@@ -10,7 +10,7 @@
 
 """@brief Stuff to write FITS files for GLAST.
 
-@todo This stuff should all be methods on a glastFitsFile object.
+@todo This stuff should all be methods on a GlastFitsFile object.
 
 @todo Maybe should enforce filename compliance to ISO 9660 Level 2 (31
 character names containing uppercase letters, numbers and underscore).

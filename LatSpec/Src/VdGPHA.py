@@ -3,6 +3,8 @@
 ## @file "VdGPHA.py"
 ## @brief Create a PHA file from Van de Graaff data (or a Monte-Carlo).
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
+##
+## @todo Take inputs from a JobOptions file, instead of hardcoding them.
 
 import Numeric as num
 
