@@ -15,6 +15,7 @@ my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
 my $taskName = $proc->{'task_name'};
+my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
