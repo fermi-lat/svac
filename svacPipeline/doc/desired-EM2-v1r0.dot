@@ -1,0 +1,95 @@
+digraph iAndTPipeline {
+
+#rotate=90;
+size="6,6";
+
+# processes
+node [shape=box];
+#
+online [color=blue];
+populateELogDB [color=blue];
+configTables [color=blue];
+configReportUrl;
+digitization [color=blue];
+digiRootFile;
+digiReport [color=blue];
+digiReportUrl;
+recon [color=blue];
+reconRootFile;
+meritRootFile;
+reconReport [color=blue];
+reconReportUrl;
+svacTuple [color=blue];
+svacRootFile;
+
+# datasets
+node [shape=ellipse];
+#
+rcReport_xml;
+schema_xml;
+snapshot_xml;
+ldf_fits;
+configReport_html;
+digi_root;
+digiReport_html;
+recon_root;
+merit_root;
+reconReport_html;
+svacTuple_root;
+#
+# non-file dependency
+#
+eLogDB [shape=triangle];
+
+online -> rcReport_xml;
+online -> schema_xml;
+online -> snapshot_xml;
+online -> ldf_fits;
+
+rcReport_xml -> populateELogDB;
+populateELogDB -> eLogDB;
+
+schema_xml -> configTables;
+snapshot_xml -> configTables;
+configTables -> configReport_html;
+#
+configReport_html -> configReportUrl;
+eLogDB -> configReportUrl;
+
+ldf_fits -> digitization;
+digitization -> digi_root;
+#
+digi_root -> digiRootFile;
+eLogDB -> digiRootFile;
+
+digi_root -> digiReport;
+digiReport -> digiReport_html;
+#
+digiReport_html -> digiReportUrl;
+eLogDB -> digiReportUrl;
+
+digi_root -> recon;
+recon -> recon_root;
+recon -> merit_root;
+#
+recon_root -> reconRootFile;
+eLogDB -> reconRootFile;
+#
+merit_root -> meritRootFile;
+eLogDB -> meritRootFile;
+
+digi_root -> reconReport;
+recon_root -> reconReport;
+reconReport -> reconReport_html;
+#
+reconReport_html -> reconReportUrl;
+eLogDB -> reconReportUrl;
+
+digi_root -> svacTuple;
+recon_root -> svacTuple;
+svacTuple -> svacTuple_root;
+#
+svacTuple_root -> svacRootFile;
+eLogDB -> svacRootFile;
+
+}

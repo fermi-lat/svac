@@ -1,0 +1,194 @@
+digraph iAndTPipeline {
+
+#rotate=90;
+size="6,8";
+
+#### task processes
+node [shape=box];
+####
+online_ldf2fits [color=blue];
+online_injectSVAC;
+#
+updateELogDB_populateElogDb [color=blue];
+updateELogDB_launchDigi;
+updateELogDB_launchConfRep;
+#
+configReport_ConfigTables [color=blue];
+configReport_configReportUrl;
+#
+digitization_Convert [color=blue];
+digitization_LaunchRecon;
+digitization_LaunchReport;
+digitization_digiRootFile;
+#
+digiReport_genReport [color=blue];
+digiReport_digiReportUrl;
+#
+recon_recon [color=blue];
+recon_LaunchSVAC;
+recon_LaunchReport;
+recon_reconRootFile;
+recon_meritRootFile;
+#
+reconReport_genReport [color=blue];
+reconReport_reconReportUrl;
+#
+svacTuple_svacTuple [color=blue];
+svacTuple_svacRootFile;
+
+#### datasets
+node [shape=ellipse];
+####
+online_rcReport;
+updateELogDB_rcReport;
+online_schema;
+updateELogDB_schema;
+configReport_schema;
+online_snapshot;
+updateELogDB_snapshot;
+configReport_snapshot;
+online_ldf;
+updateELogDB_ldf;
+digitization_ldf;
+#
+configReport_tarBall;
+#
+digitization_digi;
+recon_digi;
+digiReport_digi;
+svacTuple_digi;
+reconReport_digi;
+#
+digiReport_tarBall;
+#
+recon_recon;
+svacTuple_recon;
+reconReport_recon;
+recon_merit;
+#
+reconReport_tarBall;
+#
+svacTuple_svac;
+
+#### TP -> DS links
+edge [weight=10];
+####
+online_ldf2fits -> online_rcReport;
+online_ldf2fits -> online_schema;
+online_ldf2fits -> online_snapshot;
+online_ldf2fits -> online_ldf;
+#
+online_rcReport -> online_injectSVAC;
+online_schema -> online_injectSVAC;
+online_snapshot -> online_injectSVAC;
+online_ldf -> online_injectSVAC;
+#
+online_injectSVAC -> updateELogDB_rcReport;
+online_injectSVAC -> updateELogDB_schema;
+online_injectSVAC -> updateELogDB_snapshot;
+online_injectSVAC -> updateELogDB_ldf;
+
+updateELogDB_rcReport -> updateELogDB_populateElogDb;
+#
+updateELogDB_ldf -> updateELogDB_launchDigi;
+updateELogDB_launchDigi -> digitization_ldf;
+#
+updateELogDB_schema -> updateELogDB_launchConfRep;
+updateELogDB_snapshot -> updateELogDB_launchConfRep;
+updateELogDB_launchConfRep -> configReport_schema;
+updateELogDB_launchConfRep -> configReport_snapshot;
+
+configReport_schema -> configReport_ConfigTables;
+configReport_snapshot -> configReport_ConfigTables;
+configReport_ConfigTables -> configReport_tarBall;
+#
+configReport_tarBall -> configReport_configReportUrl;
+
+digitization_ldf -> digitization_Convert;
+digitization_Convert -> digitization_digi;
+#
+digitization_digi -> digitization_LaunchRecon;
+digitization_LaunchRecon -> recon_digi;
+#
+digitization_digi -> digitization_LaunchReport;
+digitization_LaunchReport -> digiReport_digi;
+#
+digitization_digi -> digitization_digiRootFile;
+
+digiReport_digi -> digiReport_genReport;
+digiReport_genReport -> digiReport_tarBall;
+#
+digiReport_tarBall -> digiReport_digiReportUrl;
+
+recon_digi -> recon_recon;
+recon_recon -> recon_recon;
+recon_recon -> recon_merit;
+#
+recon_recon -> recon_LaunchSVAC;
+recon_digi -> recon_LaunchSVAC;
+recon_LaunchSVAC -> svacTuple_recon;
+recon_LaunchSVAC -> svacTuple_digi;
+#
+recon_recon -> recon_LaunchReport;
+recon_digi -> recon_LaunchReport;
+recon_LaunchReport -> reconReport_recon;
+recon_LaunchReport -> reconReport_digi;
+#
+recon_recon -> recon_reconRootFile;
+#
+recon_merit -> recon_meritRootFile;
+
+reconReport_digi -> reconReport_genReport;
+reconReport_recon -> reconReport_genReport;
+reconReport_genReport -> reconReport_tarBall;
+#
+reconReport_tarBall -> reconReport_reconReportUrl;
+
+svacTuple_digi -> svacTuple_svacTuple;
+svacTuple_recon -> svacTuple_svacTuple;
+svacTuple_svacTuple -> svacTuple_svac;
+#
+svacTuple_svac -> svacTuple_svacRootFile;
+
+
+#### intratask links ####
+edge [style=dotted,weight=100];
+####
+online_ldf2fits -> online_injectSVAC;
+#
+updateELogDB_populateElogDb -> updateELogDB_launchDigi;
+updateELogDB_launchDigi -> updateELogDB_launchConfRep;
+#
+digitization_Convert -> digitization_LaunchRecon;
+digitization_LaunchRecon -> digitization_LaunchReport;
+digitization_LaunchReport -> digitization_digiRootFile;
+#
+configReport_ConfigTables -> configReport_configReportUrl;
+#
+recon_recon -> recon_LaunchSVAC;
+recon_LaunchSVAC -> recon_LaunchReport;
+recon_LaunchReport -> recon_reconRootFile;
+recon_reconRootFile -> recon_meritRootFile;
+#
+digiReport_genReport -> digiReport_digiReportUrl;
+#
+svacTuple_svacTuple -> svacTuple_svacRootFile;
+#
+reconReport_genReport -> reconReport_reconReportUrl;
+
+
+##### intertask links #####
+edge [style=dashed,weight=1];
+####
+online_injectSVAC -> updateELogDB_populateElogDb;
+#
+updateELogDB_launchDigi -> digitization_Convert;
+updateELogDB_launchConfRep -> configReport_ConfigTables;
+#
+digitization_LaunchRecon -> recon_recon;
+digitization_LaunchReport -> digiReport_genReport;
+#
+recon_LaunchSVAC -> svacTuple_svacTuple;
+recon_LaunchReport -> reconReport_genReport;
+
+}

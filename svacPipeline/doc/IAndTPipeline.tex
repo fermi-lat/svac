@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[dvips]{graphics}
+
+\begin{document}
+
+\title{The I\&T Pipieline}
+\author{Warren Focke - I\&T/SVAC}
+\date{2004 December 15}
+\maketitle
+
+
+\section{Introduction}
+\label{intro-sec}
+
+This is obviously very preliminary, I mostly just wanted to get the graphs
+out.
+
+
+\section{Logical Flow}
+\label{logic-sec}
+
+Figure \ref{desired-fig} depicts dependency flow in the I\&T pipeline task set.
+This is an idelaized version of what we'd like, the actual mapping of this
+structures onto the capabilities of the current GINO implementation will be
+discussed in Section \ref{implement-sec}.
+
+\begin{figure}
+\label{desired-fig}
+\caption{Ideal}
+\includegraphics{desired-EM2-v1r0.eps}
+
+{TPs are in boxes. Blue boxes are reprocessing entry points.  Datasets are
+ellipses. Non-file dependencies are triangles.  Solid lines show input/output
+relationships of TPs and DSs.}
+
+\end{figure}
+
+There are 15 task processes (TPs), 8 of which are entry points.  11 Datasets
+and 1 non-file dependency (creation of a database record for the run) are
+shown.  Several datasets internal to a single TP are not shown here.
+
+
+
+
+\section{Implementation}
+\label{implement-sec}
+
+Figure \ref{actual-fig} shows how we mapped the logical dependency flow onto
+the capabilities of GINO.
+
+\begin{figure}
+\label{actual-fig}
+\caption{Actual}
+\includegraphics{actual-EM2-v1r0.eps}
+
+{Each entry point represents a task.  Dotted lines show the sequence of TPs
+within a task.  Dashed lines show launching of tasks by TPs.  TPs and datasets
+are labeled taskName\_tpName and taskName\_dsName (version numbers removed
+from taskName) so they can be identified with the matching entities in the
+GINO configration.}
+
+\end{figure}
+
+There are more TPs (22 here), since it takes a TP to launch a task.  Under a
+future version of GINO which understood parallel execution, branching
+dependency flow, and multiple entry points, all of this stuff would be in 2
+tasks (instead of 8 now), and all but 1 of these "chaining" TPs would be
+eliminated.
+
+There appear to be more datasets.  This is beacuse the DSs seen by a task
+include the task name, so the TPs that launch a task must make copies of or
+links to Dss that are passed on to the next task.  Thus, digi\_digi\_root,
+recon\_digi\_root, digiReport\_digi\_root, svac\_digi\_root, and
+reconReport\_digi\_root are all the same data, but it must appear with all those
+names to work with GINO's naming convention.
+
+There are more edges.  These represent extra information that must be
+maintained by the user, as the ordering of TPs within a task must be
+explicitly specified to GINO, and launching of other tasks by TPs is done ``by hand.''
+
+The dependency on the eLog DB is not explicitly present - it is guaranteed by
+the ordering of the tasks.
+
+I have in mind an alternate (harder, of course) approach to launching tasks
+that would reduce latency waiting for tasks to run and simplify this graph
+\emph{a bit}.
+
+
+\end{document}
