@@ -305,13 +305,14 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_ebfSecond = m_digiEvent->getEbfTimeSec();
   m_ntuple.m_ebfNanoSecond =  m_digiEvent->getEbfTimeNanoSec();
 
-  m_ntuple.m_upperTime = m_digiEvent->getEbfUpperPpcTimeBase();
-  m_ntuple.m_lowerTime = m_digiEvent->getEbfLowerPpcTimeBase();
+  m_ntuple.m_upperTime   = m_digiEvent->getEbfUpperPpcTimeBase();
+  m_ntuple.m_lowerTime   = m_digiEvent->getEbfLowerPpcTimeBase();
+  m_ntuple.m_timeSeconds = m_digiEvent->getEbfPpcTimeSeconds();
 
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
 
 
-  /*
+
   // GEM information:
   m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
 
@@ -357,7 +358,7 @@ void RootAnalyzer::analyzeDigiTree()
   for (int iCno = 0; iCno<g_nCno; iCno++) {
     m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
   }
-  */
+ 
   // Luis's three-in-a-row trigger bits:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
@@ -1057,6 +1058,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
   m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
   m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
+  m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/i");
   m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/i");
   m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/i");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");

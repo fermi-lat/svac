@@ -109,6 +109,8 @@ struct NtupleDef {
   // time information. This may change depending on future data format
   unsigned int m_ebfSecond, m_ebfNanoSecond;
   unsigned int m_upperTime, m_lowerTime;
+  unsigned int m_timeSeconds;
+
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118

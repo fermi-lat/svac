@@ -10,7 +10,7 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 
 <ul>
 <li> RunRootAnalyzer.exe: It reads data from the 3 root files: mc, digi and recon. It produces 2 root files: *_svac.root contains the SVAC ntuple for I&T/SVAC, 
-     *_hist.root contains histograms for I&T/SVAC. The names of the root files are contained in an option file. The executable uses its first argument as name of 
+     *_hist.root contains histograms for I&T/SVAC. The names of the root files are contained in an option file. The executable uses its first argument as the name of 
      the option file; when there is no argument, it uses ../src/AnalyzerOption.dat as the option file</li>
 <li> merge_raRoot.exe: It merges a list of SVAC and Merit ntuple files. </li>
 <li> ../pl/RunRootAnalyzer.pl: It is used to run RunRootAnalyzer.exe in batch. </li>
@@ -24,25 +24,25 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> Run </TD> <TD> Run number taken from DigiEvent.h </TD> </TR>
 <TR> <TD> Event </TD> <TD> Event number taken from DigiEvent.h</TD> </TR>
-<TR> <TD> GltWord </TD> <TD> Trigger word. Not valid for EM1 data as there were no GASU, should be valid for LAT integration data</TD> </TR>
-<TR> <TD> EvtTime </TD> <TD> Time stamp taken from DigiEvent.h, this may change when new LDF definition is available. </TD> </TR>
-<TR> <TD> EvtSecond </TD> <TD> Event time </TD> </TR>
-<TR> <TD> EvtNanoSecond </TD> <TD> Event time </TD> </TR>
-<TR> <TD> EvtUpperTime </TD> <TD> Event time (this will change)</TD> </TR>
-<TR> <TD> EvtLowerTime </TD> <TD> Event time (this will change)</TD> </TR>
-<TR> <TD> EvtSummary </TD> <TD> Summary word for each event. For a detailed explaination, see Online document at 
+<TR> <TD> GltWord </TD> <TD> Trigger word: The definition of the bits can be found in enums/enums/TriggerBits.h. Not valid for EM1 data as there were no GASU, should be valid for LAT integration data. </TD> </TR>
+<TR> <TD> EvtTime </TD> <TD> Time in seconds, since mission start, currently 1/1/2001. This is the time that is reported when doing simulations.</TD> </TR>
+<TR> <TD> EvtSecond </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. </TD> </TR>
+<TR> <TD> EvtNanoSecond </TD> <TD> The number of nano-seconds, since 1/1/1970, used in conjunction with getEbfTimeSec for a measure of absolute time. </TD> </TR>
+<TR> <TD> EvtUpperTime </TD> <TD> The UpperPpcTimeBase word as stored in the LDF from real tests. Used in conjunction with EvtLowerTime (getEbfLowerPpcTimeBase), these words can be used to determine the spacing of real test events. </TD> </TR>
+<TR> <TD> EvtLowerTime </TD> <TD> The LowerPpcTimeBase word stored in the LDF from real tests, used in conjunction with getEbfUpperPpcTimeBase, these words can be used to determine the spacing of real test events.</TD> </TR>
+<TR> <TD> EvtTimeSeconds </TD> <TD> Uses the data words stored in the UpperPpcTimeBase and LowerPpcTimeBase to calculate seconds since power on. This time is used to determine the spacing of events - NOT as an absolute time. </TD> </TR>
+<TR> <TD> EvtSummary </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document at 
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf, Chapter 3.5</TD> </TR>
-<TR> <TD> EventSequence </TD> <TD> Event sequence number </TD> </TR>
-<TR> <TD> EventFlags </TD> <TD>  Event quality flags </TD> </TR>
-<TR> <TD> GoodEvent </TD> <TD>  Decoded from EventFlags, '1' means a good event </TD> </TR>
+<TR> <TD> EventSequence </TD> <TD> Event sequence number: It comes from a 17 bits online counter and wraps around at 128k events. It may also not be continous or monotonically increasing because of prescaling.</TD> </TR>
+<TR> <TD> EventFlags </TD> <TD>  Event quality flags: The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
+<TR> <TD> GoodEvent </TD> <TD>  Decoded from EventFlags: '1' means a good event </TD> </TR>
 <TR> <TD> TemLength[tower]      </TD> <TD> Size of the TEM event contribution              </TD> </TR>
 <TR> <TD> GemLength             </TD> <TD> Size of the GEM event contribution (fixed size) </TD> </TR>
 <TR> <TD> OswLength             </TD> <TD> Size of the OSW event contribution              </TD> </TR>
 <TR> <TD> AemLength             </TD> <TD> Size of the AEM event contribution              </TD> </TR>
 <TR> <TD> ErrLength             </TD> <TD> Size of the Error event contribution            </TD> </TR>
-<TR> <TD> DiagLength            </TD> <TD> Size of the Diagnostics event contribution      </TD> </TR>
-<TR> <TD> GemConditionsWord     </TD> <TD> GEM Conditions Summary. For a detailed explanation of GEM quantities, 
-see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4      </TD> </TR>
+<TR> <TD> DiagLength            </TD> <TD> Size of the Diagnostics event contribution. Should always be 48.</TD> </TR>
+<TR> <TD> GemConditionsWord     </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. For a detailed explanation of GEM quantities, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4      </TD> </TR>
 <TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector                      </TD> </TR>
 <TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector                      </TD> </TR>
 <TR> <TD> GemCalLeVector[tower] </TD> <TD> GEM CAL LE vector                   </TD> </TR>
@@ -55,16 +55,16 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 <TR> <TD> GemOnePpsTime         </TD> <TD> GEM PPS Time                        </TD> </TR>
 <TR> <TD> GemPrescaled          </TD> <TD> GEM Prescaled counter               </TD> </TR>
 <TR> <TD> GemDiscarded          </TD> <TD> GEM Discarded counter               </TD> </TR>
-<TR> <TD> GemSent               </TD> <TD> GEM Sent counter. NB! Removed for now! (from EM p13) </TD> </TR>
+<TR> <TD> GemSent               </TD> <TD> GEM Sent counter. NB! Removed for now! (from EM v3r0407p13) </TD> </TR>
 
-<TR> <TD> GemCondArrivalTimeWord  </TD> <TD> GEM Condition arrival times, complete word, p128 in GEM document </TD> </TR>
+<TR> <TD> GemCondArrivalTimeWord  </TD> <TD> GEM Condition arrival times, complete word, p128 in the GEM document </TD> </TR>
 <TR> <TD> GemCondArrivalTimeExt   </TD> <TD> GEM Condition arrival times, external trigger                    </TD> </TR>
 <TR> <TD> GemCondArrivalTimeCno   </TD> <TD> GEM Condition arrival times, CNO                                 </TD> </TR>
 <TR> <TD> GemCondArrivalTimeCalLe </TD> <TD> GEM Condition arrival times, Cal LE                              </TD> </TR>
 <TR> <TD> GemCondArrivalTimeCalHe </TD> <TD> GEM Condition arrival times, Cal HE                              </TD> </TR>
 <TR> <TD> GemCondArrivalTimeTkr   </TD> <TD> GEM Condition arrival times, TKR                                 </TD> </TR>
 <TR> <TD> GemCondArrivalTimeRoi   </TD> <TD> GEM Condition arrival times, ROI                                 </TD> </TR>
-<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in GEM document                 </TD> </TR>
+<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in the GEM document                 </TD> </TR>
 
 <TR> <TD> GemAcdTilesXzp        </TD> <TD> GEM ACD XZP tile list               </TD> </TR>
 <TR> <TD> GemAcdTilesYzp        </TD> <TD> GEM ACD XZM tile list               </TD> </TR>
@@ -77,7 +77,7 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 
 
 <TABLE>
-<CAPTION ALIGN="TOP"> MC variable </CAPTION>
+<CAPTION ALIGN="TOP"> MC variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> McSeqNo </TD> <TD> Sequence number </TD> </TR>
 <TR> <TD> McId </TD> <TD> PDG id for primary MC particle. For example: e-(11), e+(-11), gamma(22), mu-(13), mu+(-13) </TD> </TR>
@@ -98,23 +98,23 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 </TABLE>
 
 <TABLE>
-<CAPTION ALIGN="TOP"> Vertex variable </CAPTION>
+<CAPTION ALIGN="TOP"> Vertex variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> VtxX0 </TD> <TD> x coordinate of first(best) vertex </TD> </TR>
-<TR> <TD> VtxY0 </TD> <TD> y coordinate of first(best) vertex </TD> </TR>
-<TR> <TD> VtxZ0 </TD> <TD> z coordinate of first(best) vertex </TD> </TR>
-<TR> <TD> VtxXDir </TD> <TD> x direction in first vertex. If there are two tracks associated with the vertex, then it is averged over direction of the two tracks; Otherwise, it is just direction of the track. </TD> </TR>
-<TR> <TD> VtxYDir </TD> <TD> y direction in first vertex. If there are two tracks associated with the vertex, then it is averged over direction of the two tracks; Otherwise, it is just direction of the track. </TD> </TR>
-<TR> <TD> VtxZDir </TD> <TD> z direction in first vertex. If there are two tracks associated with the vertex, then it is averged over direction of the two tracks; Otherwise, it is just direction of the track. </TD> </TR>
-<TR> <TD> Vtx1NumTkrs </TD> <TD> Number of tracks associated with first vertex </TD> </TR>
+<TR> <TD> VtxX0 </TD> <TD> x coordinate of first (best) vertex </TD> </TR>
+<TR> <TD> VtxY0 </TD> <TD> y coordinate of first (best) vertex </TD> </TR>
+<TR> <TD> VtxZ0 </TD> <TD> z coordinate of first (best) vertex </TD> </TR>
+<TR> <TD> VtxXDir </TD> <TD> x direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> VtxYDir </TD> <TD> y direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> VtxZDir </TD> <TD> z direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> Vtx1NumTkrs </TD> <TD> Number of tracks associated with the first vertex </TD> </TR>
 </TABLE>
 
 <TABLE>
-<CAPTION ALIGN="TOP"> TKR variable </CAPTION>
+<CAPTION ALIGN="TOP"> TKR variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> TkrNumDigis </TD> <TD> Number of TKR digis. Normally a digi is produced whenver there is a strip hit in a silicon plane. </TD> </TR>
-<TR> <TD> TkrNumStrips[tower][layer][view] </TD> <TD> A 3 dimension array which describes number of strips in every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y </TD> </TR>
-<TR> <TD> tot[tower][layer][view][end] </TD> <TD> A 4 dimension array which describes tot value at every tower, layer, view and end. End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. </TD> </TR>
+<TR> <TD> TkrNumDigis </TD> <TD> Number of TKR digis. Normally a digi is produced whenever there is a strip hit in a silicon plane. </TD> </TR>
+<TR> <TD> TkrNumStrips[tower][layer][view] </TD> <TD> A 3 dimensional array which describes the number of strips in every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y </TD> </TR>
+<TR> <TD> tot[tower][layer][view][end] </TD> <TD> A 4 dimensional array which describes tot value at every tower, layer, view and end. End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. </TD> </TR>
 <TR> <TD> totCorrL[tower][layer][view][end] </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, using Hiro's linear correction formula. At the moment only valid for EM1 data. </TD> </TR>
 <TR> <TD> totCorrQ[tower][layer][view][end] </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, using Hiro's quadratic correction formula. At the moment only valid for EM1 data. </TD> </TR>
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> A 3 dimension array which describes number of clusters at every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
@@ -144,7 +144,7 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 </TABLE>
 
 <TABLE>
-<CAPTION ALIGN="TOP"> CAL variable </CAPTION>
+<CAPTION ALIGN="TOP"> CAL variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> CalEneSum </TD> <TD> Sum of energies in each crystal </TD> </TR>
 <TR> <TD> CalXEcentr </TD> <TD> x coordinate of centroid of CAL cluster </TD> </TR>
