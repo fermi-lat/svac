@@ -1,0 +1,37 @@
+package svacDb
+version v0
+
+author X. Chen <xchen@slac.stanford.edu>
+
+# tested using EngineeringModel package v1r030302p10
+
+use CalibData v*
+use calibUtil v*
+use GlastSvc v*
+use CalibSvc v*
+use RootIo   v* 
+
+use GaudiInterface v* IExternal
+
+apply_pattern package_include
+apply_pattern package_headers
+
+set ORACLE_HOME /usr/oracle
+
+include_dirs ${ORACLE_HOME}/rdbms/demo
+include_dirs ${ORACLE_HOME}/rdbms/public
+
+macro OCILINKOPT "-L /usr/oracle/lib -lclntsh /usr/oracle/rdbms/lib/kpuadef.o  `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lclient8  -lvsn8 -lwtc8 -lcommon8 -lgeneric8 -lwtc8 -lmm -lnls8  -lcore8 -lnls8 -lcore8 -lnls8  `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lclient8  -lvsn8 -lwtc8 -lcommon8 -lgeneric8  -ltrace8 -lnls8  -lcore8 -lnls8 -lcore8 -lnls8  -lclient8  -lvsn8 -lwtc8 -lcommon8 -lgeneric8 -lnls8  -lcore8 -lnls8 -lcore8 -lnls8    `cat /usr/oracle/lib/sysliblist` `if [ -f /usr/lib/libsched.so ] ; then echo -lsched ; else true; fi`  -ldl -lm  -ldl `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags` -lnsgr8 -lnzjs8 -ln8 -lnl8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`   -lnsgr8 -lnzjs8 -ln8 -lnl8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags` -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`    -lnsgr8 -lnzjs8 -ln8 -lnl8 -lnro8 `sed -e 's/-ljava//g' /usr/oracle/lib/ldflags`     -lnsgr8 -lnzjs8 -ln8 -lnl8 -lsql8 -lsql8 "
+
+path_remove LD_LIBRARY_PATH "/usr/oracle/lib" 
+path_append LD_LIBRARY_PATH "/usr/oracle/lib" 
+
+macro_append svacDb_linkopts " $(OCILINKOPT)"
+
+public
+set JOBOPTIONS "${SVACDBROOT}/src/jobOptions.txt"
+
+application PopulateDB *.cxx  $(GlastMain)
+
+
+
