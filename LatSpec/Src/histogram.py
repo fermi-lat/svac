@@ -2,17 +2,8 @@
 ## @file histogram.py
 ## @brief Code to calculate histograms.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
-##
-## This file can be run as a script to perform a simple test:
-## "python histogram.py" should print the message "Passed unit test."
 
-#
-
-"""@brief Code to calculate histograms.
-
-"""
-
-import Numeric as num
+import numarray as num
 
 # 
 class Histogram:
@@ -66,6 +57,7 @@ class Histogram:
 
         pass
 
+
     #
     def add(self, values):
         """@brief Bin values into the histogram.
@@ -95,19 +87,19 @@ class Histogram:
 
         # # get rid of the points that are out of range
         # set up limits
-        loLim = []
-        hiLim = []
+        lolim = []
+        hilim = []
         for edge in self.edges:
-            loLim.append(edge[0])
-            hiLim.append(edge[-1])
-        loLim = num.array(loLim)
-        hiLim = num.array(hiLim)
+            lolim.append(edge[0])
+            hilim.append(edge[-1])
+        lolim = num.array(lolim)
+        hilim = num.array(hilim)
         # compare to limits on element-by-element basis
-        mask = (values >= loLim) & (values < hiLim)
+        mask = (values >= lolim) & (values < hilim)
         # combine n-dim element mask into 1-dim point mask
         mask = num.alltrue(mask, 1)
         # and pull out the good points
-        good = num.compress(mask, values, 0)
+        good = num.compress(mask, values)
 
         # # find which bins to put values in
         indices = []
@@ -125,16 +117,6 @@ class Histogram:
         return self
     
     __iadd__ = add
-
-#     #
-#     def __getattr__(self, name):
-#         """@brief Magic.
-
-#         This does inscrutable fun stuff.
-
-#         """
-
-#         return
     
 
 #
