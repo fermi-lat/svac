@@ -4,7 +4,7 @@ use strict;
 
 use lib $ENV{'PDB_HOME'};
 use DPFProc;
-
+use Exec;
 
 #####################################################
 ##
@@ -40,12 +40,38 @@ my $shellFile = $outFiles->{'script'};
 
 my $exe = './RunRootAnalyzer.pl';
 
-my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
+my $command = "source setup.sh ; $exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";
 
-my $status = system($command);
 
-if ($status == 0) {
-    exit 0;}
-else {
-    exit 1;}
+my $ex = new Exec("$command");
+
+my $rc = $ex->execute();
+
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
+    
+    #(do some stuff here if you want)
+    exit($rc);
+} else {
+    if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
+        # Your app is not present!!!
+        # ie, system can't find your app or script
+        print "\n\n***** APPLICATION NOT FOUND *******\n\n";
+    } else {
+        if ($ex->{'core_dump'}) {
+            #your app core dumped
+        }
+        if ($ex->{'signal_number'} != undef) {
+            #your app terminated with a signal
+            my $signal_number = $ex->{'signal_number'};
+        }
+    }
+
+    #exit non-zero:
+    exit(255);
+}

@@ -30,8 +30,8 @@ my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
 my $cmtPath = $ENV{'CMTPATH'};
-my $cmtDir = $ENV{'DigiReportCmt'};
-my $exe = $ENV{'DigiReportApp'};
+my $cmtDir = $ENV{'digiReportCmt'};
+my $exe = $ENV{'digiReportApp'};
 
 my $doxyFile = $ENV{'digiRepDoxyFile'};
 
