@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 
 # Demonstration script.
 # Submitted to batch by pipeline scheduler.
@@ -6,7 +6,7 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use lib $ENV{'PDB_HOME'};
 use DPFProc;
 
 #####################################################
@@ -18,6 +18,9 @@ use DPFProc;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runName = $proc->{'run_name'};
+my $taskName = $proc->{'task_name'};
+my $taskProcessName = $proc->{'taskProcess_name'};
 
 #####################################################
 ##
