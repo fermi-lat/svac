@@ -73,7 +73,6 @@ output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
-
 # read in the config data
 try:
     doc = md.parse(snapFile)
@@ -81,11 +80,25 @@ except:
     output.addChild("Snapshot file %s is missing, unreadable, or invalid.\n" %
                     snapFile)
     finish()
+    pass
+
+# quit semigracefully if we don't have eactly one LAT
+lats = doc.getElementsByTagName('GLAT')
+nLats = len(lats)
+if nLats != 1:
+    if nLats == 0:
+        output.addChild("There's no LAT in this snapshot!")
+    else:
+        output.addChild("There's too many LATs in this snapshot!")
+        pass
+    finish()
+    pass
+theLat = lats[0]
 
 # make tables
-output.addChildren(configParser.globalStuff(doc))
-output.addChildren(configParser.tkrSplits(doc))
-output.addChildren(configParser.calFeReg(doc))
-output.addChildren(configParser.delays(doc))
+output.addChildren(configParser.globalStuff(theLat))
+output.addChildren(configParser.tkrSplits(theLat))
+output.addChildren(configParser.calFeReg(theLat))
+output.addChildren(configParser.delays(theLat))
 
 finish()

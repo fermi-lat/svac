@@ -45,6 +45,18 @@ def globoLogical(doc, tag, label):
 
 
 #
+def hasTkr(doc):
+    """Do we have a TKR?"""
+
+    hasTkr = True
+
+    frontEnds = doc.getElementsByTagName('GTEM/GTCC/GTRC/GTFE')
+    if len(frontEnds) < 1:
+        hasTkr = False
+    
+    return hasTkr
+
+#
 def tkrSplits(doc):
     """Get GTRC splits."""
 
@@ -54,6 +66,10 @@ def tkrSplits(doc):
     output.append(html.Heading(sectionTitle, 1))
     tabTitle = sectionTitle + ' (Left:Dead:Right)'
     
+    if not hasTkr(doc):
+        output.append("There is no TKR here!")
+        return output
+
     # read in nRead field from GTRC csr registers
     regSpec, regLabel = jobOptions.tables['TKR_NR']
     nRead = tableFromXml.xTableGen(doc, regSpec)
@@ -80,7 +96,7 @@ def tkrSplits(doc):
             pass
         pass
 
-    # map from (side, GTRC) to (view. layer)
+    # map from (side, GTRC) to (view, layer)
     viewSplits = ndDict.ndDict(dim=3, empty=jobOptions.absent)
     tems, sides, readers = sideSplits.indices()
     for iTem in tems:
@@ -128,6 +144,18 @@ def tkrSplits(doc):
 
 
 #
+def hasCal(doc):
+    """Do we have a CAL?"""
+
+    hasCal = True
+    
+    frontEnds = doc.getElementsByTagName("GTEM/GCCC/GCRC/GCFE")
+    if len(frontEnds) < 1:
+        hasCal = False
+    
+    return hasCal
+
+#
 def calFeReg(doc):
     """get stuff from CAL front ends
     and make tables of it
@@ -137,7 +165,11 @@ def calFeReg(doc):
 
     sectionTitle = "CAL front end (GCFE) settings"
     output.append(html.Heading(sectionTitle, 1))
-    
+
+    if not hasCal(doc):
+        output.addChild("There is no CAL here!")
+        return output
+
     for registerTag in jobOptions.calTags:
         nTable = oneCalReg(doc, registerTag)
         output.extend(nTable)
