@@ -35,6 +35,39 @@ schemaTag = "schema"
 #snapFile = util.findSnapshot(inDir)
 #schemaFile = util.findSchema(inDir)
 
+
+def finish():
+    # put out the output
+    # nasty globals
+    try:
+        os.stat(destDir)
+    except OSError:
+        try:
+            os.makedirs(destDir)
+        except:
+            print "Couldn't create directory [%s]." % destDir
+            sys.exit(2)
+
+    outputFileName = os.path.join(destDir, joboptions.outFile)
+
+    try:
+        outputFile = file(outputFileName, "w")
+    except:
+        print "Couldn't create file [%s]." % outputFileName
+        sys.exit(3)
+
+    outStr = str(output)
+    outputFile.write(outStr)
+    outputFile.close()
+
+    sys.exit(0)
+    return
+
+
+# tar up the output directory
+os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
+          (destDir, tarFile, tarFile))
+
 output = html.Page("Configuration for run %s" % runNumber)
 
 output.addChild("\n")
@@ -52,12 +85,12 @@ try:
 except:
     output.addChild("Schema file %s is missing, unreadable, or invalid.\n" %
                     schemaFile)
-    sys.exit(0)
+    finish()
 schemas = schema.getElementsByTagName(joboptions.schemaTag)
 if len(schemas) != 1:
     output.addChild("Schema file %s does not contain exactly 1 schema.\n" %
                     schemaFile)
-    sys.exit(0)
+    finish()
 schema = schemas[0]
 
 shapes = {}
@@ -91,7 +124,7 @@ try:
 except:
     output.addChild("Snapshot file %s is missing, unreadable, or invalid.\n" %
                     snapFile)
-    sys.exit(0)
+    finish()
     
 # get stuff from CAL front ends
 # and make tables of it
@@ -200,28 +233,4 @@ output.addChild(hTable)
 output.addChild("\n")
 
 
-# put out the output
-#destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
-try:
-    os.stat(destDir)
-except OSError:
-    try:
-        os.makedirs(destDir)
-    except:
-        print "Couldn't create directory [%s]." % destDir
-        sys.exit(2)
-outputFileName = os.path.join(destDir, joboptions.outFile)
-
-try:
-    outputFile = file(outputFileName, "w")
-except:
-    print "Couldn't create file [%s]." % outputFileName
-    sys.exit(3)
-
-output = str(output)
-outputFile.write(output)
-outputFile.close()
-
-# tar up the output directory
-os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
-          (destDir, tarFile, tarFile))
+finish()
