@@ -2,44 +2,49 @@
 
 use strict;
 
-my $numArgs = $#ARGV + 1;
+use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use DPFProc;
 
-if($numArgs == 0) {
-    die "Missing run id as input argument";
-}
+#####################################################
+##
+##  BEGIN:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
+##
+#####################################################
 
-my $runId = $ARGV[0];
+my $proc = new DPFProc(@ARGV);
+my $inFiles = $proc->{'inFiles'};
+my $outFiles = $proc->{'outFiles'};
 
-my $rawDataDir = '/nfs/farm/g/glast/u01/temp/rawData/';
-my $rootDataDir = '/nfs/farm/g/glast/u01/temp/rootData/';
+#####################################################
+##
+##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
+##
+#####################################################
+
+my $shellFile = $outFiles->{'script'}
+my $rcReport = $inFiles->{'rcReport'};
+
+# gotta compute this or get it from pieline DB
+my $eLogFeederDir = $??;
 
 #change to ftp protocol
 my $rootUrl = '/glast.u01/temp/rootData/';
 
 my $pwd = $ENV{PWD};
 
-# create run dir under rootDataDir if it does not exist 
-my $runRootDir = $rootDataDir.$runId;
-if(! (-d $runRootDir) ) {
-    mkdir($runRootDir) || die "can not make dir $runRootDir, abort!";
-}
-my $runRawDir = $rawDataDir.$runId;
-
-# create eLogFeeder dir under runRootDir if it does not exist 
-my $eLogFeederDir = $runRootDir.'/eLogFeeder';
+# check for eLogFeeder dir, quit if it does not exist 
 if(! (-d $eLogFeederDir) ) {
-    mkdir($eLogFeederDir) || die "can not make dir $eLogFeederDir, abort!";
+   die "Directory $eLogFeederDir does not exist, abort!";
 }
 
 my $scriptDir = '/nfs/slac/g/svac/common/builds/eLogFeeder/v1r1';
 
 #create a csh script to run update.py
-my $shellFile = $eLogFeederDir.'/updateElog.scr';
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{cd $eLogFeederDir \n};
-print SHELLFILE qq{cp $runRawDir/rcReport.out . \n};
+print SHELLFILE qq{cp $rcReport . \n};
 print SHELLFILE qq{cp $scriptDir/report.xml . \n};
 print SHELLFILE qq{source $scriptDir/setup.csh \n};
 print SHELLFILE qq{$scriptDir/update.py $rootUrl \n};
