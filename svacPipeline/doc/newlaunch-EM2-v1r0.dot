@@ -7,7 +7,7 @@ size="7.5,6.5";
 node [shape=box];
 ####
 ## entry points
-node [color=blue];
+node [style=filled];
 ##
 online_ldf2fits_tp [label="online\nldf2fits"];
 updateELogDB_populateElogDb_tp [label="updateELogDB\npopulateElogDb"];
@@ -18,7 +18,7 @@ recon_recon_tp [label="recon\nrecon"];
 reconReport_genReport_tp [label="reconReport\ngenReport"];
 svacTuple_svacTuple_tp [label="svacTuple\nsvacTuple "];
 ##
-node [color=black,style=solid];
+node [style=solid];
 ##
 online_injectSVAC_tp [label="online\ninjectSVAC"];
 #
@@ -42,37 +42,49 @@ svacTuple_svacRootFile_tp [label="svacTuple\nsvacRootFile"];
 #### datasets
 node [shape=ellipse];
 ####
+## real ones
+##
 online_rcReport_ds [label="online\nrcReport"];
-updateELogDB_rcReport_ds [label="updateELogDB\nrcReport"];
 online_schema_ds [label="online\nschema"];
-configReport_schema_ds [label="configReport\nschema"];
 online_snapshot_ds [label="online\nsnapshot"];
-configReport_snapshot_ds [label="configReport\nsnapshot"];
 online_ldf_ds [label="online\nldf"];
-digitization_ldf_ds [label="digitization\nldf"];
 #
 configReport_tarBall_ds [label="configReport\ntarBall"];
 #
 digitization_digi_ds [label="digitization\ndigi"];
-recon_digi_ds [label="recon\ndigi"];
-digiReport_digi_ds [label="digiReport\ndigi"];
-svacTuple_digi_ds [label="svacTuple\ndigi"];
-reconReport_digi_ds [label="reconReport\ndigi"];
 #
 digiReport_tarBall_ds [label="digiReport\ntarBall"];
 #
 recon_recon_ds [label="recon\nrecon"];
-svacTuple_recon_ds [label="svacTuple\nrecon"];
-reconReport_recon_ds [label="reconReport\nrecon"];
 recon_merit_ds [label="recon\nmerit"];
 #
 reconReport_tarBall_ds [label="reconReport\ntarBall"];
 #
 svacTuple_svac_ds [label="svacTuple\nsvac"];
+##
+## links
+node [shape=hexagon];
+##
+updateELogDB_rcReport_ds [label="updateELogDB\nrcReport"];
+configReport_schema_ds [label="configReport\nschema"];
+configReport_snapshot_ds [label="configReport\nsnapshot"];
+digitization_ldf_ds [label="digitization\nldf"];
+#
+recon_digi_ds [label="recon\ndigi"];
+digiReport_digi_ds [label="digiReport\ndigi"];
+svacTuple_digi_ds [label="svacTuple\ndigi"];
+reconReport_digi_ds [label="reconReport\ndigi"];
+#
+svacTuple_recon_ds [label="svacTuple\nrecon"];
+reconReport_recon_ds [label="reconReport\nrecon"];
+##
 
 #### TP -> DS links
 edge [weight=10];
 ####
+## ones known to GINO
+edge [weight=10];
+##
 online_ldf2fits_tp -> online_rcReport_ds;
 online_ldf2fits_tp -> online_schema_ds;
 online_ldf2fits_tp -> online_snapshot_ds;
@@ -83,48 +95,31 @@ online_schema_ds -> online_injectSVAC_tp;
 online_snapshot_ds -> online_injectSVAC_tp;
 online_ldf_ds -> online_injectSVAC_tp;
 #
-online_injectSVAC_tp -> updateELogDB_rcReport_ds;
-online_injectSVAC_tp -> configReport_schema_ds;
-online_injectSVAC_tp -> configReport_snapshot_ds;
-online_injectSVAC_tp -> digitization_ldf_ds;
-
 updateELogDB_rcReport_ds -> updateELogDB_populateElogDb_tp;
-
+#
 configReport_schema_ds -> configReport_ConfigTables_tp;
 configReport_snapshot_ds -> configReport_ConfigTables_tp;
 configReport_ConfigTables_tp -> configReport_tarBall_ds;
 #
 configReport_tarBall_ds -> configReport_configReportUrl_tp;
-
+#
 digitization_ldf_ds -> digitization_Convert_tp;
 digitization_Convert_tp -> digitization_digi_ds;
 #
 digitization_digi_ds -> digitization_Launch_tp;
-digitization_Launch_tp -> recon_digi_ds;
-#
-digitization_Launch_tp -> digiReport_digi_ds;
-#
-digitization_Launch_tp -> svacTuple_digi_ds;
-#
-digitization_Launch_tp -> reconReport_digi_ds;
-#
 digitization_digi_ds -> digitization_digiRootFile_tp;
 
 digiReport_digi_ds -> digiReport_genReport_tp;
 digiReport_genReport_tp -> digiReport_tarBall_ds;
 #
 digiReport_tarBall_ds -> digiReport_digiReportUrl_tp;
-
+#
 recon_digi_ds -> recon_recon_tp;
 recon_recon_tp -> recon_recon_ds;
 recon_recon_tp -> recon_merit_ds;
 #
 recon_recon_ds -> recon_Launch_tp;
 recon_digi_ds -> recon_Launch_tp;
-recon_Launch_tp -> svacTuple_recon_ds;
-#
-recon_Launch_tp -> reconReport_recon_ds;
-#
 recon_recon_ds -> recon_reconRootFile_tp;
 #
 recon_merit_ds -> recon_meritRootFile_tp;
@@ -140,10 +135,31 @@ svacTuple_recon_ds -> svacTuple_svacTuple_tp;
 svacTuple_svacTuple_tp -> svacTuple_svac_ds;
 #
 svacTuple_svac_ds -> svacTuple_svacRootFile_tp;
-
+#
+## unknown to GINO
+edge [weight=1,style=dotted];
+##
+online_injectSVAC_tp -> updateELogDB_rcReport_ds;
+online_injectSVAC_tp -> configReport_schema_ds;
+online_injectSVAC_tp -> configReport_snapshot_ds;
+online_injectSVAC_tp -> digitization_ldf_ds;
+#
+digitization_Launch_tp -> recon_digi_ds;
+#
+digitization_Launch_tp -> digiReport_digi_ds;
+#
+digitization_Launch_tp -> svacTuple_digi_ds;
+#
+digitization_Launch_tp -> reconReport_digi_ds;
+#
+recon_Launch_tp -> svacTuple_recon_ds;
+#
+recon_Launch_tp -> reconReport_recon_ds;
+#
+##
 
 #### intratask links ####
-edge [style=dotted,weight=100];
+edge [style=dashed,weight=100];
 ####
 online_ldf2fits_tp -> online_injectSVAC_tp;
 #
@@ -166,7 +182,7 @@ reconReport_genReport_tp -> reconReport_reconReportUrl_tp;
 
 
 ##### intertask links #####
-edge [style=dashed,weight=1];
+edge [style=dotted,weight=1];
 ####
 online_injectSVAC_tp -> updateELogDB_populateElogDb_tp;
 #
