@@ -12,15 +12,6 @@ my $linker = "ln -s";
 
 my $status = 0;
 
-foreach $oldFile (@files) {
-    my $newFile = $oldFile;
-    $newFile =~ s/$oldTask/$newTask/;
-    # make a relative symlink, not absolute
-    my ($target, $path) = fileparse($oldFile);
-    #
-    $status |= system("test -e $newFile || $linker $target $newFile");
-}
-
 my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
 
 $status |= system($command);

@@ -41,7 +41,7 @@ setenv calibRoot $svacEmDir/$calibVersion
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineVersion V1r0
 setenv svacOnlineVersion v2r0
-setenv onlineTask online-$iAndTPhase-${onlineVersion}
+setenv onlineTask online-${onlineVersion}
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv onlineTaskDir /nfs/slac/g/svac/common/pipeline/TowerA/onlinePipeline
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
@@ -49,7 +49,7 @@ setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion v2r0
-setenv eLogTask updateELogDB-$iAndTPhase-${eLogTaskVersion}
+setenv eLogTask updateELogDB-${eLogTaskVersion}
 setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate/${eLogTaskVersion}
@@ -58,7 +58,7 @@ setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion v2r0
-setenv configReportTask configReport-$iAndTPhase-${configReportTaskVersion}
+setenv configReportTask configReport-${configReportTaskVersion}
 setenv configReportVersion v1r0p0
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
@@ -68,7 +68,7 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v2r0
-setenv digitizationTask digitization-$iAndTPhase-${digitizationTaskVersion}
+setenv digitizationTask digitization-${digitizationTaskVersion}
 setenv Em2Version v2r8
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
@@ -81,7 +81,7 @@ setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v2r0
-setenv digiReportTask digiReport-$iAndTPhase-${digiReportTaskVersion}
+setenv digiReportTask digiReport-${digiReportTaskVersion}
 setenv TestReportVersion v3r1p0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
@@ -96,7 +96,7 @@ setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
 setenv reconTaskVersion v2r0
-setenv reconTask recon-$iAndTPhase-${reconTaskVersion}
+setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon/${reconTaskVersion}
@@ -105,7 +105,7 @@ setenv reconScript ${reconTaskDir}/recon.pl
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
 setenv reconReportTaskVersion v2r0
-setenv reconReportTask reconReport-$iAndTPhase-${reconReportTaskVersion}
+setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
 setenv reconReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
@@ -117,7 +117,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v2r0
-setenv svacTupleTask svacTuple-$iAndTPhase-${svacTupleTaskVersion}
+setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1r3p0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
