@@ -35,3 +35,8 @@ v0r3
 add utility exe AnalyzeAcd to analyze acd digi root files
 fix bug in mergeNtuple.cxx so that it won't create two copies of output trees
 when merging lots of svac files.
+
+v0r4
+
+add utility exe mergeRoot to merge digi root files
+

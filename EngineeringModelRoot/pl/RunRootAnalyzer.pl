@@ -7,20 +7,25 @@ $reconRootFile, $svacRootFile, $dumpFile, $shellFile);
 $jobFile = "../src/job.dat";
 
 
-my $cmtPath = "/nfs/farm/g/glast/u06/chen/glast_mc/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v1r0401p9/";
+my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v3r0402p9/";
 my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/cmt";
 my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/rh9_gcc32";
-my $digiRootDir = '/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/';
-my $svacRootDir = $digiRootDir;
+my $mcRootDir = '/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/TwoTowers/cr/batch/';
+my $digiRootDir = $mcRootDir;
+my $reconRootDir = $mcRootDir;
+#my $mcRootDir = '/nfs/farm/g/glast/u01/mc/em_v3r0402p9/oneTower/';
+#my $digiRootDir = '/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/OneTower/cr/digi/';
+#my $reconRootDir = '/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/OneTower/cr/recon/';
+my $svacRootDir = $mcRootDir;
 
 open(JOBFILE, "<$jobFile") || die "Can't open $jobFile for input, abortted!";
 while(<JOBFILE>) {
     ($rootFile) = split;
     if( $rootFile eq "") { last; }
 
-    $mcRootFile = $digiRootDir.$rootFile."_mc.root";
+    $mcRootFile = $mcRootDir.$rootFile."_mc.root";
     $digiRootFile = $digiRootDir.$rootFile."_digi.root";
-    $reconRootFile = $svacRootDir.$rootFile."_recon.root";
+    $reconRootFile = $reconRootDir.$rootFile."_recon.root";
     $svacRootFile = $svacRootDir.$rootFile."_svac.root";
     my $histFile = $svacRootDir.$rootFile."_hist.root";
     $dumpFile = $svacRootDir.$rootFile.".dump";

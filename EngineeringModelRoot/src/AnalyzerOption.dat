@@ -1,3 +1,15 @@
+/nfs/farm/g/glast/u01/EM2/rootData/101003927/em_v3r0402p15/040619015906_mc.root
+/nfs/farm/g/glast/u01/EM2/rootData/101003927/em_v3r0402p15/040619015906_digi.root
+/nfs/farm/g/glast/u01/EM2/rootData/101003927/em_v3r0402p15/040619015906_recon.root
+/nfs/farm/g/glast/u01/EM2/rootData/101003927/em_v3r0402p15/040619015906_svac.root
+/nfs/farm/g/glast/u01/EM2/rootData/101003927/em_v3r0402p15/040619015906_hist.root
+
+/nfs/farm/g/glast/u06/chen/run_sim/output/em_muon_patch_30000_0_mc.root
+/nfs/farm/g/glast/u06/chen/run_sim/output/em_muon_patch_30000_0_digi.root
+/nfs/farm/g/glast/u06/chen/run_sim/output/em_muon_patch_30000_0_recon.root
+/nfs/farm/g/glast/u06/chen/run_sim/output/em_muon_patch_30000_0_svac.root
+/nfs/farm/g/glast/u06/chen/run_sim/output/em_muon_patch_30000_0_hist.root
+
 /nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/gamma_100_3.5_0_-300_50_900_10000_0_mc.root
 /nfs/farm/g/glast/u01/svac_workshop/em_v1r0401p9/mc/TwoTowers/gamma/digi/gamma_100_3.5_0_-300_50_900_10000_0_digi.root
 /nfs/farm/g/glast/u01/svac_workshop/em_v1r0401p9/mc/TwoTowers/gamma/recon/gamma_100_3.5_0_-300_50_900_10000_0_recon.root
