@@ -62,4 +62,26 @@
 ## length nbin).  The source spectrum is integrated into the true energy bins;
 ## in practice the bins are usually narrow enough that trapezoid-rule
 ## integration is sufficient for continuum spectra.
+##
+## As for how the files are actually made:
+## 
+## The PHA files are strightforward: Make a histogram of reconstructed
+## energies of selected events, put it in a FITS file (with appropriate
+## keywords).
+## 
+## The ARF files are almost as easy: Make a histogram of the true energies of
+## selected events, divide it by a histogram of the true energies of generated
+## events.  The generated histogram is currently estimated from the functional
+## form of the generated spectrum.
+## 
+## The RMF files are formed from a 2-dimensional histogram of reconstructed
+## and true energies.  The bins along the reconstructed energy axis are the
+## "channels", and correspond to the rows of the matrix.  The bins along the
+## true energy axis are the "bins", and correspond to the columns of the
+## matrix.  To form the matrix, each column of this histogram is divided by
+## the corresponding bin from the histogram of true energies.  The sum of all
+## the elements in a given columns should then be 1.0, and an element from
+## that column is an estimate of the probability that a selected event with
+## the true energy corresponding to that column will have a reconstructed
+## energy falling in the bin corresponding to that element.
 
