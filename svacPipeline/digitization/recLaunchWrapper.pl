@@ -43,6 +43,14 @@ if (! -e $digiRootFile) {
     exit(0);
 }
 
+my $doRecon = `$ENV{'decideReconScript'} $runName`;
+if ($doRecon == '1\n') {
+    print "Reconstructable run, status: $doRecon\n";
+} else {
+    print "This is not a reconstructable run, status: $doRecon\n";
+    exit(0)
+}
+
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
