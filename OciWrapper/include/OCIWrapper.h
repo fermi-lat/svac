@@ -42,7 +42,8 @@ class OCIWrapper {
   /// only work for varchar2 type
   void defineStringByPos(OCIStmt* stmtHandle, char* pChar, int len, int pos);
 
-  void fetchNextRow(OCIStmt* stmtHandle);
+  /// return false if no more data is available so that fetch failed
+  bool fetchNextRow(OCIStmt* stmtHandle);
 
   // times is no. of times the statement will be executed for NON-SELECT
   // statement.
