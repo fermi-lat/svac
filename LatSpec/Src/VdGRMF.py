@@ -18,6 +18,13 @@ import WrtRMF
 # get config data from here
 import JobOptions
 
+# try to open output files first, so we fail early if there's a problem
+status = 0
+st, rmfptr = glastFits.createFile(JobOptions.rmfFile)
+status |= st
+st, arfptr = glastFits.createFile(JobOptions.arfFile)
+status |= st
+
 # set up bin and channel edges
 step = float(JobOptions.eTrueMax - JobOptions.eTrueMin) / JobOptions.nBin
 epsilon = step / 2
@@ -27,6 +34,14 @@ step = float(JobOptions.eReconMax - JobOptions.eReconMin) / JobOptions.nChan
 epsilon = step / 2
 reconEdges = num.arange(JobOptions.eReconMin, JobOptions.eReconMax+epsilon,
                         step)
+
+# estimate the generated spectrum
+try:
+    model = getattr(spectralFuncs, JobOptions.sourceModel)
+except AttributeError:
+    raise AttributeError, \
+          "Nonexistant source model: %s." % JobOptions.sourceModel
+sourceSpectrum = model(JobOptions.sourceParam, trueEdges)
 
 # read data
 sys.stderr.write("Reading data from %s ... " % JobOptions.responseDataFile)
@@ -53,10 +68,6 @@ accepted = acceptedBinner.histogram.astype(num.Float32)
 lowLimit = num.array(1.0, num.Float32)
 matrix /= num.maximum(accepted[:, num.NewAxis], lowLimit)
 
-# estimate the generated spectrum
-model = getattr(spectralFuncs, JobOptions.sourceModel)
-sourceSpectrum = model(JobOptions.sourceParam, trueEdges)
-
 # divide true spectrum of accepted events by generated spectrum to get an
 # energy-dependent efficiency
 efficiency = accepted / sourceSpectrum
@@ -67,14 +78,11 @@ sys.stderr.write("ok.\n")
 
 # first the RMF
 sys.stderr.write("Writing RMF to %s ... " % JobOptions.rmfFile)
-status = 0
-st, fptr = glastFits.createFile(JobOptions.rmfFile)
+st, chdu = WrtRMF.createMatrixHdu(rmfptr, matrix, trueEdges*1000)
 status |= st
-st, chdu = WrtRMF.createMatrixHdu(fptr, matrix, trueEdges*1000)
+st, chdu = WrtRMF.createEboundsHdu(rmfptr, reconEdges*1000)
 status |= st
-st, chdu = WrtRMF.createEboundsHdu(fptr, reconEdges*1000)
-status |= st
-status |= glastFits.closeFile(fptr)
+status |= glastFits.closeFile(rmfptr)
 
 if status:
     raise IOError, "CFITSIO problem."
@@ -82,11 +90,9 @@ sys.stderr.write("ok.\n")
 
 # then the ARF
 sys.stderr.write("Writing ARF to %s ... " % JobOptions.arfFile)
-st, fptr = glastFits.createFile(JobOptions.arfFile)
+st, chdu = WrtARF.createArfHdu(arfptr, efficiency, trueEdges*1000)
 status |= st
-st, chdu = WrtARF.createArfHdu(fptr, efficiency, trueEdges*1000)
-status |= st
-status |= glastFits.closeFile(fptr)
+status |= glastFits.closeFile(arfptr)
 
 if status:
     raise IOError, "CFITSIO problem."

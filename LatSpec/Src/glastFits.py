@@ -53,7 +53,8 @@ def createFile(fileName):
     st, fptr = cfitsio.fits_create_file(fileName)
     status |= st
     if status:
-        raise IOError, "Trouble opening file %s." % fileName
+        raise IOError, \
+              "Trouble creating file %s.  Maybe it already exists?" % fileName
     
     status |= cfitsio.fits_create_img(fptr, cfitsio.BYTE_IMG, 0, [])
     if status:

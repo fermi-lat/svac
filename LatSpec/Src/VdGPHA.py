@@ -16,6 +16,11 @@ import WrtPHA
 # get config data from here
 import JobOptions
 
+# try to open output files first, so we fail early if there's a problem
+status = 0
+st, phaptr = glastFits.createFile(JobOptions.phaFile)
+status |= st
+
 # set up reconstructed energy channels
 step = float(JobOptions.eReconMax - JobOptions.eReconMin) / JobOptions.nChan
 epsilon = step / 2.0
@@ -36,12 +41,9 @@ sys.stderr.write("ok.\n")
 
 # output
 sys.stderr.write("Writing PHA to %s ... " % JobOptions.phaFile)
-status = 0
-st, fptr = glastFits.createFile(JobOptions.phaFile)
+st, chdu = WrtPHA.createSpecHdu(phaptr, binner.histogram)
 status |= st
-st, chdu = WrtPHA.createSpecHdu(fptr, binner.histogram)
-status |= st
-status |= glastFits.closeFile(fptr)
+status |= glastFits.closeFile(phaptr)
 
 if status:
     raise IOError, "CFITSIO problem."
