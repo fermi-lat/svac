@@ -2,7 +2,22 @@
 
 use strict;
 
+if ($#ARGV != 6) {
+    die "Usage: $0 mcRootFile digiRootFile reconRootFile svacRootFile histFile optionFile shellFile";
+}
+
 my ($mcRootFile, $digiRootFile, $reconRootFile, $svacRootFile, $histFile, $optionFile, $shellFile) = @ARGV;
+
+print <<EOT;
+$0 running with:
+  mcRootFile:    $mcRootFile
+  digiRootFile:  $digiRootFile
+  reconRootFile: $reconRootFile
+  svacRootFile:  $svacRootFile
+  histFile:      $histFile
+  optionFile:    $optionFile
+  shellFile:     $shellFile
+EOT
 
 my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v3r0402p9/";
 my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/cmt";
