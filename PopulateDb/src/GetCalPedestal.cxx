@@ -22,17 +22,10 @@
 
 class OracleDbSvc;
 
-/**
-   @file GetCalPedestal.cxx
-   Simple algorithm to test functioning of "the other" TDS, Cal pedestals data
-*/
-
-
-
-  /** 
-   @class GetCalPedestal
-
-   Algorithm exemplifying retrieval and use of Calorimeter pedestal calibration
+/** 
+ *   @class GetCalPedestal
+ *  Algorithm retrieving CAL pedestal from SAS's calibration database 
+ *  and populating I&T's oracle database
 */
 
 class GetCalPedestal : public Algorithm {
@@ -90,9 +83,8 @@ GetCalPedestal::GetCalPedestal(const std::string&  name,
   declareProperty("validStartTime", m_calDes.m_validStartTime="");
   declareProperty("validEndTime", m_calDes.m_validEndTime="");
   declareProperty("creationTime", m_calDes.m_creationTime="2003-10-11 12:00");
-  declareProperty("orbitPosition", m_calDes.m_orbitPos=-1);
-  declareProperty("temperature", m_calDes.m_temperature=-9999);
-  declareProperty("humidity", m_calDes.m_humidity=-9999);
+  declareProperty("software", m_calDes.m_software="calibGenCAL");
+  declareProperty("version", m_calDes.m_version="v0");
   declareProperty("dataSize", m_calDes.m_dataSize=-9999);
   declareProperty("creator", m_calDes.m_creator="");
   declareProperty("description", m_calDes.m_description="");

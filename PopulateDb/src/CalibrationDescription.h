@@ -11,9 +11,8 @@ struct CalibrationDescription : public OracleTable {
   std::string m_validStartTime;
   std::string m_validEndTime; 
   std::string m_creationTime;
-  float m_orbitPos;
-  float m_temperature;
-  float m_humidity;
+  std::string m_software;
+  std::string m_version;
   int m_hardware;
   int m_calibType;
   int m_procLevel;

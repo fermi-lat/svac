@@ -86,13 +86,13 @@ private:
 
   OCIWrapper* m_db;
   
-  CalibrationDescription* m_calDes;
+  CalibrationDescription m_calDes;
 
-  TkrIndex* m_tkrIndex;
+  TkrIndex m_tkrIndex;
 
-  TkrNoisyChannel* m_tkrNoisyChannel;
+  TkrNoisyChannel m_tkrNoisyChannel;
 
-  TkrDeadChannel* m_tkrDeadChannel;
+  TkrDeadChannel m_tkrDeadChannel;
 };
 
 /// Instantiation of a static factory to create instances of this algorithm
@@ -104,28 +104,22 @@ RandomFill::RandomFill(const std::string&  name,
                  ISvcLocator*        pSvcLocator )
   : Algorithm(name, pSvcLocator), m_pOracleDbSvc(0), m_db(0)
 {
-  m_calDes = new CalibrationDescription;
 
   // Declare properties here.
-  declareProperty("source",  m_calDes->m_source=0);
-  declareProperty("hardware", m_calDes->m_hardware=2);
-  declareProperty("location", m_calDes->m_location=0);
-  declareProperty("calibType", m_calDes->m_calibType=4);
-  declareProperty("procLevel", m_calDes->m_procLevel=0);
-  declareProperty("status", m_calDes->m_status=0);
-  declareProperty("validStartTime", m_calDes->m_validStartTime="");
-  declareProperty("validEndTime", m_calDes->m_validEndTime="");
-  declareProperty("creationTime", m_calDes->m_creationTime="2003-10-11 12:00");
-  declareProperty("orbitPosition", m_calDes->m_orbitPos=-1);
-  declareProperty("temperature", m_calDes->m_temperature=-9999);
-  declareProperty("humidity", m_calDes->m_humidity=-9999);
-  declareProperty("dataSize", m_calDes->m_dataSize=-9999);
-  declareProperty("creator", m_calDes->m_creator="");
-  declareProperty("description", m_calDes->m_description="");
-
-  m_tkrIndex = new TkrIndex;
-  m_tkrNoisyChannel = new TkrNoisyChannel;
-  m_tkrDeadChannel = new TkrDeadChannel;
+  declareProperty("source",  m_calDes.m_source=0);
+  declareProperty("hardware", m_calDes.m_hardware=2);
+  declareProperty("location", m_calDes.m_location=0);
+  declareProperty("calibType", m_calDes.m_calibType=4);
+  declareProperty("procLevel", m_calDes.m_procLevel=0);
+  declareProperty("status", m_calDes.m_status=0);
+  declareProperty("validStartTime", m_calDes.m_validStartTime="");
+  declareProperty("validEndTime", m_calDes.m_validEndTime="");
+  declareProperty("creationTime", m_calDes.m_creationTime="2003-10-11 12:00");
+  declareProperty("software", m_calDes.m_software="calibGenTKR");
+  declareProperty("version", m_calDes.m_version="v0");
+  declareProperty("dataSize", m_calDes.m_dataSize=-9999);
+  declareProperty("creator", m_calDes.m_creator="");
+  declareProperty("description", m_calDes.m_description="");
 
   if(gROOT == 0) {
     static TROOT g_root("root", "root oracle interface");
@@ -135,7 +129,6 @@ RandomFill::RandomFill(const std::string&  name,
 
 RandomFill::~RandomFill()
 {
-  delete m_calDes;
 }
 
 StatusCode RandomFill::initialize() {
@@ -163,17 +156,17 @@ StatusCode RandomFill::initialize() {
   m_db = m_pOracleDbSvc->getOracleDb();
   assert(m_db != 0);
 
-  m_calDes->setDb(m_db);
-  m_calDes->setOracleTimeFmt(m_pOracleDbSvc->getOracleTimeFmt());
-  m_tkrIndex->setDb(m_db);
-  m_tkrNoisyChannel->setDb(m_db);
-  m_tkrDeadChannel->setDb(m_db);
+  m_calDes.setDb(m_db);
+  m_calDes.setOracleTimeFmt(m_pOracleDbSvc->getOracleTimeFmt());
+  m_tkrIndex.setDb(m_db);
+  m_tkrNoisyChannel.setDb(m_db);
+  m_tkrDeadChannel.setDb(m_db);
 
   try {
-    m_calDes->prepareFill();
-    m_tkrIndex->prepareFill();
-    m_tkrNoisyChannel->prepareFill();
-    m_tkrDeadChannel->prepareFill();
+    m_calDes.prepareFill();
+    m_tkrIndex.prepareFill();
+    m_tkrNoisyChannel.prepareFill();
+    m_tkrDeadChannel.prepareFill();
   }
   catch(const OCIException& e) {
     log << MSG::ERROR << e.what() << endreq;
@@ -192,37 +185,36 @@ StatusCode RandomFill::execute( ) {
 
     std::cout << "input " << i << "th set of calibration constants" << std::endl;
 
-    m_calDes->m_location = Constants::SlacCleanRoom;
-    m_calDes->m_source = Constants::ChargeInj;
-    m_calDes->m_validStartTime = "2002-01-01 03:03";
-    m_calDes->m_validEndTime = "2002-12-31 05:05";
-    m_calDes->m_creationTime = randomTime().c_str();
-    m_calDes->m_orbitPos = randomDB(1000.);
-    m_calDes->m_temperature = randomDB(100.);
-    m_calDes->m_humidity = randomDB(100.);
-    m_calDes->m_hardware = Constants::EM2;
-    m_calDes->m_procLevel = randomInt(4);
-    m_calDes->m_status = randomInt(3);
-    m_calDes->m_dataSize = randomInt(1000);
-    m_calDes->m_creator = "";
-    m_calDes->m_description = "test data";
+    m_calDes.m_location = Constants::SlacCleanRoom;
+    m_calDes.m_source = Constants::ChargeInj;
+    m_calDes.m_validStartTime = "2002-01-01 03:03";
+    m_calDes.m_validEndTime = "2002-12-31 05:05";
+    m_calDes.m_creationTime = randomTime().c_str();
+    m_calDes.m_software = "random";
+    m_calDes.m_version = "";
+    m_calDes.m_hardware = Constants::EM2;
+    m_calDes.m_procLevel = randomInt(4);
+    m_calDes.m_status = randomInt(3);
+    m_calDes.m_dataSize = randomInt(1000);
+    m_calDes.m_creator = "";
+    m_calDes.m_description = "test data";
 
     try {
       // randomly fill Tkr noisy table
-      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_id));
-      m_calDes->m_calibType = Constants::TkrNoisyChannel;
-      m_calDes->fill();
+      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes.m_id));
+      m_calDes.m_calibType = Constants::TkrNoisyChannel;
+      m_calDes.fill();
 
       for(int iTower = 0; iTower != 1; ++iTower) {
 	for(int iTray = 0; iTray != 4; ++iTray) {
 	  for(int iPos = 0; iPos != 2; ++iPos) {
 
-	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex->m_id));
-	    m_tkrIndex->m_calDesId = m_calDes->m_id;
-	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
-	    m_tkrIndex->fill();
+	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex.m_id));
+	    m_tkrIndex.m_calDesId = m_calDes.m_id;
+	    m_tkrIndex.m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
+	    m_tkrIndex.fill();
 
-	    m_tkrNoisyChannel->m_tkrIndexId = m_tkrIndex->m_id;
+	    m_tkrNoisyChannel.m_tkrIndexId = m_tkrIndex.m_id;
 
 	    int nNoisyChannels = randomInt(10);
 	    std::vector<int> noisyChannels;
@@ -234,29 +226,29 @@ StatusCode RandomFill::execute( ) {
 		itr != noisyChannels.end(); ++itr) {
 
 	      m_db->getNextSeqNo("Seq_TkrNoisyChID", 
-				 &(m_tkrNoisyChannel->m_id));
-	      m_tkrNoisyChannel->m_strip = *itr;
-	      m_tkrNoisyChannel->fill();
+				 &(m_tkrNoisyChannel.m_id));
+	      m_tkrNoisyChannel.m_strip = *itr;
+	      m_tkrNoisyChannel.fill();
 	    }
 	  }
 	}
       }
 
       // randomly fill Tkr dead table
-      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_id));
-      m_calDes->m_calibType = Constants::TkrDeadChannel;
-      m_calDes->fill();
+      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes.m_id));
+      m_calDes.m_calibType = Constants::TkrDeadChannel;
+      m_calDes.fill();
 
       for(int iTower = 0; iTower != 1; ++iTower) {
 	for(int iTray = 0; iTray != 4; ++iTray) {
 	  for(int iPos = 0; iPos != 2; ++iPos) {
 
-	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex->m_id));
-	    m_tkrIndex->m_calDesId = m_calDes->m_id;
-	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
-	    m_tkrIndex->fill();
+	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex.m_id));
+	    m_tkrIndex.m_calDesId = m_calDes.m_id;
+	    m_tkrIndex.m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
+	    m_tkrIndex.fill();
 
-	    m_tkrDeadChannel->m_tkrIndexId = m_tkrIndex->m_id;
+	    m_tkrDeadChannel.m_tkrIndexId = m_tkrIndex.m_id;
 
 	    int nDeadChannels = randomInt(10);
 	    std::vector<int> deadChannels;
@@ -268,9 +260,9 @@ StatusCode RandomFill::execute( ) {
 		itr != deadChannels.end(); ++itr) {
 
 	      m_db->getNextSeqNo("Seq_TkrDeadChID", 
-				 &(m_tkrDeadChannel->m_id));
-	      m_tkrDeadChannel->m_strip = *itr;
-	      m_tkrDeadChannel->fill();
+				 &(m_tkrDeadChannel.m_id));
+	      m_tkrDeadChannel.m_strip = *itr;
+	      m_tkrDeadChannel.fill();
 	    }
 
 	  }
