@@ -40,8 +40,8 @@ close(SHELLFILE);
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE "#include \"\$GLEAMROOT/src/basicOptions.txt\" \n";
 print JOBOPTIONFILE qq(Digitization.Members = {"digiRootReaderAlg"}; \n);
-print JOBOPTIONFILE qq(EventSelector.Instrument = "EM"; \n);
-print JOBOPTIONFILE qq(GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n);
+#print JOBOPTIONFILE qq(EventSelector.Instrument = "EM"; \n);
+#print JOBOPTIONFILE qq(GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n);
 print JOBOPTIONFILE qq(GlastDetSvc.visitorMode  = "recon";);
 
 # mask = 0 means not filtering out any events
