@@ -21,8 +21,8 @@ RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
     m_reconBranch(0), m_reconEvent(0), m_digiFile(0), m_digiTree(0),
     m_digiBranch(0), m_digiEvent(0), m_histFile(0)
 {
-  // make sure unsigned can hold 32 bit data 
-  assert(sizeof(unsigned) >= 4);
+  // make sure unsigned int hold 32 bit data 
+  assert(sizeof(unsigned int) == 4);
 
     // initialize ROOT if not already done
   if(gROOT == 0) {
@@ -968,7 +968,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12][2]/F");
   m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
-  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/I");
+  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/i");
   m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
   m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
   m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");

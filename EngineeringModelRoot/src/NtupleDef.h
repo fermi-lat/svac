@@ -116,14 +116,14 @@ struct NtupleDef {
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118
-  unsigned m_tpCal[g_nTower][g_nTP];
-  unsigned m_tpTkr[g_nTower][g_nTP];
+  unsigned int m_tpCal[g_nTower][g_nTP];
+  unsigned int m_tpTkr[g_nTower][g_nTP];
 
   // event summary word
-  unsigned m_summaryWord;
+  unsigned int m_summaryWord;
 
   // GEM information:
-  unsigned m_gemConditionsWord;
+  unsigned int m_gemConditionsWord;
 
   int m_gemTkrVector[g_nTower];
   int m_gemRoiVector[g_nTower];
