@@ -1,6 +1,12 @@
 
 import os
 
+jobOptions.runNumber = ''
+jobOptions.schemaFile = ''
+jobOptions.snapFile = ''
+jobOptions.tarBall = ''
+jobOptions.splitFile = ''
+
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']
 
