@@ -4,17 +4,17 @@
 // will be ignored if it does not exist or is not a root file.
 
 // a set of input mc root files separated by blank space(s)
-/nfs/farm/g/glast/u12/EM2/rootData/140001340/grRoot/digitization-EM2-v1r0_140001340_mc.root
+/nfs/farm/g/glast/u06/chen/glast_mc/GlastRelease_v6r2p1/Gleam/v5r9p4/rh9_gcc32/140001338_mc.root
 
 // a set of input digi root files separated by blank space(s)
-/nfs/farm/g/glast/u12/EM2/rootData/140001340/grRoot/digitization-EM2-v1r0_140001340_digi_DIGI.root
+/nfs/farm/g/glast/u12/EM2/rootData/140001338/grRoot/recon-EM2-v1r0_140001338_digi_DIGI.root
 
 // a set of input recon root files separated by blank space(s)
-/nfs/farm/g/glast/u12/EM2/rootData/140001340/calib-v1r0/grRoot/recon-EM2-v1r0_140001340_recon_RECON.root
+/nfs/farm/g/glast/u06/chen/glast_mc/GlastRelease_v6r2p1/Gleam/v5r9p4/rh9_gcc32/140001338_recon.root
 
 // output SVAC ntuple file
-svac.root
+/nfs/farm/g/glast/u06/chen/glast_mc/GlastRelease_v6r2p1/Gleam/v5r9p4/rh9_gcc32/140001338_svac.root
 
 // output SVAC histogram file
-hist.root
+/nfs/farm/g/glast/u06/chen/glast_mc/GlastRelease_v6r2p1/Gleam/v5r9p4/rh9_gcc32/140001338_hist.root
 

@@ -1,11 +1,12 @@
 package EngineeringModelRoot
-version v1r3p3
+version v1r3p5
 
 use GlastPolicy v*
 use mcRootData v*
+use commonRootData v*
 use digiRootData v*
 use reconRootData v*
-use RootPolicy v*
+use ROOT v* IExternal
 use idents v*
 use Event v*
 

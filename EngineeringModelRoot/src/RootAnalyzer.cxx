@@ -11,7 +11,6 @@
 #include "RootAnalyzer.h"
 #include "TROOT.h"
 #include "ToString.h"
-#include "Event/Recon/TkrRecon/TkrKalFitTrack.h"
 
 using std::string;
 using std::vector;
@@ -171,13 +170,11 @@ void RootAnalyzer::analyzeReconTree()
       TkrCluster* cluster = dynamic_cast<TkrCluster*>(siClusterCol->At(i));
       if(cluster) {
 
-	int iTower = cluster->getTower();
-	int iPlane = cluster->getPlane();
-	int iView = cluster->getView();
+	TowerId tId(cluster->getTkrId().getTowerX(), cluster->getTkrId().getTowerX());
+	int iTower = tId.id();
+	int iLayer = cluster->getLayer();
+	int iView = cluster->getTkrId().getView();
 
-	// note here difinition of the plane is different to difinition of the
-	// layer. Plane 0 is at top !!! So we need to do the conversions
-	int iLayer = g_nTkrLayer - 1 - iPlane;
 	assert(iLayer >= 0 && iLayer <= g_nTkrLayer - 1);
 
 	++m_ntuple.m_nTkrClusters[iTower][iLayer][iView];
@@ -211,41 +208,38 @@ void RootAnalyzer::analyzeReconTree()
   TObjArray* tracks = tkrRecon->getTrackCol();
 
   for(int i = 0; i != 2; ++i) {
-    TkrKalFitTrack* tkrTrack = 
-      dynamic_cast<TkrKalFitTrack*>(tracks->At(i));
+    TkrTrack* tkrTrack = dynamic_cast<TkrTrack*>(tracks->At(i));
     if(tkrTrack) {
-      m_ntuple.m_nFit[i] += (int) tkrTrack->getNumHits();
-      m_ntuple.m_chi2[i] = tkrTrack->getChiSquare();
+      m_ntuple.m_nFit[i] += (int) tkrTrack->getNumFitHits();
+      m_ntuple.m_chi2[i] = tkrTrack->getChiSquareFilter();
       m_ntuple.m_chi2Smooth[i] = tkrTrack->getChiSquareSmooth();
       m_ntuple.m_rms[i] = tkrTrack->getScatter();
       m_ntuple.m_msAngle[i] = tkrTrack->getKalThetaMS();
       m_ntuple.m_tkrEnergy[i] = tkrTrack->getKalEnergy();
 
+
       // End-of-track parameters:
-      Point endPos (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXPos(),
-                    tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYPos(),
-                    tkrTrack->getTrackParZ(TkrKalFitTrack::LASTHIT));
-      Vector endSlopeTmp (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXSlope(),
-                          tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYSlope(), 1.0);
-      Vector endSlope = endSlopeTmp.unit();
-      Ray trj_1 = Ray (endPos, endSlope);
+      TkrTrackHit* hit = (TkrTrackHit*) tkrTrack->Last();
+      TVector3 endPos = hit->getPoint(TkrTrackHit::SMOOTHED);
+      TVector3 endSlopeTmp = hit->getDirection(TkrTrackHit::SMOOTHED);
+      TVector3 endSlope = endSlopeTmp.Unit();
 
       if (i == 0) {
-        m_ntuple.m_tkr1EndPos[0] = trj_1.position().x();
-        m_ntuple.m_tkr1EndPos[1] = trj_1.position().y();
-        m_ntuple.m_tkr1EndPos[2] = trj_1.position().z();
+        m_ntuple.m_tkr1EndPos[0] = endPos.x();
+        m_ntuple.m_tkr1EndPos[1] = endPos.y();
+        m_ntuple.m_tkr1EndPos[2] = endPos.z();
 	// Need -1 here .....
-        m_ntuple.m_tkr1EndDir[0] = -1.0*trj_1.direction().x();
-        m_ntuple.m_tkr1EndDir[1] = -1.0*trj_1.direction().y();
-        m_ntuple.m_tkr1EndDir[2] = -1.0*trj_1.direction().z();
+        m_ntuple.m_tkr1EndDir[0] = -1.0*endSlope.x();
+        m_ntuple.m_tkr1EndDir[1] = -1.0*endSlope.y();
+        m_ntuple.m_tkr1EndDir[2] = -1.0*endSlope.z();
       } else {
-        m_ntuple.m_tkr2EndPos[0] = trj_1.position().x();
-        m_ntuple.m_tkr2EndPos[1] = trj_1.position().y();
-        m_ntuple.m_tkr2EndPos[2] = trj_1.position().z();
+        m_ntuple.m_tkr2EndPos[0] = endPos.x();
+        m_ntuple.m_tkr2EndPos[1] = endPos.y();
+        m_ntuple.m_tkr2EndPos[2] = endPos.z();
 	// Need -1 here .....
-        m_ntuple.m_tkr2EndDir[0] = -1.0*trj_1.direction().x();
-        m_ntuple.m_tkr2EndDir[1] = -1.0*trj_1.direction().y();
-        m_ntuple.m_tkr2EndDir[2] = -1.0*trj_1.direction().z();
+        m_ntuple.m_tkr2EndDir[0] = -1.0*endSlope.x();
+        m_ntuple.m_tkr2EndDir[1] = -1.0*endSlope.y();
+        m_ntuple.m_tkr2EndDir[2] = -1.0*endSlope.z();
       }
     }
   }
@@ -317,6 +311,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
 
 
+  /*
   // GEM information:
   m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
 
@@ -350,7 +345,7 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalLe = m_digiEvent->getGem().getCalLeVector();
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
-
+  
    
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
@@ -362,7 +357,7 @@ void RootAnalyzer::analyzeDigiTree()
   for (int iCno = 0; iCno<g_nCno; iCno++) {
     m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
   }
-
+  */
   // Luis's three-in-a-row trigger bits:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
@@ -621,8 +616,8 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //  nEvent = 100;
-       nEvent = nRecon;
+  //    nEvent = 100;
+         nEvent = nRecon;
 
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
@@ -941,8 +936,12 @@ void RootAnalyzer::analyzeTot()
       TkrVertex* tkrVertex = dynamic_cast<TkrVertex*>(vertices->At(0));
       if(tkrVertex) {
 
-	int convLayer = g_nTkrLayer - 1 - tkrVertex->getLayer();
-	int convTower = tkrVertex->getTower();
+	TkrTrack* trk = (TkrTrack*) tkrVertex->getTrack(0);
+	TkrTrackHit* hit = (TkrTrackHit*) trk->First();
+	commonRootData::TkrId id = hit->getClusterPtr()->getTkrId();
+	TowerId tId(id.getTowerX(), id.getTowerX());
+	int convLayer = hit->getClusterPtr()->getLayer();
+	int convTower = tId.id();
 
 	assert(convLayer >= 0 && convLayer <g_nTkrLayer);
 	float totX = std::max(m_ntuple.m_tot[convTower][convLayer][0][0], 

@@ -43,11 +43,8 @@ struct NtupleDef {
   // energy deposited in each tower, each layer and each view
   float m_depositEne[g_nTower][g_nTkrLayer][g_nView]; //depositEne
 
-  // no of clusters in each layer, assuming 18 planes (not 19 trays)
-  // note here difinition of the plane is different to difinition of the
-  // layer. Plane 0 is at top !!!  We can rearrange this to use layer number
-  // as index.
-
+  // no of clusters in each layer, assuming 18 biLayers (not 19 trays)
+  // biLayer 0 is at the bottom
   int m_nTkrClusters[g_nTower][g_nTkrLayer][g_nView];   
 
   int m_nTkrTracks;              //nTkTracks
