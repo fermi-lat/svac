@@ -1,6 +1,10 @@
 ## @file tableIo.py
 ## @brief I/O from/to ASCII ntuples.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
+##
+## This file can be run as a script to perform a simple test:
+## "python tableIo.py" should create a file "test.dat" and print
+## "Passed unit test." if all is well.
 
 #
 
@@ -89,3 +93,22 @@ def writeTable(data, file=sys.stdout, transpose=1):
         file.write(format % tuple(line))
               
 
+if __name__ == "__main__":
+    import os
+
+    testFile = 'test.dat'
+    nCols = 2
+    nRows = 3
+
+    dataOut = num.arange(nCols * nRows)
+    dataOut.shape = (nCols, nRows)
+    
+    writeTable(dataOut, testFile)
+    dataIn = readTable(testFile)
+
+    test = dataIn == dataOut
+    if num.alltrue(test.flat):
+        print "Passed unit test."
+    else:
+        print "Failed unit test."
+        

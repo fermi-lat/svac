@@ -1,6 +1,6 @@
 
 ## @file WrtPHA.py
-## @brief Create OGIP PHA files from GLAST LAT data.
+## @brief Write OGIP PHA files for the GLAST LAT.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
 ##
 ## This file can be run as a script to perform a simple test:
@@ -10,7 +10,7 @@
 #
 
 
-"""@brief Create OGIP PHA files from GLAST LAT data.
+"""@brief Write OGIP PHA files for the GLAST LAT.
 
 This module contains a buch of stuff to deal with making PHA files (see <A
 HREF="http://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/summary/ogip_92_007_summary.html">

@@ -1,5 +1,5 @@
 ## @file WrtARF.py
-## @brief Create OGIP ARF files from GLAST LAT data.
+## @brief Write OGIP ARF files for the GLAST LAT.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
 ##
 ## This file can be run as a script to perform a simple test:
@@ -8,7 +8,7 @@
 
 #
 
-"""@brief Create OGIP ARF files from GLAST LAT data.
+"""@brief Write OGIP ARF files for the GLAST LAT.
 
 This module contains a buch of stuff to deal with making ARF files (see <A
 HREF="http://legacy.gsfc.nasa.gov/docs/heasarc/caldb/docs/summary/cal_gen_92_002_summary.html">

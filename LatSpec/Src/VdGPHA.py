@@ -27,11 +27,12 @@ epsilon = step / 2.0
 edges = num.arange(minE, maxE+epsilon, step)
 
 # read data
-obsE, trueE = tableIo.readTable(infile)
+data = tableIo.readTable(infile)
+eRecon = data[0]
 
 # histogram data
 binner = histogram.Histogram(edges)
-binner += obsE
+binner += eRecon
 
 # output
 status = 0
