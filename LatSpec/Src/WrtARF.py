@@ -62,7 +62,7 @@ def createArfHdu(fptr, prod, edges):
 
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=3,
                                     ttype=["ENERG_LO", "ENERG_HI", "SPECRESP"],
-                                    tform=["I", "I", "E"],
+                                    tform=["E", "E", "E"],
                                     tunit=["keV", "keV", "cm**2"],
                                     extname="SPECRESP")
     status |= st
@@ -102,15 +102,17 @@ def createArfHdu(fptr, prod, edges):
 if __name__ == "__main__":
     import os
     
-    testfile = "test.arf"
+    testarf = "test.arf"
+    nbin = 3
+
+    os.system("rm -f %s" % testarf)
 
     status = 0
 
-    nbin = 3
     prod = num.arange(nbin)
-    edges = num.arange(nbin+1)
+    edges = num.arange(nbin+1) + 1
     
-    st, fptr = glastFits.createFile(testfile)
+    st, fptr = glastFits.createFile(testarf)
     status |= st
     st, chdu = createArfHdu(fptr, prod, edges)
     status |= st
@@ -119,6 +121,6 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system("fverify %s" % testfile)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testfile)
+    os.system("fverify %s" % testarf)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testarf)
     

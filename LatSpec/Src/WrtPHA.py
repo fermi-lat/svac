@@ -117,14 +117,18 @@ def createSpecHdu(fptr, data):
 if __name__ == "__main__":
     import os
     
-    testfile = "test.pha"
+    testpha = "test.pha"
+    testrmf = "test.rmf"
+    testarf = "test.arf"
+    nchan = 2
+
+    os.system("rm -f %s" % testpha)
 
     status = 0
 
-    nchan = 2
     data = num.arange(nchan)
     
-    st, fptr = glastFits.createFile(testfile)
+    st, fptr = glastFits.createFile(testpha)
     status |= st
     st, chdu = createSpecHdu(fptr, data)
     status |= st
@@ -132,7 +136,11 @@ if __name__ == "__main__":
 
     if status:
         raise IOError, "There was a CFITSIO problem."
+
+    # hardwire test file to use test files produced by other modules
+    os.system("fparkey %s %s RESPFILE" % (testrmf, testpha))
+    os.system("fparkey %s %s ANCRFILE" % (testarf, testpha))
     
-    os.system("fverify %s" % testfile)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testfile)
+    os.system("fverify %s" % testpha)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testpha)
     

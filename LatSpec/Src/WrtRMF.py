@@ -71,7 +71,7 @@ def createMatrixHdu(fptr, matrix, edges):
     
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=6,
          ttype=["ENERG_LO", "ENERG_HI", "N_GRP", "F_CHAN", "N_CHAN", "MATRIX"],
-         tform=["I", "I", "I", "1I", "1I", matform],
+         tform=["E", "E", "I", "1I", "1I", matform],
          tunit=["keV", "keV", "", "", "", ""], extname="MATRIX")
     status |= st
 
@@ -207,18 +207,20 @@ def createEboundsHdu(fptr, ebounds):
 if __name__ == "__main__":
     import os
     
-    testfile = "test.rmf"
+    testrmf = "test.rmf"
+    nbin = 3
+    nchan = 2
+
+    os.system("rm -f %s" % testrmf)
 
     status = 0
 
-    nbin = 3
-    nchan = 2
     matrix = num.arange(nbin*nchan)
     matrix.shape = nbin, nchan
-    edges = num.arange(nbin+1)
-    ebounds = num.arange(nchan+1)
+    edges = num.arange(nbin+1) + 1
+    ebounds = num.arange(nchan+1) + 1
     
-    st, fptr = glastFits.createFile(testfile)
+    st, fptr = glastFits.createFile(testrmf)
     status |= st
     st, chdu = createMatrixHdu(fptr, matrix, edges)
     status |= st
@@ -229,6 +231,6 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system("fverify %s" % testfile)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testfile)
+    os.system("fverify %s" % testrmf)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testrmf)
     
