@@ -104,11 +104,8 @@ my $updateElogDbXml =
             <working-directory>$eLogDataDir</working-directory>
             <log-file-path>$eLogDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"ldf\" type=\"fits\" file-type=\"LDF\"></file>
         <file name=\"rcReport\" type=\"xml\" file-type=\"rcReport\" pipeline=\"$ENV{'onlineTask'}\"></file>
-        <file name=\"schema\" type=\"xml\" file-type=\"text\" pipeline=\"$ENV{'onlineTask'}\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
-        <file name=\"snapshot\" type=\"xml\" file-type=\"text\" pipeline=\"$ENV{'onlineTask'}\"></file>
         <processing-step name=\"populateElogDb\" executable=\"populateElogDbWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"rcReport\"/>
                         <output-file name=\"script\"/>
@@ -153,8 +150,7 @@ my $configReportXml =
             <working-directory>$configDataDir</working-directory>
             <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"schema\" type=\"xml\" file-type=\"text\"></file>
-        <file name=\"snapshot\" type=\"xml\" file-type=\"text\"></file>
+        <file name=\"snapshot\" type=\"xml\" file-type=\"text\" pipeline=\"$ENV{'onlineTask'}\"></file>
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"></file>
         <processing-step name=\"ConfigTables\" executable=\"ConfigTablesWrapper\" batch-job-configuration=\"short-job\">
                         <input-file name=\"schema\"/>
@@ -206,7 +202,7 @@ my $digitizationXml =
         </batch-job-configuration>
         <file name=\"digi\" type=\"root\" file-type=\"DIGI\"></file>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
-        <file name=\"ldf\" type=\"fits\" file-type=\"LDF\"></file>
+        <file name=\"ldf\" type=\"fits\" file-type=\"LDF\" pipeline=\"$ENV{'onlineTask'}\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
         <processing-step name=\"Convert\" executable=\"ConvertWrapper\" batch-job-configuration=\"medium-job\">
                         <input-file name=\"ldf\"/>
@@ -257,7 +253,7 @@ my $digiReportXml =
             <working-directory>$digiReportDataDir</working-directory>
             <log-file-path>$digiReportDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"digi\" type=\"root\" file-type=\"DIGI\"></file>
+        <file name=\"digi\" type=\"root\" file-type=\"DIGI\" pipeline=\"$ENV{'digitizationTask'}\"></file>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"></file>
@@ -310,7 +306,7 @@ my $reconXml =
         <working-directory>$reconDataDir</working-directory>
         <log-file-path>$reconDataDir</log-file-path>
     </batch-job-configuration>
-    <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\"></file>
+    <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\" pipeline=\"$ENV{'digitizationTask'}\"></file>
     <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\"></file>
     <file name=\"merit\"      type=\"merit\"  file-type=\"root\"></file>
     <file name=\"recon\"      type=\"RECON\"  file-type=\"root\"></file>
@@ -369,9 +365,9 @@ my $reconReportXml =
             <working-directory>$reconReportDataDir</working-directory>
             <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"digi\" type=\"root\" file-type=\"DIGI\"></file>
+        <file name=\"digi\" type=\"root\" file-type=\"DIGI\" pipeline=\"$ENV{'digitizationTask'}\"></file>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
-        <file name=\"recon\" type=\"root\" file-type=\"RECON\"></file>
+        <file name=\"recon\" type=\"root\" file-type=\"RECON\" pipeline=\"$ENV{'reconTask'}\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"></file>
         <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"long-job\">
@@ -418,10 +414,10 @@ my $svacTupleXml =
             <working-directory>$svacTupleDataDir</working-directory>
             <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"digi\" type=\"root\" file-type=\"DIGI\">rootData/$(RUN_NAME)/grRoot</file>
+        <file name=\"digi\" type=\"root\" file-type=\"DIGI\" pipeline=\"$ENV{'digitizationTask'}\"></file>
         <file name=\"histogram\" type=\"root\" file-type=\"histogram\"></file>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
-        <file name=\"recon\" type=\"root\" file-type=\"RECON\"></file>
+        <file name=\"recon\" type=\"root\" file-type=\"RECON\" pipeline=\"$ENV{'reconTask'}\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
         <file name=\"svac\" type=\"root\" file-type=\"svac\"></file>
         <processing-step name=\"svacTuple\" executable=\"svacTupleWrapper\" batch-job-configuration=\"long-job\">
