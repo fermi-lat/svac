@@ -34,9 +34,9 @@ def createSpecHdu(fptr, data):
 
     status = 0
     
-    data = list(data)
+    data = num.asarray(data)
     nchan = len(data)
-    channel = range(1, nchan+1)
+    channel = num.arange(nchan) + 1
     
     glastFits.createTable(fptr, naxis2=0, tfields=2,
                           ttype=["CHANNEL", "COUNTS"], tform=["I", "J"],
@@ -96,8 +96,8 @@ def createSpecHdu(fptr, data):
     status |= cfitsio.fits_write_col_int(fptr, 1, 1, 1, channel)
     status |= cfitsio.fits_write_col_int(fptr, 2, 1, 1, data)
 
-    #if status:
-    #    raise IOError, "CFITSIO problem."
+    if status:
+        raise IOError, "CFITSIO problem."
 
     return status
 
