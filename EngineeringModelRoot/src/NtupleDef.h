@@ -6,9 +6,9 @@ struct NtupleDef {
   enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
 	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nCno=12};
 
-  int m_runId;
-  int m_eventId;
-  int m_seqNo;
+  unsigned int m_runId;
+  unsigned int m_eventId;
+  unsigned int m_seqNo;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -79,7 +79,7 @@ struct NtupleDef {
   // Cal deposited energy (MC)
   float m_mcCalEnergy;
 
-  int m_trigger;
+  unsigned int m_trigger;
 
   // centroid of the CAL cluster. Currently there is no real clustering 
   // for CAL, just bind all hits into a cluster
@@ -123,7 +123,7 @@ struct NtupleDef {
   unsigned int m_summaryWord;
 
   // GEM information:
-  unsigned int m_gemConditionsWord;
+  int m_gemConditionsWord;
 
   int m_gemTkrVector[g_nTower];
   int m_gemRoiVector[g_nTower];
@@ -131,47 +131,49 @@ struct NtupleDef {
   int m_gemCalHeVector[g_nTower];
   int m_gemCnoVector[g_nCno];
 
-  unsigned m_gemLiveTime;
-  unsigned m_gemTriggerTime;
-  unsigned m_gemDeltaEventTime;
-  unsigned m_gemOnePpsSeconds;
-  unsigned m_gemOnePpsTime;
-  unsigned m_gemPrescaled;
-  unsigned m_gemDiscarded;
-  unsigned m_gemSent;
+  unsigned int m_gemLiveTime;
+  unsigned int m_gemTriggerTime;
+  unsigned int m_gemDeltaEventTime;
+  unsigned int m_gemOnePpsSeconds;
+  unsigned int m_gemOnePpsTime;
+  unsigned int m_gemPrescaled;
+  unsigned int m_gemDiscarded;
+  unsigned int m_gemSent;
 
-  unsigned m_gemAcdTilesXzp;
-  unsigned m_gemAcdTilesXzm;
-  unsigned m_gemAcdTilesYzp;
-  unsigned m_gemAcdTilesYzm;
-  unsigned m_gemAcdTilesXy;
-  unsigned m_gemAcdTilesRbn;
-  unsigned m_gemAcdTilesNa;
+  unsigned int m_gemAcdTilesXzp;
+  unsigned int m_gemAcdTilesXzm;
+  unsigned int m_gemAcdTilesYzp;
+  unsigned int m_gemAcdTilesYzm;
+  unsigned int m_gemAcdTilesXy;
+  unsigned int m_gemAcdTilesRbn;
+  unsigned int m_gemAcdTilesNa;
+
+  // Luis's three-in-arow trigger bits:                                                                                                     unsigned int m_trgTriRowBits[g_nTower];
 
   // Event sizes:
-  unsigned m_temLength[g_nTower];
-  unsigned m_gemLength;
-  unsigned m_oswLength;
-  unsigned m_aemLength;
-  unsigned m_errLength;
-  unsigned m_diagLength;
+  unsigned int m_temLength[g_nTower];
+  unsigned int m_gemLength;
+  unsigned int m_oswLength;
+  unsigned int m_aemLength;
+  unsigned int m_errLength;
+  unsigned int m_diagLength;
 
   // Event quality/flags:
-  unsigned m_eventSequence;
-  unsigned m_eventFlags;
+  unsigned int m_eventSequence;
+  unsigned int m_eventFlags;
   int m_goodEvent;
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request
   // e.g.: m_tkrReq[0][3][1][1]=1 means tower 0, upper half of layer Y3 sends the trigger request
   // layer 0 is at the bottom
-  unsigned m_tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
+  unsigned int m_tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
 
   // decoded trigger primitive for the calorimeter
   // e.g.: m_calReq[0][3][0] contains 16 bit diagnostic data for tower 0, layer 3, negative end 
   // e.g.: m_calReq[0][3][1] contains 16 bit diagnostic data for tower 0, layer 3, positive end 
   // layer 0 is at the top (different to the tracker)
-  unsigned m_calReq[g_nTower][g_nCalLayer][g_nFace];
+  unsigned int m_calReq[g_nTower][g_nCalLayer][g_nFace];
 
   static const char* gRootNtupleDefStr;
 

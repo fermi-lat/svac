@@ -373,6 +373,9 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
   }
 
+  // Luis's three-in-a-row trigger bits:                                                                                                    for (int iTower = 0; iTower<g_nTower; iTower++) {
+    m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
+  }
   
   // Event sizes:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
@@ -906,9 +909,9 @@ void RootAnalyzer::diagnostic()
 
 void RootAnalyzer::createBranches()
 {
-  m_tree->Branch("Run", &(m_ntuple.m_runId), "Run/I");
-  m_tree->Branch("Event_ID", &(m_ntuple.m_eventId), "Event_ID/I");
-  m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/I");
+  m_tree->Branch("Run", &(m_ntuple.m_runId), "Run/i");
+  m_tree->Branch("Event_ID", &(m_ntuple.m_eventId), "Event_ID/i");
+  m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
   m_tree->Branch("McId", &(m_ntuple.m_parId), "McId/I");
   m_tree->Branch("McTotalEnergy", &(m_ntuple.m_mcEnergy), "McTotalEnergy/F");
   m_tree->Branch("McX0", &(m_ntuple.m_startPos[0]), "McX0/F");
@@ -955,7 +958,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
   m_tree->Branch("CalEneSum", &(m_ntuple.m_calEnergy), "CalEneSum/F");
   m_tree->Branch("McCalEneSum", &(m_ntuple.m_mcCalEnergy), "McCalEneSum/F");
-  m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/I");
+  m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
   m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
   m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
   m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");
@@ -972,39 +975,40 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
   m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
   m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
-  m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/I");
-  m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/I");
-  m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/I");
+  m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/i");
+  m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/i");
+  m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("GemConditionsWord", &(m_ntuple.m_gemConditionsWord), "GemConditionsWord/I");
   m_tree->Branch("GemTkrVector", &(m_ntuple.m_gemTkrVector), "GemTkrVector[16]/I");
   m_tree->Branch("GemRoiVector", &(m_ntuple.m_gemRoiVector), "GemRoiVector[16]/I");
   m_tree->Branch("GemCalLeVector", &(m_ntuple.m_gemCalLeVector), "GemCalLeVector[16]/I");
   m_tree->Branch("GemCalHeVector", &(m_ntuple.m_gemCalHeVector), "GemCalHeVector[16]/I");
   m_tree->Branch("GemCnoVector", &(m_ntuple.m_gemCnoVector), "GemCnoVector[12]/I");
-  m_tree->Branch("GemLiveTime", &(m_ntuple.m_gemLiveTime), "GemLiveTime/I");
-  m_tree->Branch("GemTriggerTime", &(m_ntuple.m_gemTriggerTime), "GemTriggerTime/I");
-  m_tree->Branch("GemDeltaEventTime", &(m_ntuple.m_gemDeltaEventTime), "GemDeltaEventTime/I");
-  m_tree->Branch("GemOnePpsSeconds", &(m_ntuple.m_gemOnePpsSeconds), "GemOnePpsSeconds/I");
-  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/I");
-  m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/I");
-  m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/I");
-  m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/I");
-  m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/I");
-  m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/I");
-  m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/I");
-  m_tree->Branch("GemAcdTilesYzm", &(m_ntuple.m_gemAcdTilesYzm), "GemAcdTilesYzm/I");
-  m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/I");
-  m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/I");
-  m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/I");
-  m_tree->Branch("TemLength", &(m_ntuple.m_temLength), "TemLength[16]/I");
-  m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/I");
-  m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/I");
-  m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/I");
-  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength/I");
-  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength/I");
-  m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/I");
-  m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/I");
+  m_tree->Branch("GemLiveTime", &(m_ntuple.m_gemLiveTime), "GemLiveTime/i");
+  m_tree->Branch("GemTriggerTime", &(m_ntuple.m_gemTriggerTime), "GemTriggerTime/i");
+  m_tree->Branch("GemDeltaEventTime", &(m_ntuple.m_gemDeltaEventTime), "GemDeltaEventTime/i");
+  m_tree->Branch("GemOnePpsSeconds", &(m_ntuple.m_gemOnePpsSeconds), "GemOnePpsSeconds/i");
+  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/Ii);
+  m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/i");
+  m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/i");
+  m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/i");
+  m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/i");
+  m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/i");
+  m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/i");
+  m_tree->Branch("GemAcdTilesYzm", &(m_ntuple.m_gemAcdTilesYzm), "GemAcdTilesYzm/i");
+  m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/i");
+  m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/i");
+  m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/i");
+  m_tree->Branch("TrgTriRowBits",&(m_ntuple.m_trgTriRowBits),"TrgTriRowBits[16]/i");
+  m_tree->Branch("TemLength", &(m_ntuple.m_temLength), "TemLength[16]/i");
+  m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/i");
+  m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/i");
+  m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/i");
+  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength/i");
+  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength/i");
+  m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/i");
+  m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
-  m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/I");
-  m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/I");
+  m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/i");
+  m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/i");
 }
