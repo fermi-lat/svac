@@ -15,20 +15,21 @@ import WrtARF
 import WrtRMF
 
 # get config data from here
-import mainpage
+import JobOptions
 
 # set up bin and channel edges
-step = (mainpage.eTrueMax - mainpage.eTrueMin) / mainpage.nBin
+step = float(JobOptions.eTrueMax - JobOptions.eTrueMin) / JobOptions.nBin
 epsilon = step / 2
-trueEdges = num.arange(mainpage.eTrueMin, mainpage.eTrueMax+epsilon, step)
+trueEdges = num.arange(JobOptions.eTrueMin, JobOptions.eTrueMax+epsilon, step)
 
-step = (mainpage.eReconMax - mainpage.eReconMin) / mainpage.nChan
+step = float(JobOptions.eReconMax - JobOptions.eReconMin) / JobOptions.nChan
 epsilon = step / 2
-reconEdges = num.arange(mainpage.eReconMin, mainpage.eReconMax+epsilon, step)
+reconEdges = num.arange(JobOptions.eReconMin, JobOptions.eReconMax+epsilon,
+                        step)
 
 # read data
-sys.stderr.write("Reading data from %s ... " % mainpage.responseDataFile)
-data = tableIo.readTable(mainpage.responseDataFile)
+sys.stderr.write("Reading data from %s ... " % JobOptions.responseDataFile)
+data = tableIo.readTable(JobOptions.responseDataFile)
 eRecon, eTrue = data[:2]
 nTuple = num.transpose((eTrue, eRecon))
 sys.stderr.write("ok.\n")
@@ -53,16 +54,16 @@ matrix /= num.maximum(accepted[:, num.NewAxis], lowLimit)
 
 # divide true spectrum of accepted events by generated spectrum to get an
 # energy-dependent efficiency
-efficiency = accepted / mainpage.sourceSpectrum(trueEdges)
+efficiency = accepted / JobOptions.sourceSpectrum(trueEdges)
 
 sys.stderr.write("ok.\n")
 
 # # output
 
 # first the RMF
-sys.stderr.write("Writing RMF to %s ... " % mainpage.rmfFile)
+sys.stderr.write("Writing RMF to %s ... " % JobOptions.rmfFile)
 status = 0
-st, fptr = glastFits.createFile(mainpage.rmfFile)
+st, fptr = glastFits.createFile(JobOptions.rmfFile)
 status |= st
 st, chdu = WrtRMF.createMatrixHdu(fptr, matrix, trueEdges*1000)
 status |= st
@@ -75,8 +76,8 @@ if status:
 sys.stderr.write("ok.\n")
 
 # then the ARF
-sys.stderr.write("Writing ARF to %s ... " % mainpage.arfFile)
-st, fptr = glastFits.createFile(mainpage.arfFile)
+sys.stderr.write("Writing ARF to %s ... " % JobOptions.arfFile)
+st, fptr = glastFits.createFile(JobOptions.arfFile)
 status |= st
 st, chdu = WrtARF.createArfHdu(fptr, efficiency, trueEdges*1000)
 status |= st

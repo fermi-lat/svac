@@ -14,16 +14,16 @@ import tableIo
 import WrtPHA
 
 # get config data from here
-import mainpage
+import JobOptions
 
 # set up reconstructed energy channels
-step = (mainpage.eReconMax - mainpage.eReconMin) / mainpage.nChan
+step = float(JobOptions.eReconMax - JobOptions.eReconMin) / JobOptions.nChan
 epsilon = step / 2.0
-edges = num.arange(mainpage.eReconMin, mainpage.eReconMax+epsilon, step)
+edges = num.arange(JobOptions.eReconMin, JobOptions.eReconMax+epsilon, step)
 
 # read data
-sys.stderr.write("Reading data from %s ... " % mainpage.specDataFile)
-data = tableIo.readTable(mainpage.specDataFile)
+sys.stderr.write("Reading data from %s ... " % JobOptions.specDataFile)
+data = tableIo.readTable(JobOptions.specDataFile)
 eRecon = data[0]
 sys.stderr.write("ok.\n")
 
@@ -35,9 +35,9 @@ binner += eRecon
 sys.stderr.write("ok.\n")
 
 # output
-sys.stderr.write("Writing PHA to %s ... " % mainpage.phaFile)
+sys.stderr.write("Writing PHA to %s ... " % JobOptions.phaFile)
 status = 0
-st, fptr = glastFits.createFile(mainpage.phaFile)
+st, fptr = glastFits.createFile(JobOptions.phaFile)
 status |= st
 st, chdu = WrtPHA.createSpecHdu(fptr, binner.histogram)
 status |= st
