@@ -25,7 +25,7 @@ setenv dataHead /nfs/farm/g/glast/u12
 setenv rootUrl /glast.u12/Integration/rootData
 setenv rawUrl /glast.u12/EM2/rawData
 
-setenv cookedTail Integration/'$(RUN_NAME)'
+setenv cookedTail Integration/rootData/'$(RUN_NAME)'
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
 setenv calibVersion calib-v1r0
