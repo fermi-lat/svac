@@ -5,12 +5,12 @@
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv sasLocation /nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel
-setenv sasVersion EngineeringModel-v3r0402p16
+setenv sasVersion EngineeringModel-v3r0404p2
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt ${svacRoot}/builds
-setenv svacPlRoot ${svacRoot}/pipeline
+setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 setenv svacPlLib ${svacPlRoot}/lib
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
@@ -45,7 +45,8 @@ setenv ldfFileType LDFFITS
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
-setenv digiReportTask digiReport-EM2-v1r0
+setenv digiReportTaskVersion v1r0
+setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
 setenv TestReportVersion v2r0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
@@ -56,13 +57,15 @@ setenv digiReportUrl html/index.html
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-setenv reconTask recon-EM2-v1r0
+setenv reconTaskVersion v1r0
+setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32/Em2.exe
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
-setenv reconReportTask reconReport-EM2-v1r0
+setenv reconReportTaskVersion v1r0
+setenv reconReportTask reconReport-EM2-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
 setenv reconReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
@@ -71,7 +74,8 @@ setenv reconReportUrl html/index.html
 #-------------------------------- reconReport ---------------------------------
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
-setenv svacTupleTask svacTuple-EM2-v1r0
+setenv svacTupleTaskVersion v1r0
+setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
