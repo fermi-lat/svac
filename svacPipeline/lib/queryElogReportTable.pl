@@ -36,4 +36,4 @@ $sth->finish() or die 'finish sql failed: '.$dbh->errstr;
 
 $dbh->disconnect or die 'disconnect db failed: '.$dbh->errstr;
 
-print $value;
+print "$value\n";
