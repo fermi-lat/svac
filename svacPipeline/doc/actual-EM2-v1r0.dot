@@ -3,6 +3,15 @@ digraph iAndTPipeline {
 #rotate=90;
 size="7.5,6.5";
 
+/*
+subgraph cluster_legend {
+	ep [label="Entry Point",shape=box,style=filled];
+	tp [label="Process",shape=box];
+	ds [label="Dataset",shape=ellipse];
+	link [label="Link",shape=hexagon];
+}
+*/
+
 #### task processes
 node [shape=box];
 ####
