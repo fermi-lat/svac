@@ -68,6 +68,10 @@ struct NtupleDef {
   float m_rms[2];
   float m_msAngle[2];
   float m_tkrEnergy[2];
+  float m_tkr1EndPos[3];
+  float m_tkr1EndDir[3];
+  float m_tkr2EndPos[3];
+  float m_tkr2EndDir[3];
 
   // Cal measured energy
   float m_calEnergy;
@@ -98,7 +102,7 @@ struct NtupleDef {
 
   // energy deposited in each crystal
   // default values are -9999
-  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol];
+  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol][g_nFace];
 
   // maximal deposited energy in a single crystal
   float m_maxCalEnergy;

@@ -9,6 +9,7 @@
 #include "mcRootData/McEvent.h"
 #include "reconRootData/ReconEvent.h"
 #include "digiRootData/DigiEvent.h"
+#include "idents/CalXtalId.h"
 #include "NtupleDef.h"
 
 class RootAnalyzer {

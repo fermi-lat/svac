@@ -1,6 +1,6 @@
 #include "NtupleDef.h"
 
-const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
+const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:Tkr1EndPos[3]/F:Tkr1EndDir[3]/F:Tkr2EndPos[3]/F:Tkr2EndDir[3]/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12][2]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
 
 NtupleDef::NtupleDef() 
 {
@@ -55,11 +55,9 @@ void NtupleDef::reset()
 
     for(int iCalLayer = 0; iCalLayer != g_nCalLayer; ++iCalLayer) {
       for(int iCol = 0; iCol != g_nCol; ++iCol) {
-
-	m_xtalEne[iTower][iCalLayer][iCol] = 0;
-
 	for(int iFace = 0; iFace != g_nFace; ++iFace){
 	  m_calReq[iTower][iCalLayer][iFace] = 0;
+  	  m_xtalEne[iTower][iCalLayer][iCol][iFace] = 0.0;
 	}
       }
     }
@@ -88,6 +86,13 @@ void NtupleDef::reset()
     m_msAngle[i] = -9999.;
     m_tkrEnergy[i] = -9999.;
     m_pairEne[i] = -9999;
+  }
+
+  for(int i = 0; i != 3; ++i) {
+    m_tkr1EndPos[i] = -9999.0;
+    m_tkr2EndPos[i] = -9999.0;
+    m_tkr1EndDir[i] = -9999.0;
+    m_tkr2EndDir[i] = -9999.0;
   }
 
 }

@@ -10,6 +10,7 @@
 #include "RootAnalyzer.h"
 #include "TROOT.h"
 #include "ToString.h"
+#include "Event/Recon/TkrRecon/TkrKalFitTrack.h"
 
 using std::cout;
 using std::endl;
@@ -228,6 +229,7 @@ void RootAnalyzer::analyzeReconTree()
 
   // fill in info stored in the very first and second track
   TObjArray* tracks = tkrRecon->getTrackCol();
+
   for(int i = 0; i != 2; ++i) {
     TkrKalFitTrack* tkrTrack = 
       dynamic_cast<TkrKalFitTrack*>(tracks->At(i));
@@ -238,6 +240,33 @@ void RootAnalyzer::analyzeReconTree()
       m_ntuple.m_rms[i] = tkrTrack->getScatter();
       m_ntuple.m_msAngle[i] = tkrTrack->getKalThetaMS();
       m_ntuple.m_tkrEnergy[i] = tkrTrack->getKalEnergy();
+
+      // End-of-track parameters:
+      Point endPos (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXPos(),
+                    tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYPos(),
+                    tkrTrack->getTrackParZ(TkrKalFitTrack::LASTHIT));
+      Vector endSlopeTmp (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXSlope(),
+                          tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYSlope(), 1.0);
+      Vector endSlope = endSlopeTmp.unit();
+      Ray trj_1 = Ray (endPos, endSlope);
+
+      if (i == 0) {
+        m_ntuple.m_tkr1EndPos[0] = trj_1.position().x();
+        m_ntuple.m_tkr1EndPos[1] = trj_1.position().y();
+        m_ntuple.m_tkr1EndPos[2] = trj_1.position().z();
+	// Need -1 here .....
+        m_ntuple.m_tkr1EndDir[0] = -1.0*trj_1.direction().x();
+        m_ntuple.m_tkr1EndDir[1] = -1.0*trj_1.direction().y();
+        m_ntuple.m_tkr1EndDir[2] = -1.0*trj_1.direction().z();
+      } else {
+        m_ntuple.m_tkr2EndPos[0] = trj_1.position().x();
+        m_ntuple.m_tkr2EndPos[1] = trj_1.position().y();
+        m_ntuple.m_tkr2EndPos[2] = trj_1.position().z();
+	// Need -1 here .....
+        m_ntuple.m_tkr2EndDir[0] = -1.0*trj_1.direction().x();
+        m_ntuple.m_tkr2EndDir[1] = -1.0*trj_1.direction().y();
+        m_ntuple.m_tkr2EndDir[2] = -1.0*trj_1.direction().z();
+      }
     }
   }
 
@@ -272,11 +301,16 @@ void RootAnalyzer::analyzeReconTree()
 	  int iCol = id.getColumn();
 
 	  float ene = calData->getEnergy();
+          
+          float eneNeg = calData->getEnergy(0,CalXtalId::NEG);
+          float enePos = calData->getEnergy(0,CalXtalId::POS);
 
 	  if(ene >= 0) ++(m_ntuple.m_nCrystalHit[iTower]);
 
-	  m_ntuple.m_xtalEne[iTower][iLayer][iCol] = ene;
-
+	  // CAL layer end energies:
+          m_ntuple.m_xtalEne[iTower][iLayer][iCol][0] = enePos;
+          m_ntuple.m_xtalEne[iTower][iLayer][iCol][1] = eneNeg;
+ 
 	  if(ene > m_ntuple.m_maxCalEnergy) m_ntuple.m_maxCalEnergy = ene;
 	}
       }
@@ -854,6 +888,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Tkr2KalThetaMs", &(m_ntuple.m_msAngle[1]), "Tkr1Ka2ThetaMs/F");
   m_tree->Branch("Tkr1KalEne", &(m_ntuple.m_tkrEnergy[0]), "Tkr1KalEne/F");
   m_tree->Branch("Tkr2KalEne", &(m_ntuple.m_tkrEnergy[1]), "Tkr2KalEne/F");
+  m_tree->Branch("Tkr1EndPos", &(m_ntuple.m_tkr1EndPos), "Tkr1EndPos[3]/F");
+  m_tree->Branch("Tkr2EndPos", &(m_ntuple.m_tkr2EndPos), "Tkr2EndPos[3]/F");
+  m_tree->Branch("Tkr1EndDir", &(m_ntuple.m_tkr1EndDir), "Tkr1EndDir[3]/F");
+  m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
   m_tree->Branch("CalEneSum", &(m_ntuple.m_calEnergy), "CalEneSum/F");
   m_tree->Branch("McCalEneSum", &(m_ntuple.m_mcCalEnergy), "McCalEneSum/F");
   m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/I");
@@ -866,7 +904,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("McConvAngle", &(m_ntuple.m_convAngle), "McConvAngle/F");
   m_tree->Branch("TkrTopTot", &(m_ntuple.m_topTot), "TkrTopTot[16]/F");
   m_tree->Branch("Tkr1ConvTot", &(m_ntuple.m_convTot), "Tkr1ConvTot/F");
-  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12]/F");
+  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12][2]/F");
   m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
   m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/I");
