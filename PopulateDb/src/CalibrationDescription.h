@@ -5,7 +5,7 @@
 #include "OracleTable.h"
 
 struct CalibrationDescription : public OracleTable {
-  long m_calDesId; 
+  long m_id; 
   int m_location;
   int m_source;
   std::string m_validStartTime;

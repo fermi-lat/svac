@@ -193,23 +193,23 @@ StatusCode RandomFill::execute( ) {
     std::cout << "input " << i << "th set of calibration constants" << std::endl;
 
     m_calDes->m_location = Constants::SlacCleanRoom;
-    m_calDes->m_source = Constants::Charge_Inj;
+    m_calDes->m_source = Constants::ChargeInj;
     m_calDes->m_validStartTime = "2002-01-01 03:03";
     m_calDes->m_validEndTime = "2002-12-31 05:05";
     m_calDes->m_creationTime = randomTime().c_str();
     m_calDes->m_orbitPos = randomDB(1000.);
     m_calDes->m_temperature = randomDB(100.);
     m_calDes->m_humidity = randomDB(100.);
-    m_calDes->m_hardware = Constants::EM;
+    m_calDes->m_hardware = Constants::EM2;
     m_calDes->m_procLevel = randomInt(4);
     m_calDes->m_status = randomInt(3);
     m_calDes->m_dataSize = randomInt(1000);
-    m_calDes->m_creator = "XinChen";
+    m_calDes->m_creator = "";
     m_calDes->m_description = "test data";
 
     try {
       // randomly fill Tkr noisy table
-      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_calDesId));
+      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_id));
       m_calDes->m_calibType = Constants::TkrNoisyChannel;
       m_calDes->fill();
 
@@ -218,7 +218,7 @@ StatusCode RandomFill::execute( ) {
 	  for(int iPos = 0; iPos != 2; ++iPos) {
 
 	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex->m_id));
-	    m_tkrIndex->m_calDesId = m_calDes->m_calDesId;
+	    m_tkrIndex->m_id = m_calDes->m_id;
 	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
 	    m_tkrIndex->fill();
 
@@ -244,7 +244,7 @@ StatusCode RandomFill::execute( ) {
       }
 
       // randomly fill Tkr dead table
-      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_calDesId));
+      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes->m_id));
       m_calDes->m_calibType = Constants::TkrDeadChannel;
       m_calDes->fill();
 
@@ -253,7 +253,7 @@ StatusCode RandomFill::execute( ) {
 	  for(int iPos = 0; iPos != 2; ++iPos) {
 
 	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex->m_id));
-	    m_tkrIndex->m_calDesId = m_calDes->m_calDesId;
+	    m_tkrIndex->m_calDesId = m_calDes->m_id;
 	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
 	    m_tkrIndex->fill();
 

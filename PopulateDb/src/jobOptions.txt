@@ -19,15 +19,8 @@ OracleDbSvc.dbName = "slac_tcp";
 OracleDbSvc.userName = "GLAST_CAL";
 OracleDbSvc.passWord = "9square#";
 
-// Use the new RootIoSvc, implementing IRunable
-//ApplicationMgr.ExtSvc += { "RootIoSvc" };
-//ApplicationMgr.Runable= "RootIoSvc"; 
-
-// ApplicationMgr.TopAlg = {"digiRootReaderAlg", "CalibEvtClock", "UseCalib",
-// ApplicationMgr.TopAlg = {"digiRootReaderAlg", "CalibEvtClock", 
-//		      "UseBadStrips" };
 ApplicationMgr.TopAlg = {"CalibEvtClock", 
-		      "RandomFill" };
+		      "GetCalElecGain" };
 
 // Persistency service setup:
 EventPersistencySvc.CnvServices = {"EventCnvSvc"};
@@ -35,11 +28,8 @@ EventPersistencySvc.CnvServices = {"EventCnvSvc"};
 // Next few lines from AcdDigi test jobOptions
 EventSelector.Input = "NONE";
 
-//GetCALPeds.calibFlavor = "chen";
-//GetCALPeds.creationTime = "2003-10-11 12:00";
-//GetCALPeds.validStartTime = "2003-10-11 12:00";
-//GetCALPeds.validEndTime = "2003-10-11 12:00";
-
+GetCalPedestal.calibFlavor = "chen_test_cal";
+GetCalElecGain.calibFlavor = "chen_test_cal";
 
 // Set output level threshold (2=DEBUG, 3=INFO, 4=WARNING, 5=ERROR, 6=FATAL )
 MessageSvc.OutputLevel      = 2;
@@ -54,12 +44,8 @@ ApplicationMgr.ExtSvc += {"CalibMySQLCnvSvc", "CalibXmlCnvSvc" };
 DetectorPersistencySvc.CnvServices += {"CalibMySQLCnvSvc"};
 DetectorPersistencySvc.CnvServices += {"CalibXmlCnvSvc"};
 
-CalibDataSvc.CalibFlavorList = {"ideal", "chen"};
+CalibDataSvc.CalibFlavorList = {"ideal", "chen_test_cal"};
 CalibDataSvc.CalibInstrumentName = "EM"; 
-
-// not used yet
-//CalibDataSvc.CalibNameList = {"TKR_HotChan/chocolate",
-//			   "Test_1/mocha"};
 
 // CalibDataSvc properties below are explicitly set to the
 // default values as established in CalibDataSvc.cxx.  
@@ -77,10 +63,4 @@ CalibMySQLCnvSvc.Host = "*";
 
 CalibEvtClock.startTime = "2003-9-25_00:20";
 CalibEvtClock.delayTime = 3;
-
-//==============================================================
-//
-// End of job options file
-//
-//##############################################################
 
