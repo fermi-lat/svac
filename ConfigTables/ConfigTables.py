@@ -14,9 +14,18 @@ import xmlUtil
 
 import joboptions
 
+
+if len(sys.argv) >= 2:
+    runNumber = sys.argv[1]
+else:
+    print "You must supply a run number."
+    sys.exit(1)
+    pass
+
+
 schemaTag = "schema"
 
-inDir = joboptions.runDir
+inDir = os.path.join(joboptions.runDir, runNumber)
 
 inPat = os.path.join(inDir, joboptions.snapshotPrefix + "*" + joboptions.exten)
 snapshots = glob.glob(inPat)
@@ -165,6 +174,7 @@ output.addChild(hTable)
 
 # put out the output
 output = str(output)
-outputFile = os.path.join(joboptions.outDir, joboptions.outFile)
+destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
+outputFile = os.path.join(destDir, joboptions.outFile)
 file(outputFile, "w").write(output)
 

@@ -165,7 +165,7 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
     #print rightTfes
     nTfe = 24
     badMagic = 63
-    if nLeft == badMagic or nRight == badMagic:
+    if nLeft == badMagic and nRight == badMagic:
         return "Absent"
     if nLeft + nRight > nTfe:
         return "Error"

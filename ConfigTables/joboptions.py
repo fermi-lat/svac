@@ -1,7 +1,8 @@
 
-runDir = "/nfs/slac/g/svac/focke/ConfigTables/rawData/139000001"
-outFile = "tables.html"
-outDir = "."
+runDir = "/nfs/farm/g/glast/u01/EM2/rawData"
+outFile = "ConfigTables.html"
+outDir = "/nfs/farm/g/glast/u01/EM2/rootData"
+reportDir = "config"
 
 registerTag = "log_acpt"
 calTags = ["log_acpt", "fhe_dac", "fle_dac", "rng_uld_dac", "ref_dac"]
