@@ -10,6 +10,16 @@
 """
 
 
+#
+def _mergeLists(*args):
+    print "merge", args
+    import bisect
+    merged = []
+    for arg in args:
+        for item in arg:
+            if item not in merged:
+                bisect.insort(merged, item)
+    return merged
 
 
 #
@@ -68,7 +78,9 @@ class ndDict(dict):
                 else:
                     next = self.__class__(empty=self.empty, dim=self.dim-1)
                     self._setSimple(myKey, next)
+                    pass
                 next[key[1:]] = value
+                pass
             pass
         else:
             self._setSimple(key, value)
@@ -113,13 +125,22 @@ class ndDict(dict):
         shape = map(len, indices)
         return shape
 
-#
-def _mergeLists(*args):
-    print "merge", args
-    import bisect
-    merged = []
-    for arg in args:
-        for item in arg:
-            if item not in merged:
-                bisect.insort(merged, item)
-    return merged
+
+    #
+    def map(self, func):
+        print "map", self
+        result = self.__class__(dim=self.dim, empty=self.empty)
+        for key, arg in self.items():
+            if self.dim == 1:
+                value = func(arg)
+            else:
+                value = arg.map(func)
+                pass
+            result[key] = value
+        return result
+
+
+    #
+    def array(self):
+        return
+    
