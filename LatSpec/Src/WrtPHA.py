@@ -89,7 +89,7 @@ def createSpecHdu(fptr, data):
     status |= cfitsio.fits_update_key_str(fptr, "XFLT0001", "NONE",
                                          "XSPEC selection filter description")
     status |= cfitsio.fits_update_key_str(fptr, "HDUVERS1", "1.1.0",
-                                         "Version number of the format")
+                                         "obsolete keyword for older software")
 
     # keywords that replace constant columns
     status |= cfitsio.fits_update_key_lng(fptr, "SYS_ERR", 0,
