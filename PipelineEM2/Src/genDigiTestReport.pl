@@ -22,7 +22,7 @@ my $reportDir = `dirname $tarBall`;
 chomp $reportDir;
 
 # not sure if we really need this one
-my $timeStamp = $??;
+my $timeStamp = '1';
 
 my $texFile = 'refman.tex';
 my $dviFile = 'refman.dvi';

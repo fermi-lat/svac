@@ -19,9 +19,12 @@ $0 running with:
   shellFile:     $shellFile
 EOT
 
-my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v3r0402p9/";
-my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/cmt";
-my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/rh9_gcc32";
+my $cmtPath = "/nfs/slac/g/svac/common/builds/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v3r0402p9/";
+my $cmtDir = "/nfs/slac/g/svac/common/builds/EngineeringModelRoot/v1/cmt";
+my $exeDir = "/nfs/slac/g/svac/common/builds/EngineeringModelRoot/v1/rh9_gcc32";
+
+my $glastRoot = "/afs/slac.stanford.edu/g/glast";
+my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
 #create option file for Main.exe
 open(OPTIONFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
@@ -35,6 +38,7 @@ close(OPTIONFILE);
 #create shell file to execute Main.exe
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile for input, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
+# didn't help #print SHELLFILE qq{source $glastScript \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
