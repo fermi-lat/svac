@@ -42,7 +42,6 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> AemLength             </TD> <TD> Size of the AEM event contribution              </TD> </TR>
 <TR> <TD> ErrLength             </TD> <TD> Size of the Error event contribution            </TD> </TR>
 <TR> <TD> DiagLength            </TD> <TD> Size of the Diagnostics event contribution. Should always be 48.</TD> </TR>
-<TR> <TD> TemError[tower]       </TD> <TD> TEM error contribution. For a detailed explanation, see section 4.4. in the Online document http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf </TD> </TR>
 <TR> <TD> GemConditionsWord     </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. For a detailed explanation of GEM quantities, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4      </TD> </TR>
 <TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector                      </TD> </TR>
 <TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector                      </TD> </TR>

@@ -96,7 +96,7 @@ void RootAnalyzer::analyzeMcTree()
     // first particle produced by pair production, used in filling m_pairEne
     int iPair = 0;
 
-    double x0, y0, z0, x1, y1, z1;
+    double x0=-9999.0, y0=-9999.0, z0=-9999.0, x1=-9999.0, y1=-999.0, z1=-9999.0;
 
     for(int iPar = 0; iPar != nPar; ++iPar) {
       McParticle* par = m_mcEvent->getMcParticle(iPar);
@@ -367,7 +367,6 @@ void RootAnalyzer::analyzeDigiTree()
   // Event sizes:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_temLength[iTower] = m_digiEvent->getEventSummaryData().temLength(iTower);
-    m_ntuple.m_temError[iTower]  = m_digiEvent->getEventSummaryData().temError(iTower); 
   }
 
   m_ntuple.m_gemLength  = m_digiEvent->getEventSummaryData().gemLength();
@@ -1101,7 +1100,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/i");
   m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength[16]/i");
   m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength[16]/i");
-  m_tree->Branch("TemError", &(m_ntuple.m_temError), "TemError[16]/i");
   m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");

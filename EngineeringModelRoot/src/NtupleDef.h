@@ -164,8 +164,6 @@ struct NtupleDef {
   unsigned int m_errLength[g_nTower];
   unsigned int m_diagLength[g_nTower];
 
-  unsigned int m_temError[g_nTower];
-
   // Event quality/flags:
   unsigned int m_eventSequence;
   unsigned int m_eventFlags;
