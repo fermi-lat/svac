@@ -1,4 +1,5 @@
-#!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
+#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
+
 """Usage: updateUrl.py runId urlKey targetFile [dataRoot]
 
 urlKey must be one of (configReportUrl, digiReportUrl, reconReportUrl,
