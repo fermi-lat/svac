@@ -2,7 +2,7 @@
 #!/nfs/slac/g/svac/local/bin/python
 
 """Usage:
-ConfigTables.py schema snapshot outDir
+ConfigTables.py runNumber schema snapshot outDir
 
 """
 
@@ -20,14 +20,15 @@ import xmlUtil
 import joboptions
 
 
-if len(sys.argv) == 4:
-    schemaFile, inFile, tarBall = sys.argv[1:]
+if len(sys.argv) == 5:
+    runNumber, schemaFile, inFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
     pass
 
 destDir = os.path.dirname(tarBall)
+tarFile = os.path.basename(tarBall)
 
 schemaTag = "schema"
 
@@ -207,3 +208,7 @@ except:
 output = str(output)
 outputFile.write(output)
 outputFile.close()
+
+# tar up the output directory
+os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
+          (destDir, tarFile, tarFile))
