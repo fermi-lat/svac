@@ -11,3 +11,6 @@ Function, class, and method doc strings must immediately succeed the defining
 statement, without blank lines between.
 
 How to document instance attributes?
+
+Prefer "@" over "\" for doxygen commands, especially in docstrings, as "\" hsa
+special meaning in Python strings.
