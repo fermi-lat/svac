@@ -31,18 +31,18 @@ reconReport_reconReportUrl_tp [label="reconReport:reconReportUrl"];
 svacTuple_svacRootFile_tp [label="svacTuple:svacRootFile"];
 #
 ## entry points
-node [color=blue];
+node [style=filled];
 ##
-online_ldf2fits_tp [label="online:ldf2fits",color=blue];
-updateELogDB_populateElogDb_tp [label="updateELogDB:populateElogDb",color=blue];
-configReport_ConfigTables_tp [label="configReport:ConfigTables",color=blue];
-digitization_Convert_tp [label="digitization:Convert",color=blue];
-digiReport_genReport_tp [label="digiReport:genReport",color=blue];
-recon_recon_tp [label="recon:recon",color=blue];
-reconReport_genReport_tp [label="reconReport:genReport",color=blue];
-svacTuple_svacTuple_tp [label="svacTuple:svacTuple ",color=blue];
+online_ldf2fits_tp [label="online:ldf2fits"];
+updateELogDB_populateElogDb_tp [label="updateELogDB:populateElogDb"];
+configReport_ConfigTables_tp [label="configReport:ConfigTables"];
+digitization_Convert_tp [label="digitization:Convert"];
+digiReport_genReport_tp [label="digiReport:genReport"];
+recon_recon_tp [label="recon:recon"];
+reconReport_genReport_tp [label="reconReport:genReport"];
+svacTuple_svacTuple_tp [label="svacTuple:svacTuple "];
 ##
-node [color=black]
+node [color=black,style=solid]
 ##
 
 
