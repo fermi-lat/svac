@@ -13,7 +13,7 @@ my $status = 0;
 foreach $oldFile (@files) {
     my $newFile = $oldFile;
     $newFile =~ s/$oldTask/$newTask/;
-    $status |= system("$linker $oldFile $newFile");
+    $status |= system("test -e $newFile || $linker $oldFile $newFile");
 }
 
 my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
