@@ -24,7 +24,7 @@ my $outFiles = $proc->{'outFiles'};
 my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};
 
-my $exe = 'populateElogDb.pl';
+my $exe = './populateElogDb.pl';
 
 my $command = "$exe '$shellFile' '$rcReport'";
 print "Running command: [$command]\nIn $ENV{'PWD'}\n";
