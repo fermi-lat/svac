@@ -6,31 +6,37 @@ size="7.5,6.5";
 #### task processes
 node [shape=box];
 ####
-online_ldf2fits_tp [label="online\nldf2fits",color=blue];
+## entry points
+node [color=blue];
+##
+online_ldf2fits_tp [label="online\nldf2fits"];
+updateELogDB_populateElogDb_tp [label="updateELogDB\npopulateElogDb"];
+configReport_ConfigTables_tp [label="configReport\nConfigTables"];
+digitization_Convert_tp [label="digitization\nConvert"];
+digiReport_genReport_tp [label="digiReport\ngenReport"];
+recon_recon_tp [label="recon\nrecon"];
+reconReport_genReport_tp [label="reconReport\ngenReport"];
+svacTuple_svacTuple_tp [label="svacTuple\nsvacTuple "];
+##
+node [color=black,style=solid];
+##
 online_injectSVAC_tp [label="online\ninjectSVAC"];
 #
-updateELogDB_populateElogDb_tp [label="updateELogDB\npopulateElogDb",color=blue];
 updateELogDB_Launch_tp [label="updateELogDB\nLaunch"];
 #
-configReport_ConfigTables_tp [label="configReport\nConfigTables",color=blue];
 configReport_configReportUrl_tp [label="configReport\nconfigReportUrl"];
 #
-digitization_Convert_tp [label="digitization\nConvert",color=blue];
 digitization_Launch_tp [label="digitization\nLaunch"];
 digitization_digiRootFile_tp [label="digitization\ndigiRootFile"];
 #
-digiReport_genReport_tp [label="digiReport\ngenReport",color=blue];
 digiReport_digiReportUrl_tp [label="digiReport\ndigiReportUrl"];
 #
-recon_recon_tp [label="recon\nrecon",color=blue];
 recon_Launch_tp [label="recon\nLaunch"];
 recon_reconRootFile_tp [label="recon\nreconRootFile"];
 recon_meritRootFile_tp [label="recon\nmeritRootFile"];
 #
-reconReport_genReport_tp [label="reconReport\ngenReport",color=blue];
 reconReport_reconReportUrl_tp [label="reconReport\nreconReportUrl"];
 #
-svacTuple_svacTuple_tp [label="svacTuple\nsvacTuple ",color=blue];
 svacTuple_svacRootFile_tp [label="svacTuple\nsvacRootFile"];
 
 #### datasets
