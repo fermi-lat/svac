@@ -29,7 +29,7 @@ import glastFits
 
 
 def createMatrixHdu(fptr, matrix, edges):
-    """@brief Append a RMF HDU to a GLAST FITS file.
+    """@brief Append an RMF HDU to a GLAST FITS file.
 
     @param fptr A GLAST FITS file open for writing.
 
@@ -132,8 +132,8 @@ def createEboundsHdu(fptr, ebounds):
 
     @param ebounds A numeric sequence containing bin edges for the
     reconstructed energy bins.  Energy is measured in keV.  The length of this
-    should be one greater than the length of the second axis of the matrix
-    (which lives in a different extension).
+    should be one greater than the length of the second axis of the
+    redistribution matrix (which lives in a different extension of this file).
 
     @return A tuple containing:
     @li CFITSIO error status, should be 0,
