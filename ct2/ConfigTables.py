@@ -122,10 +122,17 @@ output.addChildren(configParser.calFeReg(theLat))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
-output.addChildren(configParser.tkrSplits(theLat))
+output.addChildren(configParser.perGtrc(theLat))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
+
+# # This is broken, and the functionality is provided by including nread and mode tables
+# output.addChildren(configParser.tkrSplits(theLat))
+# output.addChild(html.Element("HR"))
+# output.addChild(html.Element("HR"))
+# output.addChild("\n")
+
 output.addChildren(configParser.tkrFeReg(theLat))
 output.addChild(html.Element("HR"))
 output.addChild("\n")

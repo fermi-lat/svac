@@ -20,7 +20,7 @@ import jobOptions
 
 #
 def globalStuff(doc):
-    """Deal with stuff that applies to the whole instrument"""
+    """@brief Deal with stuff that applies to the whole instrument"""
     
     output = []
 
@@ -42,7 +42,7 @@ def globalStuff(doc):
 
 #
 def globalDBStrings():
-    """Deal with LAT globals that are read from eLog DB as strings."""
+    """@brief Deal with LAT globals that are read from eLog DB as strings."""
     output = []
 
     tags = jobOptions.globalDBKeys
@@ -75,7 +75,7 @@ def globoLogical(doc, tag, label):
 
 #
 def hasTkr(doc):
-    """Do we have a TKR?"""
+    """@brief Do we have a TKR?"""
 
     hasTkr = True
 
@@ -87,7 +87,7 @@ def hasTkr(doc):
 
 #
 def tkrSplits(doc):
-    """Get GTRC splits."""
+    """@brief Get GTRC splits."""
 
     output = []
 
@@ -137,12 +137,14 @@ def tkrSplits(doc):
             pass
         pass
 
-    # write split file
-    writeSplits(viewSplits)
+    # # write split file
+    # writeSplits(viewSplits)
+    # # no, don't
 
     tems, views, layers = viewSplits.indices()
     layers.reverse()
 
+    # split into multi tables so it fits in the width of the page
     width = jobOptions.tkrSplitWidth
     nTab = int(math.ceil(float(len(tems)) / width))
     temChunks = [tems[iChunk*width:(iChunk+1)*width] for iChunk in range(nTab)]
@@ -175,7 +177,11 @@ def tkrSplits(doc):
 
 #
 def writeSplits(splits):
-    """Write out split file for use in (recon,digi) reports."""
+    """@brief Write out split file for use in (recon,digi) reports.
+
+    We don't use this anymore.  Never did, actually.
+
+    """
 
     import sys
 
@@ -215,8 +221,8 @@ def writeSplits(splits):
 
 # embarrasingly similar to calFeReg
 def tkrFeReg(doc):
-    """get stuff from TKR front ends
-    and make tables of it
+    """@brief Get stuff from TKR front ends
+    and make tables of it.
     """
 
     output = []
@@ -238,7 +244,7 @@ def tkrFeReg(doc):
 
 # embarrasingly similar to oneCalReg
 def oneTkrReg(doc, tag):
-    """Make a table for one GTFE register
+    """@brief Make a table for one GTFE register
     Tries to map layers as seen in recon file."""
 
     output = []
@@ -275,7 +281,7 @@ def oneTkrReg(doc, tag):
     return output
 
 def simpleTkrReg(doc, tag):
-    """Make a table for one GTFE register, indexed by GTCC,GTRC and GFE"""
+    """@brief Make a table for one GTFE register, indexed by GTCC,GTRC and GFE"""
 
     output = []
     
@@ -321,11 +327,65 @@ def simpleTkrReg(doc, tag):
 
     return output
 
+#
+def perGtrc(doc):
+    """@brief Make tables for stuff that comes from GTRCs.
 
+    """
+    
+    output = []
+
+    sectionTitle = "TKR readout controller (GTRC) settings"
+    output.append(html.Heading(sectionTitle, 1))
+    output.append(html.Element("HR"))    
+
+    if not hasTkr(doc):
+        output.append("There is no TKR here!")
+        return output
+
+    for registerTag in jobOptions.gtrcTags:
+        nTable = oneGtrcReg(doc, registerTag)
+        output.extend(nTable)
+        output.append(html.Element("HR"))
+        pass
+    return output
+
+#
+def oneGtrcReg(doc, tag):
+    """@brief Make tables for one GTRC register.
+
+    """
+
+    output = []
+
+    regSpec, regLabel = jobOptions.tables[tag]
+    axisLabels = jobOptions.gtrcLabels
+
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        array, indices = temData.table()
+        title = "%s for Tower %d" % (regLabel, iTem)
+        hTable = table.twoDTable(array, title, axisLabels, indices)
+        regTables.append(hTable)
+        pass
+    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
+    output.append(nTable)
+    
+    return output
+
+
+################################ CAL ####################################
 
 #
 def hasCal(doc):
-    """Do we have a CAL?"""
+    """@brief Do we have a CAL?"""
 
     hasCal = True
     
@@ -337,7 +397,7 @@ def hasCal(doc):
 
 #
 def calFeReg(doc):
-    """get stuff from CAL front ends
+    """@brief Get stuff from CAL front ends
     and make tables of it
     """
 
@@ -360,7 +420,7 @@ def calFeReg(doc):
 
 #
 def oneCalReg(doc, tag):
-    """Make a table for one GCFE register"""
+    """@brief Make a table for one GCFE register"""
 
     output = []
     
@@ -395,6 +455,7 @@ def oneCalReg(doc, tag):
 
 #
 def delays(doc):
+    """@brief Top-level function for all synchronization delays."""
     output = []
 
     sectionTitle = "Synchronization timings"
@@ -421,6 +482,7 @@ def delays(doc):
 
 #
 def oneCableDelay(doc, name):
+    """@brief Make tables of per-cable delays for one type of cable controller."""
     output = []
     
     axisLabels = jobOptions.cableLabels
@@ -440,6 +502,7 @@ def oneCableDelay(doc, name):
 
 #
 def gemStuff(doc):
+    """@brief Display stuff that lives in GGEM."""
     output = []
 
     regSpec, sectionTitle = jobOptions.tables['GEM_WIDTH']
@@ -463,6 +526,7 @@ def gemStuff(doc):
 
 #
 def tackDelays(doc):
+    """@brief Delays from trigger TACK to shaper hold."""
     output = []
 
     sectionTitle = "Delays from trigger TACK to shaper hold"
@@ -482,6 +546,7 @@ def tackDelays(doc):
 
 #
 def oneTack(doc, name):
+    """@brief Make a table of one type of TACK."""
     regSpec, junk = jobOptions.tables[name]
     title, columns = jobOptions.tackDelayLabels[name]
     
@@ -511,7 +576,7 @@ def perTem(doc):
 
 #
 def oneTem(doc, name):
-    """Make a table for one per-TEM register."""
+    """@brief Make a table for one per-TEM register."""
 
     regSpec, title = jobOptions.tables[name]
     regTable = tableFromXml.xTableGen(doc, regSpec)

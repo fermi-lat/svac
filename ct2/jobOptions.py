@@ -94,10 +94,14 @@ tkrSplitWidth = 4
 # put this many tables of TKR FE settings acros the page
 tkrTabWidth = 1 
 # put this many tables of CAL FE settings acros the page
-calTabWidth = 2 
+calTabWidth = 2
+
+# stuff from TKR readout controllers
+gtrcTags = ('TKR_NR',)
+gtrcLabels = ('GTCC', 'GTRC')
 
 # things to display from TKR front ends
-tkrTags = ('TKR_DAC',)
+tkrTags = ('TKR_MODE', 'TKR_DAC', )
 tkrAxisLabels = ('layer', 'front end')
 tkrSimpleAxisLabels = ('GTCC,GTRC (digi layer, edge)', 'GTFE')
 
