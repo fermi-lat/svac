@@ -28,12 +28,12 @@ use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $snapshot = $inFiles->{'snapshot'};
-my $split = $inFiles->{'splits'};
+#my $split = $inFiles->{'splits'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'configTablesScript'};
 
-my $command = "$exe '$runName' '$snapshot' '$split' '$tarBall'";
+my $command = "$exe '$runName' noFile '$snapshot' '$tarBall'";
 print "Running command: [$command]\n";
 
 

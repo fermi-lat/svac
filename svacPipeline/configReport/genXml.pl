@@ -12,7 +12,7 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $batchgroup = $ENV{'batchgroup'};
 
 # configReport
-my $configDataDir = "$ENV{'svacHead'}/configReport/$ENV{'configReportVersion'}";
+#my $configDataDir = "$ENV{'svacHead'}/configReport/$ENV{'configReportVersion'}";
 
 
 my $configReportXml = 
@@ -23,7 +23,7 @@ my $configReportXml =
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
 
     <name>$ENV{'configReportTask'}</name>
-    <type>>Report</type>
+    <type>Report</type>
     <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
         <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
