@@ -4,7 +4,7 @@
 
 use strict;
 
-my ($oldTask, $runName, $rcReport, $schema, $snapshot, $ldfFile) = @ARGV;
+my ($oldTask, $runName, $rcReport, $snapshot, $ldfFile) = @ARGV;
 
 my $launcher = $ENV{'taskLauncher'};
 
@@ -12,7 +12,7 @@ my $status = 0;
 
 # launch eLog task
 my $nextTask = $ENV{'eLogTask'};
-my $eLogCommand = "$launcher '$oldTask' '$nextTask' '$runName' '$rcReport' '$schema' '$snapshot' '$ldfFile'";
+my $eLogCommand = "$launcher '$oldTask' '$nextTask' '$runName' '$rcReport' '$snapshot' '$ldfFile'";
 
 my @commands = ($eLogCommand);
 

@@ -34,7 +34,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc
 my $exe = $ENV{'svacOnlineScript'};
 
 my $rcReport = $inFiles->{'rcReport'};
-my $schema = $inFiles->{'schema'};
+#my $schema = $inFiles->{'schema'};
 my $snapshot = $inFiles->{'snapshot'};
 my $ldfFile = $inFiles->{'ldf'};
 
@@ -43,7 +43,7 @@ if ((! -e $rcReport) || (-z $rcReport)) {
     exit(0);
 }
 
-my $command = "$exe '$taskName' '$runName' '$rcReport' '$schema' '$snapshot' '$ldfFile'";
+my $command = "$exe '$taskName' '$runName' '$rcReport' '$snapshot' '$ldfFile'";
 
 print "command is [$command]\n";
 
