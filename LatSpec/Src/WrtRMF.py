@@ -64,12 +64,15 @@ def createMatrixHdu(fptr, matrix, edges):
         raise ValueError, "edges don't match matrix"
     elo = edges[:-1]
     ehi = edges[1:]
+
+    n_grp = num.ones(nbin)
+    f_chan = num.ones(nbin)
+    n_chan = num.ones(nbin) * nchan
     
-    st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=3,
-                                     ttype=["ENERG_LO", "ENERG_HI", "MATRIX"],
-                                     tform=["1I", "1I", matform],
-                                     tunit=["keV", "keV", ""],
-                                     extname="MATRIX")
+    st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=6,
+         ttype=["ENERG_LO", "ENERG_HI", "N_GRP", "F_CHAN", "N_CHAN", "MATRIX"],
+         tform=["I", "I", "I", "1I", "1I", matform],
+         tunit=["keV", "keV", "", "", "", ""], extname="MATRIX")
     status |= st
 
     # required keywords
@@ -87,7 +90,10 @@ def createMatrixHdu(fptr, matrix, edges):
                                         "extension contains a response matrix")
     status |= cfitsio.fits_update_key_str(fptr, "HDUVERS", "1.3.0",
                                          "Version number of the format")
-    # What to do about TLMIN for F_CHAN?
+    # have to change this if columns are reordered
+    status |= cfitsio.fits_update_key_lng(fptr, "TLMIN4", 1,
+                                         "the first channel in the response")
+
 
     # optional keywords
     status |= cfitsio.fits_update_key_lng(fptr, "NUMGRP", nbin,
@@ -104,19 +110,23 @@ def createMatrixHdu(fptr, matrix, edges):
                                 "lower threshold used to construct the matrix")
     status |= cfitsio.fits_update_key_str(fptr, "HDUCLAS3", "REDIST",
                               "elements represent redistribution process only")
-    
-    # keywords that replace constant columns
-    status |= cfitsio.fits_update_key_lng(fptr, "N_GRP", 1,
-                                     "number of channel subsets for every bin")
-    status |= cfitsio.fits_update_key_lng(fptr, "F_CHAN", 1,
-                                      "first channel for every channel subset")
-    status |= cfitsio.fits_update_key_lng(fptr, "N_CHAN", nchan,
-                                  "number of channels in every channel subset")
+
+# XSPEC didn't like this, added the real columns.
+#     # keywords that replace constant columns
+#     status |= cfitsio.fits_update_key_lng(fptr, "N_GRP", 1,
+#                                    "number of channel subsets for every bin")
+#     status |= cfitsio.fits_update_key_lng(fptr, "F_CHAN", 1,
+#                                     "first channel for every channel subset")
+#     status |= cfitsio.fits_update_key_lng(fptr, "N_CHAN", nchan,
+#                                 "number of channels in every channel subset")
     
     # Oh, yeah, the data
     status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nbin, list(elo))
     status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nbin, list(ehi))
-    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nelt,
+    status |= cfitsio.fits_write_col_int(fptr, 3, 1, 1, n_grp)
+    status |= cfitsio.fits_write_col_int(fptr, 4, 1, 1, f_chan)
+    status |= cfitsio.fits_write_col_int(fptr, 5, 1, 1, n_chan)
+    status |= cfitsio.fits_write_col_dbl(fptr, 6, 1, 1, nelt,
                                          list(matrix.flat))
 
     if status:
