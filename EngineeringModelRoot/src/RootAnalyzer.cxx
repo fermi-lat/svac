@@ -572,19 +572,21 @@ void RootAnalyzer::analyzeData()
 
   if(nMc != 0) {
     m_mcEvent = 0;  
+    m_mcBranch = m_mcChain->GetBranch("McEvent");
     // what is stored in the root tree is actually a pointer rather than
     // mc event
-    m_mcChain->SetBranchAddress("McEvent", &m_mcEvent);
+    m_mcBranch->SetAddress(&m_mcEvent);
   }
 
   if(nRecon != 0) {
     m_reconEvent = 0;
-    m_reconChain->SetBranchAddress("ReconEvent", &m_reconEvent);
+    m_reconBranch = m_reconChain->GetBranch("ReconEvent");
+    m_reconBranch->SetAddress(&m_reconEvent);
   }
 
   if(nDigi != 0) {
-    m_digiEvent = 0;
-    m_digiChain->SetBranchAddress("DigiEvent", &m_digiEvent);
+    m_digiBranch = m_digiChain->GetBranch("DigiEvent");
+    m_digiBranch->SetAddress(&m_digiEvent);
   }
 
   /*
@@ -606,7 +608,7 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //   nEvent = 100;
+  //     nEvent = 100;
   //   nEvent = nRecon;
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
@@ -617,17 +619,17 @@ void RootAnalyzer::analyzeData()
     if(m_reconEvent) m_reconEvent->Clear();
 
     if(nMc != 0) {
-      m_mcChain->GetEvent(iEvent);
+      m_mcBranch->GetEntry(iEvent);
       analyzeMcTree();
     }
 
     if(nDigi != 0) {
-      m_digiChain->GetEvent(iEvent);
+      m_digiBranch->GetEntry(iEvent);
       analyzeDigiTree();
     }
 
     if(nRecon != 0) {
-      m_reconChain->GetEvent(iEvent);
+      m_reconBranch->GetEntry(iEvent);
       analyzeReconTree();
     }
 
