@@ -90,7 +90,7 @@ This package contains codes to generate ntuple for I&T/SVAC. The package include
 <TR> <TD> Tkr2KalEne </TD> <TD> energy of second track calculated by Kalman filter</TD> </TR>
 <TR> <TD> TkrTopTot[tower] </TD> <TD>A one dimension array which describes tot value at the top hit layer for each tower. The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR> 
 <TR> <TD> Tkr1ConvTot[tower] </TD> <TD>A one dimension array which describes tot value at the layer of the first vertex. The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR>
-<TR> <TD> TkrTp[tower] </TD> <TD>A one dimension array which describes tracker trigger primitive for each tower. For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
+<TR> <TD> TkrTp[tower][tp] </TD> <TD>A two dimension array which describes tracker trigger primitive for each tower. For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
 <TR> <TD> TkrReq[tower][layer][view][end] </TD> <TD>A 4 dimension array which describes tracker trigger request. For example: TkrReq[8][7][0][0]=1 means trigger request was sent from tower 8, layer 7, measure X and lower end of the tray.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
 </TABLE>
 
@@ -105,7 +105,7 @@ This package contains codes to generate ntuple for I&T/SVAC. The package include
 <TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> measured energy in a single crystal at each tower, layer and column </TD> </TR>
 <TR> <TD> CalMaxEne </TD> <TD> maximal measured energy in a single crystal </TD> </TR>
 <TR> <TD> CalNumHit[tower] </TD> <TD> A one dimension array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
-<TR> <TD> CalTp[tower] </TD> <TD>A one dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
+<TR> <TD> CalTp[tower][tp] </TD> <TD>A two dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 4 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent from tower 8, layer 7 and end 0.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
 </TABLE>
 
