@@ -11,9 +11,6 @@
 #
 def getSplit(nLeft, nRight, leftTfes, rightTfes):
     "Ugly hardcoded constants."
-    #print nLeft, nRight
-    #print leftTfes
-    #print rightTfes
     nTfe = 24
     badMagic = 63
     if nLeft == badMagic and nRight == badMagic:
@@ -21,10 +18,8 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
     if nLeft + nRight > nTfe:
         return "Error"
     leftTfes = leftTfes[:nLeft]
-    #print leftTfes
     firstRight = nTfe - nRight
     rightTfes = rightTfes[firstRight:]
-    #print rightTfes
     if nLeft:
         if leftTfes[-1] != 1:
             return "Error"

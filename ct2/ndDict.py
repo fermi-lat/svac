@@ -12,7 +12,6 @@
 
 #
 def _mergeLists(*args):
-    print "merge", args
     import bisect
     merged = []
     for arg in args:
@@ -39,7 +38,6 @@ class ndDict(dict):
 
     #
     def __getitem__(self, key):
-        print "get", key
         if isinstance(key, tuple):
             keyLen = len(key)
             if keyLen > self.dim:
@@ -66,7 +64,6 @@ class ndDict(dict):
 
     #
     def __setitem__(self, key, value):
-        print "set", key
         if isinstance(key, tuple):
             keyLen = len(key)
             if keyLen > self.dim:
@@ -131,7 +128,6 @@ class ndDict(dict):
 
     #
     def map(self, func):
-        print "map", self
         result = self.__class__(dim=self.dim, empty=self.empty)
         for key, arg in self.items():
             if self.dim == 1:

@@ -24,10 +24,8 @@ class xTableGen:
         self.path = path
         location, register, subField = parseReg(path)
         items = [((), self.doc)]
-        print 'items', items
         for tag in location:
             items = addPathStep(items, tag)
-            print 'items', items
             pass
         self.data = ndDict.ndDict(dim=len(location), empty='Absent')
         for coord, element in items:
@@ -56,7 +54,6 @@ def addPathStep(items, tag):
 
 #
 def getRegister(element, tag):
-    print element, tag
     child = element.getElementsByTagName(tag)[0]
     value = child.childNodes[0].data
     value = int(value, 0)

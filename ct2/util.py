@@ -13,7 +13,6 @@ class subField:
 
     #
     def __init__(self, *args):
-        print args
         if len(args) == 1:
             low, high = parseField(args[0])
         elif len(args) == 2:
