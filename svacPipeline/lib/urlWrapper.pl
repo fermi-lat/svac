@@ -32,16 +32,24 @@ my $taskProcessName = $proc->{'taskProcess_name'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlKey = $taskProcessName;
-my @inFileNames = values $$inFiles;
+my @inFileNames = values %$inFiles;
+
+my $scriptDir = $ENV{'eLogDir'};
+environmentalizer::sourceCsh("$scriptDir/setup.csh");
 
 my $exe = $ENV{'urlUpdateScript'};
 
 foreach (@inFileNames) {
 # construct a command, print it to the log file, and run it:
-    my $inFile = $_
+    my $inFile = $_;
+
+    if (! -e $_) {
+        print "File [$_] does not exist, not updating its URL\n";
+        exit(0);
+    }
 
     my $cmd = "$exe $runName $urlKey $inFile";
     print "cmd is [$cmd]\n";

@@ -1,3 +1,4 @@
+package environmentalizer;
 
 use strict;
 
