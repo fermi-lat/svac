@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl
 
+use strict;
+
 use lib '/u/gl/dflath/glast/software/DPF/PDB/';
 use DPFProc;
 

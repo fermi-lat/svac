@@ -28,7 +28,7 @@ my $snapshot = $inFiles->{'snapshot'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $command = "ConfigTables.py '$runName' '$schema' '$snapshot' '$tarBall'";
-
+print "Running command: [$command]\n";
 system $command;
 
  
