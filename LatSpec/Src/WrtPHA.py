@@ -21,8 +21,8 @@ import Numeric as num
 
 import cfitsio
 
-import tableIo
 import glastFits
+
 
 def createSpecHdu(fptr, data):
     """@brief Append a PHA SPECTRUM HDU to a GLAST FITS file.
@@ -32,7 +32,9 @@ def createSpecHdu(fptr, data):
     @param data A numeric sequence containing a histogram of counts vs energy.
     It should contain integer values, they should not be background-subtracted.
 
-    @return CFITSIO error status, should be 0.
+    @return A tuple containing:
+    @li CFITSIO error status, should be 0,
+    @li The number of the new HDU, which will then be the current HDU.
 
     """
 
@@ -42,9 +44,10 @@ def createSpecHdu(fptr, data):
     nchan = len(data)
     channel = num.arange(nchan) + 1
     
-    glastFits.createTable(fptr, naxis2=0, tfields=2,
+    st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=2,
                           ttype=["CHANNEL", "COUNTS"], tform=["I", "J"],
                           tunit=["", "count"], extname="SPECTRUM")
+    status |= st
 
     # required keywords
     status |= cfitsio.fits_update_key_str(fptr, "FILTER", "NONE",
@@ -103,7 +106,7 @@ def createSpecHdu(fptr, data):
     if status:
         raise IOError, "CFITSIO problem."
 
-    return status
+    return status, chdu
 
 
 if __name__ == "__main__":
@@ -117,7 +120,8 @@ if __name__ == "__main__":
     
     st, fptr = glastFits.createFile(testfile)
     status |= st
-    status |= createSpecHdu(fptr, data)
+    st, chdu = createSpecHdu(fptr, data)
+    status |= st
     status |= glastFits.closeFile(fptr)
 
     if status:

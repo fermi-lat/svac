@@ -75,7 +75,7 @@ def addPrimaryKeywords(fptr):
     @param fptr An open FITS file pointer.  Keywords will be aded to the
     primary HDU, and the current HDU restored before returning.
 
-    @return CFITSIO error status, should be 0.None
+    @return CFITSIO error status, should be 0.
     
     """
 
@@ -165,7 +165,8 @@ def createTable(fptr, naxis2=0, tfields=0, ttype=[], tform=[], tunit=[],
     @param fptr An open FITS file pointer.
 
     @param [naxis2=0] Number of table rows to preallocate.  Recommend leaving
-    it at the default value of 0.
+    it at the default value of 0, the table will be extended as data are
+    written.
 
     @param [tfields=0] Number of columns.
 
