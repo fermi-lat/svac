@@ -1,0 +1,18 @@
+v0
+
+Profile testing:
+
+It took 297 seconds to process a surface muon runs on two tower geomentry, 5605
+events. svac root file is roughly  4 MB.
+
+To be done:
+
+1. At the moment, the VolumeIdentifier in mcRootData is manually decoded. 
+Heather is going to add new member functions to VolumeIdentifier to do the
+decoding.
+
+2. At the moment, digiRootData only produces diagnostic info for one tower, 
+assumed to be tower 0. It should be changed in future.
+
+3. TOT corrections are carried out using Hiro's linear and quadratic formula, 
+only works for EM
