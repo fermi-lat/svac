@@ -2,11 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 3) {
-    die "Usage: $0 ldfFile shellFile jobOptionFile digiRootFile";
+if ($#ARGV != 4) {
+    die "Usage: $0 runName ldfFile shellFile jobOptionFile digiRootFile";
 }
 
-my ($ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
+my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
@@ -28,6 +28,11 @@ EOT
     
 #my $glastRoot = "/afs/slac.stanford.edu/g/glast";
 #my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
+
+# put ldfFITS file in eLog
+my $eLogCmd = "$ENV{'svacPlLib'}/updateElogReportTable.pl '$runName' FitsFile '$ldfFile'";
+print "Running command [$eLogCmd]\n";
+system($eLogCmd);
 
 if (-z $ldfFile) {
     print "LDF file [$ldfFile] has zero size.\n";
