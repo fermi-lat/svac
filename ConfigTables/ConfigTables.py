@@ -173,8 +173,23 @@ output.addChild(hTable)
 
 
 # put out the output
-output = str(output)
 destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
-outputFile = os.path.join(destDir, joboptions.outFile)
-file(outputFile, "w").write(output)
+try:
+    os.stat(destDir)
+except OSError:
+    try:
+        os.makedirs(destDir)
+    except:
+        print "Couldn't create directory %s." % destDir
+        sys.exit(2)
+outputFileName = os.path.join(destDir, joboptions.outFile)
 
+try:
+    outputFile = file(outputFileName, "w")
+except:
+    print "Couldn't create file %s." % outputFileName
+    sys.exit(3)
+
+output = str(output)
+outputFile.write(output)
+outputFile.close()
