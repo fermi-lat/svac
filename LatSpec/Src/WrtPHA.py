@@ -1,7 +1,7 @@
 
 ## @file WrtPHA.py
 ## @brief Create OGIP PHA files from GLAST LAT data.
-## @author Warren Focke
+## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
 
 #
 
