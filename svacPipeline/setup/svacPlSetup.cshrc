@@ -20,7 +20,7 @@ setenv svacPlLibVersion v2r1
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
 
-setenv iAndTPhase TowerA
+setenv iAndTPhase Integration
 
 setenv dataHead /nfs/farm/g/glast/u12/$iAndTPhase
 setenv onlineTail rawData
@@ -43,7 +43,7 @@ setenv onlineVersion V1r0
 setenv svacOnlineVersion v2r0p1
 setenv onlineTask online-EM2-${onlineVersion}
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
-setenv onlineTaskDir /nfs/slac/g/svac/common/pipeline/TowerA/onlinePipeline
+setenv onlineTaskDir /nfs/slac/g/svac/common/pipeline/EM2/onlinePipeline
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 #-------------------------------- online --------------------------------------
 
