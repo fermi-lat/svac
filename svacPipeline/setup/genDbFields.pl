@@ -46,14 +46,14 @@ my $onlineXml =
     <dataset-base-path>$ENV{'onlineHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
         <executable name=\"ldf2fitsWrapper\" version=\"onlineVersion\">
-            /nfs/slac/g/svac/common/pipeline/EM2/onlinePipeline/OnlineWrapper.pl
+            $ENV{'onlineTaskDir'}/OnlineWrapper.pl
         </executable>
         <executable name=\"injectSVACWrapper\" version=\"$ENV{'svacOnlineVersion'}\">
             $ENV{'svacOnlineDir'}/SVACWrapper.pl
         </executable>
         <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
-            <working-directory>/nfs/slac/g/svac/common/pipeline/EM2/onlinePipeline/log</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/rawData/$(RUN_NAME)</log-file-path>
+            <working-directory>$ENV{'onlineHead'}</working-directory>
+            <log-file-path>$ENV{'onlineHead'}</log-file-path>
         </batch-job-configuration>
         <file name=\"ldf\" type=\"fits\" file-type=\"LDF\"></file>
         <file name=\"rcReport\" type=\"xml\" file-type=\"rcReport\"></file>
@@ -135,27 +135,27 @@ my $configReportXml =
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
-    <name>configReport-EM2-v1r0</name>
-    <type>Digitization</type>
-    <dataset-base-path>/nfs/farm/g/glast/u12/EM2</dataset-base-path>
+    <name>$ENV{'configReportTask'}</name>
+    <type>>Report</type>
+    <dataset-base-path>$configDataDir</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"ConfigTablesWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/configReport/v1r0/ConfigTablesWrapper.pl
+        <executable name=\"ConfigTablesWrapper\" version=\"$ENV{'configReportTaskVersion'}\">
+            $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
         </executable>
-        <executable name=\"configReportUrlWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
+        <executable name=\"configReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+            $urlUpdater
         </executable>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/configReport/v1r0p0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$configDataDir</working-directory>
+            <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/configReport/v1r0p0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$configDataDir</working-directory>
+            <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"schema\" type=\"xml\" file-type=\"text\">rawData/$(RUN_NAME)</file>
-        <file name=\"snapshot\" type=\"xml\" file-type=\"text\">rawData/$(RUN_NAME)</file>
-        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\">rootData/$(RUN_NAME)/configReport/v1r0p0</file>
+        <file name=\"schema\" type=\"xml\" file-type=\"text\"></file>
+        <file name=\"snapshot\" type=\"xml\" file-type=\"text\"></file>
+        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"></file>
         <processing-step name=\"ConfigTables\" executable=\"ConfigTablesWrapper\" batch-job-configuration=\"short-job\">
                         <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
@@ -180,21 +180,21 @@ my $digitizationXml =
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
-    <name>digitization-EM2-v1r0</name>
+    <name>$ENV{'digitizationTask'}</name>
     <type>Digitization</type>
     <dataset-base-path>$digiDataDir</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"ConvertWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/digitization/v1r0/ldfToDigiWrapper.pl
+        <executable name=\"ConvertWrapper\" version=\"$ENV{'digitizationTaskVersion'}\">
+            $ENV{'digitizationTaskDir'}/ldfToDigiWrapper.pl
         </executable>
-        <executable name=\"LaunchReconWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/digitization/v1r0/recLaunchWrapper.pl
+        <executable name=\"LaunchReconWrapper\" version=\"$ENV{'digitizationTaskVersion'}\">
+            $ENV{'digitizationTaskDir'}/recLaunchWrapper.pl
         </executable>
-        <executable name=\"LaunchReportWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/digitization/v1r0/genDTRLaunchWrapper.pl
+        <executable name=\"LaunchReportWrapper\" version=\"$ENV{'digitizationTaskVersion'}\">
+            $ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl
         </executable>
-        <executable name=\"digiRootFileWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
+        <executable name=\"digiRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+            $urlUpdater
         </executable>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>$digiDataDir</working-directory>
@@ -239,15 +239,15 @@ my $digiReportXml =
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
-    <name>digiReport-EM2-v1r0</name>
+    <name>$ENV{'digiReportTask'}</name>
     <type>Report</type>
     <dataset-base-path>$digiReportDataDir</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"genReportWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/digiReport/v1r0/genDigiTestReportWrapper.pl
+        <executable name=\"genReportWrapper\" version=\"$ENV{'digiReportTaskVersion'}\">
+            $ENV{'digiReportTaskDir'}/genDigiTestReportWrapper.pl
         </executable>
-        <executable name=\"digiReportUrlWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
+        <executable name=\"digiReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+            $urlUpdater
         </executable>
         <batch-job-configuration name=\"medium-job\" queue=\"medium\" group\"$batchgroup\">
             <working-directory>$digiReportDataDir</working-directory>
@@ -299,7 +299,7 @@ my $reconXml =
     <executable name=\"genRTRLaunchWrapper\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
     </executable>
-    <executable name=\"urlWrapper\" version=\"$ENV{'reconTaskVersion'}\">
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
         $urlUpdater
     </executable>
     <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group\"$batchgroup\">
@@ -351,29 +351,29 @@ my $reconReportXml =
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
-    <name>reconReport-EM2-v1r0</name>
+    <name>$ENV{'reconReportTask'}</name>
     <type>Report</type>
-    <dataset-base-path>/nfs/farm/g/glast/u12/EM2</dataset-base-path>
+    <dataset-base-path>$reconReportDataDir</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"genReportWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/reconReport/v1r0/genReconTestReportWrapper.pl
+        <executable name=\"genReportWrapper\" version=\"$ENV{'reconReportTaskVersion'}\">
+            $ENV{'reconReportTaskDir'}/genReconTestReportWrapper.pl
         </executable>
-        <executable name=\"reconReportUrlWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
+        <executable name=\"reconReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+            $urlUpdater
         </executable>
         <batch-job-configuration name=\"long-job\" queue=\"long\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$reconReportDataDir</working-directory>
+            <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$reconReportDataDir</working-directory>
+            <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>
-        <file name=\"digi\" type=\"root\" file-type=\"DIGI\">rootData/$(RUN_NAME)/grRoot</file>
-        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\">rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</file>
-        <file name=\"recon\" type=\"root\" file-type=\"RECON\">rootData/$(RUN_NAME)/calib-v1r0/grRoot</file>
-        <file name=\"script\" type=\"csh\" file-type=\"script\">rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</file>
-        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\">rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</file>
+        <file name=\"digi\" type=\"root\" file-type=\"DIGI\"></file>
+        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
+        <file name=\"recon\" type=\"root\" file-type=\"RECON\"></file>
+        <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
+        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"></file>
         <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
@@ -400,30 +400,30 @@ my $svacTupleXml =
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
-    <name>svacTuple-EM2-v1r0</name>
+    <name>$ENV{'svacTupleTask'}</name>
     <type>Analysis</type>
-    <dataset-base-path>/nfs/farm/g/glast/u12/EM2</dataset-base-path>
+    <dataset-base-path>$svacTupleDataDir</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"svacTupleWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/svacTuple/v1r0/RunRootAnalyzerWrapper.pl
+        <executable name=\"svacTupleWrapper\" version=\"$ENV{'svacTupleTaskVersion'}\">
+            $ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl
         </executable>
-        <executable name=\"svacRootFileWrapper\" version=\"v1r0\">
-            /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
+        <executable name=\"svacRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+            $urlUpdater
         </executable>
         <batch-job-configuration name=\"long-job\" queue=\"long\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$svacTupleDataDir</working-directory>
+            <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
-            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</working-directory>
-            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+            <working-directory>$svacTupleDataDir</working-directory>
+            <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
         <file name=\"digi\" type=\"root\" file-type=\"DIGI\">rootData/$(RUN_NAME)/grRoot</file>
-        <file name=\"histogram\" type=\"root\" file-type=\"histogram\">rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</file>
-        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\">rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</file>
-        <file name=\"recon\" type=\"root\" file-type=\"RECON\">rootData/$(RUN_NAME)/calib-v1r0/grRoot</file>
-        <file name=\"script\" type=\"csh\" file-type=\"script\">rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</file>
-        <file name=\"svac\" type=\"root\" file-type=\"svac\">rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</file>
+        <file name=\"histogram\" type=\"root\" file-type=\"histogram\"></file>
+        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"></file>
+        <file name=\"recon\" type=\"root\" file-type=\"RECON\"></file>
+        <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
+        <file name=\"svac\" type=\"root\" file-type=\"svac\"></file>
         <processing-step name=\"svacTuple\" executable=\"svacTupleWrapper\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
