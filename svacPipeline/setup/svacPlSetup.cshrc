@@ -39,7 +39,7 @@ setenv svacOnlineVersion v3r0p0
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 setenv onlineDataDir EM2/rawData/'$(RUN_NAME)'
-setenv onlineDataDirFull ${dataHead}/${onlineDatDir}
+setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
 #-------------------------------- online --------------------------------------
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
