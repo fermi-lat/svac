@@ -336,6 +336,44 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
 
+
+  // GEM information:
+  m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
+
+  m_ntuple.m_gemLiveTime       = m_digiEvent->getGem().getLiveTime();
+  m_ntuple.m_gemTriggerTime    = m_digiEvent->getGem().getTriggerTime();
+  m_ntuple.m_gemDeltaEventTime = m_digiEvent->getGem().getDeltaEventTime();
+  m_ntuple.m_gemOnePpsSeconds  = m_digiEvent->getGem().getOnePpsTime().getSeconds();
+  m_ntuple.m_gemOnePpsTime     = m_digiEvent->getGem().getOnePpsTime().getTimebase();
+  m_ntuple.m_gemPrescaled      = m_digiEvent->getGem().getPrescaled();
+  m_ntuple.m_gemDiscarded      = m_digiEvent->getGem().getDiscarded();
+  m_ntuple.m_gemSent           = m_digiEvent->getGem().getSent();
+
+  m_ntuple.m_gemAcdTilesXzp = m_digiEvent->getGem().getTileList().getXzp();
+  m_ntuple.m_gemAcdTilesXzm = m_digiEvent->getGem().getTileList().getXzm();
+  m_ntuple.m_gemAcdTilesYzp = m_digiEvent->getGem().getTileList().getYzp();
+  m_ntuple.m_gemAcdTilesYzm = m_digiEvent->getGem().getTileList().getYzm();
+  m_ntuple.m_gemAcdTilesXy  = m_digiEvent->getGem().getTileList().getXy();
+  m_ntuple.m_gemAcdTilesRbn = m_digiEvent->getGem().getTileList().getRbn();
+  m_ntuple.m_gemAcdTilesNa  = m_digiEvent->getGem().getTileList().getNa();
+
+  unsigned tmpGemTkr   = m_digiEvent->getGem().getTkrVector();
+  unsigned tmpGemRoi   = m_digiEvent->getGem().getRoiVector();
+  unsigned tmpGemCalLe = m_digiEvent->getGem().getCalLeVector();
+  unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
+  unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
+
+  for (int iTower = 0; iTower<g_nTower; iTower++) {
+    m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
+    m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
+    m_ntuple.m_gemCalLeVector[iTower] = ((tmpGemCalLe >> iTower) &1 ) ;      
+    m_ntuple.m_gemCalHeVector[iTower] = ((tmpGemCalHe >> iTower) &1 ) ;      
+  }
+  for (int iCno = 0; iCno<12; iCno++) {
+    m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
+  }
+
+
   // mc events can not have diagnostic info, also check summary word
   if( (! m_mcFile) && m_digiEvent->getEventSummaryData().diagnostic() ) {
     diagnostic();
@@ -914,6 +952,27 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/I");
   m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/I");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/I");
+  m_tree->Branch("GemConditionsWord", &(m_ntuple.m_gemConditionsWord), "GemConditionsWord/I");
+  m_tree->Branch("GemTkrVector", &(m_ntuple.m_gemTkrVector), "GemTkrVector[16]/I");
+  m_tree->Branch("GemRoiVector", &(m_ntuple.m_gemRoiVector), "GemRoiVector[16]/I");
+  m_tree->Branch("GemCalLeVector", &(m_ntuple.m_gemCalLeVector), "GemCalLeVector[16]/I");
+  m_tree->Branch("GemCalHeVector", &(m_ntuple.m_gemCalHeVector), "GemCalHeVector[16]/I");
+  m_tree->Branch("GemCnoVector", &(m_ntuple.m_gemCnoVector), "GemCnoVector[12]/I");
+  m_tree->Branch("GemLiveTime", &(m_ntuple.m_gemLiveTime), "GemLiveTime/I");
+  m_tree->Branch("GemTriggerTime", &(m_ntuple.m_gemTriggerTime), "GemTriggerTime/I");
+  m_tree->Branch("GemDeltaEventTime", &(m_ntuple.m_gemDeltaEventTime), "GemDeltaEventTime/I");
+  m_tree->Branch("GemOnePpsSeconds", &(m_ntuple.m_gemOnePpsSeconds), "GemOnePpsSeconds/I");
+  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/I");
+  m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/I");
+  m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/I");
+  m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/I");
+  m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/I");
+  m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/I");
+  m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/I");
+  m_tree->Branch("GemAcdTilesYzm", &(m_ntuple.m_gemAcdTilesYzm), "GemAcdTilesYzm/I");
+  m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/I");
+  m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/I");
+  m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/I");
   m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/I");
   m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/I");
 }
