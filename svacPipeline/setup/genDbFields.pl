@@ -16,7 +16,7 @@ my $cookedRoot = "$cooked/$run";
 my $calibRoot = "$cookedRoot/$ENV{'calibVersion'}";
 
 
-my $urlUpdater = $ENV{'urlUpdateScript'};
+my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 # eLog
 my $eLogDataDir = $cookedRoot;
