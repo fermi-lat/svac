@@ -55,6 +55,8 @@ open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
+print SHELLFILE "setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'} \n";
+print SHELLFILE "setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'} \n";
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
 print SHELLFILE qq{cd $reportDir \n};

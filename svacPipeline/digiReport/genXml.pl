@@ -12,7 +12,7 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $batchgroup = $ENV{'batchgroup'};
 
 # digiReport
-my $digiReportDataDir = "$ENV{'svacEmDir'}/digiReport/$ENV{'digiReportVersion'}";
+#my $digiReportDataDir = "$ENV{'svacEmDir'}/digiReport/$ENV{'digiReportVersion'}";
 
 my $digiReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
