@@ -14,6 +14,7 @@ use DPFProc;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
 
 #####################################################
 ##
@@ -24,9 +25,10 @@ my $outFiles = $proc->{'outFiles'};
 my $schemaFile = $inFiles->{'schema'};
 my $snapFile = $inFiles->{'snapshot'};
 
-my $exe = 'ConfTLaunch.pl';
+my $exe = 'TaskLaunch.pl';
+my $newTask = 'ConfigReport';
 
-my $command = "$exe $taskName $runName $schemaFile $snapFile";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile'' $snapFile'";
 print "Running command :[$command]\n";
 my $status = system("$command");
 

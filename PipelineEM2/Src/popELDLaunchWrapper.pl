@@ -1,9 +1,5 @@
 #!/usr/local/bin/perl
 
-# Demonstration script.
-# Submitted to batch by pipeline scheduler.
-# You need only modify the last section...
-
 use strict;
 
 use lib '/u/gl/dflath/glast/software/DPF/PDB/';
@@ -26,14 +22,12 @@ my $taskName = $proc->{'task_name'};
 ##
 #####################################################
 
-my $mcRootFile = $inFiles->{'mc'};
-my $digiRootFile = $inFiles->{'digi'};
-my $reconRootFile = $inFiles->{'recon'};
+my $reportFile = $inFiles->{'rcReport'};
 
 my $exe = 'TaskLaunch.pl';
-my $newTask = 'SVACTuple';
+my $newTask = 'eLogUpdate';
 
-my $command = "$exe '$taskName' '$newTask' '$runName' '$mcRootFile' '$digiRootFile' '$reconRootFile'";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$reportFile'";
 print "Running command :[$command]\n";
 my $status = system("$command");
 
