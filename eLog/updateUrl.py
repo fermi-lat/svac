@@ -1,67 +1,84 @@
 #!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
-"""Usage: updateReportUrl.py runId reportType [dataRoot]
+"""Usage: updateUrl.py runId urlKey targetFile [dataRoot]
 
-reportType must be one of (config, recon, digi).
+urlKey must be one of (configReportUrl, digiReportUrl, reconReportUrl,
+digiRootFile, reconRootFile, meritRootFile, svacRootFile).
+
+targetFile is the file that will be pointed to.
 
 dataRoot is the root directory for the run tree on the FTP server
-(default glast.u01/EM2/rootData).
+(defaults to environment variable rootUrl).
 
 """
 
 import sys
+import os
+
 import DCOracle2
 
 #used to form ftp URL - default value
-rootDataDir = 'glast.u01/EM2/rootData'
+rootDataDir = os.environ['rootUrl']
 
-location = {"config": "config/v0r0/ConfigTables.html",
-            "digi": "digi_report/v0r0/html/index.html",
-            "recon": "calibv0/recon_report/v0r0/html/index.html"}
+reportPages = {"configReportUrl": os.environ['configReportUrl'],
+               "digiReportUrl": os.environ['digiReportUrl'],
+               "reconReportUrl": os.environ['reconReportUrl'],
+               }
 
-urlKey = {"config": "ConfigReportUrl",
-          "digi": "DigiReportUrl",
-          "recon": "ReconReportUrl",}
+goodKeys = ('configReportUrl', 'digiReportUrl', 'reconReportUrl',
+            'digiRootFile', 'reconRootFile', 'meritRootFile', 'svacRootFile',
+            )
 
 failCode = 1
 
 # parse args
 nArg = len(sys.argv)
-if nArg == 3:
-    runId, reportType = sys.argv[1:]
-elif nArg == 4:
-    runId, reportType, rootDataDir = sys.argv[1:]    
+if nArg == 4:
+    runId, urlKey, targetFile = sys.argv[1:]
+elif nArg == 5:
+    runId, urlKey, targetFile, rootDataDir = sys.argv[1:]    
 else:
+    print "Wrong number of arguments.\n"
     print __doc__
-    sys.exit(failCode)    
+    sys.exit(failCode)
 
-if reportType not in location:
+if urlKey not in goodKeys:
+    print "Bad urlKey.\n"
     print __doc__
-    sys.exit(failCode)    
+    sys.exit(failCode)
+
+# figure out the path to the target file
+path = os.path.split(targetFile)
+runIndex = path.index(runId)
+del path[:runIndex]
+if urlKey in reportPages:
+    # This is a report, we've gotta replace the tarball with the web page
+    path[-1] = pages[urlKey]
+path = os.path.join(path)
 
 #open connection to oracle database
 db = DCOracle2.connect('GLAST_CAL/9square#')
-c = db.cursor()
+cursor = db.cursor()
 
 # determine whether run is already in the database
 sqlStr = 'select * from eLogReport where RunId = %s' % runId
-c.execute(sqlStr)
-result = c.fetchone()
+cursor.execute(sqlStr)
+result = cursor.fetchone()
 if(result == None):
     print 'run %s does not exist in the database, abortted!' % runId
     db.close()
     sys.exit(failCode)
     
-# construct URL string for config report generated from online snapshots
-reportUrl = "ftp://ftp-glast.slac.stanford.edu/%s/%s/%s" % \
-            (rootDataDir, runId, location[reportType])
+# construct URL string
+reportUrl = "ftp://ftp-glast.slac.stanford.edu/%s/%s" % \
+            (rootDataDir, path)
     
 # construct sql string to input data into oracle database.
 # in oracle, '' is used to put ' inside a string.
 sqlStr = "update eLogReport set %s = '%s' where RunId = %s" % \
-         (urlKey[reportType], reportUrl, runId)
+         (urlKey, reportUrl, runId)
 
 try:
-    c.execute(sqlStr)
+    cursor.execute(sqlStr)
 except:
     (exc_type, exc_value) = sys.exc_info()[:2]
 
