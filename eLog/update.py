@@ -240,6 +240,8 @@ for report in reports:
     
     data[additionFieldsTag] = ''
     
+    intRunConfigId = 'null'
+
     for node in report.childNodes:
 
         if (node.nodeType == Node.TEXT_NODE and \
@@ -248,8 +250,6 @@ for report in reports:
             continue;
         
         name = node.nodeName
-
-        intRunConfigId = 'null'
         
         if(name == serNoTag):
             [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
