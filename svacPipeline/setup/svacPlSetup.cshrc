@@ -23,7 +23,7 @@ setenv calibVersion calib-v1r0
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion v1r0
 setenv eLogTask updateELogDB-EM2-${eLogTaskVersion}
-setenv eLogFeederVersion v1r1
+setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 #-------------------------------- eLogUpdate ----------------------------------
 

@@ -46,6 +46,24 @@ my $svacTupleDataDir = "$calibRoot/svacRoot/$ENV{'svacTupleVersion'}";
 
 open FIELDS, '>', shift;
 print FIELDS <<EOT;
+## Machine-generated file, do not edit.
+
+# This gives all the fields that must go in Navid's interface to set up the SVAC pipeline.
+# The fields are:
+#
+# for a task:
+# Name, Type, Base Path, Comment
+#
+# for a process:
+# Name, Sequence, Application, Version, Command (the wrapper), batch Queue, Log directory, CWD (where the wrapper is run), Comment
+# As far as I can tell, Application Version are basically comments.
+#
+# for a dataset:
+# Name, Data Type, File Format, Path, Comment
+
+# Datasets that are seen by more than one task are only shown in full for the first task that sees them.
+
+
 $ENV{'eLogTask'}		Report		$ENV{'dataHead'}		Populate eLog database
 
 populateElogDb	1	populateElogDb.pl	$ENV{'eLogTaskVersion'}	$eLogTaskDir/populateElogDbWrapper.pl		short	$cookedRoot	$eLogTaskDir		Enter run in electronic logbook.
@@ -64,8 +82,8 @@ $ENV{'configReportTask'}	Report	$ENV{'dataHead'}		Make instrument configuration 
 
 ConfigTables	1	ConfigTables.py	$ENV{'configReportTaskVersion'}	$configTaskDir/ConfigTablesWrapper.pl	short	$configDataDir	$ENV{'svacCmt'}/ConfigTables/$ENV{'configReportVersion'}/Src		Create instrument configuration tables.
 
-schema	text	xml	$rawRoot			XML schema file
-snapshot	text	xml	$rawRoot			XML snapshot file
+schema
+snapshot
 tarBall	Analysis	tgz	$configDataDir		Tarball (.tgz) of configuration report directory
 
 
@@ -78,7 +96,7 @@ LaunchReport	3	TaskLaunch.pl	$ENV{'digitizationTaskVersion'}	$digiTaskDir/genDTR
 
 digi		DIGI	root	$digiDataDir	Raw data in detector space
 jobOptions	text	jobOpt	$digiDataDir	config file
-ldf		LDF	fits	$rawRoot		Raw data in electronics space
+ldf
 script		script	csh	$digiDataDir	script
 
 
@@ -87,7 +105,7 @@ $ENV{'digiReportTask'}	Report	$ENV{'dataHead'}		Report on contents of digi file
 
 genReport		1	TestReport.exe	$ENV{'digiReportTaskVersion'}	$digiReportTaskDir/genDigiTestReportWrapper.pl	short	$digiReportDataDir	$digiReportTaskDir		Make report on digi file contents
 
-digi		DIGI	root	$digiDataDir		input digi file
+digi
 jobOptions	text	jobOpt	$digiReportDataDir		output config file
 script		script	csh	$digiReportDataDir		output script file
 tarBall		Analysis	tgz	$digiReportDataDir		tarball of report directory
@@ -100,7 +118,7 @@ recon		1	recon.pl		$ENV{'reconTaskVersion'}	$reconTaskDir/reconWrapper.pl		long	
 LaunchSVAC	2	TaskLaunch.pl	$ENV{'reconTaskVersion'}	$reconTaskDir/RunRALaunchWrapper.pl	short	$reconDataDir	$reconTaskDir		Launch SVAC tuple creation task
 LaunchReport	3	TaskLaunch.pl	$ENV{'reconTaskVersion'}	$reconTaskDir/genRTRLaunchWrapper.pl	short	$reconDataDir	$reconTaskDir		Launch recon report task
 
-digi		DIGI	root	$digiDataDir		digi file
+digi
 jobOptions	text	jobOpt	$reconDataDir		options for recon
 merit		merit	root	$reconDataDir		merit tuple
 recon		RECON	root	$reconDataDir		recon file
@@ -112,9 +130,9 @@ $ENV{'reconReportTask'}	Report	$ENV{'dataHead'}		Report on contents of recon & d
 
 genReport		1	TestReport.exe	$ENV{'reconReportTaskVersion'}	$reconReportTaskDir/genReconTestReportWrapper.pl	short	$reconReportDataDir		$reconReportTaskDir		Create recon report
 
-digi		DIGI	root	$digiDataDir		Digi file
+digi
 jobOptions	text	jobOpt	$reconReportDataDir		Option file
-recon		RECON	root	$reconDataDir		Recon file
+recon
 script		script	csh	$reconReportDataDir		Script
 tarBall		Analysis	tgz	$reconReportDataDir		tarball of report directory
 
@@ -124,10 +142,10 @@ $ENV{'svacTupleTask'}	Analysis	$ENV{'dataHead'}		Make SVAC "tuple"
 
 svacTuple		1	RunRootAnalyzer.exe		$ENV{'svacTupleTaskVersion'}	$svacTupleTaskDir/RunRootAnalyzerWrapper.pl	short	$svacTupleDataDir	$svacTupleTaskDir		Make SVAC "tuple"
 
-digi		DIGI	root	$digiDataDir		Digi file
+digi
 histogram		histogram	root	$svacTupleDataDir		SVAC histograms
 jobOptions	text	jobOpt	$svacTupleDataDir		option file
-recon		RECON	root	$reconDataDir		Recon file
+recon
 script		script	csh	$svacTupleDataDir		script
 svac		svac	root	$svacTupleDataDir		SVAC "tuple"
 EOT
