@@ -20,16 +20,13 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-# Gotta get the run number in here somehow.
 my $schema = $inFiles->{'schema'};
 my $snapshot = $inFiles->{'snaphot'};
 
 my $tarBall = $outFiles->{'tarBall'};
 
-my $command = "ConfigTables.py $runName $schema $snapshot $tarBall";
-my $extension = " | tee $logFile 2>&1 ";
-my $syscmd = "$command $extension";
+my $command = "ConfigTables.py '$runName' '$schema' '$snapshot' '$tarBall'";
 
-system $syscmd;
+system $command;
 
  

@@ -29,8 +29,6 @@ my $logFile = $outFiles->{'logFile'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genDigiTestReport.pl';
 
-my $command = "$exe $digiRootFile $optionFile $shellFile $tarBall";
-my $extension = " | tee $logFile 2>&1 ";
-my $syscmd = "$command $extension";
+my $command = "$exe '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 
-system $syscmd;
+system $command;
