@@ -2,16 +2,18 @@
 
 use strict;
 
-my $ldfFile = $ENV{'ldfFile'};
+if ($#ARGV != 3) {
+    die "Usage: $0 ldfFile shellFile jobOptionFile digiRootFile";
+}
 
-my $shellFile = $ENV{'shellFile'};
-my $jobOptionFile = $ENV{'jobOptionFile'};
-my $digiRootFile = $ENV{'digiRootFile'};
+my ($ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
 my $ldfFileType = $ENV{'ldfFileType'};
+my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
+my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
 print <<EOT;
 $0 running with options:
@@ -36,6 +38,8 @@ open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 #print SHELLFILE "source $glastScript \n";
+print SHELLFILE "setenv CMTCONFIG $svacCmtConfig \n";
+print SHELLFILE "setenv GLAST_EXT $svacGlastExt \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
@@ -53,46 +57,35 @@ close(SHELLFILE);
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
-ApplicationMgr.DLLs+= { "GaudiAlg", "GaudiAud"};
+ApplicationMgr.DLLs   += {"GaudiAlg",
+                          "GaudiAud"};
 ApplicationMgr.ExtSvc += {"ChronoStatSvc"};
-AuditorSvc.Auditors = {"ChronoAuditor"};
-ApplicationMgr.DLLs += {"LdfConverter"};
-//EventSelector.Instrument = "EM";
-ApplicationMgr.ExtSvc += { 
-    "LdfEventSelector/EventSelector" , 
-    "LdfCnvSvc/EventCnvSvc"
-    };
+AuditorSvc.Auditors    = {"ChronoAuditor"};
+ApplicationMgr.TopAlg = {"Sequencer/Top"};
+Top.Members = {"Sequencer/Triggered"};
+Triggered.Members = {"Sequencer/Trigger",
+                     "Sequencer/Output"};
+ApplicationMgr.DLLs    += {"GlastSvc"};
+ApplicationMgr.ExtSvc  += {"GlastDetSvc"};
+GlastDetSvc.topVolume   = "LAT"; 
+GlastDetSvc.visitorMode = "recon";
+ApplicationMgr.DLLs += {"Trigger"};
+Trigger.Members      = {"TriggerAlg"};
+TriggerAlg.mask = 0; 
+ApplicationMgr.DLLs += {"RootIo"}; 
+Output.Members       = {"digiRootWriterAlg"};
+ApplicationMgr.DLLs   += {"LdfConverter"};
+ApplicationMgr.ExtSvc += {"LdfEventSelector/EventSelector","LdfCnvSvc/EventCnvSvc"};
 EventPersistencySvc.CnvServices = {"EventCnvSvc"};
-ApplicationMgr.TopAlg = {
-      "Sequencer/Top" };
-Generator.Members = {};
-Digitization.Members = {};
-Top.Members={
-    "Sequencer/Trigger",
-    "Sequencer/Output" 
-};
-ApplicationMgr.DLLs += {"GlastSvc"};
-ApplicationMgr.ExtSvc += { "GlastDetSvc"};
-//GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml";
-GlastDetSvc.visitorMode="recon";
-ApplicationMgr.DLLs +={ 
-    "Trigger", "RootIo"
-}; 
-Trigger.Members = {"TriggerAlg"};
-TriggerAlg.mask = 0;
-
-ApplicationMgr.ExtSvc += { "RootIoSvc" };
-digiRootWriterAlg.OutputLevel=3;
-Output.Members = {
-    "digiRootWriterAlg"
-};
-digiRootWriterAlg.digiRootFile = "$digiRootFile";
+EventSelector.Instrument = "LAT";
+MessageSvc.OutputLevel = 3;
+ApplicationMgr.EvtMax = 10000000;
+GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml";
 EventSelector.StorageType = "$ldfFileType";
 EventSelector.InputList = {"$ldfFile"};
-EventSelector.OutputLevel = 4;
-MessageSvc.OutputLevel = 3;
-ApplicationMgr.EvtMax  = 100000000;
+digiRootWriterAlg.digiRootFile = "$digiRootFile";
 EOF
+
 close(JOBOPTIONFILE);
 
 system("chmod +rwx $shellFile");
