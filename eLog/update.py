@@ -105,7 +105,6 @@ def transformStrList(string):
     length = len(l)
 
     for item in l[0:length-1]:
-        print item
         oracleStr = oracleStr + str(item) + ':'
 
     oracleStr += str(l[length-1])
