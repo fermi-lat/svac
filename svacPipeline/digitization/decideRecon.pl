@@ -11,7 +11,7 @@ $ENV{'TNS_ADMIN'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/network/admin/tnsna
 $ENV{'LIBHOME'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/lib";
 
 my $result = &isParticleRun($ARGV[0]);
-print $result;
+print "$result\n";
 
 sub isParticleRun {
 
