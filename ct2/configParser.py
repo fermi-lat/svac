@@ -267,20 +267,21 @@ def simpleTkrReg(doc, tag):
     tems = xTable.data.items()
     tems.sort()
     for iTem, temData in tems:
-        array, indices = temData.table()
-        nTccs, nTrcs, nTfes = array.shape
-        nReaders = nTccs * nTrcs
-        flatterArray = ndList.ndList(shape=(nReaders,nTfes))
+        tccs = temData.items()
+        tccs.sort()
+        flatterArray = []
+        
+        junk, indices = temData.table()
         tfeLabels = indices[-1]
         readerLabels = []
         labels = (readerLabels, tfeLabels)
-        for iTcc, tccId in enumerate(indices[0]):
-            for iTrc, trcId in enumerate(indices[1]):
-                index = iTcc * nTrcs + iTrc
-                readerLabels.append('%s,%s' % (tccId, trcId))
-                for iTfe in range(nTfes):
-                    flatterArray[index, iTfe] = array[iTcc, iTrc, iTfe]
-                    pass
+
+        for iTcc, (tccId, tccData) in enumerate(tccs):
+            array, indices = tccData.table()
+            for iTrc, trcId in enumerate(indices[0]):
+                readerLabels.append('%s,%s (%s, %s)' %
+                                    (tccId, trcId, temUtil.layerMap[tccId][trcId], temUtil.wEdgeMap[tccId]))
+                flatterArray.append(array[iTrc])
                 pass
             pass
         title = "%s for Tower %d" % (regLabel, iTem)
