@@ -80,10 +80,10 @@ class Heading(Element):
 
     def __init__(self, heading="", level=1):
         Element.__init__(self)
-        self.attr["ALIGN"] = "CENTER"
+        #self.attr["ALIGN"] = "CENTER"
         self.tag = "".join((self.tagBase, str(level)))
         self.addChild(heading)
-        self.addChild(Element("HR"))
+        #self.addChild(Element("HR"))
         return
 
     pass

@@ -74,6 +74,13 @@ for registerTag in joboptions.calTags:
     elements = doc.getElementsByTagName(registerTag)
     container = util.contain(elements, shapes)
 
+    output.addChild("\n")
+    output.addChild(html.Element("HR"))
+    output.addChild("\n")
+
+    registerLabel = temUtil.registerMap[registerTag]
+    output.addChild(html.Heading(registerLabel, 2))
+
     for jtem, tem in enumerate(container):
         sides = []
         for iside, side in enumerate(tem):
@@ -81,7 +88,6 @@ for registerTag in joboptions.calTags:
             #output.addChild("\n")
 
             sideLabel = temUtil.cccSideMap[iside]
-            registerLabel = temUtil.registerMap[registerTag]
             title = "%s for Tower %d side %s" % (registerLabel, jtem, sideLabel)
             yLen = len(side)
             xLen = len(side[0])
@@ -95,10 +101,6 @@ for registerTag in joboptions.calTags:
         hTable = html.nWay(sides, joboptions.width)
         output.addChild(hTable)
         pass
-
-    output.addChild("\n")
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
     pass
 
 
@@ -164,7 +166,14 @@ for jtem, tem in enumerate(splits):
 array = util.transpose(array)
 array.reverse()
 
-splitCaption = "Tracker Split Points (Left:Right)"
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+
+splitLabel = "Tracker Split Points"
+output.addChild(html.Heading(splitLabel, 2))
+
+splitCaption = splitLabel + " (Left:Right)"
 hTable = table.oneDTable(array, splitCaption, labels)
 output.addChild(hTable)
 
