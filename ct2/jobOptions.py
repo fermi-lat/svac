@@ -1,11 +1,12 @@
 
 import os
 
-jobOptions.runNumber = ''
-jobOptions.schemaFile = ''
-jobOptions.snapFile = ''
-jobOptions.tarBall = ''
-jobOptions.splitFile = ''
+# defaults for command-line args
+jobOptions.runNumber = '1'
+jobOptions.schemaFile = 'schema.xml'
+jobOptions.snapFile = 'snapshot.xml'
+jobOptions.tarBall = 'configReport.tgz'
+jobOptions.splitFile = 'splits.dat'
 
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']
