@@ -20,7 +20,8 @@ my $configReportXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'configReportTask'}</name>
     <type>>Report</type>
     <dataset-base-path>$configDataDir</dataset-base-path>
@@ -31,6 +32,7 @@ my $configReportXml =
         <executable name=\"configReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
+
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$configDataDir</working-directory>
             <log-file-path>$configDataDir</log-file-path>
@@ -39,8 +41,11 @@ my $configReportXml =
             <working-directory>$configDataDir</working-directory>
             <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"snapshot\" pipeline=\"$ENV{'onlineTask'}\" name=\"snapshot\"/>
+
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+
+        <foreign-input-file name=\"snapshot\" pipeline=\"$ENV{'onlineTask'}\" name=\"snapshot\"/>
+
         <processing-step name=\"ConfigTables\" executable=\"ConfigTablesWrapper\" batch-job-configuration=\"short-job\">
                         <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>

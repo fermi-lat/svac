@@ -16,7 +16,8 @@ my $updateElogDbXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'eLogTask'}</name>
     <type>Report</type>
     <dataset-base-path>$eLogDataDir</dataset-base-path>
@@ -30,12 +31,16 @@ my $updateElogDbXml =
         <executable name=\"LaunchConfRepWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
         </executable>
+
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$eLogDataDir</working-directory>
             <log-file-path>$eLogDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"rcReport\" pipeline=\"$ENV{'onlineTask'}\" file=\"rcReport\"/>
+
         <file name=\"script\" type=\"csh\" file-type=\"script\"/>
+
+        <foreign-input-file name=\"rcReport\" pipeline=\"$ENV{'onlineTask'}\" file=\"rcReport\"/>
+
         <processing-step name=\"populateElogDb\" executable=\"populateElogDbWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"rcReport\"/>
                         <output-file name=\"script\"/>

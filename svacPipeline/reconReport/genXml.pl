@@ -19,7 +19,8 @@ my $reconReportXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'reconReportTask'}</name>
     <type>Report</type>
     <dataset-base-path>$reconReportDataDir</dataset-base-path>
@@ -30,6 +31,7 @@ my $reconReportXml =
         <executable name=\"reconReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
+
         <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$reconReportDataDir</working-directory>
             <log-file-path>$reconReportDataDir</log-file-path>
@@ -38,11 +40,14 @@ my $reconReportXml =
             <working-directory>$reconReportDataDir</working-directory>
             <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\"/ file=\"recon\">
+
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
         <file name=\"script\" type=\"csh\" file-type=\"script\"/>
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+
+        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
+        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\"/ file=\"recon\">
+
         <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>

@@ -19,7 +19,8 @@ my $digiReportXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'digiReportTask'}</name>
     <type>Report</type>
     <dataset-base-path>$digiReportDataDir</dataset-base-path>
@@ -30,6 +31,7 @@ my $digiReportXml =
         <executable name=\"digiReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
+
         <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
             <working-directory>$digiReportDataDir</working-directory>
             <log-file-path>$digiReportDataDir</log-file-path>
@@ -38,10 +40,13 @@ my $digiReportXml =
             <working-directory>$digiReportDataDir</working-directory>
             <log-file-path>$digiReportDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
+
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
         <file name=\"script\" type=\"csh\" file-type=\"script\"/>
         <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+
+        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
+
         <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"medium-job\">
                         <input-file name=\"digi\"/>
                         <output-file name=\"jobOptions\"/>

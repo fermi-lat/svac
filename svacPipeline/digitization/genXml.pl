@@ -19,7 +19,8 @@ my $digitizationXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'digitizationTask'}</name>
     <type>Digitization</type>
     <dataset-base-path>$digiDataDir</dataset-base-path>
@@ -36,6 +37,7 @@ my $digitizationXml =
         <executable name=\"digiRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
+
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$digiDataDir</working-directory>
             <log-file-path>$digiDataDir</log-file-path>
@@ -44,10 +46,13 @@ my $digitizationXml =
             <working-directory>$digiDataDir</working-directory>
             <log-file-path>$digiDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"ldf\" pipeline=\"$ENV{'onlineTask'}\" name=\"ldf\"/>
+
         <file name=\"digi\" type=\"root\" file-type=\"DIGI\"/>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
         <file name=\"script\" type=\"csh\" file-type=\"script\"/>
+
+        <foreign-input-file name=\"ldf\" pipeline=\"$ENV{'onlineTask'}\" name=\"ldf\"/>
+
         <processing-step name=\"Convert\" executable=\"ConvertWrapper\" batch-job-configuration=\"medium-job\">
                         <input-file name=\"ldf\"/>
                         <output-file name=\"digi\"/>

@@ -19,7 +19,8 @@ my $svacTupleXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+
     <name>$ENV{'svacTupleTask'}</name>
     <type>Analysis</type>
     <dataset-base-path>$svacTupleDataDir</dataset-base-path>
@@ -30,6 +31,7 @@ my $svacTupleXml =
         <executable name=\"svacRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
+
         <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$svacTupleDataDir</working-directory>
             <log-file-path>$svacTupleDataDir</log-file-path>
@@ -38,12 +40,15 @@ my $svacTupleXml =
             <working-directory>$svacTupleDataDir</working-directory>
             <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\" file=\"recon\"/>
+
         <file name=\"histogram\" type=\"root\" file-type=\"histogram\"/>
         <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
         <file name=\"script\" type=\"csh\" file-type=\"script\"/>
         <file name=\"svac\" type=\"root\" file-type=\"svac\"/>
+
+        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
+        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\" file=\"recon\"/>
+
         <processing-step name=\"svacTuple\" executable=\"svacTupleWrapper\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
