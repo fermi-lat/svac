@@ -1,0 +1,31 @@
+package NtupleCompare
+
+version v0
+
+author X. Chen <xchen@slac.stanford.edu>
+
+use GlastPolicy v*
+use ROOT v* IExternal
+use RootPolicy v*
+
+apply_pattern package_include
+apply_pattern package_headers
+
+#the following prepend makes the includes folder available locally: avoid the package_include
+macro_prepend includes "-I $(NTUPLECOMPAREROOT) " WIN32 "/I $(NTUPLECOMPAREROOT) "
+
+macro ntuplecompare_headers   "" WIN32
+
+macro source "*.cxx" WIN32 "*.h *.cxx"
+
+macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d "
+
+macro NRLINKOPT "-L /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/lib/ -lNR "
+
+path_append LD_LIBRARY_PATH /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/lib/
+
+macro_append NtupleCompare_linkopts " $(NRLINKOPT) "
+
+include_dirs /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/src
+
+application NtupleCompare *.cxx  
