@@ -38,9 +38,10 @@ my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
-if ((! -e $ldfFile) || (-z $ldfFile)) {
-    print "LDF file [$ldfFile] does not exist or has zero size, not launching digitization task.\n";
-    exit(0);
+my $doDigi = `decideDigi.pl $runName $ldfFile`;
+chomp $doDigi;
+if (!$doDigi) {
+	exit(0);
 }
 
 print "Running command: [$command]\n";
