@@ -8,8 +8,8 @@ $jobFile = "../src/job.dat";
 
 
 my $cmtPath = "/nfs/farm/g/glast/u06/chen/glast_mc/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v1r0401p9/";
-my $cmtDir = "/nfs/farm/g/glast/u06/chen/glast_mc/svac/EngineeringModelRoot/v0/cmt";
-my $exeDir = "/nfs/farm/g/glast/u06/chen/glast_mc/svac/EngineeringModelRoot/v0/rh9_gcc32";
+my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/cmt";
+my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/EngineeringModelRoot/v0r2/rh9_gcc32";
 my $digiRootDir = '/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/';
 my $svacRootDir = $digiRootDir;
 
