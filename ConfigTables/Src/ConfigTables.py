@@ -26,7 +26,7 @@ else:
     sys.exit(1)
     pass
 
-destDir = os.path.dirname(tarBall)
+destDir = os.path.dirname(tarBall) or '.'
 tarFile = os.path.basename(tarBall)
 
 schemaTag = "schema"
@@ -130,7 +130,10 @@ subField = util.SubField(7, 13)
 nRead = util.superMap(subField, tCsrs)
 
 #get TKR modes
-modes = doc.getElementsByTagName("mode")
+gtrcs = doc.getElementsByTagName("GTRC")
+modes = []
+for gtrc in gtrcs:
+    modes.extend(gtrc.getElementsByTagName("mode"))
 modes = util.contain(modes, shapes)
 
 nTrc = shapes["GTRC"]
@@ -194,14 +197,14 @@ except OSError:
     try:
         os.makedirs(destDir)
     except:
-        print "Couldn't create directory %s." % destDir
+        print "Couldn't create directory [%s]." % destDir
         sys.exit(2)
 outputFileName = os.path.join(destDir, joboptions.outFile)
 
 try:
     outputFile = file(outputFileName, "w")
 except:
-    print "Couldn't create file %s." % outputFileName
+    print "Couldn't create file [%s]." % outputFileName
     sys.exit(3)
 
 output = str(output)
