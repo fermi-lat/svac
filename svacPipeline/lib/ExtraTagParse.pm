@@ -8,10 +8,11 @@ sub tagParse {
 
 This parses values out of the AdditionFields string.
 
-If fed the string and a tag, it returns the value corresponding to the tag.
+If fed the string and a tag, it returns the value corresponding to the tag (a
+string).  Returns numeric 0 if the tag is not present.
 
-If fed just the string, it returns a hash containing the values associated
-with each tag.
+If fed just the string, it returns (a reference to) a hash containing the
+values associated with each tag (all strings).
 
 =cut
 
