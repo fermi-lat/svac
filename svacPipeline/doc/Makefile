@@ -26,8 +26,8 @@ IAndTPipeline.pdf: IAndTPipeline.ps
 IAndTPipeline.ps: IAndTPipeline.tex $(EPSFILES)
 
 clean:
-	rm -f *.ps *.eps *.pdf *.aux *.dvi *.log *.gif
+	rm -f *.ps *.eps *.pdf *.aux *.dvi *.log *.gif web
 
-web: $(GIFFILES)
-	cp $^ /u/ek/focke/public_html/pipeline
+web: $(GIFFILES) IAndTPipeline.pdf
+	cp $? /u/ek/focke/public_html/pipeline
 	touch web

@@ -68,7 +68,13 @@ There are more TPs (22 here), since it takes a TP to launch a task.  Under a
 future version of GINO which understood parallel execution, branching
 dependency flow, and multiple entry points, all of this stuff would be in 2
 tasks (instead of 8 now), and all but 1 of these "chaining" TPs would be
-eliminated.  Note that each TP involves at least two scripts.
+eliminated.  
+
+Note that each TP involves at least two scripts.  Setting this up required
+filling out over 400 fields trough a web interface.  They had to be entered
+without error, as they could not be edited once entered.  That web interface
+is now deprecated, configuration is done with XML files which can be edited
+offline or machine-generated.
 
 There appear to be more datasets.  This is beacuse the DSs seen by a task
 include the task name, so the TPs that launch a task must make copies of or
