@@ -2,7 +2,19 @@
 
 use strict;
 
+if ($#ARGV != 3) {
+    die "Usage: $0 digiRootFile optionFile shellFile tarBall";
+}
+
 my ($digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+
+print <<EOT;
+$0 running with:
+  digiRootFile: $digiRootFile
+  optionFile:   $optionFile
+  shellFile:    $shellFile
+  tarBall:      $tarBall
+EOT
 
 my $reconRootFile = 'noSuchFile';
 
