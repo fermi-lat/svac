@@ -8,9 +8,9 @@ $jobFile = "../src/job.dat";
 
 
 my $cmtPath = "/nfs/farm/g/glast/u06/chen/glast_mc/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v1r0401p9/";
-my $cmtDir = "/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModelRoot/v1r0401p9/cmt";
-my $exeDir = "/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModelRoot/v1r0401p9/rh9_gcc32";
-my $digiRootDir = '/nfs/farm/g/glast/u01/mc/em_v1r0401p9/oneTower/';
+my $cmtDir = "/nfs/farm/g/glast/u06/chen/glast_mc/svac/EngineeringModelRoot/v0/cmt";
+my $exeDir = "/nfs/farm/g/glast/u06/chen/glast_mc/svac/EngineeringModelRoot/v0/rh9_gcc32";
+my $digiRootDir = '/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/';
 my $svacRootDir = $digiRootDir;
 
 open(JOBFILE, "<$jobFile") || die "Can't open $jobFile for input, abortted!";
@@ -41,13 +41,14 @@ while(<JOBFILE>) {
     open(SHELLFILE, ">$shellFile") || 
 	die "Can't open $shellFile for input, abortted!";
     print SHELLFILE qq{#!/bin/csh \n \n};
+    print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
     print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
     print SHELLFILE qq{source $cmtDir/setup.csh \n};
     print SHELLFILE qq{$exeDir/RunRootAnalyzer.exe $optionFile \n};
     close(SHELLFILE);
     system("chmod +rwx $shellFile");
 #    system("$shellFile");
-    system("bsub -q medium -o $dumpFile $shellFile");
+#    system("bsub -q medium -o $dumpFile $shellFile");
 }
 
 close(JOBFILE);

@@ -20,7 +20,7 @@ std::string mergedMeritFile = "merge_merit.root";
 
 std::string jobDataFile = "../src/job.dat";
 
-std::string svacDir = "/nfs/farm/g/glast/u01/mc/em_v1r0401p9/oneTower/";
+std::string svacDir = "/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/";
 std::string meritDir = svacDir;
 
 int main() 
