@@ -3,16 +3,17 @@
 use strict;
 
 if ($#ARGV != 5) {
-    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall";
+    die "Useage: $0 runName digiRootFile reconRootFile splitInfoFile optionFile shellFile tarBall";
 }
 
-my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $splitInfoFile $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
   runName:       [$runName]
   digiRootFile:  [$digiRootFile]
   reconRootFile: [$reconRootFile]
+  splitInfoFile: [$splitInfoFile]
   optionFile:    [$optionFile]
   shellFile:     [$shellFile]
   tarBall:       [$tarBall]
@@ -33,6 +34,11 @@ my $cmtDir = $ENV{'reconReportCmt'};
 my $exe = $ENV{'reconReportApp'};
 my $reconReportVersion = $ENV{'reconReportVersion'};
 my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
+my $calibGenTKRVersion = $ENV{'calibGenTKRVersion'};
+my $calibGenCALVersion = $ENV{'calibGenCALVersion'};
+my $latexHeaderFile = $ENV{'latexHeaderFile'};
+my $doxyFile = $ENV{'digiRepDoxyFile'};
+my $testReportVersion = $ENV{'TestReportVersion'};
 
 my $doxyFile = $ENV{'reconRepDoxyFile'};
 
@@ -46,6 +52,9 @@ print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
 print OPTFILE qq{$reconReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
+print OPTFILE qq{$calibGenTKRVersion \n};
+print OPTFILE qq{$calibGenCALVersion \n};
+print OPTFILE qq{$splitInfoFile \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
@@ -56,7 +65,10 @@ print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile \n};
 print SHELLFILE qq{cd $reportDir \n};
+print SHELLFILE qq{setenv latexHeader '$latexHeaderFile' \n};
+print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};
 print SHELLFILE qq{doxygen $doxyFile \n};
+print SHELLFILE qq{mv *.eps latex/ \n};
 print SHELLFILE qq{cd latex \n};
 print SHELLFILE qq{latex $texFile \n};
 print SHELLFILE qq{dvips -o $psFile $dviFile \n};
