@@ -4,12 +4,13 @@
 
 #
 
+import jobOptions
 
 #
 def calFeReg(doc):
     # get stuff from CAL front ends
     # and make tables of it
-    for registerTag in joboptions.calTags:
+    for registerTag in jobOptions.calTags:
         elements = doc.getElementsByTagName(registerTag)
         container = util.contain(elements, shapes)
 
@@ -34,7 +35,7 @@ def calFeReg(doc):
                                          (xLab, yLab))
                 sides.append(hTable)
                 pass
-            hTable = html.nWay(sides, joboptions.width)
+            hTable = html.nWay(sides, jobOptions.calTabWidth)
             output.addChild(hTable)
             pass
         pass

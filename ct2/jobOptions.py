@@ -22,3 +22,10 @@
 'GAEM/GARC/hitmap_delay:*', 'delay from ACD trigger primitive to AEM hitmap data latch'
 'GAEM/GARC/hitmap_width:*', 'stretch width of ACD trigger primitive to AEMXS hitmap data latch'
 'GGEM/GGEMW/window_width:*', 'width of trigger window in GEM'
+
+
+outFile = os.environ['configReportUrl']
+version = os.environ['configReportVersion']
+
+# put this many tables of CAL settings acros the page
+calTabWidth = 2 
