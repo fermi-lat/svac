@@ -24,9 +24,14 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-my $exe = './TaskLaunch.pl';
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
 
-my $newTask = 'ConfigReport';
+my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+
+my $newTask = $ENV{'configReportTask'};
 my $schemaFile = $inFiles->{'schema'};
 my $snapFile = $inFiles->{'snapshot'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile' '$snapFile'";

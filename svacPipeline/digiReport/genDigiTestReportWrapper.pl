@@ -23,6 +23,11 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $digiRootFile = $inFiles->{'digi'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
@@ -30,7 +35,7 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = './genDigiTestReport.pl';
 
-my $command = "source setup.sh ; $exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

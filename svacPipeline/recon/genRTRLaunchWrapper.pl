@@ -28,9 +28,14 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-my $exe = './TaskLaunch.pl';
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
 
-my $newTask = 'ReconReport';
+my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+
+my $newTask = $ENV{'reconReportTask'};
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile' '$reconRootFile'";

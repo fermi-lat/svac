@@ -22,6 +22,11 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $digiRootFile = $inFiles->{'digi'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
@@ -31,7 +36,7 @@ my $meritRootFile = $outFiles->{'merit'};
 my $setup = $ENV{'SVACPLCONFIG'};
 my $exe = './recon.pl';
 
-my $command = "source $setup ; $exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
+my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

@@ -6,12 +6,12 @@ use strict;
 
 my ($oldTask, $runName, $rcReport, $schema, $snapshot, $ldfFile) = @ARGV;
 
-my $launcher = './TaskLaunch.pl';
+my $launcher = '$ENV{'svacPlLib'}/TaskLaunch.pl';
 
 my $status = 0;
 
 # launch eLog task
-my $nextTask = 'eLogUpdate';
+my $nextTask = $ENV{'eLogTask'};
 my $eLogCommand = "$launcher '$oldTask' '$nextTask' '$runName' '$rcReport' '$schema' '$snapshot' '$ldfFile'";
 
 my @commands = ($eLogCommand);

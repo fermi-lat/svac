@@ -27,6 +27,11 @@ my $taskProcessName = $proc->{'taskProcess_name'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $exe = './SVACLaunch.pl';
 
 my $rcReport = $inFiles->{'rcReport'};

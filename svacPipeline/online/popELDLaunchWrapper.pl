@@ -24,9 +24,14 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-my $exe = './TaskLaunch.pl';
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
 
-my $newTask = 'eLogUpdate';
+my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+
+my $newTask = $ENV{'eLogTask'};
 my $reportFile = $inFiles->{'rcReport'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$reportFile'";
 

@@ -23,6 +23,11 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};
 my $optionFile = $outFiles->{'jobOptions'};
@@ -31,7 +36,7 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = './genReconTestReport.pl';
 
-my $command = "source setup.sh ; $exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

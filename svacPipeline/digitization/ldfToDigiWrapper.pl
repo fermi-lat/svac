@@ -22,6 +22,11 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
@@ -32,7 +37,7 @@ $ENV{'shellFile'} = $shellFile;
 $ENV{'jobOptionFile'} = $jobOptionFile;
 $ENV{'digiRootFile'}= $digiRootFile;
 
-my $command = "source setup.sh ; ./ldfToDigi.pl";
+my $command = "./ldfToDigi.pl";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

@@ -26,6 +26,11 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 #my $mcRootFile = $inFiles->{'mc'};
 my $mcRootFile = 'emptyFile';
 system("touch $mcRootFile");
@@ -40,7 +45,7 @@ my $shellFile = $outFiles->{'script'};
 
 my $exe = './RunRootAnalyzer.pl';
 
-my $command = "source setup.sh ; $exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
+my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";
 
 

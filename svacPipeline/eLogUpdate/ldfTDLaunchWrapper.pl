@@ -28,9 +28,14 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-my $exe = './TaskLaunch.pl';
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
 
-my $newTask = 'Digitization';
+my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+
+my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 

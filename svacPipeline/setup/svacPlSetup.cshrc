@@ -16,6 +16,7 @@ setenv rootUrl /glast.u12/EM2/rootData
 setenv eLogTask updateELogDB-EM2-v1r0
 setenv eLogDir $svacCmt/eLogFeeder/v1r1
 
+setenv digitizationTask digitization-EM2-v1r0
 setenv ldfToDigiCmt /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/cmt
 setenv ldfToDigiApp /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/rh9_gcc32/Em2.exe
 

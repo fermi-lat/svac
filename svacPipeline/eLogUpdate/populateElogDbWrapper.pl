@@ -22,12 +22,17 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
+my $svacPlRoot = $ENV{'svacPlRoot'}
+use lib "$svacPlRoot/lib";
+use environmentalizer;
+sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+
 my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};
 
 my $exe = './populateElogDb.pl';
 
-my $command = "source setup.sh ; $exe '$shellFile' '$rcReport'";
+my $command = "$exe '$shellFile' '$rcReport'";
 print "Running command: [$command]\nIn $ENV{'PWD'}\n";
 
 my $ex = new Exec("$command");
