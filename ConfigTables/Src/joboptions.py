@@ -30,4 +30,6 @@ maxShape = {"GTWR": 16,
 broadcast = 255
 
 # pack this many table across the output page
-width = 2
+width = 4
+
+version = "v0r0"

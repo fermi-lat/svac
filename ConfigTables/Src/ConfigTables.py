@@ -78,10 +78,10 @@ output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
-output.addChild(r"""Created from files:<br/>
+output.addChild(r"""Created by ConfigTables version %s from files:<br/>
 snapshot: %s<br/>
 schema: %s<br/>
-""" % (inFile, schemaFile))
+""" % (joboptions.version, inFile, schemaFile))
 
 # get stuff from CAL front ends
 # and make tables of it
@@ -184,7 +184,7 @@ splitCaption = splitLabel + " (Left:Right)"
 hTable = table.oneDTable(array, splitCaption, labels)
 output.addChild(hTable)
 
-
+output.addChild("\n")
 
 
 # put out the output
