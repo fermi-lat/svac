@@ -157,6 +157,7 @@ tackDelayLabels = {'CAL_TRGSEQ': ('CAL (ticks (ns))', ('Tower', 'Delay')),
 
 # CAL delays
 calDelays = ('DELAY_1', 'DELAY_2', 'DELAY_3')
+gcrcLabels = ('GCCC', 'GCRC')
 
 # system clock rate and period
 clock = 20e6

@@ -604,15 +604,41 @@ def calDelays(doc):
     sectionTitle = "Delays from GCRCs"
     output.append(html.Heading(sectionTitle, 2))
 
-    aTable = []
-
     for name in jobOptions.calDelays:
-        hTable = oneGtrcReg(doc, name)
-        aTable.append(hTable)
+        hTable = oneGcrcDelay(doc, name)
+        output.extend(hTable)
         pass
+    
+    return output
 
-    aTable = html.nWay(aTable, 3)
-    output.append(aTable)
+# embarassingly similar to oneGtrcReg
+def oneGcrcDelay(doc, tag):
+    """@brief Make tables for one GCRC dalay register.
+
+    """
+
+    output = []
+
+    regSpec, regLabel = jobOptions.tables[tag]
+    axisLabels = jobOptions.gcrcLabels
+
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        temData = temData.map(mappings.displayTime)
+        array, indices = temData.table()
+        title = "%s for Tower %d (ticks (ns))" % (regLabel, iTem)
+        hTable = table.twoDTable(array, title, axisLabels, indices)
+        regTables.append(hTable)
+        pass
+    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
+    output.append(nTable)
     
     return output
 
