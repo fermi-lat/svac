@@ -7,7 +7,11 @@
 """@brief Stuff to write FITS files for GLAST.
 
 @todo This stuff should all be methods on a glastFitsFile object.
+
 @todo This needs error checking.
+
+@todo Maybe should enforce filename compliance to ISO 9660 Level 2 (31
+character names containing uppercase letters, numbers and underscore).
 
 """
 
@@ -17,7 +21,7 @@ import time
 import cfitsio
 
 ## name of organization making file
-ORIGIN = 'SVAC'
+ORIGIN = 'I&T/SVAC'
 ## software creating file
 PROGRAM = sys.argv[0]
 ## name of person responsible for file generation
@@ -45,8 +49,6 @@ def createFile(filename):
     addPrimaryKeywords(fptr)
     addStandardKeywords(fptr)
 
-    status = cfitsio.fits_flush_file(fptr)
-    
     return fptr
 
 #
@@ -125,6 +127,50 @@ def addStandardKeywords(fptr):
     return
 
 #
+def createTable(fptr, naxis2=0, tfields=0, ttype=[], tform=[], tunit=[],
+                extname=""):
+    """@brief Append a new binary table.
+
+    All arguments except @a fptr are optional.  If they are not supplied, the
+    table will have no rows or columns; they can be added later.  The HDU will
+    be created with GLAST standard keywords.
+
+    The new HDU will be added at the end of the file, and will be the current
+    HDU.
+
+    @param fptr An open FITS file pointer.
+
+    @param [naxis2=0] Number of table rows to preallocate.  Recommend leaving
+    it at the default value of 0.
+
+    @param [tfields=0] Number of columns.
+
+    @param [ttype=[]] A sequence of column names.
+
+    @param [tfrom=[]] A sequence of column data types.  Format of these is
+    defined in <A
+    HREF="http://archive.stsci.edu/fits/fits_standard/node68.html"> the FITS
+    standard. </A>
+
+    @param [tunit=[]] A sequence of column units.  Standard values for these
+    are defined in <A
+    HREF="http://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/summary/ogip_93_001_summary.html">
+    Specification of Physical Units within OGIP FITS Files. </A>
+
+    @param [extname=""] The name of the table.
+
+    @return The number of the new HDU, which will then be the current HDU.
+
+    """
+
+    status = cfitsio.fits_create_tbl(fptr, cfitsio.BINARY_TBL, naxis2, tfields,
+                                     ttype, tform, tunit, extname)
+    addStandardKeywords(fptr)    
+
+    junk, chdu = cfitsio.fits_get_hdu_num(fptr)
+    return chdu
+
+#
 def closeFile(fptr):
     """@brief close a GLAST FITS file.
 
@@ -153,6 +199,8 @@ def closeFile(fptr):
 if __name__ == "__main__":
     import os
     testfile = 'test.fits'
-    closeFile(createFile(testfile))
+    fptr = createFile(testfile)
+    createTable(fptr, extname="BOZO")
+    closeFile(fptr)
     os.system('fverify %s' % testfile)
     os.system('fdump %s outfile=STDOUT rows=- columns=-' % testfile)
