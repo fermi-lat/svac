@@ -16,6 +16,8 @@ class ndList(list):
 
     """
 
+    super = list
+
 
     #
     def __init__(self, seq=None, shape=None, empty=None):
@@ -31,6 +33,8 @@ class ndList(list):
         @return The new list.
 
         """
+
+        self.super.__init__(self)
 
         self.shape = list(shape)
         self.empty = empty

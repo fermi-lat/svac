@@ -18,21 +18,24 @@ class ndTable:
 
 
     #
-    def __init__(self, seq=None, shape=None, empty=None):
+    def __init__(self, data, labels, title):
         """@brief Create a table.
 
-        @param seq
+        @param data
 
-        @param shape 
+        @param labels 
         
-        @param empty The value to put in unfilled cells.
-        Default is None.
+        @param title
 
         @return The new table.
 
         """
 
-        
+        self.data = data
+        self.labels = list(labels)
+        self.title = title
+
+        return
 
     pass
 

@@ -25,13 +25,16 @@ def _mergeLists(*args):
 #
 class ndDict(dict):
 
+    super = dict
+
+
     #
     def __init__(self, dim=1, empty=None):
+        self.super.__init__(self)
         if dim < 1:
             raise ValueError, "Must have positive dimensions."
         self.dim = dim
         self.empty = empty
-        dict.__init__(self)
         return
 
     #
@@ -55,7 +58,7 @@ class ndDict(dict):
     #
     def _getSimple(self, key):
         if self.has_key(key):
-            value = dict.__getitem__(self, key)
+            value = self.super.__getitem__(self, key)
         else:
             value = self.empty
             pass
@@ -74,7 +77,7 @@ class ndDict(dict):
             else:
                 myKey = key[0]
                 if self.has_key(myKey):
-                    next = dict.__getitem__(self, myKey)
+                    next = self.super.__getitem__(self, myKey)
                 else:
                     next = self.__class__(empty=self.empty, dim=self.dim-1)
                     self._setSimple(myKey, next)
@@ -92,7 +95,7 @@ class ndDict(dict):
            (not isinstance(value, self.__class__) or \
             value.dim != self.dim-1):
             raise ValueError, "Can't assign to slices."
-        dict.__setitem__(self, key, value)
+        self.super.__setitem__(self, key, value)
         return
 
 
