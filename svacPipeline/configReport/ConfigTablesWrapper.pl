@@ -33,7 +33,7 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'configTablesScript'};
 
-my $command = "$exe '$runName' noFile '$snapshot' '$tarBall'";
+my $command = "$exe '$runName' '$snapshot' '$tarBall'";
 print "Running command: [$command]\n";
 
 

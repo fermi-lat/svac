@@ -43,11 +43,9 @@ my $configReportXml =
         </batch-job-configuration>
 
         <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
-        <file file-type=\"xml\" name=\"schema\"   type=\"text\"    >$ENV{'onlineDataDir'}</file>
         <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">$ENV{'configTablesDataDir'}</file>
 
         <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"short-job\">
-                        <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
