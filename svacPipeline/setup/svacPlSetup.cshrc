@@ -72,8 +72,8 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #-------------------------------- configReport --------------------------------
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
-setenv digitizationTaskVersion v3r1p1
-setenv digitizationTag v3r1p0
+setenv digitizationTaskVersion v3r1p2
+setenv digitizationTag v3r1p1
 setenv digitizationTask digitization-${digitizationTaskVersion}
 setenv Em2Version v2r11
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
@@ -107,8 +107,8 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
 setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
-setenv reconTaskVersion v3r1p1
-setenv reconTag v3r1p0
+setenv reconTaskVersion v3r1p2
+setenv reconTag v3r1p1
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -120,7 +120,7 @@ setenv reconDataDirFull ${dataHead}/${reconDataDir}
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
 setenv reconReportTaskVersion v3r1p2
-setenv reconReportTag v3r1p0
+setenv reconReportTag v3r1p1
 setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
 setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -135,7 +135,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v3r1p2
-setenv svacTupleTag v3r1p0
+setenv svacTupleTag v3r1p1
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1r3p11
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
