@@ -70,7 +70,7 @@ setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v1r0
 setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
-setenv TestReportVersion v3r1p0
+setenv TestReportVersion v3r2p0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
