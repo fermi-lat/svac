@@ -5,7 +5,7 @@
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32/EngineeringModel
-setenv EngineeringModelVersion v3r0407p3
+setenv EngineeringModelVersion v3r0407p13
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -38,6 +38,8 @@ setenv calibGenCALVersion v2r3p4
 
 setenv calibRoot $svacEmDir/$calibVersion
 
+setenv batchgroup glastdata
+
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineVersion V1r0
 setenv svacOnlineVersion v2r0p1
@@ -69,7 +71,7 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v2r0p1
 setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r8
+setenv Em2Version v2r8p2
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
