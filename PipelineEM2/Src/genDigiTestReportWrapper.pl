@@ -25,7 +25,6 @@ my $digiRootFile = $inFiles->{'digi'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
-my $logFile = $outFiles->{'logFile'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genDigiTestReport.pl';
 

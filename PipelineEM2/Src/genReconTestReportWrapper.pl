@@ -26,7 +26,6 @@ my $reconRootFile = $inFiles->{'recon'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
-my $logFile = $outFiles->{'logFile'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genReconTestReport.pl';
 

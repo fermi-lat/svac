@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl
 
+use strict;
+
 use lib '/u/gl/dflath/glast/software/DPF/PDB/';
 use DPFProc;
 
@@ -21,7 +23,7 @@ my $runName = $proc->{'run_name'};
 #####################################################
 
 my $schema = $inFiles->{'schema'};
-my $snapshot = $inFiles->{'snaphot'};
+my $snapshot = $inFiles->{'snapshot'};
 
 my $tarBall = $outFiles->{'tarBall'};
 

@@ -23,7 +23,6 @@ my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
-my $logFile = $outFiles->{'logFile'};
 
 $ENV{'ldfFile'} = $ldfFile;
 $ENV{'shellFile'} = $shellFile;
