@@ -33,7 +33,7 @@ if (-z $ldfFile) {
 }
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE "#!/bin/csh -e \n \n";
+print SHELLFILE "#!/bin/csh \n \n";
 #print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 #print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
@@ -46,7 +46,7 @@ print SHELLFILE "popd \n";
 
 # convert ldf file to digi file
 print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "$exe \n";
+print SHELLFILE "$exe || exit 1 \n";
 
 close(SHELLFILE);
 

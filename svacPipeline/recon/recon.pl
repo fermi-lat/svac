@@ -22,7 +22,7 @@ my $cmtDir = $ENV{'reconCmt'};
 my $exe = $ENV{'reconApp'};
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE "#!/bin/csh -e \n \n";
+print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
@@ -30,7 +30,7 @@ print SHELLFILE "source setup.csh \n";
 print SHELLFILE "cmt show uses \n";
 print SHELLFILE "popd \n";
 print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "$exe \n";
+print SHELLFILE "$exe || exit 1 \n";
 close(SHELLFILE);
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
