@@ -27,7 +27,7 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-my $exe = 'TaskLaunch.pl';
+my $exe = './TaskLaunch.pl';
 
 my $newTask = 'ReconReport';
 my $digiRootFile = $inFiles->{'digi'};
