@@ -1,5 +1,8 @@
 Tips, tricks, caveats and gotchas for pythfilter.py.
 
+Getting good results:
+---------------------
+
 Files must have \file and \brief comments.
 
 Function and class definitions must be preceded by non-doxyfilter comments.
@@ -14,3 +17,12 @@ How to document instance attributes?
 
 Prefer "@" over "\" for doxygen commands, especially in docstrings, as "\" hsa
 special meaning in Python strings.
+
+Mainpage and file markup go in comments, module, class, and function markup
+goes in doc strings.
+
+
+Other recommendations:
+----------------------
+
+ File-related markup should be fairly minimal.
