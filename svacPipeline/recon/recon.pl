@@ -20,8 +20,10 @@ EOT
 
 my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
 $tkrSerNo =~ s/\?//g;
+$tkrSerNo =~ s/\n//g;
 my $calSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId cal_ser_no`;
 $calSerNo =~ s/\?//g;
+$calSerNo =~ s/\n//g;
 
 my $em = 0;
 if($tkrSerNo =~ /Mini/ || $calSerNo =~ /EM2/) {
