@@ -12,6 +12,7 @@ use DPFProc;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -25,7 +26,10 @@ my $snapshot = $inFiles->{'snaphot'};
 
 my $tarBall = $outFiles->{'tarBall'};
 
-my $cmd = "ConfigTables.py $schema $snapshot $tarBall";
-system "$cmd";
+my $command = "ConfigTables.py $runName $schema $snapshot $tarBall";
+my $extension = " | tee $logFile 2>&1 ";
+my $syscmd = "$command $extension";
+
+system $syscmd;
 
  
