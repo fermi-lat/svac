@@ -120,8 +120,9 @@ if __name__ == "__main__":
     testfile = "test.pha"
 
     status = 0
-    
-    data = num.arange(8)
+
+    nchan = 2
+    data = num.arange(nchan)
     
     st, fptr = glastFits.createFile(testfile)
     status |= st
