@@ -9,10 +9,6 @@ dataRoot is the root directory for the run tree on the FTP server
 """
 
 import sys
-from xml.dom.ext.reader import Sax2
-from xml.dom import Node
-import string
-import re
 import DCOracle2
 
 #used to form ftp URL - default value
