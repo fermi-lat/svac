@@ -1,6 +1,6 @@
 #include "NtupleDef.h"
 
-const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr1NumHits1/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2Chisq/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:McTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
+const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:McTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
 
 NtupleDef::NtupleDef() 
 {
@@ -81,6 +81,7 @@ void NtupleDef::reset()
   }
 
   for(int i = 0; i != 2; ++i) {
+    m_nFit[i] = 0;
     m_chi2[i] = -9999.;
     m_chi2Smooth[i] = -9999.;
     m_rms[i] = -9999.;
