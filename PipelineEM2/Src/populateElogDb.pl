@@ -11,7 +11,7 @@ my ($shellFile $rcReport) = @ARGV;
 print <<EOT;
 $0 running with:
   shellFile: $shellFile
-  rcReport: $rcReport
+  rcReport:  $rcReport
 EOT
 
 my $eLogFeederDir = `dirname $shellFile`;

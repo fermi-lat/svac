@@ -2,7 +2,20 @@
 
 use strict;
 
+if ($#ARGV != 4) {
+    die "Usage: $0 digiRootFile shellFile jobOptionFile reconRootFile meritRootFile";
+}
+
 my ($digiRootFile, $shellFile, $jobOptionFile, $reconRootFile, $meritRootFile) = @ARGV; 
+
+print <<EOT;
+$0 running with:
+  digiRootFile:  $digiRootFile
+  shellFile:     $shellFile
+  jobOptionFile: $jobOptionFile
+  reconRootFile: $reconRootFile
+  meritRootFile: $meritRootFile
+EOT
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/sh \n \n";
