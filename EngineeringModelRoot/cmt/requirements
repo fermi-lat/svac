@@ -6,6 +6,9 @@ use mcRootData v*
 use digiRootData v*
 use reconRootData v*
 use RootPolicy v*
+use idents v*
+use Event v*
+
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 macro_prepend includes "-I $(ENGINEERINGMODELROOTROOT) " WIN32 "/I $(ENGINEERINGMODELROOTROOT) "
