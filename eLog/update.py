@@ -1,9 +1,12 @@
 #!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
-"""Usage: update.py [xmlFile] [dataRoot]
+"""Usage: update.py [xmlFile] [dataRoot] [rawRoot]
 
 xmlFile is the run report (default rcReport.out)
 
-dataRoot is the root directory for the run tree on the FTP server
+rawRoot is the root directory for the raw data tree on the FTP server
+(default /glast.u01/EM2/rawData/)
+
+dataRoot is the root directory for the root data tree on the FTP server
 (default /glast.u01/EM2/rootData/)
 
 """
@@ -17,6 +20,20 @@ import DCOracle2
 
 oracleTimeFormat = 'YYYY-MM-DD HH24:MI:SS'
 
+def execSql(c, sqlStr):
+    try:
+        c.execute(sqlStr)
+    except:
+        (exc_type, exc_value) = sys.exc_info()[:2]
+
+        print sqlStr
+        print exc_type
+        print exc_value
+
+        db.rollback()
+        db.close()
+        sys.exit(1) 
+    
 # parse time to a format for oracle
 def parseTime(l):
     l = l.split('(')
@@ -34,17 +51,25 @@ def parseTime(l):
 
     return time
 
-# check whether tag is in tags
-def checkTag(tag, tags):
-    for x in tags:
-        if(tag == x):
-            return 1
+# check whether there is a new data value in the tables for drop down menus
+# if so, add the new value to table
+def checkNewValue(value, table, col):
 
-    return 0
+    id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
+          
+    sqlStr = 'select ' + col + ' from ' + table + ' where ' + col + ' = \'' + value + '\''
+    execSql(c, sqlStr)
+    result = c.fetchone()
+
+    if(result == None):
+        print 'new ' + col + ' value found: ' + value + ', adding it to the database'
+        sqlStr = 'insert into ' + table + ' values(' + id[table] + ', \'' + value + '\')'
+        execSql(c, sqlStr)
 
 #used to form ftp URL - default value
 xmlFileName = 'rcReport.out'
 rootDataDir = '/glast.u01/EM2/rootData/'
+rawDataDir = '/glast.u01/EM2/rawData/'
 
 # parse args
 nArg = len(sys.argv)
@@ -52,6 +77,8 @@ if nArg >= 2:
     xmlFileName = sys.argv[1]
 elif nArg == 3:
     rootDataDir = sys.argv[2]
+elif nArg == 4:
+    rootDataDir = sys.argv[3]
 else:
     print __doc__
     sys.exit(99)    
@@ -90,8 +117,9 @@ phaseTag = 'Phase'
 commentsTag = 'Comments'
 errorEventCountTag = 'ErrorEventCount'
 additionFieldsTag = 'additionFields'
+onlineReportTag = 'TestReport'
 
-tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag]
+tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag]
 
 # create Reader object
 reader = Sax2.Reader()
@@ -134,7 +162,7 @@ for report in reports:
         
         name = node.nodeName
         
-        if(checkTag(name, tags) == 0):
+        if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
             # format is fieldName???value!!!
@@ -199,14 +227,25 @@ for report in reports:
 
             db.rollback()
             continue
-        
-    # construct URL string for test report generated from digi root files
-    
-    testReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + rootDataDir + data[runIdTag] + '/report/html/index.html'
 
-    # construct URL string for config report generated from online snapshots
+    # determine whether there is a new site
+    checkNewValue(data[siteTag], 'eLogSite', 'Site')
+
+    # determine whether there is a new phase
+    checkNewValue(data[phaseTag], 'eLogPhase', 'Phase')
+
+    # determine whether there is a new particle type
+    checkNewValue(data[particleTypeTag], 'eLogParticleType', 'Type')
+
+    # determine whether there is a new instrument type
+    checkNewValue(data[instrumentTypeTag], 'eLogInstrumentType', 'Instrument')
+
+    # determine whether there is a new orientation
+    checkNewValue(data[orientationTag], 'eLogOrientation', 'Orientation')
+
+    # construct URL string for online test report 
     
-    configReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + rootDataDir + data[runIdTag] + '/config/ConfigTables.html'
+    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + rawDataDir + data[runIdTag] + '/' + data[onlineReportTag]
     
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
@@ -215,7 +254,7 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, TestReportUrl, ConfigReportUrl) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + testReportUrl + '\', \'' + configReportUrl + '\')'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\')'
 
     try:
         c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
