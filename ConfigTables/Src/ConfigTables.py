@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 #!/nfs/slac/g/svac/local/bin/python
 
+"""Usage:
+ConfigTables.py schema snapshot outDir
+
+"""
+
 import glob
 import os
 import sys
@@ -15,20 +20,20 @@ import xmlUtil
 import joboptions
 
 
-if len(sys.argv) >= 2:
-    runNumber = sys.argv[1]
+if len(sys.argv) == 4:
+    schemaFile, inFile, tarBall = sys.argv[1:]
 else:
-    print "You must supply a run number."
+    print __doc__
     sys.exit(1)
     pass
 
+destDir = os.path.dirname(tarBall)
 
 schemaTag = "schema"
 
-inDir = os.path.join(joboptions.runDir, runNumber)
-
-inFile = util.findSnapshot(inDir)
-schemaFile = util.findSchema(inDir)
+#inDir = os.path.join(joboptions.runDir, runNumber)
+#inFile = util.findSnapshot(inDir)
+#schemaFile = util.findSchema(inDir)
 
 # parse the schema
 schema = md.parse(schemaFile)
@@ -182,7 +187,7 @@ output.addChild(hTable)
 
 
 # put out the output
-destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
+#destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
 try:
     os.stat(destDir)
 except OSError:
