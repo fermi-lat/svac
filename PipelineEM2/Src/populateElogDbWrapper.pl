@@ -21,7 +21,7 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-my $shellFile = $outFiles->{'script'}
+my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/populateElogDb.pl';
