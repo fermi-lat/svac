@@ -1,95 +1,95 @@
 digraph iAndTPipeline {
 
 #rotate=90;
-size="6,6";
+size="7.5,6.5";
 
 # processes
 node [shape=box];
 #
-online [color=blue];
-populateELogDB [color=blue];
-configTables [color=blue];
-configReportUrl;
-digitization [color=blue];
-digiRootFile;
-digiReport [color=blue];
-digiReportUrl;
-recon [color=blue];
-reconRootFile;
-meritRootFile;
-reconReport [color=blue];
-reconReportUrl;
-svacTuple [color=blue];
-svacRootFile;
+online_tp [label="online",color=blue];
+populateELogDB_tp [label="populateELogDB",color=blue];
+configTables_tp [label="configTables",color=blue];
+configReportUrl_tp [label="configReportUrl"];
+digitization_tp [label="digitization",color=blue];
+digiRootFile_tp [label="digiRootFile"];
+digiReport_tp [label="digiReport",color=blue];
+digiReportUrl_tp [label="digiReportUrl"];
+recon_tp [label="recon",color=blue];
+reconRootFile_tp [label="reconRootFile"];
+meritRootFile_tp [label="meritRootFile"];
+reconReport_tp [label="reconReport",color=blue];
+reconReportUrl_tp [label="reconReportUrl"];
+svacTuple_tp [label="svacTuple",color=blue];
+svacRootFile_tp [label="svacRootFile"];
 
 # datasets
 node [shape=ellipse];
 #
-rcReport_xml;
-schema_xml;
-snapshot_xml;
-ldf_fits;
-configReport_html;
-digi_root;
-digiReport_html;
-recon_root;
-merit_root;
-reconReport_html;
-svacTuple_root;
+rcReport_ds [label="rcReport"];
+schema_ds [label="schema"];
+snapshot_ds [label="snapshot"];
+ldf_ds [label="ldf"];
+configReport_ds [label="configReport"];
+digi_ds [label="digi"];
+digiReport_ds [label="digiReport"];
+recon_ds [label="recon"];
+merit_ds [label="merit"];
+reconReport_ds [label="reconReport"];
+svacTuple_ds [label="svacTuple"];
 #
 # non-file dependency
 #
-eLogDB [shape=triangle];
+eLogDB_nfd [label="eLogDB",shape=triangle];
 
-online -> rcReport_xml;
-online -> schema_xml;
-online -> snapshot_xml;
-online -> ldf_fits;
+online_tp -> rcReport_ds;
+online_tp -> schema_ds;
+online_tp -> snapshot_ds;
+online_tp -> ldf_ds;
 
-rcReport_xml -> populateELogDB;
-populateELogDB -> eLogDB;
+rcReport_ds -> populateELogDB_tp;
+populateELogDB_tp -> eLogDB_nfd;
 
-schema_xml -> configTables;
-snapshot_xml -> configTables;
-configTables -> configReport_html;
+schema_ds -> configTables_tp;
+snapshot_ds -> configTables_tp;
+configTables_tp -> configReport_ds;
 #
-configReport_html -> configReportUrl;
-eLogDB -> configReportUrl;
+configReport_ds -> configReportUrl_tp;
+eLogDB_nfd -> configReportUrl_tp;
 
-ldf_fits -> digitization;
-digitization -> digi_root;
+ldf_ds -> digitization_tp;
+digitization_tp -> digi_ds;
 #
-digi_root -> digiRootFile;
-eLogDB -> digiRootFile;
+digi_ds -> digiRootFile_tp;
+eLogDB_nfd -> digiRootFile_tp;
 
-digi_root -> digiReport;
-digiReport -> digiReport_html;
+digi_ds -> digiReport_tp;
+digiReport_tp -> digiReport_ds;
 #
-digiReport_html -> digiReportUrl;
-eLogDB -> digiReportUrl;
+digiReport_ds -> digiReportUrl_tp;
+eLogDB_nfd -> digiReportUrl_tp;
 
-digi_root -> recon;
-recon -> recon_root;
-recon -> merit_root;
+digi_ds -> recon_tp;
+recon_tp -> recon_ds;
+recon_tp -> merit_ds;
 #
-recon_root -> reconRootFile;
-eLogDB -> reconRootFile;
+recon_ds -> reconRootFile_tp;
+eLogDB_nfd -> reconRootFile_tp;
 #
-merit_root -> meritRootFile;
-eLogDB -> meritRootFile;
+merit_ds -> meritRootFile_tp;
+eLogDB_nfd -> meritRootFile_tp;
 
-digi_root -> reconReport;
-recon_root -> reconReport;
-reconReport -> reconReport_html;
+digi_ds -> reconReport_tp;
+recon_ds -> reconReport_tp;
+reconReport_tp -> reconReport_ds;
 #
-reconReport_html -> reconReportUrl;
-eLogDB -> reconReportUrl;
+reconReport_ds -> reconReportUrl_tp;
+eLogDB_nfd -> reconReportUrl_tp;
 
-digi_root -> svacTuple;
-recon_root -> svacTuple;
-svacTuple -> svacTuple_root;
+digi_ds -> svacTuple_tp;
+recon_ds -> svacTuple_tp;
+svacTuple_tp -> svacTuple_ds;
 #
-svacTuple_root -> svacRootFile;
-eLogDB -> svacRootFile;
+svacTuple_ds -> svacRootFile_tp;
+eLogDB_nfd -> svacRootFile_tp;
 
 }
