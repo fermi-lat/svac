@@ -5,8 +5,9 @@ source $GLASTROOT/ground/scripts/user.cshrc
 
 setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt $svacRoot/builds
-setenv svacPlRoot $svacRoot/pipeline/v1r0p0
 setenv sasCmt /nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0402p16
+setenv svacPlRoot $svacRoot/pipeline/v1r0p0
+setenv svacPlLib $svacPlRoot/lib
 
 setenv CMTPATH $svacCmt:$sasCmt
 
