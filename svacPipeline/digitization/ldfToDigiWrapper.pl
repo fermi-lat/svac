@@ -22,7 +22,6 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-$ENV{'svacPlRoot'} = '/nfs/farm/g/glast/u06/chen/svac/svacPipeline';
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
