@@ -22,10 +22,9 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-my $svacPlRoot = $ENV{'svacPlRoot'}
-use lib "$svacPlRoot/lib";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$svacPlRoot/setup/svacPlSetup.csh");
+sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $digiRootFile = $inFiles->{'digi'};
 my $shellFile = $outFiles->{'script'};
