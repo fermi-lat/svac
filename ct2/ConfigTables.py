@@ -2,7 +2,7 @@
 #!/nfs/slac/g/svac/local/bin/python -O
 
 """Usage:
-ConfigTables.py runNumber snapshot tarBall
+ConfigTables.py runNumber snapshot split tarBall
 
 """
 
@@ -19,8 +19,8 @@ import configParser
 import jobOptions
 
 
-if len(sys.argv) == 4:
-    runNumber, snapFile, tarBall = sys.argv[1:]
+if len(sys.argv) == 5:
+    runNumber, snapFile, splitFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -29,7 +29,9 @@ else:
 # insert command line options in jobOptions
 # might make a dump of jobOptions for the records
 jobOptions.runNumber = runNumber
+#jobOptions.schemaFile = schemaFile
 jobOptions.snapFile = snapFile
+jobOptions.splitFile = splitFile
 jobOptions.tarBall = tarBall
 
 destDir = os.path.dirname(tarBall) or '.'

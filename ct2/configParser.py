@@ -60,7 +60,6 @@ def globalDBStrings():
     args.extend(tags)
 
     values = eLogDB.query(*args)
-    values = map(nicenDBStrings, values)
 
     for tag, value in zip(tags, values):
         label = jobOptions.globalDBStringLabels[tag]
@@ -70,13 +69,6 @@ def globalDBStrings():
         pass
 
     return output
-
-def nicenDBStrings(oldString):
-    """@brief make ???-delimited strings from eLogDB look nicer."""
-    strings = oldString.split('???')
-    strings = [xx for xx in strings if xx]
-    newString = ', '.join(strings)
-    return newString
 
 #
 def globoLogical(doc, tag, label):
@@ -495,13 +487,7 @@ def delays(doc):
     # per-TEM delays
     tTable = tackDelays(doc)
     output.extend(tTable)
-    output.append(html.Element("HR"))
-
-    # CAL delays
-    if hasCal(doc):
-        output.extend(calDelays(doc))
-        output.append(html.Element("HR"))
-        pass
+    output.append(html.Element("HR"))    
 
     return output
 
@@ -595,52 +581,6 @@ def oneTack(doc, name):
     hTable = table.oneDTable(zip(labels[0], data), title, columns)
 
     return hTable
-
-#
-def calDelays(doc):
-    """@brief Show delays from GCRCs."""
-    output = []
-
-    sectionTitle = "Delays from GCRCs"
-    output.append(html.Heading(sectionTitle, 2))
-
-    for name in jobOptions.calDelays:
-        hTable = oneGcrcDelay(doc, name)
-        output.extend(hTable)
-        pass
-    
-    return output
-
-# embarassingly similar to oneGtrcReg
-def oneGcrcDelay(doc, tag):
-    """@brief Make tables for one GCRC dalay register.
-
-    """
-
-    output = []
-
-    regSpec, regLabel = jobOptions.tables[tag]
-    axisLabels = jobOptions.gcrcLabels
-
-    sectionTitle = "%s (%s)" % (regLabel, regSpec)
-    output.append(html.Heading(sectionTitle, 2))
-
-    xTable = tableFromXml.xTableGen(doc, regSpec)
-
-    regTables = []
-    tems = xTable.data.items()
-    tems.sort()
-    for iTem, temData in tems:
-        temData = temData.map(mappings.displayTime)
-        array, indices = temData.table()
-        title = "%s for Tower %d (ticks (ns))" % (regLabel, iTem)
-        hTable = table.twoDTable(array, title, axisLabels, indices)
-        regTables.append(hTable)
-        pass
-    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
-    output.append(nTable)
-    
-    return output
 
 ######################## per-TEM stuff ##########################
 

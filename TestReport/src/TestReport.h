@@ -23,8 +23,8 @@ class TestReport {
  public:
 
   TestReport(const char* dir, const char* prefix, const char* version,
-	     const char* emVersion, const char*tkrCalibSerNo, 
-	     const char* calCalibSerNo);
+	     const char* emVersion, const char*tkrV, const char* calV,
+	     const char* splitF);
   ~TestReport();
 
   void analyzeTrees(const char* mcFileName,
@@ -116,10 +116,10 @@ class TestReport {
     PlotAttribute::PlotAttribute(const char* file=0, const char* caption=0,
 				 const char* label=0, bool yLog=0,
 				 float height=10, float width=15, int x=606,
-				 int y=410, int stat=1111) : 
+				 int y=410) : 
       m_file(file), m_caption(caption), m_label(label), m_yLog(yLog),
 	 m_height(height), m_width(width), m_xPixel(x), m_yPixel(y),
-	 m_statMode(stat)
+	 m_statMode(1111)
     { 
       m_2dPlotType = COLZ;
       m_nColor = 3;
@@ -133,7 +133,7 @@ class TestReport {
 
     void set(const char* file=0, const char* caption=0, const char* label=0, 
 	     bool yLog=0, float height=10, float width=15, int x=606, 
-	     int y=410, int stat=1111)
+	     int y=410)
     {
       m_file = file;
       m_caption = caption;
@@ -145,7 +145,7 @@ class TestReport {
       m_yPixel = y;
       m_nColor = 3;
       m_2dPlotType = COLZ;
-      m_statMode = stat;
+      m_statMode = 1111;
     }
 
     /// name of file to be produced, note file type such as ".eps" is not
@@ -241,9 +241,6 @@ class TestReport {
 
   void produceNHitPlane2DPlot();
 
-  /// produce plots of histogram m_alignCalTkr
-  void produceAlignCalTkrPlot();
-
   /// set some common parameters for a 1D histogram
   void setHistParameters(TH1* h, const HistAttribute& att);
 
@@ -275,15 +272,7 @@ class TestReport {
   /// first sentence in the caption to be bold face.
   std::string boldFaceLatex(const std::string& s);
 
-  /// used in producing caption for a plot in a html file. It will put the
-  /// first sentence in the caption to be bold face.
-  std::string boldFaceHtml(const std::string& s);
-
-  /// delete sub strings enclosed between @latext and @latex
-  std::string eraseLatexStr(const std::string& s);
-
-  /// delete sub strings enclosed between @html and @html
-  std::string eraseHtmlStr(const std::string& s);
+  bool isLowEnd(int tower, int layer, int iView, int stripId);
 
   void analyzeMcTree() { }
 
@@ -305,8 +294,8 @@ class TestReport {
   /// version of the EngineeringModel package
   std::string m_emVersion;
  
-  std::string m_tkrCalibSerNo;
-  std::string m_calCalibSerNo;
+  std::string m_tkrCalibVersion;
+  std::string m_calCalibVersion;
 
   TFile* m_outputFile;
 
@@ -326,7 +315,7 @@ class TestReport {
   DigiEvent* m_digiEvent;
 
   enum {g_nLayer = 18, g_nView = 2, g_nPlane = 36, g_nStrip = 1536, 
-	g_nFEC = 24, g_nTower = 16, g_satTot = 255, g_nCalLayer = 8,
+	g_nFEC = 24, g_nTower = 16, g_satTot = 250, g_nCalLayer = 8,
 	g_nEnd =2};
 
   /// trigger histogram
@@ -334,11 +323,6 @@ class TestReport {
 
   /// no of bad events indicated in event summary data
   unsigned m_nBadEvts;
-
-  /// Error bits: Currently OR'ed over all towers!
-  unsigned int m_nTrgParityErrors;
-  unsigned int m_nPacketErrors;
-  unsigned int m_nTemErrors;
 
   /// condition summary in GEM
   TH1F* m_condSummary;
@@ -369,7 +353,7 @@ class TestReport {
   /// zero hit is not used in calculating the average 
   TH2F* m_nHit2D;
 
-  /// accumulated number of strip hits in a particular TKR plane. 
+  /// average number of strip hits in a particular TKR plane. 
   /// zero hit is not used in calculating the average, used to fill m_nHit2D
   int m_nHitPlane[g_nTower][g_nPlane];
 
@@ -379,9 +363,6 @@ class TestReport {
   /// no of events with non-zero strip hit in one end of a particular TKR plane
   /// end = 0 corresponds to GTRC value close to strip 0
   int m_nEvtHitPlane[g_nTower][g_nPlane][g_nEnd];
-
-  /// no. of events with non-zero strip hit in one plane
-  int m_nEvtPlane[g_nTower][g_nPlane];
 
   /// average number of crystal hits in a particular CAL layer 
   /// 0 hit is not used in calculating the average
@@ -442,9 +423,6 @@ class TestReport {
   /// 3 ms to study the dead time
   TH1F* m_timeIntervalCut;
 
-  /// histogram of time between adjacent event in mili second, taken from GEM
-  TH1F* m_timeIntervalGem;
-
   /// percentage of events with TKR trigger but less than 6 digis in a tower
   TGraph* m_nDigi;
 
@@ -487,9 +465,7 @@ class TestReport {
   /// TKR split info. The array contains no. of cards read from each end
   int m_nFec[g_nTower][g_nLayer][g_nView][2];
 
-  /// histograms containing distance between reconstructed CAL cluster xy 
-  /// position and the position extrapolated from the reconstructed track 
-  /// in TKR
-  TH1F* m_alignCalTkr;
+  /// input file containing TKR split info 
+  std::ifstream m_tkrSplitF;
 };
 #endif
