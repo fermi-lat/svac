@@ -27,36 +27,53 @@ schemaTag = "schema"
 
 inDir = os.path.join(joboptions.runDir, runNumber)
 
-inPat = os.path.join(inDir, joboptions.snapshotPrefix + "*" + joboptions.exten)
-snapshots = glob.glob(inPat)
-if len(snapshots) != 1:
-    print "Run directory %s does not have exactly 1 'before' snapshot." % inDir
-    sys.exit(1)
-inFile = snapshots[0]
+# inPat = os.path.join(inDir, joboptions.snapshotPrefix + "*" + joboptions.exten)
+# snapshots = glob.glob(inPat)
+# if len(snapshots) != 1:
+#     print "Run directory %s does not have exactly 1 'before' snapshot." % inDir
+#     sys.exit(1)
+# inFile = snapshots[0]
 
-schemaFile = os.path.join(inDir, joboptions.schemaFile)
+# schemaFile = os.path.join(inDir, joboptions.schemaFile)
 
+inFile = util.findSnapshot(inDir)
+schemaFile = util.findSchema(inDir)
 
 # parse the schema
 schema = md.parse(schemaFile)
 schemas = schema.getElementsByTagName(joboptions.schemaTag)
 if len(schemas) != 1:
-    print "Run directory %s does not have exactly 1 schema." % inDir
-    sys.exit(2)
+    print "Schema file %s does not have exactly 1 schema." % schemaFile
+    sys.exit(42)
 schema = schemas[0]
 
 shapes = {}
 indices = {}
 for tag in joboptions.shapeTags:
+    maxShape = joboptions.maxShape[tag]
     elements = schema.getElementsByTagName(tag)
-    shape = util.scalar(elements)
-    shape = shape.getAttribute("ID")
-    shape = util.uncompressSequence(shape)
-    while True:
-        try:
-            shape.remove(joboptions.broadcast)
-        except ValueError:
-            break
+    if len(elements) == 0:
+        shape = range(maxShape)
+    else:
+        shape = util.scalar(elements)
+        shape = shape.getAttribute("ID")
+        shape = util.uncompressSequence(shape)
+        pass
+    #while True:
+    #    try:
+    #        shape.remove(joboptions.broadcast)
+    #    except ValueError:
+    #        break
+    #    pass
+    newShape = []
+    print tag, shape
+    for index in shape:
+        if index < maxShape:
+            newShape.append(index)
+            pass
+        pass
+    shape = newShape
+    print tag, shape
     shape.sort()
     indices[tag] = shape
     shape = len(shape)
@@ -67,6 +84,15 @@ for tag in joboptions.shapeTags:
 doc = md.parse(inFile)
 
 output = html.Page("Configuration for run %s" % runNumber)
+
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+
+output.addChild(r"""Created from files:<br/>
+snapshot: %s<br/>
+schema: %s<br/>
+""" % (inFile, schemaFile))
 
 # get stuff from CAL front ends
 # and make tables of it

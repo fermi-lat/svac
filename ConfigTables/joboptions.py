@@ -20,6 +20,11 @@ shapeTags = ["GTWR",
              "GCCC", "GCRC", "GCFE",
              "GTCC", "GTRC", "GTFE",
              ]
+maxShape = {"GTWR": 16,
+            "GTEM": 16,
+            "GCCC": 4, "GCRC": 4, "GCFE": 12,
+            "GTCC": 8, "GTRC": 9, "GTFE": 24,
+            } 
 
 # special value used by schema to broadcast over all values of ID
 broadcast = 255

@@ -1,9 +1,13 @@
 
+import glob
 import operator
+import os
+import re
 import sys
 import types
 
 import xmlUtil
+
 
 def maxLen(array):
     array = flatten(array)
@@ -30,7 +34,12 @@ def isSequence(arg):
 
 def scalar(val):
     if len(val) != 1:
-        raise ValueError
+        message = r"""The programmer expected the following list:
+%r
+to have exactly 1 member.  While he anticipated the possibility that it might
+not, and checked for that condition, he didn't actually DO anything about it.
+        """ % val
+        raise ValueError, message
     else:
         val = val[0]
     return val
@@ -124,18 +133,18 @@ def mkEmpty(shape, blank=0):
 
 
 def parseRange(idStr):
-    ranges = idStr.split(',')
-    ends = map(lambda x:x.split('-'), ranges)
+    ranges = idStr.split(",")
+    ends = map(lambda x:x.split("-"), ranges)
     return ends
 
-def uncompressSequence(seqStr, sepChar=','):
+def uncompressSequence(seqStr, sepChar=","):
   l = []
   s = seqStr.split(sepChar)
   for x in s:
     x = x.strip()
-    p = x.find('-')
+    p = x.find("-")
     if p == -1:
-      if x == '*':
+      if x == "*":
         l.append(255)
       else:
         l.append(int(x))
@@ -242,3 +251,43 @@ def printArray(array):
         print row
         pass
     return
+
+
+def findSnapshot(directory):
+    prefixes = ("rsb", "rsa")
+    for prefix in prefixes:
+        filePattern = prefix + "*" + ".xml"
+        fullPattern = os.path.join(directory, filePattern)
+        files = glob.glob(fullPattern)
+        if files:
+            file = scalar(files)
+            return file
+        pass
+    print "Couldn't find snapshot in directory %s." % directory
+    sys.exit(3)
+    return
+    
+def findSchema(directory):
+    filePattern = "*" + ".xml"
+    fullPattern = os.path.join(directory, filePattern)
+    files = glob.glob(fullPattern)
+    files = grep("<schema>", files, caseSen=0)
+    if not files:
+        print "Couldn't find a schema in directory %s." % directory
+        sys.exit(4)
+    file = scalar(files)
+    return file
+
+def grep(pattern, filenames, caseSen=1):
+    flags = 0
+    if not caseSen:
+        flags |= re.IGNORECASE
+    regex = re.compile(pattern, flags)
+    matchers = []
+    for filename in filenames:
+        contents = file(filename, "rb").read()
+        if regex.search(contents):
+            matchers.append(filename)
+            pass
+        pass
+    return matchers
