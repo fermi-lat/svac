@@ -249,6 +249,8 @@ for report in reports:
         
         name = node.nodeName
 
+        intRunConfigId = 'null'
+        
         if(name == serNoTag):
             [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
         elif( name == csvTestIdTag ):
