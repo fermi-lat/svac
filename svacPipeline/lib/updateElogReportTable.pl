@@ -19,13 +19,13 @@ my $runId = $ARGV[0];
 my $columnName = $ARGV[1];
 my $value = $ARGV[2];
 
-$ENV{'TWO_TASK'}='SLAC_TCP';
+$ENV{'TWO_TASK'}='SLACPROD';
 $ENV{'ORACLE_HOME'} = "/afs/slac/package/oracle/8.1.6/sun4x_56";
 $ENV{'TNS_ADMIN'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/network/admin/tnsnames.ora";
 $ENV{'LIBHOME'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/lib";
 
 
-$dbh = DBI->connect('DBI:Oracle:SLAC_TCP', 'GLAST_CAL', '9square#') or die 'connect db failed: '.$dbh->errstr;
+$dbh = DBI->connect('DBI:Oracle:SLACPROD', 'GLAST_CAL', '9square#') or die 'connect db failed: '.$dbh->errstr;
 
 my $sqlStr = "update elogReport set $columnName='$value' where runId = $runId";
 
