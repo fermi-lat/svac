@@ -45,6 +45,7 @@ def createSpecHdu(fptr, data):
     status = 0
     
     data = num.asarray(data)
+    data = data.astype(num.Int32)
     nchan = len(data)
     channel = num.arange(nchan) + 1
     
