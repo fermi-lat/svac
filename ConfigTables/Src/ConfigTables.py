@@ -27,15 +27,6 @@ schemaTag = "schema"
 
 inDir = os.path.join(joboptions.runDir, runNumber)
 
-# inPat = os.path.join(inDir, joboptions.snapshotPrefix + "*" + joboptions.exten)
-# snapshots = glob.glob(inPat)
-# if len(snapshots) != 1:
-#     print "Run directory %s does not have exactly 1 'before' snapshot." % inDir
-#     sys.exit(1)
-# inFile = snapshots[0]
-
-# schemaFile = os.path.join(inDir, joboptions.schemaFile)
-
 inFile = util.findSnapshot(inDir)
 schemaFile = util.findSchema(inDir)
 
@@ -59,12 +50,6 @@ for tag in joboptions.shapeTags:
         shape = shape.getAttribute("ID")
         shape = util.uncompressSequence(shape)
         pass
-    #while True:
-    #    try:
-    #        shape.remove(joboptions.broadcast)
-    #    except ValueError:
-    #        break
-    #    pass
     newShape = []
     for index in shape:
         if index < maxShape:
@@ -127,14 +112,6 @@ for registerTag in joboptions.calTags:
         pass
     pass
 
-
-# #get CAL CSRs
-# gcccs = doc.getElementsByTagName("GCCC")
-# cCsrs = []
-# for gccc in gcccs:
-#     cCsrs.extend(gccc.getElementsByTagName("csr"))
-#     pass
-# cCsrs = util.contain(cCsrs, shapes)
 
 #get TKR CSRs
 gtccs = doc.getElementsByTagName("GTCC")
