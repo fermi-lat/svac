@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 
 use strict;
 
@@ -22,7 +22,7 @@ my $cmtDir = $ENV{'reconCmt'};
 my $exe = $ENV{'reconApp'};
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE "#!/bin/csh \n \n";
+print SHELLFILE "#!/bin/csh -e \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";

@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 
 # a utility script to update one column in the elogReport table 
 # usage: it takes three arguments. First argument is the runId of the run to be

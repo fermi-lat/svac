@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 
 use strict;
 
@@ -55,7 +55,7 @@ print OPTFILE qq{$splitInfoFile \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE qq{#!/bin/csh \n \n};
+print SHELLFILE qq{#!/bin/csh -e \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
