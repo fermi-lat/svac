@@ -31,4 +31,4 @@ my $exe = 'recon.pl';
 
 my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
 print "Running command: [$command]\n";
-system($command);
+exit(system($command));

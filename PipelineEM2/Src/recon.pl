@@ -92,7 +92,7 @@ print JOBOPTIONFILE qq(CalibDataSvc.CalibFlavorList = {"ideal", "chen"}; \n);
 
 close(JOBOPTIONFILE);
 system("chmod +rwx $shellFile");
-system("$shellFile");
+exit(system("$shellFile"));
 
  
 

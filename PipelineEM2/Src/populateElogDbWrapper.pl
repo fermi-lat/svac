@@ -28,4 +28,4 @@ my $exe = './populateElogDb.pl';
 
 my $command = "$exe '$shellFile' '$rcReport'";
 print "Running command: [$command]\nIn $ENV{'PWD'}\n";
-system($command);
+exit(system($command));

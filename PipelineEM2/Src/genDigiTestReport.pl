@@ -60,4 +60,4 @@ print SHELLFILE qq{tar cf $tarBall . \n};
 print SHELLFILE qq{cd $pwd};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
-system("$shellFile");
+exit(system("$shellFile"));

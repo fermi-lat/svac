@@ -4,6 +4,8 @@
 # Submitted to batch by pipeline scheduler.
 # You need only modify the last section...
 
+use strict;
+
 use lib '/u/gl/dflath/glast/software/DPF/PDB/';
 use DPFProc;
 
@@ -47,5 +49,5 @@ $ENV->{'PATH'} = `pwd` . ":" . $ENV->{'PATH'};
 my $cmd = "cp $inFiles->{'CopyIn'} $outFiles->{'CopyOut'}";
 print "cmd is [$cmd]\n";
 
-system "$cmd";
+exit(system("$cmd"));
 

@@ -41,4 +41,4 @@ print SHELLFILE qq{cd $pwd \n};
 close(SHELLFILE);
 
 system("chmod +rwx $shellFile");
-system("$shellFile");
+exit(system("$shellFile"));

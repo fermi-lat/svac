@@ -73,6 +73,6 @@ print JOBOPTIONFILE qq{ApplicationMgr.EvtMax  = 1000000000; \n};
 close(JOBOPTIONFILE);
 
 system("chmod +rwx $shellFile");
-system("$shellFile");
+exit(system("$shellFile"));
  
 

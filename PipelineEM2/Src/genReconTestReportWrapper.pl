@@ -31,4 +31,4 @@ my $exe = 'genReconTestReport.pl';
 
 my $command = "$exe '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
-system $command;
+exit(system($command));
