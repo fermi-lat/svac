@@ -6,7 +6,7 @@ if ($#ARGV != 1) {
     die "Usage: $0 shellFile rcReport";
 }
 
-my ($shellFile $rcReport) = @ARGV;
+my ($shellFile, $rcReport) = @ARGV;
 
 print <<EOT;
 $0 running with:
@@ -15,6 +15,7 @@ $0 running with:
 EOT
 
 my $eLogFeederDir = `dirname $shellFile`;
+chomp $eLogFeederDir;
 
 #change to ftp protocol
 my $rootUrl = '/glast.u01/temp/rootData/';

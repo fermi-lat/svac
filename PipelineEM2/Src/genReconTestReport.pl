@@ -18,6 +18,7 @@ $0 running with:
 EOT
 
 my $reportDir = `dirname $tarBall`;
+chomp $reportDir;
 
 # not sure if we really need this one
 my $timeStamp = $??;

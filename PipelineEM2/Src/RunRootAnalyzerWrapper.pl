@@ -35,7 +35,7 @@ my $histFile = $outFiles->{'histogram'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 
-my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/RunRootAnalyzer.pl';
+my $exe = 'RunRootAnalyzer.pl';
 
 my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";
