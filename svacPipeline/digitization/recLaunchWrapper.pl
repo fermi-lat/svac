@@ -44,7 +44,7 @@ if (! -e $digiRootFile) {
 }
 
 my $doRecon = `$ENV{'decideReconScript'} $runName`;
-chomp $dorecon;
+chomp $doRecon;
 if ($doRecon == 1) {
     print "Reconstructable run, status: $doRecon\n";
 } else {
