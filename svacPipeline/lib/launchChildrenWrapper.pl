@@ -32,10 +32,9 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = $ENV{'eLogLauncher'};
+my $exe = "$ENV{'PWD'}/launchChildren.pl";
 
-my $ldfFile = $inFiles->{'ldf'};
-my $command = "$exe '$taskName' '$runName' '$ldfFile'";
+my $command = "$exe '$taskName' '$runName'";
 
 print "Running command: [$command]\n";
 my $ex = new Exec("$command");
