@@ -25,7 +25,12 @@ my $digiRootFile = $inFiles->{'digi'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
+my $logFile = $outFiles->{'logFile'};
 
-my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genDigiTestReport.pl'
+my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genDigiTestReport.pl';
 
-system("$exe $digiRootFile $optionFile $shellFile $tarBall");
+my $command = "$exe $digiRootFile $optionFile $shellFile $tarBall";
+my $extension = " | tee $logFile 2>&1 ";
+my $syscmd = "$command $extension";
+
+system $syscmd;
