@@ -35,3 +35,5 @@ version = os.environ['configReportVersion']
 
 # put this many tables of CAL settings acros the page
 calTabWidth = 2 
+
+absent = 'Absent'

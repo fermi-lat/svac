@@ -83,9 +83,10 @@ except:
     finish()
 
 
+tkrSplits = configParser.tkrSplits(doc)
+output.addChildren(tkrSplits)
+
 calTables = configParser.calFeReg(doc)
 output.addChildren(calTables)
-
-#configParser.tkrSplits(doc)
 
 finish()

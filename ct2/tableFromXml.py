@@ -13,6 +13,8 @@ import ndDict
 import ndTable
 import util
 
+import jobOptions
+
 #
 class xTableGen:
     """@brief Create multidimensional tables from XML.
@@ -28,7 +30,7 @@ class xTableGen:
         for tag in location:
             items = addPathStep(items, tag)
             pass
-        self.data = ndDict.ndDict(dim=len(location), empty='Absent')
+        self.data = ndDict.ndDict(dim=len(location), empty=jobOptions.absent)
         for coord, element in items:
             regVal = getRegister(element, register)
             tabVal = subField(regVal)

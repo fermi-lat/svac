@@ -5,7 +5,7 @@
 #
 
 import html
-import ndTable
+import ndDict
 import htmlTable as table
 import tableFromXml
 import temUtil
@@ -57,84 +57,68 @@ def oneCalReg(doc, tag):
 #
 def tkrSplits(doc):
     # get TKR CSRs
-    gtccs = doc.getElementsByTagName("GTCC")
-    tCsrs = []
-    for gtcc in gtccs:
-        tCsrs.extend(gtcc.getElementsByTagName("csr"))
-        pass
-    tCsrs = util.contain(tCsrs, shapes, blank=-1)
+
+    output = []
+
+    sectionTitle = "Tracker Split Points"
+    output.append(html.Heading(sectionTitle, 2))
     
-    subField = util.SubField(7, 13)
-    nRead = util.superMap(subField, tCsrs)
-
-    # get TKR modes
-    gtrcs = doc.getElementsByTagName("GTRC")
-    modes = []
-    for gtrc in gtrcs:
-        modes.extend(gtrc.getElementsByTagName("mode"))
-        pass
-    modes = util.contain(modes, shapes)
-
-    nTrc = shapes["GTRC"]
-
-    # calc split points
-    splits = []
-    for jtem in range(len(tCsrs)):
-        sides = []
-        for left, right in temUtil.tccLRMap:
-            layers = []
-            for jlayer in range(nTrc):
-                split = util.getSplit(nRead[jtem][left][jlayer],
-                                      nRead[jtem][right][jlayer],
-                                      modes[jtem][left][jlayer],
-                                      modes[jtem][right][jlayer])
-                layers.append(split)
-                pass
-            sides.append(layers)
-            pass
-        splits.append(sides)
-        pass
-
-    # build split point table
-    tkrLayers = 2 * nTrc
-    layers = range(tkrLayers)
-    array = [layers]
-    labels = ["Layer"]
-    for jtem, tem in enumerate(splits):
-        for view in ("X", "Y"):
-            row = []
-            for layer in layers:
-                side, trc = temUtil.trcLayerMap[view][layer]
-                row.append(tem[side][trc])
-                pass
-            array.append(row)
-            labels.append("Tower %s %s" % (jtem, view))
-            pass
-        pass
-    array = util.transpose(array)
-    array.reverse()
-
-
-    output.addChild("\n")
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
-
-    splitLabel = "Tracker Split Points"
-    output.addChild(html.Heading(splitLabel, 2))
-
-    splitCaption = splitLabel + " (Left:Right)"
-    hTable = table.oneDTable(array, splitCaption, labels)
-    output.addChild(hTable)
-    
-    output.addChild("\n")
-
-    return
-
-#
-def tkrSplits(doc):
-    # get TKR CSRs
     regSpec, regLabel = jobOptions.tables['TKR_NR']
     nRead = tableFromXml.xTableGen(doc, regSpec)
     regSpec, regLabel = jobOptions.tables['TKR_MODE']
     mode = tableFromXml.xTableGen(doc, regSpec)
-    return
+
+    nReadData, (tems, cables, readers) = nRead.data.table()
+    modeData, junk = mode.data.table()
+
+    sideSplits = ndDict.ndDict(dim=3, empty=jobOptions.absent)
+    for temCell, iTem in enumerate(tems):
+        temRead = nReadData[temCell]
+        temMode = modeData[temCell]
+        for iSide, (left, right) in enumerate(temUtil.tccLRMap):
+            for layerCell, iLayer in enumerate(readers):
+                split = temUtil.getSplit(temRead[left, layerCell],
+                                         temRead[right, layerCell],
+                                         temMode[left, layerCell],
+                                         temMode[right, layerCell])
+                sideSplits[iTem, iSide, iLayer] = split
+                pass
+            pass
+        pass
+
+    viewSplits = ndDict.ndDict(dim=3, empty=jobOptions.absent)
+    tems, sides, readers = sideSplits.indices()
+    for iTem in tems:
+        for iSide in sides:
+            for iReader in readers:
+                view, layer = temUtil.tkrLayerMap[iSide][iReader]
+                viewSplits[iTem, view, layer] = sideSplits[iTem, iSide, iReader]
+                pass
+            pass
+        pass
+
+    tabData = []
+    tems, views, layers = viewSplits.indices()
+    layers.reverse()
+    for iLayer in layers:
+        row = [iLayer]
+        for iTem in tems:
+            for iView in views:
+                row.append(viewSplits[iTem, iView, iLayer])
+                pass
+            pass
+        tabData.append(row)
+        pass
+    tabColumns = ['Layer']
+    for iTem in tems:
+        for iView in views:
+            tabColumns.append('Tower %s %s' % (iTem, iView))
+            pass
+        pass
+
+    tabTitle = sectionTitle + ' (Left:Dead:Right)'
+    splitTab = table.oneDTable(tabData, tabTitle, tabColumns)
+    output.append(splitTab)
+
+    output.append(html.Element("HR"))    
+    return output

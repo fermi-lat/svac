@@ -49,7 +49,11 @@ class ndDict(dict):
                 return self
             else:
                 # delegate
-                return self._getSimple(key[0])[key[1:]]
+                next = self._getSimple(key[0])
+                if next == self.empty:
+                    return self.empty
+                else:
+                    return next[key[1:]]
         else:
             return self._getSimple(key)
         return

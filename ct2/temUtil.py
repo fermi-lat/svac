@@ -8,13 +8,15 @@
 
 """
 
+import jobOptions
+
 #
 def getSplit(nLeft, nRight, leftTfes, rightTfes):
     "Ugly hardcoded constants."
     nTfe = 24
-    badMagic = 63
+    badMagic = jobOptions.absent
     if nLeft == badMagic and nRight == badMagic:
-        return "Absent"
+        return jobOptions.absent
     if nLeft + nRight > nTfe:
         return "Error"
     leftTfes = leftTfes[:nLeft]
@@ -34,7 +36,9 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
             if righty != 2:
                 return "Error"
             pass
-    return "%s:%s" % (nLeft, nRight)
+        pass
+    nDead = nTfe - nLeft - nRight
+    return "%s:%s:%s" % (nLeft, nDead, nRight)
 
 cccSideMap = ("+X", "+Y", "-X", "-Y")
 cccLayerMap = ((0,2,4,6),
@@ -45,5 +49,6 @@ cccLayerMap = ((0,2,4,6),
 crcLayerMap = range(4)
 
 tccLRMap = ((0,1), (3,2), (5,4), (6,7))
-trcLayerMap = {"X": [(side, trc) for trc in range(9) for side in (1, 3)],
-               "Y": [(side, trc) for trc in range(9) for side in (0, 2)]}
+
+tkrSideMap = (('Y', 0), ('X', 0), ('Y', 1), ('X', 1))
+tkrLayerMap = [[(x[0], 2*i+x[1]) for i in range(9)] for x in tkrSideMap]
