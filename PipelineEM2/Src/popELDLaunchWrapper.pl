@@ -2,7 +2,7 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use lib $ENV{'PDB_HOME'};
 use DPFProc;
 
 #####################################################
@@ -22,12 +22,12 @@ my $taskName = $proc->{'task_name'};
 ##
 #####################################################
 
-my $reportFile = $inFiles->{'rcReport'};
-
 my $exe = 'TaskLaunch.pl';
-my $newTask = 'eLogUpdate';
 
+my $newTask = 'eLogUpdate';
+my $reportFile = $inFiles->{'rcReport'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$reportFile'";
+
 print "Running command :[$command]\n";
 my $status = system("$command");
 

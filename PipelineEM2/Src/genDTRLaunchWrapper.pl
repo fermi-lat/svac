@@ -6,7 +6,7 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use lib $ENV{'PDB_HOME'};
 use DPFProc;
 
 #####################################################
@@ -28,8 +28,8 @@ my $taskName = $proc->{'task_name'};
 
 my $exe = 'TaskLaunch.pl';
 
-my $digiRootFile = $inFiles->{'digi'};
 my $newTask = 'DigiReport';
+my $digiRootFile = $inFiles->{'digi'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
 
 print "Running command :[$command]\n";
