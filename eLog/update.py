@@ -142,16 +142,11 @@ for report in reports:
            
             data[additionFieldsTag] = data[additionFieldsTag] + name + '???' + node.childNodes[0].data + '!!!'
             
-            #replace ' with '' in order to input data into oracle
-            data[additionFieldsTag] = string.replace(data[additionFieldsTag], '\'', '\'\'')
             continue
         
         if (name == startTimeTag) or (name == endTimeTag):
             data[name] = parseTime(node.childNodes[0].data)
-        elif (name == versionDataTag or
-              name == modulesFailedVerificationTag or
-              name == additionalInputFilesTag or
-              name == commentsTag or
+        elif (
               name == releaseTag
               ):
             #replace ' with '' in order to input data into oracle
@@ -216,27 +211,13 @@ for report in reports:
     # in python, \' is used to put ' inside a string.
     # in oracle, '' is used to put ' inside a string.
             
-    sqlStr = 'insert into eLogReport values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', \'' + data[modulesFailedVerificationTag] + '\', \' \', ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', \'' + data[commentsTag] + '\', \'' + data[additionFieldsTag] + '\', ' + data[errorEventCountTag] + ', \'' + testReportUrl + '\', \'' + configReportUrl + '\')'
+    # modulesFailedVerification, Comments, versionData, additionFields
+    # are stored as CLOB in oracle, they need to be binded in order to insert
+    
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, TestReportUrl, ConfigReportUrl) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + testReportUrl + '\', \'' + configReportUrl + '\')'
 
     try:
-        c.execute(sqlStr)
-    except:
-        (exc_type, exc_value) = sys.exc_info()[:2]
-
-        print sqlStr
-        print exc_type
-        print exc_value
-
-        db.rollback()
-        continue
-
-    # sqlplus only permit a line with maximal length of 2500 characters
-    # so add versionData separatly
-
-    sqlStr = 'update eLogReport set VersionData = \'' + data[versionDataTag] + '\' where runID = ' + data[runIdTag]
-
-    try:
-        c.execute(sqlStr)
+        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
     except:
         (exc_type, exc_value) = sys.exc_info()[:2]
 
