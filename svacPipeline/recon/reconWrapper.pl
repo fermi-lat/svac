@@ -35,7 +35,7 @@ my $meritRootFile = $outFiles->{'merit'};
 
 my $exe = $ENV{'reconScript'};
 
-my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile' '$$runId'";
+my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile' '$runId'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
