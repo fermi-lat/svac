@@ -218,11 +218,10 @@ StatusCode RandomFill::execute( ) {
 	  for(int iPos = 0; iPos != 2; ++iPos) {
 
 	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex->m_id));
-	    m_tkrIndex->m_id = m_calDes->m_id;
+	    m_tkrIndex->m_calDesId = m_calDes->m_id;
 	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
 	    m_tkrIndex->fill();
 
-	    m_tkrNoisyChannel->m_avgCount = (float) randomDB(50., 100.);
 	    m_tkrNoisyChannel->m_tkrIndexId = m_tkrIndex->m_id;
 
 	    int nNoisyChannels = randomInt(10);
@@ -235,7 +234,7 @@ StatusCode RandomFill::execute( ) {
 		itr != noisyChannels.end(); ++itr) {
 
 	      m_db->getNextSeqNo("Seq_TkrNoisyChID", 
-				 &(m_tkrNoisyChannel->m_tkrNoisyChId));
+				 &(m_tkrNoisyChannel->m_id));
 	      m_tkrNoisyChannel->m_strip = *itr;
 	      m_tkrNoisyChannel->fill();
 	    }
@@ -257,7 +256,6 @@ StatusCode RandomFill::execute( ) {
 	    m_tkrIndex->m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
 	    m_tkrIndex->fill();
 
-	    m_tkrDeadChannel->m_avgCount = (float) randomDB(50., 100.);
 	    m_tkrDeadChannel->m_tkrIndexId = m_tkrIndex->m_id;
 
 	    int nDeadChannels = randomInt(10);
@@ -270,7 +268,7 @@ StatusCode RandomFill::execute( ) {
 		itr != deadChannels.end(); ++itr) {
 
 	      m_db->getNextSeqNo("Seq_TkrDeadChID", 
-				 &(m_tkrDeadChannel->m_tkrDeadChId));
+				 &(m_tkrDeadChannel->m_id));
 	      m_tkrDeadChannel->m_strip = *itr;
 	      m_tkrDeadChannel->fill();
 	    }

@@ -171,9 +171,6 @@ StatusCode GetCalPedestal::execute( ) {
     return StatusCode::FAILURE;
   }
 
-  m_db = m_pOracleDbSvc->getOracleDb();
-  assert(m_db != 0);
-
   sc = fillDescriptionTables();
   if(sc == StatusCode::FAILURE) return sc;
 
