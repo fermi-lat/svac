@@ -28,13 +28,14 @@ use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $digiRootFile = $inFiles->{'digi'};
+my $splitInfoFile = $inFiles->{'splitInfo'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'digiReportScript'};
 
-my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$splitInfoFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
