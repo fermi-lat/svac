@@ -15,21 +15,14 @@ int main(int argc, char** argv)
   else {
     optionFileName = argv[1];
   }
-  std::ifstream optionFile(optionFileName.c_str());
-  std::string mcRootFile, reconRootFile, digiRootFile, raFile, histFile;
-  optionFile >> mcRootFile >> digiRootFile >> reconRootFile >> raFile
-	     >> histFile;
 
-  RootAnalyzer analyzer(raFile.c_str(), histFile.c_str());
+  RootAnalyzer analyzer;
 
-  std::cout << "Process " << mcRootFile << std::endl;
-  std::cout << "Process " << digiRootFile << std::endl;
-  std::cout << "Process " << reconRootFile << std::endl;
-  std::cout << "Output " << raFile << std::endl;
-  std::cout << "Output " << histFile << std::endl;
+  analyzer.parseOptionFile(optionFileName.c_str());
 
-  analyzer.analyzeTrees(mcRootFile.c_str(), digiRootFile.c_str(), 
-			reconRootFile.c_str());
+  analyzer.analyzeData();
+
+  analyzer.produceOutputFile();
 
 }
 

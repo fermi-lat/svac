@@ -1,8 +1,9 @@
 #ifndef RootAnalyzer_Class
 #define RootAnalyzer_Class
 
-#include <fstream>
+#include <string>
 #include "TFile.h"
+#include "TChain.h"
 #include "TTree.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -15,15 +16,20 @@
 class RootAnalyzer {
  public:
 
-  RootAnalyzer(const char* raFileName, const char* histFileName);
+  RootAnalyzer();
   ~RootAnalyzer();
 
-  void analyzeTrees(const char* mcFileName,
-		    const char* digiFileName,
-		    const char* reconFileName);
+  /// parse option file to the RootAnalyzer
+  void parseOptionFile(const char* f);
+
+  void analyzeData();
+
+  /// produce output ntuple and histogram files based on analysis results
+  void produceOutputFile();
 
   enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, g_nCno=12};
+	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, 
+	g_nCno=12};
 
  private:
 
@@ -33,8 +39,23 @@ class RootAnalyzer {
 
   void analyzeDigiTree();
 
-  // fill diagnostic info (trigger primitive)
-  void diagnostic();
+  /// determine whether input string is empty or a comment  
+  /// a comment  is defined as a string with "//" in front
+  bool isEmptyOrCommentStr(const std::string& s);
+
+  /// determine whether a file is a root file
+  bool isRootFile(const std::string& f);
+
+  /// make a root TChain based on file names in a line, the file names should
+  /// be separated by one or more empty spaces
+  void  makeTChain(const std::string& line, TChain* chain);
+
+  /// input a line of string containing sub strings separated by empty spaces,
+  /// output first such sub string
+  void parseLine(const std::string& line, std::string& str);
+
+  // parse diagnostic data (trigger primitive)
+  void parseDiagnosticData();
 
   // extract tower number (from 0 to 16) layer number (from 0 to 17) and view 
   // number (X:0, Y:1) from id
@@ -75,18 +96,15 @@ class RootAnalyzer {
   TBranch* m_branch;
   NtupleDef m_ntuple;
 
-  TFile* m_mcFile;
-  TTree* m_mcTree;
+  TChain* m_mcChain;
   TBranch* m_mcBranch;
   McEvent* m_mcEvent;
 
-  TFile* m_reconFile;
-  TTree* m_reconTree;
+  TChain* m_reconChain;
   TBranch* m_reconBranch;
   ReconEvent* m_reconEvent;
 
-  TFile* m_digiFile;
-  TTree* m_digiTree;
+  TChain* m_digiChain;
   TBranch* m_digiBranch;
   DigiEvent* m_digiEvent;
 

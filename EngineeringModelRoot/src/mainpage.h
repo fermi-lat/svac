@@ -148,4 +148,8 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 4 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent from tower 8, layer 7 and end 0.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
 </TABLE>
 
+@section jobOpt Example of the option file
+
+@verbinclude AnalyzerOption.dat
+
 */

@@ -3,6 +3,7 @@
 #include <utility>
 #include <iterator>
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <cassert>
 #include <string>
@@ -12,14 +13,18 @@
 #include "ToString.h"
 #include "Event/Recon/TkrRecon/TkrKalFitTrack.h"
 
+using std::string;
+using std::vector;
+using std::ofstream;
+using std::ifstream;
 using std::cout;
 using std::endl;
 
-RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
-  : m_outputFile(0), m_tree(0), m_branch(0), m_mcFile(0), m_mcTree(0),
-    m_mcBranch(0), m_mcEvent(0), m_reconFile(0), m_reconTree(0), 
-    m_reconBranch(0), m_reconEvent(0), m_digiFile(0), m_digiTree(0),
-    m_digiBranch(0), m_digiEvent(0), m_histFile(0)
+RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
+			       m_mcChain(0), m_mcBranch(0), m_mcEvent(0), 
+			       m_reconChain(0), m_reconBranch(0), 
+			       m_reconEvent(0), m_digiChain(0),m_digiBranch(0),
+			       m_digiEvent(0), m_histFile(0)
 {
   // make sure unsigned int hold 32 bit data 
   assert(sizeof(unsigned int) == 4);
@@ -29,47 +34,22 @@ RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
     static TROOT gRoot("RootAnalyzer", "RootAnalyzer");
   }
 
+  m_mcChain = new TChain("Mc");
+  m_digiChain = new TChain("Digi");
+  m_reconChain = new TChain("Recon");
+
   // open output ra root file
   // No need to delete m_outputFile as ROOT will do the garbage collection
-
-  if(raFileName != "") {
-    m_outputFile = new TFile(raFileName, "RECREATE"); 
-    m_tree = new TTree("Output", "Root Analyzer");
-
-    // create branches for each ntuple variable
-    createBranches();
-  }
-
-  if(histFileName != "") {
-    m_histFile = new TFile(histFileName, "RECREATE");
-
-    // create histograms for strip hits
-
-    for(int iTower = 0; iTower != g_nTower; ++iTower) {
-      for(int iLayer = 0; iLayer != g_nTkrLayer; ++iLayer) {
-	for(int iView = 0; iView != g_nView; ++iView) {
-
-	  char name1[] = "hit00000";
-	  sprintf(name1, "hit%02d%02d%1d", iTower, iLayer, iView);
-
-	  m_stripHits[iTower][iLayer][iView] = 
-	    new TH1F(name1, name1, g_nStripsPerLayer, 0, g_nStripsPerLayer);
-
-	  char name2[] = "map00000";
-	  sprintf(name2, "map%02d%02d%1d", iTower, iLayer, iView);
-
-	  m_stripMap[iTower][iLayer][iView] = 
-	    new TH2F(name2, name2, g_nFEC, 0, g_nFEC, g_nStripsPerLayer/g_nFEC,
-		     0, g_nStripsPerLayer/g_nFEC);
-
-	}
-      }
-    }
-  }
 
 }
 
 RootAnalyzer::~RootAnalyzer()
+{
+  // since root will do the garbage collection automatically for objects such
+  // as TTree and TH1, we don't want to deallocate them once more
+}
+
+void RootAnalyzer::produceOutputFile()
 {
   TDirectory* saveDir = gDirectory;
 
@@ -181,7 +161,7 @@ void RootAnalyzer::analyzeReconTree()
 {
   TkrRecon* tkrRecon = m_reconEvent->getTkrRecon();
  
-  assert(tkrRecon != 0);
+  if (tkrRecon == 0) return;
 
   TObjArray* siClusterCol = tkrRecon->getClusterCol();
   if(siClusterCol) {
@@ -396,8 +376,9 @@ void RootAnalyzer::analyzeDigiTree()
 
 
   // mc events can not have diagnostic info, also check summary word
-  if( (! m_mcFile) && m_digiEvent->getEventSummaryData().diagnostic() ) {
-    diagnostic();
+  if( (! m_digiEvent->getFromMc()) && 
+      m_digiEvent->getEventSummaryData().diagnostic() ) {
+    parseDiagnosticData();
   }
 
   // fill in no of Tkr digis and TOTs
@@ -456,57 +437,156 @@ void RootAnalyzer::fillOutputTree()
   }
 }
 
-void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
-				const char* digiFileName="digi.root",
-				const char* reconFileName="recon.root")
+bool RootAnalyzer::isRootFile(const string& f)
 {
-  //open 3 root files
+  TFile rootF(f.c_str());
+  if(rootF.IsZombie()) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
 
-  m_mcFile = new TFile(mcFileName, "READ");
-  // check whether file exists
-  if(m_mcFile->IsZombie()) m_mcFile = 0;
-  if(m_mcFile) {
-    m_mcTree = (TTree*) m_mcFile->Get("Mc");
+void RootAnalyzer::makeTChain(const string& line, TChain* chain)
+{
+  std::istringstream stream(line);
+  string f;
+  while(stream >> f) {
+    if(isRootFile(f)) {
+      chain->Add(f.c_str());
+    }
+    else {
+      cout << f << " does not exist or is not a root file! It will not be used to make the SVAC ntuple and histogram files!" << endl;
+    } 
+  }
+}
+
+void RootAnalyzer::parseLine(const string& line, string& str)
+{
+  std::istringstream stream(line);
+  stream >> str;
+}
+
+void RootAnalyzer::parseOptionFile(const char* f)
+{
+  ifstream optF(f);
+  string line;
+
+  while( getline(optF, line) ) {
+    if(!isEmptyOrCommentStr(line)) break;
+  }
+  cout << "Input mc file(s): " << line << endl;
+  makeTChain(line, m_mcChain);
+  
+  while( getline(optF, line) ) {
+    if(!isEmptyOrCommentStr(line)) break;
+  }
+  cout << "Input digi file(s): " << line << endl;
+  makeTChain(line, m_digiChain);
+  
+  while( getline(optF, line) ) {
+    if(!isEmptyOrCommentStr(line)) break;
+  }
+  cout << "Input recon file(s): " << line << endl;
+  makeTChain(line, m_reconChain);
+
+  while( getline(optF, line) ) {
+    if(!isEmptyOrCommentStr(line)) break;
+  }
+  string svacF;
+  parseLine(line, svacF);
+  cout << "Output SVAC ntuple file: " << svacF << endl;
+  m_outputFile = new TFile(svacF.c_str(), "RECREATE");
+  m_tree = new TTree("Output", "Root Analyzer");
+  // create branches for each ntuple variable
+  createBranches();
+
+  while( getline(optF, line) ) {
+    if(!isEmptyOrCommentStr(line)) break;
+  }
+  string histF;
+  parseLine(line, histF);
+  cout << "Output hist file: " << histF << endl;
+  m_histFile = new TFile(histF.c_str(), "RECREATE");
+
+  // create histograms for strip hits
+
+  for(int iTower = 0; iTower != g_nTower; ++iTower) {
+    for(int iLayer = 0; iLayer != g_nTkrLayer; ++iLayer) {
+      for(int iView = 0; iView != g_nView; ++iView) {
+
+	char name1[] = "hit00000";
+	sprintf(name1, "hit%02d%02d%1d", iTower, iLayer, iView);
+
+	m_stripHits[iTower][iLayer][iView] = 
+	  new TH1F(name1, name1, g_nStripsPerLayer, 0, g_nStripsPerLayer);
+
+	char name2[] = "map00000";
+	sprintf(name2, "map%02d%02d%1d", iTower, iLayer, iView);
+
+	m_stripMap[iTower][iLayer][iView] = 
+	  new TH2F(name2, name2, g_nFEC, 0, g_nFEC, g_nStripsPerLayer/g_nFEC,
+		   0, g_nStripsPerLayer/g_nFEC);
+
+      }
+    }
+  }
+}
+
+bool RootAnalyzer::isEmptyOrCommentStr(const string& s)
+{
+  int len = s.length();
+  if(len == 0) return true;
+  bool empty = true;
+  for(int i = 0; i != len; ++i) {
+    if(s[0] != ' ') empty = false;
+  }
+  if(empty) return true;
+
+  if(len >= 2 && s[0] == '/' && s[1] == '/') {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+void RootAnalyzer::analyzeData()
+{
+  Long64_t nMc = m_mcChain->GetEntries();
+  cout << "No. of Mc events to be processed: " << nMc << endl;
+
+  Long64_t nDigi = m_digiChain->GetEntries();
+  cout << "No. of Digi events to be processed: " << nDigi << endl;
+
+  Long64_t nRecon = m_reconChain->GetEntries();
+  cout << "No. of Recon events to be processed: " << nRecon << endl;
+
+  Long64_t nEvent = std::max(std::max(nMc, nDigi), nRecon);
+  if( (nEvent != nMc && nMc != 0) || (nEvent != nDigi && nDigi != 0) ||
+      (nEvent != nRecon && nRecon != 0) ) {
+    cout << "No. of events in mc, digi or recon files are not identical with each other, stop processing!" << endl;
+    exit(1);
+  }
+
+  if(nMc != 0) {
     m_mcEvent = 0;  
-    m_mcBranch = m_mcTree->GetBranch("McEvent");
+    m_mcBranch = m_mcChain->GetBranch("McEvent");
     // what is stored in the root tree is actually a pointer rather than
     // mc event
     m_mcBranch->SetAddress(&m_mcEvent);
   }
 
-  m_reconFile = new TFile(reconFileName, "READ");
-  if(m_reconFile->IsZombie()) m_reconFile = 0;
-  if(m_reconFile) {
-    m_reconTree = (TTree*) m_reconFile->Get("Recon");
+  if(nRecon != 0) {
     m_reconEvent = 0;
-    m_reconBranch = m_reconTree->GetBranch("ReconEvent");
+    m_reconBranch = m_reconChain->GetBranch("ReconEvent");
     m_reconBranch->SetAddress(&m_reconEvent);
   }
 
-  m_digiFile = new TFile(digiFileName, "READ");
-  if(m_digiFile->IsZombie()) m_digiFile = 0;
-  if(m_digiFile) {
-    m_digiTree = (TTree*) m_digiFile->Get("Digi");
-    m_digiEvent = 0;
-    m_digiBranch = m_digiTree->GetBranch("DigiEvent");
+  if(nDigi != 0) {
+    m_digiBranch = m_digiChain->GetBranch("DigiEvent");
     m_digiBranch->SetAddress(&m_digiEvent);
-  }
-
-  int nEvent, nMc, nRecon, nDigi;
-  if(m_mcFile) {
-    nMc = (int) m_mcTree->GetEntries();
-    cout << "No of events in " << mcFileName << " : " << nMc << endl;
-    nEvent = nMc;
-  }
-  if(m_reconFile) {
-    nRecon = (int) m_reconTree->GetEntries();
-    cout << "No of events in " << reconFileName << " : " << nRecon << endl;
-    nEvent = nRecon;
-  }
-  if(m_digiFile) {
-    nDigi = (int) m_digiTree->GetEntries();
-    cout << "No of events in " << digiFileName << " : " << nDigi << endl;
-    nEvent = nDigi;
   }
 
   /*
@@ -531,26 +611,24 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
   //     nEvent = 100;
   //   nEvent = nRecon;
 
-  for(int iEvent = 0; iEvent != nEvent; ++iEvent) {
-
-    //    m_timeFile << iEvent;
+  for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     m_ntuple.reset();  
     if(m_mcEvent) m_mcEvent->Clear();
     if(m_digiEvent) m_digiEvent->Clear();
     if(m_reconEvent) m_reconEvent->Clear();
 
-    if(m_mcFile) {
+    if(nMc != 0) {
       m_mcBranch->GetEntry(iEvent);
       analyzeMcTree();
     }
 
-    if(m_digiFile) {
+    if(nDigi != 0) {
       m_digiBranch->GetEntry(iEvent);
       analyzeDigiTree();
     }
 
-    if(m_reconFile) {
+    if(nRecon != 0) {
       m_reconBranch->GetEntry(iEvent);
       analyzeReconTree();
     }
@@ -562,10 +640,7 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     if(m_digiEvent) m_digiEvent->Clear();
     if(m_reconEvent) m_reconEvent->Clear();
   }  
-  
-  if(m_mcFile) m_mcFile->Close();
-  if(m_reconFile) m_reconFile->Close();
-  if(m_digiFile) m_digiFile->Close();
+
 }
 
 bool RootAnalyzer::extractTowerLayerView(const VolumeIdentifier& id, 
@@ -868,42 +943,34 @@ void RootAnalyzer::analyzeTot()
  
 }
 
-void RootAnalyzer::diagnostic()
+void RootAnalyzer::parseDiagnosticData()
 {
-  int iTower = 0;
-
   if(m_digiEvent->getTkrDiagnosticCol()) {
     int nTkrDiag = m_digiEvent->getTkrDiagnosticCol()->GetLast()+1;
-
-    assert(nTkrDiag == 8);
 
     for(int i = 0; i != nTkrDiag; ++i) {
 
       const TkrDiagnosticData* pDiag = m_digiEvent->getTkrDiagnostic(i);
-
-      m_ntuple.m_tpTkr[iTower][i] = pDiag->getDataWord();
+      m_ntuple.m_tpTkr[pDiag->tower()][pDiag->gtcc()] = pDiag->getDataWord();
 
     }
 
-    ElecToGeo::getInstance()->decodeTkrTp(m_ntuple.m_tpTkr, 
-					  m_ntuple.m_tkrReq, iTower);
+    ElecToGeo::getInstance()->decodeTkrTp(m_ntuple.m_tpTkr,m_ntuple.m_tkrReq);
   }
 
   if(m_digiEvent->getCalDiagnosticCol()) {
 
     int nCalDiag = m_digiEvent->getCalDiagnosticCol()->GetLast()+1;
 
-    assert(nCalDiag == 8);
-
     for(int i = 0; i != nCalDiag; ++i) {
 
       const CalDiagnosticData* pDiag = m_digiEvent->getCalDiagnostic(i);
 
-      m_ntuple.m_tpCal[iTower][i] = pDiag->getDataWord();
-      ElecToGeo::getInstance()->decodeCalTp(m_ntuple.m_tpCal, 
-					    m_ntuple.m_calReq, iTower);
+      m_ntuple.m_tpCal[pDiag->tower()][pDiag->layer()] = pDiag->getDataWord();
 
     }
+
+    ElecToGeo::getInstance()->decodeCalTp(m_ntuple.m_tpCal, m_ntuple.m_calReq);
 
   }
 }

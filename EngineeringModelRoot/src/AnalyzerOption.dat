@@ -1,21 +1,20 @@
-/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_mc.root
-/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_digi.root
-/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_recon.root
-/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_svac.root
-/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_hist.root
+// Do not change order of the lines. Blank lines and lines starting with "//" 
+// are skipped. If you don't want to analyze a particular type of root files
+// such as mc root files, you still need to give a false file name. The file
+// will be ignored if it does not exist or is not a root file.
 
-/nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_mc.root
-/nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_digi.root
-/nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/0408102136151_recon.root
-/nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_svac.root
-/nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_hist.root
+// a set of input mc root files separated by blank space(s)
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_mc.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_mc.root 
 
+// a set of input digi root files separated by blank space(s)
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_digi.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_digi.root 
 
-mc.root
-digi.root
-recon.root
+// a set of input recon root files separated by blank space(s)
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_recon.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_recon.root 
+
+// output SVAC ntuple file
 svac.root
+
+// output SVAC histogram file
 hist.root
-
-
 

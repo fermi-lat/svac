@@ -1,14 +1,13 @@
 #ifndef NtupleDef_Class
 #define NtupleDef_Class
 
+#include "GeoConstants.h"
+
 struct NtupleDef {
 
-  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nCno=12};
-
-  unsigned int m_runId;
-  unsigned int m_eventId;
-  unsigned int m_seqNo;
+  int m_runId;
+  int m_eventId;
+  int m_seqNo;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -116,8 +115,8 @@ struct NtupleDef {
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118
-  unsigned int m_tpCal[g_nTower][g_nTP];
-  unsigned int m_tpTkr[g_nTower][g_nTP];
+  unsigned int m_tpCal[g_nTower][g_nCalLayer];
+  unsigned int m_tpTkr[g_nTower][g_nGTCC];
 
   // event summary word
   unsigned int m_summaryWord;
