@@ -36,5 +36,11 @@ $ENV{'exe'} = '/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/E
 
 my $command = "./ldfToDigi.pl";
 print "Running command: [$command]\n";
-exit(system($command));
+
+my $status = system($command);
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}
 

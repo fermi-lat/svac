@@ -45,5 +45,10 @@ print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exeDir/RunRootAnalyzer.exe $optionFile \n};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
-exit(system("$shellFile"));
 
+my $status = system("$shellFile");
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}

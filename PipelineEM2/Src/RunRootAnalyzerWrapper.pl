@@ -39,4 +39,10 @@ my $exe = './RunRootAnalyzer.pl';
 
 my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";
-exit(system($command));
+
+my $status = system($command);
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}

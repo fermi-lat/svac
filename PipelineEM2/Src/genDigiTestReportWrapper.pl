@@ -31,4 +31,10 @@ my $exe = './genDigiTestReport.pl';
 
 my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
-exit(system($command));
+
+my $status = system($command);
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}

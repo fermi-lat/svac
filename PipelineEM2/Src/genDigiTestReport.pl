@@ -58,4 +58,10 @@ print SHELLFILE qq{tar cf $tarBall . \n};
 print SHELLFILE qq{cd $pwd};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
-exit(system("$shellFile"));
+
+my $status = system("$shellFile");
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}

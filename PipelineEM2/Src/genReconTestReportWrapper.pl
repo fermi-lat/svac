@@ -32,4 +32,10 @@ my $exe = './genReconTestReport.pl';
 
 my $command = "$exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
-exit(system($command));
+
+my $status = system($command);
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}

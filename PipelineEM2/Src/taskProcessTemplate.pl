@@ -49,5 +49,10 @@ $ENV->{'PATH'} = `pwd` . ":" . $ENV->{'PATH'};
 my $cmd = "cp $inFiles->{'CopyIn'} $outFiles->{'CopyOut'}";
 print "cmd is [$cmd]\n";
 
-exit(system("$cmd"));
+my $status = system("$cmd");
+
+if ($status == 0) {
+    exit 0;}
+else {
+    exit 1;}
 
