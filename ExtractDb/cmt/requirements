@@ -1,0 +1,35 @@
+package ExtractDb
+
+version v0
+
+author X. Chen <xchen@slac.stanford.edu>
+
+use GlastPolicy v*
+use ROOT v* IExternal
+use RootPolicy v*
+
+apply_pattern package_include
+apply_pattern package_headers
+
+set ORACLE_HOME /usr/oracle
+
+include_dirs ${ORACLE_HOME}/rdbms/demo
+include_dirs ${ORACLE_HOME}/rdbms/public
+
+set OciWrapper_HOME /nfs/farm/g/glast/u06/chen/svac/OciWrapper
+
+include_dirs $(OciWrapper_HOME)/include
+
+macro OCILINKOPT " -L $(OciWrapper_HOME)/lib -lOciWrapper "
+
+path_remove LD_LIBRARY_PATH "/usr/oracle/lib" 
+path_append LD_LIBRARY_PATH "/usr/oracle/lib" 
+
+path_remove LD_LIBRARY_PATH "$(OciWrapper_HOME)/lib" 
+path_append LD_LIBRARY_PATH "$(OciWrapper_HOME)/lib" 
+
+macro_append ExtractDb_linkopts " $(OCILINKOPT)"
+
+public
+
+application ExtractDb *.cxx  
