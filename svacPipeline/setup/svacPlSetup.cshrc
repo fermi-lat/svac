@@ -127,3 +127,5 @@ if ( ${?PYTHONPATH} == '1' ) then
 else
     setenv PYTHONPATH ${SVACPYTHON}
 endif
+
+setenv PATH $PATH:${svacPlLib}
