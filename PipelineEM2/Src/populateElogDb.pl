@@ -28,7 +28,7 @@ if(! (-d $eLogFeederDir) ) {
 }
 
 #my $scriptDir = '/nfs/slac/g/svac/common/builds/eLogFeeder/v1r1';
-my $scriptDir = '/nfs/slac/g/svac/focke/test/eLogFeeder/v1r1';
+my $scriptDir = '/nfs/slac/g/svac/focke/test/svac/eLog';
 
 #create a csh script to run update.py
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
