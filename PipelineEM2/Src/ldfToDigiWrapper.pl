@@ -23,6 +23,7 @@ my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
+my $logFile = $outFiles->{'logFile'};
 
 $ENV{'ldfFile'} = $ldfFile;
 $ENV{'shellFile'} = $shellFile;
@@ -32,5 +33,9 @@ $ENV{'cmtPath'} = '/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/Engin
 $ENV{'cmtDir'} = '/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/cmt';
 $ENV{'exe'} = '/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/rh9_gcc32/Em2.exe';
 
-system "ldfToDigi.pl";
+my $command = "ldfToDigi.pl";
+my $extension = " | tee $logFile 2>&1 ";
+my $syscmd = "$command $extension";
+
+system $syscmd;
 
