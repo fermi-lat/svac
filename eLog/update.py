@@ -1,4 +1,5 @@
-#!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
+#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
+
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
 
 xmlFile is the run report (default rcReport.out)
