@@ -30,11 +30,11 @@ my $digiReportXml =
         <executable name=\"digiReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group\"$batchgroup\">
+        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
             <working-directory>$digiReportDataDir</working-directory>
             <log-file-path>$digiReportDataDir</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$digiReportDataDir</working-directory>
             <log-file-path>$digiReportDataDir</log-file-path>
         </batch-job-configuration>

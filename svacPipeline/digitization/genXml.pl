@@ -36,11 +36,11 @@ my $digitizationXml =
         <executable name=\"digiRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$digiDataDir</working-directory>
             <log-file-path>$digiDataDir</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group\"$batchgroup\">
+        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
             <working-directory>$digiDataDir</working-directory>
             <log-file-path>$digiDataDir</log-file-path>
         </batch-job-configuration>

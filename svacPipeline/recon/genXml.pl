@@ -35,11 +35,11 @@ my $reconXml =
     <executable name=\"urlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
         $urlUpdater
     </executable>
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group\"$batchgroup\">
+    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
         <working-directory>$reconDataDir</working-directory>
         <log-file-path>$reconDataDir</log-file-path>
     </batch-job-configuration>
-    <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
         <working-directory>$reconDataDir</working-directory>
         <log-file-path>$reconDataDir</log-file-path>
     </batch-job-configuration>

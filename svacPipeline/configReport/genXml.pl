@@ -31,11 +31,11 @@ my $configReportXml =
         <executable name=\"configReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$configDataDir</working-directory>
             <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"short-job\" queue=\"short\" group=\"$batchgroup\">
             <working-directory>$configDataDir</working-directory>
             <log-file-path>$configDataDir</log-file-path>
         </batch-job-configuration>

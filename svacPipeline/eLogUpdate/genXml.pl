@@ -30,7 +30,7 @@ my $updateElogDbXml =
         <executable name=\"LaunchConfRepWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
         </executable>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$eLogDataDir</working-directory>
             <log-file-path>$eLogDataDir</log-file-path>
         </batch-job-configuration>

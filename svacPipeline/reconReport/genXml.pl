@@ -30,11 +30,11 @@ my $reconReportXml =
         <executable name=\"reconReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
-        <batch-job-configuration name=\"long-job\" queue=\"long\" group\"$batchgroup\">
+        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$reconReportDataDir</working-directory>
             <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$reconReportDataDir</working-directory>
             <log-file-path>$reconReportDataDir</log-file-path>
         </batch-job-configuration>

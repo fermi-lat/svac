@@ -30,11 +30,11 @@ my $svacTupleXml =
         <executable name=\"svacRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
-        <batch-job-configuration name=\"long-job\" queue=\"long\" group\"$batchgroup\">
+        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$svacTupleDataDir</working-directory>
             <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$svacTupleDataDir</working-directory>
             <log-file-path>$svacTupleDataDir</log-file-path>
         </batch-job-configuration>
