@@ -1,6 +1,8 @@
 
 import os
 
+import mappings
+
 # defaults for command-line args
 runNumber = '1'
 schemaFile = 'schema.xml' # no longer used
@@ -24,7 +26,7 @@ tables = {
     'TKR_MODE': ('GTEM/GTCC/GTRC/GTFE/mode', # used to calc GTRC splits
                  'TKR front end mode (L or R)'),
     'TKR_DAC': ('GTEM/GTCC/GTRC/GTFE/dac', # TKR DAC
-                'TKR DAC'),
+                'TKR DAC (range,threshhold)'),
 
     'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt',
                 "CAL Log Accept Discriminator (zero supression)"), 
@@ -70,6 +72,8 @@ tables = {
                  'Hold trigger primitive for TEM diagnostic latching of TKR trigger primitive'), 
     
     }
+
+mappers = {'TKR_DAC': mappings.mapTkrDac}
 
 # logical values that apply to the whole LAT
 globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE']

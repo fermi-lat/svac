@@ -7,6 +7,7 @@
 import math
 
 import html
+import mappings
 import ndDict
 import ndList
 import htmlTable as table
@@ -263,6 +264,11 @@ def simpleTkrReg(doc, tag):
     output.append(html.Heading(sectionTitle, 2))
 
     xTable = tableFromXml.xTableGen(doc, regSpec)
+
+    if jobOptions.mappers.has_key(tag):
+        xTable.data = xTable.data.map(jobOptions.mappers[tag])
+        pass
+    
     regTables = []
     tems = xTable.data.items()
     tems.sort()
@@ -270,7 +276,7 @@ def simpleTkrReg(doc, tag):
         tccs = temData.items()
         tccs.sort()
         flatterArray = []
-        
+
         junk, indices = temData.table()
         tfeLabels = indices[-1]
         readerLabels = []
@@ -403,7 +409,7 @@ def oneCableDelay(doc, name):
     tableTitle = regLabel + ' (ticks (ns))'
 
     ticks = tableFromXml.xTableGen(doc, regSpec)
-    times = ticks.data.map(displayTime)
+    times = ticks.data.map(mappings.displayTime)
     timeData, labels = times.table()
     dTable = table.twoDTable(timeData, tableTitle, axisLabels, labels)
     output.append(dTable)
@@ -459,22 +465,10 @@ def oneTack(doc, name):
     
     regTable = tableFromXml.xTableGen(doc, regSpec)
     labels = regTable.data.indices()[0]
-    data = regTable.data.map(displayTime)
+    data = regTable.data.map(mappings.displayTime)
     data, labels = data.table()
     hTable = table.oneDTable(zip(labels[0], data), title, columns)
 
     return hTable
 
 
-#
-def ticksToTime(ticks):
-    seconds = ticks * jobOptions.tick
-    scaled = seconds * jobOptions.timeScale
-    scaled = int(scaled + 0.5)
-    time = '%s%s' % (scaled, jobOptions.timeUnits)
-    return time
-
-#
-def displayTime(ticks):
-    time = '%s (%s)' % (ticks, ticksToTime(ticks))
-    return time

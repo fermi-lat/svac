@@ -9,6 +9,7 @@
 """
 
 
+
 #
 def mapTkrDac(dac):
     """@brief Display range and threshhold for a GTFE dac.
@@ -30,3 +31,23 @@ def getThrDAC(dac):
 def getThrDACRange(dac):
     """@brief Get range from GTFE dac."""
     return dac & 0x1
+
+
+
+#
+def displayTime(ticks):
+    """Display registers that measure time.
+    Uses ticksToTime.
+    """
+    time = '%s (%s)' % (ticks, ticksToTime(ticks))
+    return time
+
+#
+def ticksToTime(ticks):
+    """Convert instrument ticks to time."""
+    import jobOptions
+    seconds = ticks * jobOptions.tick
+    scaled = seconds * jobOptions.timeScale
+    scaled = int(scaled + 0.5)
+    time = '%s%s' % (scaled, jobOptions.timeUnits)
+    return time
