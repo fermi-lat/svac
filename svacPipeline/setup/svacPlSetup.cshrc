@@ -106,7 +106,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v1r0
 setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r3p0
+setenv RunRootAnalyzerVersion v1r3p1
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
