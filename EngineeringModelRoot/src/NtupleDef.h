@@ -148,7 +148,8 @@ struct NtupleDef {
   unsigned int m_gemAcdTilesRbn;
   unsigned int m_gemAcdTilesNa;
 
-  // Luis's three-in-arow trigger bits:                                                                                                     unsigned int m_trgTriRowBits[g_nTower];
+  // Luis's three-in-arow trigger bits:
+  unsigned int m_trgTriRowBits[g_nTower];
 
   // Event sizes:
   unsigned int m_temLength[g_nTower];

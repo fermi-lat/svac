@@ -373,7 +373,8 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
   }
 
-  // Luis's three-in-a-row trigger bits:                                                                                                    for (int iTower = 0; iTower<g_nTower; iTower++) {
+  // Luis's three-in-a-row trigger bits:
+  for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
   }
   
@@ -988,7 +989,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemTriggerTime", &(m_ntuple.m_gemTriggerTime), "GemTriggerTime/i");
   m_tree->Branch("GemDeltaEventTime", &(m_ntuple.m_gemDeltaEventTime), "GemDeltaEventTime/i");
   m_tree->Branch("GemOnePpsSeconds", &(m_ntuple.m_gemOnePpsSeconds), "GemOnePpsSeconds/i");
-  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/Ii);
+  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/i");
   m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/i");
   m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/i");
   m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/i");
