@@ -55,7 +55,7 @@ def finish():
     os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
               (destDir, tarFile, tarFile))
 
-    # sys.exit(0)
+    sys.exit(0)
     return
 
 output = html.Page("Configuration for run %s" % runNumber)
