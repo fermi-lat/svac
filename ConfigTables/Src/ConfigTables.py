@@ -60,13 +60,13 @@ def finish():
     outputFile.write(outStr)
     outputFile.close()
 
+    # tar up the output directory
+    os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
+              (destDir, tarFile, tarFile))
+
     sys.exit(0)
     return
 
-
-# tar up the output directory
-os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
-          (destDir, tarFile, tarFile))
 
 output = html.Page("Configuration for run %s" % runNumber)
 
