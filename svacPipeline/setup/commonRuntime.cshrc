@@ -20,7 +20,7 @@ setenv svacPlLibVersion v2r1
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
 
-setenv iAndTPhase TowerA
+setenv iAndTPhase Integration
 
 setenv dataHead /nfs/farm/g/glast/u12/$iAndTPhase
 setenv onlineTail rawData

@@ -9,6 +9,8 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 
+my $batchgroup = $ENV{'batchgroup'};
+
 # svacTuple
 my $svacTupleDataDir = "$ENV{'calibRoot'}/svacRoot/$ENV{'svacTupleVersion'}";
 

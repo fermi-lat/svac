@@ -9,6 +9,8 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 
+my $batchgroup = $ENV{'batchgroup'};
+
 # digiReport
 my $digiReportDataDir = "$ENV{'svacEmDir'}/digiReport/$ENV{'digiReportVersion'}";
 
