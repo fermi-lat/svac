@@ -29,13 +29,11 @@ my $pdfFile = 'refman.pdf';
 my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
-my $cmtPath = '/nfs/slac/g/svac/common/builds/:/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0402p16';
-my $cmtDir = '/nfs/slac/g/svac/common/builds/TestReport/v2r0/cmt';
-my $exeDir = '/nfs/slac/g/svac/common/builds/TestReport/v2r0/rh9_gcc32';
-my $doxyFile = '/nfs/slac/g/svac/common/builds/TestReport/v2r0/src/ReportDoxyfile';
+my $cmtPath = $ENV{'CMTPATH'};
+my $cmtDir = $ENV{'DigiReportCmt'};
+my $exe = $ENV{'DigiReportApp'};
 
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
+my $doxyFile = $ENV{'digiRepDoxyFile'};
 
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
@@ -50,7 +48,7 @@ print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{source $glastScript \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
-print SHELLFILE qq{$exeDir/TestReport.exe $optionFile \n};
+print SHELLFILE qq{$exe $optionFile \n};
 print SHELLFILE qq{cd $reportDir \n};
 print SHELLFILE qq{doxygen $doxyFile \n};
 print SHELLFILE qq{cd latex \n};

@@ -19,9 +19,9 @@ $0 running with:
   shellFile:     $shellFile
 EOT
 
-my $cmtPath = "/nfs/slac/g/svac/common/builds/:/nfs/farm/g/glast/u10/builds/EngineeringModel/EngineeringModel-v3r0402p9/";
-my $cmtDir = "/nfs/slac/g/svac/common/builds/EngineeringModelRoot/v1/cmt";
-my $exeDir = "/nfs/slac/g/svac/common/builds/EngineeringModelRoot/v1/rh9_gcc32";
+my $cmtPath = $ENV{'CMTPATH'};
+my $cmtDir = $ENV{'svacCmt'};
+my $exe = $ENV{'svacApp'};
 
 my $glastRoot = "/afs/slac.stanford.edu/g/glast";
 my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
@@ -42,7 +42,7 @@ print SHELLFILE qq{source $glastScript \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
-print SHELLFILE qq{$exeDir/RunRootAnalyzer.exe $optionFile \n};
+print SHELLFILE qq{$exe $optionFile \n};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
 

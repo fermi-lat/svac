@@ -17,6 +17,10 @@ $0 running with:
   meritRootFile: $meritRootFile
 EOT
 
+my $cmtPath = $ENV{'CMTPATH'};
+my $cmtDir = $ENV{'reconCmt'};
+my $exe = $ENV{'reconApp'};
+
 my $glastRoot = "/afs/slac.stanford.edu/g/glast";
 my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
@@ -24,15 +28,13 @@ open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 print SHELLFILE "source $glastScript \n";
-print SHELLFILE "setenv CMTPATH /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/:/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0402p16 \n";
-print SHELLFILE "pushd /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/cmt \n";
+print SHELLFILE "setenv CMTPATH $cmtPath \n";
+print SHELLFILE "pushd $cmtDir';
 print SHELLFILE "source setup.csh \n";
-print SHELLFILE "popd \n";
-print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "pushd /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/cmt \n";
 print SHELLFILE "cmt show uses \n";
 print SHELLFILE "popd \n";
-print SHELLFILE "/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/rh9_gcc32/Em2.exe \n";
+print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
+print SHELLFILE "$exe \n";
 close(SHELLFILE);
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
