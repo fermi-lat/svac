@@ -88,7 +88,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
-setenv digiReportTaskVersion v3r1p1
+setenv digiReportTaskVersion v3r1p2
 setenv digiReportTag v3r1p0
 setenv digiReportTask digiReport-${digiReportTaskVersion}
 setenv TestReportVersion v3r2p6
@@ -119,7 +119,7 @@ setenv reconDataDirFull ${dataHead}/${reconDataDir}
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
-setenv reconReportTaskVersion v3r1p1
+setenv reconReportTaskVersion v3r1p2
 setenv reconReportTag v3r1p0
 setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
@@ -134,7 +134,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #-------------------------------- reconReport ---------------------------------
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
-setenv svacTupleTaskVersion v3r1p1
+setenv svacTupleTaskVersion v3r1p2
 setenv svacTupleTag v3r1p0
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1r3p11
