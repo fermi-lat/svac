@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 #!/nfs/slac/g/svac/local/bin/python
 
 """Usage:
-ConfigTables.py runNumber schema snapshot outDir
+ConfigTables.py runNumber schema snapshot tarBall
 
 """
 
