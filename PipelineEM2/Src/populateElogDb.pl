@@ -18,7 +18,7 @@ my $eLogFeederDir = `dirname $shellFile`;
 chomp $eLogFeederDir;
 
 #change to ftp protocol
-my $rootUrl = '/glast.u01/temp/rootData/';
+my $rootUrl = $ENV{'rootUrl'};
 
 my $pwd = $ENV{PWD};
 
@@ -27,8 +27,7 @@ if(! (-d $eLogFeederDir) ) {
    die "Directory $eLogFeederDir does not exist, abort!";
 }
 
-#my $scriptDir = '/nfs/slac/g/svac/common/builds/eLogFeeder/v1r1';
-my $scriptDir = '/nfs/slac/g/svac/focke/test/svac/eLog';
+my $scriptDir = $ENV{'eLogDir'};
 
 #create a csh script to run update.py
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";

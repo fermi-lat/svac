@@ -4,6 +4,8 @@ source /afs/slac.stanford.edu/g/glast/ground/scripts/user.cshrc
 
 setenv CMTPATH /nfs/slac/g/svac/common/builds:/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0402p16
 
+setenv rootUrl /glast.u12/rootData
+
 setenv eLogDir /nfs/slac/g/svac/common/builds/eLogFeeder/v1r1
 
 setenv ldfToDigiCmt /nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/cmt
