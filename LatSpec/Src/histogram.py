@@ -3,6 +3,12 @@
 ## @brief Code to calculate histograms.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
 
+#
+
+"""@brief Code to calculate histograms.
+
+"""
+
 import numarray as num
 
 # 
@@ -56,7 +62,6 @@ class Histogram:
         self.shape = num.array(shape)
 
         pass
-
 
     #
     def add(self, values):
@@ -117,7 +122,6 @@ class Histogram:
         return self
     
     __iadd__ = add
-    
 
 #
 def _test():

@@ -6,6 +6,9 @@
 
 """@brief Stuff to write FITS files for GLAST.
 
+@todo This stuff should all be methods on a glastFitsFile object.
+@todo This needs error checking.
+
 """
 
 import sys
@@ -24,7 +27,7 @@ VERSION = "0.0.1"
 ## version of the processing software
 SOFTWARE = "0.0.1"
 
-
+#
 def createFile(filename):
     """@brief Create & initialize a GLAST FITS file.
 
@@ -46,14 +49,14 @@ def createFile(filename):
     
     return fptr
 
-
+#
 def addPrimaryKeywords(fptr):
     """@brief Add required keywords to a GLAST FITS primary HDU.
 
     This adds a number of keywords that the primary HDU of every GLAST-related
     FITS file is supposed to have.  See the <A
-    HREF="http://glast.gsfc.nasa.gov/ssc/dev/fits_def/guidelines.html">GLAST
-    FITS Guidelines</A> for details.
+    HREF="http://glast.gsfc.nasa.gov/ssc/dev/fits_def/guidelines.html"> GLAST
+    FITS Guidelines </A> for details.
 
     This is kind of a hack, since almost everything is hardcoded.
 
@@ -88,14 +91,14 @@ def addPrimaryKeywords(fptr):
     
     return
 
-
+#
 def addStandardKeywords(fptr):
     """@brief Add required keywords to a GLAST FITS HDU.
 
     This adds a number of keywords that every HDU of every GLAST-related FITS
     file is supposed to have.  See the <A
-    HREF="http://glast.gsfc.nasa.gov/ssc/dev/fits_def/guidelines.html">GLAST
-    FITS Guidelines</A> for details.
+    HREF="http://glast.gsfc.nasa.gov/ssc/dev/fits_def/guidelines.html"> GLAST
+    FITS Guidelines </A> for details.
 
     @param fptr An open FITS file pointer.  Keywords will be aded to the
     current HDU.
@@ -121,7 +124,7 @@ def addStandardKeywords(fptr):
 
     return
 
-
+#
 def closeFile(fptr):
     """@brief close a GLAST FITS file.
 
