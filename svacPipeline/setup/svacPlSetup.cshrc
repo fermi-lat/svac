@@ -33,6 +33,8 @@ setenv calibVersion calib-v1r0
 setenv calibGenTKRVersion v0r1p8
 setenv calibGenCALVersion v2r3p4
 
+setenv calibRoot $svacEmDir/$calibVersion
+
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineVersion V1r0
 setenv svacOnlineVersion v1r0
