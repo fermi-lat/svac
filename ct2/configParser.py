@@ -130,3 +130,11 @@ def tkrSplits(doc):
 
     return
 
+#
+def tkrSplits(doc):
+    # get TKR CSRs
+    regSpec, regLabel = jobOptions.tables['TKR_NR']
+    nRead = tableFromXml.xTableGen(doc, regSpec)
+    regSpec, regLabel = jobOptions.tables['TKR_MODE']
+    mode = tableFromXml.xTableGen(doc, regSpec)
+    return
