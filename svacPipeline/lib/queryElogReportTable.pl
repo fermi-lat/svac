@@ -24,6 +24,11 @@ my $columnName = $ARGV[1];
 
 $dbh = DBI->connect($ENV{'dbName'}, $ENV{'userName'}, $ENV{'passWd'}) or die 'connect db failed: '.$dbh->errstr;
 
+# prepare to read in CLOB data
+my $oldReadLen = $dbh->{LongReadLen};
+$dbh->{LongReadLen} = 512 * 1024;
+$dbh->{LongTruncOk} = 1;
+
 my $sqlStr = "select $columnName from elogReport where runId = $runId";
 
 my $sth = $dbh->prepare($sqlStr) or die 'prepare sql failed: '.$dbh->errstr;
@@ -33,6 +38,8 @@ $sth->execute() or die 'execute sql failed: '.$dbh->errstr;
 my ($value) = $sth->fetchrow_array;
 
 $sth->finish() or die 'finish sql failed: '.$dbh->errstr;
+
+$dbh->{LongReadLen} = $oldReadLen;
 
 $dbh->disconnect or die 'disconnect db failed: '.$dbh->errstr;
 
