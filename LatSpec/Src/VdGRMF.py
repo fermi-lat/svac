@@ -18,7 +18,7 @@ import WrtARF
 import WrtRMF
 
 # # config
-infile = "../Data/gamma_9_25_198M_ene.dat"
+responseDataFile = "../Data/gamma_9_25_198M_ene.dat"
 rmfFile = "VdG.rmf"
 arfFile = "VdG.arf"
 
@@ -50,8 +50,8 @@ epsilon = step / 2
 reconEdges = num.arange(eReconMin, eReconMax+epsilon, step)
 
 # read data
-sys.stderr.write("Reading data from %s ... " % infile)
-data = tableIo.readTable(infile)
+sys.stderr.write("Reading data from %s ... " % responseDataFile)
+data = tableIo.readTable(responseDataFile)
 eRecon, eTrue = data[:2]
 nTuple = num.transpose((eTrue, eRecon))
 sys.stderr.write("ok.\n")

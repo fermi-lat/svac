@@ -45,12 +45,12 @@ def readTable(infile, transpose=1):
     filter = re.compile(r"^\s*[+\-]?\.?[0-9].*$", re.MULTILINE)
     lines = filter.findall(lines)
 
-    numfinder = re.compile(r"[-\+]?(?:\d+\.?\d*|\.\d+)(?:[eEdD][-\+]?\d+)?")
+    numFinder = re.compile(r"[-\+]?(?:\d+\.?\d*|\.\d+)(?:[eEdD][-\+]?\d+)?")
 
     numbers = []
     for line in lines:
         # pull out all numeric strings
-        row = numfinder.findall(line)
+        row = numFinder.findall(line)
         row = map(eval, row)
         numbers.append(row)
     numbers = num.array(numbers)

@@ -54,24 +54,25 @@ def createMatrixHdu(fptr, matrix, edges):
     
     matrix = num.asarray(matrix)
     matrix = matrix.astype(num.Float32)
-    nbin, nchan = matrix.shape
-    matform = "%dE" % nchan
-    nelt = nbin * nchan
+    nBin, nChan = matrix.shape
+    matForm = "%dE" % nChan
+    nElt = nBin * nChan
 
     edges = num.asarray(edges)
     edges = edges.astype(num.Float32)
-    if len(edges) != nbin+1:
+    if len(edges) != nBin+1:
         raise ValueError, "edges don't match matrix"
-    elo = edges[:-1]
-    ehi = edges[1:]
 
-    n_grp = num.ones(nbin)
-    f_chan = num.ones(nbin)
-    n_chan = num.ones(nbin) * nchan
+    # these are not camelCase to match column names
+    energ_lo = edges[:-1]
+    energ_hi = edges[1:]
+    n_grp = num.ones(nBin)
+    f_chan = num.ones(nBin)
+    n_chan = num.ones(nBin) * nChan
     
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=6,
          ttype=["ENERG_LO", "ENERG_HI", "N_GRP", "F_CHAN", "N_CHAN", "MATRIX"],
-         tform=["E", "E", "I", "1I", "1I", matform],
+         tform=["E", "E", "I", "1I", "1I", matForm],
          tunit=["keV", "keV", "", "", "", ""], extname="MATRIX")
     status |= st
 
@@ -80,7 +81,7 @@ def createMatrixHdu(fptr, matrix, edges):
                                          "Instrument filter in use")
     status |= cfitsio.fits_update_key_str(fptr, "CHANTYPE", "PI",
                                   "channels are really calculated energy bins")
-    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nchan,
+    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nChan,
                                  "Total number of detector channels available")
     status |= cfitsio.fits_update_key_str(fptr, "HDUCLASS", "OGIP",
                                       "format conforms to OGIP/GSFC standards")
@@ -96,9 +97,9 @@ def createMatrixHdu(fptr, matrix, edges):
 
 
     # optional keywords
-    status |= cfitsio.fits_update_key_lng(fptr, "NUMGRP", nbin,
+    status |= cfitsio.fits_update_key_lng(fptr, "NUMGRP", nBin,
                                           "the number of channel subsets")
-    status |= cfitsio.fits_update_key_lng(fptr, "NUMELT", nelt,
+    status |= cfitsio.fits_update_key_lng(fptr, "NUMELT", nElt,
                                           "the number of response elements")
     status |= cfitsio.fits_update_key_str(fptr, "RMFVERSN", "1992a",
                                          "obsolete keyword for older software")
@@ -117,16 +118,16 @@ def createMatrixHdu(fptr, matrix, edges):
 #                                    "number of channel subsets for every bin")
 #     status |= cfitsio.fits_update_key_lng(fptr, "F_CHAN", 1,
 #                                     "first channel for every channel subset")
-#     status |= cfitsio.fits_update_key_lng(fptr, "N_CHAN", nchan,
+#     status |= cfitsio.fits_update_key_lng(fptr, "N_CHAN", nChan,
 #                                 "number of channels in every channel subset")
     
     # Oh, yeah, the data
-    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nbin, list(elo))
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nbin, list(ehi))
+    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nBin, list(energ_lo))
+    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nBin, list(energ_hi))
     status |= cfitsio.fits_write_col_int(fptr, 3, 1, 1, n_grp)
     status |= cfitsio.fits_write_col_int(fptr, 4, 1, 1, f_chan)
     status |= cfitsio.fits_write_col_int(fptr, 5, 1, 1, n_chan)
-    status |= cfitsio.fits_write_col_dbl(fptr, 6, 1, 1, nelt,
+    status |= cfitsio.fits_write_col_dbl(fptr, 6, 1, 1, nElt,
                                          list(matrix.flat))
 
     if status:
@@ -155,11 +156,13 @@ def createEboundsHdu(fptr, ebounds):
 
     ebounds = num.asarray(ebounds)
     ebounds = ebounds.astype(num.Float32)
-    nchan = len(ebounds) - 1
-    emin = ebounds[:-1]
-    emax = ebounds[1:]
+    nChan = len(ebounds) - 1
 
-    channel = num.arange(nchan) + 1
+    # these are not camelCase to match column names
+    e_min = ebounds[:-1]
+    e_max = ebounds[1:]
+
+    channel = num.arange(nChan) + 1
 
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=3,
                                      ttype=["CHANNEL", "E_MIN", "E_MAX"],
@@ -174,7 +177,7 @@ def createEboundsHdu(fptr, ebounds):
                                          "Instrument filter in use")
     status |= cfitsio.fits_update_key_str(fptr, "CHANTYPE", "PI",
                                   "channels are really calculated energy bins")
-    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nchan,
+    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nChan,
                                  "Total number of detector channels available")
     status |= cfitsio.fits_update_key_str(fptr, "HDUCLASS", "OGIP",
                                       "format conforms to OGIP/GSFC standards")
@@ -195,8 +198,8 @@ def createEboundsHdu(fptr, ebounds):
 
    # Oh, yeah, the data
     status |= cfitsio.fits_write_col_int(fptr, 1, 1, 1, channel)
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nchan, list(emin))
-    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nchan, list(emax))
+    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nChan, list(e_min))
+    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nChan, list(e_max))
 
     if status:
         raise IOError, "CFITSIO problem."
@@ -207,20 +210,20 @@ def createEboundsHdu(fptr, ebounds):
 if __name__ == "__main__":
     import os
     
-    testrmf = "test.rmf"
-    nbin = 3
-    nchan = 2
+    testRmf = "test.rmf"
+    nBin = 3
+    nChan = 2
 
-    os.system("rm -f %s" % testrmf)
+    os.system("rm -f %s" % testRmf)
 
     status = 0
 
-    matrix = num.arange(nbin*nchan)
-    matrix.shape = nbin, nchan
-    edges = num.arange(nbin+1) + 1
-    ebounds = num.arange(nchan+1) + 1
+    matrix = num.arange(nBin*nChan)
+    matrix.shape = nBin, nChan
+    edges = num.arange(nBin+1) + 1
+    ebounds = num.arange(nChan+1) + 1
     
-    st, fptr = glastFits.createFile(testrmf)
+    st, fptr = glastFits.createFile(testRmf)
     status |= st
     st, chdu = createMatrixHdu(fptr, matrix, edges)
     status |= st
@@ -231,6 +234,6 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system("fverify %s" % testrmf)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testrmf)
+    os.system("fverify %s" % testRmf)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testRmf)
     

@@ -13,22 +13,21 @@ import histogram
 import tableIo
 import WrtPHA
 
-infile = "../Data/vdg_em_4M_ene.dat"
-#infile = "../Data/gamma_9_25_198M_ene.dat"
-outfile = "VdG.pha"
+specDataFile = "../Data/vdg_em_4M_ene.dat"
+phaFile = "VdG.pha"
 
 # define reconstructed energy "channels"
 eReconMin = 7.0
 eReconMax = 35.0
 nChan = 100
 
-# set up energy bins
+# set up reconstructed energy channels
 step = (eReconMax - eReconMin) / nChan
 epsilon = step / 2.0
 edges = num.arange(eReconMin, eReconMax+epsilon, step)
 
 # read data
-data = tableIo.readTable(infile)
+data = tableIo.readTable(specDataFile)
 eRecon = data[0]
 
 # histogram data
@@ -37,7 +36,7 @@ binner += eRecon
 
 # output
 status = 0
-st, fptr = glastFits.createFile(outfile)
+st, fptr = glastFits.createFile(phaFile)
 status |= st
 st, chdu = WrtPHA.createSpecHdu(fptr, binner.histogram)
 status |= st

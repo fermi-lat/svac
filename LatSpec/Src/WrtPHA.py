@@ -46,8 +46,8 @@ def createSpecHdu(fptr, data):
     
     data = num.asarray(data)
     data = data.astype(num.Int32)
-    nchan = len(data)
-    channel = num.arange(nchan) + 1
+    nChan = len(data)
+    channel = num.arange(nChan) + 1
     
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=2,
                           ttype=["CHANNEL", "COUNTS"], tform=["I", "J"],
@@ -77,7 +77,7 @@ def createSpecHdu(fptr, data):
                                          "Exposure time, dummy value")
     status |= cfitsio.fits_update_key_flt(fptr, "CORRSCAL", 0.0, -9,
                                          "Correction scale factor")
-    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nchan,
+    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nChan,
                                  "Total number of detector channels available")
     status |= cfitsio.fits_update_key_log(fptr, "POISSERR", 1, \
                                     "Poisson Distribution errors are assumed.")
@@ -117,18 +117,18 @@ def createSpecHdu(fptr, data):
 if __name__ == "__main__":
     import os
     
-    testpha = "test.pha"
-    testrmf = "test.rmf"
-    testarf = "test.arf"
-    nchan = 2
+    testPha = "test.pha"
+    testRmf = "test.rmf"
+    testArf = "test.arf"
+    nChan = 2
 
-    os.system("rm -f %s" % testpha)
+    os.system("rm -f %s" % testPha)
 
     status = 0
 
-    data = num.arange(nchan)
+    data = num.arange(nChan)
     
-    st, fptr = glastFits.createFile(testpha)
+    st, fptr = glastFits.createFile(testPha)
     status |= st
     st, chdu = createSpecHdu(fptr, data)
     status |= st
@@ -138,9 +138,9 @@ if __name__ == "__main__":
         raise IOError, "There was a CFITSIO problem."
 
     # hardwire test file to use test files produced by other modules
-    os.system("fparkey %s %s RESPFILE" % (testrmf, testpha))
-    os.system("fparkey %s %s ANCRFILE" % (testarf, testpha))
+    os.system("fparkey %s %s RESPFILE" % (testRmf, testPha))
+    os.system("fparkey %s %s ANCRFILE" % (testArf, testPha))
     
-    os.system("fverify %s" % testpha)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testpha)
+    os.system("fverify %s" % testPha)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testPha)
     

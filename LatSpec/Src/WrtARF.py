@@ -56,9 +56,11 @@ def createArfHdu(fptr, prod, edges):
 
     edges = num.asarray(edges)
     edges = edges.astype(num.Float32)
-    nbin = len(edges) - 1
-    elo = edges[:-1]
-    ehi = edges[1:]
+    nBin = len(edges) - 1
+
+    # these are not camelCase to match column names
+    energ_lo = edges[:-1]
+    energ_hi = edges[1:]
 
     st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=3,
                                     ttype=["ENERG_LO", "ENERG_HI", "SPECRESP"],
@@ -88,9 +90,9 @@ def createArfHdu(fptr, prod, edges):
                                          "obsolete keyword for older software")
 
     # Oh, yeah, the data
-    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nbin, list(elo))
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nbin, list(ehi))
-    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nbin, list(prod))
+    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nBin, list(energ_lo))
+    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nBin, list(energ_hi))
+    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nBin, list(prod))
 
 
     if status:
@@ -102,17 +104,17 @@ def createArfHdu(fptr, prod, edges):
 if __name__ == "__main__":
     import os
     
-    testarf = "test.arf"
-    nbin = 3
+    testArf = "test.arf"
+    nBin = 3
 
-    os.system("rm -f %s" % testarf)
+    os.system("rm -f %s" % testArf)
 
     status = 0
 
-    prod = num.arange(nbin)
-    edges = num.arange(nbin+1) + 1
+    prod = num.arange(nBin)
+    edges = num.arange(nBin+1) + 1
     
-    st, fptr = glastFits.createFile(testarf)
+    st, fptr = glastFits.createFile(testArf)
     status |= st
     st, chdu = createArfHdu(fptr, prod, edges)
     status |= st
@@ -121,6 +123,6 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system("fverify %s" % testarf)
-    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testarf)
+    os.system("fverify %s" % testArf)
+    os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testArf)
     

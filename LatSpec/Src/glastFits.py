@@ -34,13 +34,13 @@ VERSION = "0.0.1"
 SOFTWARE = "0.0.1"
 
 #
-def createFile(filename):
+def createFile(fileName):
     """@brief Create & initialize a GLAST FITS file.
 
-    The specified @a filename will be created, with a null image primary HDU,
+    The specified @a fileName will be created, with a null image primary HDU,
     and required keywords for a GLAST primary HDU.
 
-    @param filename The name of the file to be created.
+    @param fileName The name of the file to be created.
 
     @return A tuple containing:
     @li CFITSIO error status, should be 0,
@@ -50,10 +50,10 @@ def createFile(filename):
 
     status = 0
 
-    st, fptr = cfitsio.fits_create_file(filename)
+    st, fptr = cfitsio.fits_create_file(fileName)
     status |= st
     if status:
-        raise IOError, "Trouble opening file %s." % filename
+        raise IOError, "Trouble opening file %s." % fileName
     
     status |= cfitsio.fits_create_img(fptr, cfitsio.BYTE_IMG, 0, [])
     if status:
@@ -90,12 +90,12 @@ def addPrimaryKeywords(fptr):
     # get current HDU so we can go back there when we're done
     junk, chdu = cfitsio.fits_get_hdu_num(fptr)
     # move to primary HDU
-    st, hdutype = cfitsio.fits_movabs_hdu(fptr, 1)
+    st, hduType = cfitsio.fits_movabs_hdu(fptr, 1)
     status |= st
 
-    st, filename = cfitsio.fits_file_name(fptr)
+    st, fileName = cfitsio.fits_file_name(fptr)
     status |= st
-    status |= cfitsio.fits_update_key_str(fptr, "FILENAME", filename,
+    status |= cfitsio.fits_update_key_str(fptr, "FILENAME", fileName,
                                           "name of this file")
     status |= cfitsio.fits_update_key_str(fptr, "ORIGIN", ORIGIN,
                                           "name of organization making file")
@@ -110,7 +110,7 @@ def addPrimaryKeywords(fptr):
                                           "version of the processing software")
     
     # go back to original HDU
-    st, hdutype = cfitsio.fits_movabs_hdu(fptr, chdu)
+    st, hduType = cfitsio.fits_movabs_hdu(fptr, chdu)
     status |= st
    
     if status:
@@ -147,8 +147,8 @@ def addStandardKeywords(fptr):
                               "world coord. system for this file (FK5 or FK4)")
     
     # date of file creation
-    datestr = time.strftime("%Y-%m-%d")
-    status |= cfitsio.fits_update_key_str(fptr, "DATE", datestr, 
+    dateStr = time.strftime("%Y-%m-%d")
+    status |= cfitsio.fits_update_key_str(fptr, "DATE", dateStr, 
                                           "date file was made in yyyy-mm-dd")
 
     if status:
@@ -225,10 +225,10 @@ def closeFile(fptr):
     status |= cfitsio.fits_flush_file(fptr)
 
     # update checksums
-    st, nhdus = cfitsio.fits_get_num_hdus(fptr)
+    st, nHdus = cfitsio.fits_get_num_hdus(fptr)
     status |= st
-    for hdu in xrange(1, nhdus+1):
-        st, hdutype = cfitsio.fits_movabs_hdu(fptr, hdu)
+    for hdu in xrange(1, nHdus+1):
+        st, hduType = cfitsio.fits_movabs_hdu(fptr, hdu)
         status |= st
         status |= cfitsio.fits_write_chksum(fptr)
 
@@ -244,13 +244,13 @@ def closeFile(fptr):
 if __name__ == "__main__":
     import os
     
-    testfits = 'test.fits'
+    testFits = 'test.fits'
 
-    os.system("rm -f %s" % testfits)
+    os.system("rm -f %s" % testFits)
 
     status = 0
     
-    st, fptr = createFile(testfits)
+    st, fptr = createFile(testFits)
     status |= st
     st, chdu = createTable(fptr, extname="BOZO")
     status |= st
@@ -259,5 +259,5 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system('fverify %s' % testfits)
-    os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testfits)
+    os.system('fverify %s' % testFits)
+    os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testFits)

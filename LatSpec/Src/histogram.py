@@ -95,15 +95,15 @@ class Histogram:
 
         # # get rid of the points that are out of range
         # set up limits
-        lolim = []
-        hilim = []
+        loLim = []
+        hiLim = []
         for edge in self.edges:
-            lolim.append(edge[0])
-            hilim.append(edge[-1])
-        lolim = num.array(lolim)
-        hilim = num.array(hilim)
+            loLim.append(edge[0])
+            hiLim.append(edge[-1])
+        loLim = num.array(loLim)
+        hiLim = num.array(hiLim)
         # compare to limits on element-by-element basis
-        mask = (values >= lolim) & (values < hilim)
+        mask = (values >= loLim) & (values < hiLim)
         # combine n-dim element mask into 1-dim point mask
         mask = num.alltrue(mask, 1)
         # and pull out the good points
