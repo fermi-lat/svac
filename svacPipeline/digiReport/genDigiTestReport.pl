@@ -2,17 +2,16 @@
 
 use strict;
 
-if ($#ARGV != 5) {
-    die "Usage: $0 digiRootFile splitInfoFile optionFile shellFile tarBall";
+if ($#ARGV != 4) {
+    die "Usage: $0 digiRootFile optionFile shellFile tarBall";
 }
 
-my ($runName, $digiRootFile, $splitInfoFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
   runName:      [$runName]
   digiRootFile: [$digiRootFile]
-  splitInfoFile:[$splitInfoFile]
   optionFile:   [$optionFile]
   shellFile:    [$shellFile]
   tarBall:      [$tarBall]
@@ -35,8 +34,8 @@ my $cmtDir = $ENV{'digiReportCmt'};
 my $exe = $ENV{'digiReportApp'};
 my $digiReportVersion = $ENV{'digiReportVersion'};
 my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
-my $calibGenTKRVersion = $ENV{'calibGenTKRVersion'};
-my $calibGenCALVersion = $ENV{'calibGenCALVersion'};
+my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
+my $calCalibSerNo = $ENV{'calCalibSerNo'};
 my $latexHeaderFile = $ENV{'latexHeaderFile'};
 my $doxyFile = $ENV{'digiRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
@@ -48,9 +47,8 @@ print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
 print OPTFILE qq{$testReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
-print OPTFILE qq{$calibGenTKRVersion \n};
-print OPTFILE qq{$calibGenCALVersion \n};
-print OPTFILE qq{$splitInfoFile \n};
+print OPTFILE qq{$tkrCalibSerNo \n};
+print OPTFILE qq{$calCalibSerNo \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
