@@ -52,31 +52,47 @@ close(SHELLFILE);
 
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
-print JOBOPTIONFILE qq{ApplicationMgr.DLLs+= {"GaudiAlg", "GaudiAud"};\n};
-print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += {"ChronoStatSvc"}; \n};
-print JOBOPTIONFILE qq{AuditorSvc.Auditors = {"ChronoAuditor"}; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.DLLs += {"LdfConverter"}; \n};
-print JOBOPTIONFILE qq{EventSelector.Instrument = "EM"; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += {"LdfEventSelector/EventSelector" , "LdfCnvSvc/EventCnvSvc"}; \n};
-print JOBOPTIONFILE qq{EventPersistencySvc.CnvServices = {"EventCnvSvc"};\n};
-print JOBOPTIONFILE qq{ApplicationMgr.TopAlg = {"Sequencer/Top" }; \n};
-print JOBOPTIONFILE qq{Generator.Members = {};\n};
-print JOBOPTIONFILE qq{Digitization.Members = {};\n};
-print JOBOPTIONFILE qq{Top.Members={"Sequencer/Output"}; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.DLLs += {"GlastSvc"}; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += { "GlastDetSvc"}; \n};
-print JOBOPTIONFILE qq{GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n};
-print JOBOPTIONFILE qq{GlastDetSvc.visitorMode="recon";\n };
-print JOBOPTIONFILE qq{ApplicationMgr.DLLs +={"Trigger", "RootIo"}; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n};
-print JOBOPTIONFILE qq{digiRootWriterAlg.OutputLevel=3; \n};
-print JOBOPTIONFILE qq{Output.Members = {"digiRootWriterAlg"}; \n};
-print JOBOPTIONFILE qq{digiRootWriterAlg.digiRootFile = "$digiRootFile"; \n};
-print JOBOPTIONFILE qq{EventSelector.StorageType = "$ldfFileType"; \n};
-print JOBOPTIONFILE qq{EventSelector.InputList = {"$ldfFile"}; \n};
-print JOBOPTIONFILE qq{EventSelector.OutputLevel = 4; \n};
-print JOBOPTIONFILE qq{MessageSvc.OutputLevel = 3; \n};
-print JOBOPTIONFILE qq{ApplicationMgr.EvtMax  = 1000000000; \n};
+print JOBOPTIONFILE <<EOF;
+ApplicationMgr.DLLs+= { "GaudiAlg", "GaudiAud"};
+ApplicationMgr.ExtSvc += {"ChronoStatSvc"};
+AuditorSvc.Auditors = {"ChronoAuditor"};
+ApplicationMgr.DLLs += {"LdfConverter"};
+//EventSelector.Instrument = "EM";
+ApplicationMgr.ExtSvc += { 
+    "LdfEventSelector/EventSelector" , 
+    "LdfCnvSvc/EventCnvSvc"
+    };
+EventPersistencySvc.CnvServices = {"EventCnvSvc"};
+ApplicationMgr.TopAlg = {
+      "Sequencer/Top" };
+Generator.Members = {};
+Digitization.Members = {};
+Top.Members={
+    "Sequencer/Trigger",
+    "Sequencer/Output" 
+};
+ApplicationMgr.DLLs += {"GlastSvc"};
+ApplicationMgr.ExtSvc += { "GlastDetSvc"};
+GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml";
+GlastDetSvc.visitorMode="recon";
+ApplicationMgr.DLLs +={ 
+    "Trigger", "RootIo"
+}; 
+Trigger.Members = {"TriggerAlg"};
+TriggerAlg.mask = 0;
+
+ApplicationMgr.ExtSvc += { "RootIoSvc" };
+digiRootWriterAlg.OutputLevel=3;
+Output.Members = {
+    "digiRootWriterAlg"
+};
+digiRootWriterAlg.digiRootFile = "$digiRootFile";
+EventSelector.StorageType = "$ldfFileType";
+EventSelector.InputList = {"$ldfFile"};
+EventSelector.OutputLevel = 4;
+MessageSvc.OutputLevel = 3;
+ApplicationMgr.EvtMax  = 100000000;
+EOF
 close(JOBOPTIONFILE);
 
 system("chmod +rwx $shellFile");
