@@ -20,7 +20,7 @@ import jobOptions
 
 
 if len(sys.argv) == 4:
-    runNumber, splitFile, tarBall = sys.argv[1:]
+    runNumber, snapFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -29,9 +29,7 @@ else:
 # insert command line options in jobOptions
 # might make a dump of jobOptions for the records
 jobOptions.runNumber = runNumber
-#jobOptions.schemaFile = schemaFile
 jobOptions.snapFile = snapFile
-jobOptions.splitFile = splitFile
 jobOptions.tarBall = tarBall
 
 destDir = os.path.dirname(tarBall) or '.'
