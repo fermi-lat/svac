@@ -6,6 +6,7 @@
 
 import math
 
+import bitField
 import eLogDB
 import html
 import mappings
@@ -17,6 +18,14 @@ import temUtil
 
 import jobOptions
 
+#
+def hasGlt(doc):
+    """"""
+    hasGlt = True
+    glts = doc.getElementsByTagName('GGLT')
+    if len(glts) < 1:
+        hasGlt = False
+    return hasGlt
 
 #
 def globalStuff(doc):
@@ -27,12 +36,13 @@ def globalStuff(doc):
     sectionTitle = 'LAT globals'
     output.append(html.Heading(sectionTitle, 1))
 
-    for name in jobOptions.globoLogicals:
-        tag, label = jobOptions.tables[name]
-        line = globoLogical(doc, tag, label)
-        output.append(line)
-        #output.append(html.Element("BR"))
-        output.append('<br/>\n')
+    if hasGlt(doc):
+        for name in jobOptions.globoLogicals:
+            tag, label = jobOptions.tables[name]
+            line = globoLogical(doc, tag, label)
+            output.append(line)
+            output.append('<br/>\n')
+            pass
         pass
 
     output.extend(globalDBStrings())
@@ -452,6 +462,7 @@ def oneCalReg(doc, tag):
 
     return output
 
+################## Synchronization delays ###########################
 
 #
 def delays(doc):
@@ -470,7 +481,7 @@ def delays(doc):
     output.append(html.Element("HR"))
 
     # GEM window width
-    output.extend(gemStuff(doc))
+    output.extend(gemTimes(doc))
     output.append(html.Element("HR"))    
 
     # per-TEM delays
@@ -501,24 +512,37 @@ def oneCableDelay(doc, name):
     return output
 
 #
-def gemStuff(doc):
-    """@brief Display stuff that lives in GGEM."""
+def hasGem(doc):
+    """@brief Do we have a GEM?"""
+    
+    hasGem = True
+    
+    gems = doc.getElementsByTagName("GGEM")
+    if len(gems) < 1:
+        hasGem = False
+    
+    return hasGem
+
+#
+def gemTimes(doc):
+    """@brief Display synchronization delays that live in GGEM."""
     output = []
 
     regSpec, sectionTitle = jobOptions.tables['GEM_WIDTH']
     output.append(html.Heading(sectionTitle, 2))
 
+    if not hasGem(doc):
+        output.append("Sorry, no GEM.")
+        return output
+
     dTab = tableFromXml.xTableGen(doc, regSpec)
     data = dTab.data[0]
-    if data == jobOptions.absent:
-        value = "Sorry, no GEM."
+    if 0 in data:
+        data = data[0]
+        time = mappings.ticksToTime(data)
+        value = '%s ticks = %s' % (data, time)
     else:
-        if 0 in data:
-            data = data[0]
-            time = mappings.ticksToTime(data)
-            value = '%s ticks = %s' % (data, time)
-        else:
-            value = jobOptions.absent
+        value = jobOptions.absent
         pass
     output.append(value)
 
@@ -558,6 +582,7 @@ def oneTack(doc, name):
 
     return hTable
 
+######################## per-TEM stuff ##########################
 
 #
 def perTem(doc):
@@ -566,7 +591,7 @@ def perTem(doc):
     output = []
 
     sectionTitle = "Per-TEM quantities."
-    output.append(html.Heading(sectionTitle, 2))    
+    output.append(html.Heading(sectionTitle, 1))    
 
     for name in jobOptions.perTem:
         output.append(oneTem(doc, name))
@@ -585,6 +610,24 @@ def oneTem(doc, name):
     hTable = table.oneDTable(zip(labels, data), title, jobOptions.perTemColumns)
     return hTable
 
+################### GEM config ###################################
+
+def gemStuff(doc):
+    """@brief Display GEM configuration."""
+
+    output = []
+
+    sectionTitle = "GEM configuration"
+    output.append(html.Heading(sectionTitle, 1))    
+
+    if not hasGem(doc):
+        output.append("Sorry, no GEM.")
+        return output
+
+    output.extend(perEngine(doc))
+    output.extend(conditionsTable(doc))
+
+    return output
 
 #
 def perEngine(doc):
@@ -604,7 +647,7 @@ def perEngine(doc):
         columns.append(column)
         tag, label = jobOptions.tables[name]
         columnLabels.append(label)
-        engines = expandEngines(tag)
+        engines = expandRegs(tag, jobOptions.messageEngineRowLabels)
         for engine in engines:
             regTable = tableFromXml.xTableGen(doc, engine)
             data, labels = regTable.data.table()
@@ -620,17 +663,54 @@ def perEngine(doc):
     return output
 
 #
-def expandEngines(tag):
-    """@brief Expand wildcard in Message Engine register name.
+def conditionsTable(doc):
+    """@brief Display evnt condition -> message engine lookup table.
+
+    """
+
+    output = []
+
+    sectionTitle = 'Message engine lookup table'
+    output.append(html.Heading(sectionTitle, 2))
+
+    regSpec, label = jobOptions.tables[jobOptions.conditionTag]
+
+    subFields = map(bitField.subField, jobOptions.conditionFields)
+
+    tabWidth = 16
+    xLabels = ['X%x' % nibble for nibble in range(tabWidth)]
+    yLabels = ['%xX' % nibble for nibble in range(tabWidth)]
+
+    registers = expandRegs(regSpec, jobOptions.conditionStrings)
+    entries = []
+    for reg in registers:
+        regTable = tableFromXml.xTableGen(doc, reg)
+        data, indices = regTable.data.table()
+        for field in subFields:
+            entries.append(field(data[0][0]))
+            pass
+        pass
+
+    data = [entries[nibble*tabWidth:(nibble+1)*tabWidth]
+            for nibble in range(tabWidth)]
+
+    caption = "(L,M)SN = (Least,Most) Significant Nibble of Condition Summary"
+    hTable = table.twoDTable(data, caption, jobOptions.conditionAxes,
+                             (yLabels, xLabels))
+    output.append(hTable)    
+    
+    return output
+
+#
+def expandRegs(tag, fillers):
+    """@brief Expand wildcards in register names.
 
     """
 
     wild = '*'
-    # addresses = '0123456789abdcef'
-    addresses = jobOptions.messageEngineRowLabels
 
     engines = []
-    for address in addresses:
+    for address in fillers:
         engines.append(tag.replace(wild, address))
         pass
 
@@ -652,4 +732,3 @@ def transpose(array):
         pass
     
     return transposed
-

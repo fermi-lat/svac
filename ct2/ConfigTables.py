@@ -108,11 +108,11 @@ if nLats != 1:
 theLat = lats[0]
 
 # make tables
-#output.addChildren(configParser.globalStuff(doc))
-#output.addChild(html.Element("HR"))
-#output.addChild(html.Element("HR"))
-#output.addChild("\n")
-output.addChildren(configParser.perEngine(theLat))
+output.addChildren(configParser.globalStuff(doc))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+output.addChildren(configParser.gemStuff(theLat))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")

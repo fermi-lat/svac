@@ -16,13 +16,13 @@ version = os.environ['configReportVersion']
 # register subfields and their descriptions
 tables = {
 
-#     'ZERO_SUPP': ('GGLT/zero_suppress',
-#                   'CAL Zero Supression'),
+    'ZERO_SUPP_GLT': ('GGLT/zero_suppress',
+                      'CAL Zero Supression'),
     'ZERO_SUPP': ('GGEM/GGEMMG/engine_*:21',
                   'CAL 0 Supression'),
 
-#     'FOUR_RANGE': ('GGLT/four_range_readout',
-#                    'CAL Four Range Readout'),
+    'FOUR_RANGE_GLT': ('GGLT/four_range_readout',
+                       'CAL Four Range Readout'),
     'FOUR_RANGE': ('GGEM/GGEMMG/engine_*:20',
                    'CAL 4 Range Readout'),
 
@@ -94,7 +94,7 @@ tables = {
 mappers = {'TKR_DAC': mappings.mapTkrDac}
 
 # logical values that apply to the whole LAT
-#globoLogicals = ('ZERO_SUPP', 'FOUR_RANGE')
+globoLogicals = ('ZERO_SUPP_GLT', 'FOUR_RANGE_GLT')
 
 globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO')
 globalDBStringLabels = {'NoOfTowers': 'Number of Towers',
@@ -107,8 +107,12 @@ messageEngineColumns = ('INHIBIT', 'ZERO_SUPP', 'FOUR_RANGE', 'PRESCALE')
 # # label message engines, and use to expand wildcard in engine_* registers
 messageEngineRowLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 
+conditionTag = 'CONDITION'
 # # use to expand wildcard in conditions_* registers
 conditionStrings = ['%x%x_%x%x' % (msn, lsn, msn, lsn+7) for msn in range(16) for lsn in (0, 8)]
+# # use to pull individual table entries from registers
+conditionFields = ['%d-%d' % (4*entry, 4*entry+3) for entry in range(8)]
+conditionAxes = ('MSN', 'LSN')
 
 # values that apply per-TEM
 perTem = ('TEM_DIAG',)
