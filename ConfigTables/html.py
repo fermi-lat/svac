@@ -17,9 +17,12 @@ class Element:
 
     tag = ""
 
-    def __init__(self, tag=None, attr={}):
+    def __init__(self, tag=None, attr=None):
         if tag is not None:
             self.tag = tag
+            pass
+        if attr is None:
+            attr = {}
         self.children = []
         self.attr = attr
         return
@@ -48,10 +51,39 @@ class Page(Element):
 
     tag = "HTML"
 
-    def __init__(self, title=""):
+    def __init__(self, title="", heading=None):
+        if heading is None:
+            heading = title
         Element.__init__(self)
         self.title = title
-        self.addChild(Title(self.title))
+        self.addChild(Head(self.title))
+        self.addChild(Heading(heading))
+        return
+
+    pass
+
+class Head(Element):
+
+    tag = "HEAD"
+
+    def __init__(self, title=""):
+        Element.__init__(self)
+        title = Title(title)
+        self.addChild(title)
+        return
+
+    pass
+
+class Heading(Element):
+
+    tagBase = "H"
+
+    def __init__(self, heading="", level=1):
+        Element.__init__(self)
+        self.attr["ALIGN"] = "CENTER"
+        self.tag = "".join((self.tagBase, str(level)))
+        self.addChild(heading)
+        self.addChild(Element("HR"))
         return
 
     pass

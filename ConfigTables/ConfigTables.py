@@ -66,8 +66,7 @@ for tag in joboptions.shapeTags:
 # parse the config data
 doc = md.parse(inFile)
 
-output = html.Element("HTML")
-output.addChild("\n")
+output = html.Page("Configuration for run %s" % runNumber)
 
 # get stuff from CAL front ends
 # and make tables of it
