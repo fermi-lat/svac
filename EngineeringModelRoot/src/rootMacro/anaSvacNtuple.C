@@ -17,6 +17,8 @@ void anaSvacNtuple(const char* ra, TNtuple* tuple, TH1F** h) {
   // svac ntuple
   TBranch* brTkrNumStrips = t1->GetBranch("TkrNumStrips");
   brTkrNumStrips->SetAddress(&nStrips);
+  TBranch* brTkrNumDigis = t1->GetBranch("TkrNumDigis");
+  brTkrNumDigis->SetAddress(&nTkrNumDigis);
   TBranch* brVtxXDir = t1->GetBranch("VtxXDir");
   brVtxXDir->SetAddress(&dir[0]);
   TBranch* brVtxYDir = t1->GetBranch("VtxYDir");
