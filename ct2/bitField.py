@@ -1,15 +1,39 @@
-## @file util.py
-## @brief Random useful stuff.
+## @file bitField.py
+## @brief Read specified bits from integers as (smaller) integers.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
 
 #
 
-"""@brief Random useful stuff.
+"""@brief Read specified bits from integers as (smaller) integers.
 
 """
 
 #
 class subField:
+
+    """@brief Read specified bits from integers as (smaller) integers.
+
+    subField(low, high)
+    subField(spec)
+
+    @param low An integer, giving the number of the lowest-order bit (starting
+    from 0) to be included in the field.
+
+    @param high An integer, giving the highest-order bit to be included in the
+    field.  This is unpythonic, but these specifications are also used as
+    documentation for nonprogrammers.  May also be None, in which case there
+    is no upper limit.
+
+    @param spec A string, consisting of either:@n
+    a single integer, which will be the entire field;@n
+    '*', in which case the argument will be return unmolested;@n
+    a hyphenated range, 'low-high'.  Either limit may be '*', which is
+    equivalent to 0 (for low) or None (for high).
+
+    @return Instances are callable with integer argument, and will return the
+    specified subfield.
+
+    """
 
     #
     def __init__(self, *args):
@@ -45,6 +69,7 @@ class subField:
 
 #
 def parseField(field):
+    """@brief Parse arguments to bitField constructor into canaonical form"""
     limits = field.split('-')
     nlim = len(limits)
     if nlim < 1 or nlim > 2:
