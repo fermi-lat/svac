@@ -11,6 +11,17 @@ my $cmtPath = $ENV{'cmtPath'};
 my $cmtDir = $ENV{'cmtDir'};
 my $exe = $ENV{'exe'};
 
+print <<EOT;
+$0 running with:
+  ldfFile:       $ldfFile
+  shellFile:     $shellFile
+  jobOptionFile: $jobOptionFile
+  digiRootFile:  $digiRootFile
+  cmtPath:       $cmtPath
+  cmtDir:        $cmtDir
+  exe :          $exe
+EOT
+
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/sh \n \n";
 print SHELLFILE "unset LD_LIBRARY_PATH \n";
