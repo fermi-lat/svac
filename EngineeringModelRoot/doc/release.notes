@@ -40,3 +40,11 @@ v0r4
 
 add utility exe mergeRoot to merge digi root files
 
+
+
+v1
+
+v1r1
+Added the GEM variables, event contribution sizes and event quality flags.
+Changed CalXtalEne to have the energies for each end, not just the average of the two.
+Added end-of-track parameters for the best (first) two tracks.
