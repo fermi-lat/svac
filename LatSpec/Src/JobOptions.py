@@ -27,7 +27,7 @@ nBin = 160
 # define reconstructed energy "channels"
 eReconMin = 7.0
 eReconMax = 35.0
-nChan = 25
+nChan = 100
 
 # input spectrum used to build the response set
 sourceModel = "powerlaw"

@@ -90,9 +90,9 @@ def createArfHdu(fptr, prod, edges):
                                          "obsolete keyword for older software")
 
     # Oh, yeah, the data
-    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nBin, list(energ_lo))
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nBin, list(energ_hi))
-    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nBin, list(prod))
+    status |= cfitsio.fits_write_col_flt(fptr, 1, 1, 1, energ_lo)
+    status |= cfitsio.fits_write_col_flt(fptr, 2, 1, 1, energ_hi)
+    status |= cfitsio.fits_write_col_flt(fptr, 3, 1, 1, prod)
 
 
     if status:

@@ -122,13 +122,12 @@ def createMatrixHdu(fptr, matrix, edges):
 #                                 "number of channels in every channel subset")
     
     # Oh, yeah, the data
-    status |= cfitsio.fits_write_col_dbl(fptr, 1, 1, 1, nBin, list(energ_lo))
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nBin, list(energ_hi))
+    status |= cfitsio.fits_write_col_flt(fptr, 1, 1, 1, energ_lo)
+    status |= cfitsio.fits_write_col_flt(fptr, 2, 1, 1, energ_hi)
     status |= cfitsio.fits_write_col_int(fptr, 3, 1, 1, n_grp)
     status |= cfitsio.fits_write_col_int(fptr, 4, 1, 1, f_chan)
     status |= cfitsio.fits_write_col_int(fptr, 5, 1, 1, n_chan)
-    status |= cfitsio.fits_write_col_dbl(fptr, 6, 1, 1, nElt,
-                                         list(matrix.flat))
+    status |= cfitsio.fits_write_col_flt(fptr, 6, 1, 1, matrix.flat)
 
     if status:
         raise IOError, "CFITSIO problem."
@@ -198,8 +197,8 @@ def createEboundsHdu(fptr, ebounds):
 
    # Oh, yeah, the data
     status |= cfitsio.fits_write_col_int(fptr, 1, 1, 1, channel)
-    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nChan, list(e_min))
-    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nChan, list(e_max))
+    status |= cfitsio.fits_write_col_flt(fptr, 2, 1, 1, e_min)
+    status |= cfitsio.fits_write_col_flt(fptr, 3, 1, 1, e_max)
 
     if status:
         raise IOError, "CFITSIO problem."
