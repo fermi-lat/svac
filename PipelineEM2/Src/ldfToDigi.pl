@@ -22,7 +22,7 @@ $0 running with options:
   exe :          $exe
 EOT
 
-my $glastRoot = "";
+my $glastRoot = "/afs/slac.stanford.edu/g/glast";
 my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
