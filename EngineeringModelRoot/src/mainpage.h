@@ -154,7 +154,9 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 <TR> <TD> CalMaxEne </TD> <TD> Maximal measured energy in a single crystal </TD> </TR>
 <TR> <TD> CalNumHit[tower] </TD> <TD> A one dimension array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
 <TR> <TD> CalTp[tower][tp] </TD> <TD>A two dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
-<TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 4 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent from tower 8, layer 7 and end 0.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
+<TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
+<TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
+<TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD>A 3 dimension array which describe log accepts contained in the CAL trigger diagnostic info.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file

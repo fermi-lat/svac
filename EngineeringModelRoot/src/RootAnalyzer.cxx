@@ -621,7 +621,9 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  nEvent = nRecon;
+  //  nEvent = 100;
+       nEvent = nRecon;
+
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -982,7 +984,8 @@ void RootAnalyzer::parseDiagnosticData()
 
     }
 
-    ElecToGeo::getInstance()->decodeCalTp(m_ntuple.m_tpCal, m_ntuple.m_calReq);
+    ElecToGeo::getInstance()->decodeCalTp(m_ntuple.m_tpCal, m_ntuple.m_calReq,
+					  m_ntuple.m_calLogAccepts);
 
   }
 }

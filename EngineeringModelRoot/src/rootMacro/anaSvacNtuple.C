@@ -8,10 +8,11 @@ void anaSvacNtuple(const char* ra, TNtuple* tuple, TH1F** h) {
   int m_nTkrNumDigis;
   float m_dir[3];
 
+  // load an branch, the branch name is the same as the variable name
   TBranch* brTkrNumStrips = t1->GetBranch("TkrNumStrips");
   brTkrNumStrips->SetAddress(&m_nStrips);
-  TBranch* brTkrNumTracks = t1->GetBranch("TkrNumDigis");
-  brTkrNumTracks->SetAddress(&m_nTkrNumDigis);
+  TBranch* brTkrNumTracks = t1->GetBranch("TkrNumTracks");
+  brTkrNumTracks->SetAddress(&m_nTkrNumTracks);
   TBranch* brVtxXDir = t1->GetBranch("VtxXDir");
   brVtxXDir->SetAddress(&m_dir[0]);
   TBranch* brVtxYDir = t1->GetBranch("VtxYDir");

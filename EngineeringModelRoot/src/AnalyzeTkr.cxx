@@ -13,6 +13,7 @@
 #include "digiRootData/DigiEvent.h"
 #include "GeoConstants.h"
 #include "ElecToGeo.h"
+#include "Geo.h"
 
 using std::string;
 using std::cout;
@@ -33,13 +34,10 @@ int main(int argc, char** argv)
 
   TFile f(outputFile.c_str(), "RECREATE");
   TH1F h1("h1", "h1", 72, -0.5, 71.5);
-  TH1F h2("h2", "h2", 72, -0.5, 71.5);
-  TH1F h3("h3", "h3", 72, -0.5, 71.5);
-  TH1F h4("h4", "h4", 72, -0.5, 71.5);
-  TH1F h5("h5", "h5", 72, -0.5, 71.5);
+  TNtuple n1("n1", "n1", "nDigis:nRequests");
 
-  int nEvt[72];
-  bzero((void*) nEvt, 72*sizeof(int));
+  //  int nEvt[72];
+  //  bzero((void*) nEvt, 72*sizeof(int));
 
   TFile m_digiFile(digiFile.c_str(), "READ");
   if(m_digiFile.IsZombie()) {
@@ -90,6 +88,11 @@ int main(int argc, char** argv)
 
     int nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
 
+    if(nTkrDigis >= 6) continue;
+
+    int hitPos[g_nTkrLayer][g_nView];
+    bzero((void*) hitPos, g_nTkrLayer*g_nView*sizeof(int));
+
     for(int i = 0; i != nTkrDigis; ++i) {
       const TkrDigi* tkrDigi = m_digiEvent->getTkrDigi(i);
 
@@ -99,75 +102,25 @@ int main(int argc, char** argv)
       int iLayer = tkrDigi->getBilayer();
       GlastAxis::axis view = tkrDigi->getView();
       int iView = (view == GlastAxis::X) ? 0 : 1;
-
-      vector<UInt_t> hitCol = tkrDigi->getHitCol();
-
-      std::sort(hitCol.begin(), hitCol.end());
-
-      int nStrips = hitCol.size();
-      assert(nStrips > 0);
-
-      int last0Strip = tkrDigi->getLastController0Strip();
-
-      bool has0Strip = false;
-      bool has1Strip = false;
-
-      if(last0Strip <0) {
-	has1Strip = true;
-      }
-      else if(last0Strip < hitCol[hitCol.size()-1]) {
-	has0Strip = true;
-	has1Strip = true;
-      }
-      else if(last0Strip == hitCol[hitCol.size()-1]) {
-	has0Strip = true;
-      }
-      else {
-	assert("should not come here!");
-      }
-
-      if(has0Strip) ++nEvt[iLayer*4+iView*2];
-      if(has1Strip) ++nEvt[iLayer*4+iView*2+1];
-
-      if(has0Strip && tkrReq[iTower][iLayer][iView][0] == 0) {
-	//	cout << "event " << iEvent << " has strips read out from low end of si plane at tower " << iTower << " biLayer " << iLayer << " view " << iView << " but has no trigger request!" << endl;
-	//	std::copy(hitCol.begin(), hitCol.end(), std::ostream_iterator<int>(cout, " "));
-	//	cout << endl;
-	h1.Fill(iLayer*4+iView*2);
-	if(nTkrDigis == 6) {
-	  h2.Fill(iLayer*4+iView*2);
-	}
-	else if(nTkrDigis < 6) {
-	  h3.Fill(iLayer*4+iView*2);
-	}
-      }
-      else if(has0Strip && tkrReq[iTower][iLayer][iView][0] == 1) {
-	h4.Fill(iLayer*4+iView*2);
-      }
-
-      if(has1Strip && tkrReq[iTower][iLayer][iView][1] == 0) {
-	//	cout << "event " << iEvent << " has strips read out from high end of si plane at tower " << iTower << " biLayer " << iLayer << " view " << iView << " but has no trigger request!" << endl;
-	//	std::copy(hitCol.begin(), hitCol.end(), std::ostream_iterator<int>(cout, " "));
-	//	cout << endl;
-	h1.Fill(iLayer*4+iView*2+1);
-	if(nTkrDigis == 6) {
-	  h2.Fill(iLayer*4+iView*2+1);
-	}
-	else if(nTkrDigis < 6) {
-	  h3.Fill(iLayer*4+iView*2+1);
-	}
-      }
-      else if(has1Strip && tkrReq[iTower][iLayer][iView][1] == 1) {
-	h4.Fill(iLayer*4+iView*2+1);
-      }
-      
-
+      hitPos[iLayer][iView] = 1;      
     }
 
-  }
+    int nTkrReq = 0;
+    for(int biLayer = 0; biLayer != g_nTkrLayer; ++biLayer) {
+      for(int view = 0; view != g_nView; ++view) {
+	if( tkrReq[0][biLayer][view][0]==1 && hitPos[biLayer][view] == 0) {
+	  int plane = Geo::instance()->getPlane(biLayer, view);
+	  h1.Fill(plane*2);
+	}
+	else if(tkrReq[0][biLayer][view][1]==1 && hitPos[biLayer][view] == 0) {
+	  int plane = Geo::instance()->getPlane(biLayer, view);
+	  h1.Fill(plane*2+1);
+	}
+	if(tkrReq[0][biLayer][view][0] || tkrReq[0][biLayer][view][1]) ++nTkrReq;
+      }
+    }
 
-  for(int i = 0; i != 72; ++i) {
-    h5.Fill(i, h1.GetBinContent(i+1)/double(nEvt[i]));
+    n1.Fill(nTkrDigis, nTkrReq);
   }
 
   f.cd();

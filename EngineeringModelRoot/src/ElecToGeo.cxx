@@ -93,13 +93,18 @@ void ElecToGeo::decodeTkrTp(unsigned tp[g_nTower][g_nGTCC],
 }
 
 void ElecToGeo::decodeCalTp(unsigned tp[g_nTower][g_nCalLayer], 
-			    unsigned req[g_nTower][g_nCalLayer][g_nFace]) const
+			    unsigned req[g_nTower][g_nCalLayer][g_nFace],      
+			    unsigned accept[g_nTower][g_nCalLayer][g_nFace]) const
 {
   for(int iTower = 0; iTower != g_nTower; ++iTower) {
     for(int iLayer = 0; iLayer != g_nCalLayer; ++iLayer) {
       if(tp[iTower][iLayer] == 0) continue;
-      req[iTower][iLayer][0] = (tp[iTower][iLayer] >> 16);
-      req[iTower][iLayer][1] = (tp[iTower][iLayer] & 0xffff);
+      unsigned int diag = (tp[iTower][iLayer] >> 16);
+      req[iTower][iLayer][0] = (diag >> 12) & 3;
+      accept[iTower][iLayer][0] = (diag & 0x0fff);
+      diag = (tp[iTower][iLayer] & 0xffff);
+      req[iTower][iLayer][1] = (diag >> 12) & 3;
+      accept[iTower][iLayer][1] = (diag & 0x0fff);
     }
   }
 }

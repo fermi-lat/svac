@@ -176,11 +176,16 @@ struct NtupleDef {
   // layer 0 is at the bottom
   unsigned int m_tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
 
-  // decoded trigger primitive for the calorimeter
-  // e.g.: m_calReq[0][3][0] contains 16 bit diagnostic data for tower 0, layer 3, negative end 
-  // e.g.: m_calReq[0][3][1] contains 16 bit diagnostic data for tower 0, layer 3, positive end 
+  // decoded trigger request for the calorimeter
+  // e.g.: m_calReq[0][3][0] = 1 means a trigger request for low energy trigger
+  // was sent from crystals at tower 0, layer 3, negative end; =2 means a 
+  // trigger request was sent to high energy trigger; =3 means a trigger 
+  // request was sent to both high and low energy trigger
   // layer 0 is at the top (different to the tracker)
   unsigned int m_calReq[g_nTower][g_nCalLayer][g_nFace];
+
+  // log accept info
+  unsigned int m_calLogAccepts[g_nTower][g_nCalLayer][g_nFace];
 
   static const char* gRootNtupleDefStr;
 

@@ -62,3 +62,7 @@ add examples of rootMacros to process SVAC ntuple file
 v1r3p1
 
 bug fix in ElecToGeo since there are 9 instead of 8 RCs
+
+v1r3p3
+
+create a new variable in ntuple to contain log accept info
