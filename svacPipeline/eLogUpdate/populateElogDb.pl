@@ -19,6 +19,7 @@ chomp $eLogFeederDir;
 
 #change to ftp protocol
 my $rootUrl = $ENV{'rootUrl'};
+my $rawUrl = $ENV{'rawUrl'};
 
 # check for eLogFeeder dir, quit if it does not exist 
 if(! (-d $eLogFeederDir) ) {
@@ -33,7 +34,7 @@ print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{pushd $eLogFeederDir \n};
 print SHELLFILE qq{source $scriptDir/setup.csh \n};
-print SHELLFILE qq{$scriptDir/update.py $rcReport $rootUrl \n};
+print SHELLFILE qq{$scriptDir/update.py $rcReport $rootUrl $rawUrl \n};
 close(SHELLFILE);
 
 system("chmod +rwx $shellFile");

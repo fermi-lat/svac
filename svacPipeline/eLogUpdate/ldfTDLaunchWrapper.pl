@@ -30,13 +30,18 @@ my $runName = $proc->{'run_name'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
 my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
+
+if ((! -e $ldfFile) || (-z $ldfFile)) {
+    print "LDF file [$ldfFile] does not exist or has zero size, not launching digitization task.\n";
+    exit(0);
+}
 
 print "Running command: [$command]\n";
 

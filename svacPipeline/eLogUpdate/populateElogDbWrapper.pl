@@ -24,12 +24,12 @@ my $outFiles = $proc->{'outFiles'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};
 
-my $exe = "$ENV{'eLogScript'};
+my $exe = $ENV{'eLogScript'};
 
 my $command = "$exe '$shellFile' '$rcReport'";
 print "Running command: [$command]\nIn $ENV{'PWD'}\n";
