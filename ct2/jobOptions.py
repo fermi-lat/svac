@@ -17,24 +17,21 @@ version = os.environ['configReportVersion']
 tables = {
 
     'ZERO_SUPP_GLT': ('GGLT/zero_suppress',
-                      'CAL Zero Supression'),
-    'ZERO_SUPP': ('GGEM/GGEMMG/engine_*:21',
-                  'CAL 0 Supression'),
-
+                      'CAL Zero Suppression'),
     'FOUR_RANGE_GLT': ('GGLT/four_range_readout',
                        'CAL Four Range Readout'),
+
+    'ZERO_SUPP': ('GGEM/GGEMMG/engine_*:21',
+                  'CAL 0 Suppression'),
     'FOUR_RANGE': ('GGEM/GGEMMG/engine_*:20',
                    'CAL 4 Range Readout'),
-
     'PRESCALE': ('GGEM/GGEMMG/engine_*:0-7',
                  'Prescale'),
-
     'INHIBIT': ('GGEM/GGEMMG/engine_*:15',
                 'Inhibit'),
 
     'CONDITION': ('GGEM/GGEMSC/conditions_*',
                   'Trigger Condition -> Message engine lookup table'),
-
 
     'TEM_DIAG': ('GTEM/data_masks:12',
                  'TEM Diagnostics'),
@@ -47,7 +44,7 @@ tables = {
                 'TKR DAC (range,threshhold)'),
 
     'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt',
-                "CAL Log Accept Discriminator (zero supression)"), 
+                "CAL Log Accept Discriminator (zero suppression)"), 
     'CAL_FHE': ('GTEM/GCCC/GCRC/GCFE/fhe_dac',
                 "CAL High Energy Trigger Discriminator"), 
     'CAL_FLE': ('GTEM/GCCC/GCRC/GCFE/fle_dac',

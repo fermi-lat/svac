@@ -664,7 +664,7 @@ def perEngine(doc):
 
 #
 def conditionsTable(doc):
-    """@brief Display evnt condition -> message engine lookup table.
+    """@brief Display Condition Summary -> Message Engine lookup table.
 
     """
 
