@@ -38,7 +38,7 @@ close(OPTIONFILE);
 #create shell file to execute Main.exe
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile for input, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
-# didn't help #print SHELLFILE qq{source $glastScript \n};
+print SHELLFILE qq{source $glastScript \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
