@@ -112,6 +112,31 @@ def transformStrList(string):
     return oracleStr
 
 
+def insertIntRunConfigId(id):
+
+    sqlStr = 'lock table elogintrunconfiguration in exclusive mode'
+    
+    execSql(c, sqlStr)
+    
+    l = eval(id)
+
+    sqlStr= 'select id from elogintrunconfiguration where E2EID=\'' + l[0] + '\' and configid=' + l[1]
+
+    execSql(c, sqlStr)
+    result = c.fetchone()
+
+    if(result == None):
+        print 'new intRunConfiguration id found: ' + l[0] + ' ' + l[1] + ', adding it to the database'
+        sqlStr = 'insert into elogintrunconfiguration  values(Seq_eLogIntRunConfigurationID.NextVal, \'' +  l[0] + '\', ' + l[1]+ ', \'\')'
+        execSql(c, sqlStr)
+        sqlStr= 'select id from elogintrunconfiguration where E2EID=\'' + l[0] + '\' and configid=' + l[1]
+
+        execSql(c, sqlStr)
+        result =  c.fetchone()
+
+    [id] = result
+    return id
+
 # main codes start from here 
 #used to form ftp URL - default value
 xmlFileName = 'rcReport.out'
@@ -169,7 +194,7 @@ errorEventCountTag = 'ErrorEventCount'
 # table to store any unfound tags
 additionFieldsTag = 'additionFields'
 onlineReportTag = 'ScriptReport'
-csvTestPropertiesTag = 'csvTestProperties'
+csvTestIdTag = 'csvTestId'
 serNoTag = 'SerialNos'
 suiteNameTag = 'suiteName'
 suiteRunListTag = 'suiteRunList'
@@ -226,7 +251,9 @@ for report in reports:
 
         if(name == serNoTag):
             [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
-
+        elif( name == csvTestIdTag ):
+            intRunConfigId = insertIntRunConfigId(node.childNodes[0].data)
+            
         if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
@@ -321,7 +348,7 @@ for report in reports:
     
     if(data.has_key(onlineReportTag)):
         onlineReportUrl += data[onlineReportTag]
-    
+     
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
     # in oracle, '' is used to put ' inside a string.
@@ -329,7 +356,7 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\')'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ')'
        
     try:
        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
