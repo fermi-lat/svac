@@ -81,8 +81,10 @@ def parseSerialNosTag(value):
     for k, v in dict.iteritems():
         if(re.match('GTEM', k)):
             nTowers += 1
-            tkrSerNo = tkrSerNo + v['tkr'] + '???'
-            calSerNo = calSerNo + v['calinstrument'] + '???'
+            if(v.has_key('tkr')):
+                tkrSerNo = tkrSerNo + v['tkr'] + '???'
+            if(v.has_key('calinstrument')):
+                calSerNo = calSerNo + v['calinstrument'] + '???'
 
     return [nTowers, tkrSerNo, calSerNo]
     
