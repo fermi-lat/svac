@@ -71,8 +71,8 @@ print JOBOPTIONFILE qq(ApplicationMgr.EvtMax = 100000000; \n);
 
 print JOBOPTIONFILE qq(MessageSvc.OutputLevel      =3; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"}; \n);
-print JOBOPTIONFILE qq(TkrFailureModeSvc.layerList = {"0_0_0", "0_0_1"}; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"}; \n);
+#print JOBOPTIONFILE qq(TkrFailureModeSvc.layerList = {"0_0_0", "0_0_1"}; \n);
 
 # these two lines are added so that number of events will be registered in the root file
 print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n);
