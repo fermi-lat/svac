@@ -2,11 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 3) {
+if ($#ARGV != 4) {
     die "Usage: $0 digiRootFile optionFile shellFile tarBall";
 }
 
-my ($runNmae, $digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
