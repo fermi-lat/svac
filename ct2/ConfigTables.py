@@ -2,7 +2,7 @@
 #!/nfs/slac/g/svac/local/bin/python -O
 
 """Usage:
-ConfigTables.py runNumber schema snapshot tarBall
+ConfigTables.py runNumber snapshot tarBall
 
 """
 
@@ -19,8 +19,8 @@ import configParser
 import jobOptions
 
 
-if len(sys.argv) == 5:
-    runNumber, splitFile, snapFile, tarBall = sys.argv[1:]
+if len(sys.argv) == 4:
+    runNumber, splitFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
