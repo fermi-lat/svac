@@ -24,7 +24,7 @@ my $outFiles = $proc->{'outFiles'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};

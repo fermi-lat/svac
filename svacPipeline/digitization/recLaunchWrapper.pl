@@ -30,13 +30,18 @@ my $runName = $proc->{'run_name'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
 my $newTask = $ENV{'reconTask'};
 my $digiRootFile = $inFiles->{'digi'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
+
+if (! -e $digiRootFile) {
+    print "Digi file [$digiRootFile] does not exist, not launching recon task.\n";
+    exit(0);
+}
 
 print "Running command: [$command]\n";
 

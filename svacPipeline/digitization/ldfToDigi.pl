@@ -23,14 +23,19 @@ $0 running with options:
   cmtDir:        $cmtDir
   exe :          $exe
 EOT
+    
+#my $glastRoot = "/afs/slac.stanford.edu/g/glast";
+#my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
+if (-z $ldfFile) {
+    print "LDF file [$ldfFile] has zero size.\n";
+    exit 0;
+}
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
-print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
-print SHELLFILE "source $glastScript \n";
+#print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
+#print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
