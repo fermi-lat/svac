@@ -214,7 +214,8 @@ def tkrFeReg(doc):
 
 # embarrasingly similar to oneCalReg
 def oneTkrReg(doc, tag):
-    """Make a table for one GTFE register"""
+    """Make a table for one GTFE register
+    Tries to map layers as seen in recon file."""
 
     output = []
     
