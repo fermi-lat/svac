@@ -18,6 +18,10 @@ open(OPTFILE, "<$optionFile") || die "Can't open $optionFile for input, abortted
 while(<OPTFILE>) {
     last if( ($_ =~ /\S+/) && ($_ !~ /^\/\//) );
 }
+my $nEvts = $_;
+while(<OPTFILE>) {
+    last if( ($_ =~ /\S+/) && ($_ !~ /^\/\//) );
+}
 my $reportDir = $_;
 chop($reportDir);
 while(<OPTFILE>) {

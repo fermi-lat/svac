@@ -20,12 +20,12 @@ macro source "*.cxx" WIN32 "*.h *.cxx"
 
 macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d "
 
-macro NRLINKOPT "-L /nfs/slac/g/svac/common/builds/NumericRecipe/lib/ -lNR "
+macro NRLINKOPT "-L /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/lib/ -lNR "
 
-path_append LD_LIBRARY_PATH /nfs/slac/g/svac/common/builds/NumericRecipe/lib/
+path_append LD_LIBRARY_PATH /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/lib/
 
 macro_append NtupleCompare_linkopts " $(NRLINKOPT) "
 
-include_dirs /nfs/slac/g/svac/common/builds/NumericRecipe/src
+include_dirs /nfs/farm/g/glast/u06/chen/svac/NumericRecipe/src
 
 application NtupleCompare *.cxx  

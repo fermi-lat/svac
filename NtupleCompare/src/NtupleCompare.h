@@ -172,6 +172,11 @@ class NtupleCompare {
 
   /// probabilities from KS tests
   std::vector<double> m_ksProbs;
+
+  /// no. of events requested to be processed, note if the requested number is 
+  /// more than no. of events in the root files, only process all events
+  /// in the root files of course
+  int m_nEvents;
 };
 
 #endif

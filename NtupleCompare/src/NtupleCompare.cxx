@@ -4,6 +4,7 @@
 #include "TPad.h"
 #include "TROOT.h"
 #include "ToString.h"
+#include "ToNumber.h"
 #include "TCanvas.h"
 #include "TSystem.h"
 #include "TStyle.h"
@@ -43,6 +44,14 @@ void NtupleCompare::parseOptionFile(const char* f)
   while( getline(optF, line) ) {
     if(!skipLine(line)) break;
   }
+  string temp;
+  parseLine(temp, line);
+  m_nEvents = ToInt(temp);
+  cout << "no. of events requested to be processed: " << m_nEvents << endl;
+
+  while( getline(optF, line) ) {
+    if(!skipLine(line)) break;
+  }
   parseLine(m_outputDir, line);
   cout << "output dir: " << m_outputDir << endl;
 
@@ -52,7 +61,7 @@ void NtupleCompare::parseOptionFile(const char* f)
   parseLine(m_prefix, line);
   cout << "prefix: " << m_prefix << endl;
 
-  string temp(m_outputDir + m_prefix);
+  temp = m_outputDir + m_prefix;
   temp += "_report.doxygen";
   cout << "output doxygen file: " << temp << endl;
   m_report.open(temp.c_str());
@@ -267,7 +276,7 @@ void NtupleCompare::makeHistograms()
     string draw(*itr);
     draw += ">>";
     draw += "htemp";
-    m_meritChain1->Draw(draw.c_str(), allCuts.c_str(), "", 20000);
+    m_meritChain1->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
     int nEvent1 = (int) m_meritChain1->GetSelectedRows();
     Double_t* start1 = m_meritChain1->GetV1();
     vector<float> x1(start1, start1+nEvent1);
@@ -282,7 +291,7 @@ void NtupleCompare::makeHistograms()
     draw = *itr;
     draw += ">>";
     draw += "htemp";
-    m_meritChain2->Draw(draw.c_str(), allCuts.c_str(), "", 20000);
+    m_meritChain2->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
     int nEvent2 = (int) m_meritChain2->GetSelectedRows();
     Double_t* start2 = m_meritChain2->GetV1();
     vector<float> x2(start2, start2+nEvent2);
