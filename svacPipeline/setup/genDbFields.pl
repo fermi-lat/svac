@@ -4,7 +4,7 @@ use strict;
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $run = '$(RUN_NAME)';
 
@@ -71,7 +71,7 @@ print FIELDS <<EOT;
 
 EM2OnlineV01	Conversion	$ENV{'dataHead'}		Convert LDF files to FITS
 
-injectSVAC	2	TaskLaunch.pl	$ENV{'svacOnlineVersion'}	$ENV{'svacOnlineDir'}/SVACWrapper.pl	short	/afs/slac.stanford.edu/u/gl/glast/onlinePipeline/log/	$cookedRoot		Launch SVAC tasks
+injectSVAC	2	TaskLaunch.pl	$ENV{'svacOnlineVersion'}	$ENV{'svacOnlineDir'}/SVACWrapper.pl	short	/afs/slac.stanford.edu/u/gl/glast/onlinePipeline/log/	$rawRoot		Launch SVAC tasks
 
 $ldfLine
 $rcReportLine

@@ -19,12 +19,13 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv dataHead /nfs/farm/g/glast/u12/EM2
 setenv rootUrl /glast.u12/EM2/rootData
+setenv rawUrl /glast.u12/EM2/rawData
 
 setenv calibVersion calib-v1r0
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv svacOnlineVersion v1r0
-setenv svacOnlineDir ${svacPlRoot}/eLogUpdate/online/${svacOnlineVersion}
+setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 #-------------------------------- online --------------------------------------
 
@@ -50,7 +51,7 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v1r0
 setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
-setenv Em2Version v0r0p0
+setenv Em2Version v1r3
 setenv Em2Dir ${sasCmt}/Em2/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/Em2.exe
@@ -97,7 +98,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v1r0
 setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1
+setenv RunRootAnalyzerVersion v1r1p0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32/RunRootAnalyzer.exe
