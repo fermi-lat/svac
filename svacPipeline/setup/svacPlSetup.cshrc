@@ -42,6 +42,7 @@ setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate/${eLogTaskVersion}
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
+setenv decideDigiScript ${eLogTaskDir}/decideDigi.pl
 #-------------------------------- eLogUpdate ----------------------------------
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++

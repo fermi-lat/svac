@@ -38,7 +38,7 @@ my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
-my $doDigi = `decideDigi.pl $runName $ldfFile`;
+my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
 chomp $doDigi;
 if (!$doDigi) {
 	exit(0);
