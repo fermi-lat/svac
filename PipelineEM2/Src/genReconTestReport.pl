@@ -2,7 +2,20 @@
 
 use strict;
 
+if ($#ARGV != 4) {
+    die "Useage: $0 digiRootFile reconRootFile optionFile shellFile tarBall";
+}
+
 my ($digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+
+print <<EOT;
+$0 running with:
+  digiRootFile:  $digiRootFile
+  reconRootFile: $reconRootFile
+  optionFile:    $optionFile
+  shellFile:     $shellFile
+  tarBall:       $tarBall
+EOT
 
 my $reportDir = `dirname $tarBall`;
 
