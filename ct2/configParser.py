@@ -8,6 +8,7 @@ import math
 
 import html
 import ndDict
+import ndList
 import htmlTable as table
 import tableFromXml
 import temUtil
@@ -206,7 +207,7 @@ def tkrFeReg(doc):
         return output
 
     for registerTag in jobOptions.tkrTags:
-        nTable = oneTkrReg(doc, registerTag)
+        nTable = simpleTkrReg(doc, registerTag)
         output.extend(nTable)
         output.append(html.Element("HR"))
         pass
@@ -234,9 +235,12 @@ def oneTkrReg(doc, tag):
         gtccs.sort()
         for iGtcc, gtccData in gtccs:
             array, labels = gtccData.table()
-            layerMap = temUtil.tccLayerMap[iGtcc]
+            #layerMap = temUtil.tccLayerMap[iGtcc]
+            layerMap = temUtil.planeMap[iGtcc]
             labels[0] = [layerMap[x] for x in labels[0]]
-            sideLabel = temUtil.tccSideMap[iGtcc]
+            #sideLabel = temUtil.tccSideMap[iGtcc]
+            sideLabel = '%s %s' % \
+                        (temUtil.views[iGtcc], temUtil.edgeMap[iGtcc])
             title = "%s for Tower %d side %s" % (regLabel, iTem, sideLabel)
             sideTable = table.twoDTable(array, title, axisLabels, labels)
             regTables.append(sideTable)
@@ -246,6 +250,48 @@ def oneTkrReg(doc, tag):
     output.append(nTable)
 
     return output
+
+def simpleTkrReg(doc, tag):
+    """Make a table for one GTFE register, indexed by GTCC,GTRC and GFE"""
+
+    output = []
+    
+    axisLabels = jobOptions.tkrSimpleAxisLabels
+    regSpec, regLabel = jobOptions.tables[tag]
+    
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        array, indices = temData.table()
+        nTccs, nTrcs, nTfes = array.shape
+        nReaders = nTccs * nTrcs
+        flatterArray = ndList.ndList(shape=(nReaders,nTfes))
+        tfeLabels = indices[-1]
+        readerLabels = []
+        labels = (readerLabels, tfeLabels)
+        for iTcc, tccId in enumerate(indices[0]):
+            for iTrc, trcId in enumerate(indices[1]):
+                index = iTcc * nTrcs + iTrc
+                readerLabels.append('%s,%s' % (tccId, trcId))
+                for iTfe in range(nTfes):
+                    flatterArray[index, iTfe] = array[iTcc, iTrc, iTfe]
+                    pass
+                pass
+            pass
+        title = "%s for Tower %d" % (regLabel, iTem)
+        sideTable = table.twoDTable(flatterArray, title, axisLabels, labels)
+        regTables.append(sideTable)
+        pass
+    nTable = html.nWay(regTables, jobOptions.tkrTabWidth)
+    output.append(nTable)
+
+    return output
+
 
 
 #

@@ -84,6 +84,7 @@ calTabWidth = 2
 # things to display from TKR front ends
 tkrTags = ['TKR_DAC']
 tkrAxisLabels = ('layer', 'front end')
+tkrSimpleAxisLabels = ('GTCC,GTRC', 'GTFE')
 
 # things to display from CAL front ends
 calTags = ['CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF']
