@@ -47,7 +47,7 @@ setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion v1r0
 setenv configReportTask configReport-EM2-${configReportTaskVersion}
-setenv configReportVersion v3r0p0
+setenv configReportVersion v3r1p0
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
 setenv configTaskDir ${svacPlRoot}/configReport/${configReportTaskVersion}
@@ -121,7 +121,7 @@ setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
 setenv urlUpdateScript  ${eLogDir}/updateUrl.py
 #-------------------------------- many ----------------------------------------
 
-setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}
+setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}
 if ( ${?PYTHONPATH} == '1' ) then
     setenv PYTHONPATH ${SVACPYTHON}:$PYTHONPATH}
 else
