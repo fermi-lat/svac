@@ -96,17 +96,19 @@ def parseSerialNosTag(value):
 
 # turn a string of a python list to a string of items in the list separated
 # by : in order to save storage in oracle
-def transformStrList(str):
-    l = eval(str)
+def transformStrList(string):
+
+    l = eval(string)
 
     oracleStr = ''
 
-    length = len(oracleStr)
+    length = len(l)
 
     for item in l[0:length-1]:
-        oracleStr = oracleStr + item + ':'
+        print item
+        oracleStr = oracleStr + str(item) + ':'
 
-    oracleStr += l[length-1]
+    oracleStr += str(l[length-1])
 
     return oracleStr
 
