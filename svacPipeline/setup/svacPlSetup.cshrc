@@ -47,7 +47,7 @@ setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion v1r0
 setenv configReportTask configReport-EM2-${configReportTaskVersion}
-setenv configReportVersion v1r0p0
+setenv configReportVersion v3r0p0
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
 setenv configTaskDir ${svacPlRoot}/configReport/${configReportTaskVersion}
