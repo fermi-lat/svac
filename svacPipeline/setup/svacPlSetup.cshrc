@@ -41,7 +41,7 @@ setenv calibRoot $svacEmDir/$calibVersion
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineVersion V1r0
 setenv svacOnlineVersion v2r0p1
-setenv onlineTask online-${onlineVersion}
+setenv onlineTask online-EM2-${onlineVersion}
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv onlineTaskDir /nfs/slac/g/svac/common/pipeline/TowerA/onlinePipeline
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
