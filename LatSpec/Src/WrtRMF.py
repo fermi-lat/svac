@@ -28,7 +28,7 @@ import cfitsio
 import glastFits
 
 
-def createRmfHdu(fptr, matrix, edges):
+def createMatrixHdu(fptr, matrix, edges):
     """@brief Append a RMF HDU to a GLAST FITS file.
 
     @param fptr A GLAST FITS file open for writing.
@@ -58,7 +58,7 @@ def createRmfHdu(fptr, matrix, edges):
     matform = "%dE" % nchan
     nelt = nbin * nchan
 
-    edges = num.array(edges)
+    edges = num.asarray(edges)
     edges = edges.astype(num.Float32)
     if len(edges) != nbin+1:
         raise ValueError, "edges don't match matrix"
@@ -119,6 +119,74 @@ def createRmfHdu(fptr, matrix, edges):
     status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nelt,
                                          list(matrix.flat))
 
+    if status:
+        raise IOError, "CFITSIO problem."
+
+    return status, chdu
+
+
+def createEboundsHdu(fptr, ebounds):
+    """@brief Append an EBOUNDS HDU to a GLAST FITS file.
+
+    @param fptr A GLAST FITS file open for writing.
+
+    @param ebounds A numeric sequence containing bin edges for the
+    reconstructed energy bins.  Energy is measured in keV.  The length of this
+    should be one greater than the length of the second axis of the matrix
+    (which lives in a different extension).
+
+    @return A tuple containing:
+    @li CFITSIO error status, should be 0,
+    @li The number of the new HDU, which will then be the current HDU.
+
+    """
+
+    status = 0
+
+    ebounds = num.asarray(ebounds)
+    ebounds = ebounds.astype(num.Float32)
+    nchan = len(ebounds) - 1
+    emin = ebounds[:-1]
+    emax = ebounds[1:]
+
+    channel = num.arange(nchan) + 1
+
+    st, chdu = glastFits.createTable(fptr, naxis2=0, tfields=3,
+                                     ttype=["CHANNEL", "E_MIN", "E_MAX"],
+                                     tform=["I", "E", "E"],
+                                     tunit=["", "keV", "keV"],
+                                     extname="EBOUNDS")
+    status |= st
+    
+
+    # required keywords
+    status |= cfitsio.fits_update_key_str(fptr, "FILTER", "NONE",
+                                         "Instrument filter in use")
+    status |= cfitsio.fits_update_key_str(fptr, "CHANTYPE", "PI",
+                                  "channels are really calculated energy bins")
+    status |= cfitsio.fits_update_key_lng(fptr, "DETCHANS", nchan,
+                                 "Total number of detector channels available")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUCLASS", "OGIP",
+                                      "format conforms to OGIP/GSFC standards")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUCLAS1", "RESPONSE",
+                                         "Extension contains response data")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUCLAS2", "EBOUNDS",
+                                        "reconstructed energy bin boundaries")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUVERS", "1.2.0",
+                                         "version of the file format")
+    
+    # optional keywords
+    status |= cfitsio.fits_update_key_str(fptr, "RMFVERSN", "1992a",
+                                         "obsolete keyword for older software")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUVERS1", "1.0.0",
+                                         "obsolete keyword for older software")
+    status |= cfitsio.fits_update_key_str(fptr, "HDUVERS2", "1.1.0",
+                                         "obsolete keyword for older software")
+
+   # Oh, yeah, the data
+    status |= cfitsio.fits_write_col_int(fptr, 1, 1, 1, channel)
+    status |= cfitsio.fits_write_col_dbl(fptr, 2, 1, 1, nchan, list(emin))
+    status |= cfitsio.fits_write_col_dbl(fptr, 3, 1, 1, nchan, list(emax))
 
     if status:
         raise IOError, "CFITSIO problem."
@@ -133,15 +201,18 @@ if __name__ == "__main__":
 
     status = 0
 
-    nbin = 7
-    nchan = 5
+    nbin = 3
+    nchan = 2
     matrix = num.arange(nbin*nchan)
     matrix.shape = nbin, nchan
     edges = num.arange(nbin+1)
+    ebounds = num.arange(nchan+1)
     
     st, fptr = glastFits.createFile(testfile)
     status |= st
-    st, chdu = createRmfHdu(fptr, matrix, edges)
+    st, chdu = createMatrixHdu(fptr, matrix, edges)
+    status |= st
+    st, chdu = createEboundsHdu(fptr, ebounds)
     status |= st
     status |= glastFits.closeFile(fptr)
 
