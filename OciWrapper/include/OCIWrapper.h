@@ -33,9 +33,11 @@ class OCIWrapper {
   void bindFloatVariable(OCIStmt* stmtHandle, const char* varName, void* var);
 
   void bindStringVariable(OCIStmt* stmtHandle, const char* varName, 
-			  const char* var);
+ 			  const char* var);
  
   void defineIntByPos(OCIStmt* stmtHandle, int* pInt, int pos);
+
+  void defineUIntByPos(OCIStmt* stmtHandle, unsigned* pUInt, int pos);
 
   void defineLongByPos(OCIStmt* stmtHandle, long* pInt, int pos);
 
