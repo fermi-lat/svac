@@ -93,3 +93,8 @@ bug fixed in GltWord and TEM diagnostic info
 v1r3p10
 
 Forgot to commit HitOccupancy code to CVS in v1r3p8, do it now
+
+v1r3p11
+
+For some reasons, code can be compiled with nonoptimized build, but failed 
+in optimized build. Rearraneg functions to make optimized build.

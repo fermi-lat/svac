@@ -68,4 +68,6 @@ inline int ElecToGeo::end(int gtcc) const
   else return 1;
 }
 
+bool operator<(const ElecToGeo::gtcc_gtrc& x, const ElecToGeo::gtcc_gtrc& y);
+
 #endif

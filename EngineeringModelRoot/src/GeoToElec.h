@@ -16,6 +16,7 @@ class InvalidTkrLayerViewEnd : public std::exception {
 
 class GeoToElec {
  public:
+
   struct gtcc_gtrc {
     gtcc_gtrc(int gtcc=-9999, int gtrc=-9999) : m_gtcc(gtcc), m_gtrc(gtrc) { }
     int m_gtcc;  
@@ -28,6 +29,8 @@ class GeoToElec {
     int m_view;  // 0 means measure X, 1 means measure Y
     int m_end;  // 0 means low end, 1 means high end
   };
+
+  friend bool operator<(const tkrLayerViewEnd& x, const tkrLayerViewEnd& y);
 
  public:
   static const GeoToElec* getInstance();
@@ -50,5 +53,6 @@ inline const GeoToElec* GeoToElec::getInstance()
   return &sig;
 }
 
+bool operator<(const GeoToElec::tkrLayerViewEnd& x, const GeoToElec::tkrLayerViewEnd& y);
 
 #endif
