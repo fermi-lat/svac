@@ -26,13 +26,13 @@ setenv rootUrl /glast.u12/Integration/rootData
 setenv rawUrl /glast.u12/EM2/rawData
 
 setenv cookedTail Integration/'$(RUN_NAME)'
-setenv emTail ${cookedRoot}/${EngineeringModelVersion}
+setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
 setenv calibVersion calib-v1r0
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-setenv calibTail ${cookedRoot}/${calibVersion}
+setenv calibTail ${emTail}/${calibVersion}
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv svacOnlineVersion v3r0p0
@@ -43,7 +43,7 @@ setenv onlineDataDir EM2/rawData/'$(RUN_NAME)'
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion v3r0p0
-setenv eLogTask updateELogDB-EM2-${eLogTaskVersion}
+setenv eLogTask updateELogDB-${eLogTaskVersion}
 setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate/${eLogTaskVersion}
@@ -55,7 +55,7 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion v3r0p0
-setenv configReportTask configReport-EM2-${configReportTaskVersion}
+setenv configReportTask configReport-${configReportTaskVersion}
 setenv configReportVersion v3r1p0
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
@@ -67,7 +67,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v3r0p0
-setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
+setenv digitizationTask digitization-${digitizationTaskVersion}
 setenv Em2Version v2r8p3
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
@@ -82,7 +82,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v3r0p0
-setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
+setenv digiReportTask digiReport-${digiReportTaskVersion}
 setenv TestReportVersion v3r2p2
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
@@ -100,7 +100,7 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
 setenv LATCalibRoot /nfs/farm/g/glast/u01/calibConstants
 setenv reconTaskVersion v3r0p0
-setenv reconTask recon-EM2-${reconTaskVersion}
+setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon/${reconTaskVersion}
@@ -111,7 +111,7 @@ setenv reconDataDirFull ${dataHead}/${reconDataDir}
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
 setenv reconReportTaskVersion v3r0p0
-setenv reconReportTask reconReport-EM2-${reconReportTaskVersion}
+setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
 setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
@@ -125,7 +125,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v3r0p0
-setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
+setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1r3p4
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
@@ -141,11 +141,12 @@ setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
 setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
 setenv urlUpdateScript  ${eLogDir}/updateUrl.py
+setenv batchgroup glastdata
 #-------------------------------- many ----------------------------------------
 
 setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}
 if ( ${?PYTHONPATH} == '1' ) then
-    setenv PYTHONPATH ${SVACPYTHON}:$PYTHONPATH}
+    setenv PYTHONPATH ${SVACPYTHON}:${PYTHONPATH}
 else
     setenv PYTHONPATH ${SVACPYTHON}
 endif
