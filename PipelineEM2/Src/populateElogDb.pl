@@ -2,7 +2,13 @@
 
 use strict;
 
+if ($#ARGV != 1) {
+    die "Usage: $0 shellFile rcReport";
+}
+
 my ($shellFile $rcReport) = @ARGV;
+
+print "$0 running with:\n  shellFile: $shellFile\n  rcReport: $rcReport\n";
 
 my $eLogFeederDir = `dirname $shellFile`;
 
