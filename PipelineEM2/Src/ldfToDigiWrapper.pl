@@ -35,6 +35,6 @@ $ENV{'cmtDir'} = '/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p1
 $ENV{'exe'} = '/nfs/farm/g/glast/u06/chen/glast_mc/EngineeringModel_v3r0402p16/Em2/v0r0p0/rh9_gcc32/Em2.exe';
 
 my $command = "ldfToDigi.pl";
-
+print "Running command: [$command]\n";
 system $command;
 

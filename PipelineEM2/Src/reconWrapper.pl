@@ -29,4 +29,6 @@ my $meritRootFile = $outFiles->{'merit'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeLine/EM2/recon.pl';
 
-system("$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'");
+my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
+print "Running command: [$command]\n";
+system($command);

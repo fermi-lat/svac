@@ -37,4 +37,6 @@ my $shellFile = $outFiles->{'script'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/RunRootAnalyzer.pl';
 
-system("$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'");
+my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
+print "Running command: [$command]\n";
+system($command);

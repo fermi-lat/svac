@@ -30,5 +30,5 @@ my $tarBall = $outFiles->{'tarBall'};
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genReconTestReport.pl';
 
 my $command = "$exe '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
-
+print "Running command: [$command]\n";
 system $command;
