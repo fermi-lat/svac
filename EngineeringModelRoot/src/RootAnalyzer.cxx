@@ -366,7 +366,8 @@ void RootAnalyzer::analyzeDigiTree()
  
   // Luis's three-in-a-row trigger bits:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
-    m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
+    m_ntuple.m_digiTriRowBits[iTower] = m_digiEvent->getL1T().getDigiTriRowBits(iTower);
+    m_ntuple.m_trgReqTriRowBits[iTower] = m_digiEvent->getL1T().getTrgReqTriRowBits(iTower);
   }
   
   // Event sizes:
@@ -1091,7 +1092,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/i");
   m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/i");
   m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/i");
-  m_tree->Branch("TrgTriRowBits",&(m_ntuple.m_trgTriRowBits),"TrgTriRowBits[16]/i");
+  m_tree->Branch("DigiTriRowBits",&(m_ntuple.m_digiTriRowBits),"DigiTriRowBits[16]/i");
+  m_tree->Branch("TrgReqTriRowBits",&(m_ntuple.m_trgReqTriRowBits),"TrgReqTriRowBits[16]/i");
   m_tree->Branch("TemLength", &(m_ntuple.m_temLength), "TemLength[16]/i");
   m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/i");
   m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/i");

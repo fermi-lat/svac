@@ -72,6 +72,8 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> GemAcdTilesXy         </TD> <TD> GEM ACD YZM tile list               </TD> </TR>
 <TR> <TD> GemAcdTilesRbn        </TD> <TD> GEM ACD RNB (Ribbons) tile list     </TD> </TR>
 <TR> <TD> GemAcdTilesNa         </TD> <TD> GEM ACD NA (Not Assigned) tile list </TD> </TR>
+<TR> <TD> DigiTriRowBits        </TD> <TD> 3-in-a-row bits made from TKR digis </TD> </TR>
+<TR> <TD> TrgReqTriRowBits      </TD> <TD> 3-in-a-row bits made from trigger requests (trigger primitives) </TD> </TR>  
 </TABLE>
 
 
