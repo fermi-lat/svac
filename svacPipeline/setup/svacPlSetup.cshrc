@@ -62,6 +62,7 @@ setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/Em2.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization/${digitizationTaskVersion}
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
+setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
