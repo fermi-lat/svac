@@ -52,7 +52,13 @@ def createFile(filename):
 
     st, fptr = cfitsio.fits_create_file(filename)
     status |= st
+    if status:
+        raise IOError, "Trouble opening file %s." % filename
+    
     status |= cfitsio.fits_create_img(fptr, cfitsio.BYTE_IMG, 0, [])
+    if status:
+        raise IOError, "Trouble creating primary HDU."
+    
     status |= addPrimaryKeywords(fptr)
     status |= addStandardKeywords(fptr)
 
@@ -108,7 +114,7 @@ def addPrimaryKeywords(fptr):
     status |= st
    
     if status:
-        raise IOError, "CFITSIO problem."
+        raise IOError, "Trouble writing keywords."
 
     return status
 
@@ -146,7 +152,7 @@ def addStandardKeywords(fptr):
                                           "date file was made in yyyy-mm-dd")
 
     if status:
-        raise IOError, "CFITSIO problem."
+        raise IOError, "Trouble writing keywords."
 
     return status
 
@@ -194,10 +200,10 @@ def createTable(fptr, naxis2=0, tfields=0, ttype=[], tform=[], tunit=[],
 
     status |= cfitsio.fits_create_tbl(fptr, cfitsio.BINARY_TBL, naxis2,
                                       tfields, ttype, tform, tunit, extname)
-    status |= addStandardKeywords(fptr)    
-
     if status:
-        raise IOError, "CFITSIO problem."
+        raise IOError, "Trouble adding table HDU."
+
+    status |= addStandardKeywords(fptr)    
 
     junk, chdu = cfitsio.fits_get_hdu_num(fptr)
     return status, chdu
@@ -230,7 +236,7 @@ def closeFile(fptr):
     status |= cfitsio.fits_close_file(fptr)
     
     if status:
-        raise IOError, "CFITSIO problem."
+        raise IOError, "Trouble closing file."
 
     return status
 
