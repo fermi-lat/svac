@@ -1,0 +1,37 @@
+ObjSuf        = o
+SrcSuf        = C
+ExeSuf        =
+DllSuf        = so
+OutPutOpt     = -o 
+
+CXX           = g++
+CXXFLAGS      = -g -Wall -fPIC 
+LD            = g++
+LDFLAGS       = -g
+SOFLAGS       = -shared
+LIBS          = 
+
+libNR.so: NRUTIL.o POLINT.o QROMB.o TRAPZD.o KSTWO.o PROBKS.o SORT.o
+	$(LD) $(SOFLAGS) $^ $(LIBS) $(OutPutOpt)$@
+	@echo "$@ done"
+
+Test.exe: Test.o
+	$(LD) $(LDFLAGS) $^ $(LIBS) $(OutPutOpt)$@
+	@echo "$@ done"
+
+NRUTIL.o:  NRUTIL.h
+
+POLINT.o:  NRUTIL.h
+
+QROMB.o:  NRUTIL.h
+
+TRAPZD.o:  NRUTIL.h
+
+KSTWO.o:  NRUTIL.h
+
+PROBKS.o:  NRUTIL.h
+
+SORT.o: NRUTIL.h
+
+%.$(ObjSuf): %.$(SrcSuf)
+	$(CXX) $(CXXFLAGS) -c $<
