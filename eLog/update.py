@@ -52,8 +52,9 @@ def parseTime(l):
 
     return time
 
-# check whether there is a new data value in the tables for drop down menus
-# if so, add the new value to table
+# check whether there is a new data value in the tables if so, add the new
+# value to table. This is necessary since eLog perl cgi scripts will
+# dynamically produce a drop down menu based on contents of the table
 def checkNewValue(value, table, col):
 
     id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
@@ -67,6 +68,26 @@ def checkNewValue(value, table, col):
         sqlStr = 'insert into ' + table + ' values(' + id[table] + ', \'' + value + '\')'
         execSql(c, sqlStr)
 
+# parse SerialNos tag in rcReport to reture a list containing 3 info:
+# 1. no. of towers 2. serial no. of TKRs 3. serial no. of CALs
+def parseSerialNosTag(value):
+    dict = eval(value)
+
+    nTowers = 0
+
+    tkrSerNo = ''
+    calSerNo = ''
+
+    for k, v in dict.iteritems():
+        if(re.match('GTEM', k)):
+            nTowers += 1
+            tkrSerNo = tkrSerNo + v['tkr'] + '???'
+            calSerNo = calSerNo + v['calinstrument'] + '???'
+
+    return [nTowers, tkrSerNo, calSerNo]
+    
+
+# main codes start from here 
 #used to form ftp URL - default value
 xmlFileName = 'rcReport.out'
 #rootDataDir = '/glast.u12/EM2/rootData/'
@@ -119,8 +140,12 @@ orientationTag = 'Orientation'
 phaseTag = 'Phase'
 commentsTag = 'Comments'
 errorEventCountTag = 'ErrorEventCount'
+# note additionFields is not a tag in rcReport.out, it is a column in the
+# table to store any unfound tags
 additionFieldsTag = 'additionFields'
 onlineReportTag = 'TestReport'
+csvTestPropertiesTag = 'csvTestProperties'
+serNoTag = 'SerialNos'
 
 tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag]
 
@@ -164,7 +189,10 @@ for report in reports:
             continue;
         
         name = node.nodeName
-        
+
+        if(name == serNoTag):
+            [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
+
         if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
@@ -174,7 +202,7 @@ for report in reports:
             data[additionFieldsTag] = data[additionFieldsTag] + name + '???' + node.childNodes[0].data + '!!!'
             
             continue
-        
+
         if (name == startTimeTag) or (name == endTimeTag):
             data[name] = parseTime(node.childNodes[0].data)
         elif (
@@ -198,7 +226,7 @@ for report in reports:
 #            errFile.write(tag + ' is not found! Set to empty! \n')
             data[tag] = ''
 
-    print data[runIdTag]
+    print 'Processing run ' + data[runIdTag]
     
     # determine whether run is already in the database
     sqlStr = 'select * from eLogReport where RunId = ' + data[runIdTag]
@@ -257,7 +285,7 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\')'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\')'
 
     try:
         c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
