@@ -2,11 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 4) {
-    die "Usage: $0 digiRootFile shellFile jobOptionFile reconRootFile meritRootFile";
+if ($#ARGV != 5) {
+    die "Usage: $0 digiRootFile shellFile jobOptionFile reconRootFile meritRootFile runId";
 }
 
-my ($digiRootFile, $shellFile, $jobOptionFile, $reconRootFile, $meritRootFile) = @ARGV; 
+my ($digiRootFile, $shellFile, $jobOptionFile, $reconRootFile, $meritRootFile, $runId) = @ARGV; 
 
 print <<EOT;
 $0 running with:
@@ -15,7 +15,16 @@ $0 running with:
   jobOptionFile: $jobOptionFile
   reconRootFile: $reconRootFile
   meritRootFile: $meritRootFile
+  runId: $runId
 EOT
+
+my $tkrSerNo = `$ENV{'svacPlRoot'}/lib/queryElogReportTable.pl $runId tkr_ser_no`;
+my $calSerNo = `$ENV{'svacPlRoot'}/lib/queryElogReportTable.pl $runId cal_ser_no`;
+
+my $em = 0;
+if($tkrSerNo =~ /Mini/ || $calSerNo =~ /EM2/) {
+    $em = 1;
+}
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'reconCmt'};
@@ -37,7 +46,9 @@ open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortt
 print JOBOPTIONFILE "#include \"\$GLEAMROOT/src/basicOptions.txt\" \n";
 print JOBOPTIONFILE qq(Digitization.Members = {"digiRootReaderAlg"}; \n);
 #print JOBOPTIONFILE qq(EventSelector.Instrument = "EM"; \n);
-#print JOBOPTIONFILE qq(GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n);
+if($em) {
+    print JOBOPTIONFILE qq(GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n);
+}
 print JOBOPTIONFILE qq(GlastDetSvc.visitorMode  = "recon";);
 
 # mask = 0 means not filtering out any events
@@ -91,11 +102,11 @@ print JOBOPTIONFILE qq(ApplicationMgr.Runable= "RootIoSvc"; \n);
 close(JOBOPTIONFILE);
 system("chmod +rwx $shellFile");
 
-my $status = system("$shellFile");
+#my $status = system("$shellFile");
 
-if ($status == 0) {
-    exit 0;}
-else {
-    exit 1;}
+#if ($status == 0) {
+#    exit 0;}
+#else {
+#    exit 1;}
 
 
