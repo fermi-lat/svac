@@ -39,11 +39,11 @@ my $pdfFile = 'refman.pdf';
 my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
-my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac:/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0404p2";
-my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0/cmt";
-my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0/rh9_gcc32";
-my $doxyFile = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0/src/ReportDoxyfile";
-my $latexHeader = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0/src/latexHeader.tex";
+my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac:/nfs/farm/g/glast/u09/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0407p3";
+my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0r1p2/cmt";
+my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0r1p2/rh9_gcc32";
+my $doxyFile = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0r1p2/src/ReportDoxyfile";
+my $latexHeader = "/nfs/farm/g/glast/u06/chen/svac/NtupleCompare/v0r1p2/src/latexHeader.tex";
 
 my $shellFile = $reportDir.'/'.$prefix.'_report.scr';
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";

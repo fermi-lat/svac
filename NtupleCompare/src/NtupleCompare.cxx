@@ -192,6 +192,8 @@ void NtupleCompare::generateReport()
   m_report << "@section ksResults Results of KS tests" << endl;
   printKsProbTable(); 
 
+  m_report << "<b> Following plots compare two sets of data. First set is plotted as black points while the second set is plotted as red triangles. </b>" << endl << endl;
+
   // produce plots for each compared variables
   int size = m_variables.size();
   for(int i = 0; i != size; ++i) {
@@ -276,6 +278,7 @@ void NtupleCompare::makeHistograms()
     string draw(*itr);
     draw += ">>";
     draw += "htemp";
+    m_meritChain1->SetEstimate((int) m_meritChain1->GetEntries());
     m_meritChain1->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
     int nEvent1 = (int) m_meritChain1->GetSelectedRows();
     Double_t* start1 = m_meritChain1->GetV1();
@@ -291,6 +294,7 @@ void NtupleCompare::makeHistograms()
     draw = *itr;
     draw += ">>";
     draw += "htemp";
+    m_meritChain2->SetEstimate((int) m_meritChain2->GetEntries());
     m_meritChain2->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
     int nEvent2 = (int) m_meritChain2->GetSelectedRows();
     Double_t* start2 = m_meritChain2->GetV1();
