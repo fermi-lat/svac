@@ -66,14 +66,12 @@ for tag in joboptions.shapeTags:
     #        break
     #    pass
     newShape = []
-    print tag, shape
     for index in shape:
         if index < maxShape:
             newShape.append(index)
             pass
         pass
     shape = newShape
-    print tag, shape
     shape.sort()
     indices[tag] = shape
     shape = len(shape)
