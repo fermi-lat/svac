@@ -34,7 +34,9 @@ setenv calibGenTKRVersion v0r1p8
 setenv calibGenCALVersion v2r3p4
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
+setenv onlineVersion V1r0
 setenv svacOnlineVersion v1r0
+setenv onlineTask online-EM2-${onlineVersion}
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 #-------------------------------- online --------------------------------------
