@@ -7,6 +7,7 @@
 #define M 7
 #define NSTACK 50
 
+// something messed with memory in this routine, using std::sort instead
 void NR::sort(unsigned long n, float arr[])
 {
 	unsigned long i,ir=n,j,k,l=1;

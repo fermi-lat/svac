@@ -3,17 +3,21 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <iostream>
 #include "NRUTIL.h"
 #define NR_END 1
 #define FREE_ARG char*
 
+using std::cout;
+using std::endl;
+
 void NR::nrerror(char error_text[])
 /* Numerical Recipes standard error handler */
 {
-	fprintf(stderr,"Numerical Recipes run-time error...\n");
-	fprintf(stderr,"%s\n",error_text);
-	fprintf(stderr,"...now exiting to system...\n");
-	exit(1);
+  cout << "Numerical Recipes run-time error..." << endl;
+  cout << error_text<< endl;
+  cout << "...now exiting to system..." << endl;
+  exit(1);
 }
 
 float* NR::vector(long nl, long nh)
