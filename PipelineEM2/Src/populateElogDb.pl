@@ -8,7 +8,11 @@ if ($#ARGV != 1) {
 
 my ($shellFile $rcReport) = @ARGV;
 
-print "$0 running with:\n  shellFile: $shellFile\n  rcReport: $rcReport\n";
+print <<EOT;
+$0 running with:
+  shellFile: $shellFile
+  rcReport: $rcReport
+EOT
 
 my $eLogFeederDir = `dirname $shellFile`;
 
