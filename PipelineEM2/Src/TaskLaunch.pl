@@ -11,7 +11,7 @@ foreach $oldFile (@files) {
     link($oldFile, $newFile);
 }
 
-my $command = "createRun.pl $newTask $runName";
+my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
 
 my $status = system($command);
 if ($status == 0) {
