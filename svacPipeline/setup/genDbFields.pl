@@ -81,6 +81,7 @@ snapshot	text	xml	$rawRoot		snapshot file
 $ENV{'configReportTask'}	Report	$ENV{'dataHead'}		Make instrument configuration report
 
 ConfigTables	1	ConfigTables.py	$ENV{'configReportTaskVersion'}	$configTaskDir/ConfigTablesWrapper.pl	short	$configDataDir	$ENV{'svacCmt'}/ConfigTables/$ENV{'configReportVersion'}/Src		Create instrument configuration tables.
+configReportUrl	2	updateUrl.py	$ENV{'configReportTaskVersion'}	urlWrapper.pl	short	$configDataDir		Update URL for instrument configuration report.
 
 schema
 snapshot
@@ -93,6 +94,7 @@ $ENV{'digitizationTask'}	Digitization	$ENV{'dataHead'}		Make digi file
 Convert		1	ldfToDigi.pl	$ENV{'digitizationTaskVersion'}	$digiTaskDir/ldfToDigiWrapper.pl	medium	$digiDataDir	$digiTaskDir		Convert LDF to DIGI
 LaunchRecon	2	TaskLaunch.pl	$ENV{'digitizationTaskVersion'}	$digiTaskDir/recLaunchWrapper.pl	short	$digiDataDir	$digiTaskDir		launch recon task
 LaunchReport	3	TaskLaunch.pl	$ENV{'digitizationTaskVersion'}	$digiTaskDir/genDTRLaunchWrapper.pl	short	$digiDataDir	$digiTaskDir		launch digi report task
+digiRootFile	4	updateUrl.py	$ENV{'digitizationTaskVersion'}	urlWrapper.pl	short	$digiDataDir		Update URL for digi file.
 
 digi		DIGI	root	$digiDataDir	Raw data in detector space
 jobOptions	text	jobOpt	$digiDataDir	config file
@@ -104,6 +106,7 @@ script		script	csh	$digiDataDir	script
 $ENV{'digiReportTask'}	Report	$ENV{'dataHead'}		Report on contents of digi file
 
 genReport		1	TestReport.exe	$ENV{'digiReportTaskVersion'}	$digiReportTaskDir/genDigiTestReportWrapper.pl	short	$digiReportDataDir	$digiReportTaskDir		Make report on digi file contents
+digiReportUrl	2	updateUrl.py	$ENV{'digiReportTaskVersion'}	urlWrapper.pl	short	$digiReportDataDir		Update URL for digi report.
 
 digi
 jobOptions	text	jobOpt	$digiReportDataDir		output config file
@@ -117,6 +120,8 @@ $ENV{'reconTask'}	Reconstruction	$ENV{'dataHead'}		Make recon and merit files
 recon		1	recon.pl		$ENV{'reconTaskVersion'}	$reconTaskDir/reconWrapper.pl		long	$reconDataDir	$reconTaskDir		Make recon & merit files
 LaunchSVAC	2	TaskLaunch.pl	$ENV{'reconTaskVersion'}	$reconTaskDir/RunRALaunchWrapper.pl	short	$reconDataDir	$reconTaskDir		Launch SVAC tuple creation task
 LaunchReport	3	TaskLaunch.pl	$ENV{'reconTaskVersion'}	$reconTaskDir/genRTRLaunchWrapper.pl	short	$reconDataDir	$reconTaskDir		Launch recon report task
+reconRootFile	4	updateUrl.py	$ENV{'reconTaskVersion'}	urlWrapper.pl	short	$reconDataDir		Update URL for recon file.
+meritRootFile	5	updateUrl.py	$ENV{'reconTaskVersion'}	urlWrapper.pl	short	$reconDataDir		Update URL for merit file.
 
 digi
 jobOptions	text	jobOpt	$reconDataDir		options for recon
@@ -129,6 +134,7 @@ script		script	sh	$reconDataDir		script
 $ENV{'reconReportTask'}	Report	$ENV{'dataHead'}		Report on contents of recon & digi files
 
 genReport		1	TestReport.exe	$ENV{'reconReportTaskVersion'}	$reconReportTaskDir/genReconTestReportWrapper.pl	short	$reconReportDataDir		$reconReportTaskDir		Create recon report
+reconReportUrl	2	updateUrl.py	$ENV{'reconReportTaskVersion'}	urlWrapper.pl	short	$reconReportDataDir			Update URL for recon report.
 
 digi
 jobOptions	text	jobOpt	$reconReportDataDir		Option file
@@ -141,6 +147,7 @@ tarBall		Analysis	tgz	$reconReportDataDir		tarball of report directory
 $ENV{'svacTupleTask'}	Analysis	$ENV{'dataHead'}		Make SVAC "tuple"
 
 svacTuple		1	RunRootAnalyzer.exe		$ENV{'svacTupleTaskVersion'}	$svacTupleTaskDir/RunRootAnalyzerWrapper.pl	short	$svacTupleDataDir	$svacTupleTaskDir		Make SVAC "tuple"
+svacRootFile	2	updateUrl.py		$ENV{'svacTupleTaskVersion'}	urlWrapper.pl	short	$svacTupleDataDir		Update URL for svac tuple file.
 
 digi
 histogram		histogram	root	$svacTupleDataDir		SVAC histograms
