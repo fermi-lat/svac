@@ -1,4 +1,6 @@
 
+outFile = "ConfigTables.html"
+
 calTags = ["log_acpt", "fhe_dac", "fle_dac", "rng_uld_dac", "ref_dac"]
 
 schemaTag = "schema"
@@ -9,11 +11,13 @@ shapeTags = ["GTWR",
              "GTEM",
              "GCCC", "GCRC", "GCFE",
              "GTCC", "GTRC", "GTFE",
+             "GARC", "GAFE",
              ]
 maxShape = {"GTWR": 16,
             "GTEM": 16,
             "GCCC": 4, "GCRC": 4, "GCFE": 12,
             "GTCC": 8, "GTRC": 9, "GTFE": 24,
+            "GARC": 12, "GAFE": 18,            
             } 
 
 # pack this many tables across the output page
