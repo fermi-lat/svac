@@ -4,7 +4,7 @@
 // no. of events to be processed
 10000
 
-// output directory where KS report occurs
+// output directory where KS report occurs, the directory must exist
 ../output/
 
 // prefix of output files
