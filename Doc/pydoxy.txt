@@ -1,9 +1,11 @@
-Files must not contain literal doc strings.  __doc__ may be assigned to, but
-will not be picked up by doxyfilter.
+Tips, tricks, caveats and gotchas for pythfilter.py.
 
 Files must have \file and \brief comments.
 
 Function and class definitions must be preceded by non-doxyfilter comments.
+
+There must be a non-doxyfilter comment between file comment block and module
+docstring.
 
 Function, class, and method doc strings must immediately succeed the defining
 statement, without blank lines between.
