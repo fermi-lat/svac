@@ -98,3 +98,8 @@ v1r3p11
 
 For some reasons, code can be compiled with nonoptimized build, but failed 
 in optimized build. Rearraneg functions to make optimized build.
+
+v1r3p12
+
+Added TrgReqTriRowBits made from trigger primitives. Renamed current TriRowBits 
+to DigiTriRowBits. Updated documentation.
