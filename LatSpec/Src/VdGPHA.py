@@ -17,14 +17,15 @@ infile = "../Data/vdg_em_4M_ene.dat"
 #infile = "../Data/gamma_9_25_198M_ene.dat"
 outfile = "VdG.pha"
 
-minE = 7.0
-maxE = 27.0
-nbin = 100
+# define reconstructed energy "channels"
+eReconMin = 7.0
+eReconMax = 35.0
+nChan = 100
 
 # set up energy bins
-step = (maxE - minE) / nbin
+step = (eReconMax - eReconMin) / nChan
 epsilon = step / 2.0
-edges = num.arange(minE, maxE+epsilon, step)
+edges = num.arange(eReconMin, eReconMax+epsilon, step)
 
 # read data
 data = tableIo.readTable(infile)
