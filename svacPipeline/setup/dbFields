@@ -23,8 +23,8 @@ tarBall 	Analysis 	tgz 	rootData/$(RUN_NAME)/configReport/v1r0p0 	Tarball (.tgz)
 
 digitization  	Digitization  	/nfs/farm/g/glast/u12/EM2 	Make digi file
 
-Convert 	 	1  	ldfToDigi.pl  	v1r0p0  	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/digitization/v1r0p0/ldfToDigiWrapper.pl  	medium  	rootData/$(RUN_NAME)/grRoot 	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/digitization/v1r0p0  	Convert LDF to DIGI
-LaunchRecon 	2 	TaskLaunch.pl 	v1r0p0 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0/recLaunchWrapper.pl 	short 	rootData/$(RUN_NAME)/grRoot 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0 	launch recon task
+Convert 	 	1  	ldfToDigi.pl  	v1r0p0  	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/digitization/v1r0p0/ldfToDigiWrapper.pl  		medium  	rootData/$(RUN_NAME)/grRoot 	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/digitization/v1r0p0  	Convert LDF to DIGI
+LaunchRecon 	2 	TaskLaunch.pl 	v1r0p0 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0/recLaunchWrapper.pl 		short 	rootData/$(RUN_NAME)/grRoot 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0 	launch recon task
 LaunchReport 	3 	TaskLaunch.pl 	v1r0p0 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0/genDTRLaunchWrapper.pl 	short 	rootData/$(RUN_NAME)/grRoot 	/nfs/slac/g/svac/common/pipeLine/EM2/v1r0p0/svacPipeline/digitization/v1r0p0	launch digi report task
 											
 digi  		DIGI  	root  	rootData/$(RUN_NAME)/grRoot  	Raw data in detector space
@@ -63,9 +63,9 @@ reconReport  	Report  	/nfs/farm/g/glast/u12/EM2 	Report on contents of recon & 
 
 genReport  	1  	TestReport.exe  	v1r0p0  	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/reconReport/v1r0p0/genReconTestReportWrapper.pl  	short  	rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0 	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/reconReport/v1r0p0	Create recon report
 
-digi  		DIGI  	root  	rootData/$(RUN_NAME)/grRoot  			Digi file
+digi  		DIGI  	root  	rootData/$(RUN_NAME)/grRoot  				Digi file
 jobOptions 	text 	jobOpt 	rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0 	Option file
-recon 		RECON 	root 	rootData/$(RUN_NAME)/calib-v1r0/grRoot 		Recon file
+recon 		RECON 	root 	rootData/$(RUN_NAME)/calib-v1r0/grRoot 			Recon file
 script 		script 	csh 	rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0 	Script
 tarBall 		Analysis 	tgz 	rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0 	tarball of report directory
 
@@ -75,9 +75,9 @@ svacTuple  	Analysis  /nfs/farm/g/glast/u12/EM2	 	Make SVAC "tuple"
 
 svacTuple  	1  	RunRootAnalyzer.exe  	v1r0p0  	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/svacTuple/v1r0p0/RunRootAnalyzerWrapper.pl  	short  	rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv1r0p0  	/nfs/slac/g/svac/common/pipeLine/EM2/svacPipeline/svacTuple/v1r0p0 	Make SVAC "tuple"
 
-digi  		DIGI 	 	root  	rootData/$(RUN_NAME)/grRoot  			Digi file
+digi  		DIGI 	 	root  	rootData/$(RUN_NAME)/grRoot  				Digi file
 histogram 	histogram 	root 	rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv1r0p0 	SVAC histograms
 jobOptions 	text 		jobOpt 	rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv1r0p0 	option file
-recon 		RECON 		root 	rootData/$(RUN_NAME)/calib-v1r0/grRoot 		Recon file
+recon 		RECON 		root 	rootData/$(RUN_NAME)/calib-v1r0/grRoot 			Recon file
 script 		script 		csh 	rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv1r0p0 	script
 svac	 	svac 		root 	rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv1r0p0 	SVAC "tuple"
