@@ -5,15 +5,21 @@ use strict;
 my $oldFile;
 my ($oldTask, $newTask, $runName, @files) = @ARGV;
 
+# could also use "ln" or "cp"
+my $linker = "ln -s";
+
+my $status = 0;
+
 foreach $oldFile (@files) {
     my $newFile = $oldFile;
     $newFile =~ s/$oldTask/$newTask/;
-    link($oldFile, $newFile);
+    $status |= system("$linker $oldFile $newFile");
 }
 
 my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
 
-my $status = system($command);
+$status |= system($command);
+
 if ($status == 0) {
     exit 0;}
 else {

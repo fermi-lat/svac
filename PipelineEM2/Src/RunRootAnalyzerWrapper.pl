@@ -26,7 +26,10 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-my $mcRootFile = $inFiles->{'mc'};
+#my $mcRootFile = $inFiles->{'mc'};
+my $mcRootFile = 'emptyFile';
+system("touch $mcRootFile");
+
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};
 

@@ -28,7 +28,7 @@ my $exe = './TaskLaunch.pl';
 my $newTask = 'ConfigReport';
 my $schemaFile = $inFiles->{'schema'};
 my $snapFile = $inFiles->{'snapshot'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile'' $snapFile'";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile' '$snapFile'";
 print "Running command :[$command]\n";
 my $status = system("$command");
 

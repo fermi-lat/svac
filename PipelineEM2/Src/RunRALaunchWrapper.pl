@@ -30,10 +30,11 @@ my $runName = $proc->{'run_name'};
 my $exe = './TaskLaunch.pl';
 
 my $newTask = 'SVACTuple';
-my $mcRootFile = $inFiles->{'mc'};
+#my $mcRootFile = $inFiles->{'mc'};
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$mcRootFile' '$digiRootFile' '$reconRootFile'";
+#my $command = "$exe '$taskName' '$newTask' '$runName' '$mcRootFile' '$digiRootFile' '$reconRootFile'";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile' '$reconRootFile'";
 
 print "Running command :[$command]\n";
 my $status = system("$command");
