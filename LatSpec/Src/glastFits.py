@@ -238,11 +238,13 @@ def closeFile(fptr):
 if __name__ == "__main__":
     import os
     
-    testfile = 'test.fits'
+    testfits = 'test.fits'
+
+    os.system("rm -f %s" % testfits)
 
     status = 0
     
-    st, fptr = createFile(testfile)
+    st, fptr = createFile(testfits)
     status |= st
     st, chdu = createTable(fptr, extname="BOZO")
     status |= st
@@ -251,5 +253,5 @@ if __name__ == "__main__":
     if status:
         raise IOError, "There was a CFITSIO problem."
     
-    os.system('fverify %s' % testfile)
-    os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testfile)
+    os.system('fverify %s' % testfits)
+    os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testfits)
