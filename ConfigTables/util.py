@@ -113,13 +113,13 @@ def getLabels(seq):
     return labels
     
 
-def mkEmpty(shape):
+def mkEmpty(shape, blank=0):
     if len(shape) == 0:
         empty = []
     elif len(shape) == 1:
-        empty = [0] * shape[0]
+        empty = [blank] * shape[0]
     else:
-        empty = map(mkEmpty, [shape[1:]] * shape[0])
+        empty = map(lambda x: mkEmpty(x, blank=blank), [shape[1:]] * shape[0])
     return empty
 
 
@@ -164,6 +164,9 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
     #print leftTfes
     #print rightTfes
     nTfe = 24
+    badMagic = 63
+    if nLeft == badMagic or nRight == badMagic:
+        return "Absent"
     if nLeft + nRight > nTfe:
         return "Error"
     leftTfes = leftTfes[:nLeft]
@@ -217,14 +220,14 @@ def putVal(container, value, path):
     return
 
 
-def contain(elements, shapes):
+def contain(elements, shapes, blank=0):
     elements, tags = getRegisters(elements)
 
     shape = []
     for tag in tags:
         shape.append(shapes[tag])
         pass
-    container = mkEmpty(shape)
+    container = mkEmpty(shape, blank)
 
 
     for element, path in elements:

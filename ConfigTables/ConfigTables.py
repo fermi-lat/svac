@@ -89,7 +89,6 @@ for registerTag in joboptions.calTags:
         pass
 
     output.addChild("\n")
-    #output.addChild(html.Element("HR", attr={"SIZE": 8, "NOSHADE": None}))
     output.addChild(html.Element("HR"))
     output.addChild("\n")
     pass
@@ -109,7 +108,7 @@ tCsrs = []
 for gtcc in gtccs:
     tCsrs.extend(gtcc.getElementsByTagName("csr"))
     pass
-tCsrs = util.contain(tCsrs, shapes)
+tCsrs = util.contain(tCsrs, shapes, blank=-1)
 
 subField = util.SubField(7, 13)
 nRead = util.superMap(subField, tCsrs)

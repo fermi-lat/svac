@@ -1,5 +1,5 @@
 
-runDir = "/nfs/slac/g/svac/focke/DacXml/rawData/139000001"
+runDir = "/nfs/slac/g/svac/focke/ConfigTables/rawData/139000001"
 outFile = "tables.html"
 outDir = "."
 
