@@ -11,7 +11,7 @@ setenv sasCmt ${sasLocation}/${sasVersion}
 setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt ${svacRoot}/builds
 setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
-#setenv svacPlLibVersion v1r1
+#setenv svacPlLibVersion v1r0
 #setenv svacPlLib ${svacPlRoot}/lib/${svacPlLibVersion}
 setenv svacPlLib ${svacPlRoot}/lib
 
@@ -23,13 +23,13 @@ setenv rootUrl /glast.u12/EM2/rootData
 setenv calibVersion calib-v1r0
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv svacOnlineVersion v1r1
+setenv svacOnlineVersion v1r0
 setenv svacOnlineDir ${svacPlRoot}/eLogUpdate/online/${svacOnlineVersion}
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 #-------------------------------- online --------------------------------------
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
-setenv eLogTaskVersion v1r1
+setenv eLogTaskVersion v1r0
 setenv eLogTask updateELogDB-EM2-${eLogTaskVersion}
 setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
@@ -38,7 +38,7 @@ setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 #-------------------------------- eLogUpdate ----------------------------------
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
-setenv configReportTaskVersion v1r1
+setenv configReportTaskVersion v1r0
 setenv configReportTask configReport-EM2-${configReportTaskVersion}
 setenv configReportVersion v1r0p0
 setenv configReportUrl ConfigTables.html
@@ -48,7 +48,7 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 #-------------------------------- configReport --------------------------------
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
-setenv digitizationTaskVersion v1r1
+setenv digitizationTaskVersion v1r0
 setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
 setenv Em2Version v0r0p0
 setenv Em2Dir ${sasCmt}/Em2/${Em2Version}
@@ -60,7 +60,7 @@ setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
-setenv digiReportTaskVersion v1r1
+setenv digiReportTaskVersion v1r0
 setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
 setenv TestReportVersion v2r0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
@@ -74,7 +74,7 @@ setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-setenv reconTaskVersion v1r1
+setenv reconTaskVersion v1r0
 setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32/Em2.exe
@@ -83,7 +83,7 @@ setenv reconScript ${reconTaskDir}/recon.pl
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
-setenv reconReportTaskVersion v1r1
+setenv reconReportTaskVersion v1r0
 setenv reconReportTask reconReport-EM2-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
 setenv reconReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
@@ -95,7 +95,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #-------------------------------- reconReport ---------------------------------
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
-setenv svacTupleTaskVersion v1r1
+setenv svacTupleTaskVersion v1r0
 setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
