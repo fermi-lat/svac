@@ -15,6 +15,7 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runId = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -34,7 +35,7 @@ my $meritRootFile = $outFiles->{'merit'};
 
 my $exe = $ENV{'reconScript'};
 
-my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
+my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile' '$$runId'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

@@ -4,10 +4,10 @@
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
-setenv CMTCONFIG rh9_gcc32opt
-setenv GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
+setenv SVAC_CMTCONFIG rh9_gcc32opt
+setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv EngineeringModelVersion v3r0407p13
+setenv EngineeringModelVersion v4r060302p2
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -68,7 +68,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v3r0p0
 setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
-setenv Em2Version v2r8p2
+setenv Em2Version v2r8p3
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -98,6 +98,7 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
+setenv LATCalibRoot /nfs/farm/g/glast/u01/calibConstants
 setenv reconTaskVersion v3r0p0
 setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
