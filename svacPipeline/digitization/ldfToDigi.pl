@@ -73,7 +73,7 @@ Top.Members={
 };
 ApplicationMgr.DLLs += {"GlastSvc"};
 ApplicationMgr.ExtSvc += { "GlastDetSvc"};
-GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml";
+//GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml";
 GlastDetSvc.visitorMode="recon";
 ApplicationMgr.DLLs +={ 
     "Trigger", "RootIo"
