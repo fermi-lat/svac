@@ -81,7 +81,6 @@ open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortt
 print JOBOPTIONFILE <<EOF;
 #include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
 CalibDataSvc.CalibInstrumentName = "$instrumentType";
-ApplicationMgr.EvtMax = 10;
 GlastDetSvc.xmlfile = "$geoFile";
 digiRootReaderAlg.digiRootFile = "$digiRootFile";
 RootTupleSvc.filename = "$meritRootFile";
