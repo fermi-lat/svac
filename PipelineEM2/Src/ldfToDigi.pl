@@ -31,7 +31,7 @@ print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
-print SHELLFILE "source setup.sh \n";
+print SHELLFILE "source setup.csh \n";
 print SHELLFILE "popd \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "cmt show uses \n";
