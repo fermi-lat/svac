@@ -1,0 +1,73 @@
+/** @page TriRowBits_Analysisdoc TriRowBits_Analysis Documentation
+
+@verbatim
+
+author: Luis C. Reyes, lreyes@milkyway.gsfc.nasa.gov
+date: December 29th, 2004
+
+The purpose of this code "trirowbits_analysis.*" is to study the consistency of the Tkr Trigger given
+by the Trigger Box (hardware) and what one would expect from the digi hits and 3-in-a-row logic.
+
+INSTRUCTIONS:
+
+1. Define an enviromental variable SVAC_DATA with the absolute path to the svac tuple files.
+
+2. Create filelist.txt in the SVAC_DATA directory. Each line corresponds to a root file containing a svac
+   tuple. The name/location of the files is relative to SVAC_DATA.
+
+3. In root execute .x trirowbits_analysis.C . The first time it will create a friend tree and close root; sorry
+   about this, its the only way to stop root from crashing. Next time you execute trirowbits_analysis.C it will
+   read the friend tree and proceed with the analysis.
+
+4. Get familiar with the functions in trirowbits_analysis.h. trirowbits_analysis.C is just the starting point
+   of the analysis.
+
+any questions, bugs, suggestions are welcome.... lreyes@milkyway.gsfc.nasa.gov
+
+
+
+BACKGROUND IN TRIROWBITS:
+
+TkrTrigger looks for a 3-fold coincidence between any 3 consecutive bi-layers of a tower. Thus there are 16
+possible combinations of the 3-in-a-row signal as shown below. The layers inherit the numbering
+convention of the Digi Algorithm.
+
+Combination		Coincidence of Layers
+0		[y0, x0]	[y1,x1]		[y2,x2]
+1		[y1, x1]	[y2,x2]		[y3,x3]
+2		[y2, x2]	[y3,x3]		[y4,x4]
+3		[y3, x3]	[y4,x4]		[y5,x5]
+4		[y4, x4]	[y5,x5]		[y6,x6]
+5		[y5, x5]	[y6,x6]		[y7,x7]
+6		[y6, x6]	[y7,x7]		[y8,x8]
+7		[y7, x7]	[y8,x8]		[y9,x9]
+8		[y8, x8]	[y9,x9]		[y10,x10]
+9		[y9, x9]	[y10,x10]	[y11,x11]
+10		[y10, x10]	[y11,x11]	[y12,x12]
+11		[y11, x11]	[y12,x12]	[y13,x13]
+12		[y12, x12]	[y13,x13]	[y14,x14]
+13		[y13, x13]	[y14,x14]	[y15,x15]
+14		[y14, x14]	[y15,x15]	[y16,x16]
+15		[y15, x15]	[y17,x16]	[y17,x17]
+
+[a,b]:= a & b
+
+To study such data a bitword is defined as a 16 bits word
+  where 1  means there was such a 3-fold coincidence
+        0  means no coincidence
+
+The 16 bits are arranged in the bitword from right to left.
+
+*********************************************************
+Example:  Bitword = 2104 = 0000 1000 0011 1000
+Only combinations 3, 4, 5 and 11 have a positive trigger.
+Only layers 3, 4, 5, 6, 7, 11, 12, 13 have a hit
+*********************************************************
+
+There are 2 bitwords: digiword and temword. Digiwords consists of the digitized hits while
+temword consists of the trigger requests according to the tem. We want to compare this two.
+
+
+
+@endverbatim
+*/
