@@ -15,54 +15,15 @@ import temUtil
 import jobOptions
 
 
-#
-def calFeReg(doc):
-    # get stuff from CAL front ends
-    # and make tables of it
-
-    calTables = []
-    for registerTag in jobOptions.calTags:
-        nTable = oneCalReg(doc, registerTag)
-        calTables.extend(nTable)
-        calTables.append(html.Element("HR"))
-        pass
-    return calTables
-
-#
-def oneCalReg(doc, tag):
-    axisLabels = jobOptions.calAxisLabels
-    regSpec, regLabel = jobOptions.tables[tag]
-    sectionTitle = "%s (%s)" % (regLabel, regSpec)
-    header = html.Heading(sectionTitle, 2)
-    xTable = tableFromXml.xTableGen(doc, regSpec)
-    regTables = []
-    tems = xTable.data.items()
-    tems.sort()
-    for iTem, temData in tems:
-        gcccs = temData.items()
-        gcccs.sort()
-        for iGccc, gcccData in gcccs:
-            array, labels = gcccData.table()
-            layerMap = temUtil.cccLayerMap[iGccc]
-            labels[0] = [layerMap[x] for x in labels[0]]
-            sideLabel = temUtil.cccSideMap[iGccc]
-            title = "%s for Tower %d side %s" % (regLabel, iTem, sideLabel)
-            sideTable = table.twoDTable(array, title, axisLabels, labels)
-            regTables.append(sideTable)
-            pass
-        pass
-    nTable = html.nWay(regTables, jobOptions.calTabWidth)
-    return header, nTable
-
 
 
 #
 def tkrSplits(doc):
-    # get TKR CSRs
+    """Get GTRC splits."""
 
     output = []
 
-    sectionTitle = "Tracker Split Points"
+    sectionTitle = "TKR GTRC Split Points"
     output.append(html.Heading(sectionTitle, 2))
     tabTitle = sectionTitle + ' (Left:Dead:Right)'
     
@@ -136,3 +97,42 @@ def tkrSplits(doc):
 
     output.append(html.Element("HR"))    
     return output
+#
+def calFeReg(doc):
+    # get stuff from CAL front ends
+    # and make tables of it
+
+    calTables = []
+    for registerTag in jobOptions.calTags:
+        nTable = oneCalReg(doc, registerTag)
+        calTables.extend(nTable)
+        calTables.append(html.Element("HR"))
+        pass
+    return calTables
+
+#
+def oneCalReg(doc, tag):
+    axisLabels = jobOptions.calAxisLabels
+    regSpec, regLabel = jobOptions.tables[tag]
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    header = html.Heading(sectionTitle, 2)
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        gcccs = temData.items()
+        gcccs.sort()
+        for iGccc, gcccData in gcccs:
+            array, labels = gcccData.table()
+            layerMap = temUtil.cccLayerMap[iGccc]
+            labels[0] = [layerMap[x] for x in labels[0]]
+            sideLabel = temUtil.cccSideMap[iGccc]
+            title = "%s for Tower %d side %s" % (regLabel, iTem, sideLabel)
+            sideTable = table.twoDTable(array, title, axisLabels, labels)
+            regTables.append(sideTable)
+            pass
+        pass
+    nTable = html.nWay(regTables, jobOptions.calTabWidth)
+    return header, nTable
+
