@@ -38,7 +38,6 @@ my $updateElogDbXml =
         </batch-job-configuration>
 
         <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
-        <file file-type=\"xml\"  name=\"schema\"   type=\"text\"    >$ENV{'onlineDataDir'}</file>
         <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDir'}</file>
         <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDir'}</file>
         <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDir'}</file>
@@ -51,7 +50,6 @@ my $updateElogDbXml =
                         <input-file name=\"ldf\"/>
         </processing-step>
         <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
         </processing-step>
 </pipeline>
