@@ -27,7 +27,7 @@ my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
 
-my $exe = 'genReconTestReport.pl';
+my $exe = './genReconTestReport.pl';
 
 my $command = "$exe '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";

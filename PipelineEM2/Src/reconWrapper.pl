@@ -27,7 +27,7 @@ my $jobOptionFile = $outFiles->{'jobOptions'};
 my $reconRootFile = $outFiles->{'recon'};
 my $meritRootFile = $outFiles->{'merit'};
 
-my $exe = 'recon.pl';
+my $exe = './recon.pl';
 
 my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
 print "Running command: [$command]\n";
