@@ -22,14 +22,16 @@ def globalStuff(doc):
     output = []
 
     sectionTitle = 'LAT globals'
-    output.append(html.Heading(sectionTitle, 2))
+    output.append(html.Heading(sectionTitle, 1))
 
     for name in jobOptions.globoLogicals:
         tag, label = jobOptions.tables[name]
         line = globoLogical(doc, tag, label)
         output.append(line)
+        #output.append(html.Element("BR"))
         output.append('<br/>')
     
+    output.append(html.Element("HR"))    
     output.append(html.Element("HR"))    
     return output
 
@@ -48,8 +50,8 @@ def tkrSplits(doc):
 
     output = []
 
-    sectionTitle = "TKR GTRC Split Points"
-    output.append(html.Heading(sectionTitle, 2))
+    sectionTitle = "TKR GTRC Layer Readout Split Points"
+    output.append(html.Heading(sectionTitle, 1))
     tabTitle = sectionTitle + ' (Left:Dead:Right)'
     
     # read in nRead field from GTRC csr registers
@@ -121,29 +123,41 @@ def tkrSplits(doc):
         pass
 
     output.append(html.Element("HR"))    
+    output.append(html.Element("HR"))    
     return output
+
+
 #
 def calFeReg(doc):
     """get stuff from CAL front ends
     and make tables of it
     """
 
-    calTables = []
+    output = []
+
+    sectionTitle = "CAL front end (GCFE) settings"
+    output.append(html.Heading(sectionTitle, 1))
+    
     for registerTag in jobOptions.calTags:
         nTable = oneCalReg(doc, registerTag)
-        calTables.extend(nTable)
-        calTables.append(html.Element("HR"))
+        output.extend(nTable)
+        output.append(html.Element("HR"))
         pass
-    return calTables
+    output.append(html.Element("HR"))    
+    return output
 
 #
 def oneCalReg(doc, tag):
     """Make a table for one GCFE register"""
+
+    output = []
     
     axisLabels = jobOptions.calAxisLabels
     regSpec, regLabel = jobOptions.tables[tag]
+    
     sectionTitle = "%s (%s)" % (regLabel, regSpec)
-    header = html.Heading(sectionTitle, 2)
+    output.append(html.Heading(sectionTitle, 2))
+
     xTable = tableFromXml.xTableGen(doc, regSpec)
     regTables = []
     tems = xTable.data.items()
@@ -162,5 +176,55 @@ def oneCalReg(doc, tag):
             pass
         pass
     nTable = html.nWay(regTables, jobOptions.calTabWidth)
-    return header, nTable
+    output.append(nTable)
 
+    return output
+
+
+#
+def delays(doc):
+    output = []
+
+    sectionTitle = "Synchronization timings"
+    output.append(html.Heading(sectionTitle, 1))
+
+    for name in jobOptions.cableDelays:
+        dTable = oneCableDelay(doc, name)
+        output.extend(dTable)
+        output.append(html.Element("HR"))
+        pass
+
+    output.append(html.Element("HR"))    
+    return output
+
+#
+def oneCableDelay(doc, name):
+    output = []
+    
+    axisLabels = jobOptions.cableLabels
+    regSpec, regLabel = jobOptions.tables[name]
+
+    sectionTitle = '%s (%s)' % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+    tableTitle = regLabel + ' (ticks (ns))'
+
+    ticks = tableFromXml.xTableGen(doc, regSpec)
+    times = ticks.data.map(displayTime)
+    timeData, labels = times.table()
+    dTable = table.twoDTable(timeData, tableTitle, axisLabels, labels)
+    output.append(dTable)
+
+    return output
+
+#
+def ticksToTime(ticks):
+    seconds = ticks * jobOptions.tick
+    scaled = seconds * jobOptions.timeScale
+    scaled = int(scaled + 0.5)
+    time = '%s%s' % (scaled, jobOptions.timeUnits)
+    return time
+
+#
+def displayTime(ticks):
+    time = '%s (%s)' % (ticks, ticksToTime(ticks))
+    return time

@@ -74,7 +74,7 @@ output.addChild(html.Element("HR"))
 output.addChild("\n")
 
 
-# parse the config data
+# read in the config data
 try:
     doc = md.parse(snapFile)
 except:
@@ -82,12 +82,10 @@ except:
                     snapFile)
     finish()
 
+# make tables
 output.addChildren(configParser.globalStuff(doc))
-
-tkrSplits = configParser.tkrSplits(doc)
-output.addChildren(tkrSplits)
-
-calTables = configParser.calFeReg(doc)
-output.addChildren(calTables)
+output.addChildren(configParser.tkrSplits(doc))
+output.addChildren(configParser.calFeReg(doc))
+output.addChildren(configParser.delays(doc))
 
 finish()
