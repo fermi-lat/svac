@@ -55,10 +55,10 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v1r0
 setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
-setenv Em2Version v1r3
-setenv Em2Dir ${sasCmt}/Em2/${Em2Version}
+setenv Em2Version v2r8
+setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
-setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/Em2.exe
+setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization/${digitizationTaskVersion}
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -84,7 +84,7 @@ setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 setenv reconTaskVersion v1r0
 setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
-setenv reconApp ${Em2Dir}/rh9_gcc32/Em2.exe
+setenv reconApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon/${reconTaskVersion}
 setenv reconScript ${reconTaskDir}/recon.pl
 #-------------------------------- recon ---------------------------------------
