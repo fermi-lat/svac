@@ -147,7 +147,8 @@ for report in reports:
         if (name == startTimeTag) or (name == endTimeTag):
             data[name] = parseTime(node.childNodes[0].data)
         elif (
-              name == releaseTag
+              name == releaseTag or
+              name == additionalInputFilesTag
               ):
             #replace ' with '' in order to input data into oracle
             data[name] = node.childNodes[0].data
