@@ -1,3 +1,15 @@
+/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/gamma_100_3.5_0_-300_50_900_10000_0_mc.root
+/nfs/farm/g/glast/u01/svac_workshop/em_v1r0401p9/mc/TwoTowers/gamma/digi/gamma_100_3.5_0_-300_50_900_10000_0_digi.root
+/nfs/farm/g/glast/u01/svac_workshop/em_v1r0401p9/mc/TwoTowers/gamma/recon/gamma_100_3.5_0_-300_50_900_10000_0_recon.root
+/nfs/farm/g/glast/u01/svac_workshop/em_v1r0401p9/mc/TwoTowers/gamma/gamma_100_3.5_0_-300_50_900_10000_0_svac.root
+/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/gamma_100_3.5_0_-300_50_900_10000_0_hist.root
+
+/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p13/digi/ebf040219203443_mc.root
+/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p13/digi/ebf040219203443_digi.root
+/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p13/recon/ebf040219203443_recon.root
+/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v2r0402p4/diagnostic/ebf040219203443_svac.root
+/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v2r0402p4/diagnostic/ebf040219203443_hist.root
+
 mc.root
 digi.root
 recon.root

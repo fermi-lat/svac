@@ -23,7 +23,8 @@ int main(int argc, char** argv)
     outputFile = argv[2];
   }
   else {
-    digiFile = "/nfs/farm/g/glast/u01/mc/em_v2r0402p4/flight/surface_muons_100000_0_digi.root";
+    //    digiFile = "/nfs/farm/g/glast/u01/mc/em_v2r0402p4/flight/surface_muons_100000_0_digi.root";
+    digiFile = "../rh9_gcc32/digi.root";
     outputFile = "temp.ntp";
   }
 
