@@ -7,9 +7,10 @@ my $ldfFile = $ENV{'ldfFile'};
 my $shellFile = $ENV{'shellFile'};
 my $jobOptionFile = $ENV{'jobOptionFile'};
 my $digiRootFile = $ENV{'digiRootFile'};
-my $cmtPath = $ENV{'cmtPath'};
-my $cmtDir = $ENV{'cmtDir'};
-my $exe = $ENV{'exe'};
+
+my $cmtPath = $ENV{'CMTPATH'};
+my $cmtDir = $ENV{'ldfToDigiCmt'};
+my $exe = $ENV{'ldfToDigiApp'};
 
 print <<EOT;
 $0 running with options:
@@ -21,9 +22,6 @@ $0 running with options:
   cmtDir:        $cmtDir
   exe :          $exe
 EOT
-
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
