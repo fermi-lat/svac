@@ -12,7 +12,7 @@ import re
 import string
 import sys
 
-import numarray as num
+import Numeric as num
     
 #
 def readTable(file, transpose=1):
@@ -29,7 +29,10 @@ def readTable(file, transpose=1):
     cause the shape of the return value to be (nlines, ncolumns), so it can be
     treated as an array of ntuple data points.
     
-    @return A numarray array containing the data.
+    @return A 2-d array containing the data.
+
+    @bug This is not safe.  A maliciously designed input file can execute
+    arbitrary code.
 
     """
     

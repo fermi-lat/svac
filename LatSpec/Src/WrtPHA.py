@@ -12,3 +12,5 @@ HREF="http://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/summary/ogip_92_007_su
 The OGIP Spectral File Format </A> for details) from LAT data.
 
 """
+
+import tableIo

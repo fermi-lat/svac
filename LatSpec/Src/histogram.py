@@ -9,7 +9,7 @@
 
 """
 
-import numarray as num
+import Numeric as num
 
 # 
 class Histogram:
@@ -104,7 +104,7 @@ class Histogram:
         # combine n-dim element mask into 1-dim point mask
         mask = num.alltrue(mask, 1)
         # and pull out the good points
-        good = num.compress(mask, values)
+        good = num.compress(mask, values, 0)
 
         # # find which bins to put values in
         indices = []
@@ -122,6 +122,17 @@ class Histogram:
         return self
     
     __iadd__ = add
+
+#     #
+#     def __getattr__(self, name):
+#         """@brief Magic.
+
+#         This does inscrutable fun stuff.
+
+#         """
+
+#         return
+    
 
 #
 def _test():
