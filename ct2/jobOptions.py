@@ -20,6 +20,8 @@ tables = {
                   'CAL Zero Supression'),
     'FOUR_RANGE': ('GGLT/four_range_readout',
                    'CAL Four Range Readout'),
+    'TEM_DIAG': ('GTEM/data_masks:12',
+                 'TEM Diagnostics'),
     
     'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-12', # used to calc GTRC splits
                'Number of GTFEs to read'), 
@@ -76,7 +78,7 @@ tables = {
 mappers = {'TKR_DAC': mappings.mapTkrDac}
 
 # logical values that apply to the whole LAT
-globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE']
+globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE', 'TEM_DIAG']
 
 # make TKR split tables this many towers wide
 tkrSplitWidth = 4
