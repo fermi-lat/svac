@@ -33,8 +33,10 @@ class xTableGen:
         self.data = ndDict.ndDict(dim=len(location), empty=jobOptions.absent)
         for coord, element in items:
             regVal = getRegister(element, register)
-            tabVal = subField(regVal)
-            self.data[coord] = tabVal
+            if regVal is not None:
+                tabVal = subField(regVal)
+                self.data[coord] = tabVal
+                pass
         return
 
     #
@@ -63,7 +65,10 @@ def addPathStep(items, tag):
 
 #
 def getRegister(element, tag):
-    child = element.getElementsByTagName(tag)[0]
+    children = element.getElementsByTagName(tag)
+    if 1 > len(children):
+        return None
+    child = children[0]
     value = child.childNodes[0].data
     value = int(value, 0)
     return value

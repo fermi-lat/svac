@@ -38,8 +38,12 @@ def globalStuff(doc):
 #
 def globoLogical(doc, tag, label):
     table = tableFromXml.xTableGen(doc, tag)
-    value = table.data[0]
-    onOff = ['OFF', 'ON'][value]
+    if 0 in table.data:
+        value = table.data[0]
+        onOff = ['OFF', 'ON'][value]
+    else:
+        onOff = 'Unknown'
+        pass
     output = '%s is %s.\n' % (label, onOff)
     return output
 
@@ -270,8 +274,12 @@ def gemStuff(doc):
     if data == jobOptions.absent:
         value = "Sorry, no GEM."
     else:
-        time = ticksToTime(data)
-        value = '%s ticks = %s' % (data, time)
+        if 0 in data:
+            data = data[0]
+            time = ticksToTime(data)
+            value = '%s ticks = %s' % (data, time)
+        else:
+            value = jobOptions.absent
         pass
     output.append(value)
 
