@@ -7,8 +7,8 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv CMTCONFIG rh9_gcc32opt
 setenv GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv sasVersion EngineeringModel-v3r0407p8
-setenv EngineeringModelVersion v3r0407p8
+setenv EngineeringModelVersion v3r0407p3
+setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /nfs/slac/g/svac/common
@@ -57,7 +57,7 @@ setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v1r0
 setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
-setenv Em2Version v2r8p0
+setenv Em2Version v2r8
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
