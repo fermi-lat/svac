@@ -14,6 +14,7 @@ use DPFProc;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -28,6 +29,6 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = './genDigiTestReport.pl';
 
-my $command = "$exe '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
 exit(system($command));
