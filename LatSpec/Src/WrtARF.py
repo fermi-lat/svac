@@ -51,7 +51,7 @@ def createArfHdu(fptr, prod, edges):
 
     status = 0
 
-    pod = num.asarray(prod)
+    prod = num.asarray(prod)
     prod = prod.astype(num.Float32)
 
     edges = num.asarray(edges)
