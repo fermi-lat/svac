@@ -137,7 +137,14 @@ struct NtupleDef {
   unsigned int m_gemOnePpsTime;
   unsigned int m_gemPrescaled;
   unsigned int m_gemDiscarded;
-  unsigned int m_gemSent;
+  unsigned int m_gemCondArrivalTimeWord;
+  unsigned int m_gemCondArrivalTimeExt;
+  unsigned int m_gemCondArrivalTimeCno;
+  unsigned int m_gemCondArrivalTimeCalLe;
+  unsigned int m_gemCondArrivalTimeCalHe;
+  unsigned int m_gemCondArrivalTimeTkr;
+  unsigned int m_gemCondArrivalTimeRoi;
+  unsigned int m_gemDeltaWindowOpenTime;  
 
   unsigned int m_gemAcdTilesXzp;
   unsigned int m_gemAcdTilesXzm;

@@ -320,14 +320,22 @@ void RootAnalyzer::analyzeDigiTree()
   // GEM information:
   m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
 
-  m_ntuple.m_gemLiveTime       = m_digiEvent->getGem().getLiveTime();
-  m_ntuple.m_gemTriggerTime    = m_digiEvent->getGem().getTriggerTime();
-  m_ntuple.m_gemDeltaEventTime = m_digiEvent->getGem().getDeltaEventTime();
-  m_ntuple.m_gemOnePpsSeconds  = m_digiEvent->getGem().getOnePpsTime().getSeconds();
-  m_ntuple.m_gemOnePpsTime     = m_digiEvent->getGem().getOnePpsTime().getTimebase();
-  m_ntuple.m_gemPrescaled      = m_digiEvent->getGem().getPrescaled();
-  m_ntuple.m_gemDiscarded      = m_digiEvent->getGem().getDiscarded();
-  m_ntuple.m_gemSent           = m_digiEvent->getGem().getSent();
+  m_ntuple.m_gemLiveTime             = m_digiEvent->getGem().getLiveTime();
+  m_ntuple.m_gemTriggerTime          = m_digiEvent->getGem().getTriggerTime();
+  m_ntuple.m_gemDeltaEventTime       = m_digiEvent->getGem().getDeltaEventTime();
+  m_ntuple.m_gemOnePpsSeconds        = m_digiEvent->getGem().getOnePpsTime().getSeconds();
+  m_ntuple.m_gemOnePpsTime           = m_digiEvent->getGem().getOnePpsTime().getTimebase();
+  m_ntuple.m_gemPrescaled            = m_digiEvent->getGem().getPrescaled();
+  m_ntuple.m_gemDiscarded            = m_digiEvent->getGem().getDiscarded();
+  m_ntuple.m_gemCondArrivalTimeWord  = m_digiEvent->getGem().getCondArrTime().condArr();
+  m_ntuple.m_gemCondArrivalTimeExt   = m_digiEvent->getGem().getCondArrTime().external();
+  m_ntuple.m_gemCondArrivalTimeCno   = m_digiEvent->getGem().getCondArrTime().cno();
+  m_ntuple.m_gemCondArrivalTimeCalLe = m_digiEvent->getGem().getCondArrTime().calLE();
+  m_ntuple.m_gemCondArrivalTimeCalHe = m_digiEvent->getGem().getCondArrTime().calHE();
+  m_ntuple.m_gemCondArrivalTimeTkr   = m_digiEvent->getGem().getCondArrTime().tkr();
+  m_ntuple.m_gemCondArrivalTimeRoi   = m_digiEvent->getGem().getCondArrTime().roi();
+  m_ntuple.m_gemDeltaWindowOpenTime  = m_digiEvent->getGem().getDeltaWindowOpenTime();
+
 
   m_ntuple.m_gemAcdTilesXzp = m_digiEvent->getGem().getTileList().getXzp();
   m_ntuple.m_gemAcdTilesXzm = m_digiEvent->getGem().getTileList().getXzm();
@@ -342,6 +350,8 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalLe = m_digiEvent->getGem().getCalLeVector();
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
+
+   
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -611,8 +621,7 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-    nEvent = 100;
-     //     nEvent = nRecon;
+  nEvent = nRecon;
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -1062,7 +1071,14 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/i");
   m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/i");
   m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/i");
-  m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/i");
+  m_tree->Branch("GemCondArrivalTimeWord",&(m_ntuple.m_gemCondArrivalTimeWord), "GemCondArrivalTimeWord/i");
+  m_tree->Branch("GemCondArrivalTimeExt",&(m_ntuple.m_gemCondArrivalTimeExt), "GemCondArrivalTimeExt/i");
+  m_tree->Branch("GemCondArrivalTimeCno",&(m_ntuple.m_gemCondArrivalTimeCno), "GemCondArrivalTimeCno/i");
+  m_tree->Branch("GemCondArrivalTimeCalLe",&(m_ntuple.m_gemCondArrivalTimeCalLe), "GemCondArrivalTimeCalLe/i");
+  m_tree->Branch("GemCondArrivalTimeCalHe",&(m_ntuple.m_gemCondArrivalTimeCalHe), "GemCondArrivalTimeCalHe/i");
+  m_tree->Branch("GemCondArrivalTimeTkr",&(m_ntuple.m_gemCondArrivalTimeTkr), "GemCondArrivalTimeTkr/i");
+  m_tree->Branch("GemCondArrivalTimeRoi",&(m_ntuple.m_gemCondArrivalTimeRoi), "GemCondArrivalTimeRoi/i");
+  m_tree->Branch("GemDeltaWindowOpenTime",&(m_ntuple.m_gemDeltaWindowOpenTime), "GemDeltaWindowOpenTime/i");
   m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/i");
   m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/i");
   m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/i");

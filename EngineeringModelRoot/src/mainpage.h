@@ -55,7 +55,17 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 <TR> <TD> GemOnePpsTime         </TD> <TD> GEM PPS Time                        </TD> </TR>
 <TR> <TD> GemPrescaled          </TD> <TD> GEM Prescaled counter               </TD> </TR>
 <TR> <TD> GemDiscarded          </TD> <TD> GEM Discarded counter               </TD> </TR>
-<TR> <TD> GemSent               </TD> <TD> GEM Sent counter                    </TD> </TR>
+<TR> <TD> GemSent               </TD> <TD> GEM Sent counter. NB! Removed for now! (from EM p13) </TD> </TR>
+
+<TR> <TD> GemCondArrivalTimeWord  </TD> <TD> GEM Condition arrival times, complete word, p128 in GEM document </TD> </TR>
+<TR> <TD> GemCondArrivalTimeExt   </TD> <TD> GEM Condition arrival times, external trigger                    </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCno   </TD> <TD> GEM Condition arrival times, CNO                                 </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCalLe </TD> <TD> GEM Condition arrival times, Cal LE                              </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCalHe </TD> <TD> GEM Condition arrival times, Cal HE                              </TD> </TR>
+<TR> <TD> GemCondArrivalTimeTkr   </TD> <TD> GEM Condition arrival times, TKR                                 </TD> </TR>
+<TR> <TD> GemCondArrivalTimeRoi   </TD> <TD> GEM Condition arrival times, ROI                                 </TD> </TR>
+<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in GEM document                 </TD> </TR>
+
 <TR> <TD> GemAcdTilesXzp        </TD> <TD> GEM ACD XZP tile list               </TD> </TR>
 <TR> <TD> GemAcdTilesYzp        </TD> <TD> GEM ACD XZM tile list               </TD> </TR>
 <TR> <TD> GemAcdTilesYzm        </TD> <TD> GEM ACD YZP tile list               </TD> </TR>
