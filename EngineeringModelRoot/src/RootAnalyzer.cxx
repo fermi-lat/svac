@@ -376,8 +376,13 @@ void RootAnalyzer::analyzeDigiTree()
 
 
   // mc events can not have diagnostic info, also check summary word
+  /*
   if( (! m_digiEvent->getFromMc()) && 
       m_digiEvent->getEventSummaryData().diagnostic() ) {
+    parseDiagnosticData();
+  }
+  */
+  if( m_digiEvent->getEventSummaryData().diagnostic() ) {
     parseDiagnosticData();
   }
 
@@ -606,8 +611,8 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //   nEvent = 100;
-  //   nEvent = nRecon;
+    nEvent = 100;
+     //     nEvent = nRecon;
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 

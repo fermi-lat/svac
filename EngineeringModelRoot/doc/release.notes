@@ -58,3 +58,7 @@ modify codes to get diagnostic data from more than one tower
 v1r3
 
 add examples of rootMacros to process SVAC ntuple file
+
+v1r3p1
+
+bug fix in ElecToGeo since there are 9 instead of 8 RCs
