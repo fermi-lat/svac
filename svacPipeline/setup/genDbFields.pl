@@ -255,7 +255,7 @@ my $updateElogDbXml =
         <executable name=\"LaunchConfRepWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
         </executable>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>$eLogDataDir</working-directory>
             <log-file-path>$eLogDataDir</log-file-path>
         </batch-job-configuration>
@@ -264,14 +264,14 @@ my $updateElogDbXml =
         <file name=\"schema\" type=\"xml\" file-type=\"text\" pipeline=\"$ENV{'onlineTask'}\"></file>
         <file name=\"script\" type=\"csh\" file-type=\"script\"></file>
         <file name=\"snapshot\" type=\"xml\" file-type=\"text\" pipeline=\"$ENV{'onlineTask'}\"></file>
-        <processing-step name=\"populateElogDb\" executable=\"populateElogDbWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"populateElogDb\" executable=\"populateElogDbWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"rcReport\"/>
                         <output-file name=\"script\"/>
         </processing-step>
-        <processing-step name=\"LaunchDigi\" executable=\"LaunchDigiWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"LaunchDigi\" executable=\"LaunchDigiWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"ldf\"/>
         </processing-step>
-        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRepWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRepWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
         </processing-step>
@@ -300,6 +300,10 @@ my $configReportXml =
         <executable name=\"configReportUrlWrapper\" version=\"v1r0\">
             /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
         </executable>
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
+            <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/configReport/v1r0p0</working-directory>
+            <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
+        </batch-job-configuration>
         <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/configReport/v1r0p0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
@@ -312,7 +316,7 @@ my $configReportXml =
                         <input-file name=\"snapshot\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"configReportUrl\" executable=\"configReportUrlWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"configReportUrl\" executable=\"configReportUrlWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>
@@ -347,11 +351,11 @@ my $digitizationXml =
         <executable name=\"digiRootFileWrapper\" version=\"v1r0\">
             /nfs/slac/g/svac/common/pipeline/EM2/svacPipeline/lib/urlWrapper.pl
         </executable>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/grRoot</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/grRoot</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
@@ -365,13 +369,13 @@ my $digitizationXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
         </processing-step>
-        <processing-step name=\"LaunchRecon\" executable=\"LaunchReconWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"LaunchRecon\" executable=\"LaunchReconWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
-        <processing-step name=\"LaunchReport\" executable=\"LaunchReportWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"LaunchReport\" executable=\"LaunchReportWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
-        <processing-step name=\"digiRootFile\" executable=\"digiRootFileWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"digiRootFile\" executable=\"digiRootFileWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
 </pipeline>
@@ -404,7 +408,7 @@ my $digiReportXml =
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)//digiReport/v1r0p0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)//digiReport/v1r0p0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
@@ -418,7 +422,7 @@ my $digiReportXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"digiReportUrl\" executable=\"digiReportUrlWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"digiReportUrl\" executable=\"digiReportUrlWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>
@@ -464,7 +468,7 @@ my $reconXml =
     <log-file-path>$reconDataDirFull</log-file-path>
   </batch-job-configuration>
 
-  <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+  <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
     <working-directory>$reconDataDirFull</working-directory>
     <log-file-path>$reconDataDirFull</log-file-path>
   </batch-job-configuration>
@@ -483,21 +487,21 @@ my $reconXml =
     <output-file name=\"script\"/>
   </processing-step>
 
-  <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunchWrapper\" batch-job-configuration=\"short-job\">
+  <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunchWrapper\" batch-job-configuration=\"express-job\">
     <input-file name=\"digi\"/>
     <input-file name=\"recon\"/>
   </processing-step>
 
-  <processing-step name=\"LaunchReport\" executable=\"genRTRLaunchWrapper\" batch-job-configuration=\"short-job\">
+  <processing-step name=\"LaunchReport\" executable=\"genRTRLaunchWrapper\" batch-job-configuration=\"express-job\">
     <input-file name=\"digi\"/>
     <input-file name=\"recon\"/>
   </processing-step>
 
-  <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"short-job\">
+  <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
     <input-file name=\"recon\"/>
   </processing-step>
 
-  <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"short-job\">
+  <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
     <input-file name=\"merit\"/>
   </processing-step>
 
@@ -530,7 +534,7 @@ my $reconReportXml =
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/reconReport/v1r0p0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
@@ -546,7 +550,7 @@ my $reconReportXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"reconReportUrl\" executable=\"reconReportUrlWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"reconReportUrl\" executable=\"reconReportUrlWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>
@@ -579,7 +583,7 @@ my $svacTupleXml =
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group\"$batchgroup\">
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group\"$batchgroup\">
             <working-directory>/nfs/farm/g/glast/u12/EM2/rootData/$(RUN_NAME)/calib-v1r0/svacRoot/emRootv0r0</working-directory>
             <log-file-path>/nfs/farm/g/glast/u12/EM2/log//$(RUN_NAME)/</log-file-path>
         </batch-job-configuration>
@@ -597,7 +601,7 @@ my $svacTupleXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
         </processing-step>
-        <processing-step name=\"svacRootFile\" executable=\"svacRootFileWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"svacRootFile\" executable=\"svacRootFileWrapper\" batch-job-configuration=\"express-job\">
                         <input-file name=\"svac\"/>
         </processing-step>
 </pipeline>
