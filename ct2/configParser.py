@@ -60,6 +60,7 @@ def globalDBStrings():
     args.extend(tags)
 
     values = eLogDB.query(*args)
+    values = map(nicenDBStrings, values)
 
     for tag, value in zip(tags, values):
         label = jobOptions.globalDBStringLabels[tag]
@@ -69,6 +70,13 @@ def globalDBStrings():
         pass
 
     return output
+
+def nicenDBStrings(oldString):
+    """@brief make ???-delimited strings from eLogDB look nicer."""
+    strings = oldString.split('???')
+    strings = [xx for xx in strings if xx]
+    newString = ', '.join(strings)
+    return newString
 
 #
 def globoLogical(doc, tag, label):
