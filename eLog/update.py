@@ -87,7 +87,23 @@ def parseSerialNosTag(value):
                 calSerNo = calSerNo + v['calinstrument'] + '???'
 
     return [nTowers, tkrSerNo, calSerNo]
-    
+
+# turn a string of a python list to a string of items in the list separated
+# by : in order to save storage in oracle
+def transformStrList(str):
+    l = eval(str)
+
+    oracleStr = ''
+
+    length = len(oracleStr)
+
+    for item in l[0:length-1]:
+        oracleStr = oracleStr + item + ':'
+
+    oracleStr += l[length-1]
+
+    return oracleStr
+
 
 # main codes start from here 
 #used to form ftp URL - default value
@@ -145,11 +161,14 @@ errorEventCountTag = 'ErrorEventCount'
 # note additionFields is not a tag in rcReport.out, it is a column in the
 # table to store any unfound tags
 additionFieldsTag = 'additionFields'
-onlineReportTag = 'TestReport'
+onlineReportTag = 'ScriptReport'
 csvTestPropertiesTag = 'csvTestProperties'
 serNoTag = 'SerialNos'
+suiteNameTag = 'suiteName'
+suiteRunListTag = 'suiteRunList'
+suiteTimeStampTag = 'suiteTimeStamp'
 
-tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag]
+tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag]
 
 # create Reader object
 reader = Sax2.Reader()
@@ -211,8 +230,11 @@ for report in reports:
             
             continue
 
-        if (name == startTimeTag) or (name == endTimeTag):
+        if ((name == startTimeTag) or (name == endTimeTag)
+            or (name == suiteTimeStampTag)):
             data[name] = parseTime(node.childNodes[0].data)
+        elif( name == suiteRunListTag ):
+            data[name] = transformStrList(node.childNodes[0].data)
         elif (
               name == releaseTag or
               name == additionalInputFilesTag
@@ -284,7 +306,10 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + '/' + rawDataDir + '/' + data[runIdTag] + '/' + data[onlineReportTag]
+    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + '/' + rawDataDir + '/' + data[runIdTag] + '/'
+    
+    if(data.has_key(onlineReportTag)):
+        onlineReportUrl += data[onlineReportTag]
     
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
@@ -294,22 +319,36 @@ for report in reports:
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
     sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\')'
-
+       
     try:
-        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
+       c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
     except:
-        (exc_type, exc_value) = sys.exc_info()[:2]
+       (exc_type, exc_value) = sys.exc_info()[:2]
 
-        print sqlStr
-        print exc_type
-        print exc_value
+       print sqlStr
+       print exc_type
+       print exc_value
 
-        db.rollback()
-        continue
-    
+       db.rollback()
+       continue
+
+    if(data[testNameTag] == 'suiteSummary'):
+        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = \'' + data[suiteRunListTag] + '\' where runid = ' + data[runIdTag]
+
+        try:
+            c.execute(sqlStr)
+        except:
+            (exc_type, exc_value) = sys.exc_info()[:2]
+
+            print sqlStr
+            print exc_type
+            print exc_value
+
+            db.rollback()
+            continue    
+
     # safe to commit
     db.commit()
     
-
 #close database
 db.close()
