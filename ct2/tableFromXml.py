@@ -11,7 +11,7 @@
 
 import ndDict
 import ndTable
-import util
+import bitField
 
 import jobOptions
 
@@ -78,9 +78,9 @@ def parseReg(regStr):
     register = RF[0]
     lRF = len(RF)
     if lRF == 1:
-        subField = util.subField('*')
+        subField = bitField.subField('*')
     elif lRF == 2:
-        subField = util.subField(RF[1])
+        subField = bitField.subField(RF[1])
     elif lRF > 2:
         raise ValueError, "Register specification %s contains more than 1 bitField." % tags[-1]
     return location, register, subField
