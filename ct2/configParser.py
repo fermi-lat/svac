@@ -112,6 +112,9 @@ def tkrSplits(doc):
             pass
         pass
 
+    # write split file
+    writeSplits(viewSplits)
+
     tems, views, layers = viewSplits.indices()
     layers.reverse()
 
@@ -145,6 +148,47 @@ def tkrSplits(doc):
     output.append(html.Element("HR"))    
     output.append(html.Element("HR"))    
     return output
+
+
+#
+def writeSplits(splits):
+    """Write out split file for use in (recon,digi) reports."""
+
+    import sys
+
+    splitFile = jobOptions.splitFile
+
+    try:
+        splitFP = open(splitFile, 'w')
+    except:
+        sys.stderr.write("can't open splitFile %s for writing!\n" % splitFile)
+        sys.exit(1)
+        pass
+
+    splitFP.write("Tower Layer View Left Right\n")
+
+    tems, views, layers = splits.indices()
+
+    # lines labeled #yuk below are to try to avoid empty cells
+    for item in tems:
+        views, layers = splits[item].indices() #yuk
+        for xy in views:
+            (layers,) = splits[item, xy].indices() #yuk
+            for ilayer in layers:
+                iview = temUtil.invTkrSideMap[xy]
+                split = splits[item, xy, ilayer]
+                if split == jobOptions.absent:
+                    split = '0:0:0'
+                left, dead, right = map(int, split.split(':'))
+                print item, ilayer, iview, left, right
+                splitFP.write('%2d %2d %s %2d %2d\n' % \
+                              (item, ilayer, iview, left, right))
+                pass
+            pass
+        pass
+
+    splitFP.close()
+    return
 
 
 #

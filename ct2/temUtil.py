@@ -51,4 +51,5 @@ crcLayerMap = range(4)
 tccLRMap = ((0,1), (3,2), (5,4), (6,7))
 
 tkrSideMap = (('Y', 0), ('X', 0), ('Y', 1), ('X', 1))
+invTkrSideMap = {'X': 0, 'Y': 1}
 tkrLayerMap = [[(x[0], 2*i+x[1]) for i in range(9)] for x in tkrSideMap]

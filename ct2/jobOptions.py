@@ -2,11 +2,11 @@
 import os
 
 # defaults for command-line args
-jobOptions.runNumber = '1'
-jobOptions.schemaFile = 'schema.xml'
-jobOptions.snapFile = 'snapshot.xml'
-jobOptions.tarBall = 'configReport.tgz'
-jobOptions.splitFile = 'splits.dat'
+runNumber = '1'
+schemaFile = 'schema.xml' # no longer used
+snapFile = 'snapshot.xml'
+splitFile = 'splits.dat'
+tarBall = 'configReport.tgz'
 
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']

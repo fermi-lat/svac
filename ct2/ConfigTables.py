@@ -1,7 +1,7 @@
 #!/nfs/slac/g/svac/local/bin/python -O
 
 """Usage:
-ConfigTables.py runNumber schema snapshot tarBall
+ConfigTables.py runNumber snapshot split tarBall
 
 """
 
@@ -17,8 +17,8 @@ import configParser
 import jobOptions
 
 
-if len(sys.argv) == 6:
-    runNumber, schemaFile, snapFile, splitFile, tarBall = sys.argv[1:]
+if len(sys.argv) == 5:
+    runNumber, snapFile, splitFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -27,10 +27,10 @@ else:
 # insert command line options in jobOptions
 # might make a dump of jobOptions for the records
 jobOptions.runNumber = runNumber
-jobOptions.schemaFile = schemaFile
+#jobOptions.schemaFile = schemaFile
 jobOptions.snapFile = snapFile
-jobOptions.tarBall = tarBall
 jobOptions.splitFile = splitFile
+jobOptions.tarBall = tarBall
 
 destDir = os.path.dirname(tarBall) or '.'
 tarFile = os.path.basename(tarBall)
@@ -74,8 +74,7 @@ output.addChild("\n")
 
 output.addChild(r"""Created by ConfigTables version %s from files:<br/>
 snapshot: %s<br/>
-schema: %s<br/>
-""" % (jobOptions.version, snapFile, schemaFile))
+""" % (jobOptions.version, snapFile))
 
 output.addChild("\n")
 output.addChild(html.Element("HR"))
