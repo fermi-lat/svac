@@ -128,4 +128,4 @@ else
     setenv PYTHONPATH ${SVACPYTHON}
 endif
 
-setenv PATH $PATH:${svacPlLib}
+setenv PATH ${PATH}:${svacPlLib}
