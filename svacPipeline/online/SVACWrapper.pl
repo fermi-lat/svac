@@ -38,6 +38,11 @@ my $schema = $inFiles->{'schema'};
 my $snapshot = $inFiles->{'snapshot'};
 my $ldfFile = $inFiles->{'ldf'};
 
+if ((! -e $rcReport) || (-z $rcReport)) {
+    print "rcReport file [$rcReport] does not exist or has zero size, not launching eLog task.\n";
+    exit(0);
+}
+
 my $command = "$exe '$taskName' '$runName' '$rcReport' '$schema' '$snapshot' '$ldfFile'";
 
 print "command is [$command]\n";
