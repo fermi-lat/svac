@@ -195,6 +195,10 @@ def delays(doc):
         output.append(html.Element("HR"))
         pass
 
+    # GEM window width
+    output.extend(gemStuff(doc))
+    output.append(html.Element("HR"))    
+
     # per-TEM delays
     tTable = tackDelays(doc)
     output.extend(tTable)
@@ -222,6 +226,26 @@ def oneCableDelay(doc, name):
 
     return output
 
+#
+def gemStuff(doc):
+    output = []
+
+    regSpec, sectionTitle = jobOptions.tables['GEM_WIDTH']
+    output.append(html.Heading(sectionTitle, 2))
+
+    dTab = tableFromXml.xTableGen(doc, regSpec)
+    data = dTab.data[0]
+    if data == jobOptions.absent:
+        value = "Sorry, no GEM."
+    else:
+        time = ticksToTime(data)
+        value = '%s ticks = %s' % (data, time)
+        pass
+    output.append(value)
+
+    return output
+
+#
 def tackDelays(doc):
     output = []
 
