@@ -7,8 +7,8 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv CMTCONFIG rh9_gcc32opt
 setenv GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv sasVersion EngineeringModel-v3r0407p3
-setenv EngineeringModelVersion v3r0407p3
+setenv sasVersion EngineeringModel-v3r0407p8
+setenv EngineeringModelVersion v3r0407p8
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /nfs/slac/g/svac/common
@@ -70,7 +70,7 @@ setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v1r0
 setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
-setenv TestReportVersion v3r2p0
+setenv TestReportVersion v3r2p1
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
