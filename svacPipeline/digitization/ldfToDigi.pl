@@ -46,7 +46,7 @@ print SHELLFILE "popd \n";
 
 # convert ldf file to digi file
 print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "$exe \n";
+print SHELLFILE "$exe || exit 1\n";
 
 close(SHELLFILE);
 

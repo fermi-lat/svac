@@ -214,7 +214,7 @@ my $reconXml =
     $urlUpdater
   </executable>
 
-  <batch-job-configuration name=\"long-job\" queue=\"long\">
+  <batch-job-configuration name=\"xlong-job\" queue=\"xlong\">
     <working-directory>$reconDataDirFull</working-directory>
     <log-file-path>$reconDataDirFull</log-file-path>
   </batch-job-configuration>
@@ -230,7 +230,7 @@ my $reconXml =
   <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$reconDataDir</file>
   <file name=\"script\"     type=\"script\" file-type=\"csh\">$reconDataDir</file>
 
-  <processing-step name=\"recon\" executable=\"reconWrapper\" batch-job-configuration=\"long-job\">
+  <processing-step name=\"recon\" executable=\"reconWrapper\" batch-job-configuration=\"xlong-job\">
     <input-file name=\"digi\"/>
     <output-file name=\"jobOptions\"/>
     <output-file name=\"merit\"/>

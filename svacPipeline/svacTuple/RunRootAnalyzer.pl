@@ -23,9 +23,6 @@ my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'svacTupleCmt'};
 my $exe = $ENV{'svacTupleApp'};
 
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
-
 #create option file for Main.exe
 open(OPTIONFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTIONFILE $mcRootFile."\n";
@@ -38,11 +35,10 @@ close(OPTIONFILE);
 #create shell file to execute Main.exe
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile for input, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
-print SHELLFILE qq{source $glastScript \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
-print SHELLFILE qq{$exe $optionFile \n};
+print SHELLFILE qq{$exe $optionFile || exit 1\n};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
 

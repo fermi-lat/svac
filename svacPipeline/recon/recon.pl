@@ -21,20 +21,16 @@ my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'reconCmt'};
 my $exe = $ENV{'reconApp'};
 
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
-
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
-print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
 print SHELLFILE "cmt show uses \n";
 print SHELLFILE "popd \n";
 print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "$exe \n";
+print SHELLFILE "$exe || exit 1\n";
 close(SHELLFILE);
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
@@ -71,26 +67,26 @@ print JOBOPTIONFILE qq(ApplicationMgr.EvtMax = 100000000; \n);
 
 print JOBOPTIONFILE qq(MessageSvc.OutputLevel      =3; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"}; \n);
-print JOBOPTIONFILE qq(TkrFailureModeSvc.layerList = {"0_0_0", "0_0_1"}; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"TkrFailureModeSvc"}; \n);
+#print JOBOPTIONFILE qq(TkrFailureModeSvc.layerList = {"0_0_0", "0_0_1"}; \n);
 
 # these two lines are added so that number of events will be registered in the root file
 print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n);
 print JOBOPTIONFILE qq(ApplicationMgr.Runable= "RootIoSvc"; \n);
 
 # read in CAL calibraton constants
-print JOBOPTIONFILE qq(CalXtalRecAlg.startTime = "2003-9-5 11:00"; \n);
-print JOBOPTIONFILE qq(CalXtalRecAlg.calibFlavor="chen"; \n);
+#print JOBOPTIONFILE qq(CalXtalRecAlg.startTime = "2003-9-5 11:00"; \n);
+#print JOBOPTIONFILE qq(CalXtalRecAlg.calibFlavor="chen"; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibDataSvc"}; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibDataSvc"}; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibMySQLCnvSvc", "CalibXmlCnvSvc" }; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibMySQLCnvSvc", "CalibXmlCnvSvc" }; \n);
 
-print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibMySQLCnvSvc"}; \n);
-print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibXmlCnvSvc"}; \n);
+#print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibMySQLCnvSvc"}; \n);
+#print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibXmlCnvSvc"}; \n);
 
-print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "EM"; \n);
-print JOBOPTIONFILE qq(CalibDataSvc.CalibFlavorList = {"ideal", "chen"}; \n);
+#print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "EM"; \n);
+#print JOBOPTIONFILE qq(CalibDataSvc.CalibFlavorList = {"ideal", "chen"}; \n);
 
 close(JOBOPTIONFILE);
 system("chmod +rwx $shellFile");
