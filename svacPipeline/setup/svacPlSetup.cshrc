@@ -7,7 +7,7 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv EngineeringModelVersion v4r060302p6
+setenv EngineeringModelVersion v4r060302p8
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -15,7 +15,7 @@ setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt ${svacRoot}/builds
 # svacPlRoot is set in the pipeline
 #setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
-setenv svacPlLibVersion v3r1p0
+setenv svacPlLibVersion v3r1p1
 setenv svacPlLib ${svacPlRoot}/lib/${svacPlLibVersion}
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
