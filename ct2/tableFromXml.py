@@ -10,6 +10,7 @@
 """
 
 import ndDict
+import ndTable
 import util
 
 #
@@ -33,6 +34,12 @@ class xTableGen:
             tabVal = subField(regVal)
             self.data[coord] = tabVal
         return
+
+    #
+    def table(self):
+        array, labels = self.data.table()
+        table = ndTable.ndTable(array, labels, 'foo')
+        return table
     
     pass
 

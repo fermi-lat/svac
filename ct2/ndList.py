@@ -55,6 +55,56 @@ class ndList(list):
 
         return
 
+    #
+    def __getitem__(self, key):
+        if isinstance(key, tuple):
+            keyLen = len(key)
+            if keyLen > len(self.shape):
+                raise KeyError, "Too many indices."
+            elif keyLen == 1:
+                return self._getSimple(key[0])
+            elif keyLen == 0:
+                return self
+            else:
+                # delegate
+                return self._getSimple(key[0])[key[1:]]
+        else:
+            return self._getSimple(key)
+        return
+
+    #
+    def _getSimple(self, key):
+        value = self.super.__getitem__(self, key)
+        return value
+
+    #
+    def __setitem__(self, key, value):
+        if isinstance(key, tuple):
+            keyLen = len(key)
+            if keyLen > len(self.shape):
+                raise KeyError, "Too many indices."
+            elif keyLen == 1:
+                self._setSimple(key[0], value)
+                pass
+            else:
+                myKey = key[0]
+                next = self.super.__getitem__(self, myKey)
+                next[key[1:]] = value
+                pass
+            pass
+        else:
+            self._setSimple(key, value)
+            pass
+        return
+
+    #
+    def _setSimple(self, key, value):
+        if len(self.shape) != 1 and \
+           (not isinstance(value, self.__class__) or \
+            len(value.shape) != len(self.shape)-1):
+            raise ValueError, "Can't assign to slices."
+        self.super.__setitem__(self, key, value)
+        return
 
     pass
 

@@ -4,6 +4,9 @@
 
 #
 
+import ndTable
+import tableFromXml
+
 import jobOptions
 
 #
@@ -42,6 +45,19 @@ def calFeReg(doc):
     return
 
 
+def calFeReg(doc):
+    # get stuff from CAL front ends
+    # and make tables of it
+
+    tables = []
+    for registerTag in jobOptions.calTags:
+        regSpec, title = jobOptions.tables[registerTag]
+        xTable = tableFromXml.xTableGen(doc, regSpec)
+        nTable = xTable.table()
+        nTable.title = title
+        tables.append(nTable)
+        pass
+    return tables
 
 
 

@@ -17,7 +17,7 @@ import configParser
 import jobOptions
 
 
-if len(sys.argv) == 5:
+if len(sys.argv) == 4:
     runNumber, snapFile, tarBall = sys.argv[1:]
 else:
     print __doc__
@@ -55,7 +55,7 @@ def finish():
     os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
               (destDir, tarFile, tarFile))
 
-    sys.exit(0)
+    # sys.exit(0)
     return
 
 output = html.Page("Configuration for run %s" % runNumber)
@@ -64,10 +64,9 @@ output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
-output.addChild(r"""Created by ConfigTables version %s from files:<br/>
+output.addChild(r"""Created by ConfigTables version %s from file:<br/>
 snapshot: %s<br/>
-schema: %s<br/>
-""" % (jobOptions.version, snapFile, schemaFile))
+""" % (jobOptions.version, snapFile))
 
 
 # parse the config data
@@ -79,7 +78,7 @@ except:
     finish()
 
 
-configParser.calFeReg(doc)
-configParser.tkrSplits(doc)
+calTables = configParser.calFeReg(doc)
+#configParser.tkrSplits(doc)
 
 finish()

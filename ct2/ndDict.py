@@ -4,6 +4,7 @@
 
 #
 
+import ndList
 
 """@brief Multdimensional dictionaries.
 
@@ -84,6 +85,7 @@ class ndDict(dict):
             pass
         else:
             self._setSimple(key, value)
+            pass
         return
     
     #
@@ -140,6 +142,26 @@ class ndDict(dict):
 
 
     #
-    def array(self):
-        return
+    def table(self):
+        array = ndList.ndList(shape=self.shape(), empty=self.empty)
+        labels = self.indices()
+        myIndices = combine(labels)
+        otherIndices = combine([range(len(x)) for x in labels])
+        for oI, myI in zip(otherIndices, myIndices):
+            array[oI] = self[myI]
+            pass
+        return array, labels
     
+    pass
+
+
+#
+def combine(seq):
+    mine = seq[0]
+    if len(seq) == 1:
+        stuff = [(x,) for x in mine]
+    else:
+        next = combine(seq[1:])
+        stuff = [(x,) + extra for x in mine for extra in next]
+        pass
+    return stuff
