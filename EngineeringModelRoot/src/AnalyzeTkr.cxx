@@ -12,7 +12,7 @@
 #include "strings.h"
 #include "digiRootData/DigiEvent.h"
 #include "GeoConstants.h"
-#include "ElecToGeo.h"
+#include "GeoToElec.h"
 #include "Geo.h"
 
 using std::string;
@@ -33,11 +33,9 @@ int main(int argc, char** argv)
   }
 
   TFile f(outputFile.c_str(), "RECREATE");
-  TH1F h1("h1", "h1", 72, -0.5, 71.5);
-  TNtuple n1("n1", "n1", "nDigis:nRequests");
-
-  //  int nEvt[72];
-  //  bzero((void*) nEvt, 72*sizeof(int));
+  TH1F h1("h1", "CC occupancy", 8, -0.5, 7.5);
+  TH1F h2("h2", "RC occupancy", 9, -0.5, 8.5);
+  TH2F h3("h3", "CC and RC occupancy", 8, -0.5, 7.5, 9, -0.5, 8.5);
 
   TFile m_digiFile(digiFile.c_str(), "READ");
   if(m_digiFile.IsZombie()) {
@@ -45,82 +43,63 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  TTree* m_digiTree = (TTree*) m_digiFile.Get("Digi");
-  DigiEvent* m_digiEvent = 0;
-  TBranch* m_digiBranch = m_digiTree->GetBranch("DigiEvent");
-  m_digiBranch->SetAddress(&m_digiEvent);
+  TTree* digiTree = (TTree*) m_digiFile.Get("Digi");
+  DigiEvent* digiEvent = 0;
+  TBranch* m_digiBranch = digiTree->GetBranch("DigiEvent");
+  m_digiBranch->SetAddress(&digiEvent);
   
-  int nEvent = (int) m_digiTree->GetEntries();
+  int nEvent = (int) digiTree->GetEntries();
 
   //  nEvent = 100;
 
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) { 
 
-    if(m_digiEvent) m_digiEvent->Clear();
+    if(digiEvent) digiEvent->Clear();
 
-    m_digiTree->GetEvent(iEvent);
+    digiTree->GetEvent(iEvent);
 
-    // TKR trigger primitive
-    unsigned int tpTkr[g_nTower][g_nGTCC];
-    static unsigned int tpTkrSize = g_nTower*g_nGTCC*sizeof(unsigned int);
-    bzero((void*) tpTkr, tpTkrSize);
+    int id = digiEvent->getEventId();
 
-  // decoded trigger primitive for the tracker
-  // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request
-  // e.g.: m_tkrReq[0][3][1][1]=1 means tower 0, upper half of layer Y3 sends the trigger request
-  // layer 0 is at the bottom
-    unsigned int tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
-    static unsigned int tkrReqSize = g_nTower*g_nTkrLayer*g_nView*2*sizeof(unsigned);
-    bzero((void*) tkrReq, tkrReqSize);
 
-    if(m_digiEvent->getTkrDiagnosticCol()) {
-      int nTkrDiag = m_digiEvent->getTkrDiagnosticCol()->GetLast()+1;
-
-      for(int i = 0; i != nTkrDiag; ++i) {
-
-	const TkrDiagnosticData* pDiag = m_digiEvent->getTkrDiagnostic(i);
-	tpTkr[pDiag->tower()][pDiag->gtcc()] = pDiag->getDataWord();
-
-      }
-
-      ElecToGeo::getInstance()->decodeTkrTp(tpTkr, tkrReq);
-    }
-
-    int nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
-
-    if(nTkrDigis >= 6) continue;
-
-    int hitPos[g_nTkrLayer][g_nView];
-    bzero((void*) hitPos, g_nTkrLayer*g_nView*sizeof(int));
+    int nTkrDigis = digiEvent->getTkrDigiCol()->GetLast()+1;
 
     for(int i = 0; i != nTkrDigis; ++i) {
-      const TkrDigi* tkrDigi = m_digiEvent->getTkrDigi(i);
-
+      const TkrDigi* tkrDigi = digiEvent->getTkrDigi(i);
+    
       assert(tkrDigi != 0);
 
-      int iTower = tkrDigi->getTower().id();
-      int iLayer = tkrDigi->getBilayer();
-      GlastAxis::axis view = tkrDigi->getView();
-      int iView = (view == GlastAxis::X) ? 0 : 1;
-      hitPos[iLayer][iView] = 1;      
-    }
+      int tower = tkrDigi->getTower().id();
+      int layer = tkrDigi->getBilayer();
+      GlastAxis::axis iView = tkrDigi->getView();
+      int view = (iView == GlastAxis::X) ? 0 : 1;
 
-    int nTkrReq = 0;
-    for(int biLayer = 0; biLayer != g_nTkrLayer; ++biLayer) {
-      for(int view = 0; view != g_nView; ++view) {
-	if( tkrReq[0][biLayer][view][0]==1 && hitPos[biLayer][view] == 0) {
-	  int plane = Geo::instance()->getPlane(biLayer, view);
-	  h1.Fill(plane*2);
+      int nStrips = tkrDigi->getNumHits();
+
+      for(int i = 0; i != nStrips; ++i) {
+
+	int stripId = tkrDigi->getStrip(i);
+
+	int last0Strip = tkrDigi->getLastController0Strip();
+
+	int end;
+
+	if(last0Strip < 0) {
+	  end = 1;
 	}
-	else if(tkrReq[0][biLayer][view][1]==1 && hitPos[biLayer][view] == 0) {
-	  int plane = Geo::instance()->getPlane(biLayer, view);
-	  h1.Fill(plane*2+1);
+	else if(stripId <= last0Strip) {
+	  end = 0;
 	}
-	if(tkrReq[0][biLayer][view][0] || tkrReq[0][biLayer][view][1]) ++nTkrReq;
+	else {
+	  end = 1;
+	}
+
+	GeoToElec::gtcc_gtrc temp = GeoToElec::getInstance()->getGtccGtrc(layer, view, end);
+
+	h1.Fill(temp.m_gtcc);
+	h2.Fill(temp.m_gtrc);
+	h3.Fill(temp.m_gtcc, temp.m_gtrc);
       }
     }
-
-    n1.Fill(nTkrDigis, nTkrReq);
   }
 
   f.cd();

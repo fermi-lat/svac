@@ -10,40 +10,33 @@ void anaSvacNtuple(const char* ra, TNtuple* tuple, TH1F** h) {
   // check the description of the svac ntuple on the web to determine size and
   // dimension of the array
   int nStrips[16][18][2];
-  int nTkrNumDigis;
-  float dir[3];
+  int nClusters[16][18][2];
 
   // load an branch. The branch name is the same as the variable name in the
   // svac ntuple
   TBranch* brTkrNumStrips = t1->GetBranch("TkrNumStrips");
   brTkrNumStrips->SetAddress(&nStrips);
-  TBranch* brTkrNumDigis = t1->GetBranch("TkrNumDigis");
-  brTkrNumDigis->SetAddress(&nTkrNumDigis);
-  TBranch* brVtxXDir = t1->GetBranch("VtxXDir");
-  brVtxXDir->SetAddress(&dir[0]);
-  TBranch* brVtxYDir = t1->GetBranch("VtxYDir");
-  brVtxYDir->SetAddress(&dir[1]);
-  TBranch* brVtxZDir = t1->GetBranch("VtxZDir");
-  brVtxZDir->SetAddress(&dir[2]);
-  int nEvt = (int) t1->GetEntries();
+  TBranch* brTkrNumClusters = t1->GetBranch("TkrNumClusters");
+  brTkrNumClusters->SetAddress(&nClusters);
 
+  int nEvt = (int) t1->GetEntries();
   cout << "nEvent = " << nEvt << endl;
 
   for(int i = 0; i != nEvt; ++i) {
     
     t1->GetEntry(i);
 
-    tuple->Fill(nTkrNumDigis, dir[0], dir[1], dir[2]);
-  
-    if(nTkrNumDigis >= 6) continue;
+    int totalHits = 0;
+    int totalClusters = 0;
 
-    for(int biLayer = 0; biLayer != 18; ++biLayer) {
+    for(int layer = 0; layer != 18; ++layer) {
       for(int view = 0; view != 2; ++view) {
-	if(nStrips[0][biLayer][view] > 0) {
-	  h[0]->Fill(getPlane(biLayer, view));
-	}
+	totalHits += nStrips[0][layer][view];
+	totalClusters += nClusters[0][layer][view];
       }
-    } 
+    }
+
+    tuple->Fill(totalHits, totalClusters);
 
   }
 

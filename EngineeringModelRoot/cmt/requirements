@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v1r3p7
+version v1r3p8
 
 use GlastPolicy v*
 use mcRootData v*
@@ -32,4 +32,6 @@ application AnalyzeAcd AnalyzeAcd.cxx
 
 application AnalyzeCal AnalyzeCal.cxx
 
-application AnalyzeTkr AnalyzeTkr.cxx ElecToGeo.cxx Geo.cxx
+application AnalyzeTkr AnalyzeTkr.cxx GeoToElec.cxx 
+
+application HitOccupancy HitOccupancy.cxx GeoToElec.cxx 
