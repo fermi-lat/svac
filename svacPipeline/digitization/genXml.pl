@@ -42,7 +42,7 @@ my $digitizationXml =
             <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -52,7 +52,7 @@ my $digitizationXml =
         <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digitizationDataDir'}</file>
         <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digitizationDataDir'}</file>
 
-        <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"medium-job\">
+        <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"long-job\">
                         <input-file name=\"ldf\"/>
                         <output-file name=\"digi\"/>
                         <output-file name=\"script\"/>
