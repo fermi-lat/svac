@@ -13,8 +13,8 @@ import histogram
 import tableIo
 import WrtPHA
 
-#infile = "../Data/vdg_em_4M_ene.dat"
-infile = "../Data/gamma_9_25_198M_ene.dat"
+infile = "../Data/vdg_em_4M_ene.dat"
+#infile = "../Data/gamma_9_25_198M_ene.dat"
 outfile = "VdG.pha"
 
 minE = 7.0

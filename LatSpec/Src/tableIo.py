@@ -19,13 +19,13 @@ import sys
 import Numeric as num
     
 #
-def readTable(file, transpose=1):
+def readTable(infile, transpose=1):
     """Read an ASCII ntuple.
     
     Reads a text file containing column of numbers.
     Any lines not starting with a number will be ignored.
 
-    @param file A filename or a file object open for reading.
+    @param infile A filename or a file object open for reading.
 
     @param [transpose=1] If this parameter is true (which is the default), the
     shape of the return value is (ncolumns, nlines), so it may be treated as
@@ -35,28 +35,33 @@ def readTable(file, transpose=1):
     
     @return A 2-d array containing the data.
 
-    @bug This is not safe.  A maliciously designed input file can execute
-    arbitrary code.
-
     """
-    
-    lines = open(file).read()
+
+    if not hasattr(infile, "read"):
+        infile = file(infile)
+    lines = infile.read()
 
     # only take lines that start with a number
-    filter = re.compile('^\s*[+\-]?\.?[0-9].*$', re.MULTILINE)
+    filter = re.compile(r"^\s*[+\-]?\.?[0-9].*$", re.MULTILINE)
     lines = filter.findall(lines)
 
-    lines = map(string.split, lines)
-    lines = map(lambda x: map(eval, x), lines)
-    lines = num.array(lines)
+    numfinder = re.compile(r"[-\+]?(?:\d+\.?\d*|\.\d+)(?:[eEdD][-\+]?\d+)?")
+
+    numbers = []
+    for line in lines:
+        # pull out all numeric strings
+        row = numfinder.findall(line)
+        row = map(eval, row)
+        numbers.append(row)
+    numbers = num.array(numbers)
     if transpose:
-        lines = num.transpose(lines)
+        numbers = num.transpose(numbers)
         pass
 
-    return lines
+    return numbers
 
 #
-def writeTable(data, file=sys.stdout, transpose=1):
+def writeTable(data, outfile=sys.stdout, transpose=1):
     """Write an array to an ASCII ntuple.
 
     Writes an array to a text file containing columns of numbers.
@@ -64,8 +69,8 @@ def writeTable(data, file=sys.stdout, transpose=1):
     @param data A 2-dimensional array or nested sequence conatining the data
     to be written.
 
-    @param [file=stdout] A filename, or a file object open for writing.  If it
-    is a name, the file will be created, overwriting any existing file with
+    @param [outfile=stdout] A filename, or a file object open for writing.  If
+    it is a name, the file will be created, overwriting any existing file with
     that name.  Using an already open file object allows one to write text
     headers for analysis packages such as hippodraw or QDP before writing the
     data.  If this parameter is not supplied, the data will be written to
@@ -84,13 +89,11 @@ def writeTable(data, file=sys.stdout, transpose=1):
     data = num.asarray(data)
     if transpose:
         data = num.transpose(data)
-    try:
-        junk = file.write
-    except AttributeError:
-        file = open(file, 'w')
+    if not hasattr(outfile, "write"):
+        outfile = open(outfile, 'w')
     format = '%r ' * data.shape[-1] + '\n'
     for line in data:
-        file.write(format % tuple(line))
+        outfile.write(format % tuple(line))
               
 
 if __name__ == "__main__":
