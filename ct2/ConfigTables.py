@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #!/nfs/slac/g/svac/local/bin/python -O
 
 """Usage:
@@ -60,7 +61,7 @@ def finish():
     outputFile.close()
 
     # tar up the output directory
-    os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
+    os.system("cd %s ; gtar -c -f - --exclude %s . | gzip -c > %s" %
               (destDir, tarFile, tarFile))
 
     sys.exit(0)

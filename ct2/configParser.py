@@ -180,7 +180,7 @@ def writeSplits(splits):
                 if split == jobOptions.absent:
                     split = '0:0:0'
                 left, dead, right = map(int, split.split(':'))
-                print item, ilayer, iview, left, right
+                #print item, ilayer, iview, left, right
                 splitFP.write('%2d %2d %s %2d %2d\n' % \
                               (item, ilayer, iview, left, right))
                 pass
