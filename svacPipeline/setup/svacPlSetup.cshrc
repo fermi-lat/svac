@@ -135,9 +135,11 @@ setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
 setenv urlUpdateScript  ${eLogDir}/updateUrl.py
 #-------------------------------- many ----------------------------------------
 
-setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}
+setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}
 if ( ${?PYTHONPATH} == '1' ) then
     setenv PYTHONPATH ${SVACPYTHON}:$PYTHONPATH}
 else
     setenv PYTHONPATH ${SVACPYTHON}
 endif
+
+setenv PATH ${PATH}:${svacPlLib}
