@@ -2,7 +2,7 @@
 
 use strict;
 
-my ($digiRootFile, $optionFile, $shellFile, $tarBall) = @argv;
+my ($digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 my $reconRootFile = 'noSuchFile';
 

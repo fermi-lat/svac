@@ -2,7 +2,7 @@
 
 use strict;
 
-my($digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @argv;
+my($digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 my $reportDir = `dirname $tarBall`;
 

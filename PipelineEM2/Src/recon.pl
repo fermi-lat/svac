@@ -2,7 +2,7 @@
 
 use strict;
 
-my ($digiRootFile, $shellFile, $jobOptionFile, $reconRootFile, $meritRootFile) = @argv; 
+my ($digiRootFile, $shellFile, $jobOptionFile, $reconRootFile, $meritRootFile) = @ARGV; 
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/sh \n \n";
