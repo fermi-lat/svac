@@ -79,6 +79,7 @@ snapshot: %s<br/>
 
 output.addChild("\n")
 output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
 output.addChild("\n")
 
 # read in the config data
@@ -105,9 +106,21 @@ theLat = lats[0]
 
 # make tables
 output.addChildren(configParser.globalStuff(doc))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 output.addChildren(configParser.tkrSplits(theLat))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 output.addChildren(configParser.tkrFeReg(theLat))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 output.addChildren(configParser.calFeReg(theLat))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 output.addChildren(configParser.delays(theLat))
+output.addChild("\n")
 
 finish()

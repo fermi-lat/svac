@@ -32,9 +32,8 @@ def globalStuff(doc):
         output.append(line)
         #output.append(html.Element("BR"))
         output.append('<br/>')
+        pass
     
-    output.append(html.Element("HR"))    
-    output.append(html.Element("HR"))    
     return output
 
 #
@@ -147,8 +146,6 @@ def tkrSplits(doc):
         output.append(splitTab)
         pass
 
-    output.append(html.Element("HR"))    
-    output.append(html.Element("HR"))    
     return output
 
 
@@ -202,6 +199,7 @@ def tkrFeReg(doc):
 
     sectionTitle = "TKR front end (GTFE) settings"
     output.append(html.Heading(sectionTitle, 1))
+    output.append(html.Element("HR"))    
 
     if not hasTkr(doc):
         output.append("There is no TKR here!")
@@ -212,7 +210,6 @@ def tkrFeReg(doc):
         output.extend(nTable)
         output.append(html.Element("HR"))
         pass
-    output.append(html.Element("HR"))    
     return output
 
 # embarrasingly similar to oneCalReg
@@ -323,6 +320,7 @@ def calFeReg(doc):
 
     sectionTitle = "CAL front end (GCFE) settings"
     output.append(html.Heading(sectionTitle, 1))
+    output.append(html.Element("HR"))    
 
     if not hasCal(doc):
         output.append("There is no CAL here!")
@@ -333,7 +331,6 @@ def calFeReg(doc):
         output.extend(nTable)
         output.append(html.Element("HR"))
         pass
-    output.append(html.Element("HR"))    
     return output
 
 #
@@ -377,13 +374,14 @@ def delays(doc):
 
     sectionTitle = "Synchronization timings"
     output.append(html.Heading(sectionTitle, 1))
+    output.append(html.Element("HR"))    
 
     # per-cable times
     for name in jobOptions.cableDelays:
         dTable = oneCableDelay(doc, name)
         output.extend(dTable)
-        output.append(html.Element("HR"))
         pass
+    output.append(html.Element("HR"))
 
     # GEM window width
     output.extend(gemStuff(doc))
@@ -394,7 +392,6 @@ def delays(doc):
     output.extend(tTable)
     output.append(html.Element("HR"))    
 
-    output.append(html.Element("HR"))    
     return output
 
 #
