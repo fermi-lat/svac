@@ -77,6 +77,6 @@ Put GEM code back in. Added getEbfPpcTimeSeconds. Updated the documentation.
 
 v1r3p7
 
-Changed DiagLength and ErrorLength to be arrays over towers. Added TemError array.
-The TEM error word is not decoded yet. Renamed EvtEnergySumOpt to Vtx!Energy, 
-Run to RunID and Event to EventID. Updated the documentation.
+Changed DiagLength and ErrorLength to be arrays over towers. 
+Renamed EvtEnergySumOpt to Vtx!Energy, Run to RunID and Event 
+to EventID. Updated the documentation.
