@@ -13,17 +13,22 @@ class subField:
 
     #
     def __init__(self, *args):
+        # UNPYTHONIC: high is the last bit that's in (not the first that's out)
         if len(args) == 1:
             low, high = parseField(args[0])
         elif len(args) == 2:
             low, high = args
         else:
             raise ValueError
+
+        # self.low is the first bit tht's in
         self.low = low
+        
+        # self.high is 2**(first bit that's out)
         if high is None:
             self.high = 0
         else:
-            self.high = 2 ** high
+            self.high = 2 ** (high + 1)
             pass
         return
 
@@ -46,11 +51,11 @@ def parseField(field):
         raise ValueError
     if nlim == 1:
         limit = limits[0]
-        if limit == '*':
+        if limit == '*' or limit == '':
             return 0, None
         else:
             limit = int(limit, 0)
-            return limit, limit+1
+            return limit, limit
         pass
     if limits[0] == '*':
         limits[0] = 0

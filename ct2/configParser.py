@@ -188,11 +188,17 @@ def delays(doc):
     sectionTitle = "Synchronization timings"
     output.append(html.Heading(sectionTitle, 1))
 
+    # per-cable times
     for name in jobOptions.cableDelays:
         dTable = oneCableDelay(doc, name)
         output.extend(dTable)
         output.append(html.Element("HR"))
         pass
+
+    # per-TEM delays
+    tTable = tackDelays(doc)
+    output.extend(tTable)
+    output.append(html.Element("HR"))    
 
     output.append(html.Element("HR"))    
     return output
@@ -215,6 +221,38 @@ def oneCableDelay(doc, name):
     output.append(dTable)
 
     return output
+
+def tackDelays(doc):
+    output = []
+
+    sectionTitle = "Delays from trigger TACK to shaper hold"
+    output.append(html.Heading(sectionTitle, 2))
+
+    aTable = []
+
+    for name in jobOptions.tackDelays:
+        hTable = oneTack(doc, name)
+        aTable.append(hTable)
+        pass
+
+    aTable = html.nWay(aTable, 3)
+    output.append(aTable)
+    
+    return output
+
+#
+def oneTack(doc, name):
+    regSpec, junk = jobOptions.tables[name]
+    title, columns = jobOptions.tackDelayLabels[name]
+    
+    regTable = tableFromXml.xTableGen(doc, regSpec)
+    labels = regTable.data.indices()[0]
+    data = regTable.data.map(displayTime)
+    data, labels = data.table()
+    hTable = table.oneDTable(zip(labels[0], data), title, columns)
+
+    return hTable
+
 
 #
 def ticksToTime(ticks):

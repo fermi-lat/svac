@@ -83,9 +83,9 @@ except:
     finish()
 
 # make tables
-output.addChildren(configParser.globalStuff(doc))
-output.addChildren(configParser.tkrSplits(doc))
-output.addChildren(configParser.calFeReg(doc))
+#output.addChildren(configParser.globalStuff(doc))
+#output.addChildren(configParser.tkrSplits(doc))
+#output.addChildren(configParser.calFeReg(doc))
 output.addChildren(configParser.delays(doc))
 
 finish()

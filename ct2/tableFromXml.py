@@ -74,6 +74,13 @@ def parseReg(regStr):
     tags = regStr.split('/')
     tags = [tag for tag in tags if tag] # remove empty components
     location = tags[:-1]
-    register, field = tags[-1].split(':')
-    subField = util.subField(field)
+    RF = tags[-1].split(':')
+    register = RF[0]
+    lRF = len(RF)
+    if lRF == 1:
+        subField = util.subField('*')
+    elif lRF == 2:
+        subField = util.subField(RF[1])
+    elif lRF > 2:
+        raise ValueError, "Register specification %s contains more than 1 bitField." % tags[-1]
     return location, register, subField
