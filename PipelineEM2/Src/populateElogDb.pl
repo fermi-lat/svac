@@ -2,30 +2,9 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
-use DPFProc;
+my ($shellFile $rcReport) = @ARGV;
 
-#####################################################
-##
-##  BEGIN:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
-##
-#####################################################
-
-my $proc = new DPFProc(@ARGV);
-my $inFiles = $proc->{'inFiles'};
-my $outFiles = $proc->{'outFiles'};
-
-#####################################################
-##
-##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
-##
-#####################################################
-
-my $shellFile = $outFiles->{'script'}
-my $rcReport = $inFiles->{'rcReport'};
-
-# gotta compute this or get it from pieline DB
-my $eLogFeederDir = $??;
+my $eLogFeederDir = `dirname $shellFile`;
 
 #change to ftp protocol
 my $rootUrl = '/glast.u01/temp/rootData/';
