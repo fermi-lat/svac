@@ -4,9 +4,9 @@
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
-setenv sasLocation /nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel
-setenv sasVersion EngineeringModel-v3r0404p2
-setenv EngineeringModelVersion v3r0404p2
+setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32/EngineeringModel
+setenv sasVersion EngineeringModel-v3r0407p3
+setenv EngineeringModelVersion v3r0407p3
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /nfs/slac/g/svac/common
@@ -104,7 +104,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v1r0
 setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r1p0
+setenv RunRootAnalyzerVersion v1r3p0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32/RunRootAnalyzer.exe
