@@ -30,6 +30,8 @@ Change RootAnalyzer.cxx so that each variable is written out in a different
 branch in the tree. By this way, when a user plot a single variable in the
 ntuple, only that variable will be loaded into memory instead of all variables.
 
-HEAD
+v0r3
 
 add utility exe AnalyzeAcd to analyze acd digi root files
+fix bug in mergeNtuple.cxx so that it won't create two copies of output trees
+when merging lots of svac files.

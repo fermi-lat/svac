@@ -8,24 +8,29 @@
 #include "TH1.h"
 #include "TList.h"
 #include "TKey.h"
+#include "ToString.h"
+
+using std::string;
+using std::cout;
+using std::endl;
 
 // merge both svac and merit root files
 
 TROOT merge("merge", "merge root files");
 
-std::string mergedSvacFile = "merge_svac.root";
+string mergedSvacFile = "merge_svac.root";
 
-std::string mergedMeritFile = "merge_merit.root";
+string mergedMeritFile = "merge_merit.root";
 
-std::string jobDataFile = "../src/job.dat";
+string jobDataFile = "../src/job.dat";
 
-std::string svacDir = "/nfs/farm/g/glast/u01/mc/em_v1r0401p9/oneTower/";
-std::string meritDir = svacDir;
+string svacDir = "/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/TwoTowers/cr/batch/";
+string meritDir = svacDir;
 
 int main() 
 {
 
-  std::string fileName;
+  string fileName;
 
   ifstream inputFile(jobDataFile.c_str());
 
@@ -36,8 +41,8 @@ int main()
   TChain chainedTree2("MeritTuple");
 
   while(inputFile >> fileName) {
-    std::string svacFileName = svacDir + fileName + "_svac.root";
-    std::string meritFileName = meritDir + fileName + "_merit.root";
+    string svacFileName = svacDir + fileName + "_svac.root";
+    string meritFileName = meritDir + fileName + "_merit.root";
 
     // check whether file can be properly opened
     TFile svacF(svacFileName.c_str());
@@ -45,20 +50,20 @@ int main()
       svacF.Close();
     }
     else {
-      std::cout << "********" << svacFileName.c_str() << 
-	"can not be opened *****" << " skip this file" << std::endl;
+      cout << "********" << svacFileName.c_str() << 
+	"can not be opened *****" << " skip this file" << endl;
       continue;
     }
 
-    std::cout << "Opening file " << svacFileName << std::endl;
+    cout << "Opening file " << svacFileName << endl;
     chainedTree1.Add(svacFileName.c_str());
     
-    std::cout << "Opening file " << meritFileName << std::endl;
+    cout << "Opening file " << meritFileName << endl;
     chainedTree2.Add(meritFileName.c_str());
   }
 
   double nEvent = chainedTree1.GetEntries();
-  std::cout << "Total number of event = " << nEvent << std::endl;
+  cout << "Total number of event = " << nEvent << endl;
 
   chainedTree1.Merge(mergedSvacFile.c_str());
   chainedTree2.Merge(mergedMeritFile.c_str());
@@ -74,7 +79,12 @@ int main()
 
   assert(size <= 2);
 
-  if(size == 2) f.Delete("Output;1");
+  if(size == 2) {
+    TKey* k = (TKey*) l->At(1);
+    string name("Output;");
+    name += ToString(k->GetCycle());
+    f.Delete(name.c_str());
+  }
 
   f.Write(0, TObject::kOverwrite);
 
