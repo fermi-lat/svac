@@ -33,7 +33,10 @@ calAxisLabels = ('layer', 'crystal')
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']
 
-# put this many tables of CAL settings acros the page
+# put this many tables of CAL FE settings acros the page
 calTabWidth = 2 
+
+# make TKR split tables this many towers wide
+tkrSplitWidth = 4
 
 absent = 'Absent'

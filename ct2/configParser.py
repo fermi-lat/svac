@@ -4,6 +4,8 @@
 
 #
 
+import math
+
 import html
 import ndDict
 import htmlTable as table
@@ -62,15 +64,19 @@ def tkrSplits(doc):
 
     sectionTitle = "Tracker Split Points"
     output.append(html.Heading(sectionTitle, 2))
+    tabTitle = sectionTitle + ' (Left:Dead:Right)'
     
+    # read in nRead field from GTRC csr registers
     regSpec, regLabel = jobOptions.tables['TKR_NR']
     nRead = tableFromXml.xTableGen(doc, regSpec)
+    # read in GTFE mode registers
     regSpec, regLabel = jobOptions.tables['TKR_MODE']
     mode = tableFromXml.xTableGen(doc, regSpec)
 
     nReadData, (tems, cables, readers) = nRead.data.table()
     modeData, junk = mode.data.table()
 
+    # calculate spilt points
     sideSplits = ndDict.ndDict(dim=3, empty=jobOptions.absent)
     for temCell, iTem in enumerate(tems):
         temRead = nReadData[temCell]
@@ -86,6 +92,7 @@ def tkrSplits(doc):
             pass
         pass
 
+    # map from (side, GTRC) to (view. layer)
     viewSplits = ndDict.ndDict(dim=3, empty=jobOptions.absent)
     tems, sides, readers = sideSplits.indices()
     for iTem in tems:
@@ -97,28 +104,35 @@ def tkrSplits(doc):
             pass
         pass
 
-    tabData = []
     tems, views, layers = viewSplits.indices()
     layers.reverse()
-    for iLayer in layers:
-        row = [iLayer]
-        for iTem in tems:
+
+    width = jobOptions.tkrSplitWidth
+    nTab = int(math.ceil(float(len(tems)) / width))
+    temChunks = [tems[iChunk*width:(iChunk+1)*width] for iChunk in range(nTab)]
+
+    # construct table(s)
+    for chunk in temChunks:
+        tabData = []
+        for iLayer in layers:
+            row = [iLayer]
+            for iTem in chunk:
+                for iView in views:
+                    row.append(viewSplits[iTem, iView, iLayer])
+                    pass
+                pass
+            tabData.append(row)
+            pass
+        tabColumns = ['Layer']
+        for iTem in chunk:
             for iView in views:
-                row.append(viewSplits[iTem, iView, iLayer])
+                tabColumns.append('Tower %s %s' % (iTem, iView))
                 pass
             pass
-        tabData.append(row)
+        
+        splitTab = table.oneDTable(tabData, tabTitle, tabColumns)
+        output.append(splitTab)
         pass
-    tabColumns = ['Layer']
-    for iTem in tems:
-        for iView in views:
-            tabColumns.append('Tower %s %s' % (iTem, iView))
-            pass
-        pass
-
-    tabTitle = sectionTitle + ' (Left:Dead:Right)'
-    splitTab = table.oneDTable(tabData, tabTitle, tabColumns)
-    output.append(splitTab)
 
     output.append(html.Element("HR"))    
     return output
