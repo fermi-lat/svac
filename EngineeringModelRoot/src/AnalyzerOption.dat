@@ -1,3 +1,9 @@
+/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_mc.root
+/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_digi.root
+/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_recon.root
+/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_svac.root
+/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_hist.root
+
 /nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_mc.root
 /nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/040810213615_digi.root
 /nfs/farm/g/glast/u01/EM2/rootData/139000230/em_v3r0402p21/0408102136151_recon.root
@@ -11,9 +17,5 @@ recon.root
 svac.root
 hist.root
 
-/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_mc.root
-/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_digi.root
-/nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_recon.root
-svac.root
-hist.root
+
 

@@ -30,3 +30,5 @@ application mergeRoot mergeRoot.cxx
 application AnalyzeAcd AnalyzeAcd.cxx
 
 application AnalyzeCal AnalyzeCal.cxx
+
+application AnalyzeTkr AnalyzeTkr.cxx

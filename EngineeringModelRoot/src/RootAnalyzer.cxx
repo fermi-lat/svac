@@ -524,7 +524,7 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //    nEvent = 100;
+  //     nEvent = 100;
   //   nEvent = nRecon;
 
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) {
@@ -532,6 +532,9 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     //    m_timeFile << iEvent;
 
     m_ntuple.reset();  
+    if(m_mcEvent) m_mcEvent->Clear();
+    if(m_digiEvent) m_digiEvent->Clear();
+    if(m_reconEvent) m_reconEvent->Clear();
 
     if(m_mcFile) {
       m_mcBranch->GetEntry(iEvent);
@@ -966,9 +969,9 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
   m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/I");
-  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/I");
-  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/I");
-  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/I");
+  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
+  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
+  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
   m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/I");
   m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/I");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/I");

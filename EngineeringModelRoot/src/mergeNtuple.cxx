@@ -24,7 +24,7 @@ string mergedMeritFile = "merge_merit.root";
 
 string jobDataFile = "../src/job.dat";
 
-string svacDir = "/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/TwoTowers/cr/batch/";
+string svacDir = "/nfs/farm/g/glast/u01/mc/em_v3r0404p2/fullLat/";
 string meritDir = svacDir;
 
 int main() 

@@ -111,8 +111,8 @@ struct NtupleDef {
   int m_nCrystalHit[g_nTower];
 
   // time information. This may change depending on future data format
-  int m_ebfSecond, m_ebfNanoSecond;
-  int m_upperTime, m_lowerTime;
+  unsigned int m_ebfSecond, m_ebfNanoSecond;
+  unsigned int m_upperTime, m_lowerTime;
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118

@@ -22,6 +22,9 @@ class RootAnalyzer {
 		    const char* digiFileName,
 		    const char* reconFileName);
 
+  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
+	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, g_nCno=12};
+
  private:
 
   void analyzeMcTree();
@@ -86,9 +89,6 @@ class RootAnalyzer {
   TTree* m_digiTree;
   TBranch* m_digiBranch;
   DigiEvent* m_digiEvent;
-
-  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, g_nCno=12};
 
   TFile* m_histFile;
   TH1F* m_stripHits[g_nTower][g_nTkrLayer][g_nView];

@@ -26,10 +26,10 @@ void NtupleDef::reset()
   m_convTot = -9999;
   m_vtxTrks = -9999;
   m_maxCalEnergy = -9999;
-  m_ebfSecond = -9999;
-  m_ebfNanoSecond = -9999;
-  m_upperTime = -9999;
-  m_lowerTime = -9999;
+  m_ebfSecond = 0;
+  m_ebfNanoSecond = 0;
+  m_upperTime = 0;
+  m_lowerTime = 0;
   m_summaryWord = 0;
 
   m_gemConditionsWord = 0;
