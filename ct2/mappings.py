@@ -11,12 +11,13 @@
 
 #
 def mapTkrDac(dac):
-    """@brief """
+    """@brief Display range and threshhold for a GTFE dac.
+    Uses getThrDac and getThrDacRange."""
     return '%s,%s' % (getThrDACRange(dac), getThrDAC(dac))
 
 #
 def getThrDAC(dac):
-    """@brief Get threshhold from GTFE dac"""
+    """@brief Get threshhold from GTFE dac."""
     b0 = dac & 0x40
     b1 = dac & 0x20
     b2 = dac & 0x10
@@ -27,5 +28,5 @@ def getThrDAC(dac):
 
 #
 def getThrDACRange(dac):
-    """@brief Get range from GTFE dac"""
+    """@brief Get range from GTFE dac."""
     return dac & 0x1
