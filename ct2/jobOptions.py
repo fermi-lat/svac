@@ -22,7 +22,9 @@ tables = {
     'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-12', # used to calc GTRC splits
                'Number of GTFEs to read'), 
     'TKR_MODE': ('GTEM/GTCC/GTRC/GTFE/mode', # used to calc GTRC splits
-                 'TKR front end mode (L or R)'), 
+                 'TKR front end mode (L or R)'),
+    'TKR_DAC': ('GTEM/GTCC/GTRC/GTFE/dac', # TKR DAC
+                'TKR DAC'),
 
     'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt',
                 "CAL Log Accept Discriminator (zero supression)"), 
@@ -74,8 +76,14 @@ globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE']
 
 # make TKR split tables this many towers wide
 tkrSplitWidth = 4
+# put this many tables of TKR FE settings acros the page
+tkrTabWidth = 1 
 # put this many tables of CAL FE settings acros the page
 calTabWidth = 2 
+
+# things to display from TKR front ends
+tkrTags = ['TKR_DAC']
+tkrAxisLabels = ('layer', 'front end')
 
 # things to display from CAL front ends
 calTags = ['CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF']

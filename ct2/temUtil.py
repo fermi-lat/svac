@@ -41,14 +41,16 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
     return "%s:%s:%s" % (nLeft, nDead, nRight)
 
 cccSideMap = ("+X", "+Y", "-X", "-Y")
-cccLayerMap = ((0,2,4,6),
-               (1,3,5,7),
-               (0,2,4,6),
-               (1,3,5,7))
+cccLayerMap = (range(0, 8, 2), range(1, 8, 2)) * 2
 
 crcLayerMap = range(4)
 
 tccLRMap = ((0,1), (3,2), (5,4), (6,7))
+tccLayerMap = [range(0, 9, 2)] * 4 + [range(1, 9, 2)] * 4
+tccSideMap = ('Y Even Left', 'Y Even Right',
+              'X Even Left', 'X Even Right',
+              'Y Odd Left', 'Y Odd Right',
+              'X Odd Left', 'X Odd Right')
 
 tkrSideMap = (('Y', 0), ('X', 0), ('Y', 1), ('X', 1))
 invTkrSideMap = {'X': 0, 'Y': 1}

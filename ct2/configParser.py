@@ -190,6 +190,63 @@ def writeSplits(splits):
     splitFP.close()
     return
 
+# embarrasingly similar to calFeReg
+def tkrFeReg(doc):
+    """get stuff from TKR front ends
+    and make tables of it
+    """
+
+    output = []
+
+    sectionTitle = "TKR front end (GTFE) settings"
+    output.append(html.Heading(sectionTitle, 1))
+
+    if not hasTkr(doc):
+        output.append("There is no TKR here!")
+        return output
+
+    for registerTag in jobOptions.tkrTags:
+        nTable = oneTkrReg(doc, registerTag)
+        output.extend(nTable)
+        output.append(html.Element("HR"))
+        pass
+    output.append(html.Element("HR"))    
+    return output
+
+# embarrasingly similar to oneCalReg
+def oneTkrReg(doc, tag):
+    """Make a table for one GTFE register"""
+
+    output = []
+    
+    axisLabels = jobOptions.tkrAxisLabels
+    regSpec, regLabel = jobOptions.tables[tag]
+    
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        gtccs = temData.items()
+        gtccs.sort()
+        for iGtcc, gtccData in gtccs:
+            array, labels = gtccData.table()
+            layerMap = temUtil.tccLayerMap[iGtcc]
+            labels[0] = [layerMap[x] for x in labels[0]]
+            sideLabel = temUtil.tccSideMap[iGtcc]
+            title = "%s for Tower %d side %s" % (regLabel, iTem, sideLabel)
+            sideTable = table.twoDTable(array, title, axisLabels, labels)
+            regTables.append(sideTable)
+            pass
+        pass
+    nTable = html.nWay(regTables, jobOptions.tkrTabWidth)
+    output.append(nTable)
+
+    return output
+
 
 #
 def hasCal(doc):

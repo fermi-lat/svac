@@ -106,6 +106,7 @@ theLat = lats[0]
 # make tables
 output.addChildren(configParser.globalStuff(doc))
 output.addChildren(configParser.tkrSplits(theLat))
+output.addChildren(configParser.tkrFeReg(theLat))
 output.addChildren(configParser.calFeReg(theLat))
 output.addChildren(configParser.delays(theLat))
 
