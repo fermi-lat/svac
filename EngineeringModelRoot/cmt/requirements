@@ -25,3 +25,5 @@ application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 application mergeRoot mergeRoot.cxx 
 
 application AnalyzeAcd AnalyzeAcd.cxx
+
+application AnalyzeCal AnalyzeCal.cxx
