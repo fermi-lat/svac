@@ -28,4 +28,4 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/genDigiTestReport.pl'
 
-system("$exe $digiRootFile $optionFile $shellFile $tarBall\n");
+system("$exe $digiRootFile $optionFile $shellFile $tarBall");

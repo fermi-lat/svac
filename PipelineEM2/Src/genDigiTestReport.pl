@@ -6,7 +6,7 @@ my ($digiRootFile, $optionFile, $shellFile, $tarBall) = @argv;
 
 my $reconRootFile = 'noSuchFile';
 
-my $reportDir = `basename $tarBall`;
+my $reportDir = `dirname $tarBall`;
 
 # not sure if we really need this one
 my $timeStamp = $??;
