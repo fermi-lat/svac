@@ -12,7 +12,7 @@ my $cmtDir = $ENV{'cmtDir'};
 my $exe = $ENV{'exe'};
 
 print <<EOT;
-$0 running with:
+$0 running with options:
   ldfFile:       $ldfFile
   shellFile:     $shellFile
   jobOptionFile: $jobOptionFile
@@ -22,11 +22,14 @@ $0 running with:
   exe :          $exe
 EOT
 
+my $glastRoot = "";
+my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
+
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE "#!/bin/sh \n \n";
-print SHELLFILE "unset LD_LIBRARY_PATH \n";
-print SHELLFILE "CMTPATH=$cmtPath \n";
-print SHELLFILE "export CMTPATH \n";
+print SHELLFILE "#!/bin/csh \n \n";
+print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
+print SHELLFILE "source $glastScript \n";
+print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.sh \n";
 print SHELLFILE "popd \n";
@@ -35,8 +38,7 @@ print SHELLFILE "cmt show uses \n";
 print SHELLFILE "popd \n";
 
 # convert ldf file to digi file
-print SHELLFILE "JOBOPTIONS=$jobOptionFile \n";
-print SHELLFILE "export JOBOPTIONS \n";
+print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
 print SHELLFILE "$exe \n";
 
 close(SHELLFILE);
