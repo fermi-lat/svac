@@ -5,7 +5,7 @@
 author: Luis C. Reyes, lreyes@milkyway.gsfc.nasa.gov
 date: December 29th, 2004
 
-The purpose of this code "trirowbits_analysis.*" is to study the consistency of the Tkr Trigger given
+The purpose of "trirowbits_analysis.*" is to study the consistency of the Tkr Trigger data given
 by the Trigger Box (hardware) and what one would expect from the digi hits and 3-in-a-row logic.
 
 INSTRUCTIONS:
@@ -15,14 +15,14 @@ INSTRUCTIONS:
 2. Create filelist.txt in the SVAC_DATA directory. Each line corresponds to a root file containing a svac
    tuple. The name/location of the files is relative to SVAC_DATA.
 
-3. In root execute .x trirowbits_analysis.C . The first time it will create a friend tree and close root; sorry
-   about this, its the only way to stop root from crashing. Next time you execute trirowbits_analysis.C it will
-   read the friend tree and proceed with the analysis.
+3. In root execute .x trirowbits_analysis.C . The first time it will create a friend tree and CLOSE root; sorry
+   about this, its the only way to stop root from crashing (working on that). Next time you execute trirowbits_analysis.C
+   it will read the friend tree and proceed with the analysis.
 
-4. Get familiar with the functions in trirowbits_analysis.h. trirowbits_analysis.C is just the starting point
+4. Get familiar with the functions in "trirowbits_analysis.h". trirowbits_analysis.C is just the starting point
    of the analysis.
 
-any questions, bugs, suggestions are welcome.... lreyes@milkyway.gsfc.nasa.gov
+any questions, bug reports, suggestions are welcome.... lreyes@milkyway.gsfc.nasa.gov
 
 
 
@@ -65,7 +65,7 @@ Only layers 3, 4, 5, 6, 7, 11, 12, 13 have a hit
 *********************************************************
 
 There are 2 bitwords: digiword and temword. Digiwords consists of the digitized hits while
-temword consists of the trigger requests according to the tem. We want to compare this two.
+temword consists of the trigger requests according to the tem. We want to compare these two.
 
 
 
