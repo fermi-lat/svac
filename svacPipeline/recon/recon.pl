@@ -80,6 +80,8 @@ $geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml';
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
 #include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
+CalibDataSvc.CalibInstrumentName = "$instrumentType";
+ApplicationMgr.EvtMax = 10;
 GlastDetSvc.xmlfile = "$geoFile";
 digiRootReaderAlg.digiRootFile = "$digiRootFile";
 RootTupleSvc.filename = "$meritRootFile";
