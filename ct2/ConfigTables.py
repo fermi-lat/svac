@@ -82,6 +82,7 @@ except:
                     snapFile)
     finish()
 
+output.addChildren(configParser.globalStuff(doc))
 
 tkrSplits = configParser.tkrSplits(doc)
 output.addChildren(tkrSplits)

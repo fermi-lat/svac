@@ -15,6 +15,31 @@ import temUtil
 import jobOptions
 
 
+#
+def globalStuff(doc):
+    """Deal with stuff that applies to the whole instrument"""
+    
+    output = []
+
+    sectionTitle = 'LAT globals'
+    output.append(html.Heading(sectionTitle, 2))
+
+    for name in jobOptions.globoLogicals:
+        tag, label = jobOptions.tables[name]
+        line = globoLogical(doc, tag, label)
+        output.append(line)
+        output.append('<br/>')
+    
+    output.append(html.Element("HR"))    
+    return output
+
+#
+def globoLogical(doc, tag, label):
+    table = tableFromXml.xTableGen(doc, tag)
+    value = table.data[0]
+    onOff = ['OFF', 'ON'][value]
+    output = '%s is %s.\n' % (label, onOff)
+    return output
 
 
 #
@@ -99,8 +124,9 @@ def tkrSplits(doc):
     return output
 #
 def calFeReg(doc):
-    # get stuff from CAL front ends
-    # and make tables of it
+    """get stuff from CAL front ends
+    and make tables of it
+    """
 
     calTables = []
     for registerTag in jobOptions.calTags:
@@ -112,6 +138,8 @@ def calFeReg(doc):
 
 #
 def oneCalReg(doc, tag):
+    """Make a table for one GCFE register"""
+    
     axisLabels = jobOptions.calAxisLabels
     regSpec, regLabel = jobOptions.tables[tag]
     sectionTitle = "%s (%s)" % (regLabel, regSpec)

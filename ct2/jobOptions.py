@@ -7,10 +7,10 @@ version = os.environ['configReportVersion']
 # register subfields and their descriptions
 tables = {
 
-    'GGLT/zero_suppress:*':('GGLT/zero_suppress:*',
-                            'Zero Supression'),
-    'GGLT/four_range_readout:*':('GGLT/four_range_readout:*'
-                                 'Four Range Readout'),
+    'ZERO_SUPP': ('GGLT/zero_suppress:*',
+                  'Zero Supression'),
+    'FOUR_RANGE': ('GGLT/four_range_readout:*',
+                   'Four Range Readout'),
     
     'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-13', # used to calc GTRC splits
                'Number of GTFEs to read'), 
@@ -61,6 +61,9 @@ tables = {
                  'hold trigger primitive for TEM diagnostic latching of TKR trigger primitive'), 
     
     }
+
+# logical values that apply to the whole LAT
+globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE']
 
 # things to display from CAL front ends
 calTags = ['CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF']
