@@ -2,11 +2,9 @@
 
 use strict;
 
-my $newTask = 'SVACTuple';
+my ($oldTask, $newTask, $runName, @files) = @ARGV;
 
-my ($oldTask, $runName, $mcFile, $digiFile, $reconFile) = @ARGV;
-
-foreach $oldFile ($mcFile, $digiFile, $reconFile) {
+foreach $oldFile (@files) {
     my $newFile = $oldFile;
     $newFile =~ s/$oldTask/$newTask/;
     link $oldFile $newFile;
