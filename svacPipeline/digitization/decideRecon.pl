@@ -6,6 +6,7 @@ use DBI;
 use DBI qw(:sql_types);
 
 my $particleType = `$ENV{'svacPlRoot'}/lib/queryElogReportTable.pl $ARGV[0] particleType`;
+chomp $particleType;
 
 
 my $result;
