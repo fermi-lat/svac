@@ -33,3 +33,6 @@ def twoDTable(array, title, (xTitle, yTitle), (xLabels, yLabels)):
     table += "_" * width + "\n"
     return table
 
+def oneDtable(array, title, labels):
+    table = "Sorry, not implemented yet."
+    return table
