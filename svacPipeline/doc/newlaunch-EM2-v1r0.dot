@@ -9,74 +9,74 @@ node [shape=box];
 ## entry points
 node [style=filled];
 ##
-online_ldf2fits_tp [label="online\nldf2fits"];
-updateELogDB_populateElogDb_tp [label="updateELogDB\npopulateElogDb"];
-configReport_ConfigTables_tp [label="configReport\nConfigTables"];
-digitization_Convert_tp [label="digitization\nConvert"];
-digiReport_genReport_tp [label="digiReport\ngenReport"];
-recon_recon_tp [label="recon\nrecon"];
-reconReport_genReport_tp [label="reconReport\ngenReport"];
-svacTuple_svacTuple_tp [label="svacTuple\nsvacTuple "];
+online_ldf2fits_tp [label="online:ldf2fits"];
+updateELogDB_populateElogDb_tp [label="updateELogDB:populateElogDb"];
+configReport_ConfigTables_tp [label="configReport:ConfigTables"];
+digitization_Convert_tp [label="digitization:Convert"];
+digiReport_genReport_tp [label="digiReport:genReport"];
+recon_recon_tp [label="recon:recon"];
+reconReport_genReport_tp [label="reconReport:genReport"];
+svacTuple_svacTuple_tp [label="svacTuple:svacTuple "];
 ##
 node [style=solid];
 ##
-online_injectSVAC_tp [label="online\ninjectSVAC"];
+online_injectSVAC_tp [label="online:injectSVAC"];
 #
-updateELogDB_Launch_tp [label="updateELogDB\nLaunch"];
+updateELogDB_Launch_tp [label="updateELogDB:Launch"];
 #
-configReport_configReportUrl_tp [label="configReport\nconfigReportUrl"];
+configReport_configReportUrl_tp [label="configReport:configReportUrl"];
 #
-digitization_Launch_tp [label="digitization\nLaunch"];
-digitization_digiRootFile_tp [label="digitization\ndigiRootFile"];
+digitization_Launch_tp [label="digitization:Launch"];
+digitization_digiRootFile_tp [label="digitization:digiRootFile"];
 #
-digiReport_digiReportUrl_tp [label="digiReport\ndigiReportUrl"];
+digiReport_digiReportUrl_tp [label="digiReport:digiReportUrl"];
 #
-recon_Launch_tp [label="recon\nLaunch"];
-recon_reconRootFile_tp [label="recon\nreconRootFile"];
-recon_meritRootFile_tp [label="recon\nmeritRootFile"];
+recon_Launch_tp [label="recon:Launch"];
+recon_reconRootFile_tp [label="recon:reconRootFile"];
+recon_meritRootFile_tp [label="recon:meritRootFile"];
 #
-reconReport_reconReportUrl_tp [label="reconReport\nreconReportUrl"];
+reconReport_reconReportUrl_tp [label="reconReport:reconReportUrl"];
 #
-svacTuple_svacRootFile_tp [label="svacTuple\nsvacRootFile"];
+svacTuple_svacRootFile_tp [label="svacTuple:svacRootFile"];
 
 #### datasets
 node [shape=ellipse];
 ####
 ## real ones
 ##
-online_rcReport_ds [label="online\nrcReport"];
-online_schema_ds [label="online\nschema"];
-online_snapshot_ds [label="online\nsnapshot"];
-online_ldf_ds [label="online\nldf"];
+online_rcReport_ds [label="online:rcReport"];
+online_schema_ds [label="online:schema"];
+online_snapshot_ds [label="online:snapshot"];
+online_ldf_ds [label="online:ldf"];
 #
-configReport_tarBall_ds [label="configReport\ntarBall"];
+configReport_tarBall_ds [label="configReport:tarBall"];
 #
-digitization_digi_ds [label="digitization\ndigi"];
+digitization_digi_ds [label="digitization:digi"];
 #
-digiReport_tarBall_ds [label="digiReport\ntarBall"];
+digiReport_tarBall_ds [label="digiReport:tarBall"];
 #
-recon_recon_ds [label="recon\nrecon"];
-recon_merit_ds [label="recon\nmerit"];
+recon_recon_ds [label="recon:recon"];
+recon_merit_ds [label="recon:merit"];
 #
-reconReport_tarBall_ds [label="reconReport\ntarBall"];
+reconReport_tarBall_ds [label="reconReport:tarBall"];
 #
-svacTuple_svac_ds [label="svacTuple\nsvac"];
+svacTuple_svac_ds [label="svacTuple:svac"];
 ##
 ## links
 node [shape=hexagon];
 ##
-updateELogDB_rcReport_ds [label="updateELogDB\nrcReport"];
-configReport_schema_ds [label="configReport\nschema"];
-configReport_snapshot_ds [label="configReport\nsnapshot"];
-digitization_ldf_ds [label="digitization\nldf"];
+updateELogDB_rcReport_ds [label="updateELogDB:rcReport"];
+configReport_schema_ds [label="configReport:schema"];
+configReport_snapshot_ds [label="configReport:snapshot"];
+digitization_ldf_ds [label="digitization:ldf"];
 #
-recon_digi_ds [label="recon\ndigi"];
-digiReport_digi_ds [label="digiReport\ndigi"];
-svacTuple_digi_ds [label="svacTuple\ndigi"];
-reconReport_digi_ds [label="reconReport\ndigi"];
+recon_digi_ds [label="recon:digi"];
+digiReport_digi_ds [label="digiReport:digi"];
+svacTuple_digi_ds [label="svacTuple:digi"];
+reconReport_digi_ds [label="reconReport:digi"];
 #
-svacTuple_recon_ds [label="svacTuple\nrecon"];
-reconReport_recon_ds [label="reconReport\nrecon"];
+svacTuple_recon_ds [label="svacTuple:recon"];
+reconReport_recon_ds [label="reconReport:recon"];
 ##
 
 #### TP -> DS links
