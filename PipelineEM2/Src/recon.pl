@@ -2,41 +2,30 @@
 
 use strict;
 
-my $numArgs = $#ARGV + 1;
+use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use DPFProc;
 
-if($numArgs == 0) {
-    die "Missing run id as input argument";
-}
+#####################################################
+##
+##  BEGIN:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
+##
+#####################################################
 
-my $runId = $ARGV[0];
+my $proc = new DPFProc(@ARGV);
+my $inFiles = $proc->{'inFiles'};
+my $outFiles = $proc->{'outFiles'};
 
-my $rawDataDir = '/nfs/farm/g/glast/u01/temp/rawData/';
-my $rootDataDir = '/nfs/farm/g/glast/u01/temp/rootData/';
+#####################################################
+##
+##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
+##
+#####################################################
 
-my $runRawDir = $rawDataDir.$runId;
-my $runRootDir = $rootDataDir.$runId.'/rootFile';
-
-#search digi root file
-opendir(DIR, $runRootDir) || die "can not find $runRootDir, abort!";
-my @files = readdir(DIR);
-my $timeStamp;
-foreach my $file (@files) {
-    if($file =~ /\_digi.root/ ) {
-	$timeStamp = substr($file, 0, length($file)-10);
-	last;
-    }
-}
-if(! defined($timeStamp)) {
-    die "ldf file can not be found, abort!";
-}
-
-my $digiRootFile = $runRootDir.'/'.$timeStamp.'_digi.root';
-my $shellFile = $runRootDir.'/recon_'.$timeStamp.'.sh';
-my $jobOptionFile = $runRootDir.'/recon_'.$timeStamp.'.txt';
-my $reconRootFile = $runRootDir.'/'.$timeStamp.'_recon.root';
-my $meritRootFile = $runRootDir.'/'.$timeStamp.'_merit.root';
-my $dumpFile = $runRootDir.'/recon_'.$timeStamp.'.dump';
-my $coreFile = $runRootDir.'/recon_'.$timeStamp.'.core';
+my $digiRootFile = $inFiles->{'digi'};
+my $shellFile = $outFiles->{'script'};
+my $jobOptionFile = $outFiles->{'jobOptions'};
+my $reconRootFile = $outFiles->{'recon'};
+my $meritRootFile = $outFiles->{'merit'};
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/sh \n \n";
