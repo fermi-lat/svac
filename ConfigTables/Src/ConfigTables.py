@@ -11,7 +11,7 @@ import sys
 import xml.dom.minidom as md
 
 import html
-import table
+import htmlTable as table
 import temUtil
 import util
 import xmlUtil
@@ -107,7 +107,7 @@ for registerTag in joboptions.calTags:
             xLen = len(side[0])
             yLab = map(repr, temUtil.cccLayerMap[iside][:yLen])
             xLab = map(repr, range(xLen))
-            hTable = table.htmlTable(side, title, ("crystal", "layer"), (xLab, yLab))
+            hTable = table.twoDTable(side, title, ("crystal", "layer"), (xLab, yLab))
             #output.addChild(hTable)        
             #output.addChild("\n")
             sides.append(hTable)
