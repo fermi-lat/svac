@@ -165,8 +165,14 @@ db = DCOracle2.connect('GLAST_CAL/9square#')
 c = db.cursor()
 
 # parse the document
-doc = reader.fromStream(xmlFile)
-
+try:
+    doc = reader.fromStream(xmlFile)
+except:
+    msg = 'rcReport %s is missing, unreadable, or invalid.\n' % xmlFileName
+    sys.stderr.write(msg)
+    errFile.write(msg)
+    sys.exit(0)
+    
 reports = doc.getElementsByTagName(testReportTag)
 
 for report in reports:
