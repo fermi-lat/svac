@@ -1,9 +1,5 @@
 #!/usr/local/bin/perl
 
-# Demonstration script.
-# Submitted to batch by pipeline scheduler.
-# You need only modify the last section...
-
 use lib '/u/gl/dflath/glast/software/DPF/PDB/';
 use DPFProc;
 
@@ -23,22 +19,10 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-
-#  Ok, this is your area to play, do as you wish from here on in:
-#  Make sure you return the result of your processing in place of this perl
-#  script's return code so that LSF records the correct ret code.
-#  NOTE: This is done for you if you use the 'system' command as below.
-
-# $inFiles{'DS_NAME'} is the filename of the instance of dataset 'DS_NAME'
-# $outFiles{'DS_NAME'} is the filename of the instance of dataset 'DS_NAME'
-
-# Configure your environment and run your processing, application, or script.
-# Perl exposes the system environment thru the hash: 'ENV'
-
-
-# ==============
-#  For example:
-# ==============
+my $ldfFile = $inFiles->{'ldf'};
+my $shellFile = $outFiles->{'script'};
+my $jobOptionFile = $outFiles->{'jobOptions'};
+my $digiRootFile = $outFiles->{'digi'};
 
 $ENV{'ldfFile'} = $ldfFile;
 $ENV{'shellFile'} = $shellFile;
