@@ -35,6 +35,9 @@ my $exe = $ENV{'DigiReportApp'};
 
 my $doxyFile = $ENV{'digiRepDoxyFile'};
 
+my $glastRoot = "/afs/slac.stanford.edu/g/glast";
+my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
+
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
