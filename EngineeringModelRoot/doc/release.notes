@@ -85,3 +85,7 @@ v1r3p8
 
 add HitOccpancy as an application to demonstrate mapping from physical space
 to electronic space
+
+v1r3p9
+
+bug fixed in GltWord and TEM diagnostic info

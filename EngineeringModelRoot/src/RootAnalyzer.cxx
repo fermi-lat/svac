@@ -11,6 +11,7 @@
 #include "RootAnalyzer.h"
 #include "TROOT.h"
 #include "ToString.h"
+#include "enums/TriggerBits.h"
 
 using std::string;
 using std::vector;
@@ -298,7 +299,11 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_runId = m_digiEvent->getRunId();
   m_ntuple.m_eventId = m_digiEvent->getEventId();
 
-  m_ntuple.m_trigger = m_digiEvent->getL1T().getTriggerWord();
+  unsigned int word = m_digiEvent->getL1T().getTriggerWord();
+  unsigned bitMask = 0;
+  int ibit = enums::number_of_trigger_bits;
+  while(ibit--) { bitMask |= 1<<ibit; }
+  m_ntuple.m_trigger = word & bitMask;
 
   m_ntuple.m_timeStamp = m_digiEvent->getTimeStamp();
 
@@ -383,17 +388,8 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventFlags    = m_digiEvent->getEventSummaryData().eventFlags();
   m_ntuple.m_goodEvent     = m_digiEvent->getEventSummaryData().goodEvent();
 
-
-  // mc events can not have diagnostic info, also check summary word
-  /*
-  if( (! m_digiEvent->getFromMc()) && 
-      m_digiEvent->getEventSummaryData().diagnostic() ) {
-    parseDiagnosticData();
-  }
-  */
-  if( m_digiEvent->getEventSummaryData().diagnostic() ) {
-    parseDiagnosticData();
-  }
+  parseDiagnosticData(); 
+ 
 
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
@@ -621,8 +617,6 @@ void RootAnalyzer::analyzeData()
   }
   */
   //    nEvent = 100;
-         nEvent = nRecon;
-
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -968,8 +962,10 @@ void RootAnalyzer::parseDiagnosticData()
     for(int i = 0; i != nTkrDiag; ++i) {
 
       const TkrDiagnosticData* pDiag = m_digiEvent->getTkrDiagnostic(i);
-      m_ntuple.m_tpTkr[pDiag->tower()][pDiag->gtcc()] = pDiag->getDataWord();
-
+      int iTower = pDiag->tower();
+      if(m_ntuple.m_diagLength[iTower]) {
+	m_ntuple.m_tpTkr[iTower][pDiag->gtcc()] = pDiag->getDataWord();
+      }
     }
 
     ElecToGeo::getInstance()->decodeTkrTp(m_ntuple.m_tpTkr,m_ntuple.m_tkrReq);
@@ -983,8 +979,10 @@ void RootAnalyzer::parseDiagnosticData()
 
       const CalDiagnosticData* pDiag = m_digiEvent->getCalDiagnostic(i);
 
-      m_ntuple.m_tpCal[pDiag->tower()][pDiag->layer()] = pDiag->getDataWord();
-
+      int iTower = pDiag->tower();
+      if(m_ntuple.m_diagLength[iTower]) {
+	m_ntuple.m_tpCal[pDiag->tower()][pDiag->layer()] = pDiag->getDataWord();
+      }
     }
 
     ElecToGeo::getInstance()->decodeCalTp(m_ntuple.m_tpCal, m_ntuple.m_calReq,
