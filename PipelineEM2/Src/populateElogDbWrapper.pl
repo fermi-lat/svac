@@ -26,4 +26,4 @@ my $rcReport = $inFiles->{'rcReport'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeline/EM2/populateElogDb.pl';
 
-system("$exe $shellFile $rcReport");
+system("$exe '$shellFile' '$rcReport'");

@@ -29,4 +29,4 @@ my $meritRootFile = $outFiles->{'merit'};
 
 my $exe = '/nfs/slac/g/svac/common/pipeLine/EM2/recon.pl';
 
-system("$exe $digiRootFile $shellFile $jobOptionFile $reconRootFile $meritRootFile");
+system("$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'");
