@@ -4,7 +4,7 @@
 struct NtupleDef {
 
   enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8};
+	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nCno=12};
 
   int m_runId;
   int m_eventId;
@@ -122,14 +122,14 @@ struct NtupleDef {
   // event summary word
   unsigned m_summaryWord;
 
-  // GEM stuff:
+  // GEM information:
   unsigned m_gemConditionsWord;
 
   int m_gemTkrVector[g_nTower];
   int m_gemRoiVector[g_nTower];
   int m_gemCalLeVector[g_nTower];
   int m_gemCalHeVector[g_nTower];
-  int m_gemCnoVector[12];
+  int m_gemCnoVector[g_nCno];
 
   unsigned m_gemLiveTime;
   unsigned m_gemTriggerTime;
@@ -147,6 +147,19 @@ struct NtupleDef {
   unsigned m_gemAcdTilesXy;
   unsigned m_gemAcdTilesRbn;
   unsigned m_gemAcdTilesNa;
+
+  // Event sizes:
+  unsigned m_temLength[g_nTower];
+  unsigned m_gemLength;
+  unsigned m_oswLength;
+  unsigned m_aemLength;
+  unsigned m_errLength;
+  unsigned m_diagLength;
+
+  // Event quality/flags:
+  unsigned m_eventSequence;
+  unsigned m_eventFlags;
+  int m_goodEvent;
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request

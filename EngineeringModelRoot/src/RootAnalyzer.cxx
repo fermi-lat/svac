@@ -369,9 +369,26 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_gemCalLeVector[iTower] = ((tmpGemCalLe >> iTower) &1 ) ;      
     m_ntuple.m_gemCalHeVector[iTower] = ((tmpGemCalHe >> iTower) &1 ) ;      
   }
-  for (int iCno = 0; iCno<12; iCno++) {
+  for (int iCno = 0; iCno<g_nCno; iCno++) {
     m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
   }
+
+  
+  // Event sizes:
+  for (int iTower = 0; iTower<g_nTower; iTower++) {
+    m_ntuple.m_temLength[iTower] = m_digiEvent->getEventSummaryData().temLength(iTower);
+  }
+
+  m_ntuple.m_gemLength  = m_digiEvent->getEventSummaryData().gemLength();
+  m_ntuple.m_oswLength  = m_digiEvent->getEventSummaryData().oswLength();
+  m_ntuple.m_aemLength  = m_digiEvent->getEventSummaryData().aemLength();
+  m_ntuple.m_errLength  = m_digiEvent->getEventSummaryData().errLength();
+  m_ntuple.m_diagLength = m_digiEvent->getEventSummaryData().diagLength();
+
+  // Event quality/flags:
+  m_ntuple.m_eventSequence = m_digiEvent->getEventSummaryData().eventSequence();
+  m_ntuple.m_eventFlags    = m_digiEvent->getEventSummaryData().eventFlags();
+  m_ntuple.m_goodEvent     = m_digiEvent->getEventSummaryData().goodEvent();
 
 
   // mc events can not have diagnostic info, also check summary word
@@ -973,6 +990,15 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/I");
   m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/I");
   m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/I");
+  m_tree->Branch("TemLength", &(m_ntuple.m_temLength), "TemLength[16]/I");
+  m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/I");
+  m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/I");
+  m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/I");
+  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength/I");
+  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength/I");
+  m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/I");
+  m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/I");
+  m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
   m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/I");
   m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/I");
 }

@@ -1,6 +1,6 @@
 #include "NtupleDef.h"
 
-const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:Tkr1EndPos[3]/F:Tkr1EndDir[3]/F:Tkr2EndPos[3]/F:Tkr2EndDir[3]/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12][2]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:GemConditionsWord/I:GemTkrVector[16]/I:GemRoiVector[16]/I:GemCalLeVector[16]/I:GemCalHeVector[16]/I:GemCnoVector[12]/I:GemLiveTime/I:GemTriggerTime/I:GemDeltaEventTime/I:GemOnePpsSeconds/I:GemOnePpsTime/I:GemPrescaled/I:GemDiscarded/I:GemSent/I:GemAcdTilesXzp/I:GemAcdTilesXzm/I:GemAcdTilesYzp/I:GemAcdTilesYzM/I:GemAcdTilesXy/I:GemAcdTilesRbn/I:GemAcdTilesNa/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
+const char* NtupleDef::gRootNtupleDefStr = "Run/I:Event_ID/I:McSeqNo/I:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:Tkr1EndPos[3]/F:Tkr1EndDir[3]/F:Tkr2EndPos[3]/F:Tkr2EndDir[3]/F:CalEneSum/F:McCalEneSum/F:GltWord/I:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12][2]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/I:EvtNanoSecond/I:EvtUpperTime/I:EvtLowerTime/I:CalTp[16][8]/I:TkrTp[16][8]/I:EvtSummary/I:GemConditionsWord/I:GemTkrVector[16]/I:GemRoiVector[16]/I:GemCalLeVector[16]/I:GemCalHeVector[16]/I:GemCnoVector[12]/I:GemLiveTime/I:GemTriggerTime/I:GemDeltaEventTime/I:GemOnePpsSeconds/I:GemOnePpsTime/I:GemPrescaled/I:GemDiscarded/I:GemSent/I:GemAcdTilesXzp/I:GemAcdTilesXzm/I:GemAcdTilesYzp/I:GemAcdTilesYzM/I:GemAcdTilesXy/I:GemAcdTilesRbn/I:GemAcdTilesNa/I:TemLength[16]/I:GemLength/I:OswLength/I:AemLength/I:ErrLength/I:DiagLength/I:EventSequence/I:EventFlags/I:GoodEvent/I:TkrReq[16][18][2][2]/I:CalReq[16][8][2]";
 
 NtupleDef::NtupleDef() 
 {
@@ -46,10 +46,19 @@ void NtupleDef::reset()
   m_gemAcdTilesXzm = 0;
   m_gemAcdTilesYzp = 0;
   m_gemAcdTilesYzm = 0;
-  m_gemAcdTilesXy = 0;
+  m_gemAcdTilesXy  = 0;
   m_gemAcdTilesRbn = 0;
-  m_gemAcdTilesNa = 0;
+  m_gemAcdTilesNa  = 0;
 
+  m_gemLength  = 0;
+  m_oswLength  = 0;
+  m_aemLength  = 0;
+  m_errLength  = 0;
+  m_diagLength = 0;
+  
+  m_eventSequence = 0;
+  m_eventFlags    = 0;
+  m_goodEvent     = 0; 
 
   for(int iCno = 0; iCno < 12; iCno++){
     m_gemCnoVector [iCno] = 0;
@@ -64,6 +73,8 @@ void NtupleDef::reset()
     m_gemRoiVector[iTower] = 0;
     m_gemCalLeVector[iTower] = 0;
     m_gemCalHeVector[iTower] = 0;
+
+    m_temLength[iTower] = 0;
 
     for(int iLayer = 0; iLayer != g_nTkrLayer; ++iLayer){
       for(int iView = 0; iView != g_nView; ++iView){
