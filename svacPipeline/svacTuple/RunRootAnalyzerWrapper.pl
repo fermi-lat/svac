@@ -42,7 +42,7 @@ my $histFile = $outFiles->{'histogram'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 
-my $exe = './RunRootAnalyzer.pl';
+my $exe = $ENV{'svacTupleScript'};
 
 my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";

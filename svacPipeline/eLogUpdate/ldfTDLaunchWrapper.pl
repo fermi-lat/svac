@@ -32,7 +32,7 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+my $exe = $ENV{'taskLauncher'};
 
 my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};

@@ -32,7 +32,9 @@ my $snapshot = $inFiles->{'snapshot'};
 
 my $tarBall = $outFiles->{'tarBall'};
 
-my $command = "./ConfigTables.py '$runName' '$schema' '$snapshot' '$tarBall'";
+my $exe = $ENV{'configTablesScript'};
+
+my $command = "$exe '$runName' '$schema' '$snapshot' '$tarBall'";
 print "Running command: [$command]\n";
 
 

@@ -37,6 +37,8 @@ sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $urlKey = $taskProcessName;
 my @inFileNames = values $$inFiles;
 
+my $exe = $ENV{'urlUpdateScript'};
+
 foreach (@inFileNames) {
 # construct a command, print it to the log file, and run it:
     my $inFile = $_

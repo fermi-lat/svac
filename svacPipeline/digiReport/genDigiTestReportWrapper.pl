@@ -32,7 +32,7 @@ my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
 
-my $exe = './genDigiTestReport.pl';
+my $exe = $ENV{'digiReportScript'};
 
 my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";

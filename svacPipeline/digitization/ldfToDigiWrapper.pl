@@ -36,7 +36,7 @@ $ENV{'shellFile'} = $shellFile;
 $ENV{'jobOptionFile'} = $jobOptionFile;
 $ENV{'digiRootFile'}= $digiRootFile;
 
-my $command = "./ldfToDigi.pl";
+my $command = $ENV{'digitizationScript'};
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

@@ -32,8 +32,7 @@ my $jobOptionFile = $outFiles->{'jobOptions'};
 my $reconRootFile = $outFiles->{'recon'};
 my $meritRootFile = $outFiles->{'merit'};
 
-my $setup = $ENV{'SVACPLCONFIG'};
-my $exe = './recon.pl';
+my $exe = $ENV{'reconScript'};
 
 my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
 print "Running command: [$command]\n";

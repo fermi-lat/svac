@@ -31,7 +31,7 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = './SVACLaunch.pl';
+my $exe = $ENV{'svacOnlineScript'};
 
 my $rcReport = $inFiles->{'rcReport'};
 my $schema = $inFiles->{'schema'};

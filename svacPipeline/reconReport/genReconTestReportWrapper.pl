@@ -33,7 +33,7 @@ my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
 my $tarBall = $outFiles->{'tarBall'};
 
-my $exe = './genReconTestReport.pl';
+my $exe = $ENV{'reconReportScript'};
 
 my $command = "$exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";

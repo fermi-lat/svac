@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/tcsh
 
 # setup for SVAC pipeline
 
@@ -20,11 +20,18 @@ setenv rootUrl /glast.u12/EM2/rootData
 
 setenv calibVersion calib-v1r0
 
+#++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
+setenv svacOnlineVersion v1r0
+setenv svacOnlineDir ${svacPlRoot}/eLogUpdate/online/${svacOnlineVersion}
+#-------------------------------- online --------------------------------------
+
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion v1r0
 setenv eLogTask updateELogDB-EM2-${eLogTaskVersion}
 setenv eLogFeederVersion v2r0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
+setenv eLogTaskDir ${svacPlRoot}/eLogUpdate/${eLogTaskVersion}
+setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 #-------------------------------- eLogUpdate ----------------------------------
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
@@ -32,6 +39,9 @@ setenv configReportTaskVersion v1r0
 setenv configReportTask configReport-EM2-${configReportTaskVersion}
 setenv configReportVersion v1r0p0
 setenv configReportUrl ConfigTables.html
+setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
+setenv configTaskDir ${svacPlRoot}/configReport/${configReportTaskVersion}
+setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py 
 #-------------------------------- configReport --------------------------------
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
@@ -42,6 +52,8 @@ setenv Em2Dir ${sasCmt}/Em2/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/Em2.exe
 setenv ldfFileType LDFFITS
+setenv digitizationTaskDir ${svacPlRoot}/digitization/${digitizationTaskVersion}
+setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
@@ -54,6 +66,8 @@ setenv digiReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv digiReportVersion v1r0p0
 setenv digiReportUrl html/index.html
+setenv digiReportTaskDir ${svacPlRoot}/digiReport/${digiReportTaskVersion}
+setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
@@ -61,6 +75,8 @@ setenv reconTaskVersion v1r0
 setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32/Em2.exe
+setenv reconTaskDir ${svacPlRoot}/recon/${reconTaskVersion}
+setenv reconScript ${reconTaskDir}/recon.pl
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
@@ -71,6 +87,8 @@ setenv reconReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv reconReportVersion v1r0p0
 setenv reconReportUrl html/index.html
+setenv reconReportTaskDir ${svacPlRoot}/reconReport/${reconReportTaskVersion}
+setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #-------------------------------- reconReport ---------------------------------
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
@@ -81,4 +99,19 @@ setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersi
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32/RunRootAnalyzer.exe
 setenv svacTupleVersion emRootv0r0
+setenv svacTupleTaskDir ${svacPlRoot}/svacTuple/${svacTupleTaskVersion}
+setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 #-------------------------------- svacTuple -----------------------------------
+
+#++++++++++++++++++++++++++++++++ many ++++++++++++++++++++++++++++++++++++++++
+setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
+setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
+setenv urlUpdateScript  ${eLogDir}/updateUrl.py
+#-------------------------------- many ----------------------------------------
+
+setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}
+if ( ${?PYTHONPATH} == '1' ) then
+    setenv PYTHONPATH ${SVACPYTHON}:$PYTHONPATH}
+else
+    setenv PYTHONPATH ${SVACPYTHON}
+endif

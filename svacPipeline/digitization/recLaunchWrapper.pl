@@ -32,9 +32,8 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+my $exe = $ENV{'taskLauncher'};
 
-my $newTask = 'recon';
 my $newTask = $ENV{'reconTask'};
 my $digiRootFile = $inFiles->{'digi'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
