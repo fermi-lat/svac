@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $batchgroup = $ENV{'batchgroup'};
 
@@ -20,35 +20,37 @@ my $updateElogDbXml =
 
     <name>$ENV{'eLogTask'}</name>
     <type>Report</type>
-    <dataset-base-path>$eLogDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"populateElogDbWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
+        <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/populateElogDbWrapper.pl
         </executable>
-        <executable name=\"LaunchDigiWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
+        <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ldfTDLaunchWrapper.pl
         </executable>
-        <executable name=\"LaunchConfRepWrapper\" version=\"$ENV{'eLogTaskVersion'}\">
+        <executable name=\"LaunchConfRep\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
         </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$eLogDataDir</working-directory>
-            <log-file-path>$eLogDataDir</log-file-path>
+            <working-directory>$ENV{'eLogDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"script\" type=\"csh\" file-type=\"script\"/>
+        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"xml\"  name=\"schema\"   type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDir'}</file>
+        <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDir'}</file>
 
-        <foreign-input-file name=\"rcReport\" pipeline=\"$ENV{'onlineTask'}\" file=\"rcReport\"/>
-
-        <processing-step name=\"populateElogDb\" executable=\"populateElogDbWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"populateElogDb\" executable=\"populateElogDb\" batch-job-configuration=\"express-job\">
                         <input-file name=\"rcReport\"/>
                         <output-file name=\"script\"/>
         </processing-step>
-        <processing-step name=\"LaunchDigi\" executable=\"LaunchDigiWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                         <input-file name=\"ldf\"/>
         </processing-step>
-        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRepWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
                         <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
         </processing-step>

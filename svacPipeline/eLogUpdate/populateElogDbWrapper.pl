@@ -22,9 +22,9 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};

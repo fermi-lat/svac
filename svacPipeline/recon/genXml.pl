@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -22,16 +22,16 @@ my $reconXml =
 
     <name>$ENV{'reconTask'}</name>
     <type>Reconstruction</type>
-    <dataset-base-path>$reconDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
 
-    <executable name=\"reconWrapper\" version=\"$ENV{'reconTaskVersion'}\">
+    <executable name=\"recon\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/reconWrapper.pl
     </executable>
-    <executable name=\"RunRALaunchWrapper\" version=\"$ENV{'reconTaskVersion'}\">
+    <executable name=\"RunRALaunch\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/RunRALaunchWrapper.pl
     </executable>
-    <executable name=\"genRTRLaunchWrapper\" version=\"$ENV{'reconTaskVersion'}\">
+    <executable name=\"genRTRLaunch\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
@@ -39,33 +39,32 @@ my $reconXml =
     </executable>
 
     <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
-        <working-directory>$reconDataDir</working-directory>
-        <log-file-path>$reconDataDir</log-file-path>
+        <working-directory>$ENV{'reconDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
     <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-        <working-directory>$reconDataDir</working-directory>
-        <log-file-path>$reconDataDir</log-file-path>
+        <working-directory>$ENV{'reconDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
-    <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\"/>
-    <file name=\"merit\"      type=\"merit\"  file-type=\"root\"/>
-    <file name=\"recon\"      type=\"RECON\"  file-type=\"root\"/>
-    <file name=\"script\"     type=\"script\" file-type=\"csh\"/>
+    <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\">$ENV{'reconDataDir'}</file>
+    <file name=\"merit\"      type=\"merit\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
+    <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
+    <file name=\"script\"     type=\"script\" file-type=\"csh\">$ENV{'reconDataDir'}</file>
+    <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\">$ENV{'digitizationDataDir'}</file>
 
-    <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-
-    <processing-step name=\"recon\" executable=\"reconWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"recon\" executable=\"recon\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
                     <output-file name=\"jobOptions\"/>
                     <output-file name=\"merit\"/>
                     <output-file name=\"recon\"/>
                     <output-file name=\"script\"/>
     </processing-step>
-    <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunchWrapper\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunch\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
     </processing-step>
-    <processing-step name=\"LaunchReport\" executable=\"genRTRLaunchWrapper\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"LaunchReport\" executable=\"genRTRLaunch\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
     </processing-step>

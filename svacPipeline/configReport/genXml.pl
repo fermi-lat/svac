@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -24,34 +24,34 @@ my $configReportXml =
 
     <name>$ENV{'configReportTask'}</name>
     <type>>Report</type>
-    <dataset-base-path>$configDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"ConfigTablesWrapper\" version=\"$ENV{'configReportTaskVersion'}\">
+        <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
             $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
         </executable>
-        <executable name=\"configReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"configReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$configDataDir</working-directory>
-            <log-file-path>$configDataDir</log-file-path>
+            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"short-job\" queue=\"short\" group=\"$batchgroup\">
-            <working-directory>$configDataDir</working-directory>
-            <log-file-path>$configDataDir</log-file-path>
+            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+        <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"xml\" name=\"schema\"   type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">$ENV{'configTablesDataDir'}</file>
 
-        <foreign-input-file name=\"snapshot\" pipeline=\"$ENV{'onlineTask'}\" name=\"snapshot\"/>
-
-        <processing-step name=\"ConfigTables\" executable=\"ConfigTablesWrapper\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"short-job\">
                         <input-file name=\"schema\"/>
                         <input-file name=\"snapshot\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"configReportUrl\" executable=\"configReportUrlWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"configReportUrl\" executable=\"configReportUrl\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>

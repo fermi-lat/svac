@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -23,33 +23,32 @@ my $svacTupleXml =
 
     <name>$ENV{'svacTupleTask'}</name>
     <type>Analysis</type>
-    <dataset-base-path>$svacTupleDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"svacTupleWrapper\" version=\"$ENV{'svacTupleTaskVersion'}\">
+        <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
             $ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl
         </executable>
-        <executable name=\"svacRootFileWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"svacRootFile\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
 
         <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
-            <working-directory>$svacTupleDataDir</working-directory>
-            <log-file-path>$svacTupleDataDir</log-file-path>
+            <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$svacTupleDataDir</working-directory>
-            <log-file-path>$svacTupleDataDir</log-file-path>
+            <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"histogram\" type=\"root\" file-type=\"histogram\"/>
-        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
-        <file name=\"script\" type=\"csh\" file-type=\"script\"/>
-        <file name=\"svac\" type=\"root\" file-type=\"svac\"/>
+        <file name=\"histogram\"  file-type=\"root\"   type=\"histogram\">$ENV{'svacTupleDataDir'}</file>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\"     >$ENV{'svacTupleDataDir'}</file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\"   >$ENV{'svacTupleDataDir'}</file>
+        <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >$ENV{'svacTupleDataDir'}</file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >$ENV{'digitizationDataDir'}</file>
+        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >$ENV{'reconDataDir'}</file>
 
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\" file=\"recon\"/>
-
-        <processing-step name=\"svacTuple\" executable=\"svacTupleWrapper\" batch-job-configuration=\"long-job\">
+        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"histogram\"/>
@@ -57,7 +56,7 @@ my $svacTupleXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
         </processing-step>
-        <processing-step name=\"svacRootFile\" executable=\"svacRootFileWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"svacRootFile\" executable=\"svacRootFile\" batch-job-configuration=\"express-job\">
                         <input-file name=\"svac\"/>
         </processing-step>
 </pipeline>

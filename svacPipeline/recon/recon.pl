@@ -18,8 +18,8 @@ $0 running with:
   runId: $runId
 EOT
 
-my $tkrSerNo = `$ENV{'svacPlRoot'}/lib/queryElogReportTable.pl $runId tkr_ser_no`;
-my $calSerNo = `$ENV{'svacPlRoot'}/lib/queryElogReportTable.pl $runId cal_ser_no`;
+my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
+my $calSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId cal_ser_no`;
 
 my $em = 0;
 if($tkrSerNo =~ /Mini/ || $calSerNo =~ /EM2/) {

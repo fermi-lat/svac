@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -23,39 +23,38 @@ my $reconReportXml =
 
     <name>$ENV{'reconReportTask'}</name>
     <type>Report</type>
-    <dataset-base-path>$reconReportDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"genReportWrapper\" version=\"$ENV{'reconReportTaskVersion'}\">
+        <executable name=\"genReport\" version=\"$ENV{'reconReportTaskVersion'}\">
             $ENV{'reconReportTaskDir'}/genReconTestReportWrapper.pl
         </executable>
-        <executable name=\"reconReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"reconReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
 
         <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
-            <working-directory>$reconReportDataDir</working-directory>
-            <log-file-path>$reconReportDataDir</log-file-path>
+            <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$reconReportDataDir</working-directory>
-            <log-file-path>$reconReportDataDir</log-file-path>
+            <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
-        <file name=\"script\" type=\"csh\" file-type=\"script\"/>
-        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'reconReportDataDir'}</file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'reconReportDataDir'}</file>
+        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">$ENV{'reconReportDataDir'}</file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
+        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\">$ENV{'reconDataDir'}</file>
 
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-        <foreign-input-file name=\"recon\" pipeline=\"$ENV{'reconTask'}\"/ file=\"recon\">
-
-        <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"long-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"jobOptions\"/>
                         <output-file name=\"script\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"reconReportUrl\" executable=\"reconReportUrlWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"reconReportUrl\" executable=\"reconReportUrl\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>

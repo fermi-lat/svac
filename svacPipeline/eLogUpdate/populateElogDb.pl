@@ -1,9 +1,9 @@
 #!/usr/local/bin/perl -w
 
 use strict;
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/dbSetup.cshrc");
 
 if ($#ARGV != 1) {
     die "Usage: $0 shellFile rcReport";

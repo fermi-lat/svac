@@ -2,9 +2,9 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -23,37 +23,36 @@ my $digiReportXml =
 
     <name>$ENV{'digiReportTask'}</name>
     <type>Report</type>
-    <dataset-base-path>$digiReportDataDir</dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"genReportWrapper\" version=\"$ENV{'digiReportTaskVersion'}\">
+        <executable name=\"genReport\" version=\"$ENV{'digiReportTaskVersion'}\">
             $ENV{'digiReportTaskDir'}/genDigiTestReportWrapper.pl
         </executable>
-        <executable name=\"digiReportUrlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"digiReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
 
         <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
-            <working-directory>$digiReportDataDir</working-directory>
-            <log-file-path>$digiReportDataDir</log-file-path>
+            <working-directory>$ENV{'digiReportDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$digiReportDataDir</working-directory>
-            <log-file-path>$digiReportDataDir</log-file-path>
+            <working-directory>$ENV{'digiReportDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"jobOptions\" type=\"jobOpt\" file-type=\"text\"/>
-        <file name=\"script\" type=\"csh\" file-type=\"script\"/>
-        <file name=\"tarBall\" type=\"tgz\" file-type=\"Analysis\"/>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digiReportDataDir'}</file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digiReportDataDir'}</file>
+        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">$ENV{'digiReportDataDir'}</file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
 
-        <foreign-input-file name=\"digi\" pipeline=\"$ENV{'digitizationTask'}\" file=\"digi\"/>
-
-        <processing-step name=\"genReport\" executable=\"genReportWrapper\" batch-job-configuration=\"medium-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"medium-job\">
                         <input-file name=\"digi\"/>
                         <output-file name=\"jobOptions\"/>
                         <output-file name=\"script\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"digiReportUrl\" executable=\"digiReportUrlWrapper\" batch-job-configuration=\"express-job\">
+        <processing-step name=\"digiReportUrl\" executable=\"digiReportUrl\" batch-job-configuration=\"express-job\">
                         <input-file name=\"tarBall\"/>
         </processing-step>
 </pipeline>
