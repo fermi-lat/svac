@@ -1,7 +1,7 @@
 #!/nfs/slac/g/svac/local/bin/python
 
 """Usage:
-ConfigTables.py runNumber snapshot tarBall
+ConfigTables.py runNumber schema snapshot tarBall
 
 """
 
@@ -17,8 +17,8 @@ import configParser
 import jobOptions
 
 
-if len(sys.argv) == 4:
-    runNumber, snapFile, tarBall = sys.argv[1:]
+if len(sys.argv) == 5:
+    runNumber, schemaFile, snapFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -64,9 +64,14 @@ output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
-output.addChild(r"""Created by ConfigTables version %s from file:<br/>
+output.addChild(r"""Created by ConfigTables version %s from files:<br/>
 snapshot: %s<br/>
-""" % (jobOptions.version, snapFile))
+schema: %s<br/>
+""" % (jobOptions.version, snapFile, schemaFile))
+
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 
 
 # parse the config data
@@ -79,6 +84,8 @@ except:
 
 
 calTables = configParser.calFeReg(doc)
+output.addChildren(calTables)
+
 #configParser.tkrSplits(doc)
 
 finish()

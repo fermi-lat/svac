@@ -4,61 +4,53 @@
 
 #
 
+import html
 import ndTable
+import htmlTable as table
 import tableFromXml
+import temUtil
 
 import jobOptions
+
 
 #
 def calFeReg(doc):
     # get stuff from CAL front ends
     # and make tables of it
+
+    calTables = []
     for registerTag in jobOptions.calTags:
-        elements = doc.getElementsByTagName(registerTag)
-        container = util.contain(elements, shapes)
+        nTable = oneCalReg(doc, registerTag)
+        calTables.extend(nTable)
+        calTables.append(html.Element("HR"))
+        pass
+    return calTables
 
-        output.addChild("\n")
-        output.addChild(html.Element("HR"))
-        output.addChild("\n")
-
-        registerLabel = temUtil.registerMap[registerTag]
-        output.addChild(html.Heading(registerLabel, 2))
-        
-        for jtem, tem in enumerate(container):
-            sides = []
-            for iside, side in enumerate(tem):
-                sideLabel = temUtil.cccSideMap[iside]
-                title = "%s for Tower %d side %s" % \
-                        (registerLabel, jtem, sideLabel)
-                yLen = len(side)
-                xLen = len(side[0])
-                yLab = map(repr, temUtil.cccLayerMap[iside][:yLen])
-                xLab = map(repr, range(xLen))
-                hTable = table.twoDTable(side, title, ("crystal", "layer"),
-                                         (xLab, yLab))
-                sides.append(hTable)
-                pass
-            hTable = html.nWay(sides, jobOptions.calTabWidth)
-            output.addChild(hTable)
+#
+def oneCalReg(doc, tag):
+    axisLabels = jobOptions.calAxisLabels
+    regSpec, regLabel = jobOptions.tables[tag]
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    header = html.Heading(sectionTitle, 2)
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+    regTables = []
+    tems = xTable.data.items()
+    tems.sort()
+    for iTem, temData in tems:
+        gcccs = temData.items()
+        gcccs.sort()
+        for iGccc, gcccData in gcccs:
+            array, labels = gcccData.table()
+            layerMap = temUtil.cccLayerMap[iGccc]
+            labels[0] = [layerMap[x] for x in labels[0]]
+            sideLabel = temUtil.cccSideMap[iGccc]
+            title = "%s for Tower %d side %s" % (regLabel, iTem, sideLabel)
+            sideTable = table.twoDTable(array, title, axisLabels, labels)
+            regTables.append(sideTable)
             pass
         pass
-    return
-
-
-def calFeReg(doc):
-    # get stuff from CAL front ends
-    # and make tables of it
-
-    tables = []
-    for registerTag in jobOptions.calTags:
-        regSpec, title = jobOptions.tables[registerTag]
-        xTable = tableFromXml.xTableGen(doc, regSpec)
-        nTable = xTable.table()
-        nTable.title = title
-        tables.append(nTable)
-        pass
-    return tables
-
+    nTable = html.nWay(regTables, jobOptions.calTabWidth)
+    return header, nTable
 
 
 

@@ -1,5 +1,5 @@
 
-
+#
 def formatDict(dict):
     val = []
     for key, value in dict.items():
@@ -13,10 +13,12 @@ def formatDict(dict):
     return val
 
 
+#
 class Element:
 
     tag = ""
 
+    #
     def __init__(self, tag=None, attr=None):
         if tag is not None:
             self.tag = tag
@@ -27,13 +29,23 @@ class Element:
         self.attr = attr
         return
 
+    #
     def addChild(self, child):
         self.children.append(child)
         return
 
+    #
+    def addChildren(self, children):
+        for child in children:
+            self.addChild(child)
+            pass
+        return
+
+    #
     def __repr__(self):
         return "<HTML Element %s at %x>" % (self.tag, id(self))
 
+    #
     def __str__(self):
         val = ["<%s%s>" % (self.tag, formatDict(self.attr))] + \
               map(str, self.children) + \
@@ -41,16 +53,19 @@ class Element:
         val = "".join(val)
         return val
 
+    #
     def toString(self):
         return self.__str__()
 
     pass
 
 
+#
 class Page(Element):
 
     tag = "HTML"
 
+    #
     def __init__(self, title="", heading=None):
         if heading is None:
             heading = title
@@ -62,10 +77,13 @@ class Page(Element):
 
     pass
 
+
+#
 class Head(Element):
 
     tag = "HEAD"
 
+    #
     def __init__(self, title=""):
         Element.__init__(self)
         title = Title(title)
@@ -74,10 +92,12 @@ class Head(Element):
 
     pass
 
+#
 class Heading(Element):
 
     tagBase = "H"
 
+    #
     def __init__(self, heading="", level=1):
         Element.__init__(self)
         #self.attr["ALIGN"] = "CENTER"
@@ -88,10 +108,12 @@ class Heading(Element):
 
     pass
 
+#
 class Title(Element):
 
     tag = "TITLE"
 
+    #
     def __init__(self, title=""):
         Element.__init__(self)
         self.addChild(title)
@@ -100,6 +122,7 @@ class Title(Element):
     pass
 
 
+#
 def nWay(elements, width=2):
     import math
 

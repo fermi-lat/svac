@@ -1,7 +1,7 @@
 
 import html
 
-def twoDTable(array, title, (xTitle, yTitle), (xLabels, yLabels)):
+def twoDTable(array, title, (yTitle, xTitle), (yLabels, xLabels)):
     nXVals = len(array[0])
 
     table = html.Element("TABLE", attr={"BORDER": 1})

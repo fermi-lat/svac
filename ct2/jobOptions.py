@@ -2,7 +2,7 @@
 import os
 
 tables = {
-'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt:*', "Log Accept Discriminator"), 
+'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt:*', "Log Accept Discriminator (zero supression)"), 
 'CAL_FHE': ('GTEM/GCCC/GCRC/GCFE/fhe_dac:*', "High Energy Trigger Discriminator"), 
 'CAL_FLE': ('GTEM/GCCC/GCRC/GCFE/fle_dac:*', "Low Energy Trigger Discriminator"), 
 'CAL_RNG': ('GTEM/GCCC/GCRC/GCFE/rng_uld_dac:*', "Range Select Discriminator"), 
@@ -28,6 +28,7 @@ tables = {
 }
 
 calTags = ['CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF']
+calAxisLabels = ('layer', 'crystal')
 
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']
