@@ -2,33 +2,12 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
-use DPFProc;
+my ($digiRootFile, $optionFile, $shellFile, $tarBall) = @argv;
 
-#####################################################
-##
-##  BEGIN:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
-##
-#####################################################
-
-my $proc = new DPFProc(@ARGV);
-my $inFiles = $proc->{'inFiles'};
-my $outFiles = $proc->{'outFiles'};
-
-#####################################################
-##
-##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
-##
-#####################################################
-
-my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = 'noSuchFile';
-my $optionFile = $outFiles->{'jobOptions'};
-my $shellFile = $outFiles->{'script'};
-my $tarBall = $outFiles->{'tarBall'};
 
-# gotta figure this out or get it from pieline DB
-my $reportDir = $??;
+my $reportDir = `basename $tarBall`;
+
 # not sure if we really need this one
 my $timeStamp = $??;
 
