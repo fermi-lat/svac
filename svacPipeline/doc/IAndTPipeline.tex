@@ -55,11 +55,12 @@ the capabilities of GINO.
 
 \includegraphics[bb=120 38 545 502,width=7.5in,height=6.5in]{actual-EM2-v1r0.eps}
 
-{Each entry point represents a task.  Dotted lines show the sequence of TPs
-within a task.  Dashed lines show launching of tasks by TPs.  TPs and datasets
-are labeled taskName\_tpName and taskName\_dsName (version numbers removed
-from taskName) so they can be identified with the matching entities in the
-GINO configration.}
+{Each entry point represents a task.  Hexagons show symbolic links. Dashed
+lines show the sequence of TPs within a task.  Dotted lines show launching of
+tasks by TPs and creation of symbolic links, both of which happen witho GINO's
+knowledge.  TPs and datasets are labeled taskName:tpName and taskName:dsName
+(version numbers removed from taskName) so they can be identified with the
+matching entities in the GINO configration.}
 
 \end{figure}
 
@@ -67,25 +68,37 @@ There are more TPs (22 here), since it takes a TP to launch a task.  Under a
 future version of GINO which understood parallel execution, branching
 dependency flow, and multiple entry points, all of this stuff would be in 2
 tasks (instead of 8 now), and all but 1 of these "chaining" TPs would be
-eliminated.
+eliminated.  Note that each TP involves at least two scripts.
 
 There appear to be more datasets.  This is beacuse the DSs seen by a task
 include the task name, so the TPs that launch a task must make copies of or
-links to Dss that are passed on to the next task.  Thus, digi\_digi\_root,
-recon\_digi\_root, digiReport\_digi\_root, svac\_digi\_root, and
-reconReport\_digi\_root are all the same data, but it must appear with all those
-names to work with GINO's naming convention.
+links to DSs that are passed on to the next task.  Thus, digi\_digi\_root is a
+real file, while recon\_digi\_root, digiReport\_digi\_root, svac\_digi\_root,
+and reconReport\_digi\_root are all links to the same data which must appear
+with all those names to work with GINO's naming convention.
 
 There are more edges.  These represent extra information that must be
 maintained by the user, as the ordering of TPs within a task must be
-explicitly specified to GINO, and launching of other tasks by TPs is done ``by hand.''
+explicitly specified to GINO, and launching of other tasks by TPs and
+launching of tasks are done ``by hand,'' without GINO's knowledge.
 
 The dependency on the eLog DB is not explicitly present - it is guaranteed by
 the ordering of the tasks.
 
 I have in mind an alternate (harder, of course) approach to launching tasks
 that would reduce latency waiting for tasks to run and simplify this graph
-\emph{a bit}.
+somewhat.  This is shown in Figure \ref{newlaunch-fig}.
+
+
+\begin{figure}
+\label{newlaunch-fig}
+\caption{Proposed}
+
+\includegraphics{newlaunch-EM2-v1r0.eps}
+
+{The new scheme.}
+
+\end{figure}
 
 
 \end{document}
