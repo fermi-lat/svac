@@ -80,9 +80,11 @@ GetCalPedestal::GetCalPedestal(const std::string&  name,
   declareProperty("calibType", m_calDes.m_calibType=Constants::CalPedestal);
   declareProperty("procLevel", m_calDes.m_procLevel=Constants::Test);
   declareProperty("status", m_calDes.m_status=Constants::Ok);
-  declareProperty("validStartTime", m_calDes.m_validStartTime="");
-  declareProperty("validEndTime", m_calDes.m_validEndTime="");
-  declareProperty("creationTime", m_calDes.m_creationTime="2003-10-11 12:00");
+  declareProperty("validStartTime", m_calDes.m_validStartTime);
+  declareProperty("validEndTime", m_calDes.m_validEndTime);
+  declareProperty("runStartTime", m_calDes.m_runStartTime);
+  declareProperty("runEndTime", m_calDes.m_runEndTime);
+  declareProperty("creationTime", m_calDes.m_creationTime);
   declareProperty("software", m_calDes.m_software="calibGenCAL");
   declareProperty("version", m_calDes.m_version="v0");
   declareProperty("dataSize", m_calDes.m_dataSize=-9999);

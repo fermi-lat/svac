@@ -10,6 +10,8 @@ struct CalibrationDescription : public OracleTable {
   int m_source;
   std::string m_validStartTime;
   std::string m_validEndTime; 
+  std::string m_runStartTime;
+  std::string m_runEndTime; 
   std::string m_creationTime;
   std::string m_software;
   std::string m_version;

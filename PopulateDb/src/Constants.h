@@ -9,7 +9,7 @@ struct Constants {
 
   enum Hardware {EM2=0};
 
-  enum CalibType {CalElecGain=0, CalPedestal=4, CalLightAsy=6, TkrNoisyChannel=13, TkrDeadChannel=14};
+  enum CalibType {CalElecGain=0, CalPedestal=4, CalLightAsy=6, TkrNoisyChannel=13, TkrDeadChannel=14, TkrTot=15};
 
   enum ProcLevel {Test=0, Development=1, Production=2, Superseded=2};
 

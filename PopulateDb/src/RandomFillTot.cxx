@@ -21,32 +21,34 @@
 #include "TkrGeo.h"
 #include "CalibrationDescription.h"
 #include "TkrIndex.h"
-#include "TkrNoisyChannel.h"
-#include "TkrDeadChannel.h"
+#include "TkrTot.h"
 #include "Constants.h"
+
+using std::cout;
+using std::endl;
 
 class OracleDbSvc;
 
 /**
-   @file RandomFill.cxx
+   @file RandomFillTot.cxx
    Simple algorithm to test functioning of "the other" TDS, Cal pedestals data
 */
 
 
 
   /** 
-   @class RandomFill
+   @class RandomFillTot
 
    Algorithm exemplifying retrieval and use of Calorimeter pedestal calibration
 */
 
-class RandomFill : public Algorithm {
+class RandomFillTot : public Algorithm {
 
 public:
 
-  RandomFill(const std::string& name, ISvcLocator* pSvcLocator); 
+  RandomFillTot(const std::string& name, ISvcLocator* pSvcLocator); 
 
-  ~RandomFill();
+  ~RandomFillTot();
 
   StatusCode initialize();
 
@@ -90,17 +92,15 @@ private:
 
   TkrIndex m_tkrIndex;
 
-  TkrNoisyChannel m_tkrNoisyChannel;
-
-  TkrDeadChannel m_tkrDeadChannel;
+  TkrTot m_tkrTot;
 };
 
 /// Instantiation of a static factory to create instances of this algorithm
-static const AlgFactory<RandomFill> Factory;
-const IAlgFactory& RandomFillFactory = Factory;
+static const AlgFactory<RandomFillTot> Factory;
+const IAlgFactory& RandomFillTotFactory = Factory;
 
 
-RandomFill::RandomFill(const std::string&  name, 
+RandomFillTot::RandomFillTot(const std::string&  name, 
                  ISvcLocator*        pSvcLocator )
   : Algorithm(name, pSvcLocator), m_pOracleDbSvc(0), m_db(0)
 {
@@ -129,11 +129,11 @@ RandomFill::RandomFill(const std::string&  name,
   gRandom->SetSeed(1);
 }
 
-RandomFill::~RandomFill()
+RandomFillTot::~RandomFillTot()
 {
 }
 
-StatusCode RandomFill::initialize() {
+StatusCode RandomFillTot::initialize() {
   StatusCode sc;
   MsgStream log(msgSvc(), name());
   log << MSG::INFO << "Initialize()" << endreq;
@@ -141,7 +141,7 @@ StatusCode RandomFill::initialize() {
   sc = setProperties();
   if ( !sc.isSuccess() ) {
     log << MSG::ERROR 
-	<< "Could not set properties in RandomFill" 
+	<< "Could not set properties in RandomFillTot" 
 	<< endreq;
     return sc;
   }
@@ -161,14 +161,12 @@ StatusCode RandomFill::initialize() {
   m_calDes.setDb(m_db);
   m_calDes.setOracleTimeFmt(m_pOracleDbSvc->getOracleTimeFmt());
   m_tkrIndex.setDb(m_db);
-  m_tkrNoisyChannel.setDb(m_db);
-  m_tkrDeadChannel.setDb(m_db);
+  m_tkrTot.setDb(m_db);
 
   try {
     m_calDes.prepareFill();
     m_tkrIndex.prepareFill();
-    m_tkrNoisyChannel.prepareFill();
-    m_tkrDeadChannel.prepareFill();
+    m_tkrTot.prepareFill();
   }
   catch(const OCIException& e) {
     log << MSG::ERROR << e.what() << endreq;
@@ -179,11 +177,11 @@ StatusCode RandomFill::initialize() {
 }
 
 
-StatusCode RandomFill::execute( ) {
+StatusCode RandomFillTot::execute( ) {
 
   MsgStream log(msgSvc(), name());
 
-  for(int i = 0; i != 1000; ++i) {
+  for(int i = 0; i != 2; ++i) {
 
     std::cout << "input " << i << "th set of calibration constants" << std::endl;
 
@@ -200,75 +198,40 @@ StatusCode RandomFill::execute( ) {
     m_calDes.m_procLevel = randomInt(4);
     m_calDes.m_status = randomInt(3);
     m_calDes.m_dataSize = randomInt(1000);
-    m_calDes.m_creator = "";
+    m_calDes.m_creator = "Xin Chen";
     m_calDes.m_description = "test data";
 
     try {
-      // randomly fill Tkr noisy table
+      // randomly fill Tkr tot table
       m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes.m_id));
-      m_calDes.m_calibType = Constants::TkrNoisyChannel;
+      m_calDes.m_calibType = Constants::TkrTot;
       m_calDes.fill();
 
-      for(int iTower = 0; iTower != 1; ++iTower) {
-	for(int iTray = 0; iTray != 4; ++iTray) {
-	  for(int iPos = 0; iPos != 2; ++iPos) {
+      for(int iTower = 0; iTower != TkrGeo::nTower; ++iTower) {
+
+	cout << "Filling tower " << iTower << endl;
+
+	for(int iTray = 0; iTray != TkrGeo::nTray; ++iTray) {
+	  for(int iPos = 0; iPos != TkrGeo::nPos; ++iPos) {
+
+	    if( (iTray == 0 && iPos == TkrGeo::bot) ||
+		(iTray == TkrGeo::nTray-1 && iPos == TkrGeo::top) ) continue;
 
 	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex.m_id));
 	    m_tkrIndex.m_calDesId = m_calDes.m_id;
 	    m_tkrIndex.m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
 	    m_tkrIndex.fill();
 
-	    m_tkrNoisyChannel.m_tkrIndexId = m_tkrIndex.m_id;
+	    m_tkrTot.m_tkrIndexId = m_tkrIndex.m_id;
 
-	    int nNoisyChannels = randomInt(10);
-	    std::vector<int> noisyChannels;
-	    noisyChannels.reserve(nNoisyChannels);
-	    randomFillVector(noisyChannels, nNoisyChannels, 0, 
-			     (int) TkrGeo::nStripsPerLayer);
-
-	    for(std::vector<int>::const_iterator itr = noisyChannels.begin();
-		itr != noisyChannels.end(); ++itr) {
-
-	      m_db->getNextSeqNo("Seq_TkrNoisyChID", 
-				 &(m_tkrNoisyChannel.m_id));
-	      m_tkrNoisyChannel.m_strip = *itr;
-	      m_tkrNoisyChannel.fill();
+	    for(int iStrip = 0; iStrip != TkrGeo::nStripsPerLayer; ++iStrip) {
+	      m_tkrTot.m_p0 = randomDB(1);
+	      m_tkrTot.m_p1 = randomDB(1);
+	      m_tkrTot.m_p2 = randomDB(1);
+	      m_tkrTot.m_chi2 = randomDB(10);
+	      m_tkrTot.m_strip = iStrip;
+	      m_tkrTot.fill();
 	    }
-	  }
-	}
-      }
-
-      // randomly fill Tkr dead table
-      m_db->getNextSeqNo("Seq_CalDesID", &(m_calDes.m_id));
-      m_calDes.m_calibType = Constants::TkrDeadChannel;
-      m_calDes.fill();
-
-      for(int iTower = 0; iTower != 1; ++iTower) {
-	for(int iTray = 0; iTray != 4; ++iTray) {
-	  for(int iPos = 0; iPos != 2; ++iPos) {
-
-	    m_db->getNextSeqNo("Seq_TkrIndexID", &(m_tkrIndex.m_id));
-	    m_tkrIndex.m_calDesId = m_calDes.m_id;
-	    m_tkrIndex.m_tkrInstId = TkrGeo::getTkrId(iTower, iTray, iPos);
-	    m_tkrIndex.fill();
-
-	    m_tkrDeadChannel.m_tkrIndexId = m_tkrIndex.m_id;
-
-	    int nDeadChannels = randomInt(10);
-	    std::vector<int> deadChannels;
-	    deadChannels.reserve(nDeadChannels);
-	    randomFillVector(deadChannels, nDeadChannels, 0, 
-			     (int) TkrGeo::nStripsPerLayer);
-
-	    for(std::vector<int>::const_iterator itr = deadChannels.begin();
-		itr != deadChannels.end(); ++itr) {
-
-	      m_db->getNextSeqNo("Seq_TkrDeadChID", 
-				 &(m_tkrDeadChannel.m_id));
-	      m_tkrDeadChannel.m_strip = *itr;
-	      m_tkrDeadChannel.fill();
-	    }
-
 	  }
 	}
       }
@@ -283,15 +246,15 @@ StatusCode RandomFill::execute( ) {
 }
 
 
-StatusCode RandomFill::finalize( ) 
+StatusCode RandomFillTot::finalize( ) 
 {
   MsgStream log(msgSvc(), name());
-  log << MSG::INFO << "          Finalize RandomFill " << endreq;
+  log << MSG::INFO << "          Finalize RandomFillTot " << endreq;
   
   return StatusCode::SUCCESS;
 }
 
-std::string RandomFill::randomTime() const
+std::string RandomFillTot::randomTime() const
 {
   // feb may have 27 days
   static int max = 12 * 27 * 24 * 60;
@@ -325,7 +288,7 @@ std::string RandomFill::randomTime() const
   return time;
 }
 
-template<class X> void RandomFill::randomFillVector(std::vector<X>& v, 
+template<class X> void RandomFillTot::randomFillVector(std::vector<X>& v, 
 						    size_t size,
 						    X min, X max)
 {

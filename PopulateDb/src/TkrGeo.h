@@ -7,8 +7,11 @@ class TkrGeo {
 
   enum { nTower = 16, nTray = 19, nPos = 2, nStripsPerLayer = 1535 };
 
-  static int getTkrId(int tower, int tray, int pos) 
+  enum {bot = 0, top = 1};
+
+  static int getTkrId(int tower, int tray, bool top) 
     {
+      int pos = (top) ? 1 : 0;
       return tower*nTray*nPos + tray*nPos + pos;
     }
 };
