@@ -20,8 +20,8 @@ $0 running with:
 EOT
 
 my $cmtPath = $ENV{'CMTPATH'};
-my $cmtDir = $ENV{'svacCmt'};
-my $exe = $ENV{'svacApp'};
+my $cmtDir = $ENV{'svacTupleCmt'};
+my $exe = $ENV{'svacTupleApp'};
 
 my $glastRoot = "/afs/slac.stanford.edu/g/glast";
 my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
