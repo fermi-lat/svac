@@ -2,7 +2,7 @@
 
 use strict;
 
-use lib '/u/gl/dflath/glast/software/DPF/PDB/';
+use lib $ENV{'PDB_HOME'};
 use DPFProc;
 
 #####################################################
