@@ -7,7 +7,7 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv CMTCONFIG rh9_gcc32opt
 setenv GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv EngineeringModelVersion v3r0407p3
+setenv EngineeringModelVersion v3r0407p13
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -106,7 +106,7 @@ setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v1r0
 setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r3p1
+setenv RunRootAnalyzerVersion v1r3p4
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
