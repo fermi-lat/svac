@@ -6,11 +6,13 @@ setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv sasLocation /nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel
 setenv sasVersion EngineeringModel-v3r0404p2
+setenv EngineeringModelVersion v3r0404p2
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt ${svacRoot}/builds
-setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
+# svacPlRoot is set in the pipeline
+#setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 #setenv svacPlLibVersion v1r0
 #setenv svacPlLib ${svacPlRoot}/lib/${svacPlLibVersion}
 setenv svacPlLib ${svacPlRoot}/lib
@@ -22,6 +24,8 @@ setenv rootUrl /glast.u12/EM2/rootData
 setenv rawUrl /glast.u12/EM2/rawData
 
 setenv calibVersion calib-v1r0
+setenv calibGenTKRVersion v0r1p8
+setenv calibGenCALVersion v2r3p4
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv svacOnlineVersion v1r0
@@ -63,11 +67,12 @@ setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v1r0
 setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
-setenv TestReportVersion v2r0
+setenv TestReportVersion v3r1p0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
+setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
 setenv digiReportVersion v1r0p0
 setenv digiReportUrl html/index.html
 setenv digiReportTaskDir ${svacPlRoot}/digiReport/${digiReportTaskVersion}
