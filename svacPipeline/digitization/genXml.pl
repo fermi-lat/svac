@@ -12,7 +12,7 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $batchgroup = $ENV{'batchgroup'};
 
 # digitization
-my $digiDataDir = "$ENV{'svacEmDir'}/grRoot";
+#my $digiDataDir = "$ENV{'svacEmDir'}/grRoot";
 
 my $digitizationXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
