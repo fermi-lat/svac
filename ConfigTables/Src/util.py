@@ -200,6 +200,22 @@ def getSplit(nLeft, nRight, leftTfes, rightTfes):
 topTag = "GLAT"
 attr = "ID"
 def getRegisters(elements, topTag=topTag, attr=attr):
+    """@brief Find path to, and coordinates of, a set of XML elements.
+
+    @param elements A sequence of XML elements.
+
+    @param topTag The 'root' tag.  Parents of the elements will be found until
+    this tagName is reached.  Optional, default is 'GLAT'.
+
+    @param attr The attribute of parents used to generate coordinates.
+    Optional, default is 'ID'.
+
+    @return A tuple containing:
+    @li A list of element, coordinate pairs.
+    @li The path from topTag to the elements.
+
+    """
+    
     all = []
     #elements = doc.getElementsByTagName(tag)
     if len(elements) == 0:
@@ -223,6 +239,18 @@ def getRegisters(elements, topTag=topTag, attr=attr):
 
 
 def putVal(container, value, path):
+    """@brief Assign a value to a cell in a nested sequence.
+
+    @param container The nested sequence.
+
+    @param value The value to put in the cell.
+
+    @param path The coordinates of the cell to be filled.
+
+    @return None.
+
+    """
+    
     for index in path[:-1]:
         container = container[index]
     container[path[-1]] = value
@@ -230,6 +258,21 @@ def putVal(container, value, path):
 
 
 def contain(elements, shapes, blank=0):
+    """@brief Put integer values of XML elements into a nested sequence.
+
+    @param elements A sequence of XML elements.
+
+    @param shapes A dict with keys that are tagNames and values that are the
+    expected number of elements or parents with that tagName.  This is used to
+    set the dimensions of the containing sequence.
+
+    @param blank The default value to put in cells for which there is no
+    element.  Optional, default is 0.
+
+    @return A nested sequence containing the integer values of the elements.
+
+    """
+    
     elements, tags = getRegisters(elements)
 
     shape = []
