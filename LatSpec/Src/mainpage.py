@@ -1,5 +1,3 @@
-# -*- mode: auto-fill-mode; fill-prefix: ## ; -*-
-
 ## @file mainpage.py
 ## @brief Top-level documentation for spectral analysis package.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
