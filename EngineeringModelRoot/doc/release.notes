@@ -29,3 +29,7 @@ Before all variables are written out as leaves in a single branch.
 Change RootAnalyzer.cxx so that each variable is written out in a different
 branch in the tree. By this way, when a user plot a single variable in the
 ntuple, only that variable will be loaded into memory instead of all variables.
+
+HEAD
+
+add utility exe AnalyzeAcd to analyze acd digi root files

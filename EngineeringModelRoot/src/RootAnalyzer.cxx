@@ -11,6 +11,9 @@
 #include "TROOT.h"
 #include "ToString.h"
 
+using std::cout;
+using std::endl;
+
 RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
   : m_outputFile(0), m_tree(0), m_branch(0), m_mcFile(0), m_mcTree(0),
     m_mcBranch(0), m_mcEvent(0), m_reconFile(0), m_reconTree(0), 
@@ -304,7 +307,6 @@ void RootAnalyzer::analyzeDigiTree()
     diagnostic();
   }
 
-
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
 
@@ -338,6 +340,15 @@ void RootAnalyzer::analyzeDigiTree()
 	correctTotDataQuad(tkrDigi);
       }
   }
+
+  /*
+  // ACD digi
+  const TObjArray* acdDigiCol = m_digiEvent->getAcdDigiCol();
+  if (!acdDigiCol) return;
+
+  int nAcdDigi = acdDigiCol->GetLast() + 1;
+  cout << nAcdDigi << endl;
+  */
 }
 
 void RootAnalyzer::fillOutputTree()
@@ -389,17 +400,17 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
   int nEvent, nMc, nRecon, nDigi;
   if(m_mcFile) {
     nMc = (int) m_mcTree->GetEntries();
-    std::cout << "No of events in " << mcFileName << " : " << nMc << std::endl;
+    cout << "No of events in " << mcFileName << " : " << nMc << endl;
     nEvent = nMc;
   }
   if(m_reconFile) {
     nRecon = (int) m_reconTree->GetEntries();
-    std::cout << "No of events in " << reconFileName << " : " << nRecon << std::endl;
+    cout << "No of events in " << reconFileName << " : " << nRecon << endl;
     nEvent = nRecon;
   }
   if(m_digiFile) {
     nDigi = (int) m_digiTree->GetEntries();
-    std::cout << "No of events in " << digiFileName << " : " << nDigi << std::endl;
+    cout << "No of events in " << digiFileName << " : " << nDigi << endl;
     nEvent = nDigi;
   }
 

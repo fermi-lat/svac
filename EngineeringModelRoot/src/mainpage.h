@@ -12,6 +12,7 @@ This package contains codes to generate ntuple for I&T/SVAC. The package include
 <li> RunRootAnalyzer.exe. It read data from 3 root files: mc, digi and recon. It produce 2 root files: *_svac.root contains ntuple for I&T/SVAC, *_hist.root contains histograms for I&T/SVAC. Names of the root files are contained in a option file. The exe uses its first argument as name of the option file; when there is no argument, it uses ../src/AnalyzerOption.dat as the option file</li>
 <li> merge_raRoot.exe. It merges a list of SVAC and merit ntuple files. </li>
 <li> ../pl/RunRootAnalyzer.pl. It is used to run RunRootAnalyzer.exe at batch. </li>
+<li> AnalyzeAcd.exe. A utility exe to process ACD digi alone. </li>
 </ul>
 
 @section def Definition of SVAC ntuple

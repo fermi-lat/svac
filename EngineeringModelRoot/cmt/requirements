@@ -22,3 +22,4 @@ application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx E
 
 application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 
+application AnalyzeAcd AnalyzeAcd.cxx

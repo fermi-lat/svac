@@ -1,3 +1,9 @@
+mc.root
+digi.root
+recon.root
+svac.root
+hist.root
+
 /nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_mc.root
 /nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_digi.root
 /nfs/farm/g/glast/u01/mc/em_v1r0401p9/twoTowers/surface_muons_100000_0_recon.root
