@@ -6,6 +6,7 @@
 
 import math
 
+import eLogDB
 import html
 import mappings
 import ndDict
@@ -31,9 +32,32 @@ def globalStuff(doc):
         line = globoLogical(doc, tag, label)
         output.append(line)
         #output.append(html.Element("BR"))
-        output.append('<br/>')
+        output.append('<br/>\n')
         pass
-    
+
+    output.extend(globalDBStrings())
+    output.append('<br/>\n')
+
+    return output
+
+#
+def globalDBStrings():
+    """Deal with LAT globals that are read from eLog DB as strings."""
+    output = []
+
+    tags = jobOptions.globalDBKeys
+    args = [jobOptions.runNumber]
+    args.extend(tags)
+
+    values = eLogDB.query(*args)
+
+    for tag, value in zip(tags, values):
+        label = jobOptions.globalDBStringLabels[tag]
+        line = "%s: %s\n" % (label, value)
+        output.append(line)
+        output.append('<br/>\n')
+        pass
+
     return output
 
 #
@@ -470,3 +494,28 @@ def oneTack(doc, name):
     return hTable
 
 
+#
+def perTem(doc):
+    """@brief Make tables for all quantities that are per-TEM."""
+
+    output = []
+
+    sectionTitle = "Per-TEM quantities."
+    output.append(html.Heading(sectionTitle, 2))    
+
+    for name in jobOptions.perTem:
+        output.append(oneTem(doc, name))
+        pass
+
+    return output
+
+#
+def oneTem(doc, name):
+    """Make a table for one per-TEM register."""
+
+    regSpec, title = jobOptions.tables[name]
+    regTable = tableFromXml.xTableGen(doc, regSpec)
+    data, labels = regTable.data.table()
+    labels = labels[0]
+    hTable = table.oneDTable(zip(labels, data), title, jobOptions.perTemColumns)
+    return hTable

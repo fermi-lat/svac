@@ -51,3 +51,9 @@ def ticksToTime(ticks):
     scaled = int(scaled + 0.5)
     time = '%s%s' % (scaled, jobOptions.timeUnits)
     return time
+
+
+#
+def logical(bit):
+	"""Display a logical value."""
+	return ['Off', 'On'][bit]

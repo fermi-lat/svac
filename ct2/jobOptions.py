@@ -78,7 +78,16 @@ tables = {
 mappers = {'TKR_DAC': mappings.mapTkrDac}
 
 # logical values that apply to the whole LAT
-globoLogicals = ['ZERO_SUPP', 'FOUR_RANGE', 'TEM_DIAG']
+globoLogicals = ('ZERO_SUPP', 'FOUR_RANGE')
+globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO')
+globalDBStringLabels = {'NoOfTowers': 'Number of Towers',
+                        'TKR_SER_NO': 'TKR Serial #s',
+                        'CAL_SER_NO': 'CAL Serial #s'}
+
+# values that apply per-TEM
+perTem = ('TEM_DIAG',)
+# and column labels for those tables
+perTemColumns = ('Tower', 'Value')
 
 # make TKR split tables this many towers wide
 tkrSplitWidth = 4
@@ -88,22 +97,22 @@ tkrTabWidth = 1
 calTabWidth = 2 
 
 # things to display from TKR front ends
-tkrTags = ['TKR_DAC']
+tkrTags = ('TKR_DAC',)
 tkrAxisLabels = ('layer', 'front end')
 tkrSimpleAxisLabels = ('GTCC,GTRC (digi layer, edge)', 'GTFE')
 
 # things to display from CAL front ends
-calTags = ['CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF']
+calTags = ('CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF')
 calAxisLabels = ('layer', 'crystal')
 
 # cable delays
-# cableDelays = ['CAL_DELAY', 'TKR_DELAY', 'ACD_DELAY', 'CAL_WIDTH', 'ACD_WIDTH', 'CAL_DIAG', 'TKR_DIAG', 'ACD_LATCH_DELAY', 'ACD_LATCH_WIDTH'] # if we had an ACD
-cableDelays = ['CAL_DELAY', 'TKR_DELAY', 'CAL_WIDTH', 'CAL_DIAG', 'TKR_DIAG']
+# cableDelays = ('CAL_DELAY', 'TKR_DELAY', 'ACD_DELAY', 'CAL_WIDTH', 'ACD_WIDTH', 'CAL_DIAG', 'TKR_DIAG', 'ACD_LATCH_DELAY', 'ACD_LATCH_WIDTH') # if we had an ACD
+cableDelays = ('CAL_DELAY', 'TKR_DELAY', 'CAL_WIDTH', 'CAL_DIAG', 'TKR_DIAG')
 cableLabels = ('Tower', 'Cable') # but this won't work with the ACD
 
 # TEM delays
-# tackDelays = ['CAL_TRGSEQ', 'TKR_TRGSEQ', 'ACD_TRGSEQ'] # if we had an ACD
-tackDelays = ['CAL_TRGSEQ', 'TKR_TRGSEQ']
+# tackDelays = ('CAL_TRGSEQ', 'TKR_TRGSEQ', 'ACD_TRGSEQ') # if we had an ACD
+tackDelays = ('CAL_TRGSEQ', 'TKR_TRGSEQ')
 tackDelayLabels = {'CAL_TRGSEQ': ('CAL (ticks (ns))', ('Tower', 'Delay')),
                    'TKR_TRGSEQ': ('TKR (ticks (ns))', ('Tower', 'Delay')),
                    'ACD_TRGSEQ': ('ACD (ticks (ns))', ('AEM', 'Delay'))}
