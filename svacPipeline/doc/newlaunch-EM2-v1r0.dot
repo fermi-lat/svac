@@ -42,13 +42,13 @@ node [shape=ellipse];
 online_rcReport_ds [label="online:rcReport"];
 updateELogDB_rcReport_ds [label="updateELogDB:rcReport"];
 online_schema_ds [label="online:schema"];
-updateELogDB_schema_ds [label="updateELogDB:schema"];
+#updateELogDB_schema_ds [label="updateELogDB:schema"];
 configReport_schema_ds [label="configReport:schema"];
 online_snapshot_ds [label="online:snapshot"];
-updateELogDB_snapshot_ds [label="updateELogDB:snapshot"];
+#updateELogDB_snapshot_ds [label="updateELogDB:snapshot"];
 configReport_snapshot_ds [label="configReport:snapshot"];
 online_ldf_ds [label="online:ldf"];
-updateELogDB_ldf_ds [label="updateELogDB:ldf"];
+#updateELogDB_ldf_ds [label="updateELogDB:ldf"];
 digitization_ldf_ds [label="digitization:ldf"];
 #
 configReport_tarBall_ds [label="configReport:tarBall"];
@@ -84,19 +84,19 @@ online_snapshot_ds -> online_injectSVAC_tp;
 online_ldf_ds -> online_injectSVAC_tp;
 #
 online_injectSVAC_tp -> updateELogDB_rcReport_ds;
-online_injectSVAC_tp -> updateELogDB_schema_ds;
-online_injectSVAC_tp -> updateELogDB_snapshot_ds;
-online_injectSVAC_tp -> updateELogDB_ldf_ds;
+online_injectSVAC_tp -> configReport_schema_ds;
+online_injectSVAC_tp -> configReport_snapshot_ds;
+online_injectSVAC_tp -> digitization_ldf_ds;
 
 updateELogDB_rcReport_ds -> updateELogDB_populateElogDb_tp;
 #
-updateELogDB_ldf_ds -> updateELogDB_launchDigi_tp;
-updateELogDB_launchDigi_tp -> digitization_ldf_ds;
+#updateELogDB_ldf_ds -> updateELogDB_launchDigi_tp;
+#updateELogDB_launchDigi_tp -> digitization_ldf_ds;
 #
-updateELogDB_schema_ds -> updateELogDB_launchConfRep_tp;
-updateELogDB_snapshot_ds -> updateELogDB_launchConfRep_tp;
-updateELogDB_launchConfRep_tp -> configReport_schema_ds;
-updateELogDB_launchConfRep_tp -> configReport_snapshot_ds;
+#updateELogDB_schema_ds -> updateELogDB_launchConfRep_tp;
+#updateELogDB_snapshot_ds -> updateELogDB_launchConfRep_tp;
+#updateELogDB_launchConfRep_tp -> configReport_schema_ds;
+#updateELogDB_launchConfRep_tp -> configReport_snapshot_ds;
 
 configReport_schema_ds -> configReport_ConfigTables_tp;
 configReport_snapshot_ds -> configReport_ConfigTables_tp;
