@@ -1,0 +1,7 @@
+November 16, 2004: Anders W. Borgland
+	cvs tag v1
+	- Tnitial tag.
+         "TkrCMMTools is a package for software to process physical measurement data from built Tracker Towers. 
+	  The software itself is written as a group of Perl scripts which can be accessed through a CGI front end."
+          Added at the request of Arthur K. Scholz, Research Engineering Group. 
+
