@@ -2,11 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 5) {
+if ($#ARGV != 6) {
     die "Useage: $0 runName digiRootFile reconRootFile splitInfoFile optionFile shellFile tarBall";
 }
 
-my ($runName, $digiRootFile, $reconRootFile, $splitInfoFile $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $splitInfoFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
