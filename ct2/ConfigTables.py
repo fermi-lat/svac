@@ -8,6 +8,7 @@ ConfigTables.py runNumber snapshot split tarBall
 
 import os
 import sys
+import time
 import xml.dom.minidom as md
 
 import html
@@ -77,6 +78,8 @@ output.addChild(r"""Created by ConfigTables version %s from files:<br/>
 snapshot: %s<br/>
 """ % (jobOptions.version, snapFile))
 
+output.addChild("\n" + time.asctime() + "\n")
+
 output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
@@ -105,7 +108,11 @@ if nLats != 1:
 theLat = lats[0]
 
 # make tables
-output.addChildren(configParser.globalStuff(doc))
+#output.addChildren(configParser.globalStuff(doc))
+#output.addChild(html.Element("HR"))
+#output.addChild(html.Element("HR"))
+#output.addChild("\n")
+output.addChildren(configParser.perEngine(theLat))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")

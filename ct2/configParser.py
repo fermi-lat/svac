@@ -515,7 +515,7 @@ def gemStuff(doc):
     else:
         if 0 in data:
             data = data[0]
-            time = ticksToTime(data)
+            time = mappings.ticksToTime(data)
             value = '%s ticks = %s' % (data, time)
         else:
             value = jobOptions.absent
@@ -584,3 +584,72 @@ def oneTem(doc, name):
     labels = labels[0]
     hTable = table.oneDTable(zip(labels, data), title, jobOptions.perTemColumns)
     return hTable
+
+
+#
+def perEngine(doc):
+    """@brief Display info from Message Engines.
+
+    """
+
+    output = []
+
+    sectionTitle = 'Message engine configuration'
+    output.append(html.Heading(sectionTitle, 2))
+
+    columns = [jobOptions.messageEngineRowLabels]
+    columnLabels = ['Engine']
+    for name in jobOptions.messageEngineColumns:
+        column = []
+        columns.append(column)
+        tag, label = jobOptions.tables[name]
+        columnLabels.append(label)
+        engines = expandEngines(tag)
+        for engine in engines:
+            regTable = tableFromXml.xTableGen(doc, engine)
+            data, labels = regTable.data.table()
+            column.append(data[0][0])
+            pass
+        pass
+
+    rows = transpose(columns)
+
+    hTable = table.oneDTable(rows, sectionTitle, columnLabels)
+    output.append(hTable)
+    
+    return output
+
+#
+def expandEngines(tag):
+    """@brief Expand wildcard in Message Engine register name.
+
+    """
+
+    wild = '*'
+    # addresses = '0123456789abdcef'
+    addresses = jobOptions.messageEngineRowLabels
+
+    engines = []
+    for address in addresses:
+        engines.append(tag.replace(wild, address))
+        pass
+
+    return engines
+
+#
+def transpose(array):
+    """@brief Transpose a nested list.
+
+    """
+    nCol = len(array)
+    nRow = len(array[0])
+    transposed = []
+    for iRow in range(nRow):
+        row = []
+        transposed.append(row)
+        for iCol in range(nCol):
+            row.append(array[iCol][iRow])
+        pass
+    
+    return transposed
+

@@ -16,10 +16,26 @@ version = os.environ['configReportVersion']
 # register subfields and their descriptions
 tables = {
 
-    'ZERO_SUPP': ('GGLT/zero_suppress',
-                  'CAL Zero Supression'),
-    'FOUR_RANGE': ('GGLT/four_range_readout',
-                   'CAL Four Range Readout'),
+#     'ZERO_SUPP': ('GGLT/zero_suppress',
+#                   'CAL Zero Supression'),
+    'ZERO_SUPP': ('GGEM/GGEMMG/engine_*:21',
+                  'CAL 0 Supression'),
+
+#     'FOUR_RANGE': ('GGLT/four_range_readout',
+#                    'CAL Four Range Readout'),
+    'FOUR_RANGE': ('GGEM/GGEMMG/engine_*:20',
+                   'CAL 4 Range Readout'),
+
+    'PRESCALE': ('GGEM/GGEMMG/engine_*:0-7',
+                 'Prescale'),
+
+    'INHIBIT': ('GGEM/GGEMMG/engine_*:15',
+                'Inhibit'),
+
+    'CONDITION': ('GGEM/GGEMSC/conditions_*',
+                  'Trigger Condition -> Message engine lookup table'),
+
+
     'TEM_DIAG': ('GTEM/data_masks:12',
                  'TEM Diagnostics'),
     
@@ -78,11 +94,21 @@ tables = {
 mappers = {'TKR_DAC': mappings.mapTkrDac}
 
 # logical values that apply to the whole LAT
-globoLogicals = ('ZERO_SUPP', 'FOUR_RANGE')
+#globoLogicals = ('ZERO_SUPP', 'FOUR_RANGE')
+
 globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO')
 globalDBStringLabels = {'NoOfTowers': 'Number of Towers',
                         'TKR_SER_NO': 'TKR Serial #s',
                         'CAL_SER_NO': 'CAL Serial #s'}
+
+# GEM stuff
+# # stuff to display from message engines
+messageEngineColumns = ('INHIBIT', 'ZERO_SUPP', 'FOUR_RANGE', 'PRESCALE')
+# # label message engines, and use to expand wildcard in engine_* registers
+messageEngineRowLabels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
+
+# # use to expand wildcard in conditions_* registers
+conditionStrings = ['%x%x_%x%x' % (msn, lsn, msn, lsn+7) for msn in range(16) for lsn in (0, 8)]
 
 # values that apply per-TEM
 perTem = ('TEM_DIAG',)
