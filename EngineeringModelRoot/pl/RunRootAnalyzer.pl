@@ -48,7 +48,7 @@ while(<JOBFILE>) {
     close(SHELLFILE);
     system("chmod +rwx $shellFile");
 #    system("$shellFile");
-#    system("bsub -q medium -o $dumpFile $shellFile");
+    system("bsub -q medium -o $dumpFile $shellFile");
 }
 
 close(JOBFILE);

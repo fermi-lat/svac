@@ -32,8 +32,8 @@ RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
     m_outputFile = new TFile(raFileName, "RECREATE"); 
     m_tree = new TTree("Output", "Root Analyzer");
 
-    // create new branch
-    m_tree->Branch("Analysis", &m_ntuple, NtupleDef::gRootNtupleDefStr);
+    // create branches for each ntuple variable
+    createBranches();
   }
 
   if(histFileName != "") {
@@ -421,8 +421,8 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
 
-  //        nEvent = 100;
-     //   nEvent = nRecon;
+  //    nEvent = 100;
+  //   nEvent = nRecon;
 
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -798,3 +798,73 @@ void RootAnalyzer::diagnostic()
   }
 }
 
+void RootAnalyzer::createBranches()
+{
+  m_tree->Branch("Run", &(m_ntuple.m_runId), "Run/I");
+  m_tree->Branch("Event_ID", &(m_ntuple.m_eventId), "Event_ID/I");
+  m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/I");
+  m_tree->Branch("McId", &(m_ntuple.m_parId), "McId/I");
+  m_tree->Branch("McTotalEnergy", &(m_ntuple.m_mcEnergy), "McTotalEnergy/F");
+  m_tree->Branch("McX0", &(m_ntuple.m_startPos[0]), "McX0/F");
+  m_tree->Branch("McY0", &(m_ntuple.m_startPos[1]), "McY0/F");
+  m_tree->Branch("McZ0", &(m_ntuple.m_startPos[2]), "McZ0/F");
+  m_tree->Branch("McXDir", &(m_ntuple.m_startDir[0]), "McXDir/F");
+  m_tree->Branch("McYDir", &(m_ntuple.m_startDir[1]), "McYDir/F");
+  m_tree->Branch("McZDir", &(m_ntuple.m_startDir[2]), "McZDir/F");
+  m_tree->Branch("McConvPointX", &(m_ntuple.m_convPos[0]), "McConvPointX/F");
+  m_tree->Branch("McConvPointY", &(m_ntuple.m_convPos[1]), "McConvPointY/F");
+  m_tree->Branch("McConvPointZ", &(m_ntuple.m_convPos[2]), "McConvPointZ/F");
+  m_tree->Branch("TkrNumDigis", &(m_ntuple.m_nTkrDigis), "TkrNumDigis/I");
+  m_tree->Branch("TkrNumStrips", &(m_ntuple.m_nStrips), "TkrNumStrips[16][18][2]/I");
+  m_tree->Branch("tot", &(m_ntuple.m_tot), "tot[16][18][2][2]/I");
+  m_tree->Branch("totCorrL", &(m_ntuple.m_totCorrLinear), "totCorrL[16][18][2][2]/F");
+  m_tree->Branch("totCorrQ", &(m_ntuple.m_totCorrQuad), "totCorrQ[16][18][2][2]/F");
+  m_tree->Branch("TkrDepositEne", &(m_ntuple.m_depositEne), "TkrDepositEne[16][18][2]/F");
+  m_tree->Branch("TkrNumClusters", &(m_ntuple.m_nTkrClusters), "TkrNumClusters[16][18][2]/I");
+  m_tree->Branch("TkrNumTracks", &(m_ntuple.m_nTkrTracks), "TkrNumTracks/I");
+  m_tree->Branch("TkrNumVertices", &(m_ntuple.m_nTkrVertices), "TkrNumVertices/I");
+  m_tree->Branch("VtxX0", &(m_ntuple.m_pos[0]), "VtxX0/F");
+  m_tree->Branch("VtxY0", &(m_ntuple.m_pos[1]), "VtxY0/F");
+  m_tree->Branch("VtxZ0", &(m_ntuple.m_pos[2]), "VtxZ0/F");
+  m_tree->Branch("VtxXDir", &(m_ntuple.m_dir[0]), "VtxXDir/F");
+  m_tree->Branch("VtxYDir", &(m_ntuple.m_dir[1]), "VtxYDir/F");
+  m_tree->Branch("VtxZDir", &(m_ntuple.m_dir[2]), "VtxZDir/F");
+  m_tree->Branch("EvtEnergySumOpt", &(m_ntuple.m_fitTotalEnergy), "EvtEnergySumOpt/F");
+  m_tree->Branch("Vtx1NumTkrs", &(m_ntuple.m_vtxTrks), "Vtx1NumTkrs/I");
+  m_tree->Branch("Tkr1NumHits", &(m_ntuple.m_nFit[0]), "Tkr1NumHits/I");
+  m_tree->Branch("Tkr2NumHits", &(m_ntuple.m_nFit[1]), "Tkr2NumHits/I");
+  m_tree->Branch("Tkr1Chisq", &(m_ntuple.m_chi2[0]), "Tkr1Chisq/F");
+  m_tree->Branch("Tkr2Chisq", &(m_ntuple.m_chi2[1]), "Tkr2Chisq/F");
+  m_tree->Branch("Tkr1ChisqS", &(m_ntuple.m_chi2Smooth[0]), "Tkr1ChisqS/F");
+  m_tree->Branch("Tkr2ChisqS", &(m_ntuple.m_chi2Smooth[1]), "Tkr2ChisqS/F");
+  m_tree->Branch("Tkr1Rms", &(m_ntuple.m_rms[0]), "Tkr1Rms/F");
+  m_tree->Branch("Tkr2Rms", &(m_ntuple.m_rms[1]), "Tkr2Rms/F");
+  m_tree->Branch("Tkr1KalThetaMs", &(m_ntuple.m_msAngle[0]), "Tkr1KalThetaMs/F");
+  m_tree->Branch("Tkr2KalThetaMs", &(m_ntuple.m_msAngle[1]), "Tkr1Ka2ThetaMs/F");
+  m_tree->Branch("Tkr1KalEne", &(m_ntuple.m_tkrEnergy[0]), "Tkr1KalEne/F");
+  m_tree->Branch("Tkr2KalEne", &(m_ntuple.m_tkrEnergy[1]), "Tkr2KalEne/F");
+  m_tree->Branch("CalEneSum", &(m_ntuple.m_calEnergy), "CalEneSum/F");
+  m_tree->Branch("McCalEneSum", &(m_ntuple.m_mcCalEnergy), "McCalEneSum/F");
+  m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/I");
+  m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
+  m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
+  m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");
+  m_tree->Branch("McTkr1Ene", &(m_ntuple.m_pairEne[0]), "McTkr1Ene/F");
+  m_tree->Branch("McTkr2Ene", &(m_ntuple.m_pairEne[1]), "McTkr2Ene/F");
+  m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
+  m_tree->Branch("McConvAngle", &(m_ntuple.m_convAngle), "McConvAngle/F");
+  m_tree->Branch("TkrTopTot", &(m_ntuple.m_topTot), "TkrTopTot[16]/F");
+  m_tree->Branch("Tkr1ConvTot", &(m_ntuple.m_convTot), "Tkr1ConvTot/F");
+  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12]/F");
+  m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
+  m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
+  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/I");
+  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/I");
+  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/I");
+  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/I");
+  m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/I");
+  m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/I");
+  m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/I");
+  m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/I");
+  m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/I");
+}

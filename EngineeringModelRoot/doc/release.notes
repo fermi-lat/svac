@@ -16,3 +16,16 @@ assumed to be tower 0. It should be changed in future.
 
 3. TOT corrections are carried out using Hiro's linear and quadratic formula, 
 only works for EM
+
+v0r1
+
+When merged svac ntuple becomes too large, it will contain two cycles of the
+Output tree.
+Change mergeNtuple.cxx so that the old cycle is removed from the merged file.
+
+v0r2
+
+Before all variables are written out as leaves in a single branch.
+Change RootAnalyzer.cxx so that each variable is written out in a different
+branch in the tree. By this way, when a user plot a single variable in the
+ntuple, only that variable will be loaded into memory instead of all variables.

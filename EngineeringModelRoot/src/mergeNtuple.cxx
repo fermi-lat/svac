@@ -5,7 +5,6 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TChain.h"
-#include "NtupleDef.h"
 #include "TH1.h"
 #include "TList.h"
 #include "TKey.h"
@@ -25,12 +24,15 @@ std::string meritDir = svacDir;
 
 int main() 
 {
+
   std::string fileName;
+
   ifstream inputFile(jobDataFile.c_str());
 
-  NtupleDef* ntuple = new NtupleDef;
-
   TChain chainedTree1("Output");
+
+  chainedTree1.SetAutoSave(2000000000);
+
   TChain chainedTree2("MeritTuple");
 
   while(inputFile >> fileName) {
@@ -49,17 +51,34 @@ int main()
     }
 
     std::cout << "Opening file " << svacFileName << std::endl;
-    //    chainedTree1.SetBranchAddress("Analysis", ntuple);
     chainedTree1.Add(svacFileName.c_str());
     
     std::cout << "Opening file " << meritFileName << std::endl;
     chainedTree2.Add(meritFileName.c_str());
   }
 
+  double nEvent = chainedTree1.GetEntries();
+  std::cout << "Total number of event = " << nEvent << std::endl;
+
   chainedTree1.Merge(mergedSvacFile.c_str());
   chainedTree2.Merge(mergedMeritFile.c_str());
 
-  delete ntuple;
+  // merged svac ntuple is too large, so it contains two cycles of the Output
+  // tree, we need to delete the previous cycle
+
+  TFile f(mergedSvacFile.c_str(), "UPDATE");
+
+  TList* l = f.GetListOfKeys();
+
+  int size = l->GetSize();
+
+  assert(size <= 2);
+
+  if(size == 2) f.Delete("Output;1");
+
+  f.Write(0, TObject::kOverwrite);
+
+  f.Close();
 
 }
 

@@ -63,6 +63,9 @@ class RootAnalyzer {
   // determine boundary of tot0 and tot1, only valid for EM1
   int midStripId(int iLayer, GlastAxis::axis iView) const;
 
+  // create branches for each ntuple variable
+  void createBranches();
+
   TFile* m_outputFile;
   TTree* m_tree;
   TBranch* m_branch;
