@@ -60,7 +60,6 @@ def globalDBStrings():
     args.extend(tags)
 
     values = eLogDB.query(*args)
-    values = map(nicenDBStrings, values)
 
     for tag, value in zip(tags, values):
         label = jobOptions.globalDBStringLabels[tag]
@@ -70,13 +69,6 @@ def globalDBStrings():
         pass
 
     return output
-
-def nicenDBStrings(oldString):
-    """@brief make ???-delimited strings from eLogDB look nicer."""
-    strings = oldString.split('???')
-    strings = [xx for xx in strings if xx]
-    newString = ', '.join(strings)
-    return newString
 
 #
 def globoLogical(doc, tag, label):
@@ -495,7 +487,13 @@ def delays(doc):
     # per-TEM delays
     tTable = tackDelays(doc)
     output.extend(tTable)
-    output.append(html.Element("HR"))    
+    output.append(html.Element("HR"))
+
+    # CAL delays
+    if hasCal(doc):
+        output.extend(calDelays(doc))
+        output.append(html.Element("HR"))
+        pass
 
     return output
 
@@ -589,6 +587,26 @@ def oneTack(doc, name):
     hTable = table.oneDTable(zip(labels[0], data), title, columns)
 
     return hTable
+
+#
+def calDelays(doc):
+    """@brief Show delays from GCRCs."""
+    output = []
+
+    sectionTitle = "Delays from GCRCs"
+    output.append(html.Heading(sectionTitle, 2))
+
+    aTable = []
+
+    for name in jobOptions.calDelays:
+        hTable = oneGtrcReg(doc, name)
+        aTable.append(hTable)
+        pass
+
+    aTable = html.nWay(aTable, 3)
+    output.append(aTable)
+    
+    return output
 
 ######################## per-TEM stuff ##########################
 
