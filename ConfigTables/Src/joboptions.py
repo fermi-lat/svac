@@ -1,5 +1,8 @@
 
-outFile = "ConfigTables.html"
+import os
+
+#outFile = "ConfigTables.html"
+outFile = os.environ['configReportUrl']
 
 calTags = ["log_acpt", "fhe_dac", "fle_dac", "rng_uld_dac", "ref_dac"]
 
@@ -33,4 +36,5 @@ maxShape = {"GTWR": 16,
 # pack this many tables across the output page
 width = 4
 
-version = "v0r0"
+#version = "v1r0p0"
+version = os.environ['configReportVersion']
