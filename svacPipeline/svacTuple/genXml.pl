@@ -32,7 +32,7 @@ my $svacTupleXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
             <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
             <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -48,7 +48,7 @@ my $svacTupleXml =
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >$ENV{'digitizationDataDir'}</file>
         <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >$ENV{'reconDataDir'}</file>
 
-        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"long-job\">
+        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"xlong-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"histogram\"/>
