@@ -31,6 +31,8 @@ my $pwd =  $ENV{PWD};
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'reconReportCmt'};
 my $exe = $ENV{'reconReportApp'};
+my $reconReportVersion = $ENV{'reconReportVersion'};
+my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
 
 my $doxyFile = $ENV{'reconRepDoxyFile'};
 
@@ -42,6 +44,8 @@ print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
 print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
+print OPTFILE qq{$reconReportVersion \n};
+print OPTFILE qq{$EngineeringModelVersion \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
