@@ -12,7 +12,7 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $batchgroup = $ENV{'batchgroup'};
 
 # reconReport
-my $reconReportDataDir = "$ENV{'calibRoot'}/reconReport/$ENV{'reconReportVersion'}";
+#my $reconReportDataDir = "$ENV{'calibRoot'}/reconReport/$ENV{'reconReportVersion'}";
 
 my $reconReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
