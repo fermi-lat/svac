@@ -58,13 +58,6 @@ matrixBinner = histogram.Histogram((trueEdges, reconEdges))
 matrixBinner += nTuple
 matrix = matrixBinner.histogram.astype(num.Float32)
 
-# delete me
-trueCenters = (trueEdges[1:] + trueEdges[:-1]) / 2
-reconCenters = (reconEdges[1:] + reconEdges[:-1]) / 2
-import gnu_grid
-grid = gnu_grid.grid(matrix, trueCenters, reconCenters)
-file('unscaled_matrix.gp', 'w').write(grid)
-
 # 1-d over true energy of accepted events
 # used to normalize the matrix and to build the ARF
 acceptedBinner = histogram.Histogram(trueEdges)
@@ -78,12 +71,6 @@ matrix /= num.maximum(accepted[:, num.NewAxis], lowLimit)
 # divide true spectrum of accepted events by generated spectrum to get an
 # energy-dependent efficiency
 efficiency = accepted / sourceSpectrum
-
-# delete me
-grid = gnu_grid.grid(matrix, trueCenters, reconCenters)
-file('scaled_matrix.gp', 'w').write(grid)
-tableIo.writeTable((trueCenters, accepted, sourceSpectrum, efficiency),
-                   'arfparts.dat')
 
 sys.stderr.write("ok.\n")
 
