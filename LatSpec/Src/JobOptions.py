@@ -30,12 +30,10 @@ eReconMax = 35.0
 nChan = 25
 
 # input spectrum used to build the response set
+sourceModel = "powerlaw"
 offset = 8.0
 slope = -1.0
 norm = 198e6
-def sourceSpectrum(edges):
-    """Estimate the generated spectrum used for the "response" data set."""
-    import spectralFuncs
-    return spectralFuncs.powerlaw((offset, slope, norm), edges)
+sourceParam = (offset, slope, norm)
 
 # # end config

@@ -10,6 +10,7 @@ import Numeric as num
 
 import glastFits
 import histogram
+import spectralFuncs
 import tableIo
 import WrtARF
 import WrtRMF
@@ -52,9 +53,13 @@ accepted = acceptedBinner.histogram.astype(num.Float32)
 lowLimit = num.array(1.0, num.Float32)
 matrix /= num.maximum(accepted[:, num.NewAxis], lowLimit)
 
+# estimate the generated spectrum
+model = getattr(spectralFuncs, JobOptions.sourceModel)
+sourceSpectrum = model(JobOptions.sourceParam, trueEdges)
+
 # divide true spectrum of accepted events by generated spectrum to get an
 # energy-dependent efficiency
-efficiency = accepted / JobOptions.sourceSpectrum(trueEdges)
+efficiency = accepted / sourceSpectrum
 
 sys.stderr.write("ok.\n")
 
