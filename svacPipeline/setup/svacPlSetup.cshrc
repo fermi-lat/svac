@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# setup for SVAC pipeline
+
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source $GLASTROOT/ground/scripts/user.cshrc
 setenv sasCmt /nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0402p16
@@ -12,6 +14,8 @@ setenv svacPlLib $svacPlRoot/lib
 setenv CMTPATH $svacCmt:$sasCmt
 
 setenv rootUrl /glast.u12/EM2/rootData
+
+setenv calibVersion calib-v1r0
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTask updateELogDB-EM2-v1r0
@@ -31,6 +35,7 @@ setenv Em2Version v0r0p0
 setenv Em2Dir $sasCmt/Em2/$Em2Version
 setenv ldfToDigiCmt $Em2Dir/cmt
 setenv ldfToDigiApp $Em2Dir/rh9_gcc32/Em2.exe
+setenv ldfFileType LDFFITS
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
@@ -43,8 +48,6 @@ setenv digiRepDoxyFile $TestReportDir/src/ReportDoxyfile
 setenv digiReportVersion v1r0p0
 setenv digiReportUrl html/index.html
 #-------------------------------- digiReport ----------------------------------
-
-setenv calibVersion calib-v1r0
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
 setenv reconTask recon-EM2-v1r0

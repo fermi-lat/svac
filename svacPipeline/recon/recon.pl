@@ -29,7 +29,7 @@ print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
-print SHELLFILE "pushd $cmtDir';
+print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
 print SHELLFILE "cmt show uses \n";
 print SHELLFILE "popd \n";

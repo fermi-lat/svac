@@ -11,6 +11,7 @@ my $digiRootFile = $ENV{'digiRootFile'};
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
+my $ldfFileType = $ENV{'ldfFileType'};
 
 print <<EOT;
 $0 running with options:
@@ -66,7 +67,7 @@ print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n};
 print JOBOPTIONFILE qq{digiRootWriterAlg.OutputLevel=3; \n};
 print JOBOPTIONFILE qq{Output.Members = {"digiRootWriterAlg"}; \n};
 print JOBOPTIONFILE qq{digiRootWriterAlg.digiRootFile = "$digiRootFile"; \n};
-print JOBOPTIONFILE qq{EventSelector.StorageType = "LDFFITS"; \n};
+print JOBOPTIONFILE qq{EventSelector.StorageType = "$ldfFileType"; \n};
 print JOBOPTIONFILE qq{EventSelector.InputList = {"$ldfFile"}; \n};
 print JOBOPTIONFILE qq{EventSelector.OutputLevel = 4; \n};
 print JOBOPTIONFILE qq{MessageSvc.OutputLevel = 3; \n};
