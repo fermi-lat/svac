@@ -79,18 +79,18 @@ print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n);
 print JOBOPTIONFILE qq(ApplicationMgr.Runable= "RootIoSvc"; \n);
 
 # read in CAL calibraton constants
-print JOBOPTIONFILE qq(CalXtalRecAlg.startTime = "2003-9-5 11:00"; \n);
-print JOBOPTIONFILE qq(CalXtalRecAlg.calibFlavor="chen"; \n);
+#print JOBOPTIONFILE qq(CalXtalRecAlg.startTime = "2003-9-5 11:00"; \n);
+#print JOBOPTIONFILE qq(CalXtalRecAlg.calibFlavor="chen"; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibDataSvc"}; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibDataSvc"}; \n);
 
-print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibMySQLCnvSvc", "CalibXmlCnvSvc" }; \n);
+#print JOBOPTIONFILE qq(ApplicationMgr.ExtSvc += {"CalibMySQLCnvSvc", "CalibXmlCnvSvc" }; \n);
 
-print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibMySQLCnvSvc"}; \n);
-print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibXmlCnvSvc"}; \n);
+#print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibMySQLCnvSvc"}; \n);
+#print JOBOPTIONFILE qq(DetectorPersistencySvc.CnvServices += {"CalibXmlCnvSvc"}; \n);
 
-print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "EM"; \n);
-print JOBOPTIONFILE qq(CalibDataSvc.CalibFlavorList = {"ideal", "chen"}; \n);
+#print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "EM"; \n);
+#print JOBOPTIONFILE qq(CalibDataSvc.CalibFlavorList = {"ideal", "chen"}; \n);
 
 close(JOBOPTIONFILE);
 system("chmod +rwx $shellFile");
