@@ -47,13 +47,17 @@ if urlKey not in goodKeys:
     sys.exit(failCode)
 
 # figure out the path to the target file
-path = os.path.split(targetFile)
+#path = list(os.path.split(targetFile))
+print targetFile
+path = targetFile.split('/')
+print path
 runIndex = path.index(runId)
 del path[:runIndex]
 if urlKey in reportPages:
     # This is a report, we've gotta replace the tarball with the web page
-    path[-1] = pages[urlKey]
-path = os.path.join(path)
+    path[-1] = reportPages[urlKey]
+path = os.path.join(*path)
+print path
 
 #open connection to oracle database
 db = DCOracle2.connect('GLAST_CAL/9square#')

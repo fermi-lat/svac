@@ -4,13 +4,14 @@
 xmlFile is the run report (default rcReport.out)
 
 rawRoot is the root directory for the raw data tree on the FTP server
-(default /glast.u01/EM2/rawData/)
+(default is environment variable rawUrl)
 
 dataRoot is the root directory for the root data tree on the FTP server
-(default /glast.u01/EM2/rootData/)
+(default is environment variable rootUrl)
 
 """
 
+import os
 import sys
 from xml.dom.ext.reader import Sax2
 from xml.dom import Node
@@ -68,17 +69,19 @@ def checkNewValue(value, table, col):
 
 #used to form ftp URL - default value
 xmlFileName = 'rcReport.out'
-rootDataDir = '/glast.u01/EM2/rootData/'
-rawDataDir = '/glast.u01/EM2/rawData/'
+#rootDataDir = '/glast.u12/EM2/rootData/'
+rootDataDir = os.environ['rootUrl']
+#rawDataDir = '/glast.u12/EM2/rawData/'
+rawDataDir = os.environ['rawUrl']
 
 # parse args
 nArg = len(sys.argv)
-if nArg >= 2:
+if nArg == 2:
     xmlFileName = sys.argv[1]
 elif nArg == 3:
-    rootDataDir = sys.argv[2]
+    xmlFileName, rootDataDir = sys.argv[1:]
 elif nArg == 4:
-    rootDataDir = sys.argv[3]
+    xmlFileName, rootDataDir, rawDataDir = sys.argv[1:]
 else:
     print __doc__
     sys.exit(99)    
@@ -245,7 +248,7 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + rawDataDir + data[runIdTag] + '/' + data[onlineReportTag]
+    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + '/' + rawDataDir + '/' + data[runIdTag] + '/' + data[onlineReportTag]
     
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
