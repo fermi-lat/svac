@@ -26,8 +26,8 @@ setenv rootUrl /glast.u12/EM2/rootData
 setenv rawUrl /glast.u12/EM2/rawData
 
 setenv calibVersion calib-v1r0
-setenv calibGenTKRVersion v0r1p8
-setenv calibGenCALVersion v2r3p4
+setenv tkrCalibSerNo -9999
+setenv calCalibSerNo -9999
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv svacOnlineVersion v1r0
@@ -70,7 +70,7 @@ setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion v1r0
 setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
-setenv TestReportVersion v3r2p1
+setenv TestReportVersion v3r2p2
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
