@@ -12,9 +12,13 @@ my $raw = 'rawData';
 my $cooked = 'rootData';
 
 my $rawRoot = "$raw/$run";
+my $rawRootFull = "$ENV{'dataHead'}/$rawRoot";
 my $cookedRoot = "$cooked/$run";
-my $calibRoot = "$cookedRoot/$ENV{'calibVersion'}";
+my $cookedRootFull = "$ENV{'dataHead'}/$cookedRoot";
 
+#my $calibRoot = "$cookedRoot/$ENV{'calibVersion'}";
+my $calibRoot = "$ENV{'calibVersion'}";
+my $calibRootFull = "$cookedRootFull/$calibRoot";
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
@@ -22,16 +26,21 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $eLogDataDir = $cookedRoot;
 
 # configReport
-my $configDataDir = "$cookedRoot/configReport/$ENV{'configReportVersion'}";
+#my $configDataDir = "$cookedRoot/configReport/$ENV{'configReportVersion'}";
+my $configDataDir = "configReport/$ENV{'configReportVersion'}";
+my $configDataDirFull = "$cookedRootFull/$configDataDir";
 
 # digitization
-my $digiDataDir = "$cookedRoot/grRoot";
+#my $digiDataDir = "$cookedRoot/grRoot";
+my $digiDataDir = "grRoot";
 
 # digiReport
-my $digiReportDataDir = "$cookedRoot/digiReport/$ENV{'digiReportVersion'}";
+#my $digiReportDataDir = "$cookedRoot/digiReport/$ENV{'digiReportVersion'}";
+my $digiReportDataDir = "digiReport/$ENV{'digiReportVersion'}";
 
 # recon
 my $reconDataDir = "$calibRoot/grRoot";
+my $reconDataDirFull = "$cookedRootFull/$reconDataDir";
 
 # reconReport
 my $reconReportDataDir = "$calibRoot/reconReport/$ENV{'reconReportVersion'}";
@@ -50,7 +59,8 @@ my $meritLine = "merit		merit	root	$reconDataDir		merit tuple";
 my $svacTupleLine = "svac		svac	root	$svacTupleDataDir		SVAC tuple";
 my $svacHistLine = "histogram		histogram	root	$svacTupleDataDir		SVAC histograms";
 
-open FIELDS, '>', shift;
+
+open FIELDS, '>', 'junk';
 print FIELDS <<EOT;
 ## Machine-generated file, do not edit.
 
@@ -172,3 +182,83 @@ $reconLine
 script		script	csh	$svacTupleDataDir		script
 $svacTupleLine
 EOT
+
+close FIELDS;
+
+
+my $reconXml = 
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<pipeline
+  xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
+  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+  xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline/pipeline.xsd\">
+
+  <name>$ENV{'reconTask'}</name>
+  <type>Reconstruction</type>
+  <dataset-base-path>$cookedRootFull</dataset-base-path>
+  <run-log-path>/temp/</run-log-path>
+
+  <executable name=\"reconWrapper\" version=\"v1r0\">
+    $ENV{'reconTaskDir'}/reconWrapper.pl
+  </executable>
+
+  <executable name=\"RunRALaunchWrapper\" version=\"v1r0\">
+    $ENV{'reconTaskDir'}/RunRALaunchWrapper.pl
+  </executable>
+
+  <executable name=\"genRTRLaunchWrapper\" version=\"v1r0\">
+    $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
+  </executable>
+
+  <executable name=\"urlWrapper\" version=\"v1r0\">
+    $urlUpdater
+  </executable>
+
+  <batch-job-configuration name=\"long-job\" queue=\"long\">
+    <working-directory>$reconDataDirFull</working-directory>
+    <log-file-path>$reconDataDirFull</log-file-path>
+  </batch-job-configuration>
+
+  <batch-job-configuration name=\"short-job\" queue=\"short\">
+    <working-directory>$reconDataDirFull</working-directory>
+    <log-file-path>$reconDataDirFull</log-file-path>
+  </batch-job-configuration>
+
+  <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\">$digiDataDir</file>
+  <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\">$reconDataDir</file>
+  <file name=\"merit\"      type=\"merit\"  file-type=\"root\">$reconDataDir</file>
+  <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$reconDataDir</file>
+  <file name=\"script\"     type=\"script\" file-type=\"csh\">$reconDataDir</file>
+
+  <processing-step name=\"recon\" executable=\"reconWrapper\" batch-job-configuration=\"long-job\">
+    <input-file name=\"digi\"/>
+    <output-file name=\"jobOptions\"/>
+    <output-file name=\"merit\"/>
+    <output-file name=\"recon\"/>
+    <output-file name=\"script\"/>
+  </processing-step>
+
+  <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunchWrapper\" batch-job-configuration=\"short-job\">
+    <input-file name=\"digi\"/>
+    <input-file name=\"recon\"/>
+  </processing-step>
+
+  <processing-step name=\"LaunchReport\" executable=\"genRTRLaunchWrapper\" batch-job-configuration=\"short-job\">
+    <input-file name=\"digi\"/>
+    <input-file name=\"recon\"/>
+  </processing-step>
+
+  <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"short-job\">
+    <input-file name=\"recon\"/>
+  </processing-step>
+
+  <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"short-job\">
+    <input-file name=\"merit\"/>
+  </processing-step>
+
+</pipeline>
+";
+
+
+open FIELDS, '>', shift;
+print FIELDS $reconXml;
