@@ -3,8 +3,6 @@
 ## @file "VdGPHA.py"
 ## @brief Create a PHA file from Van de Graaff data (or a Monte-Carlo).
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
-##
-## @todo Take inputs from a JobOptions file, instead of hardcoding them.
 
 import Numeric as num
 
@@ -13,21 +11,16 @@ import histogram
 import tableIo
 import WrtPHA
 
-specDataFile = "../Data/vdg_em_4M_ene.dat"
-phaFile = "VdG.pha"
-
-# define reconstructed energy "channels"
-eReconMin = 7.0
-eReconMax = 35.0
-nChan = 100
+# get config data from here
+import mainpage
 
 # set up reconstructed energy channels
-step = (eReconMax - eReconMin) / nChan
+step = (mainpage.eReconMax - mainpage.eReconMin) / mainpage.nChan
 epsilon = step / 2.0
-edges = num.arange(eReconMin, eReconMax+epsilon, step)
+edges = num.arange(mainpage.eReconMin, mainpage.eReconMax+epsilon, step)
 
 # read data
-data = tableIo.readTable(specDataFile)
+data = tableIo.readTable(mainpage.specDataFile)
 eRecon = data[0]
 
 # histogram data
@@ -36,7 +29,7 @@ binner += eRecon
 
 # output
 status = 0
-st, fptr = glastFits.createFile(phaFile)
+st, fptr = glastFits.createFile(mainpage.phaFile)
 status |= st
 st, chdu = WrtPHA.createSpecHdu(fptr, binner.histogram)
 status |= st
