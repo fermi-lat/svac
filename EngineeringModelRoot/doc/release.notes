@@ -70,3 +70,13 @@ create a new variable in ntuple to contain log accept info
 v1r3p5
 
 modify code to read new Tkr recon data, also comment out GEM related code
+
+v1r3p6
+
+Put GEM code back in. Added getEbfPpcTimeSeconds. Updated the documentation. 
+
+v1r3p7
+
+Changed DiagLength and ErrorLength to be arrays over towers. Added TemError array.
+The TEM error word is not decoded yet. Renamed EvtEnergySumOpt to Vtx!Energy, 
+Run to RunID and Event to EventID. Updated the documentation.
