@@ -89,3 +89,7 @@ to electronic space
 v1r3p9
 
 bug fixed in GltWord and TEM diagnostic info
+
+v1r3p10
+
+Forgot to commit HitOccupancy code to CVS in v1r3p8, do it now
