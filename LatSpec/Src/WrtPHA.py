@@ -2,6 +2,10 @@
 ## @file WrtPHA.py
 ## @brief Create OGIP PHA files from GLAST LAT data.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
+##
+## This file can be run as a script to perform a simple test:
+## "python WrtPHA.py" should create a file "test.pha" and print out
+## the results of running fverify and fdump on that file.
 
 #
 
@@ -81,7 +85,7 @@ def createSpecHdu(fptr, data):
                                          "Version number of the format")
 
     # keywords that replace constant columns
-    status = cfitsio.fits_update_key_lng(fptr, "SYS_ERR", 0,
+    status |= cfitsio.fits_update_key_lng(fptr, "SYS_ERR", 0,
                                           "No systematic error was specified")
     status |= cfitsio.fits_update_key_lng(fptr, "GROUPING", 0,
                                          "No grouping data has been specified")
@@ -106,11 +110,19 @@ if __name__ == "__main__":
     import os
     
     testfile = "test.pha"
-    data = num.arange(8)
-    fptr = glastFits.createFile(testfile)
-    createSpecHdu(fptr, data)
-    glastFits.closeFile(fptr)
 
+    status = 0
+    
+    data = num.arange(8)
+    
+    st, fptr = glastFits.createFile(testfile)
+    status |= st
+    status |= createSpecHdu(fptr, data)
+    status |= glastFits.closeFile(fptr)
+
+    if status:
+        raise IOError, "There was a CFITSIO problem."
+    
     os.system("fverify %s" % testfile)
     os.system("fdump %s outfile=STDOUT rows=- columns=- page=no" % testfile)
     

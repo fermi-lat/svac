@@ -12,8 +12,6 @@
 
 @todo This stuff should all be methods on a glastFitsFile object.
 
-@todo This needs error checking.
-
 @todo Maybe should enforce filename compliance to ISO 9660 Level 2 (31
 character names containing uppercase letters, numbers and underscore).
 
@@ -44,16 +42,24 @@ def createFile(filename):
 
     @param filename The name of the file to be created.
 
-    @return A FITS file pointer to the newly-created file.
+    @return A tuple containing:
+    @li CFITSIO error status, should be 0,
+    @li A FITS file pointer to the newly-created file.
 
     """
 
-    status, fptr = cfitsio.fits_create_file(filename)
-    status = cfitsio.fits_create_img(fptr, cfitsio.BYTE_IMG, 0, [])
-    addPrimaryKeywords(fptr)
-    addStandardKeywords(fptr)
+    status = 0
 
-    return fptr
+    st, fptr = cfitsio.fits_create_file(filename)
+    status |= st
+    status |= cfitsio.fits_create_img(fptr, cfitsio.BYTE_IMG, 0, [])
+    status |= addPrimaryKeywords(fptr)
+    status |= addStandardKeywords(fptr)
+
+    if status:
+        raise IOError, "CFITSIO problem."
+
+    return status, fptr
 
 #
 def addPrimaryKeywords(fptr):
@@ -69,33 +75,42 @@ def addPrimaryKeywords(fptr):
     @param fptr An open FITS file pointer.  Keywords will be aded to the
     primary HDU, and the current HDU restored before returning.
 
-    @return None
+    @return CFITSIO error status, should be 0.None
+    
     """
+
+    status = 0
 
     # get current HDU so we can go back there when we're done
     junk, chdu = cfitsio.fits_get_hdu_num(fptr)
     # move to primary HDU
-    status, hdutype = cfitsio.fits_movabs_hdu(fptr, 1)
+    st, hdutype = cfitsio.fits_movabs_hdu(fptr, 1)
+    status |= st
 
-    status, filename = cfitsio.fits_file_name(fptr)
-    status = cfitsio.fits_update_key_str(fptr, "FILENAME", filename,
-                                         "name of this file")
-    status = cfitsio.fits_update_key_str(fptr, "ORIGIN", ORIGIN,
-                                         "name of organization making file")
-    status = cfitsio.fits_update_key_str(fptr, "AUTHOR", AUTHOR,
+    st, filename = cfitsio.fits_file_name(fptr)
+    status |= st
+    status |= cfitsio.fits_update_key_str(fptr, "FILENAME", filename,
+                                          "name of this file")
+    status |= cfitsio.fits_update_key_str(fptr, "ORIGIN", ORIGIN,
+                                          "name of organization making file")
+    status |= cfitsio.fits_update_key_str(fptr, "AUTHOR", AUTHOR,
                               "name of person responsible for file generation")
     creator = PROGRAM + '_V' + SOFTWARE
-    status = cfitsio.fits_update_key_str(fptr, "CREATOR", creator,
-                                         "software and version creating file")
-    status = cfitsio.fits_update_key_str(fptr, "VERSION", VERSION,
-                                         "release version of this file")
-    status = cfitsio.fits_update_key_str(fptr, "SOFTWARE", SOFTWARE,
-                                         "version of the processing software")
+    status |= cfitsio.fits_update_key_str(fptr, "CREATOR", creator,
+                                          "software and version creating file")
+    status |= cfitsio.fits_update_key_str(fptr, "VERSION", VERSION,
+                                          "release version of this file")
+    status |= cfitsio.fits_update_key_str(fptr, "SOFTWARE", SOFTWARE,
+                                          "version of the processing software")
     
     # go back to original HDU
-    status, hdutype = cfitsio.fits_movabs_hdu(fptr, chdu)
-    
-    return
+    st, hdutype = cfitsio.fits_movabs_hdu(fptr, chdu)
+    status |= st
+   
+    if status:
+        raise IOError, "CFITSIO problem."
+
+    return status
 
 #
 def addStandardKeywords(fptr):
@@ -109,26 +124,31 @@ def addStandardKeywords(fptr):
     @param fptr An open FITS file pointer.  Keywords will be aded to the
     current HDU.
 
-    @return None
+    @return CFITSIO error status, should be 0.
 
     """
 
+    status = 0
+
     # constant stuff
-    status = cfitsio.fits_update_key_str(fptr, "TELESCOP", "GLAST",
-                                        "name of telescope generating data")
-    status = cfitsio.fits_update_key_str(fptr, "INSTRUME", "LAT",
-                                        "name of instrument generating data")
-    status = cfitsio.fits_update_key_flt(fptr, "EQUINOX", 2000.0, -9,
-                                        "equinox for ra and dec")
-    status = cfitsio.fits_update_key_str(fptr, "RADECSYS", "FK5",
-                             "world coord. system for this file (FK5 or FK4)")
+    status |= cfitsio.fits_update_key_str(fptr, "TELESCOP", "GLAST",
+                                          "name of telescope generating data")
+    status |= cfitsio.fits_update_key_str(fptr, "INSTRUME", "LAT",
+                                          "name of instrument generating data")
+    status |= cfitsio.fits_update_key_flt(fptr, "EQUINOX", 2000.0, -9,
+                                          "equinox for ra and dec")
+    status |= cfitsio.fits_update_key_str(fptr, "RADECSYS", "FK5",
+                              "world coord. system for this file (FK5 or FK4)")
     
     # date of file creation
     datestr = time.strftime("%Y-%m-%d")
-    status = cfitsio.fits_update_key_str(fptr, "DATE", datestr, 
-                            "date file was made in yyyy-mm-dd")
+    status |= cfitsio.fits_update_key_str(fptr, "DATE", datestr, 
+                                          "date file was made in yyyy-mm-dd")
 
-    return
+    if status:
+        raise IOError, "CFITSIO problem."
+
+    return status
 
 #
 def createTable(fptr, naxis2=0, tfields=0, ttype=[], tform=[], tunit=[],
@@ -163,16 +183,23 @@ def createTable(fptr, naxis2=0, tfields=0, ttype=[], tform=[], tunit=[],
 
     @param [extname=""] The name of the table.
 
-    @return The number of the new HDU, which will then be the current HDU.
+    @return A tuple containing:
+    @li CFITSIO error status, should be 0,
+    @li The number of the new HDU, which will then be the current HDU.
 
     """
 
-    status = cfitsio.fits_create_tbl(fptr, cfitsio.BINARY_TBL, naxis2, tfields,
-                                     ttype, tform, tunit, extname)
-    addStandardKeywords(fptr)    
+    status = 0
+
+    status |= cfitsio.fits_create_tbl(fptr, cfitsio.BINARY_TBL, naxis2,
+                                      tfields, ttype, tform, tunit, extname)
+    status |= addStandardKeywords(fptr)    
+
+    if status:
+        raise IOError, "CFITSIO problem."
 
     junk, chdu = cfitsio.fits_get_hdu_num(fptr)
-    return chdu
+    return status, chdu
 
 #
 def closeFile(fptr):
@@ -180,31 +207,48 @@ def closeFile(fptr):
 
     DATASUM and CHECKSUM for each HDU will be updated before closing the file.
 
-    @param fptr An open FITS file pointer.
+    @param fptr A FITS file pointer, open for writing.
 
-    @return None
+    @return CFITSIO error status, should be 0.
 
     """
 
-    status = cfitsio.fits_flush_file(fptr)
+    status = 0
+
+    status |= cfitsio.fits_flush_file(fptr)
 
     # update checksums
-    status, nhdus = cfitsio.fits_get_num_hdus(fptr)
+    st, nhdus = cfitsio.fits_get_num_hdus(fptr)
+    status |= st
     for hdu in xrange(1, nhdus+1):
-        status, hdutype = cfitsio.fits_movabs_hdu(fptr, hdu)
-        status = cfitsio.fits_write_chksum(fptr)
+        st, hdutype = cfitsio.fits_movabs_hdu(fptr, hdu)
+        status |= st
+        status |= cfitsio.fits_write_chksum(fptr)
 
     # close the file
-    status = cfitsio.fits_close_file(fptr)
+    status |= cfitsio.fits_close_file(fptr)
     
-    return
+    if status:
+        raise IOError, "CFITSIO problem."
+
+    return status
 
 
 if __name__ == "__main__":
     import os
+    
     testfile = 'test.fits'
-    fptr = createFile(testfile)
-    createTable(fptr, extname="BOZO")
-    closeFile(fptr)
+
+    status = 0
+    
+    st, fptr = createFile(testfile)
+    status |= st
+    st, chdu = createTable(fptr, extname="BOZO")
+    status |= st
+    status |= closeFile(fptr)
+
+    if status:
+        raise IOError, "There was a CFITSIO problem."
+    
     os.system('fverify %s' % testfile)
     os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testfile)
