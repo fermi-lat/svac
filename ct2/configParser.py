@@ -50,7 +50,7 @@ def hasTkr(doc):
 
     hasTkr = True
 
-    frontEnds = doc.getElementsByTagName('GTEM/GTCC/GTRC/GTFE')
+    frontEnds = doc.getElementsByTagName('GTFE')
     if len(frontEnds) < 1:
         hasTkr = False
     
@@ -149,7 +149,7 @@ def hasCal(doc):
 
     hasCal = True
     
-    frontEnds = doc.getElementsByTagName("GTEM/GCCC/GCRC/GCFE")
+    frontEnds = doc.getElementsByTagName("GCFE")
     if len(frontEnds) < 1:
         hasCal = False
     
@@ -167,7 +167,7 @@ def calFeReg(doc):
     output.append(html.Heading(sectionTitle, 1))
 
     if not hasCal(doc):
-        output.addChild("There is no CAL here!")
+        output.append("There is no CAL here!")
         return output
 
     for registerTag in jobOptions.calTags:
