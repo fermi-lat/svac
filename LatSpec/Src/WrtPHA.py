@@ -68,7 +68,7 @@ def createSpecHdu(fptr, data):
                                       "format conforms to OGIP/GSFC standards")
     status |= cfitsio.fits_update_key_str(fptr, "HDUCLAS1", "SPECTRUM",
                                          "Extension contains a Spectrum")
-    status |= cfitsio.fits_update_key_str(fptr, "HDUVERS", "1.1.0",
+    status |= cfitsio.fits_update_key_str(fptr, "HDUVERS", "1.2.0",
                                          "Version number of the format")
     status |= cfitsio.fits_update_key_str(fptr, "CHANTYPE", "PI",
                                   "channels are really calculated energy bins")
