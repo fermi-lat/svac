@@ -1,6 +1,6 @@
 #include "NtupleDef.h"
 
-const char* NtupleDef::gRootNtupleDefStr = "Run/i:Event_ID/i:McSeqNo/i:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:EvtEnergySumOpt/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:Tkr1EndPos[3]/F:Tkr1EndDir[3]/F:Tkr2EndPos[3]/F:Tkr2EndDir[3]/F:CalEneSum/F:McCalEneSum/F:GltWord/i:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12][2]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/i:EvtNanoSecond/i:EvtUpperTime/i:EvtLowerTime/i:EvtTimeSeconds/i:CalTp[16][8]/i:TkrTp[16][8]/i:EvtSummary/i:GemConditionsWord/I:GemTkrVector[16]/I:GemRoiVector[16]/I:GemCalLeVector[16]/I:GemCalHeVector[16]/I:GemCnoVector[12]/I:GemLiveTime/i:GemTriggerTime/i:GemDeltaEventTime/i:GemOnePpsSeconds/i:GemOnePpsTime/i:GemPrescaled/i:GemDiscarded/i:GemAcdTilesXzp/i:GemAcdTilesXzm/i:GemAcdTilesYzp/i:GemAcdTilesYzM/i:GemAcdTilesXy/i:GemAcdTilesRbn/i:GemAcdTilesNa/i:GemCondArrivalTimeWord/i:GemCondArrivalTimeExt/i:GemCondArrivalTimeCno/i:GemCondArrivalTimeCalLe/i:GemCondArrivalTimeCalHe/i:GemCondArrivalTimeTkr/i:GemCondArrivalTimeRoi/i:GemDeltaWindowOpenTime/i:TrgTriRowBits[16]/i:TemLength[16]/i:GemLength/i:OswLength/i:AemLength/i:ErrLength/i:DiagLength/i:EventSequence/i:EventFlags/i:GoodEvent/I:TkrReq[16][18][2][2]/i:CalReq[16][8][2]/i:CalLogAccepts[16][8][2]/i";
+const char* NtupleDef::gRootNtupleDefStr = "RunID/i:EventID/i:McSeqNo/i:McId/I:McTotalEnergy/F:McX0/F:McY0/F:McZ0/F:McXDir/F:McYDir/F:McZDir/F:McConvPointX/F:McConvPointY/F:McConvPointZ/F:TkrNumDigis/I:TkrNumStrips[16][18][2]/I:tot[16][18][2][2]/I:totCorrL[16][18][2][2]/F:totCorrQ[16][18][2][2]/F:TkrDepositEne[16][18][2]/F:TkrNumClusters[16][18][2]/I:TkrNumTracks/I:TkrNumVertices/I:VtxX0/F:VtxY0/F:VtxZ0/F:VtxXDir/F:VtxYDir/F:VtxZDir/F:Vtx1Energy/F:Vtx1NumTkrs/I:Tkr1NumHits/I:Tkr2NumHits/I:Tkr1Chisq/F:Tkr2Chisq/F:Tkr1ChisqS/F:Tkr2ChisqS/F:Tkr1Rms/F:Tkr2Rms/F:Tkr1KalThetaMs/F:Tkr2KalThetaMs/F:Tkr1KalEne/F:Tkr2KalEne/F:Tkr1EndPos[3]/F:Tkr1EndDir[3]/F:Tkr2EndPos[3]/F:Tkr2EndDir[3]/F:CalEneSum/F:McCalEneSum/F:GltWord/i:CalXEcentr/F:CalYEcentr/F:CalZEcentr/F:McTkr1Ene/F:McTkr2Ene/F:EvtTime/D:McConvAngle/F:TkrTopTot[16]/F:Tkr1ConvTot/F:CalXtalEne[16][8][12][2]/F:CalMaxEne/F:CalNumHit[16]/I:EvtSecond/i:EvtNanoSecond/i:EvtUpperTime/i:EvtLowerTime/i:EvtTimeSeconds/i:CalTp[16][8]/i:TkrTp[16][8]/i:EvtSummary/i:GemConditionsWord/I:GemTkrVector[16]/I:GemRoiVector[16]/I:GemCalLeVector[16]/I:GemCalHeVector[16]/I:GemCnoVector[12]/I:GemLiveTime/i:GemTriggerTime/i:GemDeltaEventTime/i:GemOnePpsSeconds/i:GemOnePpsTime/i:GemPrescaled/i:GemDiscarded/i:GemAcdTilesXzp/i:GemAcdTilesXzm/i:GemAcdTilesYzp/i:GemAcdTilesYzM/i:GemAcdTilesXy/i:GemAcdTilesRbn/i:GemAcdTilesNa/i:GemCondArrivalTimeWord/i:GemCondArrivalTimeExt/i:GemCondArrivalTimeCno/i:GemCondArrivalTimeCalLe/i:GemCondArrivalTimeCalHe/i:GemCondArrivalTimeTkr/i:GemCondArrivalTimeRoi/i:GemDeltaWindowOpenTime/i:TrgTriRowBits[16]/i:TemLength[16]/i:GemLength/i:OswLength/i:AemLength/i:ErrLength[16]/i:DiagLength[16]/i:TemError[16]/i:EventSequence/i:EventFlags/i:GoodEvent/I:TkrReq[16][18][2][2]/i:CalReq[16][8][2]/i:CalLogAccepts[16][8][2]/i";
 
 NtupleDef::NtupleDef() 
 {
@@ -61,8 +61,6 @@ void NtupleDef::reset()
   m_gemLength  = 0;
   m_oswLength  = 0;
   m_aemLength  = 0;
-  m_errLength  = 0;
-  m_diagLength = 0;
   
   m_eventSequence = 0;
   m_eventFlags    = 0;
@@ -74,6 +72,9 @@ void NtupleDef::reset()
 
   for(int iTower = 0; iTower != g_nTower; ++iTower){
 
+    m_errLength[iTower]  = 0;
+    m_diagLength[iTower] = 0;
+
     m_nCrystalHit[iTower] = 0;
     m_topTot[iTower] = 0;
 
@@ -83,6 +84,7 @@ void NtupleDef::reset()
     m_gemCalHeVector[iTower] = 0;
 
     m_temLength[iTower] = 0;
+    m_temError[iTower]  = 0; 
 
     m_trgTriRowBits[iTower] = 0;
 

@@ -22,8 +22,8 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TABLE>
 <CAPTION ALIGN="TOP"> Run and Event variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> Run </TD> <TD> Run number taken from DigiEvent.h </TD> </TR>
-<TR> <TD> Event </TD> <TD> Event number taken from DigiEvent.h</TD> </TR>
+<TR> <TD> RunID </TD> <TD> Run number taken from DigiEvent.h </TD> </TR>
+<TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h</TD> </TR>
 <TR> <TD> GltWord </TD> <TD> Trigger word: The definition of the bits can be found in enums/enums/TriggerBits.h. Not valid for EM1 data as there were no GASU, should be valid for LAT integration data. </TD> </TR>
 <TR> <TD> EvtTime </TD> <TD> Time in seconds, since mission start, currently 1/1/2001. This is the time that is reported when doing simulations.</TD> </TR>
 <TR> <TD> EvtSecond </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. </TD> </TR>
@@ -42,6 +42,7 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> AemLength             </TD> <TD> Size of the AEM event contribution              </TD> </TR>
 <TR> <TD> ErrLength             </TD> <TD> Size of the Error event contribution            </TD> </TR>
 <TR> <TD> DiagLength            </TD> <TD> Size of the Diagnostics event contribution. Should always be 48.</TD> </TR>
+<TR> <TD> TemError[tower]       </TD> <TD> TEM error contribution. For a detailed explanation, see section 4.4. in the Online document http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf </TD> </TR>
 <TR> <TD> GemConditionsWord     </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. For a detailed explanation of GEM quantities, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4      </TD> </TR>
 <TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector                      </TD> </TR>
 <TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector                      </TD> </TR>
@@ -107,6 +108,7 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> VtxYDir </TD> <TD> y direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
 <TR> <TD> VtxZDir </TD> <TD> z direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
 <TR> <TD> Vtx1NumTkrs </TD> <TD> Number of tracks associated with the first vertex </TD> </TR>
+<TR> <TD> Vtx1Energy </TD> <TD> Energy stored in first vertex  </TD> </TR>
 </TABLE>
 
 <TABLE>
@@ -120,7 +122,6 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> A 3 dimension array which describes number of clusters at every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
 <TR> <TD> TkrNumTracks </TD> <TD> Number of reconstructed tracks</TD> </TR>
 <TR> <TD> TkrNumVertices </TD> <TD> Number of reconstructed vertices</TD> </TR>
-<TR> <TD> EvtEnergySumOpt </TD> <TD> Energy stored in first vertex  </TD> </TR>
 <TR> <TD> Tkr1NumHits </TD> <TD> Number of clusters in first track </TD> </TR>
 <TR> <TD> Tkr2NumHits </TD> <TD> Number of clusters in second track </TD> </TR>
 <TR> <TD> Tkr1Chisq </TD> <TD> Chi square of first track </TD> </TR>

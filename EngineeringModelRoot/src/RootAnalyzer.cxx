@@ -367,13 +367,17 @@ void RootAnalyzer::analyzeDigiTree()
   // Event sizes:
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_temLength[iTower] = m_digiEvent->getEventSummaryData().temLength(iTower);
+    m_ntuple.m_temError[iTower]  = m_digiEvent->getEventSummaryData().temError(iTower); 
   }
 
   m_ntuple.m_gemLength  = m_digiEvent->getEventSummaryData().gemLength();
   m_ntuple.m_oswLength  = m_digiEvent->getEventSummaryData().oswLength();
   m_ntuple.m_aemLength  = m_digiEvent->getEventSummaryData().aemLength();
-  m_ntuple.m_errLength  = m_digiEvent->getEventSummaryData().errLength();
-  m_ntuple.m_diagLength = m_digiEvent->getEventSummaryData().diagLength();
+  
+  for (int iTower = 0; iTower<g_nTower; iTower++) {
+    m_ntuple.m_errLength[iTower]  = m_digiEvent->getEventSummaryData().errLength(iTower);
+    m_ntuple.m_diagLength[iTower] = m_digiEvent->getEventSummaryData().diagLength(iTower);
+  }
 
   // Event quality/flags:
   m_ntuple.m_eventSequence = m_digiEvent->getEventSummaryData().eventSequence();
@@ -992,8 +996,8 @@ void RootAnalyzer::parseDiagnosticData()
 
 void RootAnalyzer::createBranches()
 {
-  m_tree->Branch("Run", &(m_ntuple.m_runId), "Run/i");
-  m_tree->Branch("Event_ID", &(m_ntuple.m_eventId), "Event_ID/i");
+  m_tree->Branch("RunID", &(m_ntuple.m_runId), "RunID/i");
+  m_tree->Branch("EventID", &(m_ntuple.m_eventId), "EventID/i");
   m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
   m_tree->Branch("McId", &(m_ntuple.m_parId), "McId/I");
   m_tree->Branch("McTotalEnergy", &(m_ntuple.m_mcEnergy), "McTotalEnergy/F");
@@ -1021,7 +1025,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("VtxXDir", &(m_ntuple.m_dir[0]), "VtxXDir/F");
   m_tree->Branch("VtxYDir", &(m_ntuple.m_dir[1]), "VtxYDir/F");
   m_tree->Branch("VtxZDir", &(m_ntuple.m_dir[2]), "VtxZDir/F");
-  m_tree->Branch("EvtEnergySumOpt", &(m_ntuple.m_fitTotalEnergy), "EvtEnergySumOpt/F");
+  m_tree->Branch("Vtx1Energy", &(m_ntuple.m_fitTotalEnergy), "Vtx1Energy/F");
   m_tree->Branch("Vtx1NumTkrs", &(m_ntuple.m_vtxTrks), "Vtx1NumTkrs/I");
   m_tree->Branch("Tkr1NumHits", &(m_ntuple.m_nFit[0]), "Tkr1NumHits/I");
   m_tree->Branch("Tkr2NumHits", &(m_ntuple.m_nFit[1]), "Tkr2NumHits/I");
@@ -1095,8 +1099,9 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/i");
   m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/i");
   m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/i");
-  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength/i");
-  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength/i");
+  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength[16]/i");
+  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength[16]/i");
+  m_tree->Branch("TemError", &(m_ntuple.m_temError), "TemError[16]/i");
   m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
