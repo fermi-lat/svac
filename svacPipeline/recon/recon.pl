@@ -21,13 +21,9 @@ my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'reconCmt'};
 my $exe = $ENV{'reconApp'};
 
-my $glastRoot = "/afs/slac.stanford.edu/g/glast";
-my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
-
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
-print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
