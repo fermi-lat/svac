@@ -35,6 +35,8 @@ setenv calCalibSerNo -9999
 setenv calibTail ${emTail}/${calibVersion}
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
+setenv onlineTaskVersion V1r0
+setenv onlineTask online-EM2-${onlineTaskVersion}
 setenv svacOnlineVersion v3r0p0
 setenv svacOnlineDir ${svacPlRoot}/online/${svacOnlineVersion}
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
