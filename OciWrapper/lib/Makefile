@@ -23,7 +23,7 @@ LDFLAGS       = -g $(OCILINKOPT)
 SOFLAGS       = -shared
 LIBS          = 
 
-all: libOciWrapper.so
+all: libOciWrapper.so test.exe
 
 libOciWrapperObj := OCIWrapper.o 
 libOciWrapperSource := $(patsubst %.o, $(TMP_DIR)/%.o, $(libOciWrapperObj))
@@ -34,6 +34,16 @@ libOciWrapper.so: $(libOciWrapperDependence) $(libOciWrapperSource)
 	@echo "$@ done"
 
 -include $(libOciWrapperDependence)
+
+testOciWrapperObj := Test.o 
+testOciWrapperSource := $(patsubst %.o, $(TMP_DIR)/%.o, $(testOciWrapperObj))
+testOciWrapperDependence := $(patsubst %.o, $(TMP_DIR)/%.d, $(testOciWrapperObj))
+
+test.exe: $(testOciWrapperDependence) $(testOciWrapperSource)
+	$(LD) -g -L. -lOciWrapper $(LIBS)  $(testOciWrapperSource) $(OutputOpt)$@
+	@echo "$@ done"
+
+-include $(testOciWrapperDependence)
 
 $(TMP_DIR)/%.$(ObjSuf): $(SRC_DIR)/%.$(SrcSuf)
 	$(CXX) $(CXXFLAGS) -c $< $(OutputOpt) $@ 
