@@ -11,7 +11,7 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 my $batchgroup = $ENV{'batchgroup'};
 
 # recon
-my $reconDataDir = "$ENV{'calibRoot'}/grRoot";
+#my $reconDataDir = "$ENV{'calibRoot'}/grRoot";
 
 my $reconXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
