@@ -6,7 +6,7 @@ use strict;
 
 my ($oldTask, $runName, $rcReport, $schema, $snapshot, $ldfFile) = @ARGV;
 
-my $launcher = '$ENV{'svacPlLib'}/TaskLaunch.pl';
+my $launcher = $ENV{'taskLauncher'};
 
 my $status = 0;
 

@@ -26,7 +26,7 @@ my $runName = $proc->{'run_name'};
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
