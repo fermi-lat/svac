@@ -214,11 +214,11 @@ def rec_name_n_param(type, tok):
         elif (tok==":"):
             return
         elif (type==token.STRING):
-            while tok[:1]=='r' or tok[:1]=='u':
+            while tok[:1] in 'rRuU':
                 tok=tok[1:]
-            while tok[:1]=='"':
+            while tok[:1] in ('"', "'"):
                 tok=tok[1:]
-            while tok[-1:]=='"':
+            while tok[-1:] in ('"', "'"):
                 tok=tok[:-1]
             doc_string=tok
         record_state=0
@@ -330,10 +330,10 @@ def tok_eater(type, tok, spos, epos, line):
             import_spos = spos
             modules     = []
             push_state(IMPORT)
-        elif (spos[1] == 0 and tok[:3] == '"""'):
+        elif (spos[1] == 0 and tok[:3] in ('"""', "'''")):
             # Capture module docstring as namespace documentation
             module_has_docstring = True
-            comment_block.append("\\namespace %s\n" % namespace)
+            comment_block.append("\\namespace %s\n" % name)
             comment_block.append(tok[3:-3])
             print_comment(spos)
 
