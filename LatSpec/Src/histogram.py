@@ -2,6 +2,9 @@
 ## @file histogram.py
 ## @brief Code to calculate histograms.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
+##
+## This file can be run as a script to perform a simple test:
+## "python histogram.py" should print the message "Passed unit test."
 
 #
 

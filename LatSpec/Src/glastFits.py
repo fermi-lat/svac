@@ -1,6 +1,10 @@
 ## @file glastFits.py
 ## @brief Stuff to write FITS files for GLAST.
 ## @author Warren Focke <focke@slac.stanford.edu> SLAC - GLAST I&T/SVAC
+##
+## This file can be run as a script to perform a simple test:
+## "python glastFits.py" should create a file "test.fits" and print out
+## the results of running fverify and fdump on that file.
 
 #
 
@@ -203,4 +207,4 @@ if __name__ == "__main__":
     createTable(fptr, extname="BOZO")
     closeFile(fptr)
     os.system('fverify %s' % testfile)
-    os.system('fdump %s outfile=STDOUT rows=- columns=-' % testfile)
+    os.system('fdump %s outfile=STDOUT rows=- columns=- page=no' % testfile)
