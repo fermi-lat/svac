@@ -6,22 +6,20 @@ if ($#ARGV != 4) {
     die "Useage: $0 digiRootFile reconRootFile optionFile shellFile tarBall";
 }
 
-my ($digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
-  digiRootFile:  $digiRootFile
-  reconRootFile: $reconRootFile
-  optionFile:    $optionFile
-  shellFile:     $shellFile
-  tarBall:       $tarBall
+  runName:       [$runName]
+  digiRootFile:  [$digiRootFile]
+  reconRootFile: [$reconRootFile]
+  optionFile:    [$optionFile]
+  shellFile:     [$shellFile]
+  tarBall:       [$tarBall]
 EOT
 
 my $reportDir = `dirname $tarBall`;
 chomp $reportDir;
-
-# not sure if we really need this one
-my $timeStamp = '1';
 
 my $texFile = 'refman.tex';
 my $dviFile = 'refman.dvi';
@@ -39,7 +37,7 @@ open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted
 print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
 print OPTFILE qq{$reportDir \n};
-print OPTFILE qq{$timeStamp \n};
+print OPTFILE qq{$runName \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
