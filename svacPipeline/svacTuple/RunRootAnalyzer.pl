@@ -22,6 +22,8 @@ EOT
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'svacTupleCmt'};
 my $exe = $ENV{'svacTupleApp'};
+my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
+my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
 #create option file for Main.exe
 open(OPTIONFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
@@ -36,6 +38,8 @@ close(OPTIONFILE);
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile for input, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
+print SHELLFILE "setenv CMTCONFIG $svacCmtConfig \n";
+print SHELLFILE "setenv GLAST_EXT $svacGlastExt \n";
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
