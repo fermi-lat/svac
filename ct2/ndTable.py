@@ -38,8 +38,22 @@ class ndTable:
 
 
 #
+def parseKey(key):
+    theRest = None
+    if isinstance(key, tuple):
+        if len(key) > 1:
+            theRest = key[1:]
+        key = key[0]
+    return key, theRest
+
+
+
+#
 class ndDict(dict):
-    """@brief A multidimensional dictionary."""
+    """@brief A multidimensional dictionary.
+    Returns a default value for getitem on nonexistent keys.
+
+    """
 
 
     #
@@ -56,12 +70,24 @@ class ndDict(dict):
 
     #
     def __getitem__(self, key):
+        myKey, theRest = parseKey(key)
+        if myKey not in self:
+            return self.empty
+        next = dict.__getitem__(self, myKey)
+        if theRest is None:
+            return next
+        else:
+            return next[theRest]
         
-        pass
-
 
     #
     def __setitem__(self, key, value):
-        
-        pass
-    
+        myKey, theRest = parseKey(key)
+        if theRest is None:
+            dict.__setitem__(self, myKey, value)
+        else:
+            if myKey not in self:
+                dict.__setitem__(self, myKey, ndDict(empty=self.empty))
+            next = dict.__getitem__(self, myKey)
+            next[theRest] = value
+        return
