@@ -57,6 +57,12 @@ def parseTime(l):
 # dynamically produce a drop down menu based on contents of the table
 def checkNewValue(value, table, col):
 
+# it is necessary to lock the table here since this script can be run in
+# multiple batch jobs to cause a race condition
+    sqlStr = 'lock table ' + table + ' in exclusive mode'
+    
+    execSql(c, sqlStr)
+    
     id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
           
     sqlStr = 'select ' + col + ' from ' + table + ' where ' + col + ' = \'' + value + '\''
@@ -269,6 +275,10 @@ for report in reports:
         print 'run ' + data[runIdTag] + ' already exists in the database, ignore this run'
         continue
 
+    sqlStr = 'lock table eLogCompletionStatus in exclusive mode'
+    
+    execSql(c, sqlStr)
+    
     #determine whether there is a new completionStatus value
     sqlStr = 'select Id from eLogCompletionStatus where Id = ' + data[completionStatusTag]
     c.execute(sqlStr)
