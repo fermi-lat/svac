@@ -40,6 +40,16 @@ my $reconReportDataDir = "$calibRoot/reconReport/$ENV{'reconReportVersion'}";
 my $svacTupleDataDir = "$calibRoot/svacRoot/$ENV{'svacTupleVersion'}";
 
 
+my $rcReportLine = "rcReport	rcReport	xml	$rawRoot		rcreport";
+my $ldfLine = "ldf	LDF	fits	$rawRoot		raw data in electronics space";
+my $schemaLine = "schema	text	xml	$rawRoot		schema file";
+my $snapshotLine = "snapshot	text	xml	$rawRoot		snapshot file";
+my $digiLine = "digi		DIGI	root	$digiDataDir	Raw data in detector space";
+my $reconLine = "recon		RECON	root	$reconDataDir		recon file";
+my $meritLine = "merit		merit	root	$reconDataDir		merit tuple";
+my $svacTupleLine = "svac		svac	root	$svacTupleDataDir		SVAC tuple";
+my $svacHistLine = "histogram		histogram	root	$svacTupleDataDir		SVAC histograms";
+
 open FIELDS, '>', shift;
 print FIELDS <<EOT;
 ## Machine-generated file, do not edit.
@@ -52,12 +62,22 @@ print FIELDS <<EOT;
 #
 # for a process:
 # Name, Sequence, Application, Version, Command (the wrapper), batch Queue, Log directory, CWD (where the wrapper is run), Comment
-# As far as I can tell, Application Version are basically comments.
+# As far as I can tell, Application and Version are basically comments.
 #
 # for a dataset:
 # Name, Data Type, File Format, Path, Comment
 
-# Datasets that are seen by more than one task are only shown in full for the first task that sees them.
+
+
+EM2OnlineV01	Conversion	$ENV{'dataHead'}		Convert LDF files to FITS
+
+injectSVAC	2	TaskLaunch.pl	$ENV{'svacOnlineVersion'}	$ENV{'svacOnlineDir'}/SVACWrapper.pl	short	/afs/slac.stanford.edu/u/gl/glast/onlinePipeline/log/	$cookedRoot		Launch SVAC tasks
+
+$ldfLine
+$rcReportLine
+$schemaLine
+$snapshotLine
+
 
 
 $ENV{'eLogTask'}		Report		$ENV{'dataHead'}		Populate eLog database
@@ -66,11 +86,11 @@ populateElogDb	1	populateElogDb.pl	$ENV{'eLogTaskVersion'}	$ENV{'eLogTaskDir'}/p
 LaunchDigi	2	TaskLaunch.pl	$ENV{'eLogTaskVersion'}	$ENV{'eLogTaskDir'}/ldfTDLaunchWrapper.pl		short	$eLogDataDir	$eLogDataDir		Launch Digitization task 
 LaunchConfRep	3	TaskLaunch.pl	$ENV{'eLogTaskVersion'}	$ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl		short	$eLogDataDir	$eLogDataDir		Launch configuration report task 
 											
-ldf	LDF	fits	$rawRoot		raw data in electronics space
-rcReport	rcReport	xml	$rawRoot		rcreport
-schema	text	xml	$rawRoot		schema file
+$ldfLine
+$rcReportLine
+$schemaLine
 script	script	csh	$eLogDataDir	script
-snapshot	text	xml	$rawRoot		snapshot file
+$snapshotLine
 
 
 
@@ -79,8 +99,8 @@ $ENV{'configReportTask'}	Report	$ENV{'dataHead'}		Make instrument configuration 
 ConfigTables	1	ConfigTables.py	$ENV{'configReportTaskVersion'}	$ENV{'configTaskDir'}/ConfigTablesWrapper.pl	short	$configDataDir	$configDataDir		Create instrument configuration tables.
 configReportUrl	2	updateUrl.py	$ENV{'configReportTaskVersion'}	$urlUpdater				short	$configDataDir	$configDataDir		Update URL for instrument configuration report.
 
-schema
-snapshot
+$schemaLine
+$snapshotLine
 tarBall	Analysis	tgz	$configDataDir		Tarball (.tgz) of configuration report directory
 
 
@@ -92,9 +112,9 @@ LaunchRecon	2	TaskLaunch.pl	$ENV{'digitizationTaskVersion'}	$ENV{'digitizationTa
 LaunchReport	3	TaskLaunch.pl	$ENV{'digitizationTaskVersion'}	$ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl	short	$digiDataDir	$digiDataDir		launch digi report task
 digiRootFile	4	updateUrl.py	$ENV{'digitizationTaskVersion'}	$urlUpdater					short	$digiDataDir	$digiDataDir		Update URL for digi file.
 
-digi		DIGI	root	$digiDataDir	Raw data in detector space
+$digiLine
 jobOptions	text	jobOpt	$digiDataDir	config file
-ldf
+$ldfLine
 script		script	csh	$digiDataDir	script
 
 
@@ -104,7 +124,7 @@ $ENV{'digiReportTask'}	Report	$ENV{'dataHead'}		Report on contents of digi file
 genReport		1	TestReport.exe	$ENV{'digiReportTaskVersion'}	$ENV{'digiReportTaskDir'}/genDigiTestReportWrapper.pl	short	$digiReportDataDir	$digiReportDataDir		Make report on digi file contents
 digiReportUrl	2	updateUrl.py	$ENV{'digiReportTaskVersion'}	$urlUpdater					short	$digiReportDataDir	$digiReportDataDir		Update URL for digi report.
 
-digi
+$digiLine
 jobOptions	text	jobOpt	$digiReportDataDir		output config file
 script		script	csh	$digiReportDataDir		output script file
 tarBall		Analysis	tgz	$digiReportDataDir		tarball of report directory
@@ -119,10 +139,10 @@ LaunchReport	3	TaskLaunch.pl	$ENV{'reconTaskVersion'}	$ENV{'reconTaskDir'}/genRT
 reconRootFile	4	updateUrl.py	$ENV{'reconTaskVersion'}	$urlUpdater				short	$reconDataDir	$reconDataDir		Update URL for recon file.
 meritRootFile	5	updateUrl.py	$ENV{'reconTaskVersion'}	$urlUpdater				short	$reconDataDir	$reconDataDir		Update URL for merit file.
 
-digi
+$digiLine
 jobOptions	text	jobOpt	$reconDataDir		options for recon
-merit		merit	root	$reconDataDir		merit tuple
-recon		RECON	root	$reconDataDir		recon file
+$meritLine
+$reconLine
 script		script	sh	$reconDataDir		script
 
 
@@ -132,9 +152,9 @@ $ENV{'reconReportTask'}	Report	$ENV{'dataHead'}		Report on contents of recon & d
 genReport		1	TestReport.exe	$ENV{'reconReportTaskVersion'}	$ENV{'reconReportTaskDir'}/genReconTestReportWrapper.pl	short	$reconReportDataDir		$reconReportDataDir		Create recon report
 reconReportUrl	2	updateUrl.py	$ENV{'reconReportTaskVersion'}	$urlUpdater					short	$reconReportDataDir		$reconReportDataDir		Update URL for recon report.
 
-digi
+$digiLine
 jobOptions	text	jobOpt	$reconReportDataDir		Option file
-recon
+$reconLine
 script		script	csh	$reconReportDataDir		Script
 tarBall		Analysis	tgz	$reconReportDataDir		tarball of report directory
 
@@ -145,10 +165,10 @@ $ENV{'svacTupleTask'}	Analysis	$ENV{'dataHead'}		Make SVAC "tuple"
 svacTuple		1	RunRootAnalyzer.exe		$ENV{'svacTupleTaskVersion'}	$ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl	short	$svacTupleDataDir	$svacTupleDataDir		Make SVAC "tuple"
 svacRootFile	2	updateUrl.py		$ENV{'svacTupleTaskVersion'}	$urlUpdater					short	$svacTupleDataDir	$svacTupleDataDir		Update URL for svac tuple file.
 
-digi
-histogram		histogram	root	$svacTupleDataDir		SVAC histograms
+$digiLine
+$svacHistLine
 jobOptions	text	jobOpt	$svacTupleDataDir		option file
-recon
+$reconLine
 script		script	csh	$svacTupleDataDir		script
-svac		svac	root	$svacTupleDataDir		SVAC "tuple"
+$svacTupleLine
 EOT
