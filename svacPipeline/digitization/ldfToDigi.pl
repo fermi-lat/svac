@@ -62,30 +62,7 @@ close(SHELLFILE);
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
-ApplicationMgr.DLLs   += {"GaudiAlg",
-                          "GaudiAud"};
-ApplicationMgr.ExtSvc += {"ChronoStatSvc"};
-AuditorSvc.Auditors    = {"ChronoAuditor"};
-ApplicationMgr.TopAlg = {"Sequencer/Top"};
-Top.Members = {"Sequencer/Triggered"};
-Triggered.Members = {"Sequencer/Trigger",
-                     "Sequencer/Output"};
-ApplicationMgr.DLLs    += {"GlastSvc"};
-ApplicationMgr.ExtSvc  += {"GlastDetSvc"};
-GlastDetSvc.topVolume   = "LAT"; 
-GlastDetSvc.visitorMode = "recon";
-ApplicationMgr.DLLs += {"Trigger"};
-Trigger.Members      = {"TriggerAlg"};
-TriggerAlg.mask = 0; 
-ApplicationMgr.DLLs += {"RootIo"}; 
-Output.Members       = {"digiRootWriterAlg"};
-ApplicationMgr.DLLs   += {"LdfConverter"};
-ApplicationMgr.ExtSvc += {"LdfEventSelector/EventSelector","LdfCnvSvc/EventCnvSvc"};
-EventPersistencySvc.CnvServices = {"EventCnvSvc"};
-EventSelector.Instrument = "LAT";
-MessageSvc.OutputLevel = 3;
-ApplicationMgr.EvtMax = 10000000;
-GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml";
+#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/ldf2digi.txt"
 EventSelector.StorageType = "$ldfFileType";
 EventSelector.InputList = {"$ldfFile"};
 digiRootWriterAlg.digiRootFile = "$digiRootFile";

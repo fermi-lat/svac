@@ -7,7 +7,7 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
 setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
-setenv EngineeringModelVersion v4r060302p2
+setenv EngineeringModelVersion v4r060302p6
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -71,7 +71,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion v3r1p0
 setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r8p3
+setenv Em2Version v2r11
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -101,7 +101,7 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-setenv LATCalibRoot /nfs/farm/g/glast/u01/calibConstants
+setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion v3r1p0
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
@@ -129,7 +129,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion v3r1p0
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r3p6
+setenv RunRootAnalyzerVersion v1r3p7
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
