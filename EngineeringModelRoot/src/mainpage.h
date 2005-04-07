@@ -159,6 +159,8 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD>A 3 dimension array which describe log accepts contained in the CAL trigger diagnostic info.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
+<TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD>A three dimension array which describes fit position in each CAL crystal, coord=0 means fitted X coordinate, coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate.</TD> </TR>
+<TR> <TD> TkrTotalHits[tower] </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file

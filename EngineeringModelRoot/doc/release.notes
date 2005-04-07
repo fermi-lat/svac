@@ -101,5 +101,10 @@ in optimized build. Rearraneg functions to make optimized build.
 
 v1r3p12
 
-Added TrgReqTriRowBits made from trigger primitives. Renamed current TriRowBits 
-to DigiTriRowBits. Updated documentation.
+Added TrgReqTriRowBits made from trigger primitives. Renamed current TriRowBits to DigiTriRowBits. Updated documentation.
+
+v1r3p13
+
+Add CalXtalPos to describe fit position in each crystal
+Add TkrTotalHits to describe total number of hits in each tower
+JIRA issue (SVAC-17

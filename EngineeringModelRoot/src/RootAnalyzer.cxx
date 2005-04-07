@@ -285,8 +285,14 @@ void RootAnalyzer::analyzeReconTree()
 	  // CAL layer end energies:
           m_ntuple.m_xtalEne[iTower][iLayer][iCol][0] = enePos;
           m_ntuple.m_xtalEne[iTower][iLayer][iCol][1] = eneNeg;
- 
+
 	  if(ene > m_ntuple.m_maxCalEnergy) m_ntuple.m_maxCalEnergy = ene;
+
+	  TVector3 pos =  calData->getPosition();
+	  m_ntuple.m_xtalPos[iTower][iLayer][iCol][0] = pos.x();
+	  m_ntuple.m_xtalPos[iTower][iLayer][iCol][1] = pos.y();
+	  m_ntuple.m_xtalPos[iTower][iLayer][iCol][2] = pos.z();
+
 	}
       }
     }
@@ -408,6 +414,9 @@ void RootAnalyzer::analyzeDigiTree()
     GlastAxis::axis iView = tkrDigi->getView();
   
     int nStrips = tkrDigi->getNumHits();
+
+    m_ntuple.m_totalStripHits[iTower] += nStrips;
+
     if(iView == GlastAxis::X) {
       m_ntuple.m_nStrips[iTower][iLayer][0] = nStrips;
       m_ntuple.m_tot[iTower][iLayer][0][0] = tkrDigi->getToT(0);
@@ -617,7 +626,7 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //    nEvent = 100;
+  //     nEvent = 100;
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -1060,7 +1069,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
   m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
   m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
-  m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/i");
+  m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/i");
   m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/i");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
@@ -1105,4 +1114,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
   m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/i");
   m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/i");
+  m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
+  m_tree->Branch("TkrTotalHits", &(m_ntuple.m_totalStripHits), "TkrTotalHits[16]/i");
+
 }

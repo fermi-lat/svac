@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <map>
 #include <fstream>
+#include <strings.h>
 #include "TFile.h"
 #include "TTree.h"
 #include "TNtuple.h"
@@ -33,9 +34,7 @@ int main(int argc, char** argv)
   }
 
   TFile f(outputFile.c_str(), "RECREATE");
-  TH1F h1("h1", "CC occupancy", 8, -0.5, 7.5);
-  TH1F h2("h2", "RC occupancy", 9, -0.5, 8.5);
-  TH2F h3("h3", "CC and RC occupancy", 8, -0.5, 7.5, 9, -0.5, 8.5);
+  TNtuple tuple("tuple", "tuple", "maxNHits:cc:rc:badEvt:fifoErr");
 
   TFile m_digiFile(digiFile.c_str(), "READ");
   if(m_digiFile.IsZombie()) {
@@ -54,14 +53,21 @@ int main(int argc, char** argv)
 
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) { 
 
-    if(digiEvent) digiEvent->Clear();
+    int nEvtPerCcRc[8][9];
+    bzero(nEvtPerCcRc, 72*sizeof(int));
 
+    int nEvtPerCc[8];
+    bzero(nEvtPerCc, 8*sizeof(int));
+
+    if(digiEvent) digiEvent->Clear();
+    
     digiTree->GetEvent(iEvent);
 
     int id = digiEvent->getEventId();
-
-
+     
     int nTkrDigis = digiEvent->getTkrDigiCol()->GetLast()+1;
+
+    int maxNhits = 0, ccMaxHits = -9999, rcMaxHits = -9999;
 
     for(int i = 0; i != nTkrDigis; ++i) {
       const TkrDigi* tkrDigi = digiEvent->getTkrDigi(i);
@@ -73,6 +79,13 @@ int main(int argc, char** argv)
       GlastAxis::axis iView = tkrDigi->getView();
       int view = (iView == GlastAxis::X) ? 0 : 1;
 
+      GeoToElec::gtcc_gtrc temp = GeoToElec::getInstance()->getGtccGtrc(layer, view, 0);
+      int lowEndCc = temp.m_gtcc;
+      int rc = temp.m_gtrc;
+
+      temp = GeoToElec::getInstance()->getGtccGtrc(layer, view, 1);
+      int highEndCc = temp.m_gtcc;
+
       int nStrips = tkrDigi->getNumHits();
 
       for(int i = 0; i != nStrips; ++i) {
@@ -81,25 +94,43 @@ int main(int argc, char** argv)
 
 	int last0Strip = tkrDigi->getLastController0Strip();
 
-	int end;
-
-	if(last0Strip < 0) {
-	  end = 1;
-	}
-	else if(stripId <= last0Strip) {
-	  end = 0;
+	if(last0Strip < 0 || stripId > last0Strip) {
+	  ++nEvtPerCcRc[highEndCc][rc];
+	  ++nEvtPerCc[highEndCc];
 	}
 	else {
-	  end = 1;
+	  ++nEvtPerCcRc[lowEndCc][rc];
+	  ++nEvtPerCc[lowEndCc];	  
 	}
 
-	GeoToElec::gtcc_gtrc temp = GeoToElec::getInstance()->getGtccGtrc(layer, view, end);
+      }
 
-	h1.Fill(temp.m_gtcc);
-	h2.Fill(temp.m_gtrc);
-	h3.Fill(temp.m_gtcc, temp.m_gtrc);
+      int maxNhits2End = std::max(nEvtPerCcRc[lowEndCc][rc], nEvtPerCcRc[highEndCc][rc]);
+
+      if(maxNhits2End > maxNhits) {
+	ccMaxHits = (nEvtPerCcRc[lowEndCc][rc]>=nEvtPerCcRc[highEndCc][rc]) ? lowEndCc : highEndCc;
+
+	rcMaxHits = rc;
+
+	maxNhits = maxNhits2End;
+      }
+
+    }
+
+
+    int badEvt =  0;
+    for(int i = 0; i != 8; ++i) {
+      assert(nEvtPerCc[i] <= 128);
+      if(nEvtPerCc[i] == 128) {
+	badEvt = 1;
       }
     }
+     
+    bool temErr = digiEvent->getEventSummaryData().errorEventSummary();
+    
+    int fifoErr = (temErr) ? 1 : 0;
+
+    tuple.Fill(maxNhits, ccMaxHits, rcMaxHits, badEvt, fifoErr);
   }
 
   f.cd();

@@ -109,7 +109,7 @@ struct NtupleDef {
   // time information. This may change depending on future data format
   unsigned int m_ebfSecond, m_ebfNanoSecond;
   unsigned int m_upperTime, m_lowerTime;
-  unsigned int m_timeSeconds;
+  double m_timeSeconds;
 
 
   //diagnostic info
@@ -186,6 +186,12 @@ struct NtupleDef {
 
   // log accept info
   unsigned int m_calLogAccepts[g_nTower][g_nCalLayer][g_nFace];
+
+  // xyz position measured in each crystal, default values are -9999
+  float m_xtalPos[g_nTower][g_nCalLayer][g_nCol][3];
+
+  // total no. of hits per tower
+  unsigned int m_totalStripHits[g_nTower];
 
   static const char* gRootNtupleDefStr;
 
