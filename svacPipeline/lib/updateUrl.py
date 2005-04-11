@@ -15,11 +15,6 @@ dataRoot is the root directory for the run tree on the FTP server
 import sys
 import os
 
-import DCOracle2
-
-#used to form ftp URL - default value
-rootDataDir = os.environ['rootUrl']
-
 reportPages = {"configReportUrl": os.environ['configReportUrl'],
                "digiReportUrl": os.environ['digiReportUrl'],
                "reconReportUrl": os.environ['reconReportUrl'],
@@ -29,12 +24,15 @@ goodKeys = ('configReportUrl', 'digiReportUrl', 'reconReportUrl',
             'digiRootFile', 'reconRootFile', 'meritRootFile', 'svacRootFile',
             )
 
-failCode = 1
+success = 0
+failure = 1
 
 # parse args
 nArg = len(sys.argv)
 if nArg == 4:
     runId, urlKey, targetFile = sys.argv[1:]
+    # used to form ftp URL - default value
+    rootDataDir = os.environ['rootUrl']
 elif nArg == 5:
     runId, urlKey, targetFile, rootDataDir = sys.argv[1:]    
 else:
@@ -60,43 +58,16 @@ if urlKey in reportPages:
 path = os.path.join(*path)
 print path
 
-#open connection to oracle database
-db = DCOracle2.connect('GLAST_CAL/9square#')
-cursor = db.cursor()
-
-# determine whether run is already in the database
-sqlStr = 'select * from eLogReport where RunId = %s' % runId
-cursor.execute(sqlStr)
-result = cursor.fetchone()
-if(result == None):
-    print 'run %s does not exist in the database, abortted!' % runId
-    db.close()
-    sys.exit(failCode)
     
 # construct URL string
-reportUrl = "ftp://ftp-glast.slac.stanford.edu/%s/%s" % \
-            (rootDataDir, path)
+reportUrl = "%s/%s" % (rootDataDir, path)
     
-# construct sql string to input data into oracle database.
-# in oracle, '' is used to put ' inside a string.
-sqlStr = "update eLogReport set %s = '%s' where RunId = %s" % \
-         (urlKey, reportUrl, runId)
-
-try:
-    cursor.execute(sqlStr)
-except:
-    (exc_type, exc_value) = sys.exc_info()[:2]
-
-    print sqlStr
-    print exc_type
-    print exc_value
-
-    db.rollback()
-    db.close()
-    sys.exit(failCode)
-    
-# safe to commit
-db.commit()
-    
-#close database
-db.close()
+# update DB
+command = "%s '%s' '%s' '%s'" % (os.environ['eLogUpdate'], runId, urlKey, reportUrl)
+sys.stderr.write("About to run command [%s]\n" % command)
+status = os.system(command)
+if status:
+    sys.exit(failure)
+else:
+    sys.exit(success)
+    pass

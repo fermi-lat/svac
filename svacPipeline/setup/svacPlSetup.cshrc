@@ -16,17 +16,24 @@ setenv svacCmt ${svacRoot}/builds
 # svacPlRoot is set in the pipeline
 #setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 setenv svacVersion v3r1p3
-setenv svacPlLibVersion ${svacVersion}
 setenv svacPlLib ${svacPlRoot}/lib
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
 
-#setenv dataHead /nfs/farm/g/glast/u14/Integration
-setenv dataHead /nfs/farm/g/glast/u14
-setenv rootUrl /glast.u14/Integration/rootData
-setenv rawUrl /glast.u14/Integration/rawData
+setenv diskHead /nfs/farm/g/glast
+setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
+setenv dataDisk u14
+setenv phase Integration
+setenv subDir ${dataDisk}/${phase}
+setenv dataHead ${diskHead}/${subDir}
+setenv urlHead ${webHead}/${subDir}
+setenv onlineSubDir rawData
+setenv svacSubDir rootData
+setenv rawUrl ${webHead}/${onlineSubDir}
+setenv rootUrl ${webHead}/${svacSubDir}
+setenv runSymbol '$(RUN_NAME)'
 
-setenv cookedTail Integration/rootData/'$(RUN_NAME)'
+setenv cookedTail ${svacSubDir}/${runSymbol}
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
 setenv calibVersion calib-v1r0
@@ -41,7 +48,7 @@ setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
-setenv onlineDataDir Integration/rawData/'$(RUN_NAME)'
+setenv onlineDataDir ${onlineSubDir}/${runSymbol}
 setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
 #-------------------------------- online --------------------------------------
 
@@ -144,8 +151,10 @@ setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #++++++++++++++++++++++++++++++++ many ++++++++++++++++++++++++++++++++++++++++
 setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
 setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
-setenv urlUpdateScript  ${eLogDir}/updateUrl.py
+setenv urlUpdateScript  ${svacPlLib}/updateUrl.py
 setenv batchgroup glastdata
+setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
+setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
 #-------------------------------- many ----------------------------------------
 
 setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}
