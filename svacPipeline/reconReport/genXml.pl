@@ -8,11 +8,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# reconReport
-#my $reconReportDataDir = "$ENV{'calibRoot'}/reconReport/$ENV{'reconReportVersion'}";
 
 my $reconReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -28,7 +24,7 @@ my $reconReportXml =
         <executable name=\"genReport\" version=\"$ENV{'reconReportTaskVersion'}\">
             $ENV{'reconReportTaskDir'}/genReconTestReportWrapper.pl
         </executable>
-        <executable name=\"reconReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"reconReportUrl\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 

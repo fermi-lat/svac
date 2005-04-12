@@ -8,7 +8,6 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $batchgroup = $ENV{'batchgroup'};
 
-# eLog
 my $eLogDataDir = $ENV{'svacHead'};
 
 my $updateElogDbXml = 

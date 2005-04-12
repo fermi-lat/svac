@@ -8,11 +8,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# digiReport
-#my $digiReportDataDir = "$ENV{'svacEmDir'}/digiReport/$ENV{'digiReportVersion'}";
 
 my $digiReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -28,7 +24,7 @@ my $digiReportXml =
         <executable name=\"genReport\" version=\"$ENV{'digiReportTaskVersion'}\">
             $ENV{'digiReportTaskDir'}/genDigiTestReportWrapper.pl
         </executable>
-        <executable name=\"digiReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"digiReportUrl\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 

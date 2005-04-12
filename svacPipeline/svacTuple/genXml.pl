@@ -8,11 +8,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# svacTuple
-#my $svacTupleDataDir = "$ENV{'calibRoot'}/svacRoot/$ENV{'svacTupleVersion'}";
 
 my $svacTupleXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -28,7 +24,7 @@ my $svacTupleXml =
         <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
             $ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl
         </executable>
-        <executable name=\"svacRootFile\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"svacRootFile\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 

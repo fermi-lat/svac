@@ -10,9 +10,6 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 my $batchgroup = $ENV{'batchgroup'};
 
-# recon
-#my $reconDataDir = "$ENV{'calibRoot'}/grRoot";
-
 my $reconXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -34,7 +31,7 @@ my $reconXml =
     <executable name=\"genRTRLaunch\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
     </executable>
-    <executable name=\"urlWrapper\" version=\"$ENV{'svacPlLibVersion'}\">
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
         $urlUpdater
     </executable>
 
