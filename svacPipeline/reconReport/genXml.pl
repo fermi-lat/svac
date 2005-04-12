@@ -28,7 +28,7 @@ my $reconReportXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
             <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
             <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -43,7 +43,7 @@ my $reconReportXml =
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
         <file name=\"recon\"      file-type=\"root\"   type=\"RECON\">$ENV{'reconDataDir'}</file>
 
-        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"long-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"jobOptions\"/>

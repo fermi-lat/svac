@@ -28,7 +28,7 @@ my $digiReportXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$ENV{'digiReportDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -42,7 +42,7 @@ my $digiReportXml =
         <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">$ENV{'digiReportDataDir'}</file>
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
 
-        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"medium-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"long-job\">
                         <input-file name=\"digi\"/>
                         <output-file name=\"jobOptions\"/>
                         <output-file name=\"script\"/>
