@@ -19,7 +19,7 @@ run cd ${dataDir}
 
 set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
-set oldDir=../../../EM2/rawData/${run}
+set oldDir=../../../../u12/EM2/rawData/${run}
 set oldTask=online-EM2-V1r0
 
 set newTask=${eLogTask}
