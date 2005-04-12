@@ -7,7 +7,7 @@ source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv EngineeringModelVersion v4r060302p10
+setenv EngineeringModelVersion v4r060302p8
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -29,8 +29,8 @@ setenv dataHead ${diskHead}/${subDir}
 setenv urlHead ${webHead}/${subDir}
 setenv onlineSubDir rawData
 setenv svacSubDir rootData
-setenv rawUrl ${webHead}/${onlineSubDir}
-setenv rootUrl ${webHead}/${svacSubDir}
+setenv rawUrl ${webHead}/${subDir}/${onlineSubDir}
+setenv rootUrl ${webHead}/${subDir}/${svacSubDir}
 setenv runSymbol '$(RUN_NAME)'
 
 setenv cookedTail ${svacSubDir}/${runSymbol}
@@ -79,7 +79,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r13
+setenv Em2Version v2r11
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
