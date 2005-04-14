@@ -2,7 +2,6 @@
 #define ElecToGeo_Class
 
 #include <map>
-#include "GeoConstants.h"
 
 // this class contains mapping from electronic space(CC, RC) to physical geometry space
 
@@ -38,13 +37,13 @@ class ElecToGeo {
   // e.g.: req[0][3][0][0]=1 means lower half of tower 0, layer X3 sends the trigger request
   // e.g.: req[0][3][1][1]=1 means upper half of tower 0, layer Y3 sends the trigger request
   // layer 0 is at the bottom
-  void decodeTkrTp(unsigned tp[g_nTower][g_nGTCC], unsigned req[g_nTower][g_nTkrLayer][g_nView][g_nEnd]) const;
+  void decodeTkrTp(unsigned tp[16][8], unsigned req[16][18][2][2], int iTower) const;
 
-  // input an array tp (layout in ebf) which contains trigger primitive for the calorimeter, output two arrays in detector space.
+  // input an array tp (layout in ebf) which contains trigger primitive for the calorimeter, output a two dimension array in detector space.
   // e.g.: req[0][3][0] contains 16 bit diagnostic data for tower 0, layer 3, negative end 
   // e.g.: req[0][3][1] contains 16 bit diagnostic data for tower 0, layer 3, positive end 
   // layer 0 is at the top (different to the tracker)
-  void decodeCalTp(unsigned tp[g_nTower][g_nCalLayer], unsigned req[g_nTower][g_nCalLayer][g_nFace], unsigned accept[g_nTower][g_nCalLayer][g_nFace]) const;
+  void decodeCalTp(unsigned tp[16][8], unsigned req[16][8][2], int iTower) const;
 
 
  private:
@@ -67,7 +66,5 @@ inline int ElecToGeo::end(int gtcc) const
   if(gtcc== 0 || gtcc==3 || gtcc==5 || gtcc==6) return 0;
   else return 1;
 }
-
-bool operator<(const ElecToGeo::gtcc_gtrc& x, const ElecToGeo::gtcc_gtrc& y);
 
 #endif

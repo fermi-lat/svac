@@ -78,33 +78,48 @@ ElecToGeo::ElecToGeo()
   m_tkrMap[gtcc_gtrc(0,0)] = tkrLayerView(0, 1);
 }
 
-void ElecToGeo::decodeTkrTp(unsigned tp[g_nTower][g_nGTCC], 
-			    unsigned req[g_nTower][g_nTkrLayer][g_nView][g_nEnd]) const
+void ElecToGeo::decodeTkrTp(unsigned tp[16][8], unsigned req[16][18][2][2]
+			    , int iTower) const
 {
-  for(int iTower = 0; iTower != g_nTower; ++iTower) {
-    for(int iGTCC = 0; iGTCC != g_nGTCC; ++iGTCC) {
-      if(tp[iTower][iGTCC] == 0) continue;
-      for(int iGTRC = 0; iGTRC != g_nGTRC; ++iGTRC) {
-	tkrLayerView x = m_tkrMap.find(gtcc_gtrc(iGTCC, iGTRC))->second;
-	req[iTower][x.m_layer][x.m_view][end(iGTCC)] = ( (tp[iTower][iGTCC] >> iGTRC) & 1 ) ;
-      }
+  // copy tp into temp so that index of temp is the GTCC number
+  unsigned temp[8];
+  temp[0] = tp[iTower][5];
+  temp[1] = tp[iTower][7];
+  temp[2] = tp[iTower][3];
+  temp[3] = tp[iTower][1];
+  temp[4] = tp[iTower][6];
+  temp[5] = tp[iTower][4];
+  temp[6] = tp[iTower][0];
+  temp[7] = tp[iTower][2];
+
+  for(int iCC = 0; iCC != 8; ++iCC) {
+    for(int iRC = 0; iRC != 9; ++iRC) {
+      tkrLayerView x = m_tkrMap.find(gtcc_gtrc(iCC, iRC))->second;
+      req[iTower][x.m_layer][x.m_view][end(iCC)] = ( (temp[iCC] >> iRC) & 1 ) ;
     }
   }
 }
 
-void ElecToGeo::decodeCalTp(unsigned tp[g_nTower][g_nCalLayer], 
-			    unsigned req[g_nTower][g_nCalLayer][g_nFace],      
-			    unsigned accept[g_nTower][g_nCalLayer][g_nFace]) const
+void ElecToGeo::decodeCalTp(unsigned tp[16][8], unsigned req[16][8][2],
+			    int iTower) const
 {
-  for(int iTower = 0; iTower != g_nTower; ++iTower) {
-    for(int iLayer = 0; iLayer != g_nCalLayer; ++iLayer) {
-      if(tp[iTower][iLayer] == 0) continue;
-      unsigned int diag = (tp[iTower][iLayer] >> 16);
-      req[iTower][iLayer][0] = (diag >> 12) & 3;
-      accept[iTower][iLayer][0] = (diag & 0x0fff);
-      diag = (tp[iTower][iLayer] & 0xffff);
-      req[iTower][iLayer][1] = (diag >> 12) & 3;
-      accept[iTower][iLayer][1] = (diag & 0x0fff);
+
+  // copy tp into temp so that index of temp is the layer number
+  // layer 0 is at top
+  unsigned temp[8];
+  temp[0] = tp[iTower][0];
+  temp[1] = tp[iTower][4];
+  temp[2] = tp[iTower][1];
+  temp[3] = tp[iTower][5];
+  temp[4] = tp[iTower][2];
+  temp[5] = tp[iTower][6];
+  temp[6] = tp[iTower][3];
+  temp[7] = tp[iTower][7];
+
+  for(int iLayer = 0; iLayer != NtupleDef::g_nCalLayer; ++iLayer) {
+    for(int iEnd = 0; iEnd != 2; ++iEnd) {
+      req[iTower][iLayer][0] = (temp[iLayer] >> 16);
+      req[iTower][iLayer][1] = (temp[iLayer] & 0xffff);
     }
   }
 }
