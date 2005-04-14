@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <time.h>
 #include <stdexcept>
+#include <stdlib.h>
 #include "ExtractDb.h"
 #include "TPad.h"
 #include "TROOT.h"
@@ -17,13 +18,14 @@ using std::ofstream;
 using std::ifstream;
 using std::cout;
 using std::endl;
+using std::istringstream;
 
 ExtractDb::ExtractDb() : m_rootF(0), m_tree(0),
-			 m_db("slac_tcp", "GLAST_CAL", "9square#")
+			 m_db("SLACPROD", "glast_cal_ro", "b6h*q4:")
 {
     // initialize ROOT if not already done
   if(gROOT == 0) {
-    static TROOT gRoot("RootAnalyzer", "RootAnalyzer");
+    static TROOT gRoot("ExtractDb", "ExtractDb");
   }
 
   assert(sizeof(unsigned int) == 4);
@@ -57,7 +59,9 @@ void ExtractDb::makeRootTree()
 
 void ExtractDb::fillRootTree()
 {
-  string sql("select v.usecs, d.Mnem, length(d.Mnem), v.value from v2HkVALfields v, v2HkTLMfields d where d.Id = v.IdTLM and v.usecs > ");
+  string sql("select v.usecs, d.Mnem, length(d.Mnem), v.value from v2HkVALCHfields v, v2HkTLMfields d where d.Id = v.IdTLM and v.source = ");
+  sql += m_sourceId;
+  sql += " and v.usecs > ";
   sql += ToString(m_startTime);
   sql += " and v.usecs < ";
   sql += ToString(m_endTime);
@@ -118,15 +122,21 @@ void ExtractDb::parseOptionFile(const char* f)
   while( getline(optF, line) ) {
     if(!skipLine(line)) break;
   }
+  parseLine(m_sourceId, line);
+  cout << "source Id: " << m_sourceId << endl;
+
+  while( getline(optF, line) ) {
+    if(!skipLine(line)) break;
+  }
   parseLine(temp, line);
-  m_startTime = ToULong(temp);
+  m_startTime = parseStrTime(temp.c_str());
   cout << "start time of house keeping data to be extracted " << ctime((time_t*) (&m_startTime)) << endl;
 
   while( getline(optF, line) ) {
     if(!skipLine(line)) break;
   }
   parseLine(temp, line);
-  m_endTime = ToULong(temp);
+  m_endTime = parseStrTime(temp.c_str());
   cout << "end time of house keeping data to be extracted " << ctime((time_t*) (&m_endTime)) << endl;
 
   while( getline(optF, line) ) {
@@ -170,4 +180,25 @@ bool ExtractDb::skipLine(const string& line)
   else {
     return false;
   }
+}
+
+time_t ExtractDb::parseStrTime(const char* str) const
+{
+  struct tm t;
+  setenv("TZ", "UTC", 1);
+
+  // input line contains 2 parts separated by empty spaces
+  istringstream stream(str);
+  string date, time;
+  stream >> date >> time;
+
+  string completeTime(date);
+  completeTime += '-';
+  completeTime += time;
+
+  // "%Y-%m-%d %H:%M:%S" could be used to avoid extra parsing above
+  // however, it would be difficult to get rid of no. of empty space in the
+  // input line.
+  strptime(completeTime.c_str(), "%Y-%m-%d-%H:%M:%S", &t);
+  return mktime(&t);
 }

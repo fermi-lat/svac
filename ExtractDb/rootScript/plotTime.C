@@ -1,52 +1,73 @@
+void main()
 {
 gROOT->Reset();
 
-unsigned int startTime = 1097232000;
-unsigned int endTime = startTime + 3600;
-unsigned int offset = startTime - 1092105000;
+#include <iostream>
+#include <time.h>
+#include <stdlib.h>
+
+
+// time range to plot, must formatted as YYYY-MM-DD HH:MI:SS
+const char* startTimeStr = "2005-03-26 19:25:50";
+const char* endTimeStr = "2005-03-26 20:25:51";
+
+gSystem->Setenv("TZ", "UTC");
+TDatime start(startTimeStr);
+unsigned int startTime  = (unsigned int) start.Convert(1);
+TDatime end(endTimeStr);
+unsigned int endTime  = (unsigned int) end.Convert(1);
+
+unsigned int offset = startTime;
+
+// Unlike what root tutorial describes, the offset should be set as 0 rather 
+// than start time.
+gStyle->SetTimeOffset(0);
+
+TCanvas* c = new TCanvas;
+gPad->SetBorderMode(0);
+gPad->SetFillColor(10);
+
 
 TString s("(EvtSecond > ");
 s += startTime;
 s += " && EvtSecond < ";
 s += endTime;
-s += ")";
+s += " && TkrNumStrips[0][1][1]>0)";
 
-TCut cut1(s.Data());
 
-TFile f("/nfs/farm/g/glast/u01/italyOneTower/em_v3r0404p2/306000163/041008101639_svac.root", "READ");
 
-gStyle->SetTimeOffset(0);
+TFile* f = new TFile("/nfs/farm/g/glast/u12/Integration/rootData/135000894/v4r060302p8/calib-v1r0/svacTuple/emRootv0r0/svacTuple-v3r1p2_135000894_svac_svac.root", "READ");
 
-TCanvas* c = new TCanvas;
-
-Output->Draw("TkrNumTracks:EvtSecond >> temp", cut1, "prof");
+Output->Draw("TkrNumStrips[0][1][1]:EvtSecond >> temp", s.Data(), "prof");
 
 TProfile* h = (TProfile*) gDirectory->Get("temp");
-h->GetXaxis()->SetTimeDisplay(1);
-h->GetXaxis()->SetTimeFormat("%H:%M:%S");
 h->SetStats(kFALSE);
 h->Draw();
+h->GetXaxis()->SetTimeDisplay(1);
+h->GetXaxis()->SetTimeFormat("%H:%M:%S");
 
-TFile f1("/nfs/slac/g/svac/chen/svac/ExtractDb/v0/output/hk.root");
-TString s1("(name == \"LHKT0TKRC0T0\" && (time+");
-s1 += offset;
-s1 += ") > ";
+
+TFile f1("/nfs/farm/g/glast/u06/chen/svac/ExtractDb/v0/output/hk.root");
+TTree* hk = (TTree*) gDirectory->Get("hk");
+TString s1("(name == \"LHKT0TKRC0T0\" && time");
+s1 += " > ";
 s1 += startTime;
-s1 += " && (time+";
-s1 += offset;
-s1 += ") < ";
+s1 += " && time";
+s1 += " < ";
 s1 += endTime;
 s1 += ")";
-TCut cut2(s1.Data());
+ cout << s1.Data() << endl;
+TCut cut2 = s1.Data();
 
-TString dr("value:(time+");
-dr += offset;
-dr += ")";
+TString dr("value:time");
+ cout << "estimates = " << hk->GetEntries() << endl;
 hk->SetEstimate((int) hk->GetEntries());
-hk->Draw(dr.Data(), cut2, "goff");
+hk->Draw(dr.Data(), s1.Data(), "goff");
 Double_t* x = hk->GetV2();
 Double_t* y = hk->GetV1();
 int n = hk->GetSelectedRows();
+cout << "selected rows = " << n << endl;
+
 Double_t max = y[0], min = y[0];
 for(int i = 1; i != n; ++i) {
   if(y[i] > max) max = y[i];
@@ -54,16 +75,16 @@ for(int i = 1; i != n; ++i) {
 }
 
 if(max > 0) {
-  max *= 1.1;
+  max *= 1.02;
 }
 else {
-  max *= 0.9;
+  max *= 0.98;
 }
 if(min > 0) {
-  min *= 0.9;
+  min *= 0.98;
 }
 else {
-  min *= 1.1;
+  min *= 1.02;
 }
 
 // must call Update() so that gPad->GetUxmax() produces correct value
@@ -86,8 +107,5 @@ for(int i = 0; i != n; ++i) {
 TGraph* gr = new TGraph(n, x, y);
 gr->SetMarkerColor(2);
 gr->Draw("*");
-//gr->GetXaxis()->SetTimeDisplay(1);
-//gr->GetXaxis()->SetTimeFormat("%H-%M");
-//gPad->Modified();
 
 }

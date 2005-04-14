@@ -1,12 +1,11 @@
 package ExtractDb
 
-version v0
+version v0r1
 
 author X. Chen <xchen@slac.stanford.edu>
 
 use GlastPolicy v*
 use ROOT v* IExternal
-use RootPolicy v*
 
 apply_pattern package_include
 apply_pattern package_headers

@@ -1,12 +1,15 @@
 // name of output root file
 ../output/hk.root
 
-// start time of the housekeeping data, UTC in seconds
-//1092417479
-1092099066
+// source id which is the first 3 digit of the run id.
+135
 
-// end time of the housekeeping data, UTC in seconds
-1092127866
+// start time of the housekeeping data, can be queried using run database
+// must be in the following format: YYYY-MM-DD-HH:MI:SS
+2005-03-26-19:25:50
+
+// end time of the housekeeping data, using same format as start time
+2005-03-26-20:25:51
 
 // TEM0 TKR Cable 0 Temp 0 raw
 LHKT0TKRC0T0
