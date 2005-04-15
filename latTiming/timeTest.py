@@ -1,9 +1,16 @@
 #!/afs/slac/g/ek/bin/python
 
+import sys
+
 import numarray
 import timeConv
 
-inFile = 'svac915.root'
+if len(sys.argv) == 2:
+    inFile = sys.argv[1]
+else:
+    sys.stderr.write("Usage: %s svacTuple.root\n" % sys.argv[0])
+    sys.exit(1)
+    pass
 
 ticks = timeConv.evtTicks(inFile)
 

@@ -15,14 +15,24 @@ def readColumns(fileName, columns, whichTuple=0):
 
     @arg fileName The ROOT file to read.
 
-    @arg columns A sequence of column names to read.
+    @arg columns A column name or sequence of column names to read.
 
     @arg [whichTuple] Name or number of tuple in file to read.
     Default is the first.
 
-    @ret A sequence of arrays, one for each name in @a columns.
+    @ret A sequence of arrays, one for each name in @a columns, or a single
+    array if a single column name was given.
 
     """
+
+    import types
+
+    if isinstance(columns, types.StringTypes):
+        oneColumn = True
+        columns = [columns]
+    else:
+        oneColumn = False
+        pass
 
     # get list of tuple names
     rc = hippo.RootController.instance()
@@ -42,5 +52,8 @@ def readColumns(fileName, columns, whichTuple=0):
 
     # pull out the data
     columnData = [numarray.array(ourTuple.getColumn(name)) for name in columns]
+
+    if oneColumn:
+        columnData = columnData[0]
 
     return columnData
