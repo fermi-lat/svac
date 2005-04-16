@@ -23,9 +23,9 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};

@@ -17,12 +17,12 @@ set dataDir=`echo ${onlineDataDirFull} | sed s/'$(RUN_NAME)'/$run/`
 test -e ${dataDir} || ( run mkdir ${dataDir} )
 run cd ${dataDir}
 
-set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
+set dataSets='ldf_LDF.fits'
 
-set oldDir=../../../../../../nfs/farm/g/glast/u12/EM2/rawData/${run}
+set oldDir=../../../EM2/rawData/${run}
 set oldTask=online-EM2-V1r0
 
-set newTask=${eLogTask}
+set newTask=${digitizationTask}
 
 foreach dataSet ($dataSets)
     set oldTail=${oldTask}_${run}_${dataSet}

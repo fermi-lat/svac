@@ -2,17 +2,13 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# reconReport
-#my $reconReportDataDir = "$ENV{'calibRoot'}/reconReport/$ENV{'reconReportVersion'}";
 
 my $reconReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -28,11 +24,11 @@ my $reconReportXml =
         <executable name=\"genReport\" version=\"$ENV{'reconReportTaskVersion'}\">
             $ENV{'reconReportTaskDir'}/genReconTestReportWrapper.pl
         </executable>
-        <executable name=\"reconReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"reconReportUrl\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
             <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
             <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -47,7 +43,7 @@ my $reconReportXml =
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
         <file name=\"recon\"      file-type=\"root\"   type=\"RECON\">$ENV{'reconDataDir'}</file>
 
-        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"long-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"jobOptions\"/>

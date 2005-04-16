@@ -2,17 +2,13 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# digitization
-#my $digiDataDir = "$ENV{'svacEmDir'}/grRoot";
 
 my $digitizationXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -34,7 +30,7 @@ my $digitizationXml =
         <executable name=\"LaunchReport\" version=\"$ENV{'digitizationTaskVersion'}\">
             $ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl
         </executable>
-        <executable name=\"digiRootFile\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"digiRootFile\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 

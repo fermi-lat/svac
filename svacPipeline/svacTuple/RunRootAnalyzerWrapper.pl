@@ -26,9 +26,9 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 #my $mcRootFile = $inFiles->{'mc'};
 my $mcRootFile = 'emptyFile';

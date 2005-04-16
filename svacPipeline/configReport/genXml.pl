@@ -2,18 +2,13 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
-
 my $batchgroup = $ENV{'batchgroup'};
-
-# configReport
-#my $configDataDir = "$ENV{'svacHead'}/configReport/$ENV{'configReportVersion'}";
-
 
 my $configReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -29,7 +24,7 @@ my $configReportXml =
         <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
             $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
         </executable>
-        <executable name=\"configReportUrl\" version=\"$ENV{'svacPlLibVersion'}\">
+        <executable name=\"configReportUrl\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
 

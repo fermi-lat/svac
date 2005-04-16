@@ -12,9 +12,9 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-use lib "$ENV{'svacPlRoot'}/lib-current";
+use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/dbSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup.cshrc");
 
 if($#ARGV+1 != 2) {
     die 'require two arguments: runId and fieldName';
