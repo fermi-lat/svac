@@ -41,9 +41,10 @@ def evtTicks(fileName):
     rollPpsTime = 2 ** 25
 
     columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime',
-               'EvtUpperTime', 'EvtLowerTime')
+               'EvtUpperTime', 'EvtLowerTime',
+               'EvtSecond', 'EvtNanoSecond')
 
-    triggerTime, ppsSeconds, ppsTime, upper, lower = \
+    triggerTime, ppsSeconds, ppsTime, upper, lower, seconds, nanoSeconds = \
                  readColumns.readColumns(fileName, columns)
 
     # debug
@@ -52,12 +53,14 @@ def evtTicks(fileName):
     ntuple.addColumn('ppsTime', ppsTime)
     ntuple.addColumn('upper', upper)
     ntuple.addColumn('lower', lower)
+    ntuple.addColumn('seconds', seconds)
+    ntuple.addColumn('nanoSeconds', nanoSeconds)
 
     ulTime = (upper * fourGib + lower) / ppcRate
-    ultBase = ulTime[0] - ppsSeconds[0]
-    ulTime -= ultBase
-    nRoll = numarray.around(ulTime / rollPpsSeconds - 0.5)
+    vxTime = seconds + nanoSeconds / 1e9
 
+    nRoll = numarray.zeros(ppsSeconds.shape[0], numarray.Float64)
+    
     # debug
     ntuple.addColumn('ulTime', ulTime)
     ntuple.addColumn('nRoll', nRoll)
@@ -68,9 +71,24 @@ def evtTicks(fileName):
 
     # debug
     ntuple.addColumn('triggerTimePlus', triggerTimePlus)
+
+    obviousRolls = (ppsSeconds[1:] < ppsSeconds[:-1]).astype(numarray.Float64)
+    nRoll[1:] += numarray.add.accumulate(obviousRolls)
     
-    evtTicks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate \
-               + triggerTimePlus - ppsTime
+    trialTime = (nRoll * rollPpsSeconds + ppsSeconds) + \
+                (triggerTimePlus - ppsTime) / tickRate
+
+    vxDelta = vxTime[1:] - vxTime[:-1]
+    trialDelta = trialTime[1:] - trialTime[:-1]
+    deltaDiff = vxDelta - trialDelta
+    extraRolls = numarray.around(deltaDiff / rollPpsTime)
+
+    print "%s extra PPS rollovers detected." % numarray.add.reduce(extraRolls)
+
+    nRoll[1:] += numarray.add.accumulate(extraRolls)
+
+    evtTicks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate + \
+                (triggerTimePlus - ppsTime)
 
     # debug
     ntuple.addColumn('evtTicks', evtTicks)
