@@ -43,8 +43,21 @@ def evtTicks(fileName):
     columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime',
                'EvtSecond', 'EvtNanoSecond')
 
-    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
-                 readColumns.readColumns(fileName, columns)
+    junk = numarray.transpose(readColumns.readColumns(fileName, columns))
+
+    tshape = list(junk.shape)
+    tshape[0] = 300
+    trash = numarray.zeros(tshape, numarray.Float64)
+    trash[:100] = junk[:100]
+    trash[-100:] = junk[-100:]
+    point = len(junk) / 4
+    trash[100:200] = junk[point:point+100]
+    #junk = trash
+
+    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = numarray.transpose(junk)
+
+#     triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
+#                  readColumns.readColumns(fileName, columns)
 
     # debug
     ntuple.addColumn('triggerTime', triggerTime)
@@ -53,6 +66,7 @@ def evtTicks(fileName):
     ntuple.addColumn('seconds', seconds)
     ntuple.addColumn('nanoSeconds', nanoSeconds)
 
+    seconds -= seconds[0]
     vxTime = seconds + nanoSeconds / 1e9
 
     nRoll = numarray.zeros(ppsSeconds.shape[0], numarray.Float64)
@@ -77,7 +91,7 @@ def evtTicks(fileName):
     vxDelta = vxTime[1:] - vxTime[:-1]
     trialDelta = trialTime[1:] - trialTime[:-1]
     deltaDiff = vxDelta - trialDelta
-    extraRolls = numarray.around(deltaDiff / rollPpsTime)
+    extraRolls = numarray.around(deltaDiff / rollPpsSeconds)
 
     print "%s extra PPS rollovers detected." % numarray.add.reduce(extraRolls)
 
