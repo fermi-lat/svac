@@ -1,5 +1,6 @@
 #!/afs/slac/g/ek/bin/python
 
+import code
 import sys
 
 import numarray
@@ -13,6 +14,8 @@ else:
     pass
 
 ticks = timeConv.evtTicks(inFile)
+sbcCycles = timeConv.sbcCycles(inFile)
+vxTime, firstSecond = timeConv.vxRealTime(inFile)
 
 print "Got %d events." % len(ticks)
 
@@ -20,3 +23,8 @@ delta = ticks[1:] - ticks[:-1]
 minDelta = numarray.minimum.reduce(delta)
 maxDelta = numarray.maximum.reduce(delta)
 print "Min: %s, Max: %s" % (minDelta, maxDelta)
+
+import hqPlot
+hqPlot.plot((ticks, sbcCycles, vxTime), ('ticks', 'sbcCycles', 'vxTime'))
+
+code.interact(local=locals())
