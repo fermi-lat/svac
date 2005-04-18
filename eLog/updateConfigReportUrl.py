@@ -1,4 +1,5 @@
-#!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
+#!/usr/bin/env python2.4
+
 """Usage: update.py [dataRoot] [runId]
 
 dataRoot is the root directory for the run tree on the FTP server

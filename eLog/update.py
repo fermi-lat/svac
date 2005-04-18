@@ -1,4 +1,4 @@
-#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
+#!/usr/bin/env python2.4
 
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
 
@@ -347,7 +347,7 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + '/' + rawDataDir + '/' + data[runIdTag] + '/'
+    onlineReportUrl = rawDataDir + '/' + data[runIdTag] + '/'
     
     if(data.has_key(onlineReportTag)):
         onlineReportUrl += data[onlineReportTag]
