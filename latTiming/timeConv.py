@@ -41,29 +41,25 @@ def evtTicks(fileName):
     rollPpsTime = 2 ** 25
 
     columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime',
-               'EvtUpperTime', 'EvtLowerTime',
                'EvtSecond', 'EvtNanoSecond')
 
-    triggerTime, ppsSeconds, ppsTime, upper, lower, seconds, nanoSeconds = \
+    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
                  readColumns.readColumns(fileName, columns)
 
     # debug
     ntuple.addColumn('triggerTime', triggerTime)
     ntuple.addColumn('ppsSeconds', ppsSeconds)
     ntuple.addColumn('ppsTime', ppsTime)
-    ntuple.addColumn('upper', upper)
-    ntuple.addColumn('lower', lower)
     ntuple.addColumn('seconds', seconds)
     ntuple.addColumn('nanoSeconds', nanoSeconds)
 
-    ulTime = (upper * fourGib + lower) / ppcRate
     vxTime = seconds + nanoSeconds / 1e9
 
     nRoll = numarray.zeros(ppsSeconds.shape[0], numarray.Float64)
     
     # debug
-    ntuple.addColumn('ulTime', ulTime)
     ntuple.addColumn('nRoll', nRoll)
+    ntuple.addColumn('vxTime', vxTime)
     # ntuple.addColumn('', )
 
     triggerTimePlus = numarray.array(triggerTime)
