@@ -35,3 +35,9 @@ Change LSF queue for digiReport ( SVAC-15 ).
 
 Change LSF queue for reconReport ( SVAC-12 ).  This was approved at the
 last round, but I goofed when installing the code.
+
+v3r1p4
+
+modify code to run eLogFeeder v2r2p1 which has following changes:
+modify code to use #!/usr/bin/env python2.4 (SVAC-29)
+modify code to use http instead of ftp to store online report URL (SVAC-28)

@@ -40,7 +40,7 @@ pushd $eLogFeederDir
 source /usr/local/bin/coraenvp
 setenv TWO_TASK $ENV{'TWO_TASK'}
 setenv ORACLE_HOME $ENV{'ORACLE_HOME'}
-setenv LD_LIBRARY_PATH .:$ENV{'ORACLE_LD_PATH'}
+setenv LD_LIBRARY_PATH 
 $scriptDir/update.py $rcReport $rootUrl $rawUrl 
 EOF
 close(SHELLFILE);
