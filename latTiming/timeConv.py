@@ -6,6 +6,7 @@
 
 """
 
+import sys
 import numarray
 import readColumns
 
@@ -22,20 +23,6 @@ def evtTicks(fileName):
 
     """
 
-    # debug
-    import hippo
-    app = hippo.HDApp()
-    canvas = app.canvas ()
-    rc = hippo.RootController.instance()
-    ntc = hippo.NTupleController.instance()
-    ntuple = hippo.NumArrayTuple()
-    ntuple.setName('nuggets')
-    ntuple.setTitle('coconuts')
-    ntc.registerNTuple(ntuple)
-
-    fourGib = 2.0 ** 32
-    # ppcRate = 16e6
-    ppcRate = 1 / 60e-9
     tickRate = 20e6
     rollPpsSeconds = 2 ** 7
     rollPpsTime = 2 ** 25
@@ -43,44 +30,16 @@ def evtTicks(fileName):
     columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime',
                'EvtSecond', 'EvtNanoSecond')
 
-    junk = numarray.transpose(readColumns.readColumns(fileName, columns))
-
-    tshape = list(junk.shape)
-    tshape[0] = 300
-    trash = numarray.zeros(tshape, numarray.Float64)
-    trash[:100] = junk[:100]
-    trash[-100:] = junk[-100:]
-    point = len(junk) / 4
-    trash[100:200] = junk[point:point+100]
-    #junk = trash
-
-    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = numarray.transpose(junk)
-
-#     triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
-#                  readColumns.readColumns(fileName, columns)
-
-    # debug
-    ntuple.addColumn('triggerTime', triggerTime)
-    ntuple.addColumn('ppsSeconds', ppsSeconds)
-    ntuple.addColumn('ppsTime', ppsTime)
-    ntuple.addColumn('seconds', seconds)
-    ntuple.addColumn('nanoSeconds', nanoSeconds)
+    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
+                 readColumns.readColumns(fileName, columns)
 
     seconds -= seconds[0]
     vxTime = seconds + nanoSeconds / 1e9
 
     nRoll = numarray.zeros(ppsSeconds.shape[0], numarray.Float64)
     
-    # debug
-    ntuple.addColumn('nRoll', nRoll)
-    ntuple.addColumn('vxTime', vxTime)
-    # ntuple.addColumn('', )
-
     triggerTimePlus = numarray.array(triggerTime)
     triggerTimePlus[numarray.where(triggerTime < ppsTime)] += rollPpsTime
-
-    # debug
-    ntuple.addColumn('triggerTimePlus', triggerTimePlus)
 
     obviousRolls = (ppsSeconds[1:] < ppsSeconds[:-1]).astype(numarray.Float64)
     nRoll[1:] += numarray.add.accumulate(obviousRolls)
@@ -93,16 +52,11 @@ def evtTicks(fileName):
     deltaDiff = vxDelta - trialDelta
     extraRolls = numarray.around(deltaDiff / rollPpsSeconds)
 
-    print "%s extra PPS rollovers detected." % numarray.add.reduce(extraRolls)
+    sys.stderr.write("%s extra PPS rollovers detected.\n" % numarray.add.reduce(extraRolls))
 
     nRoll[1:] += numarray.add.accumulate(extraRolls)
 
     evtTicks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate + \
                 (triggerTimePlus - ppsTime)
 
-    # debug
-    ntuple.addColumn('evtTicks', evtTicks)
-    import code
-    code.interact(local=locals())
-    
     return evtTicks
