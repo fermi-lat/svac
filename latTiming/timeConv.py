@@ -30,7 +30,8 @@ def evtTicks(fileName):
     """
 
     columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime')
-    triggerTime, ppsSeconds, ppsTime, = readColumns.readColumns(fileName, columns)
+    triggerTime, ppsSeconds, ppsTime, = \
+                 readColumns.readColumns(fileName, columns)
 
     # fix rollovers in 1PPS timebase
     triggerTime[numarray.where(triggerTime < ppsTime)] += rollPpsTime
@@ -49,7 +50,8 @@ def evtTicks(fileName):
     trialDelta = trialTime[1:] - trialTime[:-1]
     deltaDiff = vxDelta - trialDelta
     extraRolls = numarray.around(deltaDiff / rollPpsSeconds)
-    sys.stderr.write("%s extra PPS rollovers detected.\n" % numarray.add.reduce(extraRolls))
+    sys.stderr.write("%s extra PPS rollovers detected.\n" %
+                     numarray.add.reduce(extraRolls))
     nRoll[1:] += numarray.add.accumulate(extraRolls)
 
     evtTicks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate + \
@@ -60,6 +62,16 @@ def evtTicks(fileName):
 
 #
 def vxRealTime(fileName):
+    """@brief Get the VXWorks realtime clock data.
+
+    @arg fileName the name of an svacTuple file.
+
+    @ret A tuple containing an array of double-precision times for each event
+    (arbitrary zero point) and a double-precision scalar which can be added to
+    the array to get absolute times.
+
+    """
+    
     columns = ('EvtSecond', 'EvtNanoSecond')
     seconds, nanoSeconds = readColumns.readColumns(fileName, columns)
     vxTime = (seconds - seconds[0]) + nanoSeconds / 1e9
@@ -68,6 +80,15 @@ def vxRealTime(fileName):
 
 #
 def sbcCycles(fileName):
+    """@brief Get data from the CPU cycle counter on the SBC.
+
+    @arg fileName the name of an svacTuple file.
+
+    @ret A double-precision array containing a whole number of SBC CPU cycles
+    for each event.  The zero point is arbitrary.
+
+    """
+    
     columns = ('EvtUpperTime', 'EvtLowerTime')
     upper, lower = readColumns.readColumns(fileName, columns)
     upper -= upper[0]

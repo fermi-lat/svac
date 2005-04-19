@@ -18,6 +18,17 @@ controller.registerNTuple(tuple)
 
 #
 def plot(columns, names=None):
+    """@brief Quickly plot arrays using hippoDraw.
+
+    Actually we don't plot anything, but we do pass the arrays off to hippoDraw,
+    so the user can generate plots thru the GUI.
+
+    @arg columns A sequence of arrays (all the same length!) to plot.
+
+    @arg [names] A sequence of column names.  If present, must be the same
+    length as @a columns.  If not given, columns will be numbered.
+
+    """
 
     if names is None:
         names = [str(xx) for xx in range(len(columns))]
