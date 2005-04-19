@@ -1,8 +1,0 @@
-v1
-
-First version of code to extract calibration constants using SAS's interface
-and populating I&T's oracle database.
-
-To be done: get info from on meta database.
-
-

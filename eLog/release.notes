@@ -1,4 +1,0 @@
-v2r2p1
-
-modify code to use #!/usr/bin/env python2.4
-modify code to use http instead of ftp to store online report URL
