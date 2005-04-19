@@ -193,6 +193,9 @@ struct NtupleDef {
   // total no. of hits per tower
   unsigned int m_totalStripHits[g_nTower];
 
+  // total no. of clusters per tower
+  unsigned int m_totalClusters[g_nTower];
+
   static const char* gRootNtupleDefStr;
 
   NtupleDef();

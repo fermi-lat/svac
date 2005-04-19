@@ -179,6 +179,7 @@ void RootAnalyzer::analyzeReconTree()
 	assert(iLayer >= 0 && iLayer <= g_nTkrLayer - 1);
 
 	++m_ntuple.m_nTkrClusters[iTower][iLayer][iView];
+	++m_ntuple.m_totalClusters[iTower];
 
       }
     }
@@ -1116,5 +1117,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/i");
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
   m_tree->Branch("TkrTotalHits", &(m_ntuple.m_totalStripHits), "TkrTotalHits[16]/i");
+  m_tree->Branch("TkrTotalClusters", &(m_ntuple.m_totalClusters), "TkrTotalClusters[16]/i");
 
 }

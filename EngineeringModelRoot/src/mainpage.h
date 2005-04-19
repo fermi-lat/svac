@@ -143,6 +143,8 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> Tkr1ConvTot[tower] </TD> <TD>A one dimension array which describes tot value at the layer of the first vertex. The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR>
 <TR> <TD> TkrTp[tower][tp] </TD> <TD>A two dimension array which describes tracker trigger primitive for each tower. For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
 <TR> <TD> TkrReq[tower][layer][view][end] </TD> <TD>A 4 dimension array which describes tracker trigger request. For example: TkrReq[8][7][0][0]=1 means trigger request was sent from tower 8, layer 7, measure X and lower end of the tray.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
+<TR> <TD> TkrTotalHits[tower] </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
+<TR> <TD> TkrTotalClusters[tower] </TD> <TD>Total number of clusters in each tower.</TD> </TR>
 </TABLE>
 
 <TABLE>
@@ -160,7 +162,6 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD>A 3 dimension array which describe log accepts contained in the CAL trigger diagnostic info.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
 <TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD>A three dimension array which describes fit position in each CAL crystal, coord=0 means fitted X coordinate, coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate.</TD> </TR>
-<TR> <TD> TkrTotalHits[tower] </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file

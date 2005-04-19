@@ -107,4 +107,9 @@ v1r3p13
 
 Add CalXtalPos to describe fit position in each crystal
 Add TkrTotalHits to describe total number of hits in each tower
-JIRA issue (SVAC-17
+JIRA issue (SVAC-17)
+
+v1r3p14
+
+Add TkrTotalClusters to describe total number of clusters in each tower
+JIRA issue (SVAC-30)
