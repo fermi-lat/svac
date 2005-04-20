@@ -113,3 +113,6 @@ v1r3p14
 
 Add TkrTotalClusters to describe total number of clusters in each tower
 JIRA issue (SVAC-30)
+
+v1r3p15
+awb Added Eventsize (in bytes) and GEM dead zone counter.
