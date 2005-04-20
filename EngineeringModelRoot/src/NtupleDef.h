@@ -9,6 +9,9 @@ struct NtupleDef {
   int m_eventId;
   int m_seqNo;
 
+  // Event size in bytes:
+  int m_eventSize;
+
   // PDG encoding of the primary particle
   int m_parId;
 
@@ -144,6 +147,8 @@ struct NtupleDef {
   unsigned int m_gemCondArrivalTimeTkr;
   unsigned int m_gemCondArrivalTimeRoi;
   unsigned int m_gemDeltaWindowOpenTime;  
+  
+  int m_gemDeadZone;
 
   unsigned int m_gemAcdTilesXzp;
   unsigned int m_gemAcdTilesXzm;

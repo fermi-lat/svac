@@ -24,6 +24,7 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> RunID </TD> <TD> Run number taken from DigiEvent.h </TD> </TR>
 <TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h</TD> </TR>
+<TR> <TD> EventSize </TD> <TD> Event size in bytes (taken from the FIts file, seems ot be 8 bytes offset wrt LDF file). </TD> </TR>
 <TR> <TD> GltWord </TD> <TD> Trigger word: The definition of the bits can be found in enums/enums/TriggerBits.h. Not valid for EM1 data as there were no GASU, should be valid for LAT integration data. </TD> </TR>
 <TR> <TD> EvtTime </TD> <TD> Time in seconds, since mission start, currently 1/1/2001. This is the time that is reported when doing simulations.</TD> </TR>
 <TR> <TD> EvtSecond </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. </TD> </TR>
@@ -64,7 +65,8 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> GemCondArrivalTimeCalHe </TD> <TD> GEM Condition arrival times, Cal HE                              </TD> </TR>
 <TR> <TD> GemCondArrivalTimeTkr   </TD> <TD> GEM Condition arrival times, TKR                                 </TD> </TR>
 <TR> <TD> GemCondArrivalTimeRoi   </TD> <TD> GEM Condition arrival times, ROI                                 </TD> </TR>
-<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in the GEM document                 </TD> </TR>
+<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in the GEM document             </TD> </TR>
+<TR> <TD> GemDeadZone             </TD> <TD> GEM Dead zone counter                                            </TD> </TR>      
 
 <TR> <TD> GemAcdTilesXzp        </TD> <TD> GEM ACD XZP tile list               </TD> </TR>
 <TR> <TD> GemAcdTilesYzp        </TD> <TD> GEM ACD XZM tile list               </TD> </TR>

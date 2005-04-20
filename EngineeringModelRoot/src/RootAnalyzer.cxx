@@ -322,7 +322,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_timeSeconds = m_digiEvent->getEbfPpcTimeSeconds();
 
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
-
+  m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
 
 
   // GEM information:
@@ -343,7 +343,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_gemCondArrivalTimeTkr   = m_digiEvent->getGem().getCondArrTime().tkr();
   m_ntuple.m_gemCondArrivalTimeRoi   = m_digiEvent->getGem().getCondArrTime().roi();
   m_ntuple.m_gemDeltaWindowOpenTime  = m_digiEvent->getGem().getDeltaWindowOpenTime();
-
+  m_ntuple.m_gemDeadZone             = m_digiEvent->getGem().getMissed();
 
   m_ntuple.m_gemAcdTilesXzp = m_digiEvent->getGem().getTileList().getXzp();
   m_ntuple.m_gemAcdTilesXzm = m_digiEvent->getGem().getTileList().getXzm();
@@ -1006,6 +1006,7 @@ void RootAnalyzer::createBranches()
 {
   m_tree->Branch("RunID", &(m_ntuple.m_runId), "RunID/i");
   m_tree->Branch("EventID", &(m_ntuple.m_eventId), "EventID/i");
+  m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
   m_tree->Branch("McId", &(m_ntuple.m_parId), "McId/I");
   m_tree->Branch("McTotalEnergy", &(m_ntuple.m_mcEnergy), "McTotalEnergy/F");
@@ -1095,6 +1096,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("GemCondArrivalTimeTkr",&(m_ntuple.m_gemCondArrivalTimeTkr), "GemCondArrivalTimeTkr/i");
   m_tree->Branch("GemCondArrivalTimeRoi",&(m_ntuple.m_gemCondArrivalTimeRoi), "GemCondArrivalTimeRoi/i");
   m_tree->Branch("GemDeltaWindowOpenTime",&(m_ntuple.m_gemDeltaWindowOpenTime), "GemDeltaWindowOpenTime/i");
+  m_tree->Branch("GemDeadZone",&(m_ntuple.m_gemDeadZone), "GemDeadZone/i");
   m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/i");
   m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/i");
   m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/i");
