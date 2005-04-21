@@ -86,6 +86,7 @@ firstSecond = 0
 lastPps = 0
 lastTime = 0
 lastTicks = 0
+nRoll = 0
 
 #
 def oneTick(triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds):
@@ -95,15 +96,15 @@ def oneTick(triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds):
     global lastPps
     global lastTime
     global lastTicks
+    global nRoll
 
-    nRoll = 0
     if firstEvent:
         firstEvent = 0
         firstSecond = seconds
     else:
         if ppsSeconds < lastPps:
             # obvious pps rollover
-            nRoll = 1
+            nRoll += 1
             pass
         pass
 
