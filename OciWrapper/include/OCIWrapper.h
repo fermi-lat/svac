@@ -33,19 +33,16 @@ class OCIWrapper {
   void bindFloatVariable(OCIStmt* stmtHandle, const char* varName, void* var);
 
   void bindStringVariable(OCIStmt* stmtHandle, const char* varName, 
- 			  const char* var);
+			  const char* var);
  
   void defineIntByPos(OCIStmt* stmtHandle, int* pInt, int pos);
-
-  void defineUIntByPos(OCIStmt* stmtHandle, unsigned* pUInt, int pos);
 
   void defineLongByPos(OCIStmt* stmtHandle, long* pInt, int pos);
 
   /// only work for varchar2 type
   void defineStringByPos(OCIStmt* stmtHandle, char* pChar, int len, int pos);
 
-  /// return false if no more data is available so that fetch failed
-  bool fetchNextRow(OCIStmt* stmtHandle);
+  void fetchNextRow(OCIStmt* stmtHandle);
 
   // times is no. of times the statement will be executed for NON-SELECT
   // statement.

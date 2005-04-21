@@ -1,5 +1,4 @@
 #include <math.h>
-#include <algorithm>
 #include "NR.h"
 #include "NRUTIL.h"
 
@@ -9,8 +8,8 @@ void NR::kstwo(float data1[], unsigned long n1, float data2[], unsigned long n2,
 	unsigned long j1=1,j2=1;
 	float d1,d2,dt,en1,en2,en,fn1=0.0,fn2=0.0;
 
-	std::sort(data1, data1+n1);
-	std::sort(data2, data2+n2);
+	sort(n1,data1);
+	sort(n2,data2);
 	en1=n1;
 	en2=n2;
 	*d=0.0;

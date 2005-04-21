@@ -110,18 +110,6 @@ void OCIWrapper::defineIntByPos(OCIStmt* stmtHandle, int* pInt, int pos)
   if(checkErr(m_errHandle, m_status)) throw OCIException(m_errMsg.c_str());
 }
 
-void OCIWrapper::defineUIntByPos(OCIStmt* stmtHandle, unsigned* pUInt, int pos)
-{
-  OCIDefine* defHandle = 0;
-  sb2 dp;
-  ub2* rlenp = 0;
-  ub2* rcodep = 0;
-  m_status = OCIDefineByPos(stmtHandle, &defHandle, m_errHandle, pos, pUInt, 
-			    sizeof(unsigned), SQLT_UIN, &dp, rlenp, rcodep, 
-			    OCI_DEFAULT);
-  if(checkErr(m_errHandle, m_status)) throw OCIException(m_errMsg.c_str());
-}
-
 void OCIWrapper::defineStringByPos(OCIStmt* stmtHandle, char* pChar, int len, 
 				   int pos)
 {
@@ -154,16 +142,11 @@ void OCIWrapper::executeStatement(OCIStmt* stmtHandle, int times)
   if(checkErr(m_errHandle, m_status)) throw OCIException(m_errMsg.c_str());
 }
 
-bool OCIWrapper::fetchNextRow(OCIStmt* stmtHandle)
+void OCIWrapper::fetchNextRow(OCIStmt* stmtHandle)
 {
   m_status = OCIStmtFetch(stmtHandle, m_errHandle, 1, OCI_FETCH_NEXT, 
 			    OCI_DEFAULT);
-
-  if(m_status == OCI_NO_DATA) return false;
-
   if(checkErr(m_errHandle, m_status)) throw OCIException(m_errMsg.c_str());
-
-  return true;
 }
 
 void OCIWrapper::getNextSeqNo(const char* seqName, long* seqNo)

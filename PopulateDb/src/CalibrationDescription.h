@@ -5,16 +5,15 @@
 #include "OracleTable.h"
 
 struct CalibrationDescription : public OracleTable {
-  long m_id; 
+  long m_calDesId; 
   int m_location;
   int m_source;
   std::string m_validStartTime;
   std::string m_validEndTime; 
-  std::string m_runStartTime;
-  std::string m_runEndTime; 
   std::string m_creationTime;
-  std::string m_software;
-  std::string m_version;
+  float m_orbitPos;
+  float m_temperature;
+  float m_humidity;
   int m_hardware;
   int m_calibType;
   int m_procLevel;

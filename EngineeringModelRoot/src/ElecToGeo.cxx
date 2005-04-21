@@ -117,8 +117,10 @@ void ElecToGeo::decodeCalTp(unsigned tp[16][8], unsigned req[16][8][2],
   temp[7] = tp[iTower][7];
 
   for(int iLayer = 0; iLayer != NtupleDef::g_nCalLayer; ++iLayer) {
+    for(int iEnd = 0; iEnd != 2; ++iEnd) {
       req[iTower][iLayer][0] = (temp[iLayer] >> 16);
       req[iTower][iLayer][1] = (temp[iLayer] & 0xffff);
+    }
   }
 }
 

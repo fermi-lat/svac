@@ -10,10 +10,6 @@
 #include "RootAnalyzer.h"
 #include "TROOT.h"
 #include "ToString.h"
-#include "Event/Recon/TkrRecon/TkrKalFitTrack.h"
-
-using std::cout;
-using std::endl;
 
 RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
   : m_outputFile(0), m_tree(0), m_branch(0), m_mcFile(0), m_mcTree(0),
@@ -21,8 +17,8 @@ RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
     m_reconBranch(0), m_reconEvent(0), m_digiFile(0), m_digiTree(0),
     m_digiBranch(0), m_digiEvent(0), m_histFile(0)
 {
-  // make sure unsigned int hold 32 bit data 
-  assert(sizeof(unsigned int) == 4);
+  // make sure unsigned can hold 32 bit data 
+  assert(sizeof(unsigned) >= 4);
 
     // initialize ROOT if not already done
   if(gROOT == 0) {
@@ -36,8 +32,8 @@ RootAnalyzer::RootAnalyzer(const char* raFileName, const char* histFileName)
     m_outputFile = new TFile(raFileName, "RECREATE"); 
     m_tree = new TTree("Output", "Root Analyzer");
 
-    // create branches for each ntuple variable
-    createBranches();
+    // create new branch
+    m_tree->Branch("Analysis", &m_ntuple, NtupleDef::gRootNtupleDefStr);
   }
 
   if(histFileName != "") {
@@ -229,7 +225,6 @@ void RootAnalyzer::analyzeReconTree()
 
   // fill in info stored in the very first and second track
   TObjArray* tracks = tkrRecon->getTrackCol();
-
   for(int i = 0; i != 2; ++i) {
     TkrKalFitTrack* tkrTrack = 
       dynamic_cast<TkrKalFitTrack*>(tracks->At(i));
@@ -240,33 +235,6 @@ void RootAnalyzer::analyzeReconTree()
       m_ntuple.m_rms[i] = tkrTrack->getScatter();
       m_ntuple.m_msAngle[i] = tkrTrack->getKalThetaMS();
       m_ntuple.m_tkrEnergy[i] = tkrTrack->getKalEnergy();
-
-      // End-of-track parameters:
-      Point endPos (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXPos(),
-                    tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYPos(),
-                    tkrTrack->getTrackParZ(TkrKalFitTrack::LASTHIT));
-      Vector endSlopeTmp (tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getXSlope(),
-                          tkrTrack->getTrackPar(TkrKalFitTrack::LASTHIT)->getYSlope(), 1.0);
-      Vector endSlope = endSlopeTmp.unit();
-      Ray trj_1 = Ray (endPos, endSlope);
-
-      if (i == 0) {
-        m_ntuple.m_tkr1EndPos[0] = trj_1.position().x();
-        m_ntuple.m_tkr1EndPos[1] = trj_1.position().y();
-        m_ntuple.m_tkr1EndPos[2] = trj_1.position().z();
-	// Need -1 here .....
-        m_ntuple.m_tkr1EndDir[0] = -1.0*trj_1.direction().x();
-        m_ntuple.m_tkr1EndDir[1] = -1.0*trj_1.direction().y();
-        m_ntuple.m_tkr1EndDir[2] = -1.0*trj_1.direction().z();
-      } else {
-        m_ntuple.m_tkr2EndPos[0] = trj_1.position().x();
-        m_ntuple.m_tkr2EndPos[1] = trj_1.position().y();
-        m_ntuple.m_tkr2EndPos[2] = trj_1.position().z();
-	// Need -1 here .....
-        m_ntuple.m_tkr2EndDir[0] = -1.0*trj_1.direction().x();
-        m_ntuple.m_tkr2EndDir[1] = -1.0*trj_1.direction().y();
-        m_ntuple.m_tkr2EndDir[2] = -1.0*trj_1.direction().z();
-      }
     }
   }
 
@@ -301,16 +269,11 @@ void RootAnalyzer::analyzeReconTree()
 	  int iCol = id.getColumn();
 
 	  float ene = calData->getEnergy();
-          
-          float eneNeg = calData->getEnergy(0,CalXtalId::NEG);
-          float enePos = calData->getEnergy(0,CalXtalId::POS);
 
 	  if(ene >= 0) ++(m_ntuple.m_nCrystalHit[iTower]);
 
-	  // CAL layer end energies:
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][0] = enePos;
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][1] = eneNeg;
- 
+	  m_ntuple.m_xtalEne[iTower][iLayer][iCol] = ene;
+
 	  if(ene > m_ntuple.m_maxCalEnergy) m_ntuple.m_maxCalEnergy = ene;
 	}
       }
@@ -336,69 +299,11 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
 
-
-  // GEM information:
-  m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
-
-  m_ntuple.m_gemLiveTime       = m_digiEvent->getGem().getLiveTime();
-  m_ntuple.m_gemTriggerTime    = m_digiEvent->getGem().getTriggerTime();
-  m_ntuple.m_gemDeltaEventTime = m_digiEvent->getGem().getDeltaEventTime();
-  m_ntuple.m_gemOnePpsSeconds  = m_digiEvent->getGem().getOnePpsTime().getSeconds();
-  m_ntuple.m_gemOnePpsTime     = m_digiEvent->getGem().getOnePpsTime().getTimebase();
-  m_ntuple.m_gemPrescaled      = m_digiEvent->getGem().getPrescaled();
-  m_ntuple.m_gemDiscarded      = m_digiEvent->getGem().getDiscarded();
-  m_ntuple.m_gemSent           = m_digiEvent->getGem().getSent();
-
-  m_ntuple.m_gemAcdTilesXzp = m_digiEvent->getGem().getTileList().getXzp();
-  m_ntuple.m_gemAcdTilesXzm = m_digiEvent->getGem().getTileList().getXzm();
-  m_ntuple.m_gemAcdTilesYzp = m_digiEvent->getGem().getTileList().getYzp();
-  m_ntuple.m_gemAcdTilesYzm = m_digiEvent->getGem().getTileList().getYzm();
-  m_ntuple.m_gemAcdTilesXy  = m_digiEvent->getGem().getTileList().getXy();
-  m_ntuple.m_gemAcdTilesRbn = m_digiEvent->getGem().getTileList().getRbn();
-  m_ntuple.m_gemAcdTilesNa  = m_digiEvent->getGem().getTileList().getNa();
-
-  unsigned tmpGemTkr   = m_digiEvent->getGem().getTkrVector();
-  unsigned tmpGemRoi   = m_digiEvent->getGem().getRoiVector();
-  unsigned tmpGemCalLe = m_digiEvent->getGem().getCalLeVector();
-  unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
-  unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
-
-  for (int iTower = 0; iTower<g_nTower; iTower++) {
-    m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
-    m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
-    m_ntuple.m_gemCalLeVector[iTower] = ((tmpGemCalLe >> iTower) &1 ) ;      
-    m_ntuple.m_gemCalHeVector[iTower] = ((tmpGemCalHe >> iTower) &1 ) ;      
-  }
-  for (int iCno = 0; iCno<g_nCno; iCno++) {
-    m_ntuple.m_gemCnoVector[iCno] = ((tmpGemCno >> iCno) & 1) ;      
-  }
-
-  // Luis's three-in-a-row trigger bits:
-  for (int iTower = 0; iTower<g_nTower; iTower++) {
-    m_ntuple.m_trgTriRowBits[iTower] = m_digiEvent->getL1T().getTriRowBits(iTower);
-  }
-  
-  // Event sizes:
-  for (int iTower = 0; iTower<g_nTower; iTower++) {
-    m_ntuple.m_temLength[iTower] = m_digiEvent->getEventSummaryData().temLength(iTower);
-  }
-
-  m_ntuple.m_gemLength  = m_digiEvent->getEventSummaryData().gemLength();
-  m_ntuple.m_oswLength  = m_digiEvent->getEventSummaryData().oswLength();
-  m_ntuple.m_aemLength  = m_digiEvent->getEventSummaryData().aemLength();
-  m_ntuple.m_errLength  = m_digiEvent->getEventSummaryData().errLength();
-  m_ntuple.m_diagLength = m_digiEvent->getEventSummaryData().diagLength();
-
-  // Event quality/flags:
-  m_ntuple.m_eventSequence = m_digiEvent->getEventSummaryData().eventSequence();
-  m_ntuple.m_eventFlags    = m_digiEvent->getEventSummaryData().eventFlags();
-  m_ntuple.m_goodEvent     = m_digiEvent->getEventSummaryData().goodEvent();
-
-
   // mc events can not have diagnostic info, also check summary word
   if( (! m_mcFile) && m_digiEvent->getEventSummaryData().diagnostic() ) {
     diagnostic();
   }
+
 
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
@@ -428,22 +333,11 @@ void RootAnalyzer::analyzeDigiTree()
     }
 
       // fill in corrected tot
-    /*
       if(m_mcFile == 0) {
 	correctTotDataLinear(tkrDigi);
 	correctTotDataQuad(tkrDigi);
       }
-    */
   }
-
-  /*
-  // ACD digi
-  const TObjArray* acdDigiCol = m_digiEvent->getAcdDigiCol();
-  if (!acdDigiCol) return;
-
-  int nAcdDigi = acdDigiCol->GetLast() + 1;
-  cout << nAcdDigi << endl;
-  */
 }
 
 void RootAnalyzer::fillOutputTree()
@@ -495,21 +389,20 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
   int nEvent, nMc, nRecon, nDigi;
   if(m_mcFile) {
     nMc = (int) m_mcTree->GetEntries();
-    cout << "No of events in " << mcFileName << " : " << nMc << endl;
+    std::cout << "No of events in " << mcFileName << " : " << nMc << std::endl;
     nEvent = nMc;
   }
   if(m_reconFile) {
     nRecon = (int) m_reconTree->GetEntries();
-    cout << "No of events in " << reconFileName << " : " << nRecon << endl;
+    std::cout << "No of events in " << reconFileName << " : " << nRecon << std::endl;
     nEvent = nRecon;
   }
   if(m_digiFile) {
     nDigi = (int) m_digiTree->GetEntries();
-    cout << "No of events in " << digiFileName << " : " << nDigi << endl;
+    std::cout << "No of events in " << digiFileName << " : " << nDigi << std::endl;
     nEvent = nDigi;
   }
 
-  /*
   if(m_mcFile == 0) { 
     // read in tot correction constants for Hiro's linear formula
     readTotCorrLinear(1, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x1.txt");
@@ -527,18 +420,15 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     readTotCorrQuad(3, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX3_101003530.tnt");
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
-  */
-  //     nEvent = 100;
-  //   nEvent = nRecon;
+
+  //        nEvent = 100;
+     //   nEvent = nRecon;
 
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     //    m_timeFile << iEvent;
 
     m_ntuple.reset();  
-    if(m_mcEvent) m_mcEvent->Clear();
-    if(m_digiEvent) m_digiEvent->Clear();
-    if(m_reconEvent) m_reconEvent->Clear();
 
     if(m_mcFile) {
       m_mcBranch->GetEntry(iEvent);
@@ -634,7 +524,7 @@ void RootAnalyzer::readTotCorrLinear(int layer, int view, const char* file)
     std::string temp;
     std::getline(corrFile, temp);
   }
- 
+
   int stripId;
   float gain, offset;
 
@@ -908,108 +798,3 @@ void RootAnalyzer::diagnostic()
   }
 }
 
-void RootAnalyzer::createBranches()
-{
-  m_tree->Branch("Run", &(m_ntuple.m_runId), "Run/i");
-  m_tree->Branch("Event_ID", &(m_ntuple.m_eventId), "Event_ID/i");
-  m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
-  m_tree->Branch("McId", &(m_ntuple.m_parId), "McId/I");
-  m_tree->Branch("McTotalEnergy", &(m_ntuple.m_mcEnergy), "McTotalEnergy/F");
-  m_tree->Branch("McX0", &(m_ntuple.m_startPos[0]), "McX0/F");
-  m_tree->Branch("McY0", &(m_ntuple.m_startPos[1]), "McY0/F");
-  m_tree->Branch("McZ0", &(m_ntuple.m_startPos[2]), "McZ0/F");
-  m_tree->Branch("McXDir", &(m_ntuple.m_startDir[0]), "McXDir/F");
-  m_tree->Branch("McYDir", &(m_ntuple.m_startDir[1]), "McYDir/F");
-  m_tree->Branch("McZDir", &(m_ntuple.m_startDir[2]), "McZDir/F");
-  m_tree->Branch("McConvPointX", &(m_ntuple.m_convPos[0]), "McConvPointX/F");
-  m_tree->Branch("McConvPointY", &(m_ntuple.m_convPos[1]), "McConvPointY/F");
-  m_tree->Branch("McConvPointZ", &(m_ntuple.m_convPos[2]), "McConvPointZ/F");
-  m_tree->Branch("TkrNumDigis", &(m_ntuple.m_nTkrDigis), "TkrNumDigis/I");
-  m_tree->Branch("TkrNumStrips", &(m_ntuple.m_nStrips), "TkrNumStrips[16][18][2]/I");
-  m_tree->Branch("tot", &(m_ntuple.m_tot), "tot[16][18][2][2]/I");
-  m_tree->Branch("totCorrL", &(m_ntuple.m_totCorrLinear), "totCorrL[16][18][2][2]/F");
-  m_tree->Branch("totCorrQ", &(m_ntuple.m_totCorrQuad), "totCorrQ[16][18][2][2]/F");
-  m_tree->Branch("TkrDepositEne", &(m_ntuple.m_depositEne), "TkrDepositEne[16][18][2]/F");
-  m_tree->Branch("TkrNumClusters", &(m_ntuple.m_nTkrClusters), "TkrNumClusters[16][18][2]/I");
-  m_tree->Branch("TkrNumTracks", &(m_ntuple.m_nTkrTracks), "TkrNumTracks/I");
-  m_tree->Branch("TkrNumVertices", &(m_ntuple.m_nTkrVertices), "TkrNumVertices/I");
-  m_tree->Branch("VtxX0", &(m_ntuple.m_pos[0]), "VtxX0/F");
-  m_tree->Branch("VtxY0", &(m_ntuple.m_pos[1]), "VtxY0/F");
-  m_tree->Branch("VtxZ0", &(m_ntuple.m_pos[2]), "VtxZ0/F");
-  m_tree->Branch("VtxXDir", &(m_ntuple.m_dir[0]), "VtxXDir/F");
-  m_tree->Branch("VtxYDir", &(m_ntuple.m_dir[1]), "VtxYDir/F");
-  m_tree->Branch("VtxZDir", &(m_ntuple.m_dir[2]), "VtxZDir/F");
-  m_tree->Branch("EvtEnergySumOpt", &(m_ntuple.m_fitTotalEnergy), "EvtEnergySumOpt/F");
-  m_tree->Branch("Vtx1NumTkrs", &(m_ntuple.m_vtxTrks), "Vtx1NumTkrs/I");
-  m_tree->Branch("Tkr1NumHits", &(m_ntuple.m_nFit[0]), "Tkr1NumHits/I");
-  m_tree->Branch("Tkr2NumHits", &(m_ntuple.m_nFit[1]), "Tkr2NumHits/I");
-  m_tree->Branch("Tkr1Chisq", &(m_ntuple.m_chi2[0]), "Tkr1Chisq/F");
-  m_tree->Branch("Tkr2Chisq", &(m_ntuple.m_chi2[1]), "Tkr2Chisq/F");
-  m_tree->Branch("Tkr1ChisqS", &(m_ntuple.m_chi2Smooth[0]), "Tkr1ChisqS/F");
-  m_tree->Branch("Tkr2ChisqS", &(m_ntuple.m_chi2Smooth[1]), "Tkr2ChisqS/F");
-  m_tree->Branch("Tkr1Rms", &(m_ntuple.m_rms[0]), "Tkr1Rms/F");
-  m_tree->Branch("Tkr2Rms", &(m_ntuple.m_rms[1]), "Tkr2Rms/F");
-  m_tree->Branch("Tkr1KalThetaMs", &(m_ntuple.m_msAngle[0]), "Tkr1KalThetaMs/F");
-  m_tree->Branch("Tkr2KalThetaMs", &(m_ntuple.m_msAngle[1]), "Tkr1Ka2ThetaMs/F");
-  m_tree->Branch("Tkr1KalEne", &(m_ntuple.m_tkrEnergy[0]), "Tkr1KalEne/F");
-  m_tree->Branch("Tkr2KalEne", &(m_ntuple.m_tkrEnergy[1]), "Tkr2KalEne/F");
-  m_tree->Branch("Tkr1EndPos", &(m_ntuple.m_tkr1EndPos), "Tkr1EndPos[3]/F");
-  m_tree->Branch("Tkr2EndPos", &(m_ntuple.m_tkr2EndPos), "Tkr2EndPos[3]/F");
-  m_tree->Branch("Tkr1EndDir", &(m_ntuple.m_tkr1EndDir), "Tkr1EndDir[3]/F");
-  m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
-  m_tree->Branch("CalEneSum", &(m_ntuple.m_calEnergy), "CalEneSum/F");
-  m_tree->Branch("McCalEneSum", &(m_ntuple.m_mcCalEnergy), "McCalEneSum/F");
-  m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
-  m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
-  m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
-  m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");
-  m_tree->Branch("McTkr1Ene", &(m_ntuple.m_pairEne[0]), "McTkr1Ene/F");
-  m_tree->Branch("McTkr2Ene", &(m_ntuple.m_pairEne[1]), "McTkr2Ene/F");
-  m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
-  m_tree->Branch("McConvAngle", &(m_ntuple.m_convAngle), "McConvAngle/F");
-  m_tree->Branch("TkrTopTot", &(m_ntuple.m_topTot), "TkrTopTot[16]/F");
-  m_tree->Branch("Tkr1ConvTot", &(m_ntuple.m_convTot), "Tkr1ConvTot/F");
-  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12][2]/F");
-  m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
-  m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
-  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/i");
-  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
-  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
-  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
-  m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/i");
-  m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/i");
-  m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
-  m_tree->Branch("GemConditionsWord", &(m_ntuple.m_gemConditionsWord), "GemConditionsWord/I");
-  m_tree->Branch("GemTkrVector", &(m_ntuple.m_gemTkrVector), "GemTkrVector[16]/I");
-  m_tree->Branch("GemRoiVector", &(m_ntuple.m_gemRoiVector), "GemRoiVector[16]/I");
-  m_tree->Branch("GemCalLeVector", &(m_ntuple.m_gemCalLeVector), "GemCalLeVector[16]/I");
-  m_tree->Branch("GemCalHeVector", &(m_ntuple.m_gemCalHeVector), "GemCalHeVector[16]/I");
-  m_tree->Branch("GemCnoVector", &(m_ntuple.m_gemCnoVector), "GemCnoVector[12]/I");
-  m_tree->Branch("GemLiveTime", &(m_ntuple.m_gemLiveTime), "GemLiveTime/i");
-  m_tree->Branch("GemTriggerTime", &(m_ntuple.m_gemTriggerTime), "GemTriggerTime/i");
-  m_tree->Branch("GemDeltaEventTime", &(m_ntuple.m_gemDeltaEventTime), "GemDeltaEventTime/i");
-  m_tree->Branch("GemOnePpsSeconds", &(m_ntuple.m_gemOnePpsSeconds), "GemOnePpsSeconds/i");
-  m_tree->Branch("GemOnePpsTime", &(m_ntuple.m_gemOnePpsTime), "GemOnePpsTime/i");
-  m_tree->Branch("GemPrescaled", &(m_ntuple.m_gemPrescaled), "GemPrescaled/i");
-  m_tree->Branch("GemDiscarded", &(m_ntuple.m_gemDiscarded), "GemDiscarded/i");
-  m_tree->Branch("GemSent", &(m_ntuple.m_gemSent), "GemSent/i");
-  m_tree->Branch("GemAcdTilesXzp", &(m_ntuple.m_gemAcdTilesXzp), "GemAcdTilesXzp/i");
-  m_tree->Branch("GemAcdTilesXzm", &(m_ntuple.m_gemAcdTilesXzm), "GemAcdTilesXzm/i");
-  m_tree->Branch("GemAcdTilesYzp", &(m_ntuple.m_gemAcdTilesYzp), "GemAcdTilesYzp/i");
-  m_tree->Branch("GemAcdTilesYzm", &(m_ntuple.m_gemAcdTilesYzm), "GemAcdTilesYzm/i");
-  m_tree->Branch("GemAcdTilesXy", &(m_ntuple.m_gemAcdTilesXy), "GemAcdTilesXy/i");
-  m_tree->Branch("GemAcdTilesRbn", &(m_ntuple.m_gemAcdTilesRbn), "GemAcdTilesRbn/i");
-  m_tree->Branch("GemAcdTilesNa", &(m_ntuple.m_gemAcdTilesNa), "GemAcdTilesNa/i");
-  m_tree->Branch("TrgTriRowBits",&(m_ntuple.m_trgTriRowBits),"TrgTriRowBits[16]/i");
-  m_tree->Branch("TemLength", &(m_ntuple.m_temLength), "TemLength[16]/i");
-  m_tree->Branch("GemLength", &(m_ntuple.m_gemLength), "GemLength/i");
-  m_tree->Branch("OswLength", &(m_ntuple.m_oswLength), "OswLength/i");
-  m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/i");
-  m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength/i");
-  m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength/i");
-  m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/i");
-  m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
-  m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
-  m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/i");
-  m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/i");
-}

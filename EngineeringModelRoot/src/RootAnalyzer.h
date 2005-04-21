@@ -9,7 +9,6 @@
 #include "mcRootData/McEvent.h"
 #include "reconRootData/ReconEvent.h"
 #include "digiRootData/DigiEvent.h"
-#include "idents/CalXtalId.h"
 #include "NtupleDef.h"
 
 class RootAnalyzer {
@@ -21,9 +20,6 @@ class RootAnalyzer {
   void analyzeTrees(const char* mcFileName,
 		    const char* digiFileName,
 		    const char* reconFileName);
-
-  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, g_nCno=12};
 
  private:
 
@@ -67,9 +63,6 @@ class RootAnalyzer {
   // determine boundary of tot0 and tot1, only valid for EM1
   int midStripId(int iLayer, GlastAxis::axis iView) const;
 
-  // create branches for each ntuple variable
-  void createBranches();
-
   TFile* m_outputFile;
   TTree* m_tree;
   TBranch* m_branch;
@@ -89,6 +82,9 @@ class RootAnalyzer {
   TTree* m_digiTree;
   TBranch* m_digiBranch;
   DigiEvent* m_digiEvent;
+
+  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
+	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24};
 
   TFile* m_histFile;
   TH1F* m_stripHits[g_nTower][g_nTkrLayer][g_nView];

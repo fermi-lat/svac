@@ -4,7 +4,6 @@
 #include "TPad.h"
 #include "TROOT.h"
 #include "ToString.h"
-#include "ToNumber.h"
 #include "TCanvas.h"
 #include "TSystem.h"
 #include "TStyle.h"
@@ -44,14 +43,6 @@ void NtupleCompare::parseOptionFile(const char* f)
   while( getline(optF, line) ) {
     if(!skipLine(line)) break;
   }
-  string temp;
-  parseLine(temp, line);
-  m_nEvents = ToInt(temp);
-  cout << "no. of events requested to be processed: " << m_nEvents << endl;
-
-  while( getline(optF, line) ) {
-    if(!skipLine(line)) break;
-  }
   parseLine(m_outputDir, line);
   cout << "output dir: " << m_outputDir << endl;
 
@@ -61,7 +52,7 @@ void NtupleCompare::parseOptionFile(const char* f)
   parseLine(m_prefix, line);
   cout << "prefix: " << m_prefix << endl;
 
-  temp = m_outputDir + m_prefix;
+  string temp(m_outputDir + m_prefix);
   temp += "_report.doxygen";
   cout << "output doxygen file: " << temp << endl;
   m_report.open(temp.c_str());
@@ -179,7 +170,6 @@ void NtupleCompare::generateReport()
     m_report << "@li " << *itr << endl;
     cout << *itr << endl;
   }
-  m_ksProbs.reserve(m_variables.size());
 
   m_report << endl << "Cuts: " << endl << endl;
   cout << "Cuts: " << endl;
@@ -212,8 +202,7 @@ void NtupleCompare::convertSpecialCharacter(string& s)
 {
   int size = s.size();
   for(int i = 0; i != size; ++i) {
-    if(s[i] == '.' || s[i] == '[' || s[i] == ']' || s[i] == '*' ||
-       s[i] == '(' || s[i] == ')') s[i] = '_';
+    if(s[i] == '.' || s[i] == '[' || s[i] == ']') s[i] = '_';
   }
 }
 
@@ -270,19 +259,17 @@ void NtupleCompare::makeHistograms()
   for(vector<string>::const_iterator itr = m_variables.begin();
       itr != m_variables.end(); ++itr) {
 
-    TCanvas c1;
     string name1(*itr);
     name1 += "_1";
     string draw(*itr);
     draw += ">>";
-    draw += "htemp";
-    m_meritChain1->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
+    draw += name1;
+    m_meritChain1->Draw(draw.c_str(), allCuts.c_str());
     int nEvent1 = (int) m_meritChain1->GetSelectedRows();
     Double_t* start1 = m_meritChain1->GetV1();
     vector<float> x1(start1, start1+nEvent1);
 
-    TH1F* h1 = (TH1F*) gPad->GetPrimitive("htemp");
-    h1->SetName(name1.c_str());
+    TH1F* h1 = (TH1F*) gPad->GetPrimitive(name1.c_str());
     h1->SetXTitle(itr->c_str());
     m_hists1.push_back(h1);
 
@@ -290,14 +277,13 @@ void NtupleCompare::makeHistograms()
     name2 += "_2";
     draw = *itr;
     draw += ">>";
-    draw += "htemp";
-    m_meritChain2->Draw(draw.c_str(), allCuts.c_str(), "", m_nEvents);
+    draw += name2;
+    m_meritChain2->Draw(draw.c_str(), allCuts.c_str());
     int nEvent2 = (int) m_meritChain2->GetSelectedRows();
     Double_t* start2 = m_meritChain2->GetV1();
     vector<float> x2(start2, start2+nEvent2);
 
-    TH1F* h2 = (TH1F*) gPad->GetPrimitive("htemp");
-    h2->SetName(name2.c_str());
+    TH1F* h2 = (TH1F*) gPad->GetPrimitive(name2.c_str());
     h2->SetXTitle(itr->c_str());
     m_hists2.push_back(h2);
 
@@ -305,7 +291,7 @@ void NtupleCompare::makeHistograms()
 
     // normalize two histograms
     int norm = std::min(nEvent1, nEvent2);
-    
+
     h1->Sumw2();
     h2->Sumw2();
     if(norm < nEvent2) {
@@ -314,7 +300,7 @@ void NtupleCompare::makeHistograms()
     else if(norm < nEvent1){
       h1->Scale(norm/double(nEvent1));
     }
-    
+
   }
 }
 

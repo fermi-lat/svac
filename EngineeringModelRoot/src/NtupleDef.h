@@ -4,11 +4,11 @@
 struct NtupleDef {
 
   enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nCno=12};
+	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8};
 
-  unsigned int m_runId;
-  unsigned int m_eventId;
-  unsigned int m_seqNo;
+  int m_runId;
+  int m_eventId;
+  int m_seqNo;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -68,10 +68,6 @@ struct NtupleDef {
   float m_rms[2];
   float m_msAngle[2];
   float m_tkrEnergy[2];
-  float m_tkr1EndPos[3];
-  float m_tkr1EndDir[3];
-  float m_tkr2EndPos[3];
-  float m_tkr2EndDir[3];
 
   // Cal measured energy
   float m_calEnergy;
@@ -79,7 +75,7 @@ struct NtupleDef {
   // Cal deposited energy (MC)
   float m_mcCalEnergy;
 
-  unsigned int m_trigger;
+  int m_trigger;
 
   // centroid of the CAL cluster. Currently there is no real clustering 
   // for CAL, just bind all hits into a cluster
@@ -102,7 +98,7 @@ struct NtupleDef {
 
   // energy deposited in each crystal
   // default values are -9999
-  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol][g_nFace];
+  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol];
 
   // maximal deposited energy in a single crystal
   float m_maxCalEnergy;
@@ -111,70 +107,28 @@ struct NtupleDef {
   int m_nCrystalHit[g_nTower];
 
   // time information. This may change depending on future data format
-  unsigned int m_ebfSecond, m_ebfNanoSecond;
-  unsigned int m_upperTime, m_lowerTime;
+  int m_ebfSecond, m_ebfNanoSecond;
+  int m_upperTime, m_lowerTime;
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118
-  unsigned int m_tpCal[g_nTower][g_nTP];
-  unsigned int m_tpTkr[g_nTower][g_nTP];
+  unsigned m_tpCal[g_nTower][g_nTP];
+  unsigned m_tpTkr[g_nTower][g_nTP];
 
   // event summary word
-  unsigned int m_summaryWord;
-
-  // GEM information:
-  int m_gemConditionsWord;
-
-  int m_gemTkrVector[g_nTower];
-  int m_gemRoiVector[g_nTower];
-  int m_gemCalLeVector[g_nTower];
-  int m_gemCalHeVector[g_nTower];
-  int m_gemCnoVector[g_nCno];
-
-  unsigned int m_gemLiveTime;
-  unsigned int m_gemTriggerTime;
-  unsigned int m_gemDeltaEventTime;
-  unsigned int m_gemOnePpsSeconds;
-  unsigned int m_gemOnePpsTime;
-  unsigned int m_gemPrescaled;
-  unsigned int m_gemDiscarded;
-  unsigned int m_gemSent;
-
-  unsigned int m_gemAcdTilesXzp;
-  unsigned int m_gemAcdTilesXzm;
-  unsigned int m_gemAcdTilesYzp;
-  unsigned int m_gemAcdTilesYzm;
-  unsigned int m_gemAcdTilesXy;
-  unsigned int m_gemAcdTilesRbn;
-  unsigned int m_gemAcdTilesNa;
-
-  // Luis's three-in-arow trigger bits:
-  unsigned int m_trgTriRowBits[g_nTower];
-
-  // Event sizes:
-  unsigned int m_temLength[g_nTower];
-  unsigned int m_gemLength;
-  unsigned int m_oswLength;
-  unsigned int m_aemLength;
-  unsigned int m_errLength;
-  unsigned int m_diagLength;
-
-  // Event quality/flags:
-  unsigned int m_eventSequence;
-  unsigned int m_eventFlags;
-  int m_goodEvent;
+  unsigned m_summaryWord;
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request
   // e.g.: m_tkrReq[0][3][1][1]=1 means tower 0, upper half of layer Y3 sends the trigger request
   // layer 0 is at the bottom
-  unsigned int m_tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
+  unsigned m_tkrReq[g_nTower][g_nTkrLayer][g_nView][2];
 
   // decoded trigger primitive for the calorimeter
   // e.g.: m_calReq[0][3][0] contains 16 bit diagnostic data for tower 0, layer 3, negative end 
   // e.g.: m_calReq[0][3][1] contains 16 bit diagnostic data for tower 0, layer 3, positive end 
   // layer 0 is at the top (different to the tracker)
-  unsigned int m_calReq[g_nTower][g_nCalLayer][g_nFace];
+  unsigned m_calReq[g_nTower][g_nCalLayer][g_nFace];
 
   static const char* gRootNtupleDefStr;
 
