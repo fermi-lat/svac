@@ -6,6 +6,7 @@ import sys
 import numarray
 import timeConv
 
+# get the name of a file to read from command-line arguments
 if len(sys.argv) == 2:
     inFile = sys.argv[1]
 else:
@@ -13,9 +14,11 @@ else:
     sys.exit(1)
     pass
 
+# read in the data
 ticks = timeConv.evtTicks(inFile)
 sbcCycles = timeConv.sbcCycles(inFile)
 vxTime, firstSecond = timeConv.vxRealTime(inFile)
+serialTicks = timeConv.evtTicksSerial(inFile)
 
 print "Got %d events." % len(ticks)
 
@@ -24,7 +27,15 @@ minDelta = numarray.minimum.reduce(delta)
 maxDelta = numarray.maximum.reduce(delta)
 print "Min: %s, Max: %s" % (minDelta, maxDelta)
 
-import hqPlot
-hqPlot.plot((ticks, sbcCycles, vxTime), ('ticks', 'sbcCycles', 'vxTime'))
+if numarray.alltrue(serialTicks == ticks):
+    print "Serialized ticks pass."
+else:
+    print "Serialized ticks fail."
+    pass
 
-code.interact(local=locals())
+import hqPlot
+hqPlot.plot(( ticks,   sbcCycles,   vxTime,   serialTicks),
+            ('ticks', 'sbcCycles', 'vxTime', 'serialTicks'))
+
+banner = 'sys.exit() or EOF (^D on UNIX, ^Z on windos) to quit.'
+code.interact(banner, local=locals())

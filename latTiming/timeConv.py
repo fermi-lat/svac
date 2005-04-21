@@ -61,6 +61,79 @@ def evtTicks(fileName):
 
 
 #
+def evtTicksSerial(fileName):
+    """@brief Like evtTicks, but works one event at a time.
+
+    """
+
+    columns = ('GemTriggerTime', 'GemOnePpsSeconds', 'GemOnePpsTime',
+               'EvtSecond', 'EvtNanoSecond')
+    triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds = \
+                 readColumns.readColumns(fileName, columns)
+
+    ticks = numarray.zeros(len(seconds), numarray.Float64)
+
+    for event in range(len(seconds)):
+        ticks[event] = oneTick(triggerTime[event],
+                               ppsSeconds[event], ppsTime[event],
+                               seconds[event], nanoSeconds[event])
+        pass
+
+    return ticks
+
+firstEvent = 1
+firstSecond = 0
+lastPps = 0
+lastTime = 0
+lastTicks = 0
+
+#
+def oneTick(triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds):
+
+    global firstEvent
+    global firstSecond
+    global lastPps
+    global lastTime
+    global lastTicks
+
+    nRoll = 0
+    if firstEvent:
+        firstEvent = 0
+        firstSecond = seconds
+    else:
+        if ppsSeconds < lastPps:
+            # obvious pps rollover
+            nRoll = 1
+            pass
+        pass
+
+    # timebase rollover
+    if triggerTime < ppsTime:
+        triggerTime += rollPpsTime
+        pass
+
+    ticks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate + \
+            (triggerTime - ppsTime)
+
+    rtcTime = (seconds - firstSecond) + nanoSeconds * 1e-9
+    if not firstEvent:
+        # find less-obvious pps rollovers
+        trialDelta = (ticks - lastTicks) / tickRate
+        rtcDelta = rtcTime - lastTime
+        nRoll += numarray.around((rtcDelta - trialDelta) / rollPpsSeconds)
+        
+        ticks = (nRoll * rollPpsSeconds + ppsSeconds) * tickRate + \
+                (triggerTime - ppsTime)
+        pass
+
+    lastPps = ppsSeconds
+    lastTime = rtcTime
+    lastTicks = ticks
+
+    return ticks
+
+
+#
 def vxRealTime(fileName):
     """@brief Get the VXWorks realtime clock data.
 
