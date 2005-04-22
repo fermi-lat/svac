@@ -36,8 +36,40 @@ Change LSF queue for digiReport ( SVAC-15 ).
 Change LSF queue for reconReport ( SVAC-12 ).  This was approved at the
 last round, but I goofed when installing the code.
 
+---------------------------------------------------------------------------
 v3r1p4
+---------------
 
 modify code to run eLogFeeder v2r2p1 which has following changes:
 modify code to use #!/usr/bin/env python2.4 (SVAC-29)
 modify code to use http instead of ftp to store online report URL (SVAC-28)
+
+---------------------------------------------------------------------------
+v3r1p5
+---------------
+
+switch to EM v4r060302p18
+
+switch to eLogFeeder v2r2p2:
+
+Don't crash on runs with no serial #s.
+
+svacTuple switch to EngineeringModelRoot v1r3p15:
+
+Added TrgReqTriRowBits made from trigger primitives. 
+Renamed current TriRowBits to DigiTriRowBits. 
+Updated documentation.
+
+Add CalXtalPos to describe fit position in each crystal 
+Add TkrTotalHits to describe total number of hits in each tower 
+JIRA issue (SVAC-17)
+
+Add TkrTotalClusters to describe total number of clusters in each tower 
+JIRA issue (SVAC-30)
+
+Added Eventsize (in bytes) and GEM dead zone counter.
+
+---------------
+
+Add installation instructions to docs.
+---------------------------------------------------------------------------
