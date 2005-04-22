@@ -251,6 +251,11 @@ for report in reports:
             continue;
         
         name = node.nodeName
+
+# initialize the variables in case rcReport does not have serial number tag
+        nTowers = 0
+        tkrSerNo = ''
+        calSerNo = ''
         
         if(name == serNoTag):
             [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
