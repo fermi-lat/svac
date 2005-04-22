@@ -85,45 +85,45 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> McSeqNo </TD> <TD> Sequence number </TD> </TR>
 <TR> <TD> McId </TD> <TD> PDG id for primary MC particle. For example: e-(11), e+(-11), gamma(22), mu-(13), mu+(-13) </TD> </TR>
-<TR> <TD> McTotalEnergy </TD> <TD> Total energy of the particle including its mass </TD> </TR>
-<TR> <TD> McX0 </TD> <TD> x coordinate of origin of the particle </TD> </TR>
-<TR> <TD> McY0 </TD> <TD> y coordinate of origin of the particle </TD> </TR>
-<TR> <TD> McZ0 </TD> <TD> z coordinate of origin of the particle </TD> </TR>
-<TR> <TD> McXDir </TD> <TD> True x direction of the primary particle </TD> </TR>
-<TR> <TD> McYDir </TD> <TD> True y direction of the primary particle </TD> </TR>
-<TR> <TD> McZDir </TD> <TD> True z direction of the primary particle </TD> </TR>
-<TR> <TD> McConvPointX </TD> <TD> x coordinate of photon conversion point </TD> </TR>
-<TR> <TD> McConvPointY </TD> <TD> y coordinate of photon conversion point </TD> </TR>
-<TR> <TD> McConvPointZ </TD> <TD> z coordinate of photon conversion point </TD> </TR>
-<TR> <TD> McCalEneSum </TD> <TD> MC sum of energies deposited in each crystal </TD> </TR>
-<TR> <TD> McTkr1Ene </TD> <TD> MC energy of first track if there is a pair production </TD> </TR>
-<TR> <TD> McTkr2Ene </TD> <TD> MC energy of second track if there is a pair production </TD> </TR>
-<TR> <TD> McConvAngle </TD> <TD> Opening angle of e+/e- pair if there is a pair production </TD> </TR>
+<TR> <TD> McTotalEnergy </TD> <TD> Total energy (in MeV) of the particle including its mass </TD> </TR>
+<TR> <TD> McX0 </TD> <TD> x coordinate (in mm) of origin of the particle </TD> </TR>
+<TR> <TD> McY0 </TD> <TD> y coordinate (in mm) of origin of the particle </TD> </TR>
+<TR> <TD> McZ0 </TD> <TD> z coordinate (in mm) of origin of the particle </TD> </TR>
+<TR> <TD> McXDir </TD> <TD> True x direction (in radian) of the primary particle </TD> </TR>
+<TR> <TD> McYDir </TD> <TD> True y direction (in radian) of the primary particle </TD> </TR>
+<TR> <TD> McZDir </TD> <TD> True z direction (in radian) of the primary particle </TD> </TR>
+<TR> <TD> McConvPointX </TD> <TD> x coordinate (in mm) of photon conversion point </TD> </TR>
+<TR> <TD> McConvPointY </TD> <TD> y coordinate (in mm) of photon conversion point </TD> </TR>
+<TR> <TD> McConvPointZ </TD> <TD> z coordinate (in mm) of photon conversion point </TD> </TR>
+<TR> <TD> McCalEneSum </TD> <TD> MC sum of energies (in MeV) deposited in each crystal </TD> </TR>
+<TR> <TD> McTkr1Ene </TD> <TD> MC energy of first track (in MeV) if there is a pair production </TD> </TR>
+<TR> <TD> McTkr2Ene </TD> <TD> MC energy of second track (in MeV) if there is a pair production </TD> </TR>
+<TR> <TD> McConvAngle </TD> <TD> Opening angle (in radian) of e+/e- pair if there is a pair production </TD> </TR>
 </TABLE>
 
 <TABLE>
 <CAPTION ALIGN="TOP"> Vertex variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> VtxX0 </TD> <TD> x coordinate of first (best) vertex </TD> </TR>
-<TR> <TD> VtxY0 </TD> <TD> y coordinate of first (best) vertex </TD> </TR>
-<TR> <TD> VtxZ0 </TD> <TD> z coordinate of first (best) vertex </TD> </TR>
-<TR> <TD> VtxXDir </TD> <TD> x direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
-<TR> <TD> VtxYDir </TD> <TD> y direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
-<TR> <TD> VtxZDir </TD> <TD> z direction in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> VtxX0 </TD> <TD> x coordinate (in mm) of first (best) vertex </TD> </TR>
+<TR> <TD> VtxY0 </TD> <TD> y coordinate (in mm) of first (best) vertex </TD> </TR>
+<TR> <TD> VtxZ0 </TD> <TD> z coordinate (in mm) of first (best) vertex </TD> </TR>
+<TR> <TD> VtxXDir </TD> <TD> x direction (in radian) in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> VtxYDir </TD> <TD> y direction (in radian) in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
+<TR> <TD> VtxZDir </TD> <TD> z direction (in radian) in first vertex. If there are two tracks associated with the vertex, then it is averged over the direction of the two tracks; Otherwise, it is just the direction of the track. </TD> </TR>
 <TR> <TD> Vtx1NumTkrs </TD> <TD> Number of tracks associated with the first vertex </TD> </TR>
-<TR> <TD> Vtx1Energy </TD> <TD> Energy stored in first vertex  </TD> </TR>
+<TR> <TD> Vtx1Energy </TD> <TD> Energy (in MeV) stored in first vertex  </TD> </TR>
 </TABLE>
 
 <TABLE>
 <CAPTION ALIGN="TOP"> TKR variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> TkrNumDigis </TD> <TD> Number of TKR digis. Normally a digi is produced whenever there is a strip hit in a silicon plane. </TD> </TR>
+<TR> <TD> TkrNumDigis </TD> <TD> Number of TKR digis. A digi is produced whenever there is at least one strip hit in a silicon plane. </TD> </TR>
 <TR> <TD> TkrNumStrips[tower][layer][view] </TD> <TD> A 3 dimensional array which describes the number of strips in every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y </TD> </TR>
-<TR> <TD> tot[tower][layer][view][end] </TD> <TD> A 4 dimensional array which describes tot value at every tower, layer, view and end. End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. </TD> </TR>
+<TR> <TD> tot[tower][layer][view][end] </TD> <TD> A 4 dimensional array which describes tot value at every tower, layer, view and end. End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. Please check configuration report to find out whether the devision is really in the middle</TD> </TR>
 <TR> <TD> totCorrL[tower][layer][view][end] </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, using Hiro's linear correction formula. At the moment only valid for EM1 data. </TD> </TR>
 <TR> <TD> totCorrQ[tower][layer][view][end] </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, using Hiro's quadratic correction formula. At the moment only valid for EM1 data. </TD> </TR>
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> A 3 dimension array which describes number of clusters at every tower, layer and view. View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
-<TR> <TD> TkrNumTracks </TD> <TD> Number of reconstructed tracks</TD> </TR>
+<TR> <TD> TkrNumTracks </TD> <TD> Number of reconstructed tracks. Currently recon allows maximum of 10 tracks.</TD> </TR>
 <TR> <TD> TkrNumVertices </TD> <TD> Number of reconstructed vertices</TD> </TR>
 <TR> <TD> Tkr1NumHits </TD> <TD> Number of clusters in first track </TD> </TR>
 <TR> <TD> Tkr2NumHits </TD> <TD> Number of clusters in second track </TD> </TR>
@@ -137,10 +137,10 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TR> <TD> Tkr2KalThetaMs </TD> <TD> Multiple scattering angle of second track calculated by Kalman filter</TD> </TR>
 <TR> <TD> Tkr1KalEne </TD> <TD> Energy of first track calculated by Kalman filter</TD> </TR>
 <TR> <TD> Tkr2KalEne </TD> <TD> Energy of second track calculated by Kalman filter</TD> </TR>
-<TR> <TD> Tkr1EndPos[3] </TD> <TD> End-of-track position of track 1  </TD> </TR>
-<TR> <TD> Tkr2EndPos[3] </TD> <TD> End-of-track position of track 2  </TD> </TR>
-<TR> <TD> Tkr1EndDir[3] </TD> <TD> End-of-track direction of track 1 </TD> </TR>
-<TR> <TD> Tkr2EndDir[3] </TD> <TD> End-of-track direction of track 2 </TD> </TR>
+<TR> <TD> Tkr1EndPos[3] </TD> <TD> End-of-track position (in mm) of track 1  </TD> </TR>
+<TR> <TD> Tkr2EndPos[3] </TD> <TD> End-of-track position (in mm) of track 2  </TD> </TR>
+<TR> <TD> Tkr1EndDir[3] </TD> <TD> End-of-track direction (in mm) of track 1 </TD> </TR>
+<TR> <TD> Tkr2EndDir[3] </TD> <TD> End-of-track direction (in mm) of track 2 </TD> </TR>
 <TR> <TD> TkrTopTot[tower] </TD> <TD>A one dimension array which describes tot value at the top hit layer for each tower. The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR> 
 <TR> <TD> Tkr1ConvTot[tower] </TD> <TD>A one dimension array which describes tot value at the layer of the first vertex. The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR>
 <TR> <TD> TkrTp[tower][tp] </TD> <TD>A two dimension array which describes tracker trigger primitive for each tower. For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
@@ -152,18 +152,18 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 <TABLE>
 <CAPTION ALIGN="TOP"> CAL variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> CalEneSum </TD> <TD> Sum of energies in each crystal </TD> </TR>
-<TR> <TD> CalXEcentr </TD> <TD> x coordinate of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalYEcentr </TD> <TD> y coordinate of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalZEcentr </TD> <TD> z coordinate of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Measured energy in a single crystal at each tower, layer, column and end</TD> </TR>
-<TR> <TD> CalMaxEne </TD> <TD> Maximal measured energy in a single crystal </TD> </TR>
+<TR> <TD> CalEneSum </TD> <TD> Sum of energies (in MeV) in each crystal </TD> </TR>
+<TR> <TD> CalXEcentr </TD> <TD> x coordinate (in mm) of centroid of CAL cluster </TD> </TR>
+<TR> <TD> CalYEcentr </TD> <TD> y coordinate (in mm) of centroid of CAL cluster </TD> </TR>
+<TR> <TD> CalZEcentr </TD> <TD> z coordinate (in mm) of centroid of CAL cluster </TD> </TR>
+<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column and end</TD> </TR>
+<TR> <TD> CalMaxEne </TD> <TD> Maximal measured energy (in MeV) in a single crystal </TD> </TR>
 <TR> <TD> CalNumHit[tower] </TD> <TD> A one dimension array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
-<TR> <TD> CalTp[tower][tp] </TD> <TD>A two dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
+<TR> <TD> CalTp[tower][tp] </TD> <TD>A two dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.)</TD> </TR>
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD>A 3 dimension array which describe log accepts contained in the CAL trigger diagnostic info.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
-<TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD>A three dimension array which describes fit position in each CAL crystal, coord=0 means fitted X coordinate, coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate.</TD> </TR>
+<TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD>A three dimension array which describes fit position in each CAL crystal, coord=0 means fitted X coordinate, coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate.(For experts only.)</TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file
