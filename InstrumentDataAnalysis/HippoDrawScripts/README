@@ -7,16 +7,54 @@ contains usage examples; see the code after the line
 
 if __name__ == '__main__':
 
-One should also compare this package's version of drawMerit.py to the
-SVAC version,
+One should also compare this package's version of drawMerit.py and
+anaSvacMerit.py to the standard svac code examples,
 
-http://www-glast.slac.stanford.edu/IntegrationTest/SVAC/Instrument_Analysis/UsefulStuff/CodeExamples/drawMerit.py
+http://www-glast.slac.stanford.edu/IntegrationTest/SVAC/Instrument_Analysis/UsefulStuff/CodeExamples
 
-TTreeWrapper.py has a small class that uses pyROOT to access ROOT
-TTrees.  The syntax it provides is more natural to Python, but the
-framework is rather inefficent for accessing large datasets, but will
-be more familiar to ROOT users.  The module code shows some simple
-examples.
+The key class in svac_analysis.py is RootNTuple and it has some useful
+features:
+
+* Files and trees are given in the class constructor:
+
+  >>> merit = RootNTuple("merit.root", "MeritTuple")
+
+* HippoDraw's display management is automatically dispatched when
+  one creates a histogram or other type of plot:
+
+  >>> energyHist = merit.hist("EvtEnergySumOpt", xlog=1, ylog=1)
+
+* One can define friend trees much as in native Root:
+
+  >>> svac = RootNTuple("svac.root", "Output")
+  >>> merit.add_friend(svac)
+  >>> tkrHist = merit.xyhist("TkrNumTracks", "TkrNumVertices")
+
+* Cuts that are applied to specific plots can be manipulated from
+  the Inspector, and the TCut() method will print the current cuts
+  in a format suitable for use with a ROOT event filter (see below):
+
+  >>> tkrHist.cut('CalEnergySum', (40, 400), xlog=True)
+  >>> print tkrHist.TCut()
+  4.00e+01 < CalEnergySum < 4.00e+02
+
+* If the user's version of HippoDraw has DataArray available, the
+  dictionary syntax can be used to manipulate ntuple columns
+  arithmetically and as well as add new columns:
+
+  >>> merit["EnergyEstRatio"] = merit["TkrSumKalEne"]/merit["CalEnergySum"]
+
+
+TTreeWrapper.py contains a small class that uses pyRoot to access ROOT
+TTrees, but the syntax it provides is more natural to Python.  Like
+native ROOT CINT, the pyRoot framework is inefficent for accessing
+large datasets, but it provides a Python entry point for uninitiated
+ROOT users.
+
+A notable feature of TTreeWrapper is an event filter that can be used
+to apply cuts on the merit or svac ntuple to Digi, Recon, or Mc files.
+This functionality has not been extensively tested.  The module code
+shows some simple examples.
 
 To use these modules, download them to a local directory and set your
 PYTHONPATH environment variable to include that directory, e.g., on
@@ -24,15 +62,13 @@ linux (under csh) do
 
 % setenv PYTHONPATH /home/jchiang/svac_scripts:${PYTHONPATH}
 
-or in your Python script, put the lines
+or start your Python script with lines similar to 
 
 import sys
-sys.path.insert(0, '/home/jchiang/svac_scripts')
+sys.path.insert(0, '/home/jchiang/HippoDrawScripts/v0')
 
-at the top; then from Python, you can do things like
+then from Python, or in your script, enter
 
->>> from svac_analysis import RootNTuple
->>> merit = RootNTuple("merit.root", "MeritTuple")
->>> my_hist = merit.hist("TkrSumKalEne", xlog=1)
+from svac_analysis import RootNTuple
 
 <jchiang@slac.stanford.edu>

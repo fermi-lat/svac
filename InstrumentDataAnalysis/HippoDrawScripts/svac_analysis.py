@@ -193,6 +193,10 @@ class RootNTuple(object):
         for i in xrange(len(newcol)):
             newcol[i] = sum(self.nt.valueAt(i, variable).flat)
         self.nt.addColumn(variable + '_sum', newcol)
+    def __getitem__(self, index):
+        return self.nt[index]
+    def __setitem__(self, index, value):
+        self.nt[index] = value
     def __getattr__(self, attrname):
         return getattr(self.nt, attrname)
     
