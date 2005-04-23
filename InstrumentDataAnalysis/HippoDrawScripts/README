@@ -60,15 +60,16 @@ To use these modules, download them to a local directory and set your
 PYTHONPATH environment variable to include that directory, e.g., on
 linux (under csh) do
 
-% setenv PYTHONPATH /home/jchiang/svac_scripts:${PYTHONPATH}
+% setenv PYTHONPATH /home/jchiang/HippoDrawScripts/v0:${PYTHONPATH}
 
-or start your Python script with lines similar to 
+or start your Python session or script with lines similar to 
 
 import sys
 sys.path.insert(0, '/home/jchiang/HippoDrawScripts/v0')
 
-then from Python, or in your script, enter
+then from Python, or in your script, you can import these packages:
 
 from svac_analysis import RootNTuple
+from TTreeWrapper import TTreeWrapper
 
 <jchiang@slac.stanford.edu>
