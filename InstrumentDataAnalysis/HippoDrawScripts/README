@@ -46,15 +46,15 @@ features:
 
 
 TTreeWrapper.py contains a small class that uses pyRoot to access ROOT
-TTrees, but the syntax it provides is more natural to Python.  Like
-native ROOT CINT, the pyRoot framework is inefficent for accessing
-large datasets, but it provides a Python entry point for uninitiated
-ROOT users.
+TTrees, but the syntax it provides is more natural to Python.
+However, like native ROOT CINT, the pyRoot framework is inefficent for
+accessing large datasets.
 
 A notable feature of TTreeWrapper is an event filter that can be used
 to apply cuts on the merit or svac ntuple to Digi, Recon, or Mc files.
 This functionality has not been extensively tested.  The module code
-shows some simple examples.
+shows some simple examples.  A standalone event filter has been
+implemented in evtFilter.py.
 
 To use these modules, download them to a local directory and set your
 PYTHONPATH environment variable to include that directory, e.g., on
@@ -71,5 +71,14 @@ then from Python, or in your script, you can import these packages:
 
 from svac_analysis import RootNTuple
 from TTreeWrapper import TTreeWrapper
+
+For the latter, you may also need
+
+% setenv PYTHONPATH ${ROOTSYS}/lib:${PYTHONPATH}
+
+or 
+
+import os
+sys.path.insert(0, os.path.join(os.environ['ROOTSYS'], 'lib'))
 
 <jchiang@slac.stanford.edu>
