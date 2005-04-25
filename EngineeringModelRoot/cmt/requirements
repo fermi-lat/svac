@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v1r3p15
+version v1r3p16
 
 
 use GlastPolicy v*
@@ -28,6 +28,8 @@ application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx E
 application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 
 application mergeRoot mergeRoot.cxx 
+
+application mergeRoot_mc mergeRoot_mc.cxx 
 
 application AnalyzeAcd AnalyzeAcd.cxx
 
