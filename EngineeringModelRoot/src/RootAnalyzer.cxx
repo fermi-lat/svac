@@ -391,10 +391,8 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_diagLength[iTower] = m_digiEvent->getEventSummaryData().diagLength(iTower);
   }
 
-  // Event quality/flags:
-  m_ntuple.m_eventSequence = m_digiEvent->getEventSummaryData().eventSequence();
-  m_ntuple.m_eventFlags    = m_digiEvent->getEventSummaryData().eventFlags();
-  m_ntuple.m_goodEvent     = m_digiEvent->getEventSummaryData().goodEvent();
+  // Event quality:
+  m_ntuple.m_eventFlags = m_digiEvent->getEventSummaryData().eventFlags();
 
   parseDiagnosticData(); 
  
@@ -1112,9 +1110,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AemLength", &(m_ntuple.m_aemLength), "AemLength/i");
   m_tree->Branch("ErrLength", &(m_ntuple.m_errLength), "ErrLength[16]/i");
   m_tree->Branch("DiagLength", &(m_ntuple.m_diagLength), "DiagLength[16]/i");
-  m_tree->Branch("EventSequence", &(m_ntuple.m_eventSequence), "EventSequence/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
-  m_tree->Branch("GoodEvent", &(m_ntuple.m_goodEvent), "GoodEvent/I");
   m_tree->Branch("TkrReq", &(m_ntuple.m_tkrReq), "TkrReq[16][18][2][2]/i");
   m_tree->Branch("CalReq", &(m_ntuple.m_calReq), "CalReq[16][8][2]/i");
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");

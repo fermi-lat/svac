@@ -19,63 +19,117 @@ This package contains code to generate the SVAC ntuple for I&T/SVAC. The package
 
 @section def Definition of the SVAC ntuple
 
+Detailed explanations of some of these variables can be found in the following documents:
+
+LAT-TD-00606: LAT Inter-module Communications - A Reference Manual, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf
+<br>
+LAT-TD-00605: The Tower Electronics Module (TEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf
+<br>
+LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf
+<br>
+
 <TABLE>
 <CAPTION ALIGN="TOP"> Run and Event variables </CAPTION>
+
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> RunID </TD> <TD> Run number taken from DigiEvent.h </TD> </TR>
-<TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h</TD> </TR>
-<TR> <TD> EventSize </TD> <TD> Event size in bytes (taken from the FIts file, seems ot be 8 bytes offset wrt LDF file). </TD> </TR>
-<TR> <TD> GltWord </TD> <TD> Trigger word: The definition of the bits can be found in enums/enums/TriggerBits.h. Not valid for EM1 data as there were no GASU, should be valid for LAT integration data. </TD> </TR>
-<TR> <TD> EvtTime </TD> <TD> Time in seconds, since mission start, currently 1/1/2001. This is the time that is reported when doing simulations.</TD> </TR>
-<TR> <TD> EvtSecond </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. </TD> </TR>
-<TR> <TD> EvtNanoSecond </TD> <TD> The number of nano-seconds, since 1/1/1970, used in conjunction with getEbfTimeSec for a measure of absolute time. </TD> </TR>
-<TR> <TD> EvtUpperTime </TD> <TD> The UpperPpcTimeBase word as stored in the LDF from real tests. Used in conjunction with EvtLowerTime (getEbfLowerPpcTimeBase), these words can be used to determine the spacing of real test events. </TD> </TR>
-<TR> <TD> EvtLowerTime </TD> <TD> The LowerPpcTimeBase word stored in the LDF from real tests, used in conjunction with getEbfUpperPpcTimeBase, these words can be used to determine the spacing of real test events.</TD> </TR>
-<TR> <TD> EvtTimeSeconds </TD> <TD> Uses the data words stored in the UpperPpcTimeBase and LowerPpcTimeBase to calculate seconds since power on. This time is used to determine the spacing of events - NOT as an absolute time. </TD> </TR>
-<TR> <TD> EvtSummary </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document at 
+
+<TR> <TD> RunID </TD> <TD> Run number taken from DigiEvent.h. </TD> </TR> 
+
+<TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h. The event number comes from a 32 bit online counter. It is not always continous 
+          (because of prescaling for example). For runs taken before the middle of April 2005 it came from a 17 bits online counter and wrapped around at 128k events 
+          i.e. you could have multiple events with the same event sequence number. </TD> </TR>
+
+<TR> <TD> EventSize </TD> <TD> Event size in bytes taken from the Fits file. It seems to be an 8 bytes offset with respect to the LDF event size (the FITS event size  
+          being larger). </TD> </TR>
+
+<TR> <TD> GltWord </TD> <TD> Trigger word made from digis: The definition of the bits can be found in enums/enums/TriggerBits.h and follows the definition of the 
+          bits from the GltConditionsWord. The GltWord is the only trigger word available in the simulation as there is no GEM simulation.</TD> </TR>
+
+<TR> <TD> EvtTime </TD> <TD> Time in seconds since mission start, currently 1/1/2001. This is the time that is reported when doing simulations. NB! For real data, 
+          this time is from the event builder and is not the trigger time.</TD> </TR>
+
+<TR> <TD> EvtSecond </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. NB! For real data, 
+          this time is from the event builder and is not the trigger time.</TD> </TR>
+
+<TR> <TD> EvtNanoSecond </TD> <TD> The number of nano-seconds, since 1/1/1970, used in conjunction with getEbfTimeSec for a measure of absolute time. NB! For real data, 
+          this time is from the event builder and is not the time when the event triggered.</TD> </TR>
+
+<TR> <TD> EvtUpperTime </TD> <TD> The UpperPpcTimeBase word as stored in the LDF from real data. Used in conjunction with EvtLowerTime (getEbfLowerPpcTimeBase), 
+          these words can be used to determine the spacing of real test events. NB! This time is from the event builder and is not the time when 
+          the event triggered.</TD> </TR>
+
+<TR> <TD> EvtLowerTime </TD> <TD> The LowerPpcTimeBase word stored in the LDF from real data. Used in conjunction with getEbfUpperPpcTimeBase, these words can be 
+          used to determine the spacing of real data events. NB! This time is from the event builder and is not the time when the event triggered.</TD> </TR>
+
+<TR> <TD> EvtTimeSeconds </TD> <TD> Uses the data words stored in the UpperPpcTimeBase and LowerPpcTimeBase to calculate seconds since power on. This time is used to 
+          determine the spacing of real data events - NOT as an absolute time. NB! This time is from the event builder and is not the time when the event triggered. 
+          </TD> </TR>
+
+<TR> <TD> EvtSummary </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf, Chapter 3.5</TD> </TR>
-<TR> <TD> EventSequence </TD> <TD> Event sequence number: It comes from a 17 bits online counter and wraps around at 128k events. It may also not be continous or monotonically increasing because of prescaling.</TD> </TR>
-<TR> <TD> EventFlags </TD> <TD>  Event quality flags: The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
-<TR> <TD> GoodEvent </TD> <TD>  Decoded from EventFlags: '1' means a good event </TD> </TR>
-<TR> <TD> TemLength[tower]      </TD> <TD> Size of the TEM event contribution              </TD> </TR>
-<TR> <TD> GemLength             </TD> <TD> Size of the GEM event contribution (fixed size) </TD> </TR>
-<TR> <TD> OswLength             </TD> <TD> Size of the OSW event contribution              </TD> </TR>
-<TR> <TD> AemLength             </TD> <TD> Size of the AEM event contribution              </TD> </TR>
-<TR> <TD> ErrLength             </TD> <TD> Size of the Error event contribution            </TD> </TR>
-<TR> <TD> DiagLength            </TD> <TD> Size of the Diagnostics event contribution. Should always be 48.</TD> </TR>
-<TR> <TD> GemConditionsWord     </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. For a detailed explanation of GEM quantities, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4      </TD> </TR>
-<TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector                      </TD> </TR>
-<TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector                      </TD> </TR>
-<TR> <TD> GemCalLeVector[tower] </TD> <TD> GEM CAL LE vector                   </TD> </TR>
-<TR> <TD> GemCalHeVector[tower] </TD> <TD> GEM CAL HE vector                   </TD> </TR>
-<TR> <TD> GemCnoVector[12]      </TD> <TD> GEM CNO vector                      </TD> </TR>
-<TR> <TD> GemLiveTime           </TD> <TD> GEM Live time                       </TD> </TR>
-<TR> <TD> GemTriggerTime        </TD> <TD> GEM Trigger time                    </TD> </TR>
-<TR> <TD> GemDeltaEventTime     </TD> <TD> GEM Delta event time                </TD> </TR>
-<TR> <TD> GemOnePpsSeconds      </TD> <TD> GEM PPS Seconds                     </TD> </TR>
-<TR> <TD> GemOnePpsTime         </TD> <TD> GEM PPS Time                        </TD> </TR>
-<TR> <TD> GemPrescaled          </TD> <TD> GEM Prescaled counter               </TD> </TR>
-<TR> <TD> GemDiscarded          </TD> <TD> GEM Discarded counter               </TD> </TR>
-<TR> <TD> GemSent               </TD> <TD> GEM Sent counter. NB! Removed for now! (from EM v3r0407p13) </TD> </TR>
 
-<TR> <TD> GemCondArrivalTimeWord  </TD> <TD> GEM Condition arrival times, complete word, p128 in the GEM document </TD> </TR>
-<TR> <TD> GemCondArrivalTimeExt   </TD> <TD> GEM Condition arrival times, external trigger                    </TD> </TR>
-<TR> <TD> GemCondArrivalTimeCno   </TD> <TD> GEM Condition arrival times, CNO                                 </TD> </TR>
-<TR> <TD> GemCondArrivalTimeCalLe </TD> <TD> GEM Condition arrival times, Cal LE                              </TD> </TR>
-<TR> <TD> GemCondArrivalTimeCalHe </TD> <TD> GEM Condition arrival times, Cal HE                              </TD> </TR>
-<TR> <TD> GemCondArrivalTimeTkr   </TD> <TD> GEM Condition arrival times, TKR                                 </TD> </TR>
-<TR> <TD> GemCondArrivalTimeRoi   </TD> <TD> GEM Condition arrival times, ROI                                 </TD> </TR>
-<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time, p130 in the GEM document             </TD> </TR>
-<TR> <TD> GemDeadZone             </TD> <TD> GEM Dead zone counter                                            </TD> </TR>      
+<TR> <TD> EventFlags </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
+          The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
 
-<TR> <TD> GemAcdTilesXzp        </TD> <TD> GEM ACD XZP tile list               </TD> </TR>
-<TR> <TD> GemAcdTilesYzp        </TD> <TD> GEM ACD XZM tile list               </TD> </TR>
-<TR> <TD> GemAcdTilesYzm        </TD> <TD> GEM ACD YZP tile list               </TD> </TR>
-<TR> <TD> GemAcdTilesXy         </TD> <TD> GEM ACD YZM tile list               </TD> </TR>
-<TR> <TD> GemAcdTilesRbn        </TD> <TD> GEM ACD RNB (Ribbons) tile list     </TD> </TR>
-<TR> <TD> GemAcdTilesNa         </TD> <TD> GEM ACD NA (Not Assigned) tile list </TD> </TR>
-<TR> <TD> DigiTriRowBits        </TD> <TD> 3-in-a-row bits made from TKR digis </TD> </TR>
-<TR> <TD> TrgReqTriRowBits      </TD> <TD> 3-in-a-row bits made from trigger requests (trigger primitives) </TD> </TR>  
+<TR> <TD> GoodEvent </TD> <TD>  Decoded from EventFlags: GoodEvent=1 means a good event i.e. an event with no errors </TD> </TR>
+
+<TR> <TD> TemLength[tower] </TD> <TD> Size in bytes of the TEM event contribution, per tower. Variable length. </TD> </TR>
+<TR> <TD> GemLength        </TD> <TD> Size in bytes of the GEM event contribution. Fixed size: 64 bytes        </TD> </TR>
+<TR> <TD> OswLength        </TD> <TD> Size in bytes of the OSW event contribution. Fixed size: 32 bytes        </TD> </TR>
+<TR> <TD> AemLength        </TD> <TD> Size in bytes of the AEM event contribution.                             </TD> </TR>
+<TR> <TD> ErrLength        </TD> <TD> Size in bytes of the Error event contribution. Variable lenght.          </TD> </TR>
+<TR> <TD> DiagLength       </TD> <TD> Size in bytes of the Diagnostics event contribution. Fixed size: 48 bytes (if the TEM diagnostics are enabled)</TD> </TR>
+
+<TR> <TD> GemConditionsWord  </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. 
+          For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4 </TD> </TR>
+
+<TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
+          </TD> </TR>
+<TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector: 16 bits - the meaning depends on whether the ROI was used as a trigger or a veto. The bit is set if a ROI was 
+          asserted at least once in the trigger window. </TD> </TR> 
+<TR> <TD> GemCalLeVector[tower] </TD> <TD> GEM CAL LE vector: 16 bits, one bit per tower. The bit is set if the CAL LE trigger was asserted at least once in the trigger 
+          window. </TD> </TR>
+<TR> <TD> GemCalHeVector[tower] </TD> <TD> GEM CAL HE vector: 16 bits, one bit per tower. The bit is set if the CAL HE trigger was asserted at least once in the trigger 
+          window. </TD> </TR>
+<TR> <TD> GemCnoVector[12]      </TD> <TD> GEM CNO vector: 12 bits. The bit is set if the CNO trigger was asserted at least once in the trigger window. </TD> </TR>
+
+<TR> <TD> GemLiveTime           </TD> <TD> GEM Live time counter in ticks of 50 ns. Wraps around. </TD> </TR>
+<TR> <TD> GemTriggerTime        </TD> <TD> GEM Trigger time counter in ticks of 50 ns. Wraps around. </TD> </TR>
+<TR> <TD> GemDeltaEventTime     </TD> <TD> GEM Delta event time counter in ticks of 50 ns. Saturates at 3.3 ms </TD> </TR>
+<TR> <TD> GemOnePpsSeconds      </TD> <TD> GEM PPS Seconds: Number of seconds since the GEM was reset. Wraps around. </TD> </TR>
+<TR> <TD> GemOnePpsTime         </TD> <TD> GEM PPS Time in units of 50 ns. Wraps around. </TD> </TR>
+<TR> <TD> GemPrescaled          </TD> <TD> GEM Prescaled counter: Increments when an event is lost due to prescaling Wraps around. </TD> </TR>
+<TR> <TD> GemDiscarded          </TD> <TD> GEM Discarded counter. Increments when an event is lost due to LAT busy. Wraps around. </TD> </TR>
+
+<TR> <TD> GemCondArrivalTimeWord  </TD> <TD> GEM Condition arrival times: The complete word, see section 4.13 in the GEM document for a detailed description.</TD> </TR>
+
+<TR> <TD> GemCondArrivalTimeTkr   </TD> <TD> GEM Condition arrival times in 50 ns ticks for the TKR trigger: Tells us when the TKR trigger arrived with respect to the 
+          trigger window opening. A value of 0 means the TKR trigger opened the trigger window. The arrival time can be between 0 and 30, but you need to take the actual 
+          width of the trigger window into account (usually 5 or 12 ticks). A value of 31 means that either the TKR trigger did not participate in the trigger (i.e. 
+          the event was triggered by something else), or that the TKR trigger line was already high when the trigger window opened. This can happen if the TKR triggered 
+          the previous event and that event was discarded. </TD> </TR>
+
+<TR> <TD> GemCondArrivalTimeExt   </TD> <TD> GEM Condition arrival times in 50 ns ticks for the external trigger  </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCno   </TD> <TD> GEM Condition arrival times in 50 ns ticks for the CNO trigger       </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCalLe </TD> <TD> GEM Condition arrival times in 50 ns ticks for the CAL LE trigger    </TD> </TR>
+<TR> <TD> GemCondArrivalTimeCalHe </TD> <TD> GEM Condition arrival times in 50 ns for the CAL HE trigger          </TD> </TR>
+<TR> <TD> GemCondArrivalTimeRoi   </TD> <TD> GEM Condition arrival times in 50 ns ticks for the ROI               </TD> </TR>
+
+<TR> <TD> GemDeltaWindowOpenTime  </TD> <TD> GEM Delta window open time counter: Number of 50 ns ticks between the opening of the trigger window between the previous event 
+          and this event. Wraps around. </TD> </TR>
+
+<TR> <TD> GemDeadZone </TD> <TD> GEM Dead zone counter: It takes a minimum of 2 clock ticks for the GEM to recover from forming one trigger window and opening the 
+          next one. If a trigger window opening was requested in this 'dead zone' this counter increments. </TD> </TR>      
+
+<TR> <TD> GemAcdTilesXzp        </TD> <TD> GEM ACD XZP tile list: See section 4.9 in the GEM document for details. </TD> </TR>
+<TR> <TD> GemAcdTilesYzp        </TD> <TD> GEM ACD XZM tile list: See section 4.9 in the GEM document for details. </TD> </TR>
+<TR> <TD> GemAcdTilesYzm        </TD> <TD> GEM ACD YZP tile list: See section 4.9 in the GEM document for details. </TD> </TR>
+<TR> <TD> GemAcdTilesXy         </TD> <TD> GEM ACD YZM tile list: See section 4.9 in the GEM document for details. </TD> </TR>
+<TR> <TD> GemAcdTilesRbn        </TD> <TD> GEM ACD RNB (Ribbons) tile list: See section 4.9 in the GEM document for details.      </TD> </TR>
+<TR> <TD> GemAcdTilesNa         </TD> <TD> GEM ACD NA (Not Assigned) tile list:  See section 4.9 in the GEM document for details. </TD> </TR>
+
+<TR> <TD> DigiTriRowBits        </TD> <TD> 3-in-a-row trigger bits made from TKR digis </TD> </TR>
+<TR> <TD> TrgReqTriRowBits      </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives) </TD> </TR>  
 </TABLE>
 
 

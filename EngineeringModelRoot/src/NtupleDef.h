@@ -170,10 +170,8 @@ struct NtupleDef {
   unsigned int m_errLength[g_nTower];
   unsigned int m_diagLength[g_nTower];
 
-  // Event quality/flags:
-  unsigned int m_eventSequence;
+  // Event quality:
   unsigned int m_eventFlags;
-  int m_goodEvent;
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request

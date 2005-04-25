@@ -12,17 +12,16 @@
 #include "TLeaf.h"
 #include "TObjArray.h"
 #include "TObjString.h"
-#include "/nfs/slac/g/svac/common/builds/Fred/RootLibraries_EMv3r0402p17/digiRootData/v7r2/digiRootData/DigiEvent.h"
+#include "/nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel/EngineeringModel-v4r060302p18/mcRootData/v2r16/mcRootData/McEvent.h"
 
 
 using std::string;
 using std::cout;
 using std::endl;
 
-// Merge Digi root files:
-
+// Merge mc root files:
 string jobDataFile    = "../src/job.dat";
-string digiDir        = "/nfs/farm/g/glast/u06/borgland/Workshop_mnc/EngineeringModel-v3r0402p17/LatIntegration/v1r0p1/Output/";
+string mcDir        = "/nfs/farm/g/glast/u06/borgland/Workshop_mnc/EngineeringModel-v3r0402p17/LatIntegration/v1r0p1/Output/";
 
 int main() 
 {
@@ -30,51 +29,55 @@ int main()
   string fileName;
   ifstream inputFile(jobDataFile.c_str());
   
-  // Combined digi file name:
-  TFile *newfile = new TFile("merged_digi.root","recreate");
+  // Combined mc file name:
+  TFile *newfile = new TFile("merged_mc.root","recreate");
   TTree* newtree; 
+
+  // Set max file size to 25 GB:
+  Long64_t maxTreeSize = 25000000000;
+  newtree->SetMaxTreeSize(maxTreeSize);
 
   int iLoop = 0;
 
   // Loop over input files to merge:
   while (inputFile >> fileName) {
 
-    string digiFileName = digiDir + fileName + "_digi.root";
+    string mcFileName = mcDir + fileName + "_mc.root";
 
     // Check whether file can be properly opened:
-    TFile digiF(digiFileName.c_str());
-    if(digiF.IsOpen()) {
-      digiF.Close();
+    TFile mcF(mcFileName.c_str());
+    if(mcF.IsOpen()) {
+      mcF.Close();
     }
     else {
-      cout << "********" << digiFileName.c_str() << 
+      cout << "********" << mcFileName.c_str() << 
     	"can not be opened *****" << " skip this file" << endl;
       continue;
     }
-    cout << "Opening file " << digiFileName << endl;
+    cout << "Opening file " << mcFileName << endl;
   
  
-    TFile *digifile = new TFile (digiFileName.c_str());
-    TTree *digiTree = (TTree *) digifile->Get("Digi");
+    TFile *mcfile = new TFile (mcFileName.c_str());
+    TTree *mcTree = (TTree *) mcfile->Get("Mc");
 
     // Set branch address: 
-    DigiEvent *evt = 0;
-    digiTree->SetBranchAddress("DigiEvent",&evt);
+    McEvent *evt = 0;
+    mcTree->SetBranchAddress("McEvent",&evt);
 
-    gDirectory->cd("awb_merged_digi.root:/");
+    gDirectory->cd("merged_mc.root:/");
     if (iLoop == 0) { 
-      newtree = (TTree*) digiTree->CloneTree(0);
+      newtree = (TTree*) mcTree->CloneTree(0);
     }             
     iLoop++;
 
     // Total number of entries in the file:
-    Int_t nentries = Int_t (digiTree->GetEntriesFast());
+    Int_t nentries = Int_t (mcTree->GetEntriesFast());
 
     // Loop over all the events in the eventlist:
     for (Int_t jentry=0; jentry<nentries;jentry++) {
 
-      // Get the digi tree entry:
-      digiTree->GetEvent(jentry);
+      // Get the mc tree entry:
+      mcTree->GetEvent(jentry);
 
       // Copy it over to the new (merged) tree:
       if (evt) {
