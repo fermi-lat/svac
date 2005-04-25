@@ -116,3 +116,14 @@ JIRA issue (SVAC-30)
 
 v1r3p15
 awb Added Eventsize (in bytes) and GEM dead zone counter.
+
+v1r3p16
+awb - Removed 'EventSequence' as it now will be identical to EventID.
+    - Removed 'GoodEvent'. Users should require 'EventFlags==0' to have 
+      events without any errors.
+    - Renamed mergeRoot_debug to mergeRoot_mc. The 'bug' it fixed is no 
+      longer in Root V4. However, merging mc.root files does not work with 
+      mergeRoot for some reason. The memory usage goes through the roof and 
+      it essentially comes to a stand still.
+    - Changed default file size to 25 GB in mergeRoot, mergeRoot_mc and mergeNtuple.
+    - Updated the documentation.
