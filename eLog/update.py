@@ -92,7 +92,7 @@ def parseSerialNosTag(value):
                 tkrSerNo = tkrSerNo + v['tkr'] + '???'
             if(v.has_key('calinstrument')):
                 calSerNo = calSerNo + v['calinstrument'] + '???'
-
+    
     return [nTowers, tkrSerNo, calSerNo]
 
 # turn a string of a python list to a string of items in the list separated
@@ -243,6 +243,11 @@ for report in reports:
     
     intRunConfigId = 'null'
 
+    # initialize the variables in case rcReport does not have serial number tag
+    nTowers = 0
+    tkrSerNo = ''
+    calSerNo = ''
+
     for node in report.childNodes:
 
         if (node.nodeType == Node.TEXT_NODE and \
@@ -251,17 +256,12 @@ for report in reports:
             continue;
         
         name = node.nodeName
-
-# initialize the variables in case rcReport does not have serial number tag
-        nTowers = 0
-        tkrSerNo = ''
-        calSerNo = ''
         
         if(name == serNoTag):
             [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
         elif( name == csvTestIdTag ):
             intRunConfigId = insertIntRunConfigId(node.childNodes[0].data)
-            
+
         if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
