@@ -376,7 +376,7 @@ for report in reports:
        print exc_value
 
        db.rollback()
-       continue
+       exit(1)
 
     if(data[testNameTag] == 'suiteSummary'):
         sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = \'' + data[suiteRunListTag] + '\' where runid = ' + data[runIdTag]
@@ -391,7 +391,7 @@ for report in reports:
             print exc_value
 
             db.rollback()
-            continue    
+            exit(1)    
 
     # safe to commit
     db.commit()

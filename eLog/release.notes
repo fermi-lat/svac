@@ -13,3 +13,8 @@ v2r2p3
 bug fixing (JIRA issue: SVAC-40). Tkr and Cal serial numbers are reset in the 
 loop to parse each node in the rcReport xml file. The fix is to move 
 initialization codes out of the loop
+
+v2r2p4
+
+modify code so that it would exit with exited code 1 if sql statement is not
+successfully executed
