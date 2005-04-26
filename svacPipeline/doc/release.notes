@@ -73,3 +73,8 @@ Added Eventsize (in bytes) and GEM dead zone counter.
 
 Add installation instructions to docs.
 ---------------------------------------------------------------------------
+
+v3r1p6
+---------------
+
+Switch to eLogFeeder v2r2p3 to fix SVAC-40.

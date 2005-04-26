@@ -2,6 +2,8 @@
 
 # setup for SVAC pipeline
 
+setenv svacVersion v3r1p6
+
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
@@ -15,7 +17,6 @@ setenv svacRoot /nfs/slac/g/svac/common
 setenv svacCmt ${svacRoot}/builds
 # svacPlRoot is set in the pipeline
 #setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
-setenv svacVersion v3r1p5
 setenv svacPlLib ${svacPlRoot}/lib
 
 setenv CMTPATH ${svacCmt}:${sasCmt}
@@ -55,7 +56,7 @@ setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTask updateELogDB-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p2
+setenv eLogFeederVersion v2r2p3
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
