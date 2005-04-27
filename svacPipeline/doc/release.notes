@@ -86,3 +86,13 @@ v3r1p7
 Added some more reprocessing scripts.
 Fixed error in setup script, online version was wrong (only affected reprocessing).
 
+v3r1p8
+
+modify queryElogReportTable.pl to exit with code nonzero if the queried info is
+not in the database (JIRA issue: SVAC-46)
+
+modify recon.pl to use VDG.txt in LatIntegration job option directory to 
+reconstruct VDG photons (JIRA issue: SVAC-44)
+
+use eLogFeeder v2r2p4 to exit with exited code 1 if sql statement is not
+successfully executed
