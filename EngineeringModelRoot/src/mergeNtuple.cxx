@@ -42,7 +42,7 @@ int main()
   Long64_t maxTreeSize = 25000000000;
   chainedTree1.SetMaxTreeSize(maxTreeSize);
 
-  TChain chainedTree2("MeritTuple")
+  TChain chainedTree2("MeritTuple");
   chainedTree2.SetMaxTreeSize(maxTreeSize);
 
 

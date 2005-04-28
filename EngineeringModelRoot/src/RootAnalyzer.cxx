@@ -12,6 +12,7 @@
 #include "TROOT.h"
 #include "ToString.h"
 #include "enums/TriggerBits.h"
+#include "timestamps.h"
 
 using std::string;
 using std::vector;
@@ -359,7 +360,9 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-   
+  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime, 
+									m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,
+									m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -1070,6 +1073,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
   m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
   m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
+  m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("CalTp", &(m_ntuple.m_tpCal), "CalTp[16][8]/i");
   m_tree->Branch("TkrTp", &(m_ntuple.m_tpTkr), "TkrTp[16][8]/i");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");

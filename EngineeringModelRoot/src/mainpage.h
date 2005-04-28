@@ -65,6 +65,13 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
           determine the spacing of real data events - NOT as an absolute time. NB! This time is from the event builder and is not the time when the event triggered. 
           </TD> </TR>
 
+<TR> <TD> EvtTicks </TD> <TD> Uses the data words stored in the GemTriggerTime, GemOnePpsSeconds, GemOnePpsTime, EvtSecond,
+and EvtNanoSecond to calculate LAT ticks for each event. This time is used to determine the spacing of real data events 
+- NOT as an absolute time.  The "zero point" is arbitrary.
+NB! This is the time when the event triggered.
+The values are integers, but are stored as doubles to portably get more than 32 bits.
+          </TD> </TR>
+
 <TR> <TD> EvtSummary </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf, Chapter 3.5</TD> </TR>
 

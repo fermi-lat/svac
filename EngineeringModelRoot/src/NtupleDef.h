@@ -113,6 +113,7 @@ struct NtupleDef {
   unsigned int m_ebfSecond, m_ebfNanoSecond;
   unsigned int m_upperTime, m_lowerTime;
   double m_timeSeconds;
+  double m_triggerTicks;
 
 
   //diagnostic info

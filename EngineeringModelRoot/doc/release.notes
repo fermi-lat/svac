@@ -127,3 +127,6 @@ awb - Removed 'EventSequence' as it now will be identical to EventID.
       it essentially comes to a stand still.
     - Changed default file size to 25 GB in mergeRoot, mergeRoot_mc and mergeNtuple.
     - Updated the documentation.
+
+v1r3p17
+wbf Added EvtTicks.
