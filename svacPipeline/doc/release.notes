@@ -96,3 +96,24 @@ reconstruct VDG photons (JIRA issue: SVAC-44)
 
 use eLogFeeder v2r2p4 to exit with exited code 1 if sql statement is not
 successfully executed
+---------------------------------------------------------------------------
+
+v3r1p9
+---------------
+This was an error.
+---------------------------------------------------------------------------
+
+v3r1p10
+---------------
+Switch to EM v4r060302p19.  This tag was based on p7, it does not include 
+the p8 changes.
+---------------------------------------------------------------------------
+
+v3r1p11
+---------------
+Switch to EM v4r060302p22.  
+Merge changes from p8.
+Switch to EngineeringModelRoot v1r3p18.
+Switch to TestReport v3r2p7.
+---------------------------------------------------------------------------
+
