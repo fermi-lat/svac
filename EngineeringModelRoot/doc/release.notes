@@ -130,3 +130,6 @@ awb - Removed 'EventSequence' as it now will be identical to EventID.
 
 v1r3p17
 wbf Added EvtTicks.
+
+v1r3p18
+wbf Fixed bug in EvtTicks.

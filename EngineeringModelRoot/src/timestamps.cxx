@@ -18,7 +18,6 @@ Double_t evtTicks(unsigned int triggerTime,
   Double_t ticks;
 
   if (firstEvent) {
-    firstEvent = false;
     firstSecond = rtcSeconds;
   } else {
     if (ppsSeconds < lastPps)
@@ -44,6 +43,7 @@ Double_t evtTicks(unsigned int triggerTime,
   lastPps = ppsSeconds;
   lastTime = rtcTime;
   lastTicks = ticks;
+  firstEvent = false;
 
   return ticks;
 }
