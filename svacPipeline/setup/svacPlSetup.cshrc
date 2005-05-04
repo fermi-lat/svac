@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r1p11
+setenv svacVersion v3r1p12
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv EngineeringModelVersion v4r060302p22
+setenv EngineeringModelVersion v4r060302p23
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
