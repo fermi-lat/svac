@@ -194,7 +194,15 @@ class RootNTuple(object):
             newcol[i] = sum(self.nt.valueAt(i, variable).flat)
         self.nt.addColumn(variable + '_sum', newcol)
     def __getitem__(self, index):
-        return self.nt[index]
+        try:
+            return self.nt[index]
+        except RuntimeError, message:
+            if str(message).find('DataSource') == 0:
+                import numarray as num
+                self.nt[index] = num.array(self.getColumn(index))
+                return self.nt[index]
+            else:
+                raise RuntimeError, str(message)
     def __setitem__(self, index, value):
         self.nt[index] = value
     def __getattr__(self, attrname):
