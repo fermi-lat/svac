@@ -99,7 +99,6 @@ def oneTick(triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds):
     global nRoll
 
     if firstEvent:
-        firstEvent = 0
         firstSecond = seconds
     else:
         if ppsSeconds < lastPps:
@@ -130,6 +129,7 @@ def oneTick(triggerTime, ppsSeconds, ppsTime, seconds, nanoSeconds):
     lastPps = ppsSeconds
     lastTime = rtcTime
     lastTicks = ticks
+    firstEvent = 0
 
     return ticks
 
