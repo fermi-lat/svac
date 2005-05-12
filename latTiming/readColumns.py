@@ -48,10 +48,10 @@ def readColumns(fileName, columns, whichTuple=0):
         raise LookupError, "Requested tuple %s was not found." % whichTuple
 
     # grab it
-    ourTuple = rc.createNTuple(fileName, ourTupleName)
+    ourTuple = rc.createDataArray(fileName, ourTupleName)
 
     # pull out the data
-    columnData = [numarray.array(ourTuple.getColumn(name)) for name in columns]
+    columnData = [ourTuple[name] for name in columns]
 
     if oneColumn:
         columnData = columnData[0]
