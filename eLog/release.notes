@@ -17,4 +17,10 @@ initialization codes out of the loop
 v2r2p4
 
 modify code so that it would exit with exited code 1 if sql statement is not
-successfully executed
+successfully executed (JIRA issue: SVAC-45)
+
+v2r2p5
+
+AdditionalInputFiles and suiteRunList column in the elogReport table are 
+changed from varchar2 to CLOB so that they can hold more than 4000 characters
+of data. update.py is modfified accordingly.

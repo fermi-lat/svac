@@ -364,10 +364,10 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ')'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId, additionalInputFiles) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ', :5)'
        
     try:
-       c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
+        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]), str(data[additionalInputFilesTag]))
     except:
        (exc_type, exc_value) = sys.exc_info()[:2]
 
@@ -379,10 +379,10 @@ for report in reports:
        exit(1)
 
     if(data[testNameTag] == 'suiteSummary'):
-        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = \'' + data[suiteRunListTag] + '\' where runid = ' + data[runIdTag]
+        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = :1 where runid = ' + data[runIdTag]
 
         try:
-            c.execute(sqlStr)
+            c.execute(sqlStr, str(data[suiteRunListTag]))
         except:
             (exc_type, exc_value) = sys.exc_info()[:2]
 
