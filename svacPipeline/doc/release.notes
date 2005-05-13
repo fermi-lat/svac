@@ -127,3 +127,9 @@ v3r1p13
 Honor "nodigi" tag in decideDigi.pl.  Don't digitize runs with <3 events.
 Clean up decideRecon.pl a bit.
 ---------------------------------------------------------------------------
+
+v3r1p14
+---------------
+Switch to eLog v2r2p5.
+Fix a relative link in one of the reprocessing scripts.
+---------------------------------------------------------------------------
