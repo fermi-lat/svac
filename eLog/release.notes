@@ -24,3 +24,8 @@ v2r2p5
 AdditionalInputFiles and suiteRunList column in the elogReport table are 
 changed from varchar2 to CLOB so that they can hold more than 4000 characters
 of data. update.py is modfified accordingly.
+
+v2r2p6
+
+change code to include TEM id in tkr_ser_no and cal_ser_no.
+JIRA issue(ELB-69)
