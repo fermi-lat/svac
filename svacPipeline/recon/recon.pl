@@ -102,8 +102,7 @@ if($tkrOnly) {
 }
 
 if($calOnly) {
-    print JOBOPTIONFILE qq(TkrCalibAlg.deadStripsCalibFlavor = "ideal"; \n);	
-    print JOBOPTIONFILE qq(TkrCalibAlg.hotStripsCalibFlavor = "ideal"; \n);	
+    print JOBOPTIONFILE qq(TkrCalibAlg.calibFlavor = "ideal";\n);	
 }
 	       
 close(JOBOPTIONFILE);

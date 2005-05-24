@@ -133,3 +133,14 @@ v3r1p14
 Switch to eLog v2r2p5.
 Fix a relative link in one of the reprocessing scripts.
 ---------------------------------------------------------------------------
+
+v3r1p15
+---------------
+For singel CAL modules, replace:
+TkrCalibAlg.deadStripsCalibFlavor = "ideal"; 
+TkrCalibAlg.hotStripsCalibFlavor = "ideal";
+with
+TkrCalibAlg.calibFlavor = "ideal";
+in the JO. This way it will not ask for any TKR calibration files for CAL only
+data.
+---------------------------------------------------------------------------
