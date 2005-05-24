@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r1p14
+setenv svacVersion v3r1p16
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -56,7 +56,7 @@ setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTask updateELogDB-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p5
+setenv eLogFeederVersion v2r2p6
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -68,7 +68,7 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
 setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v3r1p3
+setenv configReportVersion v3r1p4
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
 setenv configTaskDir ${svacPlRoot}/configReport
