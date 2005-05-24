@@ -1,0 +1,4 @@
+v3r1p4:
+
+Add TKR_OR_STRETCH.  
+Fix incorrect definition of TKR_NR which overlapped TKR_OR_STRETCH.
