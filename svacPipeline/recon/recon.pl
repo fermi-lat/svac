@@ -23,9 +23,11 @@ my $particleType =  `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId particlety
 my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
 $tkrSerNo =~ s/\?//g;
 $tkrSerNo =~ s/\n//g;
+$tkrSerNo =~ s/\(.*?\)//g;
 my $calSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId cal_ser_no`;
 $calSerNo =~ s/\?//g;
 $calSerNo =~ s/\n//g;
+$calSerNo =~ s/\(.*?\)//g;
 
 my $em = 0;
 if($tkrSerNo =~ /Mini/ || $calSerNo =~ /EM2/) {

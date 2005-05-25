@@ -150,3 +150,8 @@ v3r1p16
 Switch to eLog v2r2p6.
 Switch to ConfigTables v3r1p4.
 ---------------------------------------------------------------------------
+
+v3r1p17
+---------------
+Fix recon bug caused by addition of bay location to serial #s.
+---------------------------------------------------------------------------
