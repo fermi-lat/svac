@@ -32,6 +32,12 @@ def reportRate(nEvents, nTicks):
           (nEvents, nTicks, nEvents/deltaT, num.sqrt(nEvents)/deltaT)
     return
 
+def rdr(x, dx):
+    "@brief Calculate rate and error from exponential decay constant and its error."
+    r = 1.0 / (x * oneTick)
+    dr = r * dx / x
+    return r, dr
+
 gemDeltas = []
 tickDeltas = []
 tickDeltaShorts = []
@@ -77,9 +83,13 @@ else:
     print "Fail"
     pass
 
-minTicks = num.minimum.reduce(tickDeltaShort)
-minTime = minTicks * oneTick
-print "Shortest: %d ticks = %g s." % (minTicks, minTime)
+minGemSep = num.minimum.reduce(gemDelta)
+minGST = minGemSep * oneTick
+print "Shortest gemDeltaEventTime: %d ticks = %g s." % (minGemSep, minGST)
+
+minEvtSep = num.minimum.reduce(tickDeltaShort)
+minEST = minEvtSep * oneTick
+print "Shortest EVT separation: %d ticks = %g s." % (minEvtSep, minEST)
 
 #hqPlot.plot((gemDelta, tickDelta), ('gemDelta', 'tickDelta'))
 hqPlot.plot((tickDelta,), ('tickDelta',))
