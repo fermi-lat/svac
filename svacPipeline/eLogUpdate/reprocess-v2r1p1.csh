@@ -19,13 +19,15 @@ run cd ${dataDir}
 
 set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
+set oldDir=../../../../../../nfs/farm/g/glast/u14/Integration/rawData/${run}
 set oldTask=online-v2r1p1
 set newTask=${eLogTask}
 
 foreach dataSet ($dataSets)
-    set oldName=${oldTask}_${run}_${dataSet}
+    set oldTail=${oldTask}_${run}_${dataSet}
+    set oldName=${oldDir}/${oldTail}
 	test -e ${oldName} || continue
-	set newName=`echo $oldName | sed s/${oldTask}/${newTask}/`
+	set newName=`echo $oldTail | sed s/${oldTask}/${newTask}/`
 	test -e ${newName} || ( run ln -s ${oldName} ${newName} )
 end
 
