@@ -135,8 +135,8 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> GemAcdTilesRbn        </TD> <TD> GEM ACD RNB (Ribbons) tile list: See section 4.9 in the GEM document for details.      </TD> </TR>
 <TR> <TD> GemAcdTilesNa         </TD> <TD> GEM ACD NA (Not Assigned) tile list:  See section 4.9 in the GEM document for details. </TD> </TR>
 
-<TR> <TD> DigiTriRowBits        </TD> <TD> 3-in-a-row trigger bits made from TKR digis </TD> </TR>
-<TR> <TD> TrgReqTriRowBits      </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives) </TD> </TR>  
+<TR> <TD> DigiTriRowBits[tower]        </TD> <TD> 3-in-a-row trigger bits made from TKR digis </TD> </TR>
+<TR> <TD> TrgReqTriRowBits[tower]      </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives) </TD> </TR>  
 </TABLE>
 
 
