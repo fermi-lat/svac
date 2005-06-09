@@ -90,13 +90,13 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> GemConditionsWord  </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. 
           For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4 </TD> </TR>
 
-<TR> <TD> GemTkrVector[tower]   </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
+<TR> <TD> GemTkrVector[16]   </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
           </TD> </TR>
-<TR> <TD> GemRoiVector[tower]   </TD> <TD> GEM ROI vector: 16 bits - the meaning depends on whether the ROI was used as a trigger or a veto. The bit is set if a ROI was 
+<TR> <TD> GemRoiVector[16]   </TD> <TD> GEM ROI vector: 16 bits - the meaning depends on whether the ROI was used as a trigger or a veto. The bit is set if a ROI was 
           asserted at least once in the trigger window. </TD> </TR> 
-<TR> <TD> GemCalLeVector[tower] </TD> <TD> GEM CAL LE vector: 16 bits, one bit per tower. The bit is set if the CAL LE trigger was asserted at least once in the trigger 
+<TR> <TD> GemCalLeVector[16] </TD> <TD> GEM CAL LE vector: 16 bits, one bit per tower. The bit is set if the CAL LE trigger was asserted at least once in the trigger 
           window. </TD> </TR>
-<TR> <TD> GemCalHeVector[tower] </TD> <TD> GEM CAL HE vector: 16 bits, one bit per tower. The bit is set if the CAL HE trigger was asserted at least once in the trigger 
+<TR> <TD> GemCalHeVector[16] </TD> <TD> GEM CAL HE vector: 16 bits, one bit per tower. The bit is set if the CAL HE trigger was asserted at least once in the trigger 
           window. </TD> </TR>
 <TR> <TD> GemCnoVector[12]      </TD> <TD> GEM CNO vector: 12 bits. The bit is set if the CNO trigger was asserted at least once in the trigger window. </TD> </TR>
 
