@@ -7,6 +7,8 @@
 """
 
 import bisect
+import numarray as num
+import numarray.random_array as ra
 
 
 (COND_ROI, COND_TKR, COND_CALLE, COND_CALHE, COND_CNO, COND_PER, COND_SOL, COND_EXT) = \
@@ -49,6 +51,97 @@ class Input:
 
 
 #
+class Window(Input):
+
+    #
+    def __init__(self, input):
+        self.time = input.time
+        self.condition = input.condition
+        return
+
+    #
+    def __iadd__(self, other):
+        deltaT = other - self
+        if deltaT < 0:
+            raise ValueError
+        elif deltaT < tWindow:
+            self.condition |= other.condition
+        else:
+            raise ValueError
+        return self
+
+    pass
+
+
+#
+class Event(Window):
+
+    pass
+
+
+#
+def aggregate(inputs):
+    """Make Windows from Inputs."""
+
+    windows = EventList()
+    evIt = iter(inputs)
+
+    nextInput = evIt.next()
+    lastTime = 0
+    while True:
+        window = Window(nextInput)
+        now = window.time
+        include = now + tWindow
+        dead = include + tDeadZone
+        window.dwot = now - lastTime
+        nextInput = evIt.next()
+        while nextInput.time < include:
+            window += nextInput
+            nextInput = evIt.next()
+            pass
+        while nextInput.time < dead:
+            nextInput = evIt.next()
+            pass
+        windows.append(window)
+        lastTime = window.time
+        pass
+
+    return windows
+
+
+#
+def trigger(windows):
+    """Make Events from Windows."""
+    pass
+
+
+#
+class MessageEngine:
+
+    #
+    def __init__(self, prescale=0):
+        self.prescale = prescale
+        self.reset()
+        return
+
+    #
+    def reset(self):
+        self.count = self.prescale
+        return
+
+    #
+    def hit(self):
+        self.count -= 1
+        if self.count:
+            return False
+        else:
+            self.reset()
+            return True
+        return
+
+    pass
+
+#
 class EventList:
     """This is a collection of Inputs.
 
@@ -87,6 +180,11 @@ class EventList:
         return
 
     #
+    def append(self, event):
+        self.events.append(event)
+        return
+
+    #
     def __len__(self):
         return len(self.events)
 
@@ -94,4 +192,41 @@ class EventList:
     def __getitem__(self, index):
         return self.events[index]
 
+    #
+    def __iter__(self):
+        return self.events.__iter__()
+
     pass
+
+
+#
+def makeTimes(rate, length):
+    expected = float(rate) * length
+    number = ra.poisson(expected)
+    times = ra.random(number) * length
+    times.sort()
+    # quantize here, in windows, or?
+    return times
+
+
+#
+def makeInputs(rate, length, condition):
+    times = makeTimes(rate, length)
+    inputs = EventList()
+    for thisTime in times:
+        input = Input(thisTime, condition)
+        inputs.append(input)
+        pass
+    return inputs
+
+
+
+#
+def test():
+    ii = makeInputs(80, 1000, COND_TKR)
+    ww = aggregate(ii)
+    print len(ww.events)
+    return
+
+if __name__ == "__main__":
+    test()
