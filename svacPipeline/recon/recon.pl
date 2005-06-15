@@ -21,6 +21,10 @@ EOT
 my $particleType =  `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId particletype`;
 
 my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
+
+my $tkrSep = ($tkrSerNo =~ m/\?+/g);
+my $nTwr = $#tkrSep + 1;
+
 $tkrSerNo =~ s/\?//g;
 $tkrSerNo =~ s/\n//g;
 $tkrSerNo =~ s/\(.*?\)//g;
@@ -59,6 +63,24 @@ elsif($tkrSerNo && $calSerNo) {
     $instrumentType = $tkrSerNo.':Cal'.$calSerNo;
 }
 
+my $geometries = ('$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  0
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  1
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  2
+				  '',                                              #  3
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  4
+				  '',                                              #  5
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  6
+				  '',                                              #  7
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  8
+				  '',                                              #  9
+				  '',                                              # 10
+				  '',                                              # 11
+				  '',                                              # 12
+				  '',                                              # 13
+				  '',                                              # 14
+				  '',                                              # 15
+				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', # 16
+				  );
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'reconCmt'};
@@ -82,9 +104,14 @@ print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
 print SHELLFILE "$exe || exit 1 \n";
 close(SHELLFILE);
 
-my $geoFile = '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml';;
+my $geoFile = $geometries[$nTwr];
 if($em) {
-$geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml';
+	$geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml';
+}
+
+if (!$geoFile) {
+	print STDERR "No geometry for $nTwr towers!\n";
+	exit(1);
 }
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
