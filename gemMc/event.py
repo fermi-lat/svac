@@ -14,6 +14,9 @@ import numarray.random_array as ra
 (COND_ROI, COND_TKR, COND_CALLE, COND_CALHE, COND_CNO, COND_PER, COND_SOL, COND_EXT) = \
            [1 << bit for bit in range(8)]
 
+oneTick = 50e-9
+tickRate = 20e6
+
 tWindow = 12
 tDeadZone = 2
 tBusy = 530
@@ -86,25 +89,31 @@ def aggregate(inputs):
     windows = EventList()
     evIt = iter(inputs)
 
-    nextInput = evIt.next()
-    lastTime = 0
-    while True:
-        window = Window(nextInput)
-        now = window.time
-        include = now + tWindow
-        dead = include + tDeadZone
-        window.dwot = now - lastTime
+    try:
         nextInput = evIt.next()
-        while nextInput.time < include:
-            window += nextInput
+        lastTime = 0
+        while True:
+            window = Window(nextInput)
+            now = window.time
+            include = now + tWindow
+            dead = include + tDeadZone
+            window.dwot = now - lastTime
             nextInput = evIt.next()
+            while nextInput.time < include:
+                window += nextInput
+                nextInput = evIt.next()
+                pass
+            while nextInput.time < dead:
+                nextInput = evIt.next()
+                pass
+            windows.append(window)
+            lastTime = window.time
             pass
-        while nextInput.time < dead:
-            nextInput = evIt.next()
-            pass
-        windows.append(window)
-        lastTime = window.time
+    except StopIteration:
+        # It'd be sweet to use our own exception here that was a subclass of StopIteration.
+        # To do that would take a custom iterator for EventList.
         pass
+        
 
     return windows
 
@@ -211,6 +220,8 @@ def makeTimes(rate, length):
 
 #
 def makeInputs(rate, length, condition):
+    rate /= tickRate
+    length *= tickRate
     times = makeTimes(rate, length)
     inputs = EventList()
     for thisTime in times:
@@ -224,8 +235,10 @@ def makeInputs(rate, length, condition):
 #
 def test():
     ii = makeInputs(80, 1000, COND_TKR)
+    print len(ii.events)
     ww = aggregate(ii)
     print len(ww.events)
+    print ww[0].time, ww[-1].time
     return
 
 if __name__ == "__main__":
