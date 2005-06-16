@@ -22,7 +22,7 @@ my $particleType =  `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId particlety
 
 my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
 
-my $tkrSep = ($tkrSerNo =~ m/\?+/g);
+my @tkrSep = ($tkrSerNo =~ m/\?+/g);
 my $nTwr = $#tkrSep + 1;
 
 $tkrSerNo =~ s/\?//g;
@@ -63,7 +63,7 @@ elsif($tkrSerNo && $calSerNo) {
     $instrumentType = $tkrSerNo.':Cal'.$calSerNo;
 }
 
-my $geometries = ('$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  0
+my @geometries = ('$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  0
 				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  1
 				  '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml', #  2
 				  '',                                              #  3
