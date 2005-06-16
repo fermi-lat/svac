@@ -112,6 +112,8 @@ if($em) {
 if (!$geoFile) {
 	print STDERR "No geometry for $nTwr towers!\n";
 	exit(1);
+} else {
+	print STDERR "This run has $nTwr towers, using geometry file $geoFile.\n";
 }
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
