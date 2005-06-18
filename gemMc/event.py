@@ -57,9 +57,10 @@ class Input:
 class Window(Input):
 
     #
-    def __init__(self, input):
+    def __init__(self, input, dwot=0):
         self.time = input.time
         self.condition = input.condition
+        self.dwot = dwot
         return
 
     #
@@ -78,6 +79,13 @@ class Window(Input):
 
 #
 class Event(Window):
+
+    def __init__(self, window, det=0):
+        self.time = window.time
+        self.condition = window.condition
+        self.dwot = window.dwot
+        self.det = det
+        return
 
     pass
 
@@ -111,7 +119,7 @@ def aggregate(inputs):
             pass
     except StopIteration:
         # It'd be sweet to use our own exception here that was a subclass of StopIteration.
-        # To do that would take a custom iterator for EventList.
+        # To do that would take a fancier iterator for EventList.
         pass
         
 
@@ -121,15 +129,21 @@ def aggregate(inputs):
 #
 def trigger(windows):
     """Make Events from Windows."""
-    pass
+
+    events = EventList()
+    winIt = iter(windows)
+
+    return events
 
 
 #
 class MessageEngine:
 
     #
-    def __init__(self, prescale=0):
+    def __init__(self, prescale=0, deadTime=tBusy):
         self.prescale = prescale
+        self.count = 0
+        self.deadTime = deadTime
         self.reset()
         return
 
@@ -150,9 +164,35 @@ class MessageEngine:
 
     pass
 
+
+#
+class Scheduler:
+
+    numEngines = 16
+    numCond = 256
+
+    #
+    def __init__(self):
+        self.engines = [MesageEngine() for xx in range(numEngines)]
+        self.schedule = [0] * numEngines
+        return
+
+    #
+    def lookup(window):
+        engine = self.engines[self.schedule[window.condition]]
+        if engine.hit():
+            event = Event(window, engine.deadTime)
+        else:
+            event = False
+            pass
+        return event
+
+    pass
+
+
 #
 class EventList:
-    """This is a collection of Inputs.
+    """This is a collection of Inputs, Windows, or Events.
 
     """
 
