@@ -133,3 +133,6 @@ wbf Added EvtTicks.
 
 v1r3p18
 wbf Fixed bug in EvtTicks.
+
+v1r3p18
+awb Fixed bug in filling TkrNumClusters. See JIRA SVAC-63.
