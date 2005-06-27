@@ -172,7 +172,7 @@ void RootAnalyzer::analyzeReconTree()
       TkrCluster* cluster = dynamic_cast<TkrCluster*>(siClusterCol->At(i));
       if(cluster) {
 
-	TowerId tId(cluster->getTkrId().getTowerX(), cluster->getTkrId().getTowerX());
+	TowerId tId(cluster->getTkrId().getTowerX(), cluster->getTkrId().getTowerY());
 	int iTower = tId.id();
 	int iLayer = cluster->getLayer();
 	int iView = cluster->getTkrId().getView();
