@@ -57,3 +57,36 @@ def readColumns(fileName, columns, whichTuple=0):
         columnData = columnData[0]
 
     return columnData
+
+#
+def readTuple(fileName, whichTuple=0):
+    """@brief Read an nTuple from a ROOT file.
+
+    @arg fileName The ROOT file to read.
+
+    @arg [whichTuple] Name or number of tuple in file to read.
+    Default is the first.
+
+    @ret A HippoDraw numArrayTuple.
+
+    """
+
+    # get list of tuple names
+    rc = hippo.RootController.instance()
+    tupleNames = rc.getNTupleNames(fileName)
+    nTuples = len(tupleNames)
+
+    # figure out which one we want
+    if whichTuple in tupleNames:
+        ourTupleName = whichTuple
+    elif -nTuples <= whichTuple < nTuples:
+        ourTupleName = tupleNames[whichTuple]
+    else:
+        raise LookupError, "Requested tuple %s was not found." % whichTuple
+
+    # grab it
+    ourTuple = rc.createDataArray(fileName, ourTupleName)
+
+    return ourTuple
+
+

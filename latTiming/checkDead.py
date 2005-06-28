@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/afs/slac/g/ek/bin/python
 
 """usage: checkDead.py inFile1 ...
 
@@ -22,7 +22,7 @@ else:
     pass
 
 
-columns = ('GemDeltaEventTime', 'EvtTicks')
+columns = ('GemDeltaEventTime', 'EvtTicks', 'GemDeltaWindowOpenTime')
 saturated = 2**16 - 1
 oneTick = 50e-9
 
@@ -43,10 +43,17 @@ tickDeltas = []
 tickDeltaShorts = []
 totalEvents = 0
 totalTicks = 0
+minWin = 1 << 17
 for inFile in inFiles:
     print inFile
-    
-    gemDelta, ticks = readColumns.readColumns(inFile, columns)
+
+    theTuple = readColumns.readTuple(inFile)
+    gemDelta = theTuple[columns[0]]
+    ticks = theTuple[columns[1]]
+    windowDelta = theTuple[columns[2]]
+
+    minThisWin = num.minimum.reduce(windowDelta)
+    minWin = min(minWin, minThisWin)
 
     nEvents = len(gemDelta) - 1
     totalEvents += nEvents
@@ -90,6 +97,9 @@ print "Shortest gemDeltaEventTime: %d ticks = %g s." % (minGemSep, minGST)
 minEvtSep = num.minimum.reduce(tickDeltaShort)
 minEST = minEvtSep * oneTick
 print "Shortest EVT separation: %d ticks = %g s." % (minEvtSep, minEST)
+
+minWT = minWin * oneTick
+print "Shortest gemDeltaWindowOpenTime: %d ticks = %g s." % (minWin, minWT)
 
 #hqPlot.plot((gemDelta, tickDelta), ('gemDelta', 'tickDelta'))
 hqPlot.plot((tickDelta,), ('tickDelta',))
