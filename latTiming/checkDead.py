@@ -9,6 +9,7 @@ import sys
 
 import numarray as num
 
+import deadTime
 import hqPlot
 import readColumns
 import timeConv
@@ -41,6 +42,7 @@ def rdr(x, dx):
 gemDeltas = []
 tickDeltas = []
 tickDeltaShorts = []
+deadTimes = []
 totalEvents = 0
 totalTicks = 0
 minWin = 1 << 17
@@ -51,6 +53,8 @@ for inFile in inFiles:
     gemDelta = theTuple[columns[0]]
     ticks = theTuple[columns[1]]
     windowDelta = theTuple[columns[2]]
+
+    deadTimes.append(deadTime.deadDist(theTuple))
 
     minThisWin = num.minimum.reduce(windowDelta)
     minWin = min(minWin, minThisWin)
@@ -80,6 +84,7 @@ tickDelta = num.concatenate(tickDeltas)
 del tickDeltas
 tickDeltaShort = num.concatenate(tickDeltaShorts)
 del tickDeltaShorts
+deadTimes = num.concatenate(deadTimes)
 
 print len(tickDelta), len(gemDelta)
 reportRate(totalEvents, totalTicks)
@@ -102,7 +107,9 @@ minWT = minWin * oneTick
 print "Shortest gemDeltaWindowOpenTime: %d ticks = %g s." % (minWin, minWT)
 
 #hqPlot.plot((gemDelta, tickDelta), ('gemDelta', 'tickDelta'))
-hqPlot.plot((tickDelta,), ('tickDelta',))
+#hqPlot.plot((tickDelta,), ('tickDelta',))
+#hqPlot.plot((,), ('',))
+hqPlot.plot((deadTimes,), ('deadTimes',))
 
 banner = 'sys.exit() or EOF (^D on UNIX, ^Z on windos) to quit.'
 code.interact(banner, local=locals())
