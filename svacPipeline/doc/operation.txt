@@ -19,3 +19,14 @@ cause a failure, you will have to use deleteRun.pl first to get the run out of
 GINO's database, then use createRun.pl.  Inform the CCB (Richard) if you have
 to do this.
 
+Reprocessing ... is a bit complicated.  There's not THAT much to it - make
+symlinks to the appropriate input files, with the appropriate names, and do a
+createRun.  The tricky part is figuring out what "appropriate" is.  There are
+several csh scripts in the recon and eLogUpdate directories to reprocess runs
+that were originally done with specific versions of the online task, which
+have the online version in their name somewhere.  There is also one,
+reprocess.csh, which works on runs that were originally processed by the
+current version of online's task (if the online task version has been
+correctly updated in svacPlRoot.cshrc - probably a good idea to check first).
+If you need one for an online version that doesn't have one already, you could
+try to figure it out by looking at the ones that are there.

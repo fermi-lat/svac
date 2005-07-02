@@ -44,7 +44,7 @@ setenv calCalibSerNo -9999
 setenv calibTail ${emTail}/${calibVersion}
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r1p2
+setenv onlineTaskVersion v2r2p0
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
