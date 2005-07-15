@@ -176,3 +176,19 @@ v3r1p21
 Switch to EM v5r0608p1.
 ---------------------------------------------------------------------------
 
+v3r1p22
+---------------
+Switch to EM v5r0608p2.
+---------------------------------------------------------------------------
+
+v3r1p23
+---------------
+Switched back to v5r0608p1.  This was due to CVS operator error, it was not intentional.
+Switch to EngineeringModelRoot v1r3p19.  Fiz a bug that affected status hadnling in all wrappers.
+---------------------------------------------------------------------------
+
+v3r1p24
+---------------
+Switch disks to u19.  Switch online task version to v2r2p1.
+Doc updates.  New reprocessing script.
+---------------------------------------------------------------------------

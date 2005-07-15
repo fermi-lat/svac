@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r1p23
+setenv svacVersion v3r1p24
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -23,7 +23,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u16
+setenv dataDisk u19
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
@@ -44,7 +44,7 @@ setenv calCalibSerNo -9999
 setenv calibTail ${emTail}/${calibVersion}
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r2p0
+setenv onlineTaskVersion v2r2p1
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
