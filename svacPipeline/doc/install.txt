@@ -14,7 +14,9 @@ Make sure that svacVersion in setup/svacPlSetup.cshrc is the same as the tag
 you will be using <tag>.
 
 If you are changing disks, Jim Panetta will have to change the online task at
-the same time.
+the same time.  Also, you need to go to
+/afs/slac/www/exp/glast/ground/LATSoft/nfsLinks and make a symbolic link to
+the new disk.
 
 if Jim has changed his task, you will need to update onlineTaskVersion in
 svacPlSetup.cshrc
