@@ -78,3 +78,24 @@ my $reconXmlFileName = "$ENV{'reconTask'}.xml";
 open FIELDS, '>', $reconXmlFileName;
 print FIELDS $reconXml;
 close FIELDS;
+
+
+# write the csh script that does recon on one chunk
+my $reconScript = 
+"#!/bin/csh
+unsetenv LD_LIBRARY_PATH
+setenv CMTCONFIG $svacCmtConfig
+setenv GLAST_EXT $svacGlastExt
+setenv CMTPATH $cmtPath
+setenv LATCalibRoot $latCalibRoot
+pushd $cmtDir
+source setup.csh
+cmt show uses
+popd
+setenv JOBOPTIONS \$1
+$exe || exit 1
+";
+my $scriptName = "$ENV{'reconOneScript'}";
+open(SHELLFILE, ">$scriptName") || die "Can't open $shellFile for writing!\n";
+print SHELLFILE $reconScript;
+close(shellFile);
