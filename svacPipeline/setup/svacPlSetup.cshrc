@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r1p24
+setenv svacVersion v3r2p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -19,6 +19,8 @@ setenv svacCmt ${svacRoot}/builds
 #setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 setenv svacPlLib ${svacPlRoot}/lib
 
+setenv CMTCONFIG ${SVAC_CMTCONFIG}
+setenv GLAST_EXT ${SVAC_GLAST_EXT}
 setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
@@ -116,9 +118,11 @@ setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon
-setenv reconScript ${reconTaskDir}/recon.pl
+setenv reconScript ${reconTaskDir}/recon.py
+setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
+setenv chunkQueue short
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
@@ -158,7 +162,10 @@ setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
 setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
 #-------------------------------- many ----------------------------------------
 
-setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}
+setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root
+setenv rootLib ${ROOTSYS}/lib
+
+setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}:${rootLib}
 if ( ${?PYTHONPATH} == '1' ) then
     setenv PYTHONPATH ${SVACPYTHON}:${PYTHONPATH}
 else
@@ -166,3 +173,9 @@ else
 endif
 
 setenv PATH ${PATH}:${svacPlLib}
+
+if ( ${?LD_LIBRARY_PATH} == '1' ) then
+    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${rootLib}
+else
+    setenv LD_LIBRARY_PATH ${rootLib}
+endif

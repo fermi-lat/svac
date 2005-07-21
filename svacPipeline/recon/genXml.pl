@@ -44,11 +44,10 @@ my $reconXml =
         <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
-    <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\">$ENV{'reconDataDir'}</file>
     <file name=\"merit\"      type=\"merit\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
     <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
-    <file name=\"script\"     type=\"script\" file-type=\"csh\">$ENV{'reconDataDir'}</file>
     <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\">$ENV{'digitizationDataDir'}</file>
+    <file name=\"tarFile\"    type=\"log\"    file-type=\"tgz\">$ENV{'reconDataDir'}</file>
 
     <processing-step name=\"recon\" executable=\"recon\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
@@ -84,18 +83,19 @@ close FIELDS;
 my $reconScript = 
 "#!/bin/csh
 unsetenv LD_LIBRARY_PATH
-setenv CMTCONFIG $svacCmtConfig
-setenv GLAST_EXT $svacGlastExt
-setenv CMTPATH $cmtPath
-setenv LATCalibRoot $latCalibRoot
-pushd $cmtDir
-source setup.csh
+setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'}
+setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'}
+setenv CMTPATH $ENV{'CMTPATH'}
+setenv LATCalibRoot $ENV{'LATCalibRoot'}
+pushd $ENV{'reconCmt'}
+source setup.csh ''
 cmt show uses
 popd
 setenv JOBOPTIONS \$1
-$exe || exit 1
+$ENV{'reconApp'} || exit 1
 ";
 my $scriptName = "$ENV{'reconOneScript'}";
-open(SHELLFILE, ">$scriptName") || die "Can't open $shellFile for writing!\n";
+open(SHELLFILE, ">$scriptName") || die "Can't open $scriptName for writing!\n";
 print SHELLFILE $reconScript;
-close(shellFile);
+close(SHELLFILE);
+system("chmod +rx $scriptName");

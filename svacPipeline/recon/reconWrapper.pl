@@ -16,6 +16,7 @@ my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
 my $runId = $proc->{'run_name'};
+my $taskName = $proc->{'task_name'};
 
 #####################################################
 ##
@@ -28,14 +29,13 @@ use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $digiRootFile = $inFiles->{'digi'};
-my $shellFile = $outFiles->{'script'};
-my $jobOptionFile = $outFiles->{'jobOptions'};
 my $reconRootFile = $outFiles->{'recon'};
 my $meritRootFile = $outFiles->{'merit'};
+my $tarFile = $outFiles->{'tarFile'};
 
 my $exe = $ENV{'reconScript'};
 
-my $command = "$exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile' '$runId'";
+my $command = "$exe '$digiRootFile' '$reconRootFile' '$meritRootFile' '$tarFile' '$taskName' '$runId'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

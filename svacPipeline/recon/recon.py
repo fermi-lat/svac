@@ -1,12 +1,14 @@
-#!usr/local/bin/python
+#!/usr/local/bin/python
 
 """usage: recon.py digiFile reconFile meritFile tarFile task runId"""
 
 import math
 import os
+import re
 import sys
 
 import eLogDB
+import geometry
 import runMany
 
 #from ROOT import TFile, TTree, TChain
@@ -38,14 +40,14 @@ chunks = reconPM.getFileChunks(digiFileName, treeName, numEventsPerFile)
 print chunks
 
 workDir, reconFileBase = os.path.split(reconFileName)
-
+#workDir = os.environ['argh']
 
 # figure out particle type
-particleType = eLog.query(runId, 'particletype')
+particleType = eLogDB.query(runId, 'particletype')
 
 # figure out instrument type, # of towers
-tkrSerNos = eLog.parseSerNo(eLog.query(runId, 'tkr_ser_no'))
-calSerNos = eLog.parseSerNo(eLog.query(runId, 'cal_ser_no'))
+tkrSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'tkr_ser_no'))
+calSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'cal_ser_no'))
 
 nTwr = len(tkrSerNos)
 
@@ -68,7 +70,7 @@ else:
     em = False
     pass
 
-schemaFile = eLog.query(runId, 'SCHEMACONFIGFILE')
+schemaFile = eLogDB.query(runId, 'SCHEMACONFIGFILE')
 
 tkrOnly = False
 calOnly = False
@@ -94,13 +96,13 @@ else:
 if em:
     geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml'
 else:
-    geoFile = reconLib.geometries[nTwr]
+    geoFile = geometry.geometries[nTwr]
     pass
-if ! geoFile:
-    print >> sys.stderr "No geometry for %d towers!\n" % nTwr
+if not geoFile:
+    print >> sys.stderr, "No geometry for %d towers!" % nTwr
     sys.exit(1)
 else:
-    print >> sys.stderr "This run has %d towers, using geometry file %s.\n" % (nTwr, geoFile)
+    print >> sys.stderr, "This run has %d towers, using geometry file %s." % (nTwr, geoFile)
     pass
 
 # TODO:
@@ -108,23 +110,23 @@ else:
 #  submit jobs
 
 joHead = \
-       """#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
-       CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
-       GlastDetSvc.xmlfile = "%(geoFile)s";
-       digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
-       """ % \
+"""#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
+CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
+GlastDetSvc.xmlfile = "%(geoFile)s";
+digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
+""" % \
 {
     'instrumentType': instrumentType,
     'geoFile': geoFile,
-    'digiRootFile': digiRootFile,
+    'digiRootFile': digiFileName,
     }
 if em:
-    joHead += '#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"'
+    joHead += '#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass
 if tkrOnly:
-    joHead += 'CalCalibSvc.DefaultFlavor = "ideal";'
+    joHead += 'CalCalibSvc.DefaultFlavor = "ideal";\n'
 elif calOnly:
-    joHead += 'TkrCalibAlg.calibFlavor = "ideal";'
+    joHead += 'TkrCalibAlg.calibFlavor = "ideal";\n'
     pass
 
 
@@ -132,8 +134,8 @@ elif calOnly:
 lastEvent = chunks[-1][-1]
 lastEvent = max(lastEvent, 2)
 nDigits = int(math.ceil(math.log10(lastEvent)))
-oneFormat = '\%0.%dd' % nDigits
-cFormat oneFormat + '-' + oneFormat
+oneFormat = '%0.' + `nDigits` + 'd'
+cFormat = oneFormat + '-' + oneFormat
 
 jobs = []
 joFiles = []
@@ -146,33 +148,31 @@ for iChunk, chunk in enumerate(chunks):
     cTag = cFormat % (first, last)
 
     joFile = '%s_%s_%s_text.jobOpt' % (task, runId, cTag)
-    joFiles.appen(joFile)
+    joFiles.append(joFile)
     joFile = os.path.join(workDir, joFile)
 
     numEvents = last - first + 1
     joEvents = \
-             """RootIoSvc.StartingIndex = %d;
-             RootIoSvc.EvtMax = %d;
-             """ % \
+"""RootIoSvc.StartingIndex = %d;
+RootIoSvc.EvtMax = %d;
+""" % \
     (first, numEvents)
     joData = joHead + joEvents
 
     reconFile = '%s_%s_%s_RECON.root' % (task, runId, cTag)
     reconFile = os.path.join(workDir, reconFile)
     reconFiles.append(reconFile)
-    joData += 'reconRootWriterAlg.reconRootFile = "%s";' % reconFile
+    joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconFile
     
     meritFile = '%s_%s_%s_MERIT.root' % (task, runId, cTag)
     meritFile = os.path.join(workDir, meritFile)
     meritFiles.append(meritFile)
-    joData += 'RootTupleSvc.filename = "%s";' % meritFile
+    joData += 'RootTupleSvc.filename = "%s";\n' % meritFile
 
     logFile = '%s_%s_%s.log' % (task, runId, cTag)
     logFiles.append(logFile)
     logFile = os.path.join(workDir, logFile)
     
-    print 'c = ', c[0], c[1], " numEvents= ", numEvents
-
     # at this point one would edit template JO file and add lines for first
     # event index and # events. Possibly define environment variables for
     # input, output files.
@@ -180,13 +180,13 @@ for iChunk, chunk in enumerate(chunks):
 
     open(joFile, 'w').write(joData)
 
-    cmd = 'bsub -K -q %s -o %s %s %s' % (queue, logFile, shellFile, joFile)
+    cmd = 'bsub -K -q %s -o %s %s %s' % (os.environ['chunkQueue'], logFile, shellFile, joFile)
     print cmd
     jobs.append(cmd)
 
 os.system("date")
 
-results = runMany.pollManyResult(subJob, [(x,) for x in jobs])
+results = runMany.pollManyResult(os.system, [(x,) for x in jobs])
 
 os.system("date")
 print "rc from batch jobs ", results
@@ -209,6 +209,7 @@ if status:
     pass
 
 # concat chunk files into final results
+print >> sys.stderr, "Combining merit files into %s" % meritFileName
 rcMerit = reconPM.concatenateFiles(meritFileName, 'MERIT', 'MeritTuple')
 if rcMerit:
     print >> sys.stderr, "Failed to create merit file %s!" % meritFileName
@@ -216,6 +217,8 @@ if rcMerit:
 else:
     print >> sys.stderr, "Created merit file %s."  % meritFileName
     pass
+
+print >> sys.stderr, "Combining recon files into %s" % reconFileName
 rcRecon = reconPM.concatenateFiles(reconFileName, 'RECON', 'Recon')
 if rcRecon:
     print >> sys.stderr, "Failed to create recon file %s!" % reconFileName
@@ -225,22 +228,30 @@ else:
     pass
     
 # tar up log and JO files
-listFile = 'files.list'
 keepFiles = logFiles + joFiles
-lfp = open(listFile, 'w')
-for kf in keepFiles:
-    lfp.write('%s\n' % kf)
-    pass
-lfp.close()
-command = 'gtar cf %s -T %s' % (tarFile, listFile)
-status = os.system(command)
-if status:
-    print >> sys.stderr, 'Failed to write tarfile %s!' % tarFile
-    sys.exit(1)
-    pass
 
-# get rid of chunk files
-trash = reconFiles + meritFiles
-for junkFile in trash:
-    os.unlink(junkFile)
+# listFile = 'files.list'
+# lfp = open(listFile, 'w')
+# for kf in keepFiles:
+#     lfp.write('%s\n' % kf)
+#     pass
+# lfp.close()
+# command = 'gtar cf %s -T %s' % (tarFile, listFile)
+# status = os.system(command)
+# if status:
+#     print >> sys.stderr, 'Failed to write tarfile %s!' % tarFile
+#     sys.exit(1)
+#     pass
+
+import tarfile
+tfp = tarfile.open(tarFile, mode='w:gz')
+for keeper in keepFiles:
+    tfp.add(keeper)
     pass
+tfp.close()
+
+# # get rid of chunk files
+# trash = reconFiles + meritFiles
+# for junkFile in trash:
+#     os.unlink(junkFile)
+#     pass
