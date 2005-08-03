@@ -45,6 +45,8 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
+setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r2p1
 setenv onlineTask online-${onlineTaskVersion}
@@ -123,6 +125,9 @@ setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue short
+setenv chunkTime 100 
+setenv pldVersion v0r1
+setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
@@ -174,8 +179,9 @@ endif
 
 setenv PATH ${PATH}:${svacPlLib}
 
+setenv SVAC_LD_LIBARARY_PATH ${rootLib}:${sasCmt}/lib:${pldLib}
 if ( ${?LD_LIBRARY_PATH} == '1' ) then
-    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${rootLib}
+    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SVAC_LD_LIBARARY_PATH}
 else
-    setenv LD_LIBRARY_PATH ${rootLib}
+    setenv LD_LIBRARY_PATH ${SVAC_LD_LIBARARY_PATH}
 endif

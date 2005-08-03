@@ -38,6 +38,8 @@ my $exe = $ENV{'reconScript'};
 my $command = "$exe '$digiRootFile' '$reconRootFile' '$meritRootFile' '$tarFile' '$taskName' '$runId'";
 print "Running command: [$command]\n";
 
+#environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");
+
 my $ex = new Exec("$command");
 
 my $rc = $ex->execute();

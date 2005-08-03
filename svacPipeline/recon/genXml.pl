@@ -51,10 +51,9 @@ my $reconXml =
 
     <processing-step name=\"recon\" executable=\"recon\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
-                    <output-file name=\"jobOptions\"/>
                     <output-file name=\"merit\"/>
                     <output-file name=\"recon\"/>
-                    <output-file name=\"script\"/>
+                    <output-file name=\"tarFile\"/>
     </processing-step>
     <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunch\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>

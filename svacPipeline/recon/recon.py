@@ -6,23 +6,29 @@ import math
 import os
 import re
 import sys
+import tarfile
 
+# Sometimes bsub doesn't work, complains about a bad or missing perl interpreter.
+# I think it's a problem with the delay required to automount /usr/local.
+# This should get it mounted in time.
+#os.system('ls -lL /usr/local/bin/perl')
+# but it doesn't work
+#
+# perhaps a shell issue?
+#os.environ['SHELL'] = '/bin/csh'
+# nope
+
+import ROOT
+
+import chunkSize
 import eLogDB
 import geometry
-import runMany
-
-#from ROOT import TFile, TTree, TChain
-#from ROOT import *
-import ROOT
-#from reconPM import getFileChunks
 import reconPM
-
-def subJob(arg):
-    result = os.system('bsub ' + arg)
-    return result
+import runMany
 
 ROOT.gSystem.Load('libcommonRootData.so')
 ROOT.gSystem.Load('libdigiRootData.so')
+ROOT.gSystem.Load('libreconRootData.so')
 
 if len(sys.argv) == 7:
     digiFileName, reconFileName, meritFileName, tarFile, task, runId = sys.argv[1:]
@@ -33,23 +39,24 @@ else:
 
 shellFile = os.environ['reconOneScript']
 
-treeName = 'Digi'
-numEventsPerFile = 500
-chunks = reconPM.getFileChunks(digiFileName, treeName, numEventsPerFile)
-
-print chunks
-
 workDir, reconFileBase = os.path.split(reconFileName)
-#workDir = os.environ['argh']
 
 # figure out particle type
 particleType = eLogDB.query(runId, 'particletype')
+
+numEventsPerFile = chunkSize.chunkSize(particleType)
+print >> sys.stderr, "Particle type is %s, using chunk size %s." % (particleType, numEventsPerFile)
+
+treeName = 'Digi'
+chunks = reconPM.getFileChunks(digiFileName, treeName, numEventsPerFile)
+
+print >> sys.stderr, chunks
 
 # figure out instrument type, # of towers
 tkrSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'tkr_ser_no'))
 calSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'cal_ser_no'))
 
-nTwr = len(tkrSerNos)
+nTwr = max(len(tkrSerNos), len(calSerNos))
 
 if tkrSerNos:
     firstTkr = tkrSerNos[0][0]
@@ -75,7 +82,7 @@ schemaFile = eLogDB.query(runId, 'SCHEMACONFIGFILE')
 tkrOnly = False
 calOnly = False
 
-if re.search('grid', schemaFile):
+if re.search('grid', schemaFile, re.IGNORECASE):
     instrumentType = 'LAT'
 elif em:
     instrumentType = 'EM'
@@ -105,10 +112,6 @@ else:
     print >> sys.stderr, "This run has %d towers, using geometry file %s." % (nTwr, geoFile)
     pass
 
-# TODO:
-#  create JO files for number of chunks, setting initial runs and # events
-#  submit jobs
-
 joHead = \
 """#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
 CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
@@ -120,17 +123,23 @@ digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
     'geoFile': geoFile,
     'digiRootFile': digiFileName,
     }
-if em:
+if particleType == 'Photons':
     joHead += '#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass
-if tkrOnly:
+
+# Deal with hardware that we don't expect to have calibrations for.
+# Gleam/EM will ask for calibrations for TKR and CAL even if one is absent.
+# Set TKR and CAL to ideal if we have EM hardware
+if tkrOnly or em:
+    # Set CAL to ideal if it is absent.
     joHead += 'CalCalibSvc.DefaultFlavor = "ideal";\n'
-elif calOnly:
+if calOnly or em:
+    # set TKR to ideal if it is absent.
     joHead += 'TkrCalibAlg.calibFlavor = "ideal";\n'
     pass
 
 
-# make a nice printf-style format for printing ranges of event numbers
+# make a nice printf-style format for printing ranges of event numbers sortably
 lastEvent = chunks[-1][-1]
 lastEvent = max(lastEvent, 2)
 nDigits = int(math.ceil(math.log10(lastEvent)))
@@ -143,6 +152,9 @@ reconFiles = []
 meritFiles = []
 logFiles = []
 for iChunk, chunk in enumerate(chunks):
+    # edit template JO file and add lines for first
+    # event index and # events.
+
     first, last = chunk
 
     cTag = cFormat % (first, last)
@@ -154,7 +166,7 @@ for iChunk, chunk in enumerate(chunks):
     numEvents = last - first + 1
     joEvents = \
 """RootIoSvc.StartingIndex = %d;
-RootIoSvc.EvtMax = %d;
+ApplicationMgr.EvtMax = %d;
 """ % \
     (first, numEvents)
     joData = joHead + joEvents
@@ -173,28 +185,21 @@ RootIoSvc.EvtMax = %d;
     logFiles.append(logFile)
     logFile = os.path.join(workDir, logFile)
     
-    # at this point one would edit template JO file and add lines for first
-    # event index and # events. Possibly define environment variables for
-    # input, output files.
-    # cmd would be modified to run Gleam and give the correct JO file as arg.
-
     open(joFile, 'w').write(joData)
 
-    cmd = 'bsub -K -q %s -o %s %s %s' % (os.environ['chunkQueue'], logFile, shellFile, joFile)
-    print cmd
+    # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
+    # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
+    cmd = 'exec bsub -K -q %s -o %s %s %s' % (os.environ['chunkQueue'], logFile, shellFile, joFile)
+    print >> sys.stderr, cmd
     jobs.append(cmd)
 
+# run the chunks
 os.system("date")
-
 results = runMany.pollManyResult(os.system, [(x,) for x in jobs])
-
 os.system("date")
-print "rc from batch jobs ", results
+print >> sys.stderr, "rc from batch jobs ", results
 
 # should check rc here to see if all went well.
-
-from reconPM import concatenateFiles
-
 # ditto on rc's for final success/fail report back to pipeline
 status = 0
 for iJob, rc in enumerate(results):
@@ -210,7 +215,7 @@ if status:
 
 # concat chunk files into final results
 print >> sys.stderr, "Combining merit files into %s" % meritFileName
-rcMerit = reconPM.concatenateFiles(meritFileName, 'MERIT', 'MeritTuple')
+rcMerit = reconPM.concatenateFiles(meritFileName, meritFiles, 'MeritTuple')
 if rcMerit:
     print >> sys.stderr, "Failed to create merit file %s!" % meritFileName
     sys.exit(1)
@@ -219,39 +224,24 @@ else:
     pass
 
 print >> sys.stderr, "Combining recon files into %s" % reconFileName
-rcRecon = reconPM.concatenateFiles(reconFileName, 'RECON', 'Recon')
+rcRecon = reconPM.concatenateFiles(reconFileName, reconFiles, 'Recon')
 if rcRecon:
     print >> sys.stderr, "Failed to create recon file %s!" % reconFileName
     sys.exit(1)
 else:
     print >> sys.stderr, "Created recon file %s."  % reconFileName
     pass
-    
+
 # tar up log and JO files
 keepFiles = logFiles + joFiles
-
-# listFile = 'files.list'
-# lfp = open(listFile, 'w')
-# for kf in keepFiles:
-#     lfp.write('%s\n' % kf)
-#     pass
-# lfp.close()
-# command = 'gtar cf %s -T %s' % (tarFile, listFile)
-# status = os.system(command)
-# if status:
-#     print >> sys.stderr, 'Failed to write tarfile %s!' % tarFile
-#     sys.exit(1)
-#     pass
-
-import tarfile
 tfp = tarfile.open(tarFile, mode='w:gz')
 for keeper in keepFiles:
     tfp.add(keeper)
     pass
 tfp.close()
 
-# # get rid of chunk files
-# trash = reconFiles + meritFiles
-# for junkFile in trash:
-#     os.unlink(junkFile)
-#     pass
+# get rid of chunk files
+trash = reconFiles + meritFiles
+for junkFile in trash:
+    os.unlink(junkFile)
+    pass

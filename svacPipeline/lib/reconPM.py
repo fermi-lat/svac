@@ -1,4 +1,7 @@
-def getFileChunks(fileName, treeName='Digi', numEventsPerFile=1500):
+import math
+import sys
+
+def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
 
     from ROOT import TFile, TTree, TChain
 
@@ -6,6 +9,11 @@ def getFileChunks(fileName, treeName='Digi', numEventsPerFile=1500):
     tree = file.Get(treeName)
 
     numEntries = tree.GetEntries()
+
+    numChunks = math.ceil(float(numEntries) / maxNumEventsPerFile)
+    numEventsPerFile = int(math.ceil(float(numEntries) / numChunks))
+    print >> sys.stderr, "Run has %d events." % numEntries
+    print >> sys.stderr, "Reduced chunk size from %d to %d" % (maxNumEventsPerFile, numEventsPerFile)
 
     eventStart=0
     eventEnd=-1
@@ -28,26 +36,34 @@ def getFileChunks(fileName, treeName='Digi', numEventsPerFile=1500):
     return chunks
 
 
-def concatenateFiles(outputFileName, fileKind, treeName):
+def concatenateFiles(outputFileName, fileNames, treeName):
 
     from ROOT import TChain, gSystem
     
     c = TChain(treeName)
-    c.Add('*'+fileKind+'*')
 
+    for name in fileNames:
+        print >> sys.stderr, "Adding [%s] " % name
+        c.Add(name)
+        pass
+    
     numChainEntries = c.GetEntries()
-    print 'numChainEntries = ', numChainEntries
+    print >> sys.stderr, 'numChainEntries = ', numChainEntries
 
 
-    gSystem.Load('/u/ey/richard/GLAST/Pipeline/parallel/pipelineDatasets/v0/rh9_gcc32/libpipelineDatasets.so')
+    gSystem.Load('libpipelineDatasets.so')
 
 
     from ROOT import pruneTuple
 
     pt = pruneTuple(c,outputFileName)
+
+    # we don't really care if this succeeds or not...
+    junk = pt.copyHeader(fileNames[0])
+
     retCode = pt.prune()
 
-    #print outputFileName, ' created\n'
+    #print >> sys.stderr, outputFileName, ' created\n'
 
     return retCode
 

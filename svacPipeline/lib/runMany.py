@@ -11,10 +11,11 @@ import threading
 import time
 
 FAILURE = 1
-defaultPoll = 1
+defaultPoll = 10
+defaultLaunch = 5
 
 #
-def pollMany(function, allArgs, pollInt=defaultPoll):
+def pollMany(function, allArgs, launchInt=defaultLaunch, pollInt=defaultPoll):
     """@brief Run a function for many sets arguments,
     polling to see when they are all done.
 
@@ -31,6 +32,7 @@ def pollMany(function, allArgs, pollInt=defaultPoll):
         thread = threading.Thread(target=function, args=argSet)
         threads.append(thread)
         thread.start()
+        time.sleep(launchInt)
         pass
 
     while threads:
@@ -48,7 +50,7 @@ def pollMany(function, allArgs, pollInt=defaultPoll):
 
 
 #
-def pollManyResult(function, allArgs, pollInt=defaultPoll):
+def pollManyResult(function, allArgs, launchInt=defaultLaunch, pollInt=defaultPoll):
     """@brief Run a function for many sets arguments,
     polling to see when they are all done.
 
@@ -69,6 +71,7 @@ def pollManyResult(function, allArgs, pollInt=defaultPoll):
         threads.append(thread)
         wrappers.append(wrapper)
         thread.start()
+        time.sleep(launchInt)
         pass
 
     results = [1] * nThreads
