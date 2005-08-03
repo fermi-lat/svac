@@ -77,6 +77,7 @@ def checkNewValue(value, table, col):
 
 # parse SerialNos tag in rcReport to reture a list containing 3 info:
 # 1. no. of towers 2. serial no. of TKRs 3. serial no. of CALs
+temRe = re.compile('GTEM\(([0-9]+),([0-9]*)\)')
 def parseSerialNosTag(value):
     dict = eval(value)
 
@@ -86,9 +87,10 @@ def parseSerialNosTag(value):
     calSerNo = ''
 
     for k, v in dict.iteritems():
-        if(re.match('GTEM', k)):
+        match = temRe.match(k)
+        if(match):
             nTowers += 1
-            temId = k[5]
+            temId = match.groups()[0]
             if(v.has_key('tkr')):
                 tkrSerNo = tkrSerNo + v['tkr'] + '(' +temId + ')???'
             if(v.has_key('calinstrument')):

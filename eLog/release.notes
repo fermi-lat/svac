@@ -29,3 +29,8 @@ v2r2p6
 
 change code to include TEM id in tkr_ser_no and cal_ser_no.
 JIRA issue(ELB-69)
+
+v2r2p7
+
+Change update.py to handle bay numbers that aren't a single digit (SVAC-65).
+
