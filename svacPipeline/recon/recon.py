@@ -8,16 +8,6 @@ import re
 import sys
 import tarfile
 
-# Sometimes bsub doesn't work, complains about a bad or missing perl interpreter.
-# I think it's a problem with the delay required to automount /usr/local.
-# This should get it mounted in time.
-#os.system('ls -lL /usr/local/bin/perl')
-# but it doesn't work
-#
-# perhaps a shell issue?
-#os.environ['SHELL'] = '/bin/csh'
-# nope
-
 import ROOT
 
 import chunkSize

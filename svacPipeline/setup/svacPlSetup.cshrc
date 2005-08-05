@@ -45,10 +45,10 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
-setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r2p1
+setenv onlineTaskVersion v2r3p0
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
@@ -60,7 +60,7 @@ setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTask updateELogDB-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p6
+setenv eLogFeederVersion v2r2p7
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -124,9 +124,9 @@ setenv reconScript ${reconTaskDir}/recon.py
 setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
-setenv chunkQueue short
-setenv chunkTime 100 
-setenv pldVersion v0r1
+setenv chunkQueue long
+setenv chunkTime 3600 
+setenv pldVersion v0r2
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
 

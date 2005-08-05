@@ -192,3 +192,14 @@ v3r1p24
 Switch disks to u19.  Switch online task version to v2r2p1.
 Doc updates.  New reprocessing script.
 ---------------------------------------------------------------------------
+
+
+v3r2p0
+---------------
+Parallel recon (SVAC-38 and SVAC-68)
+Run digiReport on xlong (SVAC-66)
+Recon EM hardware without calibrations (SVAC-64)
+Switch to eLog v2r2p7 (SVAC-65)
+---------------------------------------------------------------------------
+
+
