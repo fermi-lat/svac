@@ -13,6 +13,9 @@ isn't (should only take a couple of minutes).
 Make sure that svacVersion in setup/svacPlSetup.cshrc is the same as the tag
 you will be using <tag>.
 
+Make sure that the line containing "setenv eLogTestOnly 1" in
+svacPlSetup.cshrc is commented out.
+
 If you are changing disks, Jim Panetta will have to change the online task at
 the same time.  Also, you need to go to
 /afs/slac/www/exp/glast/ground/LATSoft/nfsLinks and make a symbolic link to
@@ -30,8 +33,10 @@ Copy svacPipeline directory to
 
 setenv svacPlRoot /nfs/slac/g/svac/common/pipeline/Integration/svacPipeline/<tag>
 
-Run $svacPlRoot/*/genXml.pl.  This will create several XML files with names
-like task-version.xml.
+Run $svacPlRoot/*/genXml.pl.  This will create several XML files in the
+current directory ($svacPlRoot is a good choice) with names like
+task-version.xml.  recon/genXml.pl should also create a csh file in the recon
+directory.
 
 Upload the XML files created in the previous step with web front end at
 http://glast-ground.slac.stanford.edu/

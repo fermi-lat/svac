@@ -44,18 +44,16 @@ my $reconXml =
         <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
-    <file name=\"jobOptions\" type=\"text\"   file-type=\"jobOpt\">$ENV{'reconDataDir'}</file>
     <file name=\"merit\"      type=\"merit\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
     <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
-    <file name=\"script\"     type=\"script\" file-type=\"csh\">$ENV{'reconDataDir'}</file>
     <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\">$ENV{'digitizationDataDir'}</file>
+    <file name=\"tarFile\"    type=\"log\"    file-type=\"tgz\">$ENV{'reconDataDir'}</file>
 
     <processing-step name=\"recon\" executable=\"recon\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
-                    <output-file name=\"jobOptions\"/>
                     <output-file name=\"merit\"/>
                     <output-file name=\"recon\"/>
-                    <output-file name=\"script\"/>
+                    <output-file name=\"tarFile\"/>
     </processing-step>
     <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunch\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
@@ -78,3 +76,25 @@ my $reconXmlFileName = "$ENV{'reconTask'}.xml";
 open FIELDS, '>', $reconXmlFileName;
 print FIELDS $reconXml;
 close FIELDS;
+
+
+# write the csh script that does recon on one chunk
+my $reconScript = 
+"#!/bin/csh
+unsetenv LD_LIBRARY_PATH
+setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'}
+setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'}
+setenv CMTPATH $ENV{'CMTPATH'}
+setenv LATCalibRoot $ENV{'LATCalibRoot'}
+pushd $ENV{'reconCmt'}
+source setup.csh ''
+cmt show uses
+popd
+setenv JOBOPTIONS \$1
+$ENV{'reconApp'} || exit 1
+";
+my $scriptName = "$ENV{'reconOneScript'}";
+open(SHELLFILE, ">$scriptName") || die "Can't open $scriptName for writing!\n";
+print SHELLFILE $reconScript;
+close(SHELLFILE);
+system("chmod +rx $scriptName");

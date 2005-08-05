@@ -8,6 +8,7 @@
 """
 
 import os
+import re
 import sys
 
 queryProg = 'queryElogReportTable.pl'
@@ -44,3 +45,29 @@ def query(run, *args):
     
     return results
 
+
+sep = re.compile("""\?""" * 3)
+noBay = re.compile("(.+)\(([0-9]+)\)")
+def parseSerNo(field):
+
+    """@brief Parse a serial no from eLog DB.
+
+    split(field)
+
+    @arg field The serial number field
+
+    @ret A sequence, elements of which are (serial #, bay) pairs.
+
+    """
+
+    items = sep.split(field)
+
+    results = []
+    for item in items:
+        match = noBay.match(item)
+        if match:
+            results.append(match.groups())
+            pass
+        pass
+
+    return results

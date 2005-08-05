@@ -23,6 +23,13 @@ my $runId = $ARGV[0];
 my $columnName = $ARGV[1];
 my $value = $ARGV[2];
 
+print STDERR "Run: [$runId], Column: [$columnName], Value: [$value]\n";
+
+if ($ENV{'eLogTestOnly'}) {
+	print STDERR "Running in test mode, not updating eLog.\n";
+	exit 0;
+}
+
 $dbh = DBI->connect($ENV{'dbName'}, $ENV{'userName'}, $ENV{'passWd'}) or die 'connect db failed: '.$dbh->errstr;
 
 my $sqlStr = "update elogReport set $columnName='$value' where runId = $runId";
