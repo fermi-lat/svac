@@ -84,7 +84,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r30
+setenv Em2Version v2r33
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -126,7 +126,7 @@ setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
 setenv chunkTime 3600 
-setenv pldVersion v0r2
+setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
 
