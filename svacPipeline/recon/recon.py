@@ -140,6 +140,7 @@ jobs = []
 joFiles = []
 reconFiles = []
 meritFiles = []
+calFiles = []
 logFiles = []
 for iChunk, chunk in enumerate(chunks):
     # edit template JO file and add lines for first
@@ -210,7 +211,7 @@ if status:
 
 # concat chunk files into final results
 print >> sys.stderr, "Combining cal files into %s" % calFileName
-rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalTuple')
+rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
 if rcCal:
     print >> sys.stderr, "Failed to create cal file %s!" % calFileName
     sys.exit(1)
