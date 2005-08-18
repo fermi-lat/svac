@@ -134,5 +134,8 @@ wbf Added EvtTicks.
 v1r3p18
 wbf Fixed bug in EvtTicks.
 
-v1r3p18
+v1r3p19
 awb Fixed bug in filling TkrNumClusters. See JIRA SVAC-63.
+
+v1r3p20
+awb Increased max files size for SVAC ntuple to 500 GB.
