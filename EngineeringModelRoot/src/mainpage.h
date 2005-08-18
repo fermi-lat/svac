@@ -217,8 +217,8 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> CalXEcentr </TD> <TD> x coordinate (in mm) of centroid of CAL cluster </TD> </TR>
 <TR> <TD> CalYEcentr </TD> <TD> y coordinate (in mm) of centroid of CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> z coordinate (in mm) of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column and end. Currently each end both contain the best total energy 
-          estimate.</TD> </TR>
+<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column (and end). Currently both ends contain the best total energy 
+          estimate i.e. use either [end=0] or [end=1], but not both. To get the end energies you need to look at the CAL ntuple.</TD> </TR>
 <TR> <TD> CalMaxEne </TD> <TD> Maximal measured energy (in MeV) in a single crystal </TD> </TR>
 <TR> <TD> CalNumHit[tower] </TD> <TD> A one dimension array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
 <TR> <TD> CalTp[tower][tp] </TD> <TD>A two dimension array which describes calorimeter trigger primitive for each tower.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.)</TD> </TR>

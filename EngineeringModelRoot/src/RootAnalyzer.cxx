@@ -521,6 +521,11 @@ void RootAnalyzer::parseOptionFile(const char* f)
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
   m_tree = new TTree("Output", "Root Analyzer");
+
+  // Set max file size to 500 GB:
+  Long64_t maxTreeSize = 5000000000000;
+  m_tree->SetMaxTreeSize(maxTreeSize);
+
   // create branches for each ntuple variable
   createBranches();
 
