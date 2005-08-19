@@ -36,12 +36,15 @@ tables = {
     'TEM_DIAG': ('GTEM/data_masks:12',
                  'TEM Diagnostics'),
     
-    'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-12', # used to calc GTRC splits
+    'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-11', # used to calc GTRC splits
                'Number of GTFEs to read'), 
     'TKR_MODE': ('GTEM/GTCC/GTRC/GTFE/mode', # used to calc GTRC splits
                  'TKR front end mode (L or R)'),
     'TKR_DAC': ('GTEM/GTCC/GTRC/GTFE/dac', # TKR DAC
                 'TKR DAC (range,<B>threshhold</B>)'),
+
+    'TKR_OR_STRETCH': ('GTEM/GTCC/GTRC/csr:12-16', # WTF overlaps TKR_NR?
+                       'TKR OR_STRETCH'),
 
     'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt',
                 "CAL Log Accept Discriminator (zero suppression)"), 
@@ -128,10 +131,12 @@ tkrSplitWidth = 4
 # put this many tables of TKR FE settings acros the page
 tkrTabWidth = 1 
 # put this many tables of CAL FE settings acros the page
-calTabWidth = 1
+calTabWidth = 2
+# put this many g?rc tables across page
+rcWidth = 2
 
 # stuff from TKR readout controllers
-gtrcTags = ('TKR_NR',)
+gtrcTags = ('TKR_NR', 'TKR_OR_STRETCH')
 gtrcLabels = ('GTCC', 'GTRC')
 
 # things to display from TKR front ends
