@@ -2,3 +2,10 @@ v3r1p4:
 
 Add TKR_OR_STRETCH.  
 Fix incorrect definition of TKR_NR which overlapped TKR_OR_STRETCH.
+
+
+v3r1p5:
+
+Don't crash if there are no TEMs.
+Produce nicer-looking output when hardware is missing.
+Put more of some types of table across page, fewer of others.

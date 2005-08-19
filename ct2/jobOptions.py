@@ -131,7 +131,9 @@ tkrSplitWidth = 4
 # put this many tables of TKR FE settings acros the page
 tkrTabWidth = 1 
 # put this many tables of CAL FE settings acros the page
-calTabWidth = 1
+calTabWidth = 2
+# put this many g?rc tables across page
+rcWidth = 2
 
 # stuff from TKR readout controllers
 gtrcTags = ('TKR_NR', 'TKR_OR_STRETCH')

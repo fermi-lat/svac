@@ -63,6 +63,8 @@ def globalDBStrings():
     values = map(nicenDBStrings, values)
 
     for tag, value in zip(tags, values):
+        if not value:
+            break
         label = jobOptions.globalDBStringLabels[tag]
         line = "%s: %s\n" % (label, value)
         output.append(line)
@@ -393,7 +395,7 @@ def oneGtrcReg(doc, tag):
         hTable = table.twoDTable(array, title, axisLabels, indices)
         regTables.append(hTable)
         pass
-    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
+    nTable = html.nWay(regTables, jobOptions.rcWidth)
     output.append(nTable)
     
     return output
@@ -481,22 +483,28 @@ def delays(doc):
     output.append(html.Heading(sectionTitle, 1))
     output.append(html.Element("HR"))    
 
+    anyTems = hasTem(doc)
+
     # per-cable times
-    for name in jobOptions.cableDelays:
-        dTable = oneCableDelay(doc, name)
-        output.extend(dTable)
+    if anyTems:
+        for name in jobOptions.cableDelays:
+            dTable = oneCableDelay(doc, name)
+            output.extend(dTable)
+            pass
+        output.append(html.Element("HR"))
         pass
-    output.append(html.Element("HR"))
 
     # GEM window width
     output.extend(gemTimes(doc))
     output.append(html.Element("HR"))    
 
     # per-TEM delays
-    tTable = tackDelays(doc)
-    output.extend(tTable)
-    output.append(html.Element("HR"))
-
+    if anyTems:
+        tTable = tackDelays(doc)
+        output.extend(tTable)
+        output.append(html.Element("HR"))
+        pass
+    
     # CAL delays
     if hasCal(doc):
         output.extend(calDelays(doc))
@@ -518,6 +526,8 @@ def oneCableDelay(doc, name):
     tableTitle = regLabel + ' (ticks (ns))'
 
     ticks = tableFromXml.xTableGen(doc, regSpec)
+    if not ticks.data:
+        return []
     times = ticks.data.map(mappings.displayTime)
     timeData, labels = times.table()
     dTable = table.twoDTable(timeData, tableTitle, axisLabels, labels)
@@ -637,12 +647,17 @@ def oneGcrcDelay(doc, tag):
         hTable = table.twoDTable(array, title, axisLabels, indices)
         regTables.append(hTable)
         pass
-    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
+    nTable = html.nWay(regTables, jobOptions.rcWidth)
     output.append(nTable)
     
     return output
 
 ######################## per-TEM stuff ##########################
+
+#
+def hasTem(doc):
+    """@brief Do we have any TEMs?"""
+    return hasTkr(doc) or hasCal(doc)
 
 #
 def perTem(doc):
