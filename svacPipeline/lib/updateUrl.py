@@ -3,7 +3,7 @@
 """Usage: updateUrl.py runId urlKey targetFile [dataRoot]
 
 urlKey must be one of (configReportUrl, digiReportUrl, reconReportUrl,
-digiRootFile, reconRootFile, meritRootFile, svacRootFile).
+digiRootFile, reconRootFile, meritRootFile, svacRootFile, calRootFile).
 
 targetFile is the file that will be pointed to.
 
@@ -22,6 +22,7 @@ reportPages = {"configReportUrl": os.environ['configReportUrl'],
 
 goodKeys = ('configReportUrl', 'digiReportUrl', 'reconReportUrl',
             'digiRootFile', 'reconRootFile', 'meritRootFile', 'svacRootFile',
+            'calRootFile',
             )
 
 success = 0
@@ -38,12 +39,12 @@ elif nArg == 5:
 else:
     print "Wrong number of arguments.\n"
     print __doc__
-    sys.exit(failCode)
+    sys.exit(failure)
 
 if urlKey not in goodKeys:
     print "Bad urlKey.\n"
     print __doc__
-    sys.exit(failCode)
+    sys.exit(failure)
 
 # figure out the path to the target file
 #path = list(os.path.split(targetFile))

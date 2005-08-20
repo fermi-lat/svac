@@ -44,6 +44,7 @@ my $reconXml =
         <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
+    <file name=\"cal\"        type=\"ntuple\" file-type=\"root\">$ENV{'reconDataDir'}</file>
     <file name=\"merit\"      type=\"merit\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
     <file name=\"recon\"      type=\"RECON\"  file-type=\"root\">$ENV{'reconDataDir'}</file>
     <file name=\"digi\"       type=\"DIGI\"   file-type=\"root\">$ENV{'digitizationDataDir'}</file>
@@ -51,6 +52,7 @@ my $reconXml =
 
     <processing-step name=\"recon\" executable=\"recon\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
+                    <output-file name=\"cal\"/>
                     <output-file name=\"merit\"/>
                     <output-file name=\"recon\"/>
                     <output-file name=\"tarFile\"/>
@@ -68,6 +70,9 @@ my $reconXml =
     </processing-step>
     <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"merit\"/>
+    </processing-step>
+    <processing-step name=\"calRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"cal\"/>
     </processing-step>
 </pipeline>
 ";

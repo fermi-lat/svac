@@ -20,8 +20,8 @@ ROOT.gSystem.Load('libcommonRootData.so')
 ROOT.gSystem.Load('libdigiRootData.so')
 ROOT.gSystem.Load('libreconRootData.so')
 
-if len(sys.argv) == 7:
-    digiFileName, reconFileName, meritFileName, tarFile, task, runId = sys.argv[1:]
+if len(sys.argv) == 8:
+    digiFileName, reconFileName, meritFileName, calFileName, tarFile, task, runId = sys.argv[1:]
 else:
     print >> sys.stderr, __doc__
     sys.exit(1)
@@ -140,6 +140,7 @@ jobs = []
 joFiles = []
 reconFiles = []
 meritFiles = []
+calFiles = []
 logFiles = []
 for iChunk, chunk in enumerate(chunks):
     # edit template JO file and add lines for first
@@ -166,10 +167,15 @@ ApplicationMgr.EvtMax = %d;
     reconFiles.append(reconFile)
     joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconFile
     
-    meritFile = '%s_%s_%s_MERIT.root' % (task, runId, cTag)
+    meritFile = '%s_%s_%s_merit.root' % (task, runId, cTag)
     meritFile = os.path.join(workDir, meritFile)
     meritFiles.append(meritFile)
     joData += 'RootTupleSvc.filename = "%s";\n' % meritFile
+
+    calFile = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
+    calFile = os.path.join(workDir, calFile)
+    calFiles.append(calFile)
+    joData += 'CalXtalRecAlg.tupleFilename = "%s";\n' % calFile
 
     logFile = '%s_%s_%s.log' % (task, runId, cTag)
     logFiles.append(logFile)
@@ -204,6 +210,15 @@ if status:
     pass
 
 # concat chunk files into final results
+print >> sys.stderr, "Combining cal files into %s" % calFileName
+rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
+if rcCal:
+    print >> sys.stderr, "Failed to create cal file %s!" % calFileName
+    sys.exit(1)
+else:
+    print >> sys.stderr, "Created cal file %s."  % calFileName
+    pass
+
 print >> sys.stderr, "Combining merit files into %s" % meritFileName
 rcMerit = reconPM.concatenateFiles(meritFileName, meritFiles, 'MeritTuple')
 if rcMerit:
@@ -231,7 +246,7 @@ for keeper in keepFiles:
 tfp.close()
 
 # get rid of chunk files
-trash = reconFiles + meritFiles
+trash = reconFiles + meritFiles + calFiles
 for junkFile in trash:
     os.unlink(junkFile)
     pass

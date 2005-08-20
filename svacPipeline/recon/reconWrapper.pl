@@ -31,11 +31,12 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $outFiles->{'recon'};
 my $meritRootFile = $outFiles->{'merit'};
+my $calRootFile = $outFiles->{'cal'};
 my $tarFile = $outFiles->{'tarFile'};
 
 my $exe = $ENV{'reconScript'};
 
-my $command = "$exe '$digiRootFile' '$reconRootFile' '$meritRootFile' '$tarFile' '$taskName' '$runId'";
+my $command = "$exe '$digiRootFile' '$reconRootFile' '$meritRootFile' '$calRootFile' '$tarFile' '$taskName' '$runId'";
 print "Running command: [$command]\n";
 
 #environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");

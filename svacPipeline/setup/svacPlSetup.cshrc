@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r2p0
+setenv svacVersion v3r3p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv EngineeringModelVersion v5r0608p1
+setenv EngineeringModelVersion v5r0608p6
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -84,7 +84,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r29
+setenv Em2Version v2r33
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -126,7 +126,7 @@ setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
 setenv chunkTime 3600 
-setenv pldVersion v0r2
+setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
 
