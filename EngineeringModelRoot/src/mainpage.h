@@ -78,8 +78,6 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> EventFlags </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
 
-<TR> <TD> GoodEvent </TD> <TD>  Decoded from EventFlags: GoodEvent=1 means a good event i.e. an event with no errors </TD> </TR>
-
 <TR> <TD> TemLength[tower] </TD> <TD> Size in bytes of the TEM event contribution, per tower. Variable length. </TD> </TR>
 <TR> <TD> GemLength        </TD> <TD> Size in bytes of the GEM event contribution. Fixed size: 64 bytes        </TD> </TR>
 <TR> <TD> OswLength        </TD> <TD> Size in bytes of the OSW event contribution. Fixed size: 32 bytes        </TD> </TR>
