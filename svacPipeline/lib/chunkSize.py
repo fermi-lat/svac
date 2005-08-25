@@ -8,6 +8,7 @@
 """
 
 import os
+import sys
 
 # minimum scaled observed recon rate (events / SLAC LSF second)
 minRate = {

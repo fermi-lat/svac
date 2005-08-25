@@ -7,6 +7,7 @@
 """@brief Log CPU and wall time used by process.
 """
 
+import sys
 import time
 
 
