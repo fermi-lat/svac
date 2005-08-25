@@ -203,3 +203,19 @@ Switch to eLog v2r2p7 (SVAC-65)
 ---------------------------------------------------------------------------
 
 
+v3r3p0
+---------------
+Add CAL tuple.
+EngineeringModel v5r0608p6
+Raise limit on merged recon files to 500GB.
+---------------------------------------------------------------------------
+
+
+v3r3p1
+---------------
+switch disk to u21
+configReport v3r1p5
+increase recon chunk size
+fix bug that made VdG recon crash
+add more logging to recon
+---------------------------------------------------------------------------

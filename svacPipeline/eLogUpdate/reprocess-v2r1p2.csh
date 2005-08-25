@@ -1,7 +1,7 @@
 #!/bin/tcsh
 
-# this reprocesses runs that were originally done with the current version
-# (whatever that is) of online's task
+# this reprocesses runs that were originally done with version
+# v2r1p2 of online's task
 
 set run=$1
 if ( { test -z $run } ) then
@@ -19,13 +19,15 @@ run cd ${dataDir}
 
 set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
+set oldDir=../../../../../../nfs/farm/g/glast/u16/Integration/rawData/${run}
 set oldTask=online-v2r1p2
 set newTask=${eLogTask}
 
 foreach dataSet ($dataSets)
-    set oldName=${oldTask}_${run}_${dataSet}
+    set oldTail=${oldTask}_${run}_${dataSet}
+    set oldName=${oldDir}/${oldTail}
 	test -e ${oldName} || continue
-	set newName=`echo $oldName | sed s/${oldTask}/${newTask}/`
+	set newName=`echo $oldTail | sed s/${oldTask}/${newTask}/`
 	test -e ${newName} || ( run ln -s ${oldName} ${newName} )
 end
 

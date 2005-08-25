@@ -11,9 +11,9 @@ import os
 
 # minimum scaled observed recon rate (events / SLAC LSF second)
 minRate = {
-    'Cosmics': 2.84,
-    'Photons': 1.15,
-    'Am241': 4.67,
+    'Cosmics': 2.00,
+    'Photons': 1.00,
+    'Am241': 10.90,
     }
 
 try:
@@ -58,7 +58,11 @@ def chunkSize(particleType, targetSeconds=None, minChunk=None, maxChunk=None):
         maxChunk = defaultMaxChunk
         pass
 
-    chunk = targetSeconds * minRate[particleType]
+    rate = minRate[particleType]
+    chunk = targetSeconds * rate
+
+    print >> sys.stderr, 'Target Time (SLAC) = %s\nParticle Type = %s\nRate = %s\nChunk Size = %s' % \
+          (targetSeconds, particleType, rate, chunk)
 
     chunk = int(chunk)
     chunk = max(chunk, minChunk)

@@ -13,6 +13,7 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     numChunks = math.ceil(float(numEntries) / maxNumEventsPerFile)
     numEventsPerFile = int(math.ceil(float(numEntries) / numChunks))
     print >> sys.stderr, "Run has %d events." % numEntries
+    print >> sys.stderr, "Using %d chunks." % numChunks
     print >> sys.stderr, "Reduced chunk size from %d to %d" % (maxNumEventsPerFile, numEventsPerFile)
 
     eventStart=0

@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r3p0
+setenv svacVersion v3r3p1
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -25,7 +25,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u19
+setenv dataDisk u21
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
@@ -48,7 +48,7 @@ setenv calibTail ${emTail}/${calibVersion}
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r3p0
+setenv onlineTaskVersion v2r3p1
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
@@ -72,7 +72,7 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
 setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v3r1p4
+setenv configReportVersion v3r1p5
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
 setenv configTaskDir ${svacPlRoot}/configReport
@@ -125,7 +125,7 @@ setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 3600 
+setenv chunkTime 10000 
 setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------

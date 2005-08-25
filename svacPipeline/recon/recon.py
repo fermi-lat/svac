@@ -15,6 +15,9 @@ import eLogDB
 import geometry
 import reconPM
 import runMany
+import timeLog
+
+timeLogger = timeLog.timeLog()
 
 ROOT.gSystem.Load('libcommonRootData.so')
 ROOT.gSystem.Load('libdigiRootData.so')
@@ -114,7 +117,7 @@ digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
     'digiRootFile': digiFileName,
     }
 if particleType == 'Photons':
-    joHead += '#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
+    joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass
 
 # Deal with hardware that we don't expect to have calibrations for.
@@ -185,14 +188,18 @@ ApplicationMgr.EvtMax = %d;
 
     # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
     # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
-    cmd = 'exec bsub -K -q %s -o %s %s %s' % (os.environ['chunkQueue'], logFile, shellFile, joFile)
+    cmd = 'exec bsub -K -q %s -G %s -o %s %s %s' % \
+          (os.environ['chunkQueue'], os.environ['batchgroup'], \
+           logFile, shellFile, joFile)
     print >> sys.stderr, cmd
     jobs.append(cmd)
 
 # run the chunks
 os.system("date")
+timeLogger()
 results = runMany.pollManyResult(os.system, [(x,) for x in jobs])
 os.system("date")
+timeLogger()
 print >> sys.stderr, "rc from batch jobs ", results
 
 # should check rc here to see if all went well.
@@ -211,7 +218,9 @@ if status:
 
 # concat chunk files into final results
 print >> sys.stderr, "Combining cal files into %s" % calFileName
+timeLogger()
 rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
+timeLogger()
 if rcCal:
     print >> sys.stderr, "Failed to create cal file %s!" % calFileName
     sys.exit(1)
@@ -220,7 +229,9 @@ else:
     pass
 
 print >> sys.stderr, "Combining merit files into %s" % meritFileName
+timeLogger()
 rcMerit = reconPM.concatenateFiles(meritFileName, meritFiles, 'MeritTuple')
+timeLogger()
 if rcMerit:
     print >> sys.stderr, "Failed to create merit file %s!" % meritFileName
     sys.exit(1)
@@ -229,7 +240,9 @@ else:
     pass
 
 print >> sys.stderr, "Combining recon files into %s" % reconFileName
+timeLogger()
 rcRecon = reconPM.concatenateFiles(reconFileName, reconFiles, 'Recon')
+timeLogger()
 if rcRecon:
     print >> sys.stderr, "Failed to create recon file %s!" % reconFileName
     sys.exit(1)
@@ -250,3 +263,5 @@ trash = reconFiles + meritFiles + calFiles
 for junkFile in trash:
     os.unlink(junkFile)
     pass
+
+timeLogger()
