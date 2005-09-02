@@ -139,3 +139,6 @@ awb Fixed bug in filling TkrNumClusters. See JIRA SVAC-63.
 
 v1r3p20
 awb Increased max files size for SVAC ntuple to 500 GB.
+
+v1r4p0: September 2, 2005
+awb Added ACD variables
