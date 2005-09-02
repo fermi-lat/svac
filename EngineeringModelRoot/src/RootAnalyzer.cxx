@@ -459,9 +459,6 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getLowDiscrim(AcdDigi::A);
     m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getLowDiscrim(AcdDigi::B);
 
-    m_ntuple.m_acdHighDisc[AcdID][0] = acdDigi->getHighDiscrim(AcdDigi::A);
-    m_ntuple.m_acdHighDisc[AcdID][1] = acdDigi->getHighDiscrim(AcdDigi::B);
-
     m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
     m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
   }
@@ -1202,7 +1199,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdRange", &(m_ntuple.m_acdRange), "AcdRange[604][2]/I");
   m_tree->Branch("AcdParityError", &(m_ntuple.m_acdParityError), "AcdParityError[604][2]/I");
   m_tree->Branch("AcdLowDisc", &(m_ntuple.m_acdLowDisc), "AcdLowDisc[604][2]/I");
-  m_tree->Branch("AcdHighDisc", &(m_ntuple.m_acdHighDisc), "AcdHighDisc[604][2]/I");
   m_tree->Branch("Acd10Ids", &(m_ntuple.m_acd10Ids), "Acd10Ids[10]/I");
   m_tree->Branch("AcdTileNumber", &(m_ntuple.m_acdTileNumber), "AcdTileNumber[604]/I");
   m_tree->Branch("AcdMCEnergy", &(m_ntuple.m_acdMCEnergy), "AcdMCEnergy[604]/F");
