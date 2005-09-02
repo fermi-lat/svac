@@ -25,7 +25,7 @@ LAT-TD-00606: LAT Inter-module Communications - A Reference Manual, http://www-g
 <br>
 LAT-TD-00605: The Tower Electronics Module (TEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf
 <br>
-LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf
+LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf
 <br>
 
 <TABLE>
@@ -224,6 +224,28 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD>A 3 dimension array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means trigger request was sent to low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to high energy trigger; =3 means the trigger request was sent to both trigger.  </TD> </TR>
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD>A 3 dimension array which describe log accepts contained in the CAL trigger diagnostic info.  For detailed description, please see onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
 <TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD>A three dimension array which describes fit position in each CAL crystal, coord=0 means fitted X coordinate, coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate.(For experts only.)</TD> </TR>
+</TABLE>
+
+
+<TABLE>
+<CAPTION ALIGN="TOP"> ACD variables </CAPTION>
+<TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
+<TR> <TD> AcdNumDigis             </TD> <TD> Number of ACD digis </TD> </TR>
+<TR> <TD> AcdPha[tile][2]         </TD> <TD> Pulse Hight Analysis for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHitMap[tile][2]      </TD> <TD> Veto discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdRange[tile][2]       </TD> <TD> Range for the specified tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdParityError[tile][2] </TD> <TD> Parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdLowDisc[tile][2]     </TD> <TD> Low discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHighDisc[tile][2]    </TD> <TD> High (CNO) discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdTileNumber[tile]     </TD> <TD> Tile number in dense notation. </TD> </TR> 
+<TR> <TD> AcdMCEnergy[tile]       </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
+<TR> <TD> AcdEnergy               </TD> <TD> Total energy deposited in the ACD system. </TD> </TR> 
+<TR> <TD> AcdTileCount            </TD> <TD> Total number of ACD tiles above veto threshold.  </TD> </TR> 
+<TR> <TD> AcdDoca                 </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
+<TR> <TD> AcdMinDocaId            </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
+<TR> <TD> AcdGammaDoca            </TD> <TD> The minimal Distance of Closest Approach (DOCA) of the photon wrt the center of the tile. </TD> </TR>
+<TR> <TD> AcdActiveDist           </TD> <TD> Minimum Active Distance for all tracks and ACD tiles above veto threshol. </TD> </TR>
+<TR> <TD> Acd10Ids[10]            </TD> <TD> The tile IDs for the first 10 tiles above veto threshol. </TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file

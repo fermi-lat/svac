@@ -300,6 +300,21 @@ void RootAnalyzer::analyzeReconTree()
     }
 
   }  // calRecon
+
+
+  //
+  // ACD recon:
+  //                                                                                                                                                                                                            
+  AcdRecon* acdRecon = m_reconEvent->getAcdRecon();
+  if (acdRecon) {
+    m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
+    m_ntuple.m_acdDoca       = acdRecon->getDoca();
+    m_ntuple.m_acdGammaDoca  = acdRecon->getGammaDoca();
+    m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
+    m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
+    m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
+  }
+
 }
   
 void RootAnalyzer::analyzeDigiTree()
@@ -399,6 +414,61 @@ void RootAnalyzer::analyzeDigiTree()
 
   parseDiagnosticData(); 
  
+
+  //
+  // ACD digi:
+  //                                                                                                                                                                                              
+  const TObjArray* acdDigiCol = m_digiEvent->getAcdDigiCol();
+  assert(acdDigiCol != 0);
+
+  int nAcdDigi = acdDigiCol->GetLast()+1;
+
+  m_ntuple.m_acdNumDigis = nAcdDigi;
+
+  int i10Count = 0;
+
+  for(int iDigi = 0; iDigi != nAcdDigi; ++iDigi) {
+
+    const AcdDigi* acdDigi = dynamic_cast<const AcdDigi*>(acdDigiCol->At(iDigi));
+
+    assert(acdDigi != 0);
+
+    int AcdID = acdDigi->getId().getId();
+
+    if (AcdID > 603) {
+      std::cout << "Anders - WARNING!!!! ACD ID is " << AcdID << std::endl;
+    }
+
+    if (i10Count < 10) {
+      m_ntuple.m_acd10Ids[i10Count] = AcdID;
+      i10Count++;
+    }
+
+    m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
+    m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
+
+    m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getVeto(AcdDigi::A);
+    m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getVeto(AcdDigi::B);
+
+    m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
+    m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
+
+    m_ntuple.m_acdParityError[AcdID][0] = acdDigi->getParityError(AcdDigi::A);
+    m_ntuple.m_acdParityError[AcdID][1] = acdDigi->getParityError(AcdDigi::B);
+
+    m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getLowDiscrim(AcdDigi::A);
+    m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getLowDiscrim(AcdDigi::B);
+
+    m_ntuple.m_acdHighDisc[AcdID][0] = acdDigi->getHighDiscrim(AcdDigi::A);
+    m_ntuple.m_acdHighDisc[AcdID][1] = acdDigi->getHighDiscrim(AcdDigi::B);
+
+    m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
+    m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
+  }
+
+
+
+
 
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
@@ -1125,5 +1195,22 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
   m_tree->Branch("TkrTotalHits", &(m_ntuple.m_totalStripHits), "TkrTotalHits[16]/i");
   m_tree->Branch("TkrTotalClusters", &(m_ntuple.m_totalClusters), "TkrTotalClusters[16]/i");
-
+  // ACD digi:
+  m_tree->Branch("AcdNumDigis", &(m_ntuple.m_acdNumDigis), "AcdNumDigis/I");
+  m_tree->Branch("AcdPha", &(m_ntuple.m_acdPha), "AcdPha[604][2]/I");
+  m_tree->Branch("AcdHitMap", &(m_ntuple.m_acdHitMap), "AcdHitMap[604][2]/I");
+  m_tree->Branch("AcdRange", &(m_ntuple.m_acdRange), "AcdRange[604][2]/I");
+  m_tree->Branch("AcdParityError", &(m_ntuple.m_acdParityError), "AcdParityError[604][2]/I");
+  m_tree->Branch("AcdLowDisc", &(m_ntuple.m_acdLowDisc), "AcdLowDisc[604][2]/I");
+  m_tree->Branch("AcdHighDisc", &(m_ntuple.m_acdHighDisc), "AcdHighDisc[604][2]/I");
+  m_tree->Branch("Acd10Ids", &(m_ntuple.m_acd10Ids), "Acd10Ids[10]/I");
+  m_tree->Branch("AcdTileNumber", &(m_ntuple.m_acdTileNumber), "AcdTileNumber[604]/I");
+  m_tree->Branch("AcdMCEnergy", &(m_ntuple.m_acdMCEnergy), "AcdMCEnergy[604]/F");
+  // ACD recon:
+  m_tree->Branch("AcdEnergy", &(m_ntuple.m_acdEnergy),"AcdEnergy/F");
+  m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
+  m_tree->Branch("AcdGammaDoca", &(m_ntuple.m_acdGammaDoca),"AcdGammaDoca/F");
+  m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
+  m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
+  m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
 }

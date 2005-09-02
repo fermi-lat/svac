@@ -72,6 +72,27 @@ struct NtupleDef {
   float m_tkr2EndPos[3];
   float m_tkr2EndDir[3];
 
+  // ACD:
+  int m_acdPha[g_nAcdTile][2];
+  int m_acdHitMap[g_nAcdTile][2];
+  int m_acdRange[g_nAcdTile][2];
+  int m_acdParityError[g_nAcdTile][2];
+  int m_acdLowDisc[g_nAcdTile][2];
+  int m_acdHighDisc[g_nAcdTile][2];
+  int m_acdTileNumber[g_nAcdTile];
+  int m_acdMCEnergy[g_nAcdTile];
+  int m_acdNumDigis;
+  int m_acd10Ids[10];
+
+  float m_acdEnergy;
+  float m_acdDoca;
+  float m_acdGammaDoca;
+  float m_acdActiveDist;
+  int   m_acdMinDocaId;
+  int   m_acdTileCount;
+
+
+
   // Cal measured energy
   float m_calEnergy;
 
