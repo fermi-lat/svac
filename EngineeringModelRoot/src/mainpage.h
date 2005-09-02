@@ -238,7 +238,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> AcdLowDisc[tileID][2]     </TD> <TD> Low discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdHighDisc[tileID][2]    </TD> <TD> High (CNO) discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdTileNumber[tileID]     </TD> <TD> Tile number in dense notation. </TD> </TR> 
-<TR> <TD> AcdMCEnergy[tileID]       </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
+<TR> <TD> AcdMCEnergy               </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
 <TR> <TD> AcdEnergy                 </TD> <TD> Total energy deposited in the ACD system. </TD> </TR> 
 <TR> <TD> AcdTileCount              </TD> <TD> Total number of ACD tiles above veto threshold.  </TD> </TR> 
 <TR> <TD> AcdDoca                   </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
