@@ -142,3 +142,6 @@ awb Increased max files size for SVAC ntuple to 500 GB.
 
 v1r4p0: September 2, 2005
 awb Added ACD variables
+
+v1r4p1: September 2, 2005
+awb Removed ACD high discriminator (CNO) - it's a GEM variable.
