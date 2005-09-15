@@ -35,8 +35,8 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 
 <TR> <TD> RunID </TD> <TD> Run number taken from DigiEvent.h. </TD> </TR> 
 
-<TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h. The event number comes from a 32 bit online counter. It is not always continous 
-          (because of prescaling for example). For runs taken before the middle of April 2005 it came from a 17 bits online counter and wrapped around at 128k events 
+<TR> <TD> EventID </TD> <TD> Event number taken from DigiEvent.h. The event number comes from a 32 bit online counter. The event numbers are always contigous, i.e. no gaps,  
+          except for runs taken with software prescaling. For runs taken before the middle of April 2005 it came from a 17 bits online counter and wrapped around at 128k events 
           i.e. you could have multiple events with the same event sequence number. </TD> </TR>
 
 <TR> <TD> EventSize </TD> <TD> Event size in bytes taken from the Fits file. It seems to be an 8 bytes offset with respect to the LDF event size (the FITS event size  
