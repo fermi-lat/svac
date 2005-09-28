@@ -1,6 +1,9 @@
 
 
 flightGeom = '$(XMLGEODBSROOT)/xml/flight/flightSegVols.xml'
+lat10Geom = '$(XMLGEODBSROOT)/xml/latAssembly/lat10TowerSegVols.xml'
+lat12Geom = '$(XMLGEODBSROOT)/xml/latAssembly/lat12TowerSegVols.xml'
+lat14Geom = '$(XMLGEODBSROOT)/xml/latAssembly/lat14TowerSegVols.xml'
 # the index here is the number of towers
 geometries = (flightGeom, #  0
               flightGeom, #  1
@@ -12,11 +15,11 @@ geometries = (flightGeom, #  0
               '',         #  7
               flightGeom, #  8
               '',         #  9
-              '',         # 10
+              lat10Geom,  # 10
               '',         # 11
-              '',         # 12
+              lat12Geom,  # 12
               '',         # 13
-              '',         # 14
+              lat14Geom,  # 14
               '',         # 15
               flightGeom, # 16
               )
