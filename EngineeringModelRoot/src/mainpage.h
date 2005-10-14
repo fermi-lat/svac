@@ -86,7 +86,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> DiagLength       </TD> <TD> Size in bytes of the Diagnostics event contribution. Fixed size: 48 bytes (if the TEM diagnostics are enabled)</TD> </TR>
 
 <TR> <TD> GemConditionsWord  </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. 
-          For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chapter 4 </TD> </TR>
+          For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf Chapter 4 </TD> </TR>
 
 <TR> <TD> GemTkrVector[16]   </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
           </TD> </TR>
