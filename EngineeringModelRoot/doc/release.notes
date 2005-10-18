@@ -145,3 +145,7 @@ awb Added ACD variables
 
 v1r4p1: September 2, 2005
 awb Removed ACD high discriminator (CNO) - it's a GEM variable.
+
+	: October 18, 2005
+awb Removed enum in Rootanalyzer.h as it's redundant. 
+    Added g_nFEC=24 to enum in GeoConstants.h 
