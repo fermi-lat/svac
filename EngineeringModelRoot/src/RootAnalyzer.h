@@ -27,9 +27,9 @@ class RootAnalyzer {
   /// produce output ntuple and histogram files based on analysis results
   void produceOutputFile();
 
-  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, 
-	g_nCno=12};
+  //enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
+  //	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, 
+  //	g_nCno=12};
 
  private:
 
