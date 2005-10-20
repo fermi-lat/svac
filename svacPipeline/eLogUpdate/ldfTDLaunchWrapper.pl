@@ -40,6 +40,9 @@ my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
 my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
 chomp $doDigi;
+unless (length($doDigi)) {
+	die("Can't determine digitizability!\n");
+}
 if (!$doDigi) {
 	exit(0);
 }

@@ -3,7 +3,9 @@
 use strict;
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup.cshrc");
+
+# Use Oracle 8 libs because the script we are launching is Python.
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup8.cshrc");
 
 if ($#ARGV != 1) {
     die "Usage: $0 shellFile rcReport";
@@ -37,7 +39,6 @@ print SHELLFILE <<EOF;
 #!/bin/csh 
 unsetenv LD_LIBRARY_PATH 
 pushd $eLogFeederDir
-source /usr/local/bin/coraenvp
 setenv TWO_TASK $ENV{'TWO_TASK'}
 setenv ORACLE_HOME $ENV{'ORACLE_HOME'}
 setenv LD_LIBRARY_PATH 

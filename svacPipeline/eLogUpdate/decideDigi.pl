@@ -27,6 +27,12 @@ my @badOffline = ('nodigi');
 my $offline = `$query $run offline`;
 chomp $offline;
 
+#doesn't work, as $query fails if asked about an absent field, 
+#and offline is often absent
+# unless (length($offline)) {
+# 	die("Can't get offline tag!\n");
+# }
+
 if (grep(/^$offline$/i, @badOffline)) {
 	print STDERR "Offline tag '$offline' says don't do it.\n";
 	noDigi();
@@ -40,6 +46,9 @@ if ((! -e $ldfFile) || (-z $ldfFile)) {
 my $command = "$query $run EventCount";
 my $nEvents = `$command`;
 chomp $nEvents;
+unless (length($nEvents)) {
+	die("Can't get event count!\n");
+}
 $nEvents = int($nEvents);
 print STDERR "Run $run has $nEvents events.\n";
 if ($nEvents <= 2) {

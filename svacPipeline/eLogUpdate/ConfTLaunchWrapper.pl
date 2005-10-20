@@ -31,9 +31,8 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $exe = $ENV{'taskLauncher'};
 
 my $newTask = $ENV{'configReportTask'};
-my $schemaFile = $inFiles->{'schema'};
 my $snapFile = $inFiles->{'snapshot'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile' '$snapFile'";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$snapFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

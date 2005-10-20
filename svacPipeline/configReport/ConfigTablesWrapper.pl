@@ -28,7 +28,6 @@ use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $snapshot = $inFiles->{'snapshot'};
-#my $split = $inFiles->{'splits'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'configTablesScript'};
