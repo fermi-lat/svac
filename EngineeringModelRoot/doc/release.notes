@@ -149,3 +149,7 @@ awb Removed ACD high discriminator (CNO) - it's a GEM variable.
 	: October 18, 2005
 awb Removed enum in Rootanalyzer.h as it's redundant. 
     Added g_nFEC=24 to enum in GeoConstants.h 
+
+
+v1r5: Orcotber 26, 2005
+awb Tagged Johann's TKR stuff. Histograms are now in the svac.root file.
