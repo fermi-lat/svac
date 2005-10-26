@@ -39,6 +39,8 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
   m_digiChain = new TChain("Digi");
   m_reconChain = new TChain("Recon");
 
+  m_tkrCalib = new TkrHits();
+
   // open output ra root file
   // No need to delete m_outputFile as ROOT will do the garbage collection
 
@@ -48,13 +50,16 @@ RootAnalyzer::~RootAnalyzer()
 {
   // since root will do the garbage collection automatically for objects such
   // as TTree and TH1, we don't want to deallocate them once more
+  delete m_tkrCalib;
 }
 
 void RootAnalyzer::produceOutputFile()
 {
-  TDirectory* saveDir = gDirectory;
+  //  TDirectory* saveDir = gDirectory;
 
   if(m_outputFile) {
+    m_outputFile->cd("TkrCalib");
+    m_tkrCalib->saveAllHist();
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
@@ -66,7 +71,7 @@ void RootAnalyzer::produceOutputFile()
     m_histFile->Close();
   }
 
-  saveDir->cd();
+  //  saveDir->cd();
 }
 
 
@@ -587,6 +592,7 @@ void RootAnalyzer::parseOptionFile(const char* f)
   parseLine(line, svacF);
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
+  m_outputFile->mkdir("TkrCalib");
   m_tree = new TTree("Output", "Root Analyzer");
 
   // Set max file size to 500 GB:
@@ -700,7 +706,9 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //     nEvent = 100;
+  //  nEvent = 100;
+
+  m_tkrCalib->setNevents(nEvent);
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -725,6 +733,12 @@ void RootAnalyzer::analyzeData()
     }
 
     analyzeTot();
+    
+    m_tkrCalib->setOutputFile(m_outputFile);
+    //Load current event pointers in TkrCalibManager
+    m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
+    //Tracker Calibration Analysis
+    m_tkrCalib->analyzeEvents(iEvent);
 
     fillOutputTree();
     if(m_mcEvent) m_mcEvent->Clear();

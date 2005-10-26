@@ -12,6 +12,7 @@
 #include "digiRootData/DigiEvent.h"
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
+#include "TkrHits.h"
 
 class RootAnalyzer {
  public:
@@ -126,6 +127,8 @@ class RootAnalyzer {
 
   // number of events with negative root when doing tot correction using quadratic formula
   int m_nTotNegRoot;
+
+  TkrHits* m_tkrCalib;
 
 };
 
