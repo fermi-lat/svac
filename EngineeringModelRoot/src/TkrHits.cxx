@@ -385,6 +385,7 @@ bool TkrHits::setOutputFiles( const char* outputDir )
 
 void TkrHits::analyzeEvents( int iEvent )
 {
+   (void)iEvent;
     if(! passCut()) return;
 
     if( ! m_towerInfoDefined ) setTowerInfo();
@@ -635,7 +636,7 @@ void TkrHits::selectGoodClusters(){
 
 	// find closest recon clusters
 	float dzmin=10000, dzmin2=10000, dz;
-	int numSkip=0, umin, umin2, tl, tunp;
+	int numSkip=0, umin=0, umin2=0, tl, tunp;
 	const TkrCluster* tcls;
 	for( int dl=1; dl<g_nLayer; dl++){
 	  for( int dir=-1; dir<2; dir+=2){
@@ -723,7 +724,7 @@ bool TkrHits::closeToTrack( const TkrCluster* cluster, TkrCluster* clusters[g_nT
 
   // find closest hits
   float dzmin=10000, dzmin2=10000, dz;
-  int numSkip=0, umin, umin2, tl, tunp;
+  int numSkip=0, umin=0, umin2=0, tl, tunp;
   TkrCluster* tcls;
   for( int dl=1; dl<g_nLayer; dl++){
     for( int dir=-1; dir<2; dir+=2){
@@ -881,7 +882,7 @@ void TkrHits::fillOccupancy( int tDiv )
   float dirX=m_dir.X()/m_dir.Z(), dirY=m_dir.Y()/m_dir.Z(), 
     preX=m_pos.X(), preY=m_pos.Y(), preXZ=m_pos.Z(), preYZ=m_pos.Z();
   int aview, preLayer=g_nLayer;
-  int lastTower=-1, nTowers, towers[2], strips[g_nView];
+  int lastTower=-1, nTowers=0, towers[2], strips[g_nView];
 
   int numCls = m_clusters.size();
   for( int cls=0; cls<numCls; cls++){
