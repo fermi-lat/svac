@@ -3,7 +3,8 @@
 # setup for oracle db to be accessed by the SVAC pipeline
 # Uses Oracle 10 libs for perl scripts
 
-setenv TWO_TASK SLACPROD
+#setenv TWO_TASK SLACPROD
+setenv TWO_TASK GLASTP
 
 setenv ORACLE_HOME /afs/slac/package/oracle/new
 setenv TNS_ADMIN ${ORACLE_HOME}/network/adm

@@ -219,3 +219,27 @@ increase recon chunk size
 fix bug that made VdG recon crash
 add more logging to recon
 ---------------------------------------------------------------------------
+
+
+v3r3p2
+---------------
+Change some oracle-related environment variables, do both cleanup and
+kludgification of the methods used to set them.  Changes were necessary
+due to changes in SLAC's default Oracle environment.  Changes adress JIRA
+PIT-18 .
+
+Changes to partially adress JIRA SVAC-73 (don't interpret bad DB queries
+as valid but empty data).
+
+Final part of the fix for SVAC-60 (geometry issues w/ 10, 12, 14 towers).
+
+Clean up some cruft left over from when configReport used the schema.
+
+Reduce recon chunk size for VdG runs.
+---------------------------------------------------------------------------
+
+
+v3r3p3
+---------------
+Switch Oracle from SLACPROD to GLASTP
+---------------------------------------------------------------------------
