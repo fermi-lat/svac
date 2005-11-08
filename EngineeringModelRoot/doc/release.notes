@@ -151,5 +151,10 @@ awb Removed enum in Rootanalyzer.h as it's redundant.
     Added g_nFEC=24 to enum in GeoConstants.h 
 
 
-v1r5: Orcotber 26, 2005
+v1r5: October 26, 2005
 awb Tagged Johann's TKR stuff. Histograms are now in the svac.root file.
+
+v1r6: November 7, 2005
+awb Added Eric's ACD-TKR intersection variables.
+    Updated ACD variables/code to current code.
+    Updated CAL Recon code to new CalRecon.
