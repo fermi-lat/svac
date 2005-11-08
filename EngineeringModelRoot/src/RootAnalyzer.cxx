@@ -318,8 +318,34 @@ void RootAnalyzer::analyzeReconTree()
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
     m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
-  }
 
+    m_ntuple.m_acdRibbonMCEnergy     = acdRecon->getRibbonEnergy();
+    m_ntuple.m_acdRibbonCount        = acdRecon->getRibbonCount();
+    m_ntuple.m_acdRibbonActiveDist   = acdRecon->getRibbonActiveDist();
+    m_ntuple.m_acdMaxActiveDistId    = acdRecon->getMaxActDistId().getId();
+    m_ntuple.m_acdRibbonActiveDistId = acdRecon->getRibbonActDistId().getId();
+
+    // Eric's ACD-TKR intersection stuff:
+    m_ntuple.m_acdNumTkrIntersection = acdRecon->nAcdIntersections();
+
+    for (int iAcdTkrIntSec = 0; iAcdTkrIntSec < m_acdNumTkrIntersection; iAcdTkrIntSec++) {
+    int nInter = acdRecon->nAcdIntersections();
+    for ( int iInter(0); iInter < nInter; iInter++ ) {
+      const AcdTkrIntersection* acdInterRoot = acdRecon->getAcdTkrIntersection(iInter);
+      m_ntuple.m_acdTkrIntersectionTileId[iInter]                  = acdInterRoot->getTileId().getId();
+      m_ntuple.m_acdTkrIntersectionTkrIndex[iInter]                = acdInterRoot->getTrackIndex();
+      m_ntuple.m_acdTkrIntersectionGlobalX[iInter]                 = acdInterRoot->getGlobalPosition().x();
+      m_ntuple.m_acdTkrIntersectionGlobalY[iInter]                 = acdInterRoot->getGlobalPosition().y();
+      m_ntuple.m_acdTkrIntersectionGlobalZ[iInter]                 = acdInterRoot->getGlobalPosition().z();
+      m_ntuple.m_acdTkrIntersectionLocalX[iInter]                  = acdInterRoot->getLocalX();
+      m_ntuple.m_acdTkrIntersectionLocalY[iInter]                  = acdInterRoot->getLocalY();
+      m_ntuple.m_acdTkrIntersectionLocalXXCov[iInter]              = acdInterRoot->getLocalXXCov();
+      m_ntuple.m_acdTkrIntersectionLocalYYCov[iInter]              = acdInterRoot->getLocalYYCov();
+      m_ntuple.m_acdTkrIntersectionLocalXYCov[iInter]              = acdInterRoot->getLocalXYCov();
+      m_ntuple.m_acdTkrIntersectionArcLengthToInterSection[iInter] = acdInterRoot->getArcLengthToIntersection();
+      m_ntuple.m_acdTkrIntersectionPathLengthInTile[iInter]        = acdInterRoot->getPathLengthInTile();
+      m_ntuple.m_acdTkrIntersectionTileHit[iInter]                 = acdInterRoot->tileHit();
+  }
 }
   
 void RootAnalyzer::analyzeDigiTree()
@@ -452,17 +478,20 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
     m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
 
-    m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getVeto(AcdDigi::A);
-    m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getVeto(AcdDigi::B);
+    m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
+    m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
 
     m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
     m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
 
-    m_ntuple.m_acdParityError[AcdID][0] = acdDigi->getParityError(AcdDigi::A);
-    m_ntuple.m_acdParityError[AcdID][1] = acdDigi->getParityError(AcdDigi::B);
+    m_ntuple.m_acdOddParityError[AcdID][0] = acdDigi->getOddParityError(AcdDigi::A);
+    m_ntuple.m_acdOddParityError[AcdID][1] = acdDigi->getOddParityError(AcdDigi::B);
 
-    m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getLowDiscrim(AcdDigi::A);
-    m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getLowDiscrim(AcdDigi::B);
+    m_ntuple.m_acdHeaderParityError[AcdID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
+    m_ntuple.m_acdHeaderParityError[AcdID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
+
+    m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
+    m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
 
     m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
     m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
@@ -1206,16 +1235,19 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
   m_tree->Branch("TkrTotalHits", &(m_ntuple.m_totalStripHits), "TkrTotalHits[16]/i");
   m_tree->Branch("TkrTotalClusters", &(m_ntuple.m_totalClusters), "TkrTotalClusters[16]/i");
+
   // ACD digi:
   m_tree->Branch("AcdNumDigis", &(m_ntuple.m_acdNumDigis), "AcdNumDigis/I");
   m_tree->Branch("AcdPha", &(m_ntuple.m_acdPha), "AcdPha[604][2]/I");
   m_tree->Branch("AcdHitMap", &(m_ntuple.m_acdHitMap), "AcdHitMap[604][2]/I");
   m_tree->Branch("AcdRange", &(m_ntuple.m_acdRange), "AcdRange[604][2]/I");
-  m_tree->Branch("AcdParityError", &(m_ntuple.m_acdParityError), "AcdParityError[604][2]/I");
+  m_tree->Branch("AcdOddParityError", &(m_ntuple.m_acdOddParityError), "AcdOddParityError[604][2]/I");
+  m_tree->Branch("AcdHeaderParityError", &(m_ntuple.m_acdHeaderParityError), "AcdHeaderParityError[604][2]/I");
   m_tree->Branch("AcdLowDisc", &(m_ntuple.m_acdLowDisc), "AcdLowDisc[604][2]/I");
   m_tree->Branch("Acd10Ids", &(m_ntuple.m_acd10Ids), "Acd10Ids[10]/I");
   m_tree->Branch("AcdTileNumber", &(m_ntuple.m_acdTileNumber), "AcdTileNumber[604]/I");
   m_tree->Branch("AcdMCEnergy", &(m_ntuple.m_acdMCEnergy), "AcdMCEnergy[604]/F");
+
   // ACD recon:
   m_tree->Branch("AcdEnergy", &(m_ntuple.m_acdEnergy),"AcdEnergy/F");
   m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
@@ -1223,4 +1255,26 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
   m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
+  m_tree->Branch("AcdRibbonMCEnergy", &(m_ntuple.m_acdRibbonMCEnergy),"AcdRibbonMCEnergy/F");
+  m_tree->Branch("AcdRibbonCount", &(m_ntuple.m_acdRibbonCount),"AcdRibbonCount/I");
+  m_tree->Branch("AcdRibbonActiveDist", &(m_ntuple.m_acdRibbonActiveDist),"AcdRibbonActiveDist/F");
+  m_tree->Branch("AcdMaxActiveDistId", &(m_ntuple.m_acdMaxActiveDistId),"AcdMaxActiveDistId/I");
+  m_tree->Branch("AcdRibbonActiveDistId", &(m_ntuple.m_acdRibbonActiveDistId),"AcdRibbonActiveDistId/I");
+
+  // Eric's ACD-TKR intersection stuff:
+  m_tree->Branch("AcdNumTkrIntSec", &(m_ntuple.m_acdNumTkrIntersection),"AcdNumTkrIntSec/I");
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
+  m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[10]/I");
+  m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[10]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[10]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalZ", &(m_ntuple.m_acdTkrIntersectionGlobalZ),"AcdTkrIntSecGlobalZ[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalX", &(m_ntuple.m_acdTkrIntersectionLocalX),"AcdTkrIntSecLocalX[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalY", &(m_ntuple.m_acdTkrIntersectionLocalY),"AcdTkrIntSecLocalY[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXXCov", &(m_ntuple.m_acdTkrIntersectionLocalXXCov),"AcdTkrIntSecLocalXXCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalYYCov", &(m_ntuple.m_acdTkrIntersectionLocalYYCov),"AcdTkrIntSecLocalYYCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXYCov", &(m_ntuple.m_acdTkrIntersectionLocalXYCov),"AcdTkrIntSecLocalXYCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecArcLengthToIntSec", &(m_ntuple.m_acdTkrIntersectionArcLengthToIntersection),"AcdTkrIntSecArcLengthToIntSec[10]/F");
+  m_tree->Branch("AcdTkrIntSecPathLengthInTile", &(m_ntuple.m_acdTkrIntersectionPathLengthInTile),"AcdTkrIntSecPathLengthInTile[10]/F");
+  m_tree->Branch("AcdTkrIntSecTileHit", &(m_ntuple.m_acdTkrIntersectionTileHit),"AcdTkrIntSecTileHit[10]/I");
 }

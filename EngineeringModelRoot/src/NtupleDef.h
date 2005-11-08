@@ -73,14 +73,15 @@ struct NtupleDef {
   float m_tkr2EndDir[3];
 
   // ACD:
+  float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];
   int m_acdHitMap[g_nAcdTile][2];
   int m_acdRange[g_nAcdTile][2];
-  int m_acdParityError[g_nAcdTile][2];
+  int m_acdOddParityError[g_nAcdTile][2];
+  int m_acdHeaderParityError[g_nAcdTile][2];
   int m_acdLowDisc[g_nAcdTile][2];
   int m_acdHighDisc[g_nAcdTile][2];
   int m_acdTileNumber[g_nAcdTile];
-  int m_acdMCEnergy[g_nAcdTile];
   int m_acdNumDigis;
   int m_acd10Ids[10];
 
@@ -91,6 +92,26 @@ struct NtupleDef {
   int   m_acdMinDocaId;
   int   m_acdTileCount;
 
+  float m_acdRibbonActiveDist;
+  float m_acdRibbonMCEnergy;
+  int m_acdRibbonCount;
+  int m_acdMaxActiveDistId;
+  int m_acdRibbonActiveDistId;
+
+  int m_acdNumTkrIntersection;
+  int m_acdTkrIntersectionTileId[10];
+  int m_acdTkrIntersectionTkrIndex[10];
+  float m_acdTkrIntersectionGlobalX[10];
+  float m_acdTkrIntersectionGlobalY[10];
+  float m_acdTkrIntersectionGlobalZ[10];
+  float m_acdTkrIntersectionLocalX[10];
+  float m_acdTkrIntersectionLocalY[10];
+  float m_acdTkrIntersectionLocalXXCov[10];
+  float m_acdTkrIntersectionLocalYYCov[10];
+  float m_acdTkrIntersectionLocalXYCov[10];
+  float m_acdTkrIntersectionArcLengthToIntersection[10];
+  float m_acdTkrIntersectionPathLengthInTile[10];
+  int m_acdTkrIntersectionTileHit[10];
 
 
   // Cal measured energy
