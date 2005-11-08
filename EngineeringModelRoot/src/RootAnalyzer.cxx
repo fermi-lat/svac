@@ -259,11 +259,11 @@ void RootAnalyzer::analyzeReconTree()
     if(calClusterCol) {
       // currently there is just one cluster in CAL
       CalCluster* calCluster = dynamic_cast<CalCluster*>(calClusterCol->At(0));
-      if(calCluster) {
-	m_ntuple.m_calPos[0] = calCluster->getPosition().x();
-	m_ntuple.m_calPos[1] = calCluster->getPosition().y();
-	m_ntuple.m_calPos[2] = calCluster->getPosition().z();
-	m_ntuple.m_calEnergy = calCluster->getEnergySum();
+      if (calCluster) {
+        m_ntuple.m_calPos[0] = calCluster->getParams().getCentroid().x();
+        m_ntuple.m_calPos[1] = calCluster->getParams().getCentroid().y();
+        m_ntuple.m_calPos[2] = calCluster->getParams().getCentroid().z();
+        m_ntuple.m_calEnergy = calCluster->getParams().getEnergy();
       }
     }
 
