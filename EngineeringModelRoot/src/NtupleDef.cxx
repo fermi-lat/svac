@@ -124,7 +124,7 @@ void NtupleDef::reset()
     m_acdTkrIntersectionLocalXXCov[iAcdTkr]              = -9999.0;
     m_acdTkrIntersectionLocalYYCov[iAcdTkr]              = -9999.0;
     m_acdTkrIntersectionLocalXYCov[iAcdTkr]              = -9999.0;
-    m_acdTkrIntersectionArcLengthToInterSection[iAcdTkr] = -9999.0;
+    m_acdTkrIntersectionArcLengthToIntersection[iAcdTkr] = -9999.0;
     m_acdTkrIntersectionPathLengthInTile[iAcdTkr]        = -9999.0;
     m_acdTkrIntersectionTileHit[iAcdTkr]                 = -9999;
   }
