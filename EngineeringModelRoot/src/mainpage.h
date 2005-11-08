@@ -244,7 +244,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> AcdDoca                         </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
 <TR> <TD> AcdMinDocaId                    </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
 <TR> <TD> AcdGammaDoca                    </TD> <TD> The minimal Distance of Closest Approach (DOCA) of the photon wrt the center of the tile. </TD> </TR>
-<TR> <TD> AcdActiveDist                   </TD> <TD> Minimum Active Distance for all tracks and ACD tiles above veto threshol. </TD> </TR>
+<TR> <TD> AcdActiveDist                   </TD> <TD> Returns the maximum Active Distance for all tracks and ACD tiles. </TD> </TR>
 <TR> <TD> AcdMaxActiveDistId              </TD> <TD> The tile ID of the ACD tile associated with the maximum active distance.  </TD> </TR>
 <TR> <TD> Acd10Ids[10]                    </TD> <TD> The tile IDs for the first 10 tiles above veto threshol. </TD> </TR>
 
@@ -252,7 +252,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> AcdRibbonMCEnergy               </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>  </TD> </TR>
 <TR> <TD> AcdRibbonCount                  </TD> <TD> Total number of ACD ribbons above veto threshold. </TD> </TR>
 <TR> <TD> AcdRibbonActiveDist             </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
-<TR> <TD> AcdRibbonActiveDistId           </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum active distance. </TD> </TR>
+<TR> <TD> AcdRibbonActiveDistId           </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
 
 <TR> <TD> AcdNumTkrIntSec                             </TD> <TD> Total number of ACD-TKR intersections. </TD> </TR>
