@@ -240,7 +240,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 <TR> <TD> AcdTileNumber[tileID]           </TD> <TD> Tile number in dense notation. </TD> </TR> 
 <TR> <TD> AcdMCEnergy                     </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
 <TR> <TD> AcdEnergy                       </TD> <TD> Total energy deposited in the ACD system. </TD> </TR> 
-<TR> <TD> AcdTileCount                    </TD> <TD> Total number of ACD tiles above veto threshold.  </TD> </TR> 
+<TR> <TD> AcdTileCount                    </TD> <TD> Total number of ACD tiles with the accept bit set (above the low threshold).  </TD> </TR> 
 <TR> <TD> AcdDoca                         </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
 <TR> <TD> AcdMinDocaId                    </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
 <TR> <TD> AcdGammaDoca                    </TD> <TD> The minimal Distance of Closest Approach (DOCA) of the photon wrt the center of the tile. </TD> </TR>
@@ -250,7 +250,7 @@ The values are integers, but are stored as doubles to portably get more than 32 
 
 
 <TR> <TD> AcdRibbonMCEnergy               </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>  </TD> </TR>
-<TR> <TD> AcdRibbonCount                  </TD> <TD> Total number of ACD ribbons above veto threshold. </TD> </TR>
+<TR> <TD> AcdRibbonCount                  </TD> <TD> Total number of ACD ribbons with the accept bit set (above the low threshold). </TD> </TR>
 <TR> <TD> AcdRibbonActiveDist             </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
 <TR> <TD> AcdRibbonActiveDistId           </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
