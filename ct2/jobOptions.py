@@ -61,7 +61,7 @@ tables = {
                   'Delay from CAL trigger discriminator to TEM trigger primitive formation'), 
     'TKR_DELAY': ('GTEM/GTCC/trg_alignment:0-7',
                   'Delay from TKR trigger discriminator to TEM trigger primitive formation'), 
-    'ACD_DELAY': ('GAEM/GARC/veto_delay:0-7',
+    'ACD_DELAY': ('GAEM/GARC/veto_delay',
                   'Delay from ACD trigger discriminator to AEM trigger primitive formation'), 
     
     'CAL_WIDTH': ('GTEM/GCCC/trg_alignment:8-15',
@@ -73,6 +73,12 @@ tables = {
                         'Delay from ACD trigger primitive to AEM hitmap data latch'), 
     'ACD_LATCH_WIDTH': ('GAEM/GARC/hitmap_width',
                         'Stretch width of ACD trigger primitive to AEMXS hitmap data latch'), 
+    'ACD_HITMAP_DEADTIME': ('GAEM/GARC/hitmap_deadtime',
+                            'Time added to hitmap signals'),
+    'ACD_HOLD_DELAY': ('GAEM/GARC/hold_delay',
+                       'Delay from trigger to hold'),
+    'ACD_ADC_TACQ': ('GAEM/GARC/adc_tacq',
+                     'ADC acquisition time'),
     
     'GEM_WIDTH': ('GGEM/GGEMW/window_width',
                   'Width of trigger window in GEM'), 
@@ -95,6 +101,35 @@ tables = {
                  'Hold trigger primitive for TEM diagnostic latching of CAL trigger primitive'), 
     'TKR_DIAG': ('GTEM/GTCC/trg_alignment:16-23',
                  'Hold trigger primitive for TEM diagnostic latching of TKR trigger primitive'), 
+
+
+    'ACD_HVBS': ('GAEM/GARC/hvbs',
+                 'Requested High Voltage (HV) for normal operation'),
+    'ACD_SAA': ('GAEM/GARC/saa',
+                'Requested High Voltage (HV) for SAA operation'),
+    'ACD_USE_HV_NORMAL': ('GAEM/GARC/use_hv_normal',
+                          'Current High Voltage (HV) for normal operation'),
+    'ACD_USE_HV_SAA': ('GAEM/GARC/use_hv_saa',
+                       'Current High Voltage (HV) for SAA operation'),
+
+    'ACD_MODE': ('GAEM/GARC/mode',
+                 'Various bit fields for mode settings'),
+    'ACD_STATUS': ('GAEM/GARC/status',
+                   'Status'),
+
+    'ACD_CONFIG_REG': ('GAEM/GARC/GAFE/configuration',
+                       'Configuration setup'),
+    'ACD_VETO_DAC': ('GAEM/GARC/GAFE/veto_dac',
+                     'Set VETO threshold (coarse)'),
+    'ACD_VETO_VERNIER': ('GAEM/GARC/GAFE/veto_vernier',
+                         'Set VETO threshold (fine)'),
+    'ACD_HLD_DAC': ('GAEM/GARC/GAFE/hld_dac',
+                    'Set HLD threshold'),
+    'ACD_BIAS_DAC': ('GAEM/GARC/GAFE/bias_dac',
+                     'Set bias value'),
+
+    '': ('',
+         ''),
     
     }
 
@@ -135,6 +170,23 @@ calTabWidth = 2
 # put this many g?rc tables across page
 rcWidth = 2
 
+# # ACD stuff ####################################
+
+garcLabels = ('GARC', 'Value')
+gafeLabels = ('GARC', 'GAFE')
+
+# HV info
+acdHvTags = ('ACD_HVBS', 'ACD_USE_HV_NORMAL', 'ACD_SAA', 'ACD_USE_HV_SAA')
+
+acdMaskRegs = {'PHA': ('GAEM/GARC/pha_en_0', 'AEM/GARC/pha_en_1'),
+               'veto': ('GAEM/GARC/veto_en_0', 'AEM/GARC/veto_en_1')}
+acdGarcRandom = ('ACD_MODE', 'ACD_STATUS')
+
+acdGafe = ('ACD_CONFIG_REG', 'ACD_VETO_DAC', 'ACD_VETO_VERNIER', 'ACD_HLD_DAC',
+           'ACD_BIAS_DAC')
+
+# # TKR stuff ####################################
+
 # stuff from TKR readout controllers
 gtrcTags = ('TKR_NR', 'TKR_OR_STRETCH')
 gtrcLabels = ('GTCC', 'GTRC')
@@ -144,14 +196,22 @@ tkrTags = ('TKR_MODE', 'TKR_DAC', )
 tkrAxisLabels = ('layer', 'front end')
 tkrSimpleAxisLabels = ('GTCC,GTRC (digi layer, edge)', 'GTFE')
 
+
+# # CAL ##########################################
+
 # things to display from CAL front ends
 calTags = ('CAL_LAD', 'CAL_FHE', 'CAL_FLE', 'CAL_RNG', 'CAL_REF')
 calAxisLabels = ('layer', 'crystal')
 
+# # delays #######################################
+
 # cable delays
-# cableDelays = ('CAL_DELAY', 'TKR_DELAY', 'ACD_DELAY', 'CAL_WIDTH', 'ACD_WIDTH', 'CAL_DIAG', 'TKR_DIAG', 'ACD_LATCH_DELAY', 'ACD_LATCH_WIDTH') # if we had an ACD
 cableDelays = ('CAL_DELAY', 'TKR_DELAY', 'CAL_WIDTH', 'CAL_DIAG', 'TKR_DIAG')
-cableLabels = ('Tower', 'Cable') # but this won't work with the ACD
+cableLabels = ('Tower', 'Cable')
+
+garcDelays = ('ACD_DELAY', 'ACD_WIDTH', 'ACD_ADC_TACQ', 'ACD_LATCH_DELAY',
+              'ACD_LATCH_WIDTH', 'ACD_HITMAP_DEADTIME', 'ACD_HOLD_DELAY')
+
 
 # TEM delays
 # tackDelays = ('CAL_TRGSEQ', 'TKR_TRGSEQ', 'ACD_TRGSEQ') # if we had an ACD
@@ -171,6 +231,20 @@ tick = 1.0 / clock
 # units to report times in
 timeScale = 1e9
 timeUnits = 'ns'
+
+timeLabel = ' (ticks (%s))' % timeUnits
+timeMap = (mappings.displayTime, timeLabel)
+
+
+# voltage scale
+maxVolts = 1500.0
+voltRegMax = 1 << 12 - 1
+vScale = maxVolts / voltRegMax
+voltUnit = 'V'
+voltLabel = ' (steps (%s))' % voltUnit
+voltMap = (mappings.displayHv, voltLabel)
+
+hexMap = (mappings.displayHex, '')
 
 # put this in empty table cells
 absent = 'Absent'

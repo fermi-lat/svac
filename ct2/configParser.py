@@ -401,6 +401,145 @@ def oneGtrcReg(doc, tag):
     return output
 
 
+################################ ACD ####################################
+
+#
+def hasAcd(doc):
+    """@brief Do we have an ACD?"""
+
+    hasAcd = True
+
+    frontEnds = doc.getElementsByTagName("GAFE")
+    if len(frontEnds) < 1:
+        hasAcd = False
+        pass
+
+    return hasAcd
+    
+#
+def oneGarc(doc, name, mappers):
+    """@brief Make tables of per-GARC values."""
+    output = []
+
+    display, units = mappers
+
+    columnLabels = jobOptions.garcLabels
+    regSpec, regLabel = jobOptions.tables[name]
+
+    sectionTitle = '%s (%s)' % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+    tableTitle = regLabel + units
+
+    ticks = tableFromXml.xTableGen(doc, regSpec)
+    if not ticks.data:
+        return []
+    times = ticks.data.map(display)
+    timeData, labels = times.table()
+
+    data = zip(labels[1], timeData[0])
+    
+    dTable = table.oneDTable(data, tableTitle, columnLabels)
+    output.append(dTable)    
+    
+    return output
+
+#
+def manyGarcs(doc, names, mappers):
+    """@brief Organize multiple table of per-GARC values."""
+    output = []
+
+    # This was gonna put several tables side-by-side, as they're tall and skinny.
+    # But I'm not sure what to do with the titles & captions.
+
+    for name in names:
+        dTable = oneGarc(doc, name, mappers)
+        output.extend(dTable)        
+        output.append(html.Element("HR"))
+        pass
+    output.append(html.Element("HR"))
+
+    return output
+
+#
+def garcMask(doc, base):
+    """@brief Format GARC PHA and veto enables."""
+    output = []
+
+    data = []
+
+    regs = jobOptions.acdMaskRegs[base]
+    regLens = (16, 2)
+    for reg, regLen in zip(regs, regLens):
+        dTable = tableFromXml.xTableGen(doc, reg)
+        masks, labels = dTable.table()
+        masks = masks[0]
+        for mask in masks:
+            for bit in range(regLen):
+                # oh crap
+                pass
+            pass
+        pass
+    
+    return output
+    
+#
+def oneGafeReg(doc, tag):
+    """@brief Make a table for one GAFE register"""
+
+    output = []
+    
+    axisLabels = jobOptions.gafeLabels
+    regSpec, regLabel = jobOptions.tables[tag]
+    
+    sectionTitle = "%s (%s)" % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+
+    xTable = tableFromXml.xTableGen(doc, regSpec)
+    data, indices = xTable.data.table()
+
+    # only one GAEM
+    data = data[0]
+    indices = indices[1:]
+
+    hTable = table.twoDTable(data, regLabel, axisLabels, indices)
+
+    output.append(hTable)
+    return output
+
+def gafeRegs(doc):
+    """@grief Display stuff that lives in GAFE registers"""
+    output = []
+
+    sectionTitle = 'GAFE Reisters'
+    output.append(html.Heading(sectionTitle, 2))
+    output.append(html.Element("HR"))
+
+    for tag in jobOptions.acdGafe:
+        output.extend(oneGafeReg(doc, tag))
+        output.append(html.Element("HR"))
+        pass
+    
+    return output
+
+#
+def acdStuff(doc):
+    """@brief ACD stuff"""
+    output = []
+
+    sectionTitle = 'ACD'
+    output.append(html.Heading(sectionTitle, 1))
+    output.append(html.Element("HR"))
+    output.append(html.Element("HR"))
+
+    output.append(html.Heading('Voltage conversions are bogus!', 2))
+    output.append(html.Element("HR"))
+    output.extend(manyGarcs(doc, jobOptions.acdHvTags, jobOptions.voltMap))
+    output.extend(manyGarcs(doc, jobOptions.acdGarcRandom, jobOptions.hexMap))
+    output.extend(gafeRegs(doc))
+    output.append(html.Element("HR"))
+        
+    return output
+
 ################################ CAL ####################################
 
 #
@@ -483,7 +622,8 @@ def delays(doc):
     output.append(html.Heading(sectionTitle, 1))
     output.append(html.Element("HR"))    
 
-    anyTems = hasTem(doc)
+    # anyTems = hasTem(doc)
+    anyTems = True
 
     # per-cable times
     if anyTems:
@@ -494,6 +634,11 @@ def delays(doc):
         output.append(html.Element("HR"))
         pass
 
+    # per-GARC times
+    if hasAcd(doc):
+        output.extend(manyGarcs(doc, jobOptions.garcDelays, jobOptions.timeMap))
+        pass
+    
     # GEM window width
     output.extend(gemTimes(doc))
     output.append(html.Element("HR"))    
@@ -534,6 +679,7 @@ def oneCableDelay(doc, name):
     output.append(dTable)
 
     return output
+
 
 #
 def hasGem(doc):

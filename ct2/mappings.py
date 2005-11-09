@@ -8,8 +8,6 @@
 
 """
 
-
-
 #
 def mapTkrDac(dac):
     """@brief Display range and threshhold for a GTFE dac.
@@ -54,6 +52,29 @@ def ticksToTime(ticks):
 
 
 #
+def displayHv(steps):
+    """Display registers that measure HV voltage.
+    Uses stepsToVolts.
+    """
+    volts = '%s (%s)' % (steps, stepsToVolts(steps))
+    return volts
+
+#
+def stepsToVolts(steps):
+    """Convert HV registers to volts."""
+    import jobOptions
+    volts = steps * jobOptions.vScale
+    volts = '%.1f%s' % (volts, jobOptions.voltUnit)
+    return volts
+
+
+#
 def logical(bit):
 	"""Display a logical value."""
 	return ['Off', 'On'][bit]
+
+
+#
+def displayHex(value):
+    """@brief Display hex values."""
+    return '%#X' % value

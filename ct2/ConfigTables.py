@@ -126,6 +126,10 @@ output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
+if configParser.hasAcd(theLat):
+    output.addChildren(configParser.acdStuff(theLat))
+    pass
+
 if configParser.hasCal(theLat):
     output.addChildren(configParser.calFeReg(theLat))
     output.addChild(html.Element("HR"))
