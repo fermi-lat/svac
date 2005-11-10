@@ -483,7 +483,7 @@ def garcMask(doc, base):
     return output
     
 #
-def oneGafeReg(doc, tag):
+def oneGafeReg(doc, tag, mapper):
     """@brief Make a table for one GAFE register"""
 
     output = []
@@ -495,7 +495,8 @@ def oneGafeReg(doc, tag):
     output.append(html.Heading(sectionTitle, 2))
 
     xTable = tableFromXml.xTableGen(doc, regSpec)
-    data, indices = xTable.data.table()
+    data = xTable.data.map(mapper)
+    data, indices = data.table()
 
     # only one GAEM
     data = data[0]
@@ -506,16 +507,22 @@ def oneGafeReg(doc, tag):
     output.append(hTable)
     return output
 
+#
 def gafeRegs(doc):
-    """@grief Display stuff that lives in GAFE registers"""
+    """@brief Display stuff that lives in GAFE registers"""
     output = []
 
     sectionTitle = 'GAFE Reisters'
     output.append(html.Heading(sectionTitle, 2))
     output.append(html.Element("HR"))
 
+    for tag in jobOptions.acdGafeHex:
+        output.extend(oneGafeReg(doc, tag, mappings.displayHex))
+        output.append(html.Element("HR"))
+        pass
+    
     for tag in jobOptions.acdGafe:
-        output.extend(oneGafeReg(doc, tag))
+        output.extend(oneGafeReg(doc, tag, mappings.displayNull))
         output.append(html.Element("HR"))
         pass
     

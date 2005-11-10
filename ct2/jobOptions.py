@@ -182,8 +182,8 @@ acdMaskRegs = {'PHA': ('GAEM/GARC/pha_en_0', 'AEM/GARC/pha_en_1'),
                'veto': ('GAEM/GARC/veto_en_0', 'AEM/GARC/veto_en_1')}
 acdGarcRandom = ('ACD_MODE', 'ACD_STATUS')
 
-acdGafe = ('ACD_CONFIG_REG', 'ACD_VETO_DAC', 'ACD_VETO_VERNIER', 'ACD_HLD_DAC',
-           'ACD_BIAS_DAC')
+acdGafeHex = ('ACD_CONFIG_REG', )
+acdGafe = ('ACD_VETO_DAC', 'ACD_VETO_VERNIER', 'ACD_HLD_DAC', 'ACD_BIAS_DAC')
 
 # # TKR stuff ####################################
 

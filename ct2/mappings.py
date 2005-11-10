@@ -78,3 +78,8 @@ def logical(bit):
 def displayHex(value):
     """@brief Display hex values."""
     return '%#X' % value
+
+#
+def displayNull(value):
+    """@brief Return argument unchanged"""
+    return value
