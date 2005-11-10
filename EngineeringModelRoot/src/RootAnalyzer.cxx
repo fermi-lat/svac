@@ -307,6 +307,8 @@ void RootAnalyzer::analyzeReconTree()
     TObjArray* calMipTrackCol = calRecon->getCalMipTrackCol();
     if (calMipTrackCol) {
       int nCalMip = calMipTrackCol->GetLast() + 1;
+      m_ntuple.m_calMipNum = nCalMip;
+
       for (int i = 0; i< std::min(2,nCalMip); i++) {
         CalMipTrack* calMip = dynamic_cast<CalMipTrack*>(calMipTrackCol->At(i));
         if (calMip) {
@@ -322,7 +324,12 @@ void RootAnalyzer::analyzeReconTree()
             m_ntuple.m_calMip1Dir[1] = dir.y();
             m_ntuple.m_calMip1Dir[2] = dir.z();
 
-            m_ntuple.m_calMip1Chi2 = calMip->getChi2();
+            m_ntuple.m_calMip1Chi2    = calMip->getChi2();
+            m_ntuple.m_calMip1D2edge  = calMip->getD2Edge();
+            m_ntuple.m_calMip1ArcLen  = calMip->getArcLen();
+            m_ntuple.m_calMip1Ecor    = calMip->getEcor();
+            m_ntuple.m_calMip1EcorRms = calMip->getEcorRms();
+            m_ntuple.m_calMip1Erm     = calMip->getErm();
           }
           if (i == 1) {
             m_ntuple.m_calMip2Pos[0] = pos.x();
@@ -333,7 +340,12 @@ void RootAnalyzer::analyzeReconTree()
             m_ntuple.m_calMip2Dir[1] = dir.y();
             m_ntuple.m_calMip2Dir[2] = dir.z();
 
-            m_ntuple.m_calMip1Chi2 = calMip->getChi2();
+            m_ntuple.m_calMip2Chi2    = calMip->getChi2();
+            m_ntuple.m_calMip2D2edge  = calMip->getD2Edge();
+            m_ntuple.m_calMip2ArcLen  = calMip->getArcLen();
+            m_ntuple.m_calMip2Ecor    = calMip->getEcor();
+            m_ntuple.m_calMip2EcorRms = calMip->getEcorRms();
+            m_ntuple.m_calMip2Erm     = calMip->getErm();
           }
         }
       }
@@ -1242,13 +1254,25 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
 
-  m_tree->Branch("CalMip1Pos", &(m_ntuple.m_calMip1Pos),"CalMip1Pos[3]/F");
-  m_tree->Branch("CalMip2Pos", &(m_ntuple.m_calMip2Pos),"CalMip2Pos[3]/F");
-  m_tree->Branch("CalMip1Dir", &(m_ntuple.m_calMip1Dir),"CalMip1Dir[3]/F");
-  m_tree->Branch("CalMip2Dir", &(m_ntuple.m_calMip2Dir),"CalMip2Dir[3]/F");
-  m_tree->Branch("CalMip1Chi2", &(m_ntuple.m_calMip1Chi2),"CalMip1Chi2/F");
-  m_tree->Branch("CalMip2Chi2", &(m_ntuple.m_calMip2Chi2),"CalMip2Chi2/F"); 
+  m_tree->Branch("CalMipNum", &(m_ntuple.m_calMipNum),"CalMipNum/I");
 
+  m_tree->Branch("CalMip1Pos", &(m_ntuple.m_calMip1Pos),"CalMip1Pos[3]/F");
+  m_tree->Branch("CalMip1Dir", &(m_ntuple.m_calMip1Dir),"CalMip1Dir[3]/F");
+  m_tree->Branch("CalMip1Chi2", &(m_ntuple.m_calMip1Chi2),"CalMip1Chi2/F");
+  m_tree->Branch("CalMip1D2edge", &(m_ntuple.m_calMip1D2edge),"CalMip1D2edge");
+  m_tree->Branch("CalMip1ArcLen", &(m_ntuple.m_calMip1ArcLen),"CalMip1ArcLen/F");
+  m_tree->Branch("CalMip1Ecor", &(m_ntuple.m_calMip1Ecor),"CalMip1Ecor/F");
+  m_tree->Branch("CalMip1EcorRms", &(m_ntuple.m_calMip1EcorRms),"CalMip1EcorRms/F");
+  m_tree->Branch("CalMip1Erm", &(m_ntuple.m_calMip1Erm),"CalMip1Erm/F");
+
+  m_tree->Branch("CalMip2Pos", &(m_ntuple.m_calMip2Pos),"CalMip2Pos[3]/F");
+  m_tree->Branch("CalMip2Dir", &(m_ntuple.m_calMip2Dir),"CalMip2Dir[3]/F");
+  m_tree->Branch("CalMip2Chi2", &(m_ntuple.m_calMip2Chi2),"CalMip2Chi2/F"); 
+  m_tree->Branch("CalMip2D2edge", &(m_ntuple.m_calMip2D2edge),"CalMip2D2edge");
+  m_tree->Branch("CalMip2ArcLen", &(m_ntuple.m_calMip2ArcLen),"CalMip2ArcLen/F");
+  m_tree->Branch("CalMip2Ecor", &(m_ntuple.m_calMip2Ecor),"CalMip2Ecor/F");
+  m_tree->Branch("CalMip2EcorRms", &(m_ntuple.m_calMip2EcorRms),"CalMip2EcorRms/F");
+  m_tree->Branch("CalMip2Erm", &(m_ntuple.m_calMip2Erm),"CalMip2Erm/F");
 
   // GLT information:
   m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
