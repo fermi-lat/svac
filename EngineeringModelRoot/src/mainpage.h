@@ -240,9 +240,9 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
 <TR> <TD> CalEneSum  </TD> <TD> Float </TD> <TD> Sum of energies (in MeV) in each crystal </TD> </TR>
-<TR> <TD> CalXEcentr </TD> <TD> Float </TD> <TD> x coordinate (in mm) of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of CAL cluster </TD> </TR>
-<TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of CAL cluster </TD> </TR>
+<TR> <TD> CalXEcentr </TD> <TD> Float </TD> <TD> x coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
+<TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
+<TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 
 <TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column (and end). 
           Currently both ends contain the best total energy estimate i.e. use either [end=0] or [end=1], but not both. To get the end energies you need to look at the CAL ntuple.</TD> </TR>
@@ -263,6 +263,14 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 
 <TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD> Float </TD> <TD>A 3 dimensional array which describes fit position in each CAL crystal: coord=0 means fitted X coordinate, 
           coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate. (For experts only.) </TD> </TR>
+
+
+<TR> <TD> CalMip1Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position for MIP 1: 0=X, 1=Y and 2=Z. </TD> </TR> 
+<TR> <TD> CalMip2Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position for MIP 2: 0=X, 1=Y and 2=Z. </TD> </TR> 
+<TR> <TD> CalMip1Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for MIP 1: 0=X, 1=Y and 2=Z. </TD> </TR>
+<TR> <TD> CalMip2Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for MIP 2: 0=X, 1=Y and 2=Z. </TD> </TR>            
+<TR> <TD> CalMip1Chi2     </TD> <TD> Float </TD> <TD> Chi2 of MIP 1. </TD> </TR>
+<TR> <TD> CalMip2Chi2     </TD> <TD> Float </TD> <TD> Chi2 of MIP 2. </TD> </TR>
 </TABLE>
 
 

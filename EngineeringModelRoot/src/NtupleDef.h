@@ -72,7 +72,7 @@ struct NtupleDef {
   float m_tkr2EndPos[3];
   float m_tkr2EndDir[3];
 
-  // ACD:
+  // ACD information:
   float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];
   int m_acdHitMap[g_nAcdTile][2];
@@ -98,6 +98,8 @@ struct NtupleDef {
   int m_acdMaxActiveDistId;
   int m_acdRibbonActiveDistId;
 
+
+  // ACD-TKR intersection information:
   int m_acdNumTkrIntersection;
   int m_acdTkrIntersectionTileId[10];
   int m_acdTkrIntersectionTkrIndex[10];
@@ -113,6 +115,14 @@ struct NtupleDef {
   float m_acdTkrIntersectionPathLengthInTile[10];
   int m_acdTkrIntersectionTileHit[10];
 
+
+  // CAL MIP information:
+  float m_calMip1Pos[3];
+  float m_calMip2Pos[3];
+  float m_calMip1Dir[3];
+  float m_calMip2Dir[3];
+  float m_calMip1Chi2;
+  float m_calMip2Chi2;
 
   // Cal measured energy
   float m_calEnergy;
