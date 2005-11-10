@@ -158,3 +158,6 @@ v1r6: November 7, 2005
 awb Added Eric's ACD-TKR intersection variables.
     Updated ACD variables/code to current code.
     Updated CAL Recon code to new CalRecon.
+
+v1r7: November 10, 2005
+awb Added CAL MIP variables.
