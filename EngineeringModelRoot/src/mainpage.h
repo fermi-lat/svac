@@ -229,46 +229,45 @@ The values are integers, but are stored as doubles to portably get more than 32 
 
 <TABLE>
 <CAPTION ALIGN="TOP"> ACD variables </CAPTION>
-<TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
-<TR> <TD> AcdNumDigis                     </TD> <TD> Number of ACD digis </TD> </TR>
-<TR> <TD> AcdPha[tileID][2]               </TD> <TD> Pulse Hight Analysis for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHitMap[tileID][2]            </TD> <TD> Veto discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdRange[tileID][2]             </TD> <TD> Range for the specified tile/ribbon and PMT (A or B).</TD> </TR>
-<TR> <TD> AcdOddParityError[tileID][2]    </TD> <TD> Odd parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHeaderParityError[tileID][2] </TD> <TD> Header parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdLowDisc[tileID][2]           </TD> <TD> Low discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdTileNumber[tileID]           </TD> <TD> Tile number in dense notation. </TD> </TR> 
-<TR> <TD> AcdMCEnergy                     </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
-<TR> <TD> AcdEnergy                       </TD> <TD> Total energy deposited in the ACD system. </TD> </TR> 
-<TR> <TD> AcdTileCount                    </TD> <TD> Total number of ACD tiles with the accept bit set (above the low threshold).  </TD> </TR> 
-<TR> <TD> AcdDoca                         </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
-<TR> <TD> AcdMinDocaId                    </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
-<TR> <TD> AcdGammaDoca                    </TD> <TD> The minimal Distance of Closest Approach (DOCA) of the photon wrt the center of the tile. </TD> </TR>
-<TR> <TD> AcdActiveDist                   </TD> <TD> Returns the maximum Active Distance for all tracks and ACD tiles. </TD> </TR>
-<TR> <TD> AcdMaxActiveDistId              </TD> <TD> The tile ID of the ACD tile associated with the maximum active distance.  </TD> </TR>
-<TR> <TD> Acd10Ids[10]                    </TD> <TD> The tile IDs for the first 10 ACD digis. </TD> </TR>
+<TR> <TH> Variable name </TH> <TH>Meaning </TH> </TR>
+<TR> <TD> AcdNumDigis                           </TD> <TD> Number of ACD digis </TD> </TR>
+<TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Pulse Hight Analysis for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Veto discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdRange[tileID:0-603][2]             </TD> <TD> Range for the specified tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Odd parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Header parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Low discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Tile number in dense notation. </TD> </TR> 
+
+<TR> <TD> AcdMCEnergy            </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
+<TR> <TD> AcdEnergy              </TD> <TD> Total energy deposited in the ACD system. </TD> </TR> 
+<TR> <TD> AcdTileCount           </TD> <TD> Total number of ACD tiles with the accept bit set (above the low threshold).  </TD> </TR> 
+<TR> <TD> AcdDoca                </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
+<TR> <TD> AcdMinDocaId           </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
+<TR> <TD> AcdGammaDoca           </TD> <TD> The minimal Distance of Closest Approach (DOCA) of the photon wrt the center of the tile. </TD> </TR>
+<TR> <TD> AcdActiveDist          </TD> <TD> Returns the maximum Active Distance for all tracks and ACD tiles. </TD> </TR>
+<TR> <TD> AcdMaxActiveDistId     </TD> <TD> The tile ID of the ACD tile associated with the maximum active distance.  </TD> </TR>
+<TR> <TD> Acd10Ids[10]           </TD> <TD> The tile IDs for the first 10 ACD digis. </TD> </TR>
+<TR> <TD> AcdRibbonMCEnergy      </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>  </TD> </TR>
+<TR> <TD> AcdRibbonCount         </TD> <TD> Total number of ACD ribbons with the accept bit set (above the low threshold). </TD> </TR>
+<TR> <TD> AcdRibbonActiveDist    </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
+<TR> <TD> AcdRibbonActiveDistId  </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
 
-<TR> <TD> AcdRibbonMCEnergy               </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>  </TD> </TR>
-<TR> <TD> AcdRibbonCount                  </TD> <TD> Total number of ACD ribbons with the accept bit set (above the low threshold). </TD> </TR>
-<TR> <TD> AcdRibbonActiveDist             </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
-<TR> <TD> AcdRibbonActiveDistId           </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
-
-
-<TR> <TD> AcdNumTkrIntSec                             </TD> <TD> Total number of ACD-TKR intersections. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTileId[iTkrIntSec]              </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec]            </TD> <TD> The track index of the intersecting track.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalX[iTkrIntSec]             </TD> <TD> Global X-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalY[iTkrIntSec]             </TD> <TD> Global Y-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalZ[iTkrIntSec]             </TD> <TD> Global Z-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec]              </TD> <TD> Local X-ccoridnate of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec]              </TD> <TD> Local Y-ccoridnate of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalXXCov[iTkrIntSec]          </TD> <TD> Covariance matrix element XX of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalYYCov[iTkrIntSec]          </TD> <TD> Covariance matrix element YY of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec]          </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec]   </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
-<TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec]    </TD> <TD> Path length of track through tile. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec]             </TD> <TD> Set if intersected tile/ribbon is hit. </TD> </TR>
+<TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Total number of ACD-TKR intersections. Maximum number is 10.</TD> </TR>
+<TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-9]              </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
+<TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-9]            </TD> <TD> The track index of the intersecting track.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalX[iTkrIntSec:0-9]             </TD> <TD> Global X-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalY[iTkrIntSec:0-9]             </TD> <TD> Global Y-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalZ[iTkrIntSec:0-9]             </TD> <TD> Global Z-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec:0-9]              </TD> <TD> Local X-ccoridnate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec:0-9]              </TD> <TD> Local Y-ccoridnate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalXXCov[iTkrIntSec:0-9]          </TD> <TD> Covariance matrix element XX of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalYYCov[iTkrIntSec:0-9]          </TD> <TD> Covariance matrix element YY of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-9]          </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec:0-9]   </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
+<TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec:0-9]    </TD> <TD> Path length of track through tile. </TD> </TR>
+<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-9]             </TD> <TD> Set if intersected tile/ribbon is hit. </TD> </TR>
 
 </TABLE>
 
