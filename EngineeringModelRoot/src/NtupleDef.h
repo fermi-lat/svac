@@ -117,7 +117,7 @@ struct NtupleDef {
 
 
   // CAL MIP information:
-  int CalMipNum;
+  int m_alMipNum;
 
   float m_calMip1Pos[3];
   float m_calMip1Dir[3];
