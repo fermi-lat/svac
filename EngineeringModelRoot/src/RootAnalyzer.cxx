@@ -379,19 +379,21 @@ void RootAnalyzer::analyzeReconTree()
       int nInter = acdRecon->nAcdIntersections();
       for ( int iInter(0); iInter < nInter; iInter++ ) {
         const AcdTkrIntersection* acdInterRoot = acdRecon->getAcdTkrIntersection(iInter);
-        m_ntuple.m_acdTkrIntersectionTileId[iInter]                  = acdInterRoot->getTileId().getId();
-        m_ntuple.m_acdTkrIntersectionTkrIndex[iInter]                = acdInterRoot->getTrackIndex();
-        m_ntuple.m_acdTkrIntersectionGlobalX[iInter]                 = acdInterRoot->getGlobalPosition().x();
-        m_ntuple.m_acdTkrIntersectionGlobalY[iInter]                 = acdInterRoot->getGlobalPosition().y();
-        m_ntuple.m_acdTkrIntersectionGlobalZ[iInter]                 = acdInterRoot->getGlobalPosition().z();
-        m_ntuple.m_acdTkrIntersectionLocalX[iInter]                  = acdInterRoot->getLocalX();
-        m_ntuple.m_acdTkrIntersectionLocalY[iInter]                  = acdInterRoot->getLocalY();
-        m_ntuple.m_acdTkrIntersectionLocalXXCov[iInter]              = acdInterRoot->getLocalXXCov();
-        m_ntuple.m_acdTkrIntersectionLocalYYCov[iInter]              = acdInterRoot->getLocalYYCov();
-        m_ntuple.m_acdTkrIntersectionLocalXYCov[iInter]              = acdInterRoot->getLocalXYCov();
-        m_ntuple.m_acdTkrIntersectionArcLengthToIntersection[iInter] = acdInterRoot->getArcLengthToIntersection();
-        m_ntuple.m_acdTkrIntersectionPathLengthInTile[iInter]        = acdInterRoot->getPathLengthInTile();
-        m_ntuple.m_acdTkrIntersectionTileHit[iInter]                 = acdInterRoot->tileHit();
+        if (iInter < 20) {
+          m_ntuple.m_acdTkrIntersectionTileId[iInter]                  = acdInterRoot->getTileId().getId();
+          m_ntuple.m_acdTkrIntersectionTkrIndex[iInter]                = acdInterRoot->getTrackIndex();
+          m_ntuple.m_acdTkrIntersectionGlobalX[iInter]                 = acdInterRoot->getGlobalPosition().x();
+          m_ntuple.m_acdTkrIntersectionGlobalY[iInter]                 = acdInterRoot->getGlobalPosition().y();
+          m_ntuple.m_acdTkrIntersectionGlobalZ[iInter]                 = acdInterRoot->getGlobalPosition().z();
+          m_ntuple.m_acdTkrIntersectionLocalX[iInter]                  = acdInterRoot->getLocalX();
+          m_ntuple.m_acdTkrIntersectionLocalY[iInter]                  = acdInterRoot->getLocalY();
+          m_ntuple.m_acdTkrIntersectionLocalXXCov[iInter]              = acdInterRoot->getLocalXXCov();
+          m_ntuple.m_acdTkrIntersectionLocalYYCov[iInter]              = acdInterRoot->getLocalYYCov();
+          m_ntuple.m_acdTkrIntersectionLocalXYCov[iInter]              = acdInterRoot->getLocalXYCov();  
+          m_ntuple.m_acdTkrIntersectionArcLengthToIntersection[iInter] = acdInterRoot->getArcLengthToIntersection();
+          m_ntuple.m_acdTkrIntersectionPathLengthInTile[iInter]        = acdInterRoot->getPathLengthInTile();
+          m_ntuple.m_acdTkrIntersectionTileHit[iInter]                 = acdInterRoot->tileHit();
+	}
       }
     }
   }
@@ -1357,18 +1359,18 @@ void RootAnalyzer::createBranches()
 
   // Eric's ACD-TKR intersection stuff:
   m_tree->Branch("AcdNumTkrIntSec", &(m_ntuple.m_acdNumTkrIntersection),"AcdNumTkrIntSec/I");
-  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
-  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
-  m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[10]/I");
-  m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[10]/F");
-  m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[10]/F");
-  m_tree->Branch("AcdTkrIntSecGlobalZ", &(m_ntuple.m_acdTkrIntersectionGlobalZ),"AcdTkrIntSecGlobalZ[10]/F");
-  m_tree->Branch("AcdTkrIntSecLocalX", &(m_ntuple.m_acdTkrIntersectionLocalX),"AcdTkrIntSecLocalX[10]/F");
-  m_tree->Branch("AcdTkrIntSecLocalY", &(m_ntuple.m_acdTkrIntersectionLocalY),"AcdTkrIntSecLocalY[10]/F");
-  m_tree->Branch("AcdTkrIntSecLocalXXCov", &(m_ntuple.m_acdTkrIntersectionLocalXXCov),"AcdTkrIntSecLocalXXCov[10]/F");
-  m_tree->Branch("AcdTkrIntSecLocalYYCov", &(m_ntuple.m_acdTkrIntersectionLocalYYCov),"AcdTkrIntSecLocalYYCov[10]/F");
-  m_tree->Branch("AcdTkrIntSecLocalXYCov", &(m_ntuple.m_acdTkrIntersectionLocalXYCov),"AcdTkrIntSecLocalXYCov[10]/F");
-  m_tree->Branch("AcdTkrIntSecArcLengthToIntSec", &(m_ntuple.m_acdTkrIntersectionArcLengthToIntersection),"AcdTkrIntSecArcLengthToIntSec[10]/F");
-  m_tree->Branch("AcdTkrIntSecPathLengthInTile", &(m_ntuple.m_acdTkrIntersectionPathLengthInTile),"AcdTkrIntSecPathLengthInTile[10]/F");
-  m_tree->Branch("AcdTkrIntSecTileHit", &(m_ntuple.m_acdTkrIntersectionTileHit),"AcdTkrIntSecTileHit[10]/I");
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[20]/I");
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[20]/I");
+  m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[20]/I");
+  m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[20]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[20]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalZ", &(m_ntuple.m_acdTkrIntersectionGlobalZ),"AcdTkrIntSecGlobalZ[20]/F");
+  m_tree->Branch("AcdTkrIntSecLocalX", &(m_ntuple.m_acdTkrIntersectionLocalX),"AcdTkrIntSecLocalX[20]/F");
+  m_tree->Branch("AcdTkrIntSecLocalY", &(m_ntuple.m_acdTkrIntersectionLocalY),"AcdTkrIntSecLocalY[20]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXXCov", &(m_ntuple.m_acdTkrIntersectionLocalXXCov),"AcdTkrIntSecLocalXXCov[20]/F");
+  m_tree->Branch("AcdTkrIntSecLocalYYCov", &(m_ntuple.m_acdTkrIntersectionLocalYYCov),"AcdTkrIntSecLocalYYCov[20]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXYCov", &(m_ntuple.m_acdTkrIntersectionLocalXYCov),"AcdTkrIntSecLocalXYCov[20]/F");
+  m_tree->Branch("AcdTkrIntSecArcLengthToIntSec", &(m_ntuple.m_acdTkrIntersectionArcLengthToIntersection),"AcdTkrIntSecArcLengthToIntSec[20]/F");
+  m_tree->Branch("AcdTkrIntSecPathLengthInTile", &(m_ntuple.m_acdTkrIntersectionPathLengthInTile),"AcdTkrIntSecPathLengthInTile[20]/F");
+  m_tree->Branch("AcdTkrIntSecTileHit", &(m_ntuple.m_acdTkrIntersectionTileHit),"AcdTkrIntSecTileHit[20]/I");
 }

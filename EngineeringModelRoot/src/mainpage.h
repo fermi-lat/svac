@@ -316,20 +316,20 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdRibbonActiveDistId  </TD> <TD> Int   </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
 
-<TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections. Maximum number is 10.</TD> </TR>
-<TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-9]              </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-9]            </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalX[iTkrIntSec:0-9]             </TD> <TD> Float </TD> <TD> Global X-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalY[iTkrIntSec:0-9]             </TD> <TD> Float </TD> <TD> Global Y-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecGlobalZ[iTkrIntSec:0-9]             </TD> <TD> Float </TD> <TD> Global Z-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec:0-9]              </TD> <TD> Float </TD> <TD> Local X-ccoridnate of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec:0-9]              </TD> <TD> Float </TD> <TD> Local Y-ccoridnate of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalXXCov[iTkrIntSec:0-9]          </TD> <TD> Float </TD> <TD> Covariance matrix element XX of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalYYCov[iTkrIntSec:0-9]          </TD> <TD> Float </TD> <TD> Covariance matrix element YY of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-9]          </TD> <TD> Float </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec:0-9]   </TD> <TD> Float </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
-<TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec:0-9]    </TD> <TD> Float </TD> <TD> Path length of track through tile. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-9]             </TD> <TD> Int   </TD> <TD> Set if intersected tile/ribbon is hit. </TD> </TR>
+<TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections.</TD> </TR>
+<TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-19]             </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
+<TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-19]           </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalX[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global X-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalY[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global Y-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecGlobalZ[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global Z-coordinate of the hit position.  </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local X-ccoridnate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local Y-ccoridnate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalXXCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XX of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalYYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element YY of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec:0-19]  </TD> <TD> Float </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
+<TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec:0-19]   </TD> <TD> Float </TD> <TD> Path length of track through tile. </TD> </TR>
+<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. Exact mask format will be added later. </TD> </TR>
 
 </TABLE>
 

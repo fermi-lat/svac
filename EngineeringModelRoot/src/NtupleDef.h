@@ -102,19 +102,19 @@ struct NtupleDef {
 
   // ACD-TKR intersection information:
   int m_acdNumTkrIntersection;
-  int m_acdTkrIntersectionTileId[10];
-  int m_acdTkrIntersectionTkrIndex[10];
-  float m_acdTkrIntersectionGlobalX[10];
-  float m_acdTkrIntersectionGlobalY[10];
-  float m_acdTkrIntersectionGlobalZ[10];
-  float m_acdTkrIntersectionLocalX[10];
-  float m_acdTkrIntersectionLocalY[10];
-  float m_acdTkrIntersectionLocalXXCov[10];
-  float m_acdTkrIntersectionLocalYYCov[10];
-  float m_acdTkrIntersectionLocalXYCov[10];
-  float m_acdTkrIntersectionArcLengthToIntersection[10];
-  float m_acdTkrIntersectionPathLengthInTile[10];
-  int m_acdTkrIntersectionTileHit[10];
+  int m_acdTkrIntersectionTileId[20];
+  int m_acdTkrIntersectionTkrIndex[20];
+  float m_acdTkrIntersectionGlobalX[20];
+  float m_acdTkrIntersectionGlobalY[20];
+  float m_acdTkrIntersectionGlobalZ[20];
+  float m_acdTkrIntersectionLocalX[20];
+  float m_acdTkrIntersectionLocalY[20];
+  float m_acdTkrIntersectionLocalXXCov[20];
+  float m_acdTkrIntersectionLocalYYCov[20];
+  float m_acdTkrIntersectionLocalXYCov[20];
+  float m_acdTkrIntersectionArcLengthToIntersection[20];
+  float m_acdTkrIntersectionPathLengthInTile[20];
+  int m_acdTkrIntersectionTileHit[20];
 
 
   // CAL MIP information:
