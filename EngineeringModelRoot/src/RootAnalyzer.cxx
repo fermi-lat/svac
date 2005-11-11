@@ -370,6 +370,7 @@ void RootAnalyzer::analyzeReconTree()
     m_ntuple.m_acdRibbonActiveDist   = acdRecon->getRibbonActiveDist();
     m_ntuple.m_acdMaxActiveDistId    = acdRecon->getMaxActDistId().getId();
     m_ntuple.m_acdRibbonActiveDistId = acdRecon->getRibbonActDistId().getId();
+    m_ntuple.m_acdCornerDoca         = acdRecon->getCornerDoca();
 
     // Eric's ACD-TKR intersection stuff:
     m_ntuple.m_acdNumTkrIntersection = acdRecon->nAcdIntersections();
@@ -1352,6 +1353,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdRibbonActiveDist", &(m_ntuple.m_acdRibbonActiveDist),"AcdRibbonActiveDist/F");
   m_tree->Branch("AcdMaxActiveDistId", &(m_ntuple.m_acdMaxActiveDistId),"AcdMaxActiveDistId/I");
   m_tree->Branch("AcdRibbonActiveDistId", &(m_ntuple.m_acdRibbonActiveDistId),"AcdRibbonActiveDistId/I");
+  m_tree->Branch("AcdCornerDoca", &(m_ntuple.m_acdCornerDoca),"AcdCornerDoca/F");
 
   // Eric's ACD-TKR intersection stuff:
   m_tree->Branch("AcdNumTkrIntSec", &(m_ntuple.m_acdNumTkrIntersection),"AcdNumTkrIntSec/I");

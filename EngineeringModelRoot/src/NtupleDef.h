@@ -97,6 +97,7 @@ struct NtupleDef {
   int m_acdRibbonCount;
   int m_acdMaxActiveDistId;
   int m_acdRibbonActiveDistId;
+  float m_acdCornerDoca;
 
 
   // ACD-TKR intersection information:
@@ -117,7 +118,7 @@ struct NtupleDef {
 
 
   // CAL MIP information:
-  int m_alMipNum;
+  int m_calMipNum;
 
   float m_calMip1Pos[3];
   float m_calMip1Dir[3];
