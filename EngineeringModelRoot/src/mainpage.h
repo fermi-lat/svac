@@ -329,10 +329,9 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
 <TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec:0-19]  </TD> <TD> Float </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
 <TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec:0-19]   </TD> <TD> Float </TD> <TD> Path length of track through tile. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. It is set to 1 if it passed the accept threshold for PMT A, 
-          to 2 if it passed the accept threshold for PMT B, to 4 if it passed the Veto threshold for PMT A, to 8 if it passed the Veto threshold for PMT B, to 16 if it passed the CNO threshold for 
-          PMT A and 32 if it passed the CNO threshold for PMT B. </TD> </TR>
-
+<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. It is the sum of the values 1, 2, 4, 8, 16, and 32 which are set if 
+          the signal in the tile passed the accept threshold for PMT A, the accept threshold for PMT B, the Veto threshold for PMT A, the Veto threshold for PMT B, the CNO threshold for PMT A and the 
+          CNO threshold for PMT B respectively. </TD> </TR>
 </TABLE>
 
 @section jobOpt Example of the option file
