@@ -329,7 +329,9 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
 <TR> <TD> AcdTkrIntSecArcLengthToIntSec[iTkrIntSec:0-19]  </TD> <TD> Float </TD> <TD> Distance along track from first hit to tile intersection. </TD> </TR>
 <TR> <TD> AcdTkrIntSecPathLengthInTile[iTkrIntSec:0-19]   </TD> <TD> Float </TD> <TD> Path length of track through tile. </TD> </TR>
-<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. Exact mask format will be added later. </TD> </TR>
+<TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. It is set to 1 if it passed the accept threshold for PMT A, 
+          to 2 if it passed the accept threshold for PMT B, to 4 if it passed the Veto threshold for PMT A, to 8 if it passed the Veto threshold for PMT B, to 16 if it passed the CNO threshold for 
+          PMT A and 32 if it passed the CNO threshold for PMT B. </TD> </TR>
 
 </TABLE>
 
