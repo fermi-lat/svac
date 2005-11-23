@@ -1360,7 +1360,6 @@ void RootAnalyzer::createBranches()
   // Eric's ACD-TKR intersection stuff:
   m_tree->Branch("AcdNumTkrIntSec", &(m_ntuple.m_acdNumTkrIntersection),"AcdNumTkrIntSec/I");
   m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[20]/I");
-  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[20]/I");
   m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[20]/I");
   m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[20]/F");
   m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[20]/F");
