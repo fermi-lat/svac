@@ -174,3 +174,5 @@ awb Forgot to update the documentation.
 v1r8p3: November 11, 2005
 awb Fixed wrong assumption about the number of TKR-ACD intewsections.
 
+v1r8p4: November 23, 2005
+awb Removed duplicate variable in the ntuple. Thanks Hippo!
