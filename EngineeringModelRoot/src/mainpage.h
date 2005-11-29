@@ -196,8 +196,10 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> totCorrQ[tower][layer][view][end]  </TD> <TD> Int </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, 
           using Hiro's quadratic correction formula. At the moment only valid for EM1 data. </TD> </TR>
 
-<TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> Int </TD> <TD> A 3 dimension array which describes number of clusters at every tower, layer and view. 
+<TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> Int </TD> <TD> A 3 dimension array which describes the number of clusters at every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
+
+<TR> <TD> TkrDepositEne[tower][layer][view] </TD> <TD> Float </TD> <TD> A 3 dimension array containing, for each tower, the true deposited energy in each layer and view. For MC only. </TD> </TR>
 
 <TR> <TD> TkrNumTracks   </TD> <TD> Int </TD> <TD> Number of reconstructed tracks. Currently recon allows maximum of 10 tracks.</TD> </TR>
 <TR> <TD> TkrNumVertices </TD> <TD> Int </TD> <TD> Number of reconstructed vertices</TD> </TR>
