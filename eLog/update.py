@@ -64,7 +64,11 @@ def checkNewValue(value, table, col):
     
     execSql(c, sqlStr)
     
-    id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
+    id = {'eLogSite': 'Seq_eLogSiteID.NextVal',
+          'eLogPhase': 'Seq_eLogPhaseID.NextVal',
+          'eLogOrientation': 'Seq_eLogOrientationID.NextVal',
+          'eLogInstrumentType': 'Seq_eLogInstrumentTypeID.NextVal',
+          'eLogParticleType': 'Seq_eLogParticleTypeID.NextVal'}
           
     sqlStr = 'select ' + col + ' from ' + table + ' where ' + col + ' = \'' + value + '\''
     execSql(c, sqlStr)
@@ -203,8 +207,23 @@ serNoTag = 'SerialNos'
 suiteNameTag = 'suiteName'
 suiteRunListTag = 'suiteRunList'
 suiteTimeStampTag = 'suiteTimeStamp'
+analTag = 'Readback_mode'
+analUnitTag = 'analysisUnit'
+analTemTag = 'analysisTemId'
 
-tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag]
+tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag,
+        eventCountTag, badEventCountTag, pauseCountTag,
+        startTimeTag, elapsedTimeTag, endTimeTag,
+        schemaConfigFileTag, additionalInputFilesTag, releaseTag,
+        modulesFailedVerificationTag, versionDataTag,
+        completionStatusTag, completionStatusStrTag,
+        archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag,
+        siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag,
+        commentsTag, errorEventCountTag,
+        onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag,
+        analTag, analUnitTag, analTemTag]
+
+reinsertTags = [analTag, analUnitTag, analTemTag]
 
 # create Reader object
 reader = Sax2.Reader()
@@ -250,6 +269,7 @@ for report in reports:
     nTowers = 0
     tkrSerNo = ''
     calSerNo = ''
+    readBack = False
 
     for node in report.childNodes:
 
@@ -261,7 +281,9 @@ for report in reports:
         name = node.nodeName
         
         if(name == serNoTag):
-            [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
+            [nTowers, tkrSerNo, calSerNo] = \
+                      parseSerialNosTag(node.childNodes[0].data)
+            
         elif( name == csvTestIdTag ):
             intRunConfigId = insertIntRunConfigId(node.childNodes[0].data)
 
@@ -359,6 +381,25 @@ for report in reports:
     
     if(data.has_key(onlineReportTag)):
         onlineReportUrl += data[onlineReportTag]
+        
+    # mangle serial # fields if this is an analysis run
+    if data.has_key(analTag) and eval(data[analTag]):
+        analSerNo = '%s(%s)???' % (data[analUnitTag], data[analTemTag])
+        otherSerNo = ''
+        if data[analUnitTag] in tkrSerNo:
+            tkrSerNo = analSerNo
+            calSerNo = otherSerNo
+        elif data[analUnitTag] in calSerNo:
+            calSerNo = analSerNo
+            tkrSerNo = otherSerNo
+            pass
+        # The tags we used to do this didn't go into additionFileds.
+        # Nor do they have their own columns in the DB.
+        # So insert them into additionFields now.
+        for tag in reinsertTags:
+            data[additionFieldsTag] += '%s???%s!!!' % (tag, data[tag])
+            pass
+        pass
      
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
