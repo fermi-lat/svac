@@ -481,6 +481,38 @@ def garcMask(doc, base):
         pass
     
     return output
+
+#
+def garcPha(doc):
+    """@brief Format GARC PHA threshholds."""
+    output = []
+
+    axisLabels = jobOptions.gafeLabels
+
+    regLabel = "GARC PHA Threshholds"
+    regBase = 'GAEM/GARC/pha_threshold_'
+    regSpec = regBase + 'N'
+    sectionTitle = '%s (%s)' % (regLabel, regSpec)
+    output.append(html.Heading(sectionTitle, 2))
+    
+    nPhas = 18
+    names = [regBase + '%d' % x for x in range(nPhas)]
+
+    data = ndDict.ndDict(2)
+    for gafe, name in enumerate(names):
+        xTable = tableFromXml.xTableGen(doc, name)
+        garcData = xTable.data[0]
+        for garc in garcData:
+            data[garc, gafe] = garcData[garc]
+            pass
+        pass
+
+    array, indices = data.table()
+    hTable = table.twoDTable(array, regLabel, axisLabels, indices)
+    output.append(hTable)
+    
+    return output
+    
     
 #
 def oneGafeReg(doc, tag, mapper):
@@ -542,6 +574,9 @@ def acdStuff(doc):
     output.append(html.Element("HR"))
     output.extend(manyGarcs(doc, jobOptions.acdHvTags, jobOptions.voltMap))
     output.extend(manyGarcs(doc, jobOptions.acdGarcRandom, jobOptions.hexMap))
+    output.extend(garcPha(doc))
+    output.append(html.Element("HR"))
+    output.append(html.Element("HR"))
     output.extend(gafeRegs(doc))
     output.append(html.Element("HR"))
         
