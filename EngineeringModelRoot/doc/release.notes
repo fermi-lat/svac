@@ -176,3 +176,7 @@ awb Fixed wrong assumption about the number of TKR-ACD intewsections.
 
 v1r8p4: November 23, 2005
 awb Removed duplicate variable in the ntuple. Thanks Hippo!
+
+v1r8p5: December 13, 2005
+awb	Only fill ACD arrays for attached tiles. 
+      	Check that tile id is less than 604 (max size of arrays). 
