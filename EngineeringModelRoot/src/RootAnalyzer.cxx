@@ -518,12 +518,12 @@ void RootAnalyzer::analyzeDigiTree()
     int AcdID = acdDigi->getId().getId();
 
     // Attached tile?
-    if (acdDigi->getNa()==0 && AcdID>603) {
+    if (acdDigi->getId().getNa()==0 && AcdID>603) {
       std::cout << "ACD tile ID for attached tile is >603! - " << AcdID << std::endl;
     } 
 
     // Attached tile?
-    if (acdDigi->getNa()==0 && AcdID<604) {
+    if (acdDigi->getId().getNa()==0 && AcdID<604) {
 
       if (i10Count < 10) {
         m_ntuple.m_acd10Ids[i10Count] = AcdID;
