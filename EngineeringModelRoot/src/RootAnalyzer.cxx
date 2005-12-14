@@ -517,37 +517,41 @@ void RootAnalyzer::analyzeDigiTree()
 
     int AcdID = acdDigi->getId().getId();
 
-    if (AcdID > 603) {
-      std::cout << "Anders - WARNING!!!! ACD ID is " << AcdID << std::endl;
+    // Attached tile?
+    if (acdDigi->getNa()==0 && AcdID>603) {
+      std::cout << "ACD tile ID for attached tile is >603! - " << AcdID << std::endl;
+    } 
+
+    // Attached tile?
+    if (acdDigi->getNa()==0 && AcdID<604) {
+
+      if (i10Count < 10) {
+        m_ntuple.m_acd10Ids[i10Count] = AcdID;
+        i10Count++;
+      }
+
+      m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
+      m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
+
+      m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
+      m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
+
+      m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
+      m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
+
+      m_ntuple.m_acdOddParityError[AcdID][0] = acdDigi->getOddParityError(AcdDigi::A);
+      m_ntuple.m_acdOddParityError[AcdID][1] = acdDigi->getOddParityError(AcdDigi::B);
+
+      m_ntuple.m_acdHeaderParityError[AcdID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
+      m_ntuple.m_acdHeaderParityError[AcdID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
+
+      m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
+      m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
+
+      m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
+      m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
     }
-
-    if (i10Count < 10) {
-      m_ntuple.m_acd10Ids[i10Count] = AcdID;
-      i10Count++;
-    }
-
-    m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
-    m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
-
-    m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
-    m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
-
-    m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
-    m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
-
-    m_ntuple.m_acdOddParityError[AcdID][0] = acdDigi->getOddParityError(AcdDigi::A);
-    m_ntuple.m_acdOddParityError[AcdID][1] = acdDigi->getOddParityError(AcdDigi::B);
-
-    m_ntuple.m_acdHeaderParityError[AcdID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
-    m_ntuple.m_acdHeaderParityError[AcdID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
-
-    m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
-    m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
-
-    m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
-    m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
   }
-
 
 
 
