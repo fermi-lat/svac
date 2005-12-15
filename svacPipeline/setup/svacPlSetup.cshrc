@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p0
+setenv svacVersion v3r4p1
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -29,13 +29,16 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u21
+setenv onlineDisk u21
+setenv reconStageDir /nfs/farm/g/glast/u21/staging
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
 setenv urlHead ${webHead}/${subDir}
+setenv onlineHead ${diskHead}/${onlineDisk}/${phase}
 setenv onlineSubDir rawData
 setenv svacSubDir rootData
-setenv rawUrl ${webHead}/${subDir}/${onlineSubDir}
+setenv rawUrl ${webHead}/${onlineDisk}/${phase}/${onlineSubDir}
 setenv rootUrl ${webHead}/${subDir}/${svacSubDir}
 setenv runSymbol '$(RUN_NAME)'
 
@@ -51,13 +54,13 @@ setenv calibTail ${emTail}/${calibVersion}
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r3p2
+setenv onlineTaskVersion v2r4p0
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 setenv onlineDataDir ${onlineSubDir}/${runSymbol}
-setenv onlineDataDirFull ${dataHead}/${onlineDataDir}
+setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 #-------------------------------- online --------------------------------------
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
@@ -102,7 +105,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r4p3
+setenv TestReportVersion v3r4p5
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -150,7 +153,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r8p4
+setenv RunRootAnalyzerVersion v1r8p5
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe

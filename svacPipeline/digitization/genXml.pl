@@ -19,7 +19,7 @@ my $digitizationXml =
 
     <name>$ENV{'digitizationTask'}</name>
     <type>Digitization</type>
-    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
+    <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
         <executable name=\"Convert\" version=\"$ENV{'digitizationTaskVersion'}\">
             $ENV{'digitizationTaskDir'}/ldfToDigiWrapper.pl
@@ -43,10 +43,10 @@ my $digitizationXml =
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"ldf\"        file-type=\"fits\"   type=\"LDF\">$ENV{'onlineDataDir'}</file>
-        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
-        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digitizationDataDir'}</file>
-        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digitizationDataDir'}</file>
+        <file name=\"ldf\"        file-type=\"fits\"   type=\"LDF\">$ENV{'onlineDataDirFull'}</file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDirFull'}</file>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digitizationDataDirFull'}</file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digitizationDataDirFull'}</file>
 
         <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"xlong-job\">
                         <input-file name=\"ldf\"/>

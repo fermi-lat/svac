@@ -19,7 +19,7 @@ my $updateElogDbXml =
 
     <name>$ENV{'eLogTask'}</name>
     <type>Report</type>
-    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
+    <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
         <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/populateElogDbWrapper.pl
@@ -36,10 +36,10 @@ my $updateElogDbXml =
             <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
-        <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDir'}</file>
-        <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDir'}</file>
-        <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDir'}</file>
+        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDirFull'}</file>
+        <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDirFull'}</file>
+        <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDirFull'}</file>
+        <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDirFull'}</file>
 
         <processing-step name=\"populateElogDb\" executable=\"populateElogDb\" batch-job-configuration=\"express-job\">
                         <input-file name=\"rcReport\"/>

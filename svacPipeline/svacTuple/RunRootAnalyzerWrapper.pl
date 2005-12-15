@@ -72,7 +72,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if ($ex->{'signal_number'} != undef) {
+        if (defined($ex->{'signal_number'})) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

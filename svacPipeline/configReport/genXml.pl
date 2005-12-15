@@ -19,7 +19,7 @@ my $configReportXml =
 
     <name>$ENV{'configReportTask'}</name>
     <type>Report</type>
-    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
+    <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
         <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
             $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
@@ -32,15 +32,15 @@ my $configReportXml =
             <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
             <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"short-job\" queue=\"short\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
             <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
             <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
-        <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">$ENV{'configTablesDataDir'}</file>
+        <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDirFull'}</file>
+        <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">$ENV{'configTablesDataDirFull'}</file>
 
-        <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"short-job\">
+        <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
                         <input-file name=\"snapshot\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>

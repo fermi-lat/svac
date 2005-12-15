@@ -33,6 +33,7 @@ else:
 shellFile = os.environ['reconOneScript']
 
 workDir, reconFileBase = os.path.split(reconFileName)
+stageDir = os.environ['reconStageDir']
 
 # figure out particle type
 particleType = eLogDB.query(runId, 'particletype')
@@ -166,17 +167,17 @@ ApplicationMgr.EvtMax = %d;
     joData = joHead + joEvents
 
     reconFile = '%s_%s_%s_RECON.root' % (task, runId, cTag)
-    reconFile = os.path.join(workDir, reconFile)
+    reconFile = os.path.join(stageDir, reconFile)
     reconFiles.append(reconFile)
     joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconFile
     
     meritFile = '%s_%s_%s_merit.root' % (task, runId, cTag)
-    meritFile = os.path.join(workDir, meritFile)
+    meritFile = os.path.join(stageDir, meritFile)
     meritFiles.append(meritFile)
     joData += 'RootTupleSvc.filename = "%s";\n' % meritFile
 
     calFile = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
-    calFile = os.path.join(workDir, calFile)
+    calFile = os.path.join(stageDir, calFile)
     calFiles.append(calFile)
     joData += 'CalXtalRecAlg.tupleFilename = "%s";\n' % calFile
 
@@ -219,7 +220,8 @@ if status:
 # concat chunk files into final results
 print >> sys.stderr, "Combining cal files into %s" % calFileName
 timeLogger()
-rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
+#rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
+rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalTuple')
 timeLogger()
 if rcCal:
     print >> sys.stderr, "Failed to create cal file %s!" % calFileName

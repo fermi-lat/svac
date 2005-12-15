@@ -243,3 +243,34 @@ v3r3p3
 ---------------
 Switch Oracle from SLACPROD to GLASTP
 ---------------------------------------------------------------------------
+
+
+v3r4p0
+---------------
+EM v5r0703p3
+
+Upgrade configReport (v3r2p0), TestReport (v3r4p3), and svacTuple (v1r8p4) 
+for ACD.
+
+Move all code to AFS.
+
+Current version is now selected by changing a symbolic link, no more need to 
+edit ~glastdpf/.cshrc.
+---------------------------------------------------------------------------
+
+
+v3r4p1
+---------------
+Allow recon staging & online to use different disks from the main SVAC one 
+(tho all three currently point at u21).
+
+Reduce recon chunk size.
+
+Move configReport to medium queue.
+
+Upgrade testReport (v3r4p5) and svacTuple (v1r8p5).
+
+Fix an error handling issue in all wrappers.
+
+Deal with new CAL tuple name in recon.
+---------------------------------------------------------------------------
