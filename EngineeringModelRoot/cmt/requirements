@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v1r8p5
+version v1r8p6
 
 
 use GlastPolicy v*
