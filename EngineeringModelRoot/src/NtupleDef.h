@@ -72,7 +72,7 @@ struct NtupleDef {
   float m_tkr2EndPos[3];
   float m_tkr2EndDir[3];
 
-  // ACD information:
+  // ACD Digi information:
   float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];
   int m_acdHitMap[g_nAcdTile][2];
@@ -80,11 +80,19 @@ struct NtupleDef {
   int m_acdOddParityError[g_nAcdTile][2];
   int m_acdHeaderParityError[g_nAcdTile][2];
   int m_acdLowDisc[g_nAcdTile][2];
-  int m_acdHighDisc[g_nAcdTile][2];
   int m_acdTileNumber[g_nAcdTile];
   int m_acdNumDigis;
   int m_acd10Ids[10];
 
+  // ACD NA:
+  int m_acdNaPha[g_nAcdNaTile][2];
+  int m_acdNaHitMap[g_nAcdNaTile][2];
+  int m_acdNaRange[g_nAcdNaTile][2];
+  int m_acdNaOddParityError[g_nAcdNaTile][2];
+  int m_acdNaHeaderParityError[g_nAcdNaTile][2];
+  int m_acdNaLowDisc[g_nAcdNaTile][2];
+
+  // ACD Recon information:
   float m_acdEnergy;
   float m_acdDoca;
   float m_acdGammaDoca;

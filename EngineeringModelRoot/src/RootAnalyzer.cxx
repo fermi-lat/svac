@@ -499,31 +499,35 @@ void RootAnalyzer::analyzeDigiTree()
 
   //
   // ACD digi:
-  //                                                                                                                                                                                              
+  //
   const TObjArray* acdDigiCol = m_digiEvent->getAcdDigiCol();
   assert(acdDigiCol != 0);
 
+  // Number of digis:
   int nAcdDigi = acdDigiCol->GetLast()+1;
-
   m_ntuple.m_acdNumDigis = nAcdDigi;
 
+  // For the first 10 digis:
   int i10Count = 0;
 
+  // Loop over all digis:
   for(int iDigi = 0; iDigi != nAcdDigi; ++iDigi) {
 
     const AcdDigi* acdDigi = dynamic_cast<const AcdDigi*>(acdDigiCol->At(iDigi));
-
     assert(acdDigi != 0);
 
+    // Tile ID:
     int AcdID = acdDigi->getId().getId();
 
-    // Attached tile?
-    if (acdDigi->getId().getNa()==0 && AcdID>603) {
+
+    // Attached tile and ID out of bounds?
+    if (acdDigi->getId().getNa()==0 && (AcdID>603 || AcdID<0)) {
       std::cout << "ACD tile ID for attached tile is >603! - " << AcdID << std::endl;
-    } 
+    }
+
 
     // Attached tile?
-    if (acdDigi->getId().getNa()==0 && AcdID<604) {
+    if (acdDigi->getId().getNa()==0 && AcdID>0 && AcdID<604) {
 
       if (i10Count < 10) {
         m_ntuple.m_acd10Ids[i10Count] = AcdID;
@@ -551,7 +555,58 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
       m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
     }
+
+
+    // Non-Attached tile?
+    if (acdDigi->getId().getNa()==1) {
+
+      // NA tile ID:
+      int AcdNaID = -1;
+
+      // Get the name of the tile: NA0, NA1, ...., NA9, NA10
+      const char* AcdNaName = acdDigi->getTileName();
+
+      // Easier to manipulate:
+      std::string tmpAcdNaName = (std::string) AcdNaName;
+
+      // Lenght of string:
+      int AcdNaNameLength = tmpAcdNaName.size();
+
+      if ( AcdNaNameLength == 4) {
+	// Can only mean NA10:
+	AcdNaID = 10;
+      } else {
+	// Now we only have NAx:
+	char* p = &tmpAcdNaName[2];
+        AcdNaID = atoi(p);
+      }
+
+      if (AcdNaID<0 || AcdNaID>10) {
+	std::cout << "ACD tile ID for non-attached tile is not in range! - " << AcdID << std::endl;        
+      }
+
+      if (AcdNaID>-1 && AcdNaID<11) {
+	m_ntuple.m_acdNaPha[AcdNaID][0] = acdDigi->getPulseHeight(AcdDigi::A);
+        m_ntuple.m_acdNaPha[AcdNaID][1] = acdDigi->getPulseHeight(AcdDigi::B);
+
+	m_ntuple.m_acdNaHitMap[AcdNaID][0] = acdDigi->getHitMapBit(AcdDigi::A);
+        m_ntuple.m_acdNaHitMap[AcdNaID][1] = acdDigi->getHitMapBit(AcdDigi::B);
+
+	m_ntuple.m_acdNaRange[AcdNaID][0] = acdDigi->getRange(AcdDigi::A);
+        m_ntuple.m_acdNaRange[AcdNaID][1] = acdDigi->getRange(AcdDigi::B);
+
+	m_ntuple.m_acdNaOddParityError[AcdNaID][0] = acdDigi->getOddParityError(AcdDigi::A);
+        m_ntuple.m_acdNaOddParityError[AcdNaID][1] = acdDigi->getOddParityError(AcdDigi::B);
+
+	m_ntuple.m_acdNaHeaderParityError[AcdNaID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
+        m_ntuple.m_acdNaHeaderParityError[AcdNaID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
+
+        m_ntuple.m_acdNaLowDisc[AcdNaID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
+        m_ntuple.m_acdNaLowDisc[AcdNaID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
+      }
+    }
   }
+
 
 
 
@@ -1346,6 +1401,14 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Acd10Ids", &(m_ntuple.m_acd10Ids), "Acd10Ids[10]/I");
   m_tree->Branch("AcdTileNumber", &(m_ntuple.m_acdTileNumber), "AcdTileNumber[604]/I");
   m_tree->Branch("AcdMCEnergy", &(m_ntuple.m_acdMCEnergy), "AcdMCEnergy[604]/F");
+
+  // NA ACD digis:
+  m_tree->Branch("AcdNaPha", &(m_ntuple.m_acdNaPha), "AcdNaPha[11][2]/I");
+  m_tree->Branch("AcdNaHitMap", &(m_ntuple.m_acdNaHitMap), "AcdNaHitMap[11][2]/I");
+  m_tree->Branch("AcdNaRange", &(m_ntuple.m_acdNaRange), "AcdNaRange[11][2]/I");
+  m_tree->Branch("AcdNaOddParityError", &(m_ntuple.m_acdNaOddParityError), "AcdNaOddParityError[11][2]/I");
+  m_tree->Branch("AcdNaHeaderParityError", &(m_ntuple.m_acdNaHeaderParityError), "AcdNaHeaderParityError[11][2]/I");
+  m_tree->Branch("AcdNaLowDisc", &(m_ntuple.m_acdNaLowDisc), "AcdNaLowDisc[11][2]/I");
 
   // ACD recon:
   m_tree->Branch("AcdEnergy", &(m_ntuple.m_acdEnergy),"AcdEnergy/F");

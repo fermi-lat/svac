@@ -293,14 +293,21 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TABLE>
 <CAPTION ALIGN="TOP"> ACD variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning </TH> </TR>
-<TR> <TD> AcdNumDigis                           </TD> <TD> Int </TD> <TD> Number of ACD digis </TD> </TR>
-<TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdRange[tileID:0-603][2]             </TD> <TD> Int </TD> <TD> Range for the specified tile/ribbon and PMT (A or B).</TD> </TR>
-<TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int </TD> <TD> Header parity error bit for the specified tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNumDigis                           </TD> <TD> Int </TD> <TD> Number of ACD digis. This includes both attached and non-attached tiles (unless the non-attached were masked off). </TD> </TR>
+<TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdRange[tileID:0-603][2]             </TD> <TD> Int </TD> <TD> Range for the specified attached tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int </TD> <TD> Tile number in dense notation. </TD> </TR> 
+
+<TR> <TD> AcdNaPha[NA0-NA10][2]                 </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified n0n-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaRange[NA0-NA10][2]               </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdNaOddParityError[NA0-NA10][2]      </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHeaderParityError[NA0-NA10][2]   </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaLowDisc[NA0-Na10][2]             </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 
 <TR> <TD> AcdMCEnergy            </TD> <TD> Float </TD> <TD> The amount of Monte Carlo energy (MeV) deposited in this detector. Only useful for simulated data. </TD> </TR>
 <TR> <TD> AcdEnergy              </TD> <TD> Float </TD> <TD> Total energy (in MeV) deposited in the ACD system. </TD> </TR> 
