@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p1
+setenv svacVersion v3r4p2
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -10,8 +10,8 @@ setenv SVAC_CMTCONFIG rh9_gcc32opt
 #setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
 #setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume05
-setenv EngineeringModelVersion v5r0703p3
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
+setenv EngineeringModelVersion v5r0703p5
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -31,6 +31,7 @@ setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u21
 setenv onlineDisk u21
 setenv reconStageDir /nfs/farm/g/glast/u21/staging
+setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
@@ -78,9 +79,9 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
 setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v3r2p0
+setenv configReportVersion v3r2p1
 setenv configReportUrl ConfigTables.html
-setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}/Src
+setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
 setenv configTaskDir ${svacPlRoot}/configReport
 setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py 
 setenv configTablesDataDir ${cookedTail}/configReport/${configReportVersion}
@@ -105,7 +106,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r4p5
+setenv TestReportVersion v3r4p6
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -153,7 +154,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r8p5
+setenv RunRootAnalyzerVersion v1r8p6
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe

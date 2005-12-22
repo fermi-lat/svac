@@ -33,7 +33,18 @@ else:
 shellFile = os.environ['reconOneScript']
 
 workDir, reconFileBase = os.path.split(reconFileName)
-stageDir = os.environ['reconStageDir']
+#stageDir = os.environ['reconStageDir']
+stageDir = os.path.join(os.environ['reconStageDir'], runId)
+os.environ['runStageDir'] = stageDir
+if not os.path.isdir(stageDir):
+    os.makedirs(stageDir)
+    pass
+
+inDir = '$inDir'
+procDir = '$procDir'
+
+digiBase = os.path.basename(digiFileName)
+digiWorkFile = os.path.join(inDir, digiBase)
 
 # figure out particle type
 particleType = eLogDB.query(runId, 'particletype')
@@ -49,8 +60,9 @@ print >> sys.stderr, chunks
 # figure out instrument type, # of towers
 tkrSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'tkr_ser_no'))
 calSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'cal_ser_no'))
+dbTwr = int(eLogDB.query(runId, 'NoOfTowers'))
 
-nTwr = max(len(tkrSerNos), len(calSerNos))
+nTwr = max(len(tkrSerNos), len(calSerNos), dbTwr)
 
 if tkrSerNos:
     firstTkr = tkrSerNos[0][0]
@@ -76,7 +88,8 @@ schemaFile = eLogDB.query(runId, 'SCHEMACONFIGFILE')
 tkrOnly = False
 calOnly = False
 
-if re.search('grid', schemaFile, re.IGNORECASE):
+fullLatRe = 'grid|lat'
+if re.search(fullLatRe, schemaFile, re.IGNORECASE):
     instrumentType = 'LAT'
 elif em:
     instrumentType = 'EM'
@@ -115,7 +128,7 @@ digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
 {
     'instrumentType': instrumentType,
     'geoFile': geoFile,
-    'digiRootFile': digiFileName,
+    'digiRootFile': digiWorkFile,
     }
 if particleType == 'Photons':
     joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
@@ -166,20 +179,23 @@ ApplicationMgr.EvtMax = %d;
     (first, numEvents)
     joData = joHead + joEvents
 
-    reconFile = '%s_%s_%s_RECON.root' % (task, runId, cTag)
-    reconFile = os.path.join(stageDir, reconFile)
+    reconFileBase = '%s_%s_%s_RECON.root' % (task, runId, cTag)
+    reconProcFile = os.path.join(procDir, reconFileBase)
+    reconFile = os.path.join(stageDir, reconFileBase)
     reconFiles.append(reconFile)
-    joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconFile
+    joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconProcFile
     
-    meritFile = '%s_%s_%s_merit.root' % (task, runId, cTag)
-    meritFile = os.path.join(stageDir, meritFile)
+    meritFileBase = '%s_%s_%s_merit.root' % (task, runId, cTag)
+    meritProcFile = os.path.join(procDir, meritFileBase)
+    meritFile = os.path.join(stageDir, meritFileBase)
     meritFiles.append(meritFile)
-    joData += 'RootTupleSvc.filename = "%s";\n' % meritFile
+    joData += 'RootTupleSvc.filename = "%s";\n' % meritProcFile
 
-    calFile = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
-    calFile = os.path.join(stageDir, calFile)
+    calFileBase = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
+    calProcFile = os.path.join(procDir, calFileBase)
+    calFile = os.path.join(stageDir, calFileBase)
     calFiles.append(calFile)
-    joData += 'CalXtalRecAlg.tupleFilename = "%s";\n' % calFile
+    joData += 'CalXtalRecAlg.tupleFilename = "%s";\n' % calProcFile
 
     logFile = '%s_%s_%s.log' % (task, runId, cTag)
     logFiles.append(logFile)
@@ -189,9 +205,9 @@ ApplicationMgr.EvtMax = %d;
 
     # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
     # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
-    cmd = 'exec bsub -K -q %s -G %s -o %s %s %s' % \
+    cmd = 'exec bsub -K -q %s -G %s -o %s %s %s %s' % \
           (os.environ['chunkQueue'], os.environ['batchgroup'], \
-           logFile, shellFile, joFile)
+           logFile, shellFile, joFile, digiFileName)
     print >> sys.stderr, cmd
     jobs.append(cmd)
 
@@ -265,5 +281,8 @@ trash = reconFiles + meritFiles + calFiles
 for junkFile in trash:
     os.unlink(junkFile)
     pass
+# and the staging directory
+# (if it's not empty, something is wrong)
+os.rmdir(stageDir)
 
 timeLogger()

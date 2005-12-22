@@ -96,7 +96,44 @@ source setup.csh ''
 cmt show uses
 popd
 setenv JOBOPTIONS \$1
+set digiFile=\$2
+
+set stageDir=\$runStageDir
+set localDir=$ENV{'localDisk'}
+
+if ( { test -d \$localDir } ) then
+    set relocate=1
+    setenv inDir \$localDir
+    setenv procDir \$localDir
+
+    set digiBase=`basename \$digiFile`
+    set reconFile=`awk -F'\"' '/RECON\\.root/{print \$2}' \$JOBOPTIONS`
+    set reconBase=`basename \$reconFile`
+    set meritFile=`awk -F'\"' '/merit\\.root/{print \$2}' \$JOBOPTIONS`
+    set meritBase=`basename \$meritFile`
+    set calFile=`awk -F'\"' '/calTuple\\.root/{print \$2}' \$JOBOPTIONS`
+    set calBase=`basename \$calFile`
+
+    cp \$digiFile \$procDir
+
+else
+    set relocate=0
+    setenv procDir \$stageDir
+    setenv inDir `dirname \$digiFile`
+endif
+echo Reading digi file from \$inDir
+echo Writing chunk files to \$procDir
+
 $ENV{'reconApp'} || exit 1
+
+if ( \$relocate ) then
+    echo Relocating chunk files from \$procDir to \$stageDir
+    pushd \$procDir
+    mv \$reconBase \$meritBase \$calBase \$stageDir
+    cd \$inDir
+    rm \$digiBase
+    popd
+endif
 ";
 my $scriptName = "$ENV{'reconOneScript'}";
 open(SHELLFILE, ">$scriptName") || die "Can't open $scriptName for writing!\n";
