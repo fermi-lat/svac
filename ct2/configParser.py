@@ -469,14 +469,19 @@ def garcMask(doc, base):
 
     regs = jobOptions.acdMaskRegs[base]
     regLens = (16, 2)
+    tables = [tableFromXml.xTableGen(doc, reg) for reg in regs]
+
     for reg, regLen in zip(regs, regLens):
         dTable = tableFromXml.xTableGen(doc, reg)
         masks, labels = dTable.table()
         masks = masks[0]
         for mask in masks:
+            row = []
             for bit in range(regLen):
-                # oh crap
+                row.append((mask >> bit) & 1)
                 pass
+            row.reverse()
+            data.append(row)
             pass
         pass
     
@@ -502,6 +507,9 @@ def garcPha(doc):
     for gafe, name in enumerate(names):
         xTable = tableFromXml.xTableGen(doc, name)
         garcData = xTable.data[0]
+        print garcData
+        if garcData == jobOptions.absent:
+            continue
         for garc in garcData:
             data[garc, gafe] = garcData[garc]
             pass
@@ -509,6 +517,8 @@ def garcPha(doc):
 
     array, indices = data.table()
     hTable = table.twoDTable(array, regLabel, axisLabels, indices)
+    if not hTable:
+        return ''
     output.append(hTable)
     
     return output
@@ -529,6 +539,9 @@ def oneGafeReg(doc, tag, mapper):
     xTable = tableFromXml.xTableGen(doc, regSpec)
     data = xTable.data.map(mapper)
     data, indices = data.table()
+
+    if not data:
+        return ''
 
     # only one GAEM
     data = data[0]
