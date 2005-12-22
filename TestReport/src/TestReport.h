@@ -246,10 +246,6 @@ class TestReport {
 
   void produceReconEnePlots();
 
-  void produceGemDiscardedPlot();
-
-  void produceTriggerPerTowerPlot();
-
   void produceTimeIntervalPlot();
 
   void produceNHitPlane2DPlot();
@@ -290,9 +286,6 @@ class TestReport {
   /// apply \ in front of some latex special characters 
   void applyDash(std::string* x, int n) const;
 
-  /// convert to the dense acd notation
-  static UShort_t getGemId(UInt_t id);
-  
   /// used in producing caption for a plot in a latex file. It will put the
   /// first sentence in the caption to be bold face.
   std::string boldFaceLatex(const std::string& s);
@@ -462,19 +455,6 @@ class TestReport {
 
   /// time of last trigger
   UInt_t m_endTime;
-
-  // GEM discarded events:
-  TH1F* m_gemDiscarded;
-  TH1F* m_gemDiscardedTime;
-
-  // Number of triggers per tower:
-  TH1F* m_tkrPerTower;
-  TH1F* m_calLoPerTower;
-  TH1F* m_calHiPerTower;
-
-  int m_tkrPerTowerArray[g_nTower];
-  int m_calLoPerTowerArray[g_nTower];
-  int m_calHiPerTowerArray[g_nTower];
 
   /// histogram of time between adjacent event in mili second
   TH1F* m_timeInterval;
