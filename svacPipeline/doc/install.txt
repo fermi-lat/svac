@@ -19,6 +19,11 @@ you will be using <tag>.
 Make sure that the line containing "setenv eLogTestOnly 1" in
 svacPlSetup.cshrc is commented out.
 
+If you are changing EM release, you need to modify EngineeringModelVersion and
+sasLocation, (both near the top of svacPlSetup.cshrc) and probably Em2Version
+(in the digitization section; this is misnamed, it's actually the version of
+LatIntegration).
+
 If you are changing disks, you need to go to
 /afs/slac/www/exp/glast/ground/LATSoft/nfsLinks and make a symbolic link to
 the new disk.

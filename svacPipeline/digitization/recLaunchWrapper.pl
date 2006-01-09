@@ -45,11 +45,14 @@ if (! -e $digiRootFile) {
 
 my $doRecon = `$ENV{'decideReconScript'} $runName`;
 chomp $doRecon;
-if ($doRecon == 1) {
+if ($doRecon eq '1') {
     print "Reconstructable run, status: $doRecon\n";
-} else {
+} elsif ($doRecon eq '0') {
     print "This is not a reconstructable run, status: $doRecon\n";
-    exit(0)
+    exit(0);
+} else {
+	print "Bad result from decideRecon.\n";
+	exit(1);
 }
 
 print "Running command: [$command]\n";

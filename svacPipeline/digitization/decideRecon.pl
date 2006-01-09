@@ -48,10 +48,17 @@ my @reconPTypes = ('Cosmics', 'Photons', 'Am241');
 
 if (grep(/^$particleType$/i, @reconPTypes)) {
 	print STDERR "Particle type '$particleType' OK.\n";
-    yesRecon();
 }
 else {
 	print STDERR "Bad Particle type '$particleType'.\n";
     noRecon();
 }
 
+
+my @serials = (`$query $run CAL_SER_NO`, `$query $run TKR_SER_NO`);
+if (grep(/mini|em/i, @serials)) {
+	print STDERR "Weird old hardware, not reconstructing.\n";
+	noRecon();
+}
+
+yesRecon();

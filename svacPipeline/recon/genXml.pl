@@ -101,10 +101,16 @@ set digiFile=\$2
 set stageDir=\$runStageDir
 set localDir=$ENV{'localDisk'}
 
+alias run 'echo \\!* ; date ; \\!*'
+
 if ( { test -d \$localDir } ) then
     set relocate=1
-    setenv inDir \$localDir
-    setenv procDir \$localDir
+
+	set myLocal=\$localDir/\$\$
+	test -d \$myLocal || run mkdir \$myLocal
+
+    setenv inDir \$myLocal
+    setenv procDir \$myLocal
 
     set digiBase=`basename \$digiFile`
     set reconFile=`awk -F'\"' '/RECON\\.root/{print \$2}' \$JOBOPTIONS`
@@ -114,7 +120,11 @@ if ( { test -d \$localDir } ) then
     set calFile=`awk -F'\"' '/calTuple\\.root/{print \$2}' \$JOBOPTIONS`
     set calBase=`basename \$calFile`
 
-    cp \$digiFile \$procDir
+    run cp \$digiFile \$inDir && set unDone=0 || set unDone=1
+	while (\$unDone)
+		sleep 17
+		run cp \$digiFile \$inDir && set unDone=0 || set unDone=1
+	end
 
 else
     set relocate=0
@@ -129,10 +139,11 @@ $ENV{'reconApp'} || exit 1
 if ( \$relocate ) then
     echo Relocating chunk files from \$procDir to \$stageDir
     pushd \$procDir
-    mv \$reconBase \$meritBase \$calBase \$stageDir
+    run mv \$reconBase \$meritBase \$calBase \$stageDir
     cd \$inDir
-    rm \$digiBase
+    run rm \$digiBase
     popd
+	run rmdir \$myLocal 
 endif
 ";
 my $scriptName = "$ENV{'reconOneScript'}";
