@@ -112,18 +112,6 @@ TestReport::TestReport(const char* dir, const char* prefix,
   att.m_xTitle = "GEM Condition summary word";
   setHistParameters(m_condSummary, att);
 
-  m_tkrPerTower = new TH1F("tkrPerTower","Number of TKR triggers per tower",32,0,16);
-  att.set("Tower number","Number of TKR triggers");
-  setHistParameters(m_tkrPerTower, att);
-
-  m_calLoPerTower = new TH1F("calLoPerTower","Number of CAL LO triggers per tower",32,0,16);
-  att.set("Tower number","Number of CAL LO triggers");
-  setHistParameters(m_calLoPerTower, att);
-
-  m_calHiPerTower = new TH1F("calHiPerTower","Number of CAL Hi triggers per tower",32,0,16);
-  att.set("Tower number","Number of CAL HI triggers");
-  setHistParameters(m_calHiPerTower, att);
-
   for(int i = 0; i != 7; ++i) {
     m_nEventDigi[i] = 0;
   }
@@ -249,14 +237,6 @@ TestReport::TestReport(const char* dir, const char* prefix,
   m_zeroCalEneLayer2D = new TH2F("zeroCalEneLayer", "Ratio of events with zero energy measured in a particular CAL layer(MeV)", 8, -0.5, 7.5, 16, -0.5, 15.5);
   att.set("Layer", "Tower");
   setHistParameters(m_zeroCalEneLayer2D, att);
-
-  m_gemDiscarded = new TH1F("gemDiscarded","Number of GEM discarded events between two successive read out events",40,0,20);
-  att.set("Number of GEM discarded events","Number of events");
-  setHistParameters(m_gemDiscarded,att);
-
-  m_gemDiscardedTime = new TH1F("gemDiscardedTime","Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns)",100,0,530);
-  att.set("Time of last discarded event (nominally 50 ns ticks)","Number of events");
-  setHistParameters(m_gemDiscardedTime,att);
 
   m_timeInterval = new TH1F("timeInterval", "Time interval between adjacent event in mill second", 100, 0., 3.);
   att.set("Time interval between adjacent events(ms)", "Number of events");
@@ -482,15 +462,13 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   }
 
   // For testing:
-  //int nEvent = 5000;
-  //m_nEvent = nEvent;
+  int nEvent = 5000;
+  m_nEvent = nEvent;
 
-  // For GEM discarded events:
-  int previousGemDiscarded = 0;
 
   for(int iEvent = 0; iEvent != m_nEvent; ++iEvent) {
 
-    if ( iEvent % 1000 == 0 ) {
+    if ( iEvent % 100 == 0 ) {
       cout << iEvent << endl;
     }
 
@@ -507,31 +485,6 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       m_digiBranch->GetEntry(iEvent);
 
       analyzeDigiTree();
-
-
-      // GEM discarded events:
-      int thisGemDiscarded = m_digiEvent->getGem().getDiscarded();
-
-      int thisGemDeltaEventTime       = m_digiEvent->getGem().getDeltaEventTime();
-      int thisGemWDeltaWindowOpenTime = m_digiEvent->getGem().getDeltaWindowOpenTime();
-
-      if (iEvent > 0) {
-        // Gem discarded delta wrt the previous event:
-        float delta = thisGemDiscarded - previousGemDiscarded;
-        m_gemDiscarded->Fill(delta);
-
-        // Fill time histo for non-saturated events:
-        if (thisGemWDeltaWindowOpenTime<65500 && thisGemDeltaEventTime<65500) {
-
-          // Get time quantity we want to look at:
-          int deltaTime = thisGemDeltaEventTime - thisGemWDeltaWindowOpenTime;
-
-          // Fill histogram:
-          m_gemDiscardedTime->Fill(deltaTime);
-        }
-      }
-      previousGemDiscarded = thisGemDiscarded;
-
 
       UInt_t uPpcT = m_digiEvent->getEbfUpperPpcTimeBase();
       UInt_t lPpcT = m_digiEvent->getEbfLowerPpcTimeBase();
@@ -597,11 +550,8 @@ void TestReport::analyzeReconTree()
  
   TVector3 pos, dir;
 
-  Int_t nTk = 0;
-
   if(tkrRecon) {
     m_nTkrTrack->Fill(tkrRecon->getTrackCol()->GetLast()+1);
-    nTk = tkrRecon->getTrackCol()->GetLast()+1;
 
     TObjArray* vertices = tkrRecon->getVertexCol();
     if(tkrRecon->getVertexCol()->GetLast() >= 0) {
@@ -671,12 +621,10 @@ void TestReport::analyzeReconTree()
   }
 
   AcdRecon* acdRecon = m_reconEvent->getAcdRecon();
-  if ( acdRecon && nTk == 1) {
+  if ( acdRecon ) {
     UInt_t nAcdInter = acdRecon->nAcdIntersections();
     for ( UInt_t iAcdInter(0); iAcdInter < nAcdInter; iAcdInter++ ) {
       const AcdTkrIntersection* acdInter = acdRecon->getAcdTkrIntersection(iAcdInter);
-      if ( acdInter->getTrackIndex() != 0 ) continue;
-      if ( acdInter->getArcLengthToIntersection() != 0 ) continue;
       UShort_t acdGemId = getGemId( acdInter->getTileId().getId() );
       if ( acdInter->tileHit() ) {
 	m_AcdEfficMap->Fill( acdGemId );
@@ -732,35 +680,6 @@ void TestReport::analyzeDigiTree()
       ++m_nEvtGemTrigger[i];
     }
   }
-
-  // Triggers per tower:
-  for (int i = 0; i != g_nTower; ++i) {
-    m_tkrPerTowerArray[i]   = 0;
-    m_calLoPerTowerArray[i] = 0;
-    m_calHiPerTowerArray[i] = 0;
-  }
-
-  int gemTkrVector   = m_digiEvent->getGem().getTkrVector();
-  int gemCalLoVector = m_digiEvent->getGem().getCalLeVector();
-  int gemCalHiVector = m_digiEvent->getGem().getCalHeVector();
-
-  for (int i = 0; i != g_nTower; ++i) {
-    if ((gemTkrVector >> i)   & 1 ) ++m_tkrPerTowerArray[i];
-    if ((gemCalLoVector >> i) & 1 ) ++m_calLoPerTowerArray[i];
-    if ((gemCalHiVector >> i) & 1 ) ++m_calHiPerTowerArray[i];
-  }
-  for (int i = 0; i != g_nTower; ++i) {
-    if (m_tkrPerTowerArray[i] > 0) {
-      m_tkrPerTower->Fill(i);
-    }
-    if (m_calLoPerTowerArray[i] > 0) {
-      m_calLoPerTower->Fill(i);
-    }
-    if (m_calHiPerTowerArray[i] > 0) {
-      m_calHiPerTower->Fill(i);
-    }
-  }
-
 
   // 1 count = 50 ns
   UInt_t deltaT = m_digiEvent->getGem().getDeltaEventTime();
@@ -992,7 +911,7 @@ void TestReport::generateReport()
   (*m_report) << "@li There are @b " << m_nTemErrors << " events with TEM errors " << endl;
 
   (*m_report) << "@li There are @b " << m_nAcdOddParityError    << " events with ACD Odd Parity errors " << endl;
-  (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD 'Header Parity errors'." << endl;
+  (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD Header Parity errors " << endl;
 
   (*m_report) << "@li Time of the first trigger: <b>" << ctime((time_t*) (&m_startTime)) << " (GMT) </b>";
   (*m_report) << "@li Time of the last trigger: <b>" << ctime((time_t*) (&m_endTime)) << " (GMT) </b>";
@@ -1030,13 +949,6 @@ void TestReport::generateDigiReport()
   insertPlot(att);
   *(m_report) << "@latexonly \\nopagebreak @endlatexonly" << endl;
   printGltTriggerTable();
-
-  // Trigger per tower:
-  produceTriggerPerTowerPlot();
-
-  // GEM discarded events:
-  (*m_report) << "@section gemDiscarded GEM Discarded Events" << endl;
-  produceGemDiscardedPlot();
 
   (*m_report) << "@section timeInfo Time Info" << endl;
 
@@ -1927,45 +1839,6 @@ void TestReport::scale2DHist(TH2F* h, int* nEvents)
     }
   }
 }
-
-
-void TestReport::produceTriggerPerTowerPlot()
-{
-  string file(m_prefix);
-  file += "_tkrPerTower";
-  PlotAttribute att(file.c_str(), "Number of TKR triggers per tower","tkrPerTower");
-  producePlot(m_tkrPerTower, att);
-  insertPlot(att);
-
-  file = m_prefix;
-  file += "_calLoPerTower";
-  att.set(file.c_str(), "Number of CAL LO triggers per tower","calLoPerTower");
-  producePlot(m_calLoPerTower, att);
-  insertPlot(att);
-
-  file = m_prefix;
-  file += "_calHiPerTower";
-  att.set(file.c_str(), "Number of CAL Hi triggers per tower","calHiPerTower");
-  producePlot(m_calHiPerTower, att);
-  insertPlot(att);
-}
-
-
-void TestReport::produceGemDiscardedPlot()
-{
-  string file(m_prefix);
-  file += "_gemDiscarded";
-  PlotAttribute att(file.c_str(), "Number of GEM discarded events between two successive read out events","gemDiscarded","true");
-  producePlot(m_gemDiscarded, att);
-  insertPlot(att);
-
-  file = m_prefix;
-  file += "_gemDiscardedTime";
-  att.set(file.c_str(), "Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns). Only non-saturated values of the GEM time counters have been used.","gemDiscardedTime","true");
-  producePlot(m_gemDiscardedTime, att);
-  insertPlot(att);
-}
-
 
 void TestReport::produceTimeIntervalPlot()
 {
