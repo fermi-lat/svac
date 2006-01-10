@@ -106,11 +106,19 @@ alias run 'echo \\!* ; date ; \\!*'
 if ( { test -d \$localDir } ) then
     set relocate=1
 
-	set myLocal=\$localDir/\$\$
-	test -d \$myLocal || run mkdir \$myLocal
+    set myLocal=\$localDir/\$\$
+    test -d \$myLocal || run mkdir \$myLocal
 
     setenv inDir \$myLocal
     setenv procDir \$myLocal
+
+    run cp \$JOBOPTIONS \$inDir && set unDone=0 || set unDone=1
+    while (\$unDone)
+        sleep 19 # randomish delay
+        run cp \$JOBOPTIONS \$inDir && set unDone=0 || set unDone=1
+    end
+    set joBase=`echo \$JOBOPTIONS | awk -F/ '{print \$NF}'`
+    setenv JOBOPTIONS \$inDir/\$joBase
 
     set digiBase=`basename \$digiFile`
     set reconFile=`awk -F'\"' '/RECON\\.root/{print \$2}' \$JOBOPTIONS`
@@ -121,10 +129,10 @@ if ( { test -d \$localDir } ) then
     set calBase=`basename \$calFile`
 
     run cp \$digiFile \$inDir && set unDone=0 || set unDone=1
-	while (\$unDone)
-		sleep 17
-		run cp \$digiFile \$inDir && set unDone=0 || set unDone=1
-	end
+    while (\$unDone)
+        sleep 17 # randomish delay
+        run cp \$digiFile \$inDir && set unDone=0 || set unDone=1
+    end
 
 else
     set relocate=0
@@ -141,7 +149,7 @@ if ( \$relocate ) then
     pushd \$procDir
     run mv \$reconBase \$meritBase \$calBase \$stageDir
     cd \$inDir
-    run rm \$digiBase
+    run rm \$digiBase \$joBase
     popd
 	run rmdir \$myLocal 
 endif
