@@ -1,20 +1,20 @@
 // (Special "header" just for doxygen)
 
-/*! @mainpage  package EngineeringModelRoot
+/*! @mainpage  Package svac/EngineeringModelRoot
 
-@author Xin Chen
+@author Xin Chen - Current maintainer: Anders W. Borgland
 
 @section intro Introduction
 
-This package contains code to generate the SVAC ntuple for I&T/SVAC. The package includes the following executables/scripts:
+This package contains code to generate the SVAC ntuple for I&T/SVAC in addition to some histograms useful for the TKR group. The package includes the following executables and scripts:
 
 <ul>
 <li> RunRootAnalyzer.exe: It reads data from the 3 root files: mc, digi and recon. It produces 2 root files: *_svac.root contains the SVAC ntuple for I&T/SVAC, 
      *_hist.root contains histograms for I&T/SVAC. The names of the root files are contained in an option file. The executable uses its first argument as the name of 
      the option file; when there is no argument, it uses ../src/AnalyzerOption.dat as the option file</li>
-<li> merge_raRoot.exe: It merges a list of SVAC and Merit ntuple files. </li>
+<li> mergeNtuple.exe: It merges a list of SVAC and Merit ntuple files. </li>
+<li> mergeRoot.exe and mergeRoot_mc.exe: Merges digi.root/recon.root and mc.root files.
 <li> ../pl/RunRootAnalyzer.pl: It is used to run RunRootAnalyzer.exe in batch. </li>
-<li> AnalyzeAcd.exe: A utility executable to process ACD digi alone. </li>
 </ul>
 
 @section def Definition of the SVAC ntuple
@@ -342,9 +342,5 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
           the signal in the tile passed the accept threshold for PMT A, the accept threshold for PMT B, the Veto threshold for PMT A, the Veto threshold for PMT B, the CNO threshold for PMT A and the 
           CNO threshold for PMT B respectively. </TD> </TR>
 </TABLE>
-
-@section jobOpt Example of the option file
-
-@verbinclude AnalyzerOption.dat
 
 */
