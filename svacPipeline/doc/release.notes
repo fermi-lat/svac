@@ -274,3 +274,9 @@ Fix an error handling issue in all wrappers.
 
 Deal with new CAL tuple name in recon.
 ---------------------------------------------------------------------------
+
+
+v3r4p4
+---------------
+Add explicit maxTreeSize to account for merged CalTuple > 2 GB.
+Recon seems to be fine without this - don't know why.

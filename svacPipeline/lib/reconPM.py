@@ -42,6 +42,7 @@ def concatenateFiles(outputFileName, fileNames, treeName):
     from ROOT import TChain, gSystem
     
     c = TChain(treeName)
+    c.SetMaxTreeSize(500000000000)
 
     for name in fileNames:
         print >> sys.stderr, "Adding [%s] " % name
