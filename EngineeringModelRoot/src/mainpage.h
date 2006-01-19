@@ -293,14 +293,15 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TABLE>
 <CAPTION ALIGN="TOP"> ACD variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning </TH> </TR>
-<TR> <TD> AcdNumDigis                           </TD> <TD> Int </TD> <TD> Number of ACD digis. This includes both attached and non-attached tiles (unless the non-attached were masked off). </TD> </TR>
-<TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdRange[tileID:0-603][2]             </TD> <TD> Int </TD> <TD> Range for the specified attached tile/ribbon and PMT (A or B).</TD> </TR>
-<TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int </TD> <TD> Tile number in dense notation. </TD> </TR> 
+<TR> <TD> AcdNumDigis                           </TD> <TD> Int   </TD> <TD> Number of ACD digis. This includes both attached and non-attached tiles (unless the non-attached were masked off). </TD> </TR>
+<TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int   </TD> <TD> Pulse Hight Analysis for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdMips[tileID:0-603][2]              </TD> <TD> Float </TD> <TD> Calibrated PHA in MIPs. Not fileld yet!</TD> </TR>
+<TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int   </TD> <TD> Veto discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdRange[tileID:0-603][2]             </TD> <TD> Int   </TD> <TD> Range for the specified attached tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int   </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int   </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile number in dense notation. </TD> </TR> 
 
 <TR> <TD> AcdNaPha[NA0-NA10][2]                 </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified n0n-attached tile/ribbon and PMT (A or B). </TD> </TR>
@@ -325,14 +326,16 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdRibbonActiveDistId  </TD> <TD> Int   </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
 
+
+<TR> <TD> AcdTkrIntersection                              </TD> <TD>       </TD> <TD  Information about the expected intersection of a track with the ACD. </TD> </TR>
 <TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections.</TD> </TR>
 <TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-19]             </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
 <TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-19]           </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>
 <TR> <TD> AcdTkrIntSecGlobalX[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global X-coordinate of the hit position.  </TD> </TR>
 <TR> <TD> AcdTkrIntSecGlobalY[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global Y-coordinate of the hit position.  </TD> </TR>
 <TR> <TD> AcdTkrIntSecGlobalZ[iTkrIntSec:0-19]            </TD> <TD> Float </TD> <TD> Global Z-coordinate of the hit position.  </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local X-ccoridnate of hit (in tile coordinates). </TD> </TR>
-<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local Y-ccoridnate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalX[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local X-coordinate of hit (in tile coordinates). </TD> </TR>
+<TR> <TD> AcdTkrIntSecLocalY[iTkrIntSec:0-19]             </TD> <TD> Float </TD> <TD> Local Y-coordinate of hit (in tile coordinates). </TD> </TR>
 <TR> <TD> AcdTkrIntSecLocalXXCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XX of hit (in tile coordinates). </TD> </TR>
 <TR> <TD> AcdTkrIntSecLocalYYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element YY of hit (in tile coordinates). </TD> </TR>
 <TR> <TD> AcdTkrIntSecLocalXYCov[iTkrIntSec:0-19]         </TD> <TD> Float </TD> <TD> Covariance matrix element XY of hit (in tile coordinates). </TD> </TR>
@@ -341,6 +344,27 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdTkrIntSecTileHit[iTkrIntSec:0-19]            </TD> <TD> Int   </TD> <TD> Greater than zero if intersected tile/ribbon is hit. It is the sum of the values 1, 2, 4, 8, 16, and 32 which are set if 
           the signal in the tile passed the accept threshold for PMT A, the accept threshold for PMT B, the Veto threshold for PMT A, the Veto threshold for PMT B, the CNO threshold for PMT A and the 
           CNO threshold for PMT B respectively. </TD> </TR>
+
+
+
+
+<TR> <TD> AcdTkrPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
+          (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise  </TD> </TR> 
+
+<TR> <TD> AcdPocaAcdTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
+<TR> <TD> AcdPocaAcdTileID[TrackIndex:0-1][Tile:0-6]      </TD> <TD> Float </TD> <TD>  Tile ID of the tile the track intersects. </TD> </TR>
+<TR> <TD> AcdPocaDoca[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 3D. </TD> </TR>
+<TR> <TD> AcdPocaDocaErr[TrackIndex:0-1][Tile:0-6]        </TD> <TD> Float </TD> <TD>  Error on DOCA. This is calculated using the full Kalman Filter propagation of the track to the POCA 
+          and the projection of the propagated covarience matrix along the line of the DOCA. </TD> </TR>
+<TR> <TD> AcdPocaDocaRegion[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Returns a code showing which region of the tile or ribbon the POCA occured in. </TD> </TR>
+<TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA </TD> </TR> 
+<TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA  </TD> </TR> 
+<TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA  </TD> </TR> 
+<TR> <TD> AcdPocaSlopeX[TrackIndex:0-1][Tile:0-6]         </TD> <TD> Float </TD> <TD>  X-slope at POCA  </TD> </TR> 
+<TR> <TD> AcdPocaSlopeY[TrackIndex:0-1][Tile:0-6]         </TD> <TD> Float </TD> <TD>  Y-slope at POCA  </TD> </TR> 
+
+
+
 </TABLE>
 
 */

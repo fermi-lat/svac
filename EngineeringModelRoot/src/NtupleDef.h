@@ -124,6 +124,21 @@ struct NtupleDef {
   float m_acdTkrIntersectionPathLengthInTile[20];
   int m_acdTkrIntersectionTileHit[20];
 
+  // ACD MIPs:
+  float m_acdMips[604][2];
+
+  // ACD POCA:
+  float m_acdPocaDoca[2][6];
+  float m_acdPocaDocaErr[2][6];
+  float m_acdPocaDocaRegion[2][6];
+  float m_acdPocaX[2][6];
+  float m_acdPocaY[2][6];
+  float m_acdPocaZ[2][6];
+  float m_acdPocaSlopeX[2][6];
+  float m_acdPocaSlopeY[2][6];
+  int   m_acdPocaTileID[2][6];
+  int   m_acdPocaTrackID[2][6];
+
 
   // CAL MIP information:
   int m_calMipNum;

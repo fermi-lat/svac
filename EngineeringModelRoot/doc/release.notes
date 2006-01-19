@@ -185,3 +185,8 @@ v1r8p6: December 15, 2005
 awb	Added protection for array index out of range for ACD arrays.
 	Checking to see if a tile is attached or not.
 	Added separate arrays for non-attached tiles.
+
+
+v1r8p7: January 19, 2006
+awb     Added AcdTkrPoca variables.
+ 
