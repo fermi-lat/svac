@@ -190,3 +190,9 @@ awb	Added protection for array index out of range for ACD arrays.
 v1r8p7: January 19, 2006
 awb     Added AcdTkrPoca variables.
  
+
+v1r8p8: January 20, 2006
+awb for Hiro	TkrCalib updates
+
+v1r8p9: January 20, 2006
+awb   Forgot to do a cvs ci first  
