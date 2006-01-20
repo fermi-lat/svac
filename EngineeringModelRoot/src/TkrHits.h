@@ -27,28 +27,21 @@
 
 #include "GeoConstants.h"
 
-
-
-const float maxChisq = 1.75;
-const float maxFracErr = 0.015;
-const float minFracErr = 0.005;
-
 static const float stripPitch = 0.228; // strip pitch
 
 static const int g_nLayer = 18;
-// g_nPlane=0 refers to top biLayer while g_nLayer=0 refers to bottom biLayer
-#ifdef OLD_RECON
-static const int g_nPlane = 18;
-#endif
-//static const int g_nView = 2;
 static const int g_nUniPlane = g_nLayer*g_nView;
 
 static const int g_nFecd = 24;
 static const int g_nStrip = 1536;
 //static const int g_nTower = 16;
 
+// group of strips so that each group has enough statistics
+static const int g_nDiv = 24; //used to be 64;takuya  
   
 static const int g_nWafer = 4, g_nBad=7, g_nTime=5, g_nMerge=4;
+
+const int nTotHistBin = 200;
 
 const float ladderGap = 2.148;
 const float posZ[g_nView][g_nLayer] = { 
@@ -104,7 +97,7 @@ class Cluster{
   ~Cluster(){;};
   bool addStrip( int );
 
- private:
+ protected:
   int tower;
   int uniPlane;
   int firstStrip; // first strip number
@@ -141,6 +134,17 @@ struct badStripVar{
 };
 
 //
+// tot calibration variable
+//
+struct totCalibVar{
+  float totQuadra[g_nStrip];
+  float totGain[g_nStrip];
+  float totOffset[g_nStrip];
+  float chargeScale[g_nDiv];
+  int chargeDist[g_nDiv][nTotHistBin];
+};
+
+//
 //
 // tower variable class
 //
@@ -148,8 +152,8 @@ class towerVar{
  public:
   towerVar( int twr, bool badStrips);
   ~towerVar(){;};
+  void saveHists( bool );
   void readHists( TFile*, UInt_t, UInt_t );
-  void saveHists();
 
   int towerId;
   float center[g_nView];
@@ -164,23 +168,7 @@ class towerVar{
   int rHits[g_nUniPlane][g_nStrip];
   int dHits[g_nUniPlane][g_nStrip];
   std::vector<badStripVar> bsVar;
-};
-
-//
-// class poisson
-//
-class poissonFunc{
- public:
-  poissonFunc();
-  ~poissonFunc(){;};
-
-  double getProb( double, int );
-  float getLogProb( float, int );
-  float getLogIntProb( double, int );
-  
- private:
-  double factorial[200];
-  float logFactorial[200];
+  std::vector<totCalibVar> tcVar;
 };
 
 //
@@ -188,13 +176,12 @@ class poissonFunc{
 //
 class TkrHits {
  public:
-  TkrHits();
+  TkrHits( bool initHistsFlag=true );
   //  TkrHits( const std::string, const std::string );
-  ~TkrHits();
+  ~TkrHits(){};
   
   void setOutputFile( TFile* outputFile ) {m_rootFile=outputFile;}  
-  bool setOutputFiles( const char* outputDir );  
-  void analyzeEvents(int);
+  void analyzeEvent();
   
   void setNevents(int nEvent) {m_nEvents = nEvent;}
 
@@ -204,21 +191,15 @@ class TkrHits {
     m_reconEvent=reconEvent;
   }
 
-  void saveAllHist();
+  void saveAllHist( bool saveTimeOcc=false );
 
- private:
+ protected:
 
   void initOccHists();
   void saveOccHists();
 
-  void getTimeStamp();
-  void initHists();
+  void initCommonHists();
   void setTowerInfo();
-  
-  void splitWords(std::vector<std::string>&, const std::string& );
-
-  void getDate( const char* str, std::string& date );
-  
   
   bool passCut();
   
@@ -228,8 +209,10 @@ class TkrHits {
   layerId getLayerId( const TkrCluster* );
   layerId getLayerId( Cluster* );
   bool closeToTrack( const TkrCluster*, TkrCluster*[g_nTower][g_nUniPlane] );
-  
-  bool checkFile( const std::string );
+  float getTrackRMS();
+  Double_t leastSquareLinearFit( std::vector<Double_t> &vy, 
+			     std::vector<Double_t> &vx, 
+			     Double_t &y0, Double_t &dydx );
   
   TH1F *m_nTrackDist, *m_maxHitDist, *m_trkRMS, *m_numClsDist, *m_dirzDist, 
     *m_armsDist, *m_brmsDist[g_nLayer/3];
@@ -239,23 +222,13 @@ class TkrHits {
   TProfile *m_dirProfile;
 
   int m_nEvents;
-  
-  TFile* m_reconFile;
-  TTree* m_reconTree;
+
   ReconEvent* m_reconEvent;
-  
-  TFile* m_digiFile;
-  TTree* m_digiTree;
   DigiEvent* m_digiEvent;
-  
   TFile* m_rootFile; 
  
   // reconstructed track and direction
-#ifdef OLD_RECON
-  TkrKalFitTrack* m_track;
-#else
   TkrTrack* m_track;
-#endif
   TVector3 m_pos, m_dir;
   
   std::vector<Cluster*> m_clusters;
@@ -264,10 +237,6 @@ class TkrHits {
   
   //file stream for log output
   std::ofstream m_log;
-  // output directory
-  std::string m_outputDir;
-  // dtd file
-  std::string m_dtdDir;
   
   // tower variables
   std::vector<int> m_towerList;
@@ -275,20 +244,19 @@ class TkrHits {
   std::vector<towerVar> m_towerVar;
   std::vector<int> m_trackTowerList;
   
-  
-  //xml related parameters
-  int m_first_run, m_last_run;
-  std::string m_version, m_tag, m_dateStamp, m_timeStamp, m_startTime, m_stopTime;
-  
+  //xml related parameters  
+  std::string m_version, m_tag;
+
   // bad strips analysis related stuff
   void fillOccupancy( int );
   void calculateEfficiency();
   
-  bool m_badStrips, m_correctedTot, m_histMode,m_towerInfoDefined;
+  bool m_badStrips, m_towerInfoDefined; 
   TH1F* m_aPos[g_nWafer+1];
-  TH1F *m_occDist, *m_poissonDist, *m_lrec, *m_ldigi, *m_lcls, *m_locc, *m_leff, *m_ltrk, *m_dist;
+  TH1F *m_occDist, *m_poissonDist, *m_lrec, *m_ldigi, *m_lcls, *m_htwr, *m_locc, *m_leff, *m_ltrk, *m_dist;
 
-  float m_maxDirZ;
+  float m_maxDirZ, m_maxTrackRMS, m_maxDelta;
+  float m_trackRMS;
 
 };
 

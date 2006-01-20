@@ -898,9 +898,12 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //  nEvent = 100;
+  //nEvent = 1000;
 
   m_tkrCalib->setNevents(nEvent);
+  m_tkrCalib->setOutputFile(m_outputFile);
+  //Load current event pointers in TkrCalibManager
+  m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
 
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
@@ -926,11 +929,8 @@ void RootAnalyzer::analyzeData()
 
     analyzeTot();
     
-    m_tkrCalib->setOutputFile(m_outputFile);
-    //Load current event pointers in TkrCalibManager
-    m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
     //Tracker Calibration Analysis
-    m_tkrCalib->analyzeEvents(iEvent);
+    m_tkrCalib->analyzeEvent();
 
     fillOutputTree();
     if(m_mcEvent) m_mcEvent->Clear();

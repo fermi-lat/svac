@@ -5,9 +5,6 @@
 
 #include "TkrHits.h"
 #include "facilities/Util.h"
-#ifndef OLD_RECON
-#include "commonRootData/idents/TkrId.h"
-#endif
 #include "commonRootData/idents/TowerId.h"
 
 using std::string;
@@ -96,9 +93,11 @@ towerVar::towerVar( int twr, bool badStrips ){
   hwserial = "None";
   runid = "-1";
   bsVar.clear();
+  tcVar.clear();
 
   for( int unp=0; unp!=g_nUniPlane; unp++){
     badStripVar bsv;
+    totCalibVar tcv;
     for( int strip=0; strip!=g_nStrip; strip++){
       rHits[unp][strip] = 0;
       dHits[unp][strip] = 0;
@@ -112,6 +111,7 @@ towerVar::towerVar( int twr, bool badStrips ){
       }
     }
     if( badStrips ) bsVar.push_back( bsv );
+    else tcVar.push_back( tcv );
   }
 #ifdef PRINT_DEBUG
   std::cout << "towerVar constructer " << twr << std::endl;
@@ -119,7 +119,7 @@ towerVar::towerVar( int twr, bool badStrips ){
 }
 
 
-void towerVar::saveHists(){
+void towerVar::saveHists( bool saveTimeOcc ){
 
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
   char name[] = "roccT00X17w3t4";
@@ -158,22 +158,91 @@ void towerVar::saveHists(){
     ehist->Write(0, TObject::kOverwrite);
     thist->Write(0, TObject::kOverwrite);
     lhist->Write(0, TObject::kOverwrite);
-    for(int iWafer = 0; iWafer != g_nWafer; ++iWafer){
-      sprintf(name,"occT%d%c%dw%d", towerId, cvw[view], layer, iWafer);
-      hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
-      for( int strip=0; strip!=g_nStrip; strip++)
-	hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][0] );
-      hist->Write(0, TObject::kOverwrite);
+    if( saveTimeOcc ){
+      for(int iWafer = 0; iWafer != g_nWafer; ++iWafer)
+	for( int tDiv = 0; tDiv != g_nTime; tDiv++){
+	  sprintf(name,"occT%d%c%dw%dt%d", towerId, cvw[view], layer, iWafer, tDiv);
+	  hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
+	  for( int strip=0; strip!=g_nStrip; strip++)
+	    hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][tDiv] );
+	  hist->Write(0, TObject::kOverwrite);
+	}
+    }
+    else{
+      for(int iWafer = 0; iWafer != g_nWafer; ++iWafer){
+	sprintf(name,"occT%d%c%dw%d", towerId, cvw[view], layer, iWafer);
+	hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
+	for( int strip=0; strip!=g_nStrip; strip++)
+	  hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][0] );
+	hist->Write(0, TObject::kOverwrite);
+      }
     }
   }
 }
+
+
+void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
+
+  TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
+  char name[] = "roccT00X17w3t4";
+  char cvw[] = "XY";
+  for( int unp=0; unp!=g_nUniPlane; unp++){
+    layerId lid( unp );
+    int layer = lid.layer;
+    int view = lid.view;
+    sprintf(name,"roccT%d%c%d", towerId, cvw[view], layer);
+    rhist = (TH1F*)hfile->FindObjectAny( name );
+    sprintf(name,"doccT%d%c%d", towerId, cvw[view], layer);
+    dhist = (TH1F*)hfile->FindObjectAny( name );
+    for( int strip=0; strip!=g_nStrip; strip++){      
+      rHits[unp][strip] += (int)rhist->GetBinContent( strip+1 );
+      dHits[unp][strip] += (int)dhist->GetBinContent( strip+1 );
+    }
+  }
+
+  for( UInt_t unp=0; unp!=bsVar.size(); unp++){
+    layerId lid( unp );
+    int layer = lid.layer;
+    int view = lid.view;
+    sprintf(name,"eoccT%d%c%d", towerId, cvw[view], layer);
+    ehist = (TH1F*)hfile->FindObjectAny( name );
+    sprintf(name,"toccT%d%c%d", towerId, cvw[view], layer);
+    thist = (TH1F*)hfile->FindObjectAny( name );
+    sprintf(name,"loccT%d%c%d", towerId, cvw[view], layer);
+    lhist = (TH1F*)hfile->FindObjectAny( name );
+    for( int strip=0; strip!=g_nStrip; strip++){
+      bsVar[unp].eHits[strip] += (int)ehist->GetBinContent( strip+1 );
+      bsVar[unp].tHits[strip] += (int)thist->GetBinContent( strip+1 );
+      bsVar[unp].lHits[strip] += (int)lhist->GetBinContent( strip+1 );
+    }
+    for(int iWafer = 0; iWafer != g_nWafer; ++iWafer){
+      sprintf(name,"occT%d%c%dw%d", towerId, cvw[view], layer, iWafer );
+      hist = (TH1F*)hfile->FindObjectAny( name );
+      if( hist ){ // check if simple version exist
+	int tdiv = (iRoot*g_nTime)/nRoot;
+	for( int strip=0; strip!=g_nStrip; strip++)
+	  bsVar[unp].nHits[strip][iWafer][tdiv] 
+	    += (int)hist->GetBinContent( strip+1 );
+	continue; // no need to get time dependent histograms
+      }
+      for( int tDiv = 0; tDiv != g_nTime; tDiv++){
+	sprintf(name,"occT%d%c%dw%dt%d", towerId, cvw[view], layer, iWafer, tDiv );
+	hist = (TH1F*)hfile->FindObjectAny( name );
+	int tdiv = (tDiv+iRoot*g_nTime)/nRoot;
+	for( int strip=0; strip!=g_nStrip; strip++)
+	  bsVar[unp].nHits[strip][iWafer][tdiv] 
+	    += (int)hist->GetBinContent( strip+1 );
+      }
+    }
+  }
+}
+
 //
 // TkrHits implementation 
 //
-TkrHits::TkrHits(): 
-  m_reconFile(0), m_reconTree(0), 
-  m_reconEvent(0), m_digiFile(0), m_digiTree(0),
-  m_digiEvent(0), m_rootFile(0)
+TkrHits::TkrHits( bool initHistsFlag ): 
+  m_reconEvent(0), m_digiEvent(0), m_rootFile(0), m_log(0), 
+  m_maxDirZ(-0.85), m_maxTrackRMS(0.3), m_maxDelta(3.0), m_trackRMS(-1.0)
 {
 
   // get version number from CVS string
@@ -190,62 +259,31 @@ TkrHits::TkrHits():
   i = version.find( " " );
   version.assign( version, 0, i ) ;
   m_version = version;
-  std::cout << "Tag: " << m_tag << ", version: " << m_version << std::endl;
+  std::cout << "TkrHits, Tag: " << m_tag 
+	    << ", version: " << m_version << std::endl;
 
   for(int tower = 0; tower != g_nTower; ++tower)
     m_towerPtr[tower] = -1;
 
   m_badStrips = true;
-  initHists();
-}
-
-
-void TkrHits::getTimeStamp(){
-
-  // get time 
-  time_t rawtime=0;
-  time( &rawtime );
-  // format time into a null-terminated string
-  char nts[] = "050124-000000";
-  size_t ntsmax=10;
-  strftime( nts, ntsmax, "%y%m%d", gmtime( &rawtime ) );
-  m_dateStamp = nts;
-  strftime( nts, ntsmax, "%H%M%S", gmtime( &rawtime ) );
-  m_timeStamp = nts;
-}
-
-
-void TkrHits::splitWords(  std::vector<std::string>& words, 
-		    const std::string& line ) {
-
-  std::string::size_type pos = 0;
-  std::string word;
-
-  for( ; ; ) {
-
-    string::size_type i = line.find(' ', pos);
-    if(i != string::npos) word = line.substr(pos, i-pos);
-    else word = line.substr(pos); // end of line
-    words.push_back( word );
-    
-    if(i == string::npos) break;
-    pos = i + 1;
+  if( initHistsFlag ){
+    initCommonHists();
+    if( m_badStrips ) initOccHists();
   }
 }
 
 
-void TkrHits::initHists(){
+void TkrHits::initCommonHists(){
   m_nTrackDist = new TH1F("nTrack", "nTrack", 10, 0, 10);
   m_maxHitDist = new TH1F("maxHit", "maxHit", g_nUniPlane, 0, g_nUniPlane);
-  m_trkRMS = new TH1F("trkRMS", "trkRMS", 100, 0, 0.002);
+  m_trkRMS = new TH1F("trkRMS", "trkRMS", 100, 0, 2.5);
   m_numClsDist = new TH1F("numCls", "# of cluster per layer", 10, 0, 10 );
   m_dirzDist = new TH1F("dirZ", "dirZ", 100, -1, 1);
   m_armsDist = new TH1F("arms", "arms", 100, -5, 5);
   m_lrec = new TH1F("lrec", "lrec", g_nUniPlane, 0, g_nUniPlane);
   m_ldigi = new TH1F("ldigi", "ldigi", g_nUniPlane, 0, g_nUniPlane);
   m_lcls = new TH1F("lcls", "lcls", g_nUniPlane, 0, g_nUniPlane);
-
-  if( m_badStrips ) initOccHists();
+  m_htwr = new TH1F("htwr", "htwr", g_nTower, 0, g_nTower);
 }
 
 
@@ -270,7 +308,7 @@ void TkrHits::initOccHists(){
 }
 
 
-void TkrHits::saveAllHist()
+void TkrHits::saveAllHist( bool saveWaferOcc )
 {
   if(m_rootFile == 0) return;
   std::cout << "save histograms" << std::endl;
@@ -284,46 +322,13 @@ void TkrHits::saveAllHist()
   m_lrec->Write(0, TObject::kOverwrite);
   m_ldigi->Write(0, TObject::kOverwrite);
   m_lcls->Write(0, TObject::kOverwrite);
+  m_htwr->Write(0, TObject::kOverwrite);
 
   if( m_badStrips ){
     saveOccHists();
-    for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw)
-      m_towerVar[tw].saveHists();
   }
-}
-
-TkrHits::~TkrHits() 
-{
-//   if(m_rootFile == 0) return;
-//   if(!m_rootFile->IsOpen()){
-//     m_rootFile->Open(m_rootFile->GetName(),"UPDATE");
-//     std::cout << "Reopening..." << m_rootFile->GetName() <<std::endl;
-//   }
-
-//   std::cout << "save histograms" << std::endl;
-
-//   if(m_rootFile->cd("TkrCalib")==kFALSE) {
-//     m_rootFile->mkdir("TkrCalib");
-//     m_rootFile->cd("TkrCalib");
-//   }
-
-//   m_nTrackDist->Write(0, TObject::kOverwrite);
-//   m_maxHitDist->Write(0, TObject::kOverwrite);
-//   m_trkRMS->Write(0, TObject::kOverwrite);
-//   m_numClsDist->Write(0, TObject::kOverwrite);
-//   m_dirzDist->Write(0, TObject::kOverwrite);
-//   m_armsDist->Write(0, TObject::kOverwrite);
-//   m_lrec->Write(0, TObject::kOverwrite);
-//   m_ldigi->Write(0, TObject::kOverwrite);
-//   m_lcls->Write(0, TObject::kOverwrite);
-
-//   if( m_badStrips ){
-//     saveOccHists();
-//     for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw)
-//       m_towerVar[tw].saveHists();
-//   }
-
-//   m_rootFile->Close();
+  for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw)
+    m_towerVar[tw].saveHists( saveWaferOcc );
 }
 
 
@@ -344,48 +349,8 @@ void TkrHits::saveOccHists(){
 }
 
 
-bool TkrHits::setOutputFiles( const char* outputDir )
+void TkrHits::analyzeEvent()
 {
-  m_outputDir = outputDir;
-
-  std::string testId = "TE603";
-  if( m_badStrips ) testId = "TE403";
-
-  std::string filename;
-  char fname[] = "/TE603_050121-000000.root";
-
-  filename = m_outputDir;
-  sprintf( fname, "/%s_%s-%s.log", testId.c_str(), 
-	   m_dateStamp.c_str(), m_timeStamp.c_str() );
-  filename += fname;
-  m_log.open( filename.c_str() );
-  if( m_log )
-    std::cout << "Open log file: " << filename << std::endl;
-  else{
-    std::cout << filename << " cannot be opened." << std::endl;
-    return false;
-  }
-
-  filename = m_outputDir;
-  sprintf( fname, "/%s_%s-%s.root", testId.c_str(), 
-	   m_dateStamp.c_str(), m_timeStamp.c_str() );
-  filename += fname;
-  m_rootFile = new TFile( filename.c_str(), "RECREATE" );
-  if( m_rootFile ){
-    std::cout << "Open output root file: " << filename << std::endl;
-    m_log << "Output root file: " << filename << std::endl;
-  }
-  else{
-    std::cout << filename << " can not be opened." << std::endl;
-    return false;
-  }
-  return true;
-}
-
-
-void TkrHits::analyzeEvents( int iEvent )
-{
-   (void)iEvent;
     if(! passCut()) return;
 
     if( ! m_towerInfoDefined ) setTowerInfo();
@@ -436,18 +401,10 @@ layerId TkrHits::getLayerId( Cluster* cluster ){
 
 layerId TkrHits::getLayerId( const TkrCluster* cluster )
 {
-#ifdef OLD_RECON
-  int planeId = cluster->getPlane();
-  TkrCluster::view viewId = cluster->getView();
-  int tower = cluster->getTower();
-  int layer = g_nLayer - planeId - 1;
-  int view = (viewId == TkrCluster::X) ? 0 : 1;
-#else
   commonRootData::TkrId id = cluster->getTkrId();
   int tower = TowerId( id.getTowerX(), id.getTowerY() ).id();
   int view = id.getView();
   int layer = cluster->getLayer();
-#endif
   layerId lid( layer, view, tower);
   return lid;
 }
@@ -531,7 +488,8 @@ void TkrHits::getReconClusters()
     int twr = m_towerPtr[ m_towerVar[tw].towerId ];
     if( twr != int(tw) ) {
       std::cout << "Invalid tower id: " << twr << " != " << tw << std::endl;
-      m_log << "Invalid tower id: " << twr << " != " << tw << std::endl;
+      if( m_log )
+	m_log << "Invalid tower id: " << twr << " != " << tw << std::endl;
       exit( EXIT_FAILURE );
     }
     for( int unp=0; unp<g_nUniPlane; unp++)
@@ -545,30 +503,12 @@ void TkrHits::getReconClusters()
   int lastTower = -1;
   int numRecCls = 0;
   
-#ifdef OLD_RECON
-  std::map<int, TkrCluster*> clsMap;
-  TObjArray* siClusterCol = tkrRecon->getClusterCol();
-  int noOfTkrClusters = siClusterCol->GetLast()+1;
-  for(int i = 0; i != noOfTkrClusters; ++i) {
-    TkrCluster* cluster = dynamic_cast<TkrCluster*>(siClusterCol->At(i));
-    clsMap[cluster->getId()] = cluster;
-  }
-  
-  TkrKalFitTrack* tkrTrack = m_track;
-  int nHitPlane = tkrTrack->getNumHits();
-  for(int iPlane = 0; iPlane != nHitPlane; ++iPlane) {
-    const TkrHitPlane* plane = tkrTrack->getHitPlane(iPlane);
-    std::map<int, TkrCluster*>::const_iterator itr = clsMap.find(plane->getIdHit());
-    assert(itr != clsMap.end());
-    TkrCluster* cluster = itr->second;
-#else
   TkrTrack* tkrTrack = m_track;
   TIter trk1HitsItr(tkrTrack);
   TkrTrackHit* pTrk1Hit = 0;
   while( (pTrk1Hit = (TkrTrackHit*)trk1HitsItr.Next()) ) {    
     const TkrCluster* cluster = (pTrk1Hit->getClusterPtr());
     if(!cluster) continue;
-#endif
     numRecCls++;
     layerId lid = getLayerId( cluster );
     //std::cout << lid.tower << " " << lid.uniPlane << " " << lid.layer << " " << lid.view << std::endl;
@@ -796,6 +736,7 @@ bool TkrHits::passCut()
   TObjArray* tracks = tkrRecon->getTrackCol();
   int numTracks = tracks->GetEntries();
   m_nTrackDist->Fill( numTracks );
+  m_trackRMS = -1.0;
   
   // select only 1 or 2 track event
   if( numTracks > 2) return false;
@@ -803,12 +744,7 @@ bool TkrHits::passCut()
   // find a track with maximum number of hits.
   int maxHits = 0, nHits;
   for( int tk=0; tk!=numTracks; tk++){
-    
-#ifdef OLD_RECON
-    TkrKalFitTrack* track = dynamic_cast<TkrKalFitTrack*>(tracks->At(tk));
-#else
     TkrTrack* track = dynamic_cast<TkrTrack*>(tracks->At(tk));
-#endif
     if(track) {
       nHits = track->getNumFitHits();
       if( nHits > maxHits ){
@@ -821,14 +757,101 @@ bool TkrHits::passCut()
   }
   m_maxHitDist->Fill( maxHits );
   if( maxHits < 6 ) return false;
-  m_trkRMS->Fill( m_track->getScatter() );
+  //m_trkRMS->Fill( m_track->getScatter() );
+  m_trkRMS->Fill( getTrackRMS() );
+  //std::cout << m_trackRMS << " " << m_track->getScatter()/m_trackRMS << std::endl;
   m_dirzDist->Fill( m_dir.Z() );
   float maxDirZ = m_maxDirZ;
   if( m_badStrips ) maxDirZ = -0.7;
   if( m_dir.Z() > maxDirZ ) return false;
-  if( m_track->getScatter() > 2.0E-4 ) return false;
+  //if( m_track->getScatter() > 2.0E-4 ) return false;
+  if( m_trackRMS > m_maxTrackRMS ) return false;
   
   return true;
+}
+
+
+float TkrHits::getTrackRMS(){
+  if( m_trackRMS >= 0.0 ) return m_trackRMS;
+
+  //
+  // register hits and perform linear fit
+  //
+  std::vector<Double_t> vx, vzx, vy, vzy;
+  TkrTrack* tkrTrack = m_track;
+  TIter trk1HitsItr(tkrTrack);
+  TkrTrackHit* pTrk1Hit = 0;
+  while( (pTrk1Hit = (TkrTrackHit*)trk1HitsItr.Next()) ) {    
+    const TkrCluster* cluster = (pTrk1Hit->getClusterPtr());
+    if(!cluster) continue;
+    layerId lid = getLayerId( cluster );
+    Double_t z = (cluster->getPosition()).Z();
+    if( lid.view == 0 ){
+      vx.push_back( (cluster->getPosition()).X() );
+      vzx.push_back( z );
+    }
+    else{
+      vy.push_back( (cluster->getPosition()).Y() );
+      vzy.push_back( z );
+    }
+  }
+  Double_t x0=-1.0, dxdz=-1.0, y0, dydz;
+  // fit xz and yz
+  leastSquareLinearFit( vx, vzx, x0, dxdz );
+  leastSquareLinearFit( vy, vzy, y0, dydz );
+
+  // reset mpos
+  Double_t z = m_pos.Z();
+  m_pos.SetXYZ( x0 + dxdz*z, y0 + dydz*z, z );
+  // reset dir
+  Double_t dirz = -1 / sqrt( dxdz*dxdz + dydz*dydz + 1.0 );
+  m_dir.SetXYZ( dxdz*dirz, dydz*dirz, dirz );
+
+  // calculare combined rms in both x and y
+  float sum=0.0, sumsq=0.0;
+  for( UInt_t i=0; i<vx.size(); i++){
+    float del = vx[i] - ( x0+dxdz*vzx[i] );
+    //std::cout << del << " = " << vx[i] << " -  " << x0+dxdz*vzx[i] << " =" 
+    //      << x0 << "+" << dxdz << "*" << vzx[i] << std::endl;
+    sum += del;
+    sumsq += del*del;
+  }
+  for( UInt_t i=0; i<vy.size(); i++){
+    float del = vy[i] - ( y0+dydz*vzy[i] );
+    sum += del;
+    sumsq += del*del;
+  }
+  int num = ( vx.size()+vy.size() );
+  float mean = sum / num;
+  float rmsq = sumsq / num - mean*mean;
+  if( rmsq > 0.0 ) m_trackRMS = sqrt( rmsq );
+  else m_trackRMS = 0.0;
+  return m_trackRMS;
+
+}
+
+
+Double_t TkrHits::leastSquareLinearFit( std::vector<Double_t> &vy, 
+					std::vector<Double_t> &vx, 
+					Double_t &y0, Double_t &dydx ){
+
+  Double_t sumX=0.0, sumXX=0.0, sumXY=0.0, sumY=0.0, sumYY=0.0;
+  UInt_t num = vy.size();
+  for( UInt_t i=0; i<num; i++){
+    sumX += vx[i];
+    sumXX += vx[i]*vx[i];
+    sumXY += vx[i]*vy[i];
+    sumYY += vy[i]*vy[i];
+    sumY += vy[i];
+  }
+  dydx = ( sumXY*num - sumX*sumY ) / ( sumXX*num - sumX*sumX );
+  y0 = ( sumY - dydx*sumX ) / num;
+  Double_t rms = sumYY - 2*dydx*sumXY - 2*y0*sumY 
+    + dydx*dydx*sumXX + 2*dydx*y0*sumX + y0*y0*num;
+  if( rms > 0.0 ) rms = sqrt( rms / num );
+  else rms = 0.0;
+  //std::cout << rms << std::endl;
+  return rms;
 }
 
 
