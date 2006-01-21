@@ -41,6 +41,8 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
 
   m_tkrCalib = new TkrHits();
 
+  m_tkrNoiseOcc = new TkrNoiseOcc();
+
   // open output ra root file
   // No need to delete m_outputFile as ROOT will do the garbage collection
 
@@ -51,6 +53,7 @@ RootAnalyzer::~RootAnalyzer()
   // since root will do the garbage collection automatically for objects such
   // as TTree and TH1, we don't want to deallocate them once more
   delete m_tkrCalib;
+  delete m_tkrNoiseOcc;
 }
 
 void RootAnalyzer::produceOutputFile()
@@ -60,6 +63,7 @@ void RootAnalyzer::produceOutputFile()
   if(m_outputFile) {
     m_outputFile->cd("TkrCalib");
     m_tkrCalib->saveAllHist();
+    m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
@@ -785,6 +789,7 @@ void RootAnalyzer::parseOptionFile(const char* f)
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
   m_outputFile->mkdir("TkrCalib");
+  m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc");
   m_tree = new TTree("Output", "Root Analyzer");
 
   // Set max file size to 500 GB:
@@ -904,7 +909,11 @@ void RootAnalyzer::analyzeData()
   m_tkrCalib->setOutputFile(m_outputFile);
   //Load current event pointers in TkrCalibManager
   m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
-
+  
+  //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval, int coincidence_cut, int multi_ld, int multi_hd)
+  m_tkrNoiseOcc->initAnalysis(nEvent, 1000, 1, -1, 65);
+  m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
+  
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     m_ntuple.reset();  
@@ -931,6 +940,7 @@ void RootAnalyzer::analyzeData()
     
     //Tracker Calibration Analysis
     m_tkrCalib->analyzeEvent();
+    m_tkrNoiseOcc->anaDigiEvt();
 
     fillOutputTree();
     if(m_mcEvent) m_mcEvent->Clear();

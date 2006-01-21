@@ -13,6 +13,7 @@
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
 #include "TkrHits.h"
+#include "TkrNoiseOcc.h"
 
 class RootAnalyzer {
  public:
@@ -130,6 +131,8 @@ class RootAnalyzer {
 
   TkrHits* m_tkrCalib;
 
+  TkrNoiseOcc* m_tkrNoiseOcc;
+  TDirectory* m_tkrNoiseOcc_dir;
 };
 
 #endif
