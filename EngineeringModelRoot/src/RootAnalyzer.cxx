@@ -39,7 +39,7 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
   m_digiChain = new TChain("Digi");
   m_reconChain = new TChain("Recon");
 
-  m_tkrCalib = new TkrHits();
+  m_tkrCalib = new TkrHits( true );
 
   m_tkrNoiseOcc = new TkrNoiseOcc();
 

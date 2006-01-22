@@ -176,7 +176,7 @@ class towerVar{
 //
 class TkrHits {
  public:
-  TkrHits( bool initHistsFlag=true );
+  TkrHits( bool initHistsFlag=false );
   //  TkrHits( const std::string, const std::string );
   ~TkrHits(){};
   

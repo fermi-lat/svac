@@ -138,6 +138,8 @@ void towerVar::saveHists( bool saveTimeOcc ){
     }
     rhist->Write(0, TObject::kOverwrite);
     dhist->Write(0, TObject::kOverwrite);
+    delete rhist;
+    delete dhist;
   }
 
   for( UInt_t unp=0; unp!=bsVar.size(); unp++){
@@ -158,6 +160,9 @@ void towerVar::saveHists( bool saveTimeOcc ){
     ehist->Write(0, TObject::kOverwrite);
     thist->Write(0, TObject::kOverwrite);
     lhist->Write(0, TObject::kOverwrite);
+    delete ehist;
+    delete thist;
+    delete lhist;
     if( saveTimeOcc ){
       for(int iWafer = 0; iWafer != g_nWafer; ++iWafer)
 	for( int tDiv = 0; tDiv != g_nTime; tDiv++){
@@ -166,6 +171,7 @@ void towerVar::saveHists( bool saveTimeOcc ){
 	  for( int strip=0; strip!=g_nStrip; strip++)
 	    hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][tDiv] );
 	  hist->Write(0, TObject::kOverwrite);
+	  delete hist;
 	}
     }
     else{
@@ -174,8 +180,9 @@ void towerVar::saveHists( bool saveTimeOcc ){
 	hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
 	for( int strip=0; strip!=g_nStrip; strip++)
 	  hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][0] );
-	hist->Write(0, TObject::kOverwrite);
-      }
+	hist->Write(0, TObject::kOverwrite); 
+	delete hist;
+     }
     }
   }
 }
@@ -241,7 +248,7 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
 // TkrHits implementation 
 //
 TkrHits::TkrHits( bool initHistsFlag ): 
-  m_reconEvent(0), m_digiEvent(0), m_rootFile(0), m_log(0), 
+  m_reconEvent(0), m_digiEvent(0), m_rootFile(0), 
   m_maxDirZ(-0.85), m_maxTrackRMS(0.3), m_maxDelta(3.0), m_trackRMS(-1.0)
 {
 
@@ -488,7 +495,7 @@ void TkrHits::getReconClusters()
     int twr = m_towerPtr[ m_towerVar[tw].towerId ];
     if( twr != int(tw) ) {
       std::cout << "Invalid tower id: " << twr << " != " << tw << std::endl;
-      if( m_log )
+      if( m_log.is_open() )
 	m_log << "Invalid tower id: " << twr << " != " << tw << std::endl;
       exit( EXIT_FAILURE );
     }
