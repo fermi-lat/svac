@@ -196,3 +196,10 @@ awb for Hiro	TkrCalib updates
 
 v1r8p9: January 20, 2006
 awb   Forgot to do a cvs ci first  
+
+v1r9: January 21, 2006
+	TKR flare monitoring added.
+
+v1r10: January 22, 2006
+awb for Hiro: Deleting histograms at end of job in TkrCalib.
+
