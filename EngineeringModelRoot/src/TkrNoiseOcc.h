@@ -55,7 +55,7 @@ class TkrNoiseOcc {
   int m_coincidence_cut, m_multi_ld, m_multi_hd;
   float m_crit_strip_rate, m_crit_layer_rate;
   /// data parameter
-  int m_nEvent, m_evt_interval, m_nx;
+  int m_nEvent, m_evt_interval, m_nx, m_event_counter;
 
   /// data array definition
   float  *vTkrExposure[NUMTOWER][NUMLAYER];

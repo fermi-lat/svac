@@ -37,13 +37,13 @@ TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval, int coincidence_cut, int
   m_evt_interval    = evt_interval;   
   m_coincidence_cut = coincidence_cut;
   m_multi_ld        = multi_ld;       
-  m_multi_hd        = multi_hd;       
+  m_multi_hd        = multi_hd;
 
   m_crit_strip_rate = 5.0e-5;
   m_crit_layer_rate = 5.0e-2;
 
   m_nx = (int)(m_nEvent/m_evt_interval)+1;
- 
+  m_event_counter   = 0;
   
   for(tower=0;tower<NUMTOWER; tower++){
     for (bilayer=0; bilayer<NUMLAYER; bilayer++) {
@@ -93,7 +93,7 @@ TkrNoiseOcc::anaDigiEvt() {
       }
     }
   }
-    
+
   ievent = m_digiEvt->getEventId(); 
   //digiEventId = evt->getEventId(); 
   //digiRunNum = evt->getRunId();      
@@ -142,7 +142,7 @@ TkrNoiseOcc::anaDigiEvt() {
       }
       
       // Fill Exposure
-      vTkrExposure[tower][bilayer][(int)((ievent-1)/m_evt_interval)] +=1.0;
+      vTkrExposure[tower][bilayer][(int)(m_event_counter/m_evt_interval)] +=1.0;
       
       for(xyview=0; xyview<2; xyview++){ 
 	
@@ -155,11 +155,11 @@ TkrNoiseOcc::anaDigiEvt() {
 	}
 	
 	// Fill Strip Occupancy
-	vTkrStripOcc[tower][bilayer][xyview][(int)(ievent/m_evt_interval)] += (float)numHitLayer[tower][bilayer][xyview];
+	vTkrStripOcc[tower][bilayer][xyview][(int)(m_event_counter/m_evt_interval)] += (float)numHitLayer[tower][bilayer][xyview];
 	
 	// Fill Event Occupancy
 	if (numHitLayer[tower][bilayer][xyview]>0) {
-	  vTkrLayerOcc[tower][bilayer][xyview][(int)(ievent/m_evt_interval)] +=1.0;
+	  vTkrLayerOcc[tower][bilayer][xyview][(int)(m_event_counter/m_evt_interval)] +=1.0;
 	}
 	// Fill Noise Multiplicity
 	vTkrNoiseMul[tower][bilayer][xyview][numHitLayer[tower][bilayer][xyview]] +=1.0;
@@ -193,7 +193,7 @@ TkrNoiseOcc::anaDigiEvt() {
       }
     }
   }
-  
+  m_event_counter +=1;
 }  
 
 
@@ -203,6 +203,7 @@ TkrNoiseOcc::clearAnalysis() {
   int tower, bilayer, xyview;
   //int m_nx;
 
+  m_event_counter = 0;
   /// delete histgram array
   for(tower=0;tower<NUMTOWER; tower++){
     for (bilayer=0; bilayer<NUMLAYER; bilayer++) {
