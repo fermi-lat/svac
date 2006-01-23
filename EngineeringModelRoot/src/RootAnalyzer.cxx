@@ -384,8 +384,8 @@ void RootAnalyzer::analyzeReconTree()
 
       const AcdId& acdId = acdPoca->getId();
       int acdID = acdId.getId();
-
-      if ( trackIndex == 0 && nTrack1 < 6 ) {
+      
+      if (trackIndex == 0 && nTrack1 < 6) {
         m_ntuple.m_acdPocaDoca[0][nTrack1]       = acdPoca->getDoca();
         m_ntuple.m_acdPocaDocaErr[0][nTrack1]    = acdPoca->getDocaErr();
         m_ntuple.m_acdPocaDocaRegion[0][nTrack1] = acdPoca->getDocaRegion();
@@ -397,9 +397,9 @@ void RootAnalyzer::analyzeReconTree()
         m_ntuple.m_acdPocaTileID[0][nTrack1]     = acdID;
         m_ntuple.m_acdPocaTrackID[0][nTrack1]    = trackIndex; 
         nTrack1++;
-      } else if ( trackIndex == 1 && nTrack2 < 6 ) {
+      } else if (trackIndex == 1 && nTrack2 < 6) {
         m_ntuple.m_acdPocaDoca[1][nTrack2]       = acdPoca->getDoca();
-        m_ntuple.m_acdPocaDocaErr[1][nTrack2]     = acdPoca->getDocaErr();
+        m_ntuple.m_acdPocaDocaErr[1][nTrack2]    = acdPoca->getDocaErr();
         m_ntuple.m_acdPocaDocaRegion[1][nTrack2] = acdPoca->getDocaRegion();
         m_ntuple.m_acdPocaX[1][nTrack2]          = acdPoca->getPoca().X(); 
         m_ntuple.m_acdPocaY[1][nTrack2]          = acdPoca->getPoca().Y(); 
@@ -411,6 +411,8 @@ void RootAnalyzer::analyzeReconTree()
         nTrack2++;
       }
     }
+    m_ntuple.m_acdPocaNbrTrack1 = nTrack1;
+    m_ntuple.m_acdPocaNbrTrack2 = nTrack2;
   }
 
   //
@@ -1518,4 +1520,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdPocaSlopeY", &(m_ntuple.m_acdPocaSlopeY),"AcdPocaSlopeY[2][6]/F");
   m_tree->Branch("AcdPocaTileID", &(m_ntuple.m_acdPocaTileID),"AcdPocaTileID[2][6]/I");
   m_tree->Branch("AcdPocaTrackID", &(m_ntuple.m_acdPocaTrackID),"AcdPocaTrackID[2][6]/I");
+  m_tree->Branch("AcdPocaNbrTrack1", &(m_ntuple.m_acdPocaNbrTrack1),"AcdPocaNbrTrack1/I");
+  m_tree->Branch("AcdPocaNbrTrack2", &(m_ntuple.m_acdPocaNbrTrack2),"AcdPocaNbrTrack2/I");
 }

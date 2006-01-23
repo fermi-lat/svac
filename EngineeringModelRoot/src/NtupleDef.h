@@ -138,7 +138,8 @@ struct NtupleDef {
   float m_acdPocaSlopeY[2][6];
   int   m_acdPocaTileID[2][6];
   int   m_acdPocaTrackID[2][6];
-
+  int   m_acdPocaNbrTrack1;
+  int   m_acdPocaNbrTrack2;
 
   // CAL MIP information:
   int m_calMipNum;

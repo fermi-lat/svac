@@ -350,7 +350,8 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 
 <TR> <TD> AcdTkrPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
           (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise  </TD> </TR> 
-
+<TR> <TD> AcdPocaNbrTrack1                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 1. NB! May be larger than 5! </TD> </TR>
+<TR> <TD> AcdPocaNbrTrack2                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 2. NB! May be larger than 5! </TD> </TR>
 <TR> <TD> AcdPocaAcdTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
 <TR> <TD> AcdPocaAcdTileID[TrackIndex:0-1][Tile:0-6]      </TD> <TD> Float </TD> <TD>  Tile ID of the tile the track intersects. </TD> </TR>
 <TR> <TD> AcdPocaDoca[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 3D. </TD> </TR>
