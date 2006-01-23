@@ -203,3 +203,5 @@ v1r9: January 21, 2006
 v1r10: January 22, 2006
 awb for Hiro: Deleting histograms at end of job in TkrCalib.
 
+v1r11: January 22, 2006
+awb	Cut-and-paste error in PocaDoca arrays caused overwrite.
