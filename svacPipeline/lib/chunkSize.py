@@ -16,6 +16,7 @@ minRate = {
     'Photons': 0.5,
     'Am241': 10.90,
     }
+defaultParticleType = 'Cosmics'
 
 try:
     defaultTargetSeconds = int(os.environ['chunkTime'])
@@ -59,7 +60,12 @@ def chunkSize(particleType, targetSeconds=None, minChunk=None, maxChunk=None):
         maxChunk = defaultMaxChunk
         pass
 
-    rate = minRate[particleType]
+    try:
+        rate = minRate[particleType]
+    except KeyError:
+        rate = minRate[defaultParticleType]
+        pass
+
     chunk = targetSeconds * rate
 
     print >> sys.stderr, 'Target Time (SLAC) = %s\nParticle Type = %s\nRate = %s\nChunk Size = %s' % \

@@ -280,3 +280,14 @@ v3r4p4
 ---------------
 Add explicit maxTreeSize to account for merged CalTuple > 2 GB.
 Recon seems to be fine without this - don't know why.
+---------------------------------------------------------------------------
+
+
+v3r4p5
+---------------
+EM v5r070305p4
+TestReport v3r4p9
+RunRootAnalyzer v1r12
+Default particle type to 'Comsmics' for determining chunk size.
+Don't fail recon if chunk logs are missing.
+Move staging to u19.

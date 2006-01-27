@@ -195,7 +195,7 @@ ApplicationMgr.EvtMax = %d;
     calProcFile = os.path.join(procDir, calFileBase)
     calFile = os.path.join(stageDir, calFileBase)
     calFiles.append(calFile)
-    joData += 'CalXtalRecAlg.tupleFilename = "%s";\n' % calProcFile
+    joData += 'CalTupleAlg.tupleFilename = "%s";\n' % calProcFile
 
     logFile = '%s_%s_%s.log' % (task, runId, cTag)
     logFiles.append(logFile)
@@ -272,7 +272,11 @@ else:
 keepFiles = logFiles + joFiles
 tfp = tarfile.open(tarFile, mode='w:gz')
 for keeper in keepFiles:
-    tfp.add(keeper)
+    try:
+        tfp.add(keeper)
+    except OSError:
+        print >> sys.stderr, "Log file %s missing!" % keeper
+        pass
     pass
 tfp.close()
 
