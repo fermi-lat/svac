@@ -291,3 +291,10 @@ RunRootAnalyzer v1r12
 Default particle type to 'Comsmics' for determining chunk size.
 Don't fail recon if chunk logs are missing.
 Move staging to u19.
+---------------------------------------------------------------------------
+
+
+v3r4p6
+---------------
+Merge CAL and merit tuples with hadd rather than pruneTuple.cxx.
+---------------------------------------------------------------------------

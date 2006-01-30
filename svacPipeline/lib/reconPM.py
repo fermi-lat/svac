@@ -1,5 +1,6 @@
 import math
 import sys
+import os
 
 def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
 
@@ -37,7 +38,7 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     return chunks
 
 
-def concatenateFiles(outputFileName, fileNames, treeName):
+def concatenate_prune(outputFileName, fileNames, treeName):
 
     from ROOT import TChain, gSystem
     
@@ -68,6 +69,18 @@ def concatenateFiles(outputFileName, fileNames, treeName):
     #print >> sys.stderr, outputFileName, ' created\n'
 
     return retCode
+
+def concatenate_hadd(outputFileName, fileNames, treeName):
+
+    fmt = '/nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt/ROOT/v4.02.00/root/bin/hadd -f %s' % outputFileName
+    fmt += ' %s' * len(fileNames)
+    cmd = fmt % tuple(fileNames)
+
+    retCode = os.system(cmd)
+
+    return retCode
+
+concatenateFiles = concatenate_hadd
 
 def submitBatch(shellName):
 

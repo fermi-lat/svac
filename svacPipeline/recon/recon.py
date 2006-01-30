@@ -237,7 +237,7 @@ if status:
 print >> sys.stderr, "Combining cal files into %s" % calFileName
 timeLogger()
 #rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
-rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalTuple')
+rcCal = reconPM.concatenate_hadd(calFileName, calFiles, 'CalTuple')
 timeLogger()
 if rcCal:
     print >> sys.stderr, "Failed to create cal file %s!" % calFileName
@@ -248,7 +248,7 @@ else:
 
 print >> sys.stderr, "Combining merit files into %s" % meritFileName
 timeLogger()
-rcMerit = reconPM.concatenateFiles(meritFileName, meritFiles, 'MeritTuple')
+rcMerit = reconPM.concatenate_hadd(meritFileName, meritFiles, 'MeritTuple')
 timeLogger()
 if rcMerit:
     print >> sys.stderr, "Failed to create merit file %s!" % meritFileName
@@ -259,7 +259,7 @@ else:
 
 print >> sys.stderr, "Combining recon files into %s" % reconFileName
 timeLogger()
-rcRecon = reconPM.concatenateFiles(reconFileName, reconFiles, 'Recon')
+rcRecon = reconPM.concatenate_prune(reconFileName, reconFiles, 'Recon')
 timeLogger()
 if rcRecon:
     print >> sys.stderr, "Failed to create recon file %s!" % reconFileName
