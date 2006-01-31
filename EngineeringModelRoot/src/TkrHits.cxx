@@ -98,6 +98,8 @@ towerVar::towerVar( int twr, bool badStrips ){
   for( int unp=0; unp!=g_nUniPlane; unp++){
     badStripVar bsv;
     totCalibVar tcv;
+    bsv.hLayer = 0;
+    bsv.tLayer = 0;
     for( int strip=0; strip!=g_nStrip; strip++){
       rHits[unp][strip] = 0;
       dHits[unp][strip] = 0;
@@ -113,17 +115,33 @@ towerVar::towerVar( int twr, bool badStrips ){
     if( badStrips ) bsVar.push_back( bsv );
     else tcVar.push_back( tcv );
   }
+
+  char name[] = "numHitGTRCT00";
+  sprintf(name,"numHitGTRCT%d", towerId);
+  numHitGTRC = new TH1F(name, name, 65, 0, 65);
+#ifndef ROOT_PROFILE
+  resProf = new profile( g_nUniPlane, 0, g_nUniPlane );
+#else
+  sprintf(name,"resProfT%d", towerId);
+  resProf = new TProfile( name, name, g_nUniPlane, 0, g_nUniPlane );
+#endif
 #ifdef PRINT_DEBUG
   std::cout << "towerVar constructer " << twr << std::endl;
 #endif
 }
 
 
-void towerVar::saveHists( bool saveTimeOcc ){
+void towerVar::saveHists( bool saveTimeOcc ){ 
 
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
   char name[] = "roccT00X17w3t4";
+  char dname[] = "T00";
   char cvw[] = "XY";
+
+  sprintf(dname,"T%d", towerId);
+  gDirectory->mkdir( dname, dname );
+  gDirectory->cd( dname );
+
   for( int unp=0; unp!=g_nUniPlane; unp++){
     layerId lid( unp );
     int layer = lid.layer;
@@ -142,7 +160,13 @@ void towerVar::saveHists( bool saveTimeOcc ){
     delete dhist;
   }
 
+  sprintf(name,"lhitT%d", towerId);
+  dhist = new TH1F(name, name, g_nUniPlane, 0, g_nUniPlane);
+  sprintf(name,"ltrkT%d", towerId);
+  rhist = new TH1F(name, name, g_nUniPlane, 0, g_nUniPlane);
   for( UInt_t unp=0; unp!=bsVar.size(); unp++){
+    dhist->Fill( unp+0.1, bsVar[unp].hLayer );
+    rhist->Fill( unp+0.1, bsVar[unp].tLayer );
     layerId lid( unp );
     int layer = lid.layer;
     int view = lid.view;
@@ -185,13 +209,107 @@ void towerVar::saveHists( bool saveTimeOcc ){
      }
     }
   }
+  gDirectory->cd( "../Towers" );
+  sprintf(name,"leffT%d", towerId);
+  hist = new TH1F(name, name, g_nUniPlane, 0, g_nUniPlane);
+  hist->Divide( dhist, rhist );
+  for( int unp=0; unp<g_nUniPlane; unp++){
+    // calculate binomial error
+    float eff = hist->GetBinContent( unp+1 );
+    float entry = rhist->GetBinContent( unp+1 );
+    float error = 0.0;
+    if( entry > 0 && eff<1.0 && eff>0.0 ) error = sqrt( eff*(1-eff)/entry );
+    hist->SetBinError( unp+1, error );
+  }
+  dhist->Write(0, TObject::kOverwrite);
+  rhist->Write(0, TObject::kOverwrite);
+  hist->Write(0, TObject::kOverwrite);
+  delete dhist;
+  delete rhist;
+  delete hist;
+
+  numHitGTRC->Write(0, TObject::kOverwrite);
+#ifdef ROOT_PROFILE
+  resProf->Write(0, TObject::kOverwrite);
+#else
+  sprintf(name,"resHistT%d", towerId);
+  hist = new TH1F( name, name, g_nUniPlane, 0, g_nUniPlane );
+  for( int unp=0; unp!=g_nUniPlane; unp++){
+    hist->SetBinContent( unp+1, resProf->getMean( unp ) );
+    hist->SetBinError( unp+1, resProf->getRMS( unp ) );
+  }
+  hist->Write(0, TObject::kOverwrite);
+#endif
+  gDirectory->cd( ".." );
 }
 
+profile::profile( int nbin, float min, float max ){
+
+  updated = false;
+  numBin = nbin;
+  binMin = min;
+  binMax = max;
+  binSize = (binMax-binMin) / numBin;
+
+  for( int i=0; i!=numBin; i++){
+    num.push_back( 0 );
+    sum.push_back( 0.0 );
+    sumsq.push_back( 0.0 );
+    mean.push_back( 0.0 );
+    rms.push_back( 0.0 );
+  }
+}
+
+void profile::Fill( float x, float val ){
+
+  if( x < binMin || x >= binMax ) return;
+  int bin = (int) (( x - binMin ) / binSize);
+  if( bin >= numBin ) return;
+
+  updated = false;
+  num[bin] += 1;
+  sum[bin] += val;
+  sumsq[bin] += val*val;
+
+  return;
+
+}
+
+void profile::calculate(){
+
+  for( UInt_t bin=0; bin<num.size(); bin++){
+    if( num[bin] == 0 ) continue;
+    mean[bin] = sum[bin]/num[bin];
+    float rmssq = sumsq[bin]/num[bin] - mean[bin]*mean[bin];
+    if( rmssq > 0.0 ) rms[bin] = sqrt( rmssq );
+  }
+  updated = true;
+
+}
+
+float profile::getMean( int bin ){
+  if( ! updated ) calculate();
+  return mean[bin];
+}
+float profile::getRMS( int bin ){
+  if( ! updated ) calculate();
+  return rms[bin];
+}
 
 void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
 
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
   char name[] = "roccT00X17w3t4";
+
+  sprintf(name,"numHitGTRCT%d", towerId);
+  hist = (TH1F*)hfile->FindObjectAny( name );
+  if( hist ) numHitGTRC->Add( hist );
+#ifdef ROOT_PROFILE
+  sprintf(name,"resProfT%d", towerId);
+  TProfile *prof = (TProfile*)hfile->FindObjectAny( name );
+  if( prof ) resProf->Add( prof );  
+#endif
+
   char cvw[] = "XY";
   for( int unp=0; unp!=g_nUniPlane; unp++){
     layerId lid( unp );
@@ -207,7 +325,13 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
     }
   }
 
+  sprintf(name,"lhitT%d", towerId );
+  dhist = (TH1F*)hfile->FindObjectAny( name );
+  sprintf(name,"ltrkT%d", towerId );
+  rhist = (TH1F*)hfile->FindObjectAny( name );
   for( UInt_t unp=0; unp!=bsVar.size(); unp++){
+    bsVar[unp].hLayer += (int)dhist->GetBinContent( unp+1 );
+    bsVar[unp].tLayer += (int)rhist->GetBinContent( unp+1 );
     layerId lid( unp );
     int layer = lid.layer;
     int view = lid.view;
@@ -281,22 +405,31 @@ TkrHits::TkrHits( bool initHistsFlag ):
 
 
 void TkrHits::initCommonHists(){
+  std::cout << "initialize common hisograms." << std::endl;
   m_nTrackDist = new TH1F("nTrack", "nTrack", 10, 0, 10);
   m_maxHitDist = new TH1F("maxHit", "maxHit", g_nUniPlane, 0, g_nUniPlane);
-  m_trkRMS = new TH1F("trkRMS", "trkRMS", 100, 0, 2.5);
+  m_trkRMS = new TH1F("trkRMS", "trkRMS", 100, 0, 2.0);
+  m_numHitGTRC = new TH1F("numHitGTRC", "numHitGTRC", 65, 0, 65);
+  m_largeMulGTRC = new TH1F("largeMulGTRC", "largeMulGTRC", g_nUniPlane, 0, g_nUniPlane);
+  m_rawTOT = new TH1F("rawTOT", "rawTOT", 128, 0, 256);
+  m_trkRMS1TWR = new TH1F("trkRMS1TWR", "trkRMS1TWR", 100, 0, 2.0);
+  m_trkRMS2TWR = new TH1F("trkRMS2TWR", "trkRMS2TWR", 100, 0, 2.0);
+  m_rmsProf1TWR = new TProfile("rmsProf1TWR","rmsProf1TWR",g_nTower,0,g_nTower);
+  m_rmsProf2TWR = new TProfile("rmsProf2TWR","rmsProf2TWR",g_nTower,0,g_nTower);
+  m_tresProfX = new TProfile("tresProfX","tresProfX",g_nTower,0,g_nTower);
+  m_tresProfY = new TProfile("tresProfY","tresProfY",g_nTower,0,g_nTower);
   m_numClsDist = new TH1F("numCls", "# of cluster per layer", 10, 0, 10 );
   m_dirzDist = new TH1F("dirZ", "dirZ", 100, -1, 1);
   m_armsDist = new TH1F("arms", "arms", 100, -5, 5);
   m_lrec = new TH1F("lrec", "lrec", g_nUniPlane, 0, g_nUniPlane);
   m_ldigi = new TH1F("ldigi", "ldigi", g_nUniPlane, 0, g_nUniPlane);
   m_lcls = new TH1F("lcls", "lcls", g_nUniPlane, 0, g_nUniPlane);
-  m_htwr = new TH1F("htwr", "htwr", g_nTower, 0, g_nTower);
 }
 
 
 void TkrHits::initOccHists(){
+  std::cout << "initialize occupancy hisograms." << std::endl;
   m_locc = new TH1F("locc", "locc", g_nUniPlane, 0, g_nUniPlane);
-  m_leff = new TH1F("leff", "leff", g_nUniPlane, 0, g_nUniPlane);
   m_ltrk = new TH1F("ltrk", "ltrk", g_nUniPlane, 0, g_nUniPlane);
   m_dist = new TH1F("dist", "distance", 50, 0, 200);
   m_brmsDist[0] = new TH1F("brms0", "brms 0-2", 100, -5, 5);
@@ -317,33 +450,120 @@ void TkrHits::initOccHists(){
 
 void TkrHits::saveAllHist( bool saveWaferOcc )
 {
-  if(m_rootFile == 0) return;
+  if( m_rootFile == 0 ) return;
   std::cout << "save histograms" << std::endl;
+  gDirectory->mkdir( "Towers" );
+
+  m_largeMulGTRC->Scale( 1.0/(g_nTower*2*m_nEvents) );
 
   m_nTrackDist->Write(0, TObject::kOverwrite);
   m_maxHitDist->Write(0, TObject::kOverwrite);
+  m_numHitGTRC->Write(0, TObject::kOverwrite);
+  m_largeMulGTRC->Write(0, TObject::kOverwrite);
+  m_rawTOT->Write(0, TObject::kOverwrite);
   m_trkRMS->Write(0, TObject::kOverwrite);
+  m_trkRMS1TWR->Write(0, TObject::kOverwrite);
+  m_trkRMS2TWR->Write(0, TObject::kOverwrite);
+  m_rmsProf1TWR->Write(0, TObject::kOverwrite);
+  m_rmsProf2TWR->Write(0, TObject::kOverwrite);
+  m_tresProfX->Write(0, TObject::kOverwrite);
+  m_tresProfY->Write(0, TObject::kOverwrite);
   m_numClsDist->Write(0, TObject::kOverwrite);
   m_dirzDist->Write(0, TObject::kOverwrite);
   m_armsDist->Write(0, TObject::kOverwrite);
   m_lrec->Write(0, TObject::kOverwrite);
   m_ldigi->Write(0, TObject::kOverwrite);
   m_lcls->Write(0, TObject::kOverwrite);
-  m_htwr->Write(0, TObject::kOverwrite);
 
-  if( m_badStrips ){
-    saveOccHists();
-  }
-  for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw)
+  if( m_badStrips ) saveOccHists();
+
+  char name[] = "leffT00";
+  float eff, error, offset, frac, entry;
+  TH1F* hist;
+  TH1F* thits = new TH1F("thits", "thits", g_nTower, 0, g_nTower);
+  TH1F* teff = new TH1F("teff", "teff", g_nTower, 0, g_nTower);
+  float bins[18] = {0.0001,0.08,0.12,0.17,0.25,0.35,0.5,0.7,1.0,1.4,2.0,2.8,4.0,5.6,8.0,12.0,16.0,24.0};
+  TH1F* ineffDist = new TH1F("ineffDist", "ineffDist", 17, bins);
+  for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw){
     m_towerVar[tw].saveHists( saveWaferOcc );
+    for( int unp = 0; unp != g_nUniPlane; unp++){
+      thits->Fill( m_towerVar[tw].towerId, m_towerVar[tw].bsVar[unp].tLayer );
+      teff->Fill( m_towerVar[tw].towerId, m_towerVar[tw].bsVar[unp].hLayer );
+    }
+    //
+    // check for outliers
+    //
+    for( int unp=0; unp<g_nUniPlane; unp++){
+      //
+      // efficiency
+      sprintf( name, "leffT%d", m_towerVar[tw].towerId );
+      hist = (TH1F*)m_rootFile->FindObjectAny( name );
+      eff = hist->GetBinContent( unp+1 );
+      error = hist->GetBinError( unp+1 );
+      ineffDist->Fill( 100*(1-eff)+0.0001 );
+      if( eff < 0.98 && m_log.is_open() ){
+	layerId lid( unp );
+	char vw[] = "XY";
+	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+		  << " " << vw[lid.view] << lid.layer
+		  << " low efficiency: " << eff << " +- " << error << std::endl;
+	m_log << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+	      << " " << vw[lid.view] << lid.layer
+	      << " low efficiency: " << eff << " +- " << error << std::endl;
+      }
+      //
+      // check for alignment outliers
+      offset = m_towerVar[tw].resProf->GetBinContent( unp+1 );
+      error = m_towerVar[tw].resProf->GetBinError( unp+1 );
+      if( fabs(offset) > 0.1 && m_log.is_open() ){
+	layerId lid( unp );
+	char vw[] = "XY";
+	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+		  << " " << vw[lid.view] << lid.layer
+		  << " large offset: " << offset << " +- " << error << std::endl;
+	m_log << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+	      << " " << vw[lid.view] << lid.layer
+	      << " large offset: " << offset << " +- " << error << std::endl;
+      }
+    }
+    //
+    // check noise flare
+    frac = m_towerVar[tw].numHitGTRC->Integral( 15, 65 )
+      / ( m_nEvents * g_nUniPlane * 2 );
+    if( frac > 1.0E-4 && m_log.is_open() ){
+	 std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+		   << " high fraction of large GTRC hits: " << frac << std::endl;
+	 m_log << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
+	       << " high fraction of large GTRC hits: " << frac << std::endl;
+    }
+  }
+  teff->Divide( thits );
+  for( int twr=0; twr<g_nTower; twr++){
+    // calculate binomial error
+    eff = teff->GetBinContent( twr+1 );
+    entry = thits->GetBinContent( twr+1 );
+    error = 0.0;
+    if( entry > 0 && eff<1.0 && eff>0.0 ) error = sqrt( eff*(1-eff)/entry );
+    teff->SetBinError( twr+1, error );
+    if( m_log.is_open() ){
+      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr 
+		<< " efficiency: " << eff << " +- " << error << std::endl;
+      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr 
+	    << " efficiency: " << eff << " +- " << error << std::endl;
+    }
+   }
+  thits->Write(0, TObject::kOverwrite);
+  teff->Write(0, TObject::kOverwrite);
+  ineffDist->Write(0, TObject::kOverwrite);
+
 }
 
 
 void TkrHits::saveOccHists(){
+  std::cout << "save occupancy histograms" << std::endl;
   for( int i=0; i<g_nLayer/3; i++) 
     m_brmsDist[i]->Write(0, TObject::kOverwrite);
   m_locc->Write(0, TObject::kOverwrite);
-  m_leff->Write(0, TObject::kOverwrite);
   m_ltrk->Write(0, TObject::kOverwrite);
   m_dist->Write(0, TObject::kOverwrite);
   m_occDist->Write(0, TObject::kOverwrite);
@@ -358,9 +578,10 @@ void TkrHits::saveOccHists(){
 
 void TkrHits::analyzeEvent()
 {
-    if(! passCut()) return;
-
     if( ! m_towerInfoDefined ) setTowerInfo();
+    monitorTKR();
+
+    if(! passCut()) return;
 
     getReconClusters();
     getDigiClusters();
@@ -414,6 +635,61 @@ layerId TkrHits::getLayerId( const TkrCluster* cluster )
   int layer = cluster->getLayer();
   layerId lid( layer, view, tower);
   return lid;
+}
+
+void TkrHits::monitorTKR(){
+
+  // Loop over all TkrDigis
+  const TObjArray* tkrDigiCol = m_digiEvent->getTkrDigiCol();
+  if (!tkrDigiCol) return;
+  TIter tkrIter(tkrDigiCol);
+  TkrDigi *tkrDigi = 0;
+  while ( ( tkrDigi = (TkrDigi*)tkrIter.Next() ) ) {
+    Int_t totl = tkrDigi->getToT(0);
+    if( totl > 0 ) m_rawTOT->Fill( totl );
+    Int_t toth = tkrDigi->getToT(1);
+    if( toth > 0 ) m_rawTOT->Fill( toth );
+    Int_t lastRC0Strip = tkrDigi->getLastController0Strip();
+
+    UInt_t numHits = tkrDigi->getNumHits();
+    // Loop through collection of hit strips for this TkrDigi
+    Int_t ihit, numl=0, numh=0;
+    for (ihit = 0; ihit < numHits; ihit++) {
+      // Retrieve the strip number
+      if( tkrDigi->getStrip(ihit) > lastRC0Strip ) numh++;
+      else numl++;
+    }
+    Int_t tower = tkrDigi->getTower().id();
+    Int_t tw = m_towerPtr[ tower ];
+    if( numl > 0 ){
+      m_numHitGTRC->Fill( numl );
+      m_towerVar[tw].numHitGTRC->Fill( numl );
+    }
+    if( numh > 0 ){
+      m_numHitGTRC->Fill( numh );
+      m_towerVar[tw].numHitGTRC->Fill( numh );
+    }
+    if( numl > maxHitGTRC || numh > maxHitGTRC ){
+      Int_t layer = tkrDigi->getBilayer();
+      GlastAxis::axis viewId = tkrDigi->getView();
+      int view = (viewId == GlastAxis::X) ? 0 : 1;
+      layerId lid( layer, view );
+      if( numl > maxHitGTRC ) m_largeMulGTRC->Fill( lid.uniPlane );	
+      if( numh > maxHitGTRC ) m_largeMulGTRC->Fill( lid.uniPlane );
+    }
+    if( m_log.is_open() && (numh>bufferSizeGTRC||numl>bufferSizeGTRC) ){
+      Int_t layer = tkrDigi->getBilayer();
+      GlastAxis::axis viewId = tkrDigi->getView();
+      int view = (viewId == GlastAxis::X) ? 0 : 1;
+      char vw[] = "XY";
+      std::cout << m_towerVar[tw].hwserial << " T" << tower
+		<< vw[view] << layer << " invalid GTRC multiplicity: " 
+		<< numh << " " << numl << std::endl;
+      m_log << m_towerVar[tw].hwserial << " T" << tower
+	    << vw[view] << layer << " invalid GTRC multiplicity: " 
+	    << numh << " " << numl << std::endl;
+    }
+  } 
 }
 
 
@@ -766,6 +1042,18 @@ bool TkrHits::passCut()
   if( maxHits < 6 ) return false;
   //m_trkRMS->Fill( m_track->getScatter() );
   m_trkRMS->Fill( getTrackRMS() );
+  if( m_trackTowerList.size() == 1 ){
+    m_trkRMS1TWR->Fill( m_trackRMS );
+    if( m_trackRMS < 2.0 ) 
+      m_rmsProf1TWR->Fill( m_trackTowerList[0], m_trackRMS );
+  }
+  else if( m_trackTowerList.size() == 2 ){
+    m_trkRMS2TWR->Fill( m_trackRMS );
+    if( m_trackRMS < 2.0 ){
+      m_rmsProf2TWR->Fill( m_trackTowerList[0], m_trackRMS );
+      m_rmsProf2TWR->Fill( m_trackTowerList[1], m_trackRMS );
+    }
+  }
   //std::cout << m_trackRMS << " " << m_track->getScatter()/m_trackRMS << std::endl;
   m_dirzDist->Fill( m_dir.Z() );
   float maxDirZ = m_maxDirZ;
@@ -784,7 +1072,9 @@ float TkrHits::getTrackRMS(){
   //
   // register hits and perform linear fit
   //
+  Int_t towerBits = 0;
   std::vector<Double_t> vx, vzx, vy, vzy;
+  std::vector<Int_t> twx, twy, upx, upy;
   TkrTrack* tkrTrack = m_track;
   TIter trk1HitsItr(tkrTrack);
   TkrTrackHit* pTrk1Hit = 0;
@@ -792,16 +1082,26 @@ float TkrHits::getTrackRMS(){
     const TkrCluster* cluster = (pTrk1Hit->getClusterPtr());
     if(!cluster) continue;
     layerId lid = getLayerId( cluster );
+    towerBits |= (1<<lid.tower);
     Double_t z = (cluster->getPosition()).Z();
     if( lid.view == 0 ){
       vx.push_back( (cluster->getPosition()).X() );
       vzx.push_back( z );
+      twx.push_back( lid.tower );
+      upx.push_back( lid.uniPlane );
     }
     else{
       vy.push_back( (cluster->getPosition()).Y() );
       vzy.push_back( z );
+      twy.push_back( lid.tower );
+      upy.push_back( lid.uniPlane );
     }
   }
+  // check tower with hits.
+  m_trackTowerList.clear();
+  for( int twr=0; twr<g_nTower; twr++)
+    if( towerBits&(1<<twr) ) m_trackTowerList.push_back( twr );
+
   Double_t x0=-1.0, dxdz=-1.0, y0, dydz;
   // fit xz and yz
   leastSquareLinearFit( vx, vzx, x0, dxdz );
@@ -818,8 +1118,6 @@ float TkrHits::getTrackRMS(){
   float sum=0.0, sumsq=0.0;
   for( UInt_t i=0; i<vx.size(); i++){
     float del = vx[i] - ( x0+dxdz*vzx[i] );
-    //std::cout << del << " = " << vx[i] << " -  " << x0+dxdz*vzx[i] << " =" 
-    //      << x0 << "+" << dxdz << "*" << vzx[i] << std::endl;
     sum += del;
     sumsq += del*del;
   }
@@ -833,6 +1131,29 @@ float TkrHits::getTrackRMS(){
   float rmsq = sumsq / num - mean*mean;
   if( rmsq > 0.0 ) m_trackRMS = sqrt( rmsq );
   else m_trackRMS = 0.0;
+
+  if( m_trackRMS > 0.4 ) return m_trackRMS;
+  UInt_t numTower = m_trackTowerList.size();
+  if( numTower > 2 ) return m_trackRMS;
+
+  //
+  // look at residual for each tower and layer.
+  float residual;
+  for( UInt_t i=0; i<vx.size(); i++){
+    residual = vx[i] - ( x0+dxdz*vzx[i] );
+    if( fabs( residual ) > 1.5 ) continue;
+    if( numTower==2 ) m_tresProfX->Fill(  twx[i], residual );
+    if( numTower==1 )
+      m_towerVar[m_towerPtr[twx[i]]].resProf->Fill( upx[i], residual );
+  }
+  for( UInt_t i=0; i<vy.size(); i++){
+    residual = vy[i] - ( y0+dydz*vzy[i] );
+    if( fabs( residual ) > 1.5 ) continue;
+    if( numTower==2 ) m_tresProfY->Fill(  twy[i], residual );
+    if( numTower==1 )
+      m_towerVar[m_towerPtr[twy[i]]].resProf->Fill( upy[i], residual );
+  }
+
   return m_trackRMS;
 
 }
@@ -868,6 +1189,8 @@ void TkrHits::fillOccupancy( int tDiv )
   std::cout << "fillOccupancy start" << std::endl;
 #endif
   
+  int lStrip = g_nStrip/g_nLadder;
+
   //initialize container
   int nHits[g_nTower][g_nLayer][g_nView][g_nWafer+1];
   for( unsigned int tw=0; tw<m_towerVar.size(); tw++){
@@ -896,7 +1219,7 @@ void TkrHits::fillOccupancy( int tDiv )
     
     for(int iStrip = cluster->getFirstStrip(); 
 	iStrip != int(cluster->getLastStrip()+1); ++iStrip){
-      nHits[tower][layer][view][iStrip/384]++;
+      nHits[tower][layer][view][iStrip/lStrip]++;
       nHits[tower][layer][view][g_nWafer]++;
     }
     
@@ -953,31 +1276,40 @@ void TkrHits::fillOccupancy( int tDiv )
 	    lastTower = -1;
 	  }
 	}
+	int margin = 20;
 	for( int tw=0; tw<nTowers; tw++){ // check both tower
 	  int twr = towers[tw];
 	  int vtw = m_towerPtr[twr];
 	  int numActive=0;
+	  int numVG=0;
 	  for( int vw=0; vw!=g_nView; vw++){
 	    strips[vw]=-1;
 	    lpos = tpos[vw] - m_towerVar[vtw].center[vw];
 	    for( int iw=0; iw!=g_nWafer; ++iw){
 	      float stp = ( lpos-ladderGap*(iw-1.5) ) / stripPitch 
 		+ g_nStrip/2;
-	      if( stp>=iw*g_nStrip/4 && stp < (iw+1)*g_nStrip/4 ){
-		strips[vw] = int(stp);
-	      }
+	      if( stp>=iw*lStrip && stp<(iw+1)*lStrip ) strips[vw] = int(stp);
 	    }
-	    if( strips[vw] > 0 ) numActive++;
+	    if( strips[vw] > 0 ){ 
+	      numActive++;
+	      int stp = strips[vw] % lStrip;
+	      if( stp>margin && stp<lStrip-margin ) numVG++;
+	    }
 	  }
 	  // check if track go thorugh active region in all views
 	  if( numActive == g_nView ){
 	    for( int vw=0; vw!=g_nView; vw++){
 	      layerId lid( lyr, vw );
 	      m_towerVar[vtw].bsVar[lid.uniPlane].tHits[strips[vw]]++;
-	      // layer with associated hits
-	      if( hitPlanes[layer][vw]>0 )
-		m_towerVar[vtw].bsVar[lid.uniPlane].eHits[strips[vw]]++;
+	      if( numVG == g_nView )
+		m_towerVar[vtw].bsVar[lid.uniPlane].tLayer++;
 	      m_ltrk->Fill( lid.uniPlane );
+	      // layer with associated hits
+	      if( hitPlanes[layer][vw]>0 ){
+		m_towerVar[vtw].bsVar[lid.uniPlane].eHits[strips[vw]]++;
+		if( numVG == g_nView )
+		  m_towerVar[vtw].bsVar[lid.uniPlane].hLayer++;
+	      }
 	    }
 	  }
 	} // tower loop

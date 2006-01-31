@@ -29,17 +29,18 @@
 
 static const float stripPitch = 0.228; // strip pitch
 
-static const int g_nLayer = 18;
+static const int g_nLayer = g_nTkrLayer;
 static const int g_nUniPlane = g_nLayer*g_nView;
 
-static const int g_nFecd = 24;
-static const int g_nStrip = 1536;
-//static const int g_nTower = 16;
+static const int g_nFecd = g_nFEC;
+static const int g_nStrip = g_nStripsPerLayer;
 
 // group of strips so that each group has enough statistics
-static const int g_nDiv = 24; //used to be 64;takuya  
+static const int g_nDiv = g_nFEC; //used to be 64;takuya  
   
-static const int g_nWafer = 4, g_nBad=7, g_nTime=5, g_nMerge=4;
+static const int g_nWafer=4, g_nLadder=4, g_nBad=8, g_nTime=5, g_nMerge=4;
+
+static const int bufferSizeGTRC = 64, maxHitGTRC = 14;
 
 const int nTotHistBin = 200;
 
@@ -125,6 +126,7 @@ class Cluster{
 // bad strips variables
 //
 struct badStripVar{
+  int tLayer, hLayer;
   int eHits[g_nStrip];
   int tHits[g_nStrip];
   int lHits[g_nStrip];
@@ -145,6 +147,28 @@ struct totCalibVar{
 };
 
 //
+// profile class
+//
+class profile{
+ public: 
+  profile( int nbin, float min, float max );
+  ~profile(){;};
+  void Fill( float x, float val );
+  float getMean( int bin );
+  float getRMS( int bin );
+  float GetBinContent( int bin ){ return getMean( bin-1 ); };
+  float GetBinError( int bin ){ return getRMS( bin-1 ); };
+
+ protected:
+  void calculate();
+
+  int numBin;
+  float binMin, binMax, binSize;
+  std::vector<int> num;
+  std::vector<float> sum, sumsq, mean, rms;
+  bool updated;
+};
+//
 //
 // tower variable class
 //
@@ -162,6 +186,14 @@ class towerVar{
   // clusters
   std::vector<Cluster> digiClusters[g_nUniPlane];
   const TkrCluster* reconClusters[g_nUniPlane];
+
+#define ROOT_PROFILE 1
+#ifndef ROOT_PROFILE
+  profile *resProf;
+#else
+  TProfile *resProf;
+#endif
+  TH1F* numHitGTRC;
 
   // do not use histogram since it will slow down significantly.
   // these will be converted to histograms later in saveHits method.
@@ -193,7 +225,7 @@ class TkrHits {
 
   void saveAllHist( bool saveTimeOcc=false );
 
- protected:
+  //protected:
 
   void initOccHists();
   void saveOccHists();
@@ -203,6 +235,7 @@ class TkrHits {
   
   bool passCut();
   
+  void monitorTKR();
   void getDigiClusters();
   void getReconClusters();
   void selectGoodClusters();
@@ -214,8 +247,11 @@ class TkrHits {
 			     std::vector<Double_t> &vx, 
 			     Double_t &y0, Double_t &dydx );
   
-  TH1F *m_nTrackDist, *m_maxHitDist, *m_trkRMS, *m_numClsDist, *m_dirzDist, 
+  TH1F *m_nTrackDist, *m_maxHitDist, *m_numClsDist, *m_dirzDist, 
+    *m_numHitGTRC, *m_rawTOT, *m_largeMulGTRC,
+    *m_trkRMS, *m_trkRMS1TWR, *m_trkRMS2TWR,
     *m_armsDist, *m_brmsDist[g_nLayer/3];
+  TProfile *m_rmsProf1TWR, *m_rmsProf2TWR, *m_tresProfX, *m_tresProfY;
   
   TH1F *m_fracErrDist, *m_chisqDist, *m_fracBatTot, *m_chist[5];
   TH1F *m_chargeScale, *m_entries, *m_langauWidth, *m_langauGSigma;
@@ -225,7 +261,7 @@ class TkrHits {
 
   ReconEvent* m_reconEvent;
   DigiEvent* m_digiEvent;
-  TFile* m_rootFile; 
+  TFile* m_rootFile;
  
   // reconstructed track and direction
   TkrTrack* m_track;
@@ -253,7 +289,7 @@ class TkrHits {
   
   bool m_badStrips, m_towerInfoDefined; 
   TH1F* m_aPos[g_nWafer+1];
-  TH1F *m_occDist, *m_poissonDist, *m_lrec, *m_ldigi, *m_lcls, *m_htwr, *m_locc, *m_leff, *m_ltrk, *m_dist;
+  TH1F *m_occDist, *m_poissonDist, *m_lrec, *m_ldigi, *m_lcls, *m_locc, *m_ltrk, *m_dist;
 
   float m_maxDirZ, m_maxTrackRMS, m_maxDelta;
   float m_trackRMS;
