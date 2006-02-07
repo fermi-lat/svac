@@ -206,8 +206,8 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> Tkr1NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in first track </TD> </TR>
 <TR> <TD> Tkr2NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in second track </TD> </TR>
 
-<TR> <TD> Tkr1Chisq      </TD> <TD> Float </TD> <TD> Chi square of first track </TD> </TR>
-<TR> <TD> Tkr2Chisq      </TD> <TD> Float </TD> <TD> Chi square of second track </TD> </TR>
+<TR> <TD> Tkr1Chisq      </TD> <TD> Float </TD> <TD> Chi square of first track. Note that the Merit variable Tkr1Chisq is the smooth chi2 which here is called Tkr1ChisqS. </TD> </TR>
+<TR> <TD> Tkr2Chisq      </TD> <TD> Float </TD> <TD> Chi square of second track. Note that the Merit variable Tkr2Chisq is the smooth chi2 which here is called Tkr2ChisqS.  </TD> </TR>
 <TR> <TD> Tkr1ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of first track </TD> </TR>
 <TR> <TD> Tkr2ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of second track </TD> </TR>
 <TR> <TD> Tkr1Rms        </TD> <TD> Float </TD> <TD> Rms value of first track </TD> </TR>
@@ -241,7 +241,7 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <CAPTION ALIGN="TOP"> CAL variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> CalEneSum  </TD> <TD> Float </TD> <TD> Sum of energies (in MeV) in each crystal </TD> </TR>
+<TR> <TD> CalEneSum  </TD> <TD> Float </TD> <TD> Sum of energies (in MeV) in each crystal. This is the same as the Merit variable CalEnergyRaw. </TD> </TR>
 <TR> <TD> CalXEcentr </TD> <TD> Float </TD> <TD> x coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 <TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
@@ -327,7 +327,7 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 
 
 
-<TR> <TD> AcdTkrIntersection                              </TD> <TD>       </TD> <TD  Information about the expected intersection of a track with the ACD. </TD> </TR>
+<TR> <TD> AcdTkrIntersection                              </TD> <TD>       </TD> <TD> Information about the expected intersection of a track with the ACD. </TD> </TR>
 <TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections.</TD> </TR>
 <TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-19]             </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
 <TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-19]           </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>

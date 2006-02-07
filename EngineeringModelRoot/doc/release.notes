@@ -209,3 +209,6 @@ awb	Cut-and-paste error in PocaDoca arrays caused overwrite.
 v1r12: January 23, 2006
 awb	Added two new ACD poca variables.
 	Bugfix in Tkr occupancy monitoring (Mutsumi).
+
+v1r13: February 7, 2006
+awb     Fixed bug in ACD arrays. Not filled for Tile ID==0.

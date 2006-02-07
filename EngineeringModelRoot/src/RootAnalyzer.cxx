@@ -586,7 +586,7 @@ void RootAnalyzer::analyzeDigiTree()
 
 
     // Attached tile?
-    if (acdDigi->getId().getNa()==0 && AcdID>0 && AcdID<604) {
+    if (acdDigi->getId().getNa()==0 && AcdID>-1 && AcdID<604) {
 
       if (i10Count < 10) {
         m_ntuple.m_acd10Ids[i10Count] = AcdID;
