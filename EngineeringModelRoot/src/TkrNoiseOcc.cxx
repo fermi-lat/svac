@@ -90,6 +90,8 @@ TkrNoiseOcc::anaDigiEvt() {
     for(bilayer=0; bilayer<NUMLAYER; bilayer++) {
       for(xyview=0; xyview<2; xyview++) {
 	numHitLayer[tower][bilayer][xyview]=0;
+	tot0[tower][bilayer][xyview]=TOT_INI_VAL;
+	tot1[tower][bilayer][xyview]=TOT_INI_VAL;
       }
     }
   }
@@ -169,7 +171,7 @@ TkrNoiseOcc::anaDigiEvt() {
 	}
 	//Fill Tot
 	val = tot0[tower][bilayer][xyview];
-	if ( val<0 || 290<val ) val = 299;
+	if ( val<0 || 299<val ) val = 299;
 	vTkrNoiseTot0[tower][bilayer][xyview][val] +=1.0;
 	
 	if ((err_cout==1)&&(val==299)) {
@@ -180,7 +182,7 @@ TkrNoiseOcc::anaDigiEvt() {
 	}	      
 
 	val = tot1[tower][bilayer][xyview];
-	if ( val<0 || 290<val ) val = 299;
+	if ( val<0 || 299<val ) val = 299;
 	vTkrNoiseTot1[tower][bilayer][xyview][val] +=1.0;
 	
 	if ((err_cout==1)&&(val==299)) {
@@ -251,7 +253,7 @@ TkrNoiseOcc::saveAnaToHis(char* histFileName){
     return;
   }
 
-  TDirectory* tkrNoiseOcc_dir = m_histFile->mkdir("tkrNoiseOcc");
+  TDirectory* tkrNoiseOcc_dir = m_histFile->mkdir("TkrNoiseOcc");
   writeAnaToHis(tkrNoiseOcc_dir);
   closeHistFile();
 }

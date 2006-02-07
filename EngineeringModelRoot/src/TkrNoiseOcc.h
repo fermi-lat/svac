@@ -21,7 +21,7 @@
 
 #define TOT_MAX 300
 #define MUL_MAX 150
-
+#define TOT_INI_VAL 295
 
 class TkrNoiseOcc {
  public:
