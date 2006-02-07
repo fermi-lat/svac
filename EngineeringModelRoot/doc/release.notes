@@ -212,3 +212,6 @@ awb	Added two new ACD poca variables.
 
 v1r13: February 7, 2006
 awb     Fixed bug in ACD arrays. Not filled for Tile ID==0.
+
+v1r14: February 7, 2006
+awb for Mutsumi: Bug fix in TkrNoiseOcc (TOT distribution of TKR noise). 
