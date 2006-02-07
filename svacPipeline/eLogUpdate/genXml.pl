@@ -27,16 +27,12 @@ my $updateElogDbXml =
         <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/ldfTDLaunchWrapper.pl
         </executable>
-        <executable name=\"LaunchConfRep\" version=\"$ENV{'eLogTaskVersion'}\">
-            $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
-        </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$ENV{'eLogDataDirFull'}</working-directory>
             <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDirFull'}</file>
         <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDirFull'}</file>
         <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDirFull'}</file>
         <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDirFull'}</file>
@@ -47,9 +43,6 @@ my $updateElogDbXml =
         </processing-step>
         <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                         <input-file name=\"ldf\"/>
-        </processing-step>
-        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"snapshot\"/>
         </processing-step>
 </pipeline>
 ";

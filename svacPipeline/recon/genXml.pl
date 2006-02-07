@@ -28,12 +28,6 @@ my $reconXml =
     <executable name=\"RunRALaunch\" version=\"$ENV{'reconTaskVersion'}\">
         $ENV{'reconTaskDir'}/RunRALaunchWrapper.pl
     </executable>
-    <executable name=\"genRTRLaunch\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
-    </executable>
-    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
-        $urlUpdater
-    </executable>
 
     <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
         <working-directory>$ENV{'reconDataDirFull'}</working-directory>
@@ -60,19 +54,6 @@ my $reconXml =
     <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunch\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
-    </processing-step>
-    <processing-step name=\"LaunchReport\" executable=\"genRTRLaunch\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-                    <input-file name=\"recon\"/>
-    </processing-step>
-    <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"recon\"/>
-    </processing-step>
-    <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"merit\"/>
-    </processing-step>
-    <processing-step name=\"calRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"cal\"/>
     </processing-step>
 </pipeline>
 ";

@@ -27,12 +27,6 @@ my $digitizationXml =
         <executable name=\"LaunchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
             $ENV{'digitizationTaskDir'}/recLaunchWrapper.pl
         </executable>
-        <executable name=\"LaunchReport\" version=\"$ENV{'digitizationTaskVersion'}\">
-            $ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl
-        </executable>
-        <executable name=\"digiRootFile\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
@@ -55,12 +49,6 @@ my $digitizationXml =
                         <output-file name=\"jobOptions\"/>
         </processing-step>
         <processing-step name=\"LaunchRecon\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"LaunchReport\" executable=\"LaunchReport\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"digiRootFile\" executable=\"digiRootFile\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
 </pipeline>

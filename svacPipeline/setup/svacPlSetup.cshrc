@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p6
+setenv svacVersion v3r4p6muon
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -52,7 +52,7 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
-#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p0

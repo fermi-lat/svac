@@ -24,9 +24,6 @@ my $svacTupleXml =
         <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
             $ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl
         </executable>
-        <executable name=\"svacRootFile\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
 
         <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
             <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
@@ -51,9 +48,6 @@ my $svacTupleXml =
                         <output-file name=\"svac\"/>
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
-        </processing-step>
-        <processing-step name=\"svacRootFile\" executable=\"svacRootFile\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"svac\"/>
         </processing-step>
 </pipeline>
 

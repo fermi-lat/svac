@@ -298,3 +298,10 @@ v3r4p6
 ---------------
 Merge CAL and merit tuples with hadd rather than pruneTuple.cxx.
 ---------------------------------------------------------------------------
+
+
+v3r4p6muon
+---------------
+Just like v3r4p6, but use muon hypothesis for recon and don't update DB.
+And don't make any reports.
+---------------------------------------------------------------------------
