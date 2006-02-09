@@ -12,9 +12,6 @@
 #include "reconRootData/ReconEvent.h"
 #include "digiRootData/DigiEvent.h"
 #include "enums/TriggerBits.h"
-#include "reconRootData/AcdRecon.h"
-#include "reconRootData/AcdTkrIntersection.h"
-#include "digiRootData/AcdDigi.h"
 
 /**
  * \class TestReport
@@ -124,10 +121,10 @@ class TestReport {
 
   struct PlotAttribute {
     PlotAttribute::PlotAttribute(const char* file=0, const char* caption=0,
-				 const char* label=0, bool yLog=0, bool zLog=0,
+				 const char* label=0, bool yLog=0,
 				 float height=10, float width=15, int x=606,
 				 int y=410, int stat=1111, bool statBox=0) : 
-      m_file(file), m_caption(caption), m_label(label), m_yLog(yLog), m_zLog(zLog),
+      m_file(file), m_caption(caption), m_label(label), m_yLog(yLog),
 	 m_height(height), m_width(width), m_xPixel(x), m_yPixel(y),
 	 m_statMode(stat), m_statBox(statBox)
     { 
@@ -142,14 +139,13 @@ class TestReport {
     }
 
     void set(const char* file=0, const char* caption=0, const char* label=0, 
-	     bool yLog=0, bool zLog=0, float height=10, float width=15, int x=606, 
+	     bool yLog=0, float height=10, float width=15, int x=606, 
 	     int y=410, int stat=1111, bool statBox=0)
     {
       m_file = file;
       m_caption = caption;
       m_label = label;
       m_yLog = yLog;
-      m_zLog = zLog;
       m_height = height;
       m_width = width;
       m_xPixel = x;
@@ -166,7 +162,6 @@ class TestReport {
     const char* m_caption;
     const char* m_label;
     bool m_yLog;
-    bool m_zLog;
 
     /// height and width of a plot in latex
     float m_height;
@@ -353,8 +348,8 @@ class TestReport {
   DigiEvent* m_digiEvent;
 
   enum {g_nLayer = 18, g_nView = 2, g_nPlane = 36, g_nStrip = 1536, 
-	g_nFEC = 24, g_nTower = 16, g_satTot = 250, g_overlapTot = 255,
-        g_nCalLayer = 8, g_nEnd =2};
+	g_nFEC = 24, g_nTower = 16, g_satTot = 255, g_nCalLayer = 8,
+	g_nEnd =2};
 
   /// trigger histogram
   TH1F* m_trigger;
@@ -456,11 +451,8 @@ class TestReport {
   /// number of events with 0 TOT but at least 1 strip
   int m_nEventZeroTot;
 
-  /// number of events with TOT values outside range [0, g_overlapTot]
+  /// number of events with TOT values outside range [0, g_satTot]
   int m_nEvtInvalidTot;
-
-  /// number of events with TOT values outside range [0, g_satTot] i.e. overlapped triggers
-  int m_nEvtOverlapTriggerTot;
 
   /// number of events with none zero TOT but no strip hit
   int m_nEventBadTot;

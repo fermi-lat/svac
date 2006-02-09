@@ -68,7 +68,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_nTrgParityErrors(0), m_nPacketErrors(0), m_nTemErrors(0),
     m_nEvent(0),
     m_nTkrTrigger(0), m_nEventBadStrip(0), m_nEventMoreStrip(0), 
-    m_nEventSatTot(0), m_nEventZeroTot(0), m_nEvtInvalidTot(0), m_nEvtOverlapTriggerTot(0),
+    m_nEventSatTot(0), m_nEventZeroTot(0), m_nEvtInvalidTot(0),
     m_nEventBadTot(0), m_startTime(0),
     m_endTime(0), m_nDigi(0), m_nAcdOddParityError(0), m_nAcdHeaderParityError(0),
     m_AcdTileIdOnePMT(0), m_AcdTileIdOneVeto(0),
@@ -281,67 +281,67 @@ TestReport::TestReport(const char* dir, const char* prefix,
   setHistParameters(m_nAcdDigis,att);
 
   m_AcdTileIdOnePMT = new TH1F("AcdTileIdOnePMT","ACD tile ID for single PMT digis",128,-0.5,127.5);
-  att.set("ACD GEM ID","Fraction of events w/ only 1 PMT fired");
+  att.set("ACD tile ID for single PMT digis","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdTileIdOnePMT,att);
 
   m_AcdTileIdOneVeto = new TH1F("AcdTileIdOneVeto","ACD tile ID for single Veto digis",128,-0.5,127.5);
-  att.set("ACD GEM ID","Fraction of events w/ only 1 Veto signal");
+  att.set("ACD tile ID for single Veto digis","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdTileIdOneVeto,att);
 
-  m_AcdHitMap = new TH1F("AcdHitMap","ACD GEM ID for Hits",128,-0.5,127.5);
-  att.set("ACD GEM ID","Number of events");
+  m_AcdHitMap = new TH1F("AcdHitMap","ACD tile ID for Hits",128,-0.5,127.5);
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdHitMap,att);
  
-  m_AcdVetoMap = new TH1F("AcdVetoMap","ACD GEM ID for Vetos",128,-0.5,127.5);
-  att.set("ACD GEM ID","Fraction of events above Veto threshold");
+  m_AcdVetoMap = new TH1F("AcdVetoMap","ACD tile ID for Vetos",128,-0.5,127.5);
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdVetoMap,att);
   
-  m_AcdPhaMapA = new TH2F("AcdPhaMapA","ACD GEM ID vs PHA for A PMT",128,-0.5,127.5,256,0,4096);
-  att.set("ACD GEM ID","PHA counts");
+  m_AcdPhaMapA = new TH2F("AcdPhaMapA","ACD tile ID for Phas A",128,-0.5,127.5,256,0,4096);
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdPhaMapA,att);
 
-  m_AcdPhaMapB = new TH2F("AcdPhaMapB","ACD GEM ID vs PHA for B PMT",128,-0.5,127.5,256,0,4096);
-  att.set("ACD GEM ID","PHA counts");
+  m_AcdPhaMapB = new TH2F("AcdPhaMapB","ACD tile ID for Phas B",128,-0.5,127.5,256,0,4096);
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdPhaMapB,att);
 
   m_AcdEfficMap = new TH1F("AcdEfficMap","ACD Effic by Tile ID",128,-0.5,127.5); 
-  att.set("ACD GEM ID","Number of events");
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdEfficMap,att);
 
   m_AcdInEfficMap = new TH1F("AcdInEfficMap","ACD InEffic by Tile ID",128,-0.5,127.5); 
-  att.set("ACD GEM ID","Fraction on expected hits that are missing");
+  att.set("ACD tile ID for hits","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdInEfficMap,att);
   
   m_AcdMissMapTop = new TH2F("AcdMissMapTop","ACD X-Y location for misses",200,-800.,800.,200,-800.,800.);
-  att.set("X (mm)","Y (mm)");
+  att.set("ACD X-Y location for misses","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdMissMapTop,att);
 
   m_AcdMissMapMinusX = new TH2F("AcdMissMapMinusX","ACD Y-Z location for misses",200,-800.,800.,200,0.,800.);
-  att.set("Y (mm)","Z (mm)");
+  att.set("ACD Y-Z location for misses","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdMissMapMinusX,att);
 
   m_AcdMissMapMinusY = new TH2F("AcdMissMapMinusY","ACD X-Z location for misses",200,-800.,800.,200,0.,800.);
-  att.set("X (mm)","Z (mm)");
+  att.set("ACD X-Z location for misses","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdMissMapMinusY,att);
 
   m_AcdMissMapPlusX = new TH2F("AcdMissMapPlusX","ACD Y-Z location for misses",200,-800.,800.,200,0.,800.);
-  att.set("Y (mm)","Z (mm)");
+  att.set("ACD Y-Z location for misses","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdMissMapPlusX,att);
 
   m_AcdMissMapPlusY = new TH2F("AcdMissMapPlusY","ACD X-Z location for misses",200,-800.,800.,200,0.,800.);
-  att.set("X (mm)","Z (mm)");
+  att.set("ACD X-Z location for misses","Number of events");
   att.m_canRebin = false;
   setHistParameters(m_AcdMissMapPlusY,att);
   
@@ -565,9 +565,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 	    double_t(lPpcT - prevLPpcT) / 16000.;
 	}
 
-	if ( interval < 500. ) {
-	  m_timeInterval->Fill(interval);
-	}
+	m_timeInterval->Fill(interval);
 	m_timeIntervalCut->Fill(interval);
 	prevUPpcT = uPpcT;
 	prevLPpcT = lPpcT;
@@ -602,8 +600,8 @@ void TestReport::analyzeReconTree()
   Int_t nTk = 0;
 
   if(tkrRecon) {
-    nTk = tkrRecon->getTrackCol()->GetLast()+1;
     m_nTkrTrack->Fill(tkrRecon->getTrackCol()->GetLast()+1);
+    nTk = tkrRecon->getTrackCol()->GetLast()+1;
 
     TObjArray* vertices = tkrRecon->getVertexCol();
     if(tkrRecon->getVertexCol()->GetLast() >= 0) {
@@ -678,7 +676,7 @@ void TestReport::analyzeReconTree()
     for ( UInt_t iAcdInter(0); iAcdInter < nAcdInter; iAcdInter++ ) {
       const AcdTkrIntersection* acdInter = acdRecon->getAcdTkrIntersection(iAcdInter);
       if ( acdInter->getTrackIndex() != 0 ) continue;
-      if ( acdInter->getArcLengthToIntersection() < 0 ) continue;
+      if ( acdInter->getArcLengthToIntersection() != 0 ) continue;
       UShort_t acdGemId = getGemId( acdInter->getTileId().getId() );
       if ( acdInter->tileHit() ) {
 	m_AcdEfficMap->Fill( acdGemId );
@@ -845,11 +843,7 @@ void TestReport::analyzeDigiTree()
     if((tot0>0 && lowCount==0)|| (tot1>0 && highCount==0)) badTot = true;
     if((tot0==0 && lowCount>0)|| (tot1==0 && highCount>0)) zeroTot = true;
     
-    if (tot0<0 || tot0>g_overlapTot || tot1<0 || tot1>g_overlapTot) ++m_nEvtInvalidTot; 
-    if (tot0>g_satTot && tot0!=g_overlapTot) ++m_nEvtInvalidTot; 
-    if (tot1>g_satTot && tot1!=g_overlapTot) ++m_nEvtInvalidTot; 
-
-    if(tot0==g_satTot || tot1==g_satTot) ++m_nEvtOverlapTriggerTot; 
+    if(tot0<0 || tot0>g_satTot || tot1<0 || tot1>g_satTot) ++m_nEvtInvalidTot; 
 
     if(tot0 == 0){
       m_totZero2D->Fill(plane+0.25, tower, 1./m_nEvent);
@@ -953,8 +947,8 @@ void TestReport::analyzeDigiTree()
     if ( singleVeto ) m_AcdTileIdOneVeto->Fill(AcdGemID);
     if ( vetoA || vetoB ) m_AcdVetoMap->Fill(AcdGemID);
 
-    if (acdDigi->getRange(AcdDigi::A) == 0 ) m_AcdPhaMapA->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::A) );
-    if (acdDigi->getRange(AcdDigi::B) == 0 ) m_AcdPhaMapB->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::B) );      
+    m_AcdPhaMapA->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::A) );
+    m_AcdPhaMapB->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::B) );      
     
     if (acdDigi->getOddParityError(AcdDigi::A)) ++tmpAcdOddParityError;
     if (acdDigi->getOddParityError(AcdDigi::B)) ++tmpAcdOddParityError;
@@ -998,7 +992,7 @@ void TestReport::generateReport()
   (*m_report) << "@li There are @b " << m_nTemErrors << " events with TEM errors " << endl;
 
   (*m_report) << "@li There are @b " << m_nAcdOddParityError    << " events with ACD Odd Parity errors " << endl;
-  (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD 'Header Parity errors'.  (Should always be zero)." << endl;
+  (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD 'Header Parity errors'." << endl;
 
   (*m_report) << "@li Time of the first trigger: <b>" << ctime((time_t*) (&m_startTime)) << " (GMT) </b>";
   (*m_report) << "@li Time of the last trigger: <b>" << ctime((time_t*) (&m_endTime)) << " (GMT) </b>";
@@ -1073,13 +1067,13 @@ void TestReport::generateDigiReport()
   // produce plots for nhits distribution for 16 towers
   file = m_prefix;
   file += "_hitsPerTower_1";
-  att.set(file.c_str(), "Number of strip hits in a tower(for tower 0 to tower 7).", "hitsPerTower_1", 1, 0, 18, 18, 909, 615);
+  att.set(file.c_str(), "Number of strip hits in a tower(for tower 0 to tower 7).", "hitsPerTower_1", 1, 18, 18, 909, 615);
   producePlot((TObject**) m_nHit, att, 4, 2);
   insertPlot(att);
 
   file = m_prefix;
   file += "_hitsPerTower_2";
-  att.set(file.c_str(), "Number of strip hits in a tower(for tower 8 to tower 15.", "hitsPerTower_2", 1, 0, 18, 18, 909, 615);
+  att.set(file.c_str(), "Number of strip hits in a tower(for tower 8 to tower 15.", "hitsPerTower_2", 1, 18, 18, 909, 615);
   producePlot((TObject**) m_nHit+8, att, 4, 2);
   insertPlot(att);
 
@@ -1089,13 +1083,13 @@ void TestReport::generateDigiReport()
 
   file = m_prefix;
   file += "_layersPerTower_1";
-  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 0 to tower 7).", "layersPerTower_1", 1, 0, 18, 18, 909, 615, 111);
+  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 0 to tower 7).", "layersPerTower_1", 1, 18, 18, 909, 615, 111);
   producePlot((TObject**) m_nLayer, att, 4, 2);
   insertPlot(att);
 
   file = m_prefix;
   file += "_layersPerTower_2";
-  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 8 to tower 15).", "layersPerTower_1", 1, 0, 18, 18, 909, 615, 111);
+  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 8 to tower 15).", "layersPerTower_1", 1, 18, 18, 909, 615, 111);
   producePlot((TObject**) m_nLayer+8, att, 4, 2);
   insertPlot(att);
 
@@ -1103,8 +1097,7 @@ void TestReport::generateDigiReport()
   *(m_report) << "@subsection totInfo Time Over Threshold (TOT) information" << endl;
   *(m_report) << "@latexonly \\nopagebreak @endlatexonly" << endl;
   *(m_report) << "@li Fraction of events with saturated TOT value of " << g_satTot << " counts(1 count = 200ns): @b " << ToString(m_nEventSatTot/double(m_nEvent)) << endl;
-  *(m_report) << "@li Fraction of events with overlapped triggers i.e. TOT value of " << g_overlapTot << " counts(1 count = 200ns): @b " << ToString(m_nEvtOverlapTriggerTot/double(m_nEvent)) << endl;
-  *(m_report) << "@li Fraction of events with invalid TOT (outside the range [0, " << g_satTot << "] and != g_overlapTot): @b " << ToString(m_nEvtInvalidTot/double(m_nEvent)) << endl;
+  *(m_report) << "@li Fraction of events with invalid TOT (outside the range [0, " << g_satTot << "]): @b " << ToString(m_nEvtInvalidTot/double(m_nEvent)) << endl;
   *(m_report) << "@li Fraction of events with TOT==0 and nStrip!=0 for each Si plane: @b " << ToString(m_nEventZeroTot/double(m_nEvent)) << endl;
   *(m_report) << "@li Fraction of events with TOT!=0 and nStrip==0 for each Si plane: @b " << ToString(m_nEventBadTot/double(m_nEvent)) << endl;
 
@@ -1197,10 +1190,6 @@ void TestReport::producePlot(TObject* h, const PlotAttribute& att)
   gStyle->SetPalette();
 
   if(att.m_yLog) gPad->SetLogy();
-  if(att.m_zLog) {
-    cout << "set logz" << endl;
-    gPad->SetLogz();
-  }
 
   Double_t minY(0.);
   Double_t maxY(0.);
@@ -1349,10 +1338,6 @@ void TestReport::producePlot(TObject** h, const PlotAttribute& att, int nRow,
     gPad->SetBottomMargin(0.05*nRow);
 
     if(att.m_yLog) gPad->SetLogy();
-    if(att.m_zLog) {
-      cout << "set logz" << endl;
-      gPad->SetLogz();
-    }
 
     if(TGraph* gr = dynamic_cast<TGraph*>(h[i])) {
       gr->Draw("A*");
@@ -1714,13 +1699,13 @@ void TestReport::produceAveTotPlots()
 
   string file(m_prefix);
   file += "_tot0";
-  PlotAttribute att(file.c_str(), "Average TOT value in tower 0 to tower 7(excluding 0 and saturation). Plane 0 is at bottom of the tracker.", "tot0", 0, 0, 18, 18, 909, 615);
+  PlotAttribute att(file.c_str(), "Average TOT value in tower 0 to tower 7(excluding 0 and saturation). Plane 0 is at bottom of the tracker.", "tot0", 0, 18, 18, 909, 615);
   producePlot((TObject**) graphs, att, 4, 2);
   insertPlot(att);
 
   file = m_prefix;
   file += "_tot1";
-  att.set(file.c_str(), "Average TOT value in tower 8 to tower 15(excluding 0 and saturation). Plane 0 is at bottom of the tracker.", "tot1", 0, 0, 18, 12.2, 909, 615);
+  att.set(file.c_str(), "Average TOT value in tower 8 to tower 15(excluding 0 and saturation). Plane 0 is at bottom of the tracker.", "tot1", 0, 18, 12.2, 909, 615);
   att.m_2dPlotType = PlotAttribute::COLZ;
   producePlot((TObject**) graphs+8, att, 4, 2);
   insertPlot(att);
@@ -1806,7 +1791,7 @@ void TestReport::produceZeroSatTot2DPlot()
 
   string file = m_prefix;
   file += "_totSat";
-  PlotAttribute att(file.c_str(), "Fraction of events with saturated TOT value of 250 counts (1 count = 200 ns, plane 0 is at the bottom). When calculating the fraction, the denominator is the number of events with at least 1 hit in the corresponding region. The plot contains information for both TOT counters in the same plane. For example, the bin at tower 0, plane 0-0.5 corresponds to the TOT value from the GTRC close to strip 0 in plane 0 in tower 0. The bin at tower 0, plane 0.5-1. corresponds to the TOT value from the GTRC close to strip 1536 in plane 0 in tower 0", "satTot");
+  PlotAttribute att(file.c_str(), "Fraction of events with saturated TOT value of 255 counts (1 count = 200 ns, plane 0 is at the bottom). When calculating the fraction, the denominator is the number of events with at least 1 hit in the corresponding region. The plot contains information for both TOT counters in the same plane. For example, the bin at tower 0, plane 0-0.5 corresponds to the TOT value from the GTRC close to strip 0 in plane 0 in tower 0. The bin at tower 0, plane 0.5-1. corresponds to the TOT value from the GTRC close to strip 1536 in plane 0 in tower 0", "satTot");
   producePlot(m_totSat2D, att);
   insertPlot(att);
 }
@@ -1970,13 +1955,13 @@ void TestReport::produceGemDiscardedPlot()
 {
   string file(m_prefix);
   file += "_gemDiscarded";
-  PlotAttribute att(file.c_str(), "Number of GEM discarded events between two successive read out events","gemDiscarded",true);
+  PlotAttribute att(file.c_str(), "Number of GEM discarded events between two successive read out events","gemDiscarded","true");
   producePlot(m_gemDiscarded, att);
   insertPlot(att);
 
   file = m_prefix;
   file += "_gemDiscardedTime";
-  att.set(file.c_str(), "Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns). Only non-saturated values of the GEM time counters have been used.","gemDiscardedTime",true);
+  att.set(file.c_str(), "Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns). Only non-saturated values of the GEM time counters have been used.","gemDiscardedTime","true");
   producePlot(m_gemDiscardedTime, att);
   insertPlot(att);
 }
@@ -2114,14 +2099,12 @@ void TestReport::produceAcdDigiPlots()
   file = m_prefix;
   file += "_AcdPhaMapA";
   att.set(file.c_str(), "ACD PHA map -- A PMTs.", "AcdPhaMapA" );
-  att.m_zLog = true;
   producePlot(m_AcdPhaMapA, att);
   insertPlot(att);
 
   file = m_prefix;  
-  file += "_AcdPhaMapB";  
+  file += "_AcdPhaMapB";
   att.set(file.c_str(), "ACD PHA map -- B PMTs.", "AcdPhaMapB" );
-  att.m_zLog = true;
   producePlot(m_AcdPhaMapB, att);
   insertPlot(att);
 }
