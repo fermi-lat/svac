@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p6
+setenv svacVersion v3r4p7
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -154,7 +154,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r12
+setenv RunRootAnalyzerVersion v1r14
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe

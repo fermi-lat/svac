@@ -72,7 +72,7 @@ def concatenate_prune(outputFileName, fileNames, treeName):
 
 def concatenate_hadd(outputFileName, fileNames, treeName):
 
-    fmt = '/nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt/ROOT/v4.02.00/root/bin/hadd -f %s' % outputFileName
+    fmt = '${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd -f %s' % outputFileName
     fmt += ' %s' * len(fileNames)
     cmd = fmt % tuple(fileNames)
 

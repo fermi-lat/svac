@@ -298,3 +298,12 @@ v3r4p6
 ---------------
 Merge CAL and merit tuples with hadd rather than pruneTuple.cxx.
 ---------------------------------------------------------------------------
+
+
+v3r4p7
+---------------
+svacTuple v1r14
+Use copy of hadd in $SVAC_GLAST_EXT, rather than hardcoding to nfs copy
+(which no longer exists).
+Add some reprocessing scripts to svacTuple.
+---------------------------------------------------------------------------
