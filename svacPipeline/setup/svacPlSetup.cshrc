@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p7
+setenv svacVersion v3r5p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -28,7 +28,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u27
+setenv dataDisk u25
 setenv onlineDisk u21
 setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch
@@ -66,7 +66,8 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
-setenv eLogTask updateELogDB-${eLogTaskVersion}
+setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
+setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
 setenv eLogFeederVersion v2r2p7
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
@@ -90,7 +91,8 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
-setenv digitizationTask digitization-${digitizationTaskVersion}
+setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
+setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
 setenv Em2Version v2r49
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
