@@ -307,3 +307,9 @@ Use copy of hadd in $SVAC_GLAST_EXT, rather than hardcoding to nfs copy
 (which no longer exists).
 Add some reprocessing scripts to svacTuple.
 ---------------------------------------------------------------------------
+
+
+v3r4p8
+---------------
+Use u25 for rootData.
+---------------------------------------------------------------------------
