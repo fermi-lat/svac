@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p8
+setenv svacVersion v3r4p9
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -29,7 +29,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u25
-setenv onlineDisk u21
+setenv onlineDisk u25
 setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch
 setenv phase Integration
@@ -55,7 +55,7 @@ setenv calibTail ${emTail}/${calibVersion}
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
-setenv onlineTaskVersion v2r4p0
+setenv onlineTaskVersion v2r4p1
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
 setenv svacOnlineDir ${svacPlRoot}/online
