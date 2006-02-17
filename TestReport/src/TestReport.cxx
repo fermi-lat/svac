@@ -68,7 +68,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_nTrgParityErrors(0), m_nPacketErrors(0), m_nTemErrors(0),
     m_nEvent(0),
     m_nTkrTrigger(0), m_nEventBadStrip(0), m_nEventMoreStrip(0), 
-    m_nEventSatTot(0), m_nEventZeroTot(0), m_nEvtInvalidTot(0), m_nEvtOverlapTriggerTot(0),
+    m_nEventSatTot(0), m_nEventZeroTot(0), m_nEvtInvalidTot(0),
     m_nEventBadTot(0), m_startTime(0),
     m_endTime(0), m_nDigi(0), m_nAcdOddParityError(0), m_nAcdHeaderParityError(0),
     m_AcdTileIdOnePMT(0), m_AcdTileIdOneVeto(0),
@@ -845,11 +845,7 @@ void TestReport::analyzeDigiTree()
     if((tot0>0 && lowCount==0)|| (tot1>0 && highCount==0)) badTot = true;
     if((tot0==0 && lowCount>0)|| (tot1==0 && highCount>0)) zeroTot = true;
     
-    if (tot0<0 || tot0>g_overlapTot || tot1<0 || tot1>g_overlapTot) ++m_nEvtInvalidTot; 
-    if (tot0>g_satTot && tot0!=g_overlapTot) ++m_nEvtInvalidTot; 
-    if (tot1>g_satTot && tot1!=g_overlapTot) ++m_nEvtInvalidTot; 
-
-    if(tot0==g_satTot || tot1==g_satTot) ++m_nEvtOverlapTriggerTot; 
+    if(tot0<0 || tot0>g_satTot || tot1<0 || tot1>g_satTot) ++m_nEvtInvalidTot; 
 
     if(tot0 == 0){
       m_totZero2D->Fill(plane+0.25, tower, 1./m_nEvent);
@@ -953,8 +949,8 @@ void TestReport::analyzeDigiTree()
     if ( singleVeto ) m_AcdTileIdOneVeto->Fill(AcdGemID);
     if ( vetoA || vetoB ) m_AcdVetoMap->Fill(AcdGemID);
 
-    if (acdDigi->getRange(AcdDigi::A) == 0 ) m_AcdPhaMapA->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::A) );
-    if (acdDigi->getRange(AcdDigi::B) == 0 ) m_AcdPhaMapB->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::B) );      
+    m_AcdPhaMapA->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::A) );
+    m_AcdPhaMapB->Fill(AcdGemID, acdDigi->getPulseHeight(AcdDigi::B) );      
     
     if (acdDigi->getOddParityError(AcdDigi::A)) ++tmpAcdOddParityError;
     if (acdDigi->getOddParityError(AcdDigi::B)) ++tmpAcdOddParityError;
@@ -1103,8 +1099,7 @@ void TestReport::generateDigiReport()
   *(m_report) << "@subsection totInfo Time Over Threshold (TOT) information" << endl;
   *(m_report) << "@latexonly \\nopagebreak @endlatexonly" << endl;
   *(m_report) << "@li Fraction of events with saturated TOT value of " << g_satTot << " counts(1 count = 200ns): @b " << ToString(m_nEventSatTot/double(m_nEvent)) << endl;
-  *(m_report) << "@li Fraction of events with overlapped triggers i.e. TOT value of " << g_overlapTot << " counts(1 count = 200ns): @b " << ToString(m_nEvtOverlapTriggerTot/double(m_nEvent)) << endl;
-  *(m_report) << "@li Fraction of events with invalid TOT (outside the range [0, " << g_satTot << "] and != g_overlapTot): @b " << ToString(m_nEvtInvalidTot/double(m_nEvent)) << endl;
+  *(m_report) << "@li Fraction of events with invalid TOT (outside the range [0, " << g_satTot << "]): @b " << ToString(m_nEvtInvalidTot/double(m_nEvent)) << endl;
   *(m_report) << "@li Fraction of events with TOT==0 and nStrip!=0 for each Si plane: @b " << ToString(m_nEventZeroTot/double(m_nEvent)) << endl;
   *(m_report) << "@li Fraction of events with TOT!=0 and nStrip==0 for each Si plane: @b " << ToString(m_nEventBadTot/double(m_nEvent)) << endl;
 
@@ -1806,7 +1801,7 @@ void TestReport::produceZeroSatTot2DPlot()
 
   string file = m_prefix;
   file += "_totSat";
-  PlotAttribute att(file.c_str(), "Fraction of events with saturated TOT value of 250 counts (1 count = 200 ns, plane 0 is at the bottom). When calculating the fraction, the denominator is the number of events with at least 1 hit in the corresponding region. The plot contains information for both TOT counters in the same plane. For example, the bin at tower 0, plane 0-0.5 corresponds to the TOT value from the GTRC close to strip 0 in plane 0 in tower 0. The bin at tower 0, plane 0.5-1. corresponds to the TOT value from the GTRC close to strip 1536 in plane 0 in tower 0", "satTot");
+  PlotAttribute att(file.c_str(), "Fraction of events with saturated TOT value of 255 counts (1 count = 200 ns, plane 0 is at the bottom). When calculating the fraction, the denominator is the number of events with at least 1 hit in the corresponding region. The plot contains information for both TOT counters in the same plane. For example, the bin at tower 0, plane 0-0.5 corresponds to the TOT value from the GTRC close to strip 0 in plane 0 in tower 0. The bin at tower 0, plane 0.5-1. corresponds to the TOT value from the GTRC close to strip 1536 in plane 0 in tower 0", "satTot");
   producePlot(m_totSat2D, att);
   insertPlot(att);
 }
