@@ -118,7 +118,11 @@ towerVar::towerVar( int twr, bool badStrips ){
 
   char name[] = "numHitGTRCT00";
   sprintf(name,"numHitGTRCT%d", towerId);
-  numHitGTRC = new TH1F(name, name, 65, 0, 65);
+  numHitGTRC = new histogram(name, name, 65, 0, 65);
+  sprintf(name,"resXT%d", towerId);
+  resX = new histogram( name, name, 100, -3.0, 3.0 );
+  sprintf(name,"resYT%d", towerId);
+  resY = new histogram( name, name, 100, -3.0, 3.0 );
 #ifndef ROOT_PROFILE
   resProf = new profile( g_nUniPlane, 0, g_nUniPlane );
 #else
@@ -228,7 +232,9 @@ void towerVar::saveHists( bool saveTimeOcc ){
   delete rhist;
   delete hist;
 
-  numHitGTRC->Write(0, TObject::kOverwrite);
+  numHitGTRC->save();
+  resX->save();
+  resY->save();
 #ifdef ROOT_PROFILE
   resProf->Write(0, TObject::kOverwrite);
 #else
@@ -296,6 +302,74 @@ float profile::getRMS( int bin ){
   return rms[bin];
 }
 
+histogram::histogram( const char* cname, const char* ctitle, const int bin, const float min, const float max ){
+
+  name = std::string(cname);
+  title = std::string(ctitle);
+  nbins = bin;
+  xmin = min;
+  xmax = max;
+  sum = 0.0;
+  binSize = (xmax-xmin) / nbins;
+  for( int bin=0; bin<nbins+2; bin++) contents.push_back( 0.0 );
+
+}
+
+int histogram::getBin( const float x ){
+
+  int bin;
+  if( x < xmin ) bin = 0;
+  else if( x >= xmax ) bin = nbins+1;
+  else bin = int( ( x - xmin ) / binSize + 1 );
+
+  return bin;
+}
+
+void histogram::Fill( const float x, const float val ){
+  int bin = getBin( x );
+  contents[bin] += val;
+  sum += val;
+}
+
+void histogram::Add( const TH1* hist ){
+
+  if( hist->GetNbinsX() != nbins ){ 
+    std::cout << "histogram::Add, # of bin mismatch" << nbins << " " 
+	      << hist->GetNbinsX() << std::endl;
+    return;
+  }
+
+  for( int bin=0; bin<nbins+2; bin++)
+    contents[bin] += hist->GetBinContent( bin );
+  sum += hist->Integral();
+
+}
+
+void histogram::save(){
+
+  TH1F* hist = new TH1F( name.c_str(), title.c_str(), nbins, xmin, xmax );
+  for( int bin=0; bin<nbins+2; bin++) 
+    hist->SetBinContent( bin, contents[bin] );  
+  hist->Write(0, TObject::kOverwrite);
+}
+
+float histogram::Integral( const int bin1, const int bin2 ){
+
+  float integral=0.0;
+  int min = bin1;
+  if( min < 0 ) min = 0;
+  int max = bin2+1;
+  if( max > nbins ) max = nbins;
+  if( max < min ){ 
+    std::cout << "histogram::Integral, invalid integration region: "
+	      << min << " " << max << std::endl;
+    return 0.0;
+  }
+  for( int bin=min; bin<max; bin++) integral += contents[bin];
+  return integral;
+}
+
+
 void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
 
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
@@ -304,6 +378,12 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
   sprintf(name,"numHitGTRCT%d", towerId);
   hist = (TH1F*)hfile->FindObjectAny( name );
   if( hist ) numHitGTRC->Add( hist );
+  sprintf(name,"resXT%d", towerId);
+  hist = (TH1F*)hfile->FindObjectAny( name );
+  if( hist ) resX->Add( hist );  
+  sprintf(name,"resYT%d", towerId);
+  hist = (TH1F*)hfile->FindObjectAny( name );
+  if( hist ) resY->Add( hist );  
 #ifdef ROOT_PROFILE
   sprintf(name,"resProfT%d", towerId);
   TProfile *prof = (TProfile*)hfile->FindObjectAny( name );
@@ -500,8 +580,9 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
       hist = (TH1F*)m_rootFile->FindObjectAny( name );
       eff = hist->GetBinContent( unp+1 );
       error = hist->GetBinError( unp+1 );
+      if( error == 0.0 ) error = 1.0;
       ineffDist->Fill( 100*(1-eff)+0.0001 );
-      if( eff < 0.98 && m_log.is_open() ){
+      if( (eff-0.98)/error<-3.0 && m_log.is_open() ){
 	layerId lid( unp );
 	char vw[] = "XY";
 	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
@@ -515,7 +596,8 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
       // check for alignment outliers
       offset = m_towerVar[tw].resProf->GetBinContent( unp+1 );
       error = m_towerVar[tw].resProf->GetBinError( unp+1 );
-      if( fabs(offset) > 0.1 && m_log.is_open() ){
+      if( error == 0.0 ) error = 1.0;
+      if( (fabs(offset)-0.1)/error > 3.0 && m_log.is_open() ){
 	layerId lid( unp );
 	char vw[] = "XY";
 	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
@@ -528,7 +610,7 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
     }
     //
     // check noise flare
-    frac = m_towerVar[tw].numHitGTRC->Integral( 15, 65 )
+    frac = m_towerVar[tw].numHitGTRC->Integral( 15, 65 ) // sum 14-64
       / ( m_nEvents * g_nUniPlane * 2 );
     if( frac > 1.0E-4 && m_log.is_open() ){
 	 std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
@@ -653,7 +735,8 @@ void TkrHits::monitorTKR(){
 
     UInt_t numHits = tkrDigi->getNumHits();
     // Loop through collection of hit strips for this TkrDigi
-    Int_t ihit, numl=0, numh=0;
+    UInt_t ihit;
+    Int_t numl=0, numh=0;
     for (ihit = 0; ihit < numHits; ihit++) {
       // Retrieve the strip number
       if( tkrDigi->getStrip(ihit) > lastRC0Strip ) numh++;
@@ -1073,8 +1156,9 @@ float TkrHits::getTrackRMS(){
   // register hits and perform linear fit
   //
   Int_t towerBits = 0;
-  std::vector<Double_t> vx, vzx, vy, vzy;
-  std::vector<Int_t> twx, twy, upx, upy;
+  std::vector<Double_t> vx[g_nTower], vzx[g_nTower], 
+    vy[g_nTower], vzy[g_nTower];
+  std::vector<Int_t> upx[g_nTower], upy[g_nTower];
   TkrTrack* tkrTrack = m_track;
   TIter trk1HitsItr(tkrTrack);
   TkrTrackHit* pTrk1Hit = 0;
@@ -1082,76 +1166,130 @@ float TkrHits::getTrackRMS(){
     const TkrCluster* cluster = (pTrk1Hit->getClusterPtr());
     if(!cluster) continue;
     layerId lid = getLayerId( cluster );
+    int twr = lid.tower;
     towerBits |= (1<<lid.tower);
     Double_t z = (cluster->getPosition()).Z();
     if( lid.view == 0 ){
-      vx.push_back( (cluster->getPosition()).X() );
-      vzx.push_back( z );
-      twx.push_back( lid.tower );
-      upx.push_back( lid.uniPlane );
+      vx[twr].push_back( (cluster->getPosition()).X() );
+      vzx[twr].push_back( z );
+      upx[twr].push_back( lid.uniPlane );
     }
     else{
-      vy.push_back( (cluster->getPosition()).Y() );
-      vzy.push_back( z );
-      twy.push_back( lid.tower );
-      upy.push_back( lid.uniPlane );
+      vy[twr].push_back( (cluster->getPosition()).Y() );
+      vzy[twr].push_back( z );
+      upy[twr].push_back( lid.uniPlane );
     }
   }
-  // check tower with hits.
+  //
+  // check tower with hits and do linear fit
+  //
+  float sum=0.0, sumsq=0.0, num=0.0;
+  Double_t x0[g_nTower], dxdz[g_nTower], y0[g_nTower], dydz[g_nTower];
+  Int_t ref1twr=-1, ref2twr=-1;
+  UInt_t ref1num=0, ref2num=0, numTracks=0;
   m_trackTowerList.clear();
-  for( int twr=0; twr<g_nTower; twr++)
+  for( int twr=0; twr<g_nTower; twr++){
     if( towerBits&(1<<twr) ) m_trackTowerList.push_back( twr );
+    if( vx[twr].size() < 3 || vy[twr].size() < 3 ) continue;
+    numTracks++;
+    UInt_t numhits = vx[twr].size() + vy[twr].size();
+    if( numhits >  ref1num ){
+      ref2num = ref1num;
+      ref2twr = ref1twr;
+      ref1num = numhits;
+      ref1twr = twr;      
+    }
+    else if( numhits > ref2num ){
+      ref2num = numhits;
+      ref2twr = twr;      
+    }
 
-  Double_t x0=-1.0, dxdz=-1.0, y0, dydz;
-  // fit xz and yz
-  leastSquareLinearFit( vx, vzx, x0, dxdz );
-  leastSquareLinearFit( vy, vzy, y0, dydz );
+    // fit xz and yz
+    leastSquareLinearFit( vx[twr], vzx[twr], x0[twr], dxdz[twr] );
+    leastSquareLinearFit( vy[twr], vzy[twr], y0[twr], dydz[twr] );
 
-  // reset mpos
-  Double_t z = m_pos.Z();
-  m_pos.SetXYZ( x0 + dxdz*z, y0 + dydz*z, z );
-  // reset dir
-  Double_t dirz = -1 / sqrt( dxdz*dxdz + dydz*dydz + 1.0 );
-  m_dir.SetXYZ( dxdz*dirz, dydz*dirz, dirz );
-
-  // calculare combined rms in both x and y
-  float sum=0.0, sumsq=0.0;
-  for( UInt_t i=0; i<vx.size(); i++){
-    float del = vx[i] - ( x0+dxdz*vzx[i] );
-    sum += del;
-    sumsq += del*del;
+    // calculare combined rms in both x and y
+    for( UInt_t i=0; i<vx[twr].size(); i++){
+      float del = vx[twr][i] - ( x0[twr]+dxdz[twr]*vzx[twr][i] );
+      num++;
+      sum += del;
+      sumsq += del*del;
+    }
+    for( UInt_t i=0; i<vy[twr].size(); i++){
+      float del = vy[twr][i] - ( y0[twr]+dydz[twr]*vzy[twr][i] );
+      num++;
+      sum += del;
+      sumsq += del*del;
+    }
   }
-  for( UInt_t i=0; i<vy.size(); i++){
-    float del = vy[i] - ( y0+dydz*vzy[i] );
-    sum += del;
-    sumsq += del*del;
-  }
-  int num = ( vx.size()+vy.size() );
   float mean = sum / num;
   float rmsq = sumsq / num - mean*mean;
   if( rmsq > 0.0 ) m_trackRMS = sqrt( rmsq );
   else m_trackRMS = 0.0;
+  if( numTracks == 0 ) return m_trackRMS;
+
+  // reset mpos
+  Double_t z = m_pos.Z();
+  m_pos.SetXYZ( x0[ref1twr] + dxdz[ref1twr]*z, y0[ref1twr] + dydz[ref1twr]*z, z );
+  // reset dir
+  Double_t dirz = -1 / sqrt( dxdz[ref1twr]*dxdz[ref1twr] + dydz[ref1twr]*dydz[ref1twr] + 1.0 );
+  m_dir.SetXYZ( dxdz[ref1twr]*dirz, dydz[ref1twr]*dirz, dirz );
 
   if( m_trackRMS > 0.4 ) return m_trackRMS;
-  UInt_t numTower = m_trackTowerList.size();
-  if( numTower > 2 ) return m_trackRMS;
-
+  if( numTracks > 2 ) return m_trackRMS;
+  if( numTracks==2 && ( ref1twr<0 || ref2twr<0 ) ){ // invalid
+    std::cout << "invalid reference tower numbers: " << ref1twr 
+	      << " " << ref2twr << std::endl;
+    if( m_log.is_open() )
+      m_log << "invalid reference tower numbers: " << ref1twr 
+	    << " " << ref2twr << std::endl;
+    return m_trackRMS;  
+  }
   //
   // look at residual for each tower and layer.
+  //
   float residual;
-  for( UInt_t i=0; i<vx.size(); i++){
-    residual = vx[i] - ( x0+dxdz*vzx[i] );
-    if( fabs( residual ) > 1.5 ) continue;
-    if( numTower==2 ) m_tresProfX->Fill(  twx[i], residual );
-    if( numTower==1 )
-      m_towerVar[m_towerPtr[twx[i]]].resProf->Fill( upx[i], residual );
-  }
-  for( UInt_t i=0; i<vy.size(); i++){
-    residual = vy[i] - ( y0+dydz*vzy[i] );
-    if( fabs( residual ) > 1.5 ) continue;
-    if( numTower==2 ) m_tresProfY->Fill(  twy[i], residual );
-    if( numTower==1 )
-      m_towerVar[m_towerPtr[twy[i]]].resProf->Fill( upy[i], residual );
+  for( int twr=0; twr<g_nTower; twr++){
+    if( vx[twr].size() < 3 || vy[twr].size() < 3 ) continue;
+    int reftwr = -1;
+    if( numTracks==2 ) // determine reference tower
+      if( twr!=ref1twr ) reftwr = ref1twr;
+      else if( twr!=ref2twr ) reftwr = ref2twr;
+      else{
+	std::cout << "invalid tower numbers: " << twr << " " << ref1twr 
+		  << " " << ref2twr << std::endl;
+	if( m_log.is_open() )
+	  m_log << "invalid tower numbers: " << twr << " " << ref1twr 
+		<< " " << ref2twr << std::endl;
+	continue;
+      }
+
+    //
+    // residual for x
+    for( UInt_t i=0; i<vx[twr].size(); i++){
+      residual = vx[twr][i] - ( x0[twr]+dxdz[twr]*vzx[twr][i] );
+      if( fabs( residual ) > 1.5 ) continue;
+      m_towerVar[m_towerPtr[twr]].resProf->Fill( upx[twr][i], residual );
+      if( numTracks==2 ){
+	residual = vx[twr][i] 
+	  - ( x0[reftwr]+dxdz[reftwr]*vzx[twr][i] );
+	m_tresProfX->Fill( twr, residual );
+	m_towerVar[m_towerPtr[twr]].resX->Fill( residual );
+      }
+    }
+    //
+    // residual for y
+    for( UInt_t i=0; i<vy[twr].size(); i++){
+      residual = vy[twr][i] - ( y0[twr]+dydz[twr]*vzy[twr][i] );
+      if( fabs( residual ) > 1.5 ) continue;
+      m_towerVar[m_towerPtr[twr]].resProf->Fill( upy[twr][i], residual );
+      if( numTracks==2 ){
+	residual = vy[twr][i] 
+	  - ( y0[reftwr]+dydz[reftwr]*vzy[twr][i] );
+	m_tresProfY->Fill( twr, residual );
+	m_towerVar[m_towerPtr[twr]].resY->Fill( residual );
+      }
+    }
   }
 
   return m_trackRMS;
@@ -1165,6 +1303,12 @@ Double_t TkrHits::leastSquareLinearFit( std::vector<Double_t> &vy,
 
   Double_t sumX=0.0, sumXX=0.0, sumXY=0.0, sumY=0.0, sumYY=0.0;
   UInt_t num = vy.size();
+  if( num < 3 ){
+    y0 = 0;
+    dydx = 0;
+    return -1.0;
+  }
+
   for( UInt_t i=0; i<num; i++){
     sumX += vx[i];
     sumXX += vx[i]*vx[i];

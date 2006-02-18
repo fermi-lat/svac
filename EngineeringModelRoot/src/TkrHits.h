@@ -168,6 +168,30 @@ class profile{
   std::vector<float> sum, sumsq, mean, rms;
   bool updated;
 };
+
+//
+// simple histogram class
+//
+class histogram{
+ public:
+  histogram( const char*, const char*, const int, const float, const float );
+  ~histogram(){;};
+  void Fill( const float x, const float val=1.0 );
+  void Add( const TH1* );
+  void save();
+  float GetBinContent( const int bin ){ return contents[bin]; };
+  float Integral(){ return sum; };
+  float Integral( const int, const int );
+
+ protected:
+  int getBin( const float val );
+
+  std::string name, title;
+  int nbins;
+  float xmin, xmax, binSize, sum;
+  std::vector<float> contents;
+};
+
 //
 //
 // tower variable class
@@ -193,7 +217,7 @@ class towerVar{
 #else
   TProfile *resProf;
 #endif
-  TH1F* numHitGTRC;
+  histogram *resX, *resY, *numHitGTRC;
 
   // do not use histogram since it will slow down significantly.
   // these will be converted to histograms later in saveHits method.
