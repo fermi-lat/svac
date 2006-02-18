@@ -628,16 +628,40 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
     if( entry > 0 && eff<1.0 && eff>0.0 ) error = sqrt( eff*(1-eff)/entry );
     teff->SetBinError( twr+1, error );
     if( m_log.is_open() ){
-      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr 
-		<< " efficiency: " << eff << " +- " << error << std::endl;
-      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr 
-	    << " efficiency: " << eff << " +- " << error << std::endl;
+      std::cout.setf( std::ios::fixed );
+      std::cout.precision( 4 );
+      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+		<< " tower efficiency: " << eff << " +- " << error 
+		<< std::endl;
+      m_log.setf( std::ios::fixed );
+      m_log.precision( 4 );
+      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+	    << " tower efficiency: " << eff << " +- " << error 
+	    << std::endl;
     }
-   }
+  }
   thits->Write(0, TObject::kOverwrite);
   teff->Write(0, TObject::kOverwrite);
   ineffDist->Write(0, TObject::kOverwrite);
 
+  //
+  // print out tower offset
+  if( m_log.is_open() ){
+    for( int twr=0; twr<g_nTower; twr++){
+      std::cout.precision( 3 );
+      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+		<< " xshift: " << m_tresProfX->GetBinContent( twr+1 )
+		<< " +- " << m_tresProfX->GetBinError( twr+1 )
+		<< " yshift: " << m_tresProfY->GetBinContent( twr+1 )
+		<< " +- " << m_tresProfY->GetBinError( twr+1 ) << std::endl;
+      m_log.precision( 3 );
+      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+	    << " xshift: " << m_tresProfX->GetBinContent( twr+1 )
+	    << " +- " << m_tresProfX->GetBinError( twr+1 )
+	    << " yshift: " << m_tresProfY->GetBinContent( twr+1 )
+	    << " +- " << m_tresProfY->GetBinError( twr+1 ) << std::endl;
+    }
+  }
 }
 
 
