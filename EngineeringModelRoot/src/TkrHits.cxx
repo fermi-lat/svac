@@ -221,8 +221,12 @@ void towerVar::saveHists( bool saveTimeOcc ){
     // calculate binomial error
     float eff = hist->GetBinContent( unp+1 );
     float entry = rhist->GetBinContent( unp+1 );
-    float error = 0.0;
-    if( entry > 0 && eff<1.0 && eff>0.0 ) error = sqrt( eff*(1-eff)/entry );
+    float error = 1.0E-5;
+    if( entry > 0 ){
+      error = eff*(1-eff)/entry;
+      if( error > 0.0 ) error = sqrt( error );
+      else error = 1.0E-5;
+    }
     hist->SetBinError( unp+1, error );
   }
   dhist->Write(0, TObject::kOverwrite);
@@ -374,7 +378,7 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
 
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
   char name[] = "roccT00X17w3t4";
-
+  
   sprintf(name,"numHitGTRCT%d", towerId);
   hist = (TH1F*)hfile->FindObjectAny( name );
   if( hist ) numHitGTRC->Add( hist );
@@ -534,7 +538,12 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
   std::cout << "save histograms" << std::endl;
   gDirectory->mkdir( "Towers" );
 
-  m_largeMulGTRC->Scale( 1.0/(g_nTower*2*m_nEvents) );
+  float numEvents = m_nTrackDist->Integral(0,11);
+  if( numEvents <= 0.0 ) numEvents = 1.0;
+  if( m_nEvents > 0.0 ){
+    m_largeMulGTRC->Scale( 1.0/(g_nTower*2*numEvents) );
+    numEvents = m_nEvents;
+  }
 
   m_nTrackDist->Write(0, TObject::kOverwrite);
   m_maxHitDist->Write(0, TObject::kOverwrite);
@@ -609,9 +618,9 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
       }
     }
     //
-    // check noise flare
-    frac = m_towerVar[tw].numHitGTRC->Integral( 15, 65 ) // sum 14-64
-      / ( m_nEvents * g_nUniPlane * 2 );
+    // check noise flare (sum 14-64)
+    frac = m_towerVar[tw].numHitGTRC->Integral( 15, 65 ) 
+      / ( numEvents * g_nUniPlane * 2 );
     if( frac > 1.0E-4 && m_log.is_open() ){
 	 std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
 		   << " high fraction of large GTRC hits: " << frac << std::endl;
@@ -624,17 +633,21 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
     // calculate binomial error
     eff = teff->GetBinContent( twr+1 );
     entry = thits->GetBinContent( twr+1 );
-    error = 0.0;
-    if( entry > 0 && eff<1.0 && eff>0.0 ) error = sqrt( eff*(1-eff)/entry );
+    error = 1.0E-5;
+    if( entry > 0 ){
+      error = eff*(1-eff)/entry;
+      if( error > 0.0 ) error = sqrt( error );
+      else error = 1.0E-5;
+    }
     teff->SetBinError( twr+1, error );
     if( m_log.is_open() ){
       std::cout.setf( std::ios::fixed );
-      std::cout.precision( 4 );
+      std::cout.precision( 5 );
       std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
 		<< " tower efficiency: " << eff << " +- " << error 
 		<< std::endl;
       m_log.setf( std::ios::fixed );
-      m_log.precision( 4 );
+      m_log.precision( 5 );
       m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
 	    << " tower efficiency: " << eff << " +- " << error 
 	    << std::endl;
