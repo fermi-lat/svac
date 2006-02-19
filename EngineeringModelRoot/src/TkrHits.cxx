@@ -628,8 +628,10 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
 	       << " high fraction of large GTRC hits: " << frac << std::endl;
     }
   }
+
   teff->Divide( thits );
-  for( int twr=0; twr<g_nTower; twr++){
+  for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw){
+    int twr = m_towerVar[tw].towerId;
     // calculate binomial error
     eff = teff->GetBinContent( twr+1 );
     entry = thits->GetBinContent( twr+1 );
@@ -643,12 +645,12 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
     if( m_log.is_open() ){
       std::cout.setf( std::ios::fixed );
       std::cout.precision( 5 );
-      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+      std::cout << m_towerVar[tw].hwserial << " T" << twr
 		<< " tower efficiency: " << eff << " +- " << error 
 		<< std::endl;
       m_log.setf( std::ios::fixed );
       m_log.precision( 5 );
-      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+      m_log << m_towerVar[tw].hwserial << " T" << twr
 	    << " tower efficiency: " << eff << " +- " << error 
 	    << std::endl;
     }
@@ -660,15 +662,16 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
   //
   // print out tower offset
   if( m_log.is_open() ){
-    for( int twr=0; twr<g_nTower; twr++){
+    for( UInt_t tw = 0; tw != m_towerVar.size(); ++tw){
+      int twr = m_towerVar[tw].towerId;
       std::cout.precision( 3 );
-      std::cout << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+      std::cout << m_towerVar[tw].hwserial << " T" << twr
 		<< " xshift: " << m_tresProfX->GetBinContent( twr+1 )
 		<< " +- " << m_tresProfX->GetBinError( twr+1 )
 		<< " yshift: " << m_tresProfY->GetBinContent( twr+1 )
 		<< " +- " << m_tresProfY->GetBinError( twr+1 ) << std::endl;
       m_log.precision( 3 );
-      m_log << m_towerVar[m_towerPtr[twr]].hwserial << " T" << twr
+      m_log << m_towerVar[tw].hwserial << " T" << twr
 	    << " xshift: " << m_tresProfX->GetBinContent( twr+1 )
 	    << " +- " << m_tresProfX->GetBinError( twr+1 )
 	    << " yshift: " << m_tresProfY->GetBinContent( twr+1 )
