@@ -11,7 +11,7 @@ my $launcher = $ENV{'taskLauncher'};
 my $status = 0;
 
 # launch eLog task
-my $nextTask = $ENV{'eLogTask'};
+my $nextTask = $ENV{'eLogTaskLatte'};
 my $eLogCommand = "$launcher '$oldTask' '$nextTask' '$runName' '$rcReport' '$snapshot' '$ldfFile'";
 
 my @commands = ($eLogCommand);

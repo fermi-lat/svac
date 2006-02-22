@@ -2,7 +2,8 @@ import math
 import sys
 import os
 
-def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
+
+def getFileEvents(fileName, treeName='Digi'):
 
     from ROOT import TFile, TTree, TChain
 
@@ -10,6 +11,13 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     tree = file.Get(treeName)
 
     numEntries = tree.GetEntries()
+
+    return numEntries
+
+
+def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
+
+    numEntries = getFileEvents(fileName, treeName)
 
     numChunks = math.ceil(float(numEntries) / maxNumEventsPerFile)
     numEventsPerFile = int(math.ceil(float(numEntries) / numChunks))

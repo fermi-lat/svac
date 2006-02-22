@@ -95,7 +95,7 @@ $updateElogDbXml =
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
         <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">
-            <path>$ENV{'onlineDataDirFull'}</path>
+            <path>$ENV{'onlineDataDirFull'}/LICOS</path>
         </file>
         <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >
             <path>$ENV{'eLogDataDirFull'}</path>

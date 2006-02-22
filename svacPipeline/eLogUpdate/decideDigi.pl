@@ -51,7 +51,9 @@ unless (length($nEvents)) {
 }
 $nEvents = int($nEvents);
 print STDERR "Run $run has $nEvents events.\n";
-if ($nEvents <= 2) {
+# LICOS runs will appear to have negative events at this point, try to digitize them all
+# LATTE runs appear to have 2 more events (sweep) than they really do (if they have any)
+if (0 <= $nEvents && $nEvents <= 2) {
 	noDigi();
 }
 

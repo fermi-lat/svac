@@ -101,8 +101,11 @@ $digitizationXml =
         <executable name=\"LaunchReport\" version=\"$ENV{'digitizationTaskVersion'}\">
             $ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl
         </executable>
-        <executable name=\"digiRootFile\" version=\"$ENV{'svacVersion'}\">
+        <executable name=\"digiRootFile\" version=\"$ENV{'digitizationTaskVersion'}\">
             $urlUpdater
+        </executable>
+        <executable name=\"SetEvents\" version=\"$ENV{'digitizationTaskVersion'}\">
+            $ENV{'digitizationTaskDir'}/setEventsWrapper.pl
         </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
@@ -140,6 +143,9 @@ $digitizationXml =
                         <input-file name=\"digi\"/>
         </processing-step>
         <processing-step name=\"digiRootFile\" executable=\"digiRootFile\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"digi\"/>
+        </processing-step>
+        <processing-step name=\"SetEvents\" executable=\"SetEvents\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
 </pipeline>

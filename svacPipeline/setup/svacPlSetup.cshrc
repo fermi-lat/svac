@@ -29,7 +29,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u25
-setenv onlineDisk u21
+setenv onlineDisk u25
 setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch
 setenv phase Integration
@@ -52,7 +52,9 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p0
@@ -68,7 +70,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p7
+setenv eLogFeederVersion v2r3p0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -101,6 +103,7 @@ setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
+setenv setEventsScript ${digitizationTaskDir}/SetEvents.py
 setenv digitizationDataDir ${emTail}/grRoot
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
