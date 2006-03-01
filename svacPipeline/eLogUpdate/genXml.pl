@@ -91,7 +91,7 @@ $updateElogDbXml =
             <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\"  name=\"RetDef\"   type=\"RetDef\"  >
+        <file file-type=\"evt\"  name=\"RetDef\"   type=\"RetDef\"  >
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
         <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">

@@ -117,7 +117,7 @@ $digitizationXml =
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"RetDef\"     file-type=\"fits\"   type=\"RetDef\">
+        <file name=\"RetDef\"     file-type=\"evt\"   type=\"RetDef\">
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">
