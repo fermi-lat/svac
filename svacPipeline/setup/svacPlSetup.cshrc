@@ -52,9 +52,11 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
+# Shouldn't normally use these, whoever is starting the run should do it.
 #setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
+
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
-setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1

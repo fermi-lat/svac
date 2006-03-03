@@ -8,7 +8,7 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-environmentalizer::sourceCsh("$ENV{SVAC_PDB_CONFIG}");
+#environmentalizer::sourceCsh("$ENV{SVAC_PDB_CONFIG}");
 
 my $runName = $ARGV[0];
 
@@ -23,10 +23,10 @@ my $nextTask = $ENV{'eLogTaskLicos'};
 my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
-my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.xml";
+my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
 
 my $rcReportIn = $onlineDataDir . '/LICOS/' . 'rcReport.out';
-my $RetDefIn = $onlineDataDir . '/' . 'RetDef.xml';
+my $RetDefIn = $onlineDataDir . '/' . $runName . '.evt';
 my @inFiles = ($rcReportIn, $RetDefIn);
 
 my $rcReportOut = $onlineDataDir . '/LICOS/' . $rcReportBase;
