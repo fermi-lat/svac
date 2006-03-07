@@ -39,8 +39,10 @@ if (-z $ldfFile) {
     exit 0;
 }
 
-my %extensions = ('fits' => 'LDFFITS',
-				  'xml'  => 'CCSDSFILE');
+my %extensions = ('evt'  => 'CCSDSFILE',
+                  'fits' => 'LDFFITS',
+                  'ldf'  => 'LDFFILE',
+                  'xml'  => 'CCSDSFILE');
 
 my @fields = split(/\./, $ldfFile);
 my $ldfFileType = $extensions{$fields[-1]};

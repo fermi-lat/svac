@@ -1,7 +1,7 @@
 #!/bin/tcsh
 
 # this reprocesses runs that were originally digitized with the current version
-# (whatever that is) of SVAC's digitization-latte task
+# (whatever that is) of SVAC's digitization-licos task
 
 set run=$1
 if ( { test -z $run } ) then
@@ -19,7 +19,7 @@ run cd ${dataDir}
 
 set dataSets='digi_DIGI.root'
 
-set oldTask=${digitizationTaskLatte}
+set oldTask=${digitizationTaskLicos}
 set newTask=${reconTask}
 
 foreach dataSet ($dataSets)

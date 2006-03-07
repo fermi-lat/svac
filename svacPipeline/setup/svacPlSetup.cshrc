@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r5p1
+setenv svacVersion v3r5p2
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -10,8 +10,8 @@ setenv SVAC_CMTCONFIG rh9_gcc32opt
 #setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
 #setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
-setenv EngineeringModelVersion v6r070305p4
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume10
+setenv EngineeringModelVersion v6r070305p5
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -105,7 +105,7 @@ setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
-setenv setEventsScript ${digitizationTaskDir}/SetEvents.py
+setenv setEventsScript ${digitizationTaskDir}/setEvents.py
 setenv digitizationDataDir ${emTail}/grRoot
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
