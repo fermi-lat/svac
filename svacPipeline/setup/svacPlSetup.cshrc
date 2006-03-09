@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r5p3
+setenv svacVersion v3r5p4
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -135,7 +135,7 @@ setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon
 setenv reconScript ${reconTaskDir}/recon.py
-setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
+setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long

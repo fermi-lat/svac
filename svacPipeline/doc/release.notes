@@ -309,6 +309,18 @@ Add some reprocessing scripts to svacTuple.
 ---------------------------------------------------------------------------
 
 
+v3r4p8
+---------------
+Use u25 for rootData.
+---------------------------------------------------------------------------
+
+
+v3r4p9
+---------------
+Use u25 for rawData.
+---------------------------------------------------------------------------
+
+
 v3r5p0
 ---------------
 EM v6r070305p3
@@ -338,4 +350,11 @@ EM v6r070305p7
 TestReport v3r4p13
 Add an extra, non-version-dependent link $run_rcReport.xml -> rcReport.out 
 for LICOS runs.
+---------------------------------------------------------------------------
+
+
+v3r5p4
+---------------
+Recon chunk script is now a static .csh file, rather than being generated at 
+the same time as the GINO .xml files.
 ---------------------------------------------------------------------------

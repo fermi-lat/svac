@@ -47,8 +47,7 @@ setenv svacPlRoot <PIPELINE_HOME>/svacPipeline/<tag>
 
 Run $svacPlRoot/*/genXml.pl.  This will create several XML files in the
 current directory ($svacPlRoot is a good choice) with names like
-task-version.xml.  recon/genXml.pl should also create a csh file in the recon
-directory.
+task-version.xml.
 
 Upload the XML files created in the previous step with web front end at
 http://glast-ground.slac.stanford.edu/
