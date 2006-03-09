@@ -27,11 +27,12 @@ my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
 
 my $rcReportIn = $onlineDataDir . '/LICOS/' . 'rcReport.out';
 my $RetDefIn = $onlineDataDir . '/' . $runName . '.evt';
-my @inFiles = ($rcReportIn, $RetDefIn);
+my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn);
 
 my $rcReportOut = $onlineDataDir . '/LICOS/' . $rcReportBase;
+my $rcReportXml = $onlineDataDir . '/LICOS/' . $runName . '_rcReport.xml';
 my $RetDefOut = $onlineDataDir . '/' . $RetDefBase;
-my @outFiles = ($rcReportOut, $RetDefOut);
+my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut);
 
 for (my $ii=0; $ii<=$#inFiles; $ii++) {
 	my $inFile = $inFiles[$ii];

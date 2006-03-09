@@ -330,3 +330,12 @@ EM v6r070305p5
 Fix a few bugs with JO files.
 Reprocessing scripts.
 ---------------------------------------------------------------------------
+
+
+v3r5p3
+---------------
+EM v6r070305p7
+TestReport v3r4p13
+Add an extra, non-version-dependent link $run_rcReport.xml -> rcReport.out 
+for LICOS runs.
+---------------------------------------------------------------------------
