@@ -43,6 +43,17 @@ if (! -e $digiRootFile) {
     exit(0);
 }
 
+my $nEvents = `$query $run EventCount`;
+unless (length($nEvents)) {
+        die("Can't get event count!\n");
+}
+$nEvents = int($nEvents);
+print STDERR "Run $run has $nEvents events.\n";
+if ($nEvents <= 0) {
+    print "Digi file [$digiRootFile] has no events, not launching digiReport task.\n";
+    exit(0);
+}
+
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

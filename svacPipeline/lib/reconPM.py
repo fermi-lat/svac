@@ -19,6 +19,9 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
 
     numEntries = getFileEvents(fileName, treeName)
 
+    if numEntries <= 0:
+        raise ValueError "Digi file %s is empty!" % fileName
+
     numChunks = math.ceil(float(numEntries) / maxNumEventsPerFile)
     numEventsPerFile = int(math.ceil(float(numEntries) / numChunks))
     print >> sys.stderr, "Run has %d events." % numEntries

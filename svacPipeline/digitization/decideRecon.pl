@@ -61,4 +61,15 @@ if (grep(/mini|em/i, @serials)) {
 	noRecon();
 }
 
+my $nEvents = `$query $run EventCount`;
+unless (length($nEvents)) {
+        die("Can't get event count!\n");
+}
+$nEvents = int($nEvents);
+print STDERR "Run $run has $nEvents events.\n";
+if ($nEvents <= 0) {
+	noRecon();
+}
+
+
 yesRecon();

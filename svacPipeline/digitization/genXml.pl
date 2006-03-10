@@ -136,6 +136,9 @@ $digitizationXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
         </processing-step>
+        <processing-step name=\"SetEvents\" executable=\"SetEvents\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"digi\"/>
+        </processing-step>
         <processing-step name=\"LaunchRecon\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
@@ -143,9 +146,6 @@ $digitizationXml =
                         <input-file name=\"digi\"/>
         </processing-step>
         <processing-step name=\"digiRootFile\" executable=\"digiRootFile\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"SetEvents\" executable=\"SetEvents\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
 </pipeline>

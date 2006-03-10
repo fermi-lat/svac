@@ -357,4 +357,6 @@ v3r5p4
 ---------------
 Recon chunk script is now a static .csh file, rather than being generated at 
 the same time as the GINO .xml files.
+Don't launch recon or digiReport if there are no events after digitization.
+Fail a little more gracefully if empty run makes it to recon.
 ---------------------------------------------------------------------------
