@@ -313,10 +313,16 @@ for report in reports:
             data[name] = node.childNodes[0].data
 
 # fill in default
+    if(data.has_key(eventCountTag) == 0):
+        data[eventCountTag] = '-1'
     if(data.has_key(badEventCountTag) == 0):
         data[badEventCountTag] = '0'
     if(data.has_key(errorEventCountTag) == 0):
         data[errorEventCountTag] = '0'
+        pass
+    if not data.has_key(analTag):
+        data[analTag] = 'False'
+        pass
 
     for tag in tags:
         if(data.has_key(tag) == 0):
@@ -381,7 +387,7 @@ for report in reports:
     
     if(data.has_key(onlineReportTag)):
         onlineReportUrl += data[onlineReportTag]
-        
+
     # mangle serial # fields if this is an analysis run
     if data.has_key(analTag) and eval(data[analTag]):
         analSerNo = '%s(%s)???' % (data[analUnitTag], data[analTemTag])
