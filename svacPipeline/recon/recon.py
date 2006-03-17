@@ -37,6 +37,7 @@ workDir, reconFileBase = os.path.split(reconFileName)
 stageDir = os.path.join(os.environ['reconStageDir'], runId)
 os.environ['runStageDir'] = stageDir
 if not os.path.isdir(stageDir):
+    print >> sys.stderr, 'Making dir [%s]' % stageDir
     os.makedirs(stageDir)
     pass
 
