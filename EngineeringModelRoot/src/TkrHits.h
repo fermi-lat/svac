@@ -139,9 +139,9 @@ struct badStripVar{
 // tot calibration variable
 //
 struct totCalibVar{
-  float totQuadra[g_nStrip];
+  float totQuad[g_nStrip];
   float totGain[g_nStrip];
-  float totOffset[g_nStrip];
+  float totThreshold[g_nStrip];
   float chargeScale[g_nDiv];
   int chargeDist[g_nDiv][nTotHistBin];
 };
@@ -276,6 +276,7 @@ class TkrHits {
     *m_trkRMS, *m_trkRMS1TWR, *m_trkRMS2TWR,
     *m_armsDist, *m_brmsDist[g_nLayer/3];
   TProfile *m_rmsProf1TWR, *m_rmsProf2TWR, *m_tresProfX, *m_tresProfY;
+  TProfile *m_sigDist, *m_sigRMS, *m_sigTrad;
   
   TH1F *m_fracErrDist, *m_chisqDist, *m_fracBatTot, *m_chist[5];
   TH1F *m_chargeScale, *m_entries, *m_langauWidth, *m_langauGSigma;
@@ -301,6 +302,7 @@ class TkrHits {
   // tower variables
   std::vector<int> m_towerList;
   int m_towerPtr[g_nTower];
+  bool m_goodTrackTowerFlag[g_nTower];
   std::vector<towerVar> m_towerVar;
   std::vector<int> m_trackTowerList;
   

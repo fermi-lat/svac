@@ -485,6 +485,9 @@ TkrHits::TkrHits( bool initHistsFlag ):
     initCommonHists();
     if( m_badStrips ) initOccHists();
   }
+#ifdef DEBUG_PRINT
+  std::cout << "TkrHits Initialization finished." << std::endl;
+#endif
 }
 
 
@@ -508,6 +511,10 @@ void TkrHits::initCommonHists(){
   m_lrec = new TH1F("lrec", "lrec", g_nUniPlane, 0, g_nUniPlane);
   m_ldigi = new TH1F("ldigi", "ldigi", g_nUniPlane, 0, g_nUniPlane);
   m_lcls = new TH1F("lcls", "lcls", g_nUniPlane, 0, g_nUniPlane);
+
+  m_sigDist = new TProfile("msigDist", "msigDist", 100, 0, 600.0);
+  m_sigRMS = new TProfile("msigRMS", "msigRMS", 100, 0, 0.5);
+  m_sigTrad = new TProfile("msigTrad", "msigTrad", 100, 0, 10.0);
 }
 
 
@@ -564,7 +571,21 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
   m_ldigi->Write(0, TObject::kOverwrite);
   m_lcls->Write(0, TObject::kOverwrite);
 
-  if( m_badStrips ) saveOccHists();
+  TH1F* sigDist = new TH1F("sigDist","sigDist", 100, 0, 600.0);
+  TH1F* sigRMS = new TH1F("sigRMS","sigRMS", 100, 0, 0.5);
+  TH1F* sigTrad = new TH1F("sigTrad","sigTrad", 100, 0, 10.0);
+  for( int i=1; i<101; i++ ){
+    sigDist->SetBinContent( i, m_sigDist->GetBinError( i ) );
+    sigRMS->SetBinContent( i, m_sigRMS->GetBinError( i ) );
+    sigTrad->SetBinContent( i, m_sigTrad->GetBinError( i ) );
+  }
+  sigDist->Write(0, TObject::kOverwrite);
+  sigRMS->Write(0, TObject::kOverwrite);
+  sigTrad->Write(0, TObject::kOverwrite);
+
+  if( !m_badStrips ) return;
+
+  saveOccHists();
 
   char name[] = "leffT00";
   float eff, error, offset, frac, entry;
@@ -918,6 +939,8 @@ void TkrHits::getReconClusters()
     numRecCls++;
     layerId lid = getLayerId( cluster );
     //std::cout << lid.tower << " " << lid.uniPlane << " " << lid.layer << " " << lid.view << std::endl;
+    // check if this cluster belong to good track segment.
+    if( !m_goodTrackTowerFlag[lid.tower] ) continue;
     int tw = m_towerPtr[ lid.tower ];
     m_towerVar[tw].reconClusters[lid.uniPlane] = cluster;
     if( lid.tower != lastTower ){
@@ -1165,18 +1188,6 @@ bool TkrHits::passCut()
   if( maxHits < 6 ) return false;
   //m_trkRMS->Fill( m_track->getScatter() );
   m_trkRMS->Fill( getTrackRMS() );
-  if( m_trackTowerList.size() == 1 ){
-    m_trkRMS1TWR->Fill( m_trackRMS );
-    if( m_trackRMS < 2.0 ) 
-      m_rmsProf1TWR->Fill( m_trackTowerList[0], m_trackRMS );
-  }
-  else if( m_trackTowerList.size() == 2 ){
-    m_trkRMS2TWR->Fill( m_trackRMS );
-    if( m_trackRMS < 2.0 ){
-      m_rmsProf2TWR->Fill( m_trackTowerList[0], m_trackRMS );
-      m_rmsProf2TWR->Fill( m_trackTowerList[1], m_trackRMS );
-    }
-  }
   //std::cout << m_trackRMS << " " << m_track->getScatter()/m_trackRMS << std::endl;
   m_dirzDist->Fill( m_dir.Z() );
   float maxDirZ = m_maxDirZ;
@@ -1184,7 +1195,7 @@ bool TkrHits::passCut()
   if( m_dir.Z() > maxDirZ ) return false;
   //if( m_track->getScatter() > 2.0E-4 ) return false;
   if( m_trackRMS > m_maxTrackRMS ) return false;
-  
+
   return true;
 }
 
@@ -1192,6 +1203,9 @@ bool TkrHits::passCut()
 float TkrHits::getTrackRMS(){
   if( m_trackRMS >= 0.0 ) return m_trackRMS;
 
+#ifdef DEBUG_PRINT
+  std::cout << "getTrackRMS started." << std::endl;
+#endif
   //
   // register hits and perform linear fit
   //
@@ -1199,6 +1213,7 @@ float TkrHits::getTrackRMS(){
   std::vector<Double_t> vx[g_nTower], vzx[g_nTower], 
     vy[g_nTower], vzy[g_nTower];
   std::vector<Int_t> upx[g_nTower], upy[g_nTower];
+  float offsetx[g_nTower], offsety[g_nTower], trms[g_nTower];
   TkrTrack* tkrTrack = m_track;
   TIter trk1HitsItr(tkrTrack);
   TkrTrackHit* pTrk1Hit = 0;
@@ -1210,11 +1225,13 @@ float TkrHits::getTrackRMS(){
     towerBits |= (1<<lid.tower);
     Double_t z = (cluster->getPosition()).Z();
     if( lid.view == 0 ){
+      offsety[twr] = (cluster->getPosition()).Y();
       vx[twr].push_back( (cluster->getPosition()).X() );
       vzx[twr].push_back( z );
       upx[twr].push_back( lid.uniPlane );
     }
     else{
+      offsetx[twr] = (cluster->getPosition()).X();
       vy[twr].push_back( (cluster->getPosition()).Y() );
       vzy[twr].push_back( z );
       upy[twr].push_back( lid.uniPlane );
@@ -1229,8 +1246,11 @@ float TkrHits::getTrackRMS(){
   UInt_t ref1num=0, ref2num=0, numTracks=0;
   m_trackTowerList.clear();
   for( int twr=0; twr<g_nTower; twr++){
-    if( towerBits&(1<<twr) ) m_trackTowerList.push_back( twr );
+    m_goodTrackTowerFlag[ twr ] = false;
+    //if( towerBits&(1<<twr) ) 
+    //only tower with sufficient number of hits is used.
     if( vx[twr].size() < 3 || vy[twr].size() < 3 ) continue;
+    m_trackTowerList.push_back( twr );
     numTracks++;
     UInt_t numhits = vx[twr].size() + vy[twr].size();
     if( numhits >  ref1num ){
@@ -1249,24 +1269,55 @@ float TkrHits::getTrackRMS(){
     leastSquareLinearFit( vy[twr], vzy[twr], y0[twr], dydz[twr] );
 
     // calculare combined rms in both x and y
+    float numt=0, sumt=0, sumsqt=0;
     for( UInt_t i=0; i<vx[twr].size(); i++){
       float del = vx[twr][i] - ( x0[twr]+dxdz[twr]*vzx[twr][i] );
       num++;
       sum += del;
       sumsq += del*del;
+      numt++;
+      sumt += del;
+      sumsqt += del*del;
     }
     for( UInt_t i=0; i<vy[twr].size(); i++){
       float del = vy[twr][i] - ( y0[twr]+dydz[twr]*vzy[twr][i] );
       num++;
       sum += del;
       sumsq += del*del;
+      numt++;
+      sumt += del;
+      sumsqt += del*del;
     }
+    float mean = sumt / numt;
+    float rmsq = sumsqt / numt - mean*mean;
+    if( rmsq > 0.0 ) trms[twr] = sqrt( rmsq );
+    else trms[twr] = 0.0;
+    if( trms[twr] < m_maxTrackRMS ) 
+      m_goodTrackTowerFlag[ twr ] = true;
   }
   float mean = sum / num;
   float rmsq = sumsq / num - mean*mean;
   if( rmsq > 0.0 ) m_trackRMS = sqrt( rmsq );
   else m_trackRMS = 0.0;
   if( numTracks == 0 ) return m_trackRMS;
+
+#ifdef DEBUG_PRINT
+  std::cout << "getTrackRMS, linear fit finished." << std::endl;
+#endif
+
+  for( UInt_t itwr=0; itwr<m_trackTowerList.size(); itwr++){
+    int twr = m_trackTowerList[itwr];
+    if( m_trackTowerList.size() == 1 ){
+      m_trkRMS1TWR->Fill( m_trackRMS );
+      if( m_trackRMS < 2.0 ) 
+	m_rmsProf1TWR->Fill( twr, m_trackRMS );
+    }
+    else if( m_trackTowerList.size() == 2 ){
+      m_trkRMS2TWR->Fill( m_trackRMS );
+      if( trms[twr] < 2.0 )
+	m_rmsProf2TWR->Fill( twr, trms[twr] );
+    }
+  }
 
   // reset mpos
   Double_t z = m_pos.Z();
@@ -1288,11 +1339,17 @@ float TkrHits::getTrackRMS(){
   //
   // look at residual for each tower and layer.
   //
-  float residual;
-  for( int twr=0; twr<g_nTower; twr++){
-    if( vx[twr].size() < 3 || vy[twr].size() < 3 ) continue;
+#ifdef DEBUG_PRINT
+  std::cout << "getTrackRMS, start residual calculation." << std::endl;
+#endif
+  float trkpos, residual, boundx, boundy, boundz, dldz, dist, trad;
+  const float maxrms = 0.3, maxtrad=6.0, mindist=10.0, maxdist=450;
+  for( UInt_t itwr=0; itwr!=m_trackTowerList.size(); itwr++){
+    int twr = m_trackTowerList[itwr];
+    if( trms[twr] > maxrms ) continue;
     int reftwr = -1;
-    if( numTracks==2 ) // determine reference tower
+    if( numTracks==2 ){ 
+      // determine reference tower
       if( twr!=ref1twr ) reftwr = ref1twr;
       else if( twr!=ref2twr ) reftwr = ref2twr;
       else{
@@ -1303,7 +1360,32 @@ float TkrHits::getTrackRMS(){
 		<< " " << ref2twr << std::endl;
 	continue;
       }
-
+#ifdef DEBUG_PRINT
+      std::cout << "getTrackRMS: " << twr << " " << reftwr
+		<< ", " << offsetx[twr] << " " << offsety[twr] 
+		<< ", " << offsetx[reftwr] << " " << offsety[reftwr] 
+		<< ", " << x0[reftwr] << " " << y0[reftwr]
+		<< ", " << dxdz[reftwr] << " " << dydz[reftwr]
+		<< std::endl;
+#endif
+      //
+      // calculate track intercept at tower boudary
+      if( offsetx[twr] == offsetx[reftwr] ){ // boundary at y
+	boundy = 0.5 * ( offsety[twr] + offsety[reftwr] );
+	boundz = (boundy-y0[reftwr]) / dydz[reftwr];
+	boundx = boundz * dxdz[reftwr] + x0[reftwr];
+	// total thickness of wall
+	trad = sqrt( 1 + (1+dxdz[reftwr]*dxdz[reftwr])/(dydz[reftwr]*dydz[reftwr]) );
+      }
+      else if( offsety[twr] == offsety[reftwr] ){ // boundary at x
+	boundx = 0.5 * ( offsetx[twr] + offsetx[reftwr] );
+	boundz = (boundx-x0[reftwr]) / dxdz[reftwr];
+	boundy = boundz * dydz[reftwr] + y0[reftwr];
+	trad = sqrt( 1 + (1+dydz[reftwr]*dydz[reftwr])/(dxdz[reftwr]*dxdz[reftwr]) );
+      }
+      else numTracks = 3;
+      dldz = sqrt( dxdz[reftwr]*dxdz[reftwr] + dydz[reftwr]*dydz[reftwr] + 1 );
+    }
     //
     // residual for x
     for( UInt_t i=0; i<vx[twr].size(); i++){
@@ -1311,10 +1393,21 @@ float TkrHits::getTrackRMS(){
       if( fabs( residual ) > 1.5 ) continue;
       m_towerVar[m_towerPtr[twr]].resProf->Fill( upx[twr][i], residual );
       if( numTracks==2 ){
-	residual = vx[twr][i] 
-	  - ( x0[reftwr]+dxdz[reftwr]*vzx[twr][i] );
-	m_tresProfX->Fill( twr, residual );
-	m_towerVar[m_towerPtr[twr]].resX->Fill( residual );
+	trkpos = x0[reftwr] + dxdz[reftwr]*vzx[twr][i];
+	if( fabs( trkpos-boundx ) < 5.0 ) continue;
+	residual = vx[twr][i] - trkpos;
+	dist = dldz * fabs(vzx[twr][i]-boundz);
+	if( trms[reftwr]<0.3 && trad<maxtrad )
+	  m_sigDist->Fill( dist, residual );
+	if( trad<maxtrad && dist>mindist && dist<maxdist)
+	  m_sigRMS->Fill( trms[reftwr], residual );
+	if( trms[reftwr]<0.3 && dist>mindist && dist<maxdist)
+	  m_sigTrad->Fill( trad, residual );
+	if( fabs(residual)<3.0 && trms[reftwr]<0.3 
+	    && trad<maxtrad && dist>mindist && dist<maxdist ){
+	  m_tresProfX->Fill( twr, residual );
+	  m_towerVar[m_towerPtr[twr]].resX->Fill( residual );
+	}
       }
     }
     //
@@ -1324,14 +1417,28 @@ float TkrHits::getTrackRMS(){
       if( fabs( residual ) > 1.5 ) continue;
       m_towerVar[m_towerPtr[twr]].resProf->Fill( upy[twr][i], residual );
       if( numTracks==2 ){
-	residual = vy[twr][i] 
-	  - ( y0[reftwr]+dydz[reftwr]*vzy[twr][i] );
-	m_tresProfY->Fill( twr, residual );
-	m_towerVar[m_towerPtr[twr]].resY->Fill( residual );
+	trkpos = y0[reftwr] + dydz[reftwr]*vzy[twr][i];
+	if( fabs( trkpos-boundy ) < 5.0 ) continue;
+	residual = vy[twr][i] - trkpos;
+	dist = dldz * fabs(vzy[twr][i]-boundz);
+	if( trms[reftwr]<maxrms && trad<maxtrad )
+	  m_sigDist->Fill( dist, residual );
+	if( trad<maxtrad && dist>mindist && dist<maxdist)
+	  m_sigRMS->Fill( trms[reftwr], residual );
+	if( trms[reftwr]<maxrms && dist>mindist && dist<maxdist)
+	  m_sigTrad->Fill( trad, residual );
+	if( fabs(residual)<3.0 && trms[reftwr]<maxrms 
+	    && trad<maxtrad && dist>mindist && dist<maxdist ){
+	  m_tresProfY->Fill( twr, residual );
+	  m_towerVar[m_towerPtr[twr]].resY->Fill( residual );
+	}
       }
     }
   }
 
+#ifdef DEBUG_PRINT
+  std::cout << "getTrackRMS finished." << std::endl;
+#endif
   return m_trackRMS;
 
 }
