@@ -22,7 +22,7 @@ import jobOptions
 def hasGlt(doc):
     """"""
     hasGlt = True
-    glts = doc.getElementsByTagName('GGLT')
+    glts = doc.getElementsByTagName(jobOptions.presenceTags['GLT'])
     if len(glts) < 1:
         hasGlt = False
     return hasGlt
@@ -32,7 +32,7 @@ def globalStuff(doc):
     """@brief Deal with stuff that applies to the whole instrument"""
     
     output = []
-
+    
     sectionTitle = 'LAT globals'
     output.append(html.Heading(sectionTitle, 1))
 
@@ -99,7 +99,7 @@ def hasTkr(doc):
 
     hasTkr = True
 
-    frontEnds = doc.getElementsByTagName('GTFE')
+    frontEnds = doc.getElementsByTagName(jobOptions.presenceTags['TKR'])
     if len(frontEnds) < 1:
         hasTkr = False
     
@@ -603,7 +603,7 @@ def hasCal(doc):
 
     hasCal = True
     
-    frontEnds = doc.getElementsByTagName("GCFE")
+    frontEnds = doc.getElementsByTagName(jobOptions.presenceTags['CAL'])
     if len(frontEnds) < 1:
         hasCal = False
     
@@ -742,7 +742,7 @@ def hasGem(doc):
     
     hasGem = True
     
-    gems = doc.getElementsByTagName("GGEM")
+    gems = doc.getElementsByTagName(jobOptions.presenceTags['GEM'])
     if len(gems) < 1:
         hasGem = False
     

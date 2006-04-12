@@ -32,6 +32,7 @@ jobOptions.runNumber = runNumber
 jobOptions.snapFile = snapFile
 jobOptions.tarBall = tarBall
 
+inDir = os.path.dirname(snapFile)
 destDir = os.path.dirname(tarBall) or '.'
 tarFile = os.path.basename(tarBall)
 
@@ -53,7 +54,9 @@ def finish():
         outputFile = file(outputFileName, "w")
     except:
         print "Couldn't create file [%s]." % outputFileName
+        raise
         sys.exit(3)
+
 
     outStr = str(output)
     outputFile.write(outStr)
@@ -66,23 +69,6 @@ def finish():
     sys.exit(0)
     return
 
-output = html.Page("Configuration for run %s" % runNumber)
-
-output.addChild("\n")
-output.addChild(html.Element("HR"))
-output.addChild("\n")
-
-output.addChild(r"""Created by ConfigTables version %s from files:<br/>
-snapshot: %s<br/>
-""" % (jobOptions.version, snapFile))
-
-output.addChild("\n" + time.asctime() + "\n")
-
-output.addChild("\n")
-output.addChild(html.Element("HR"))
-output.addChild(html.Element("HR"))
-output.addChild("\n")
-
 # read in the config data
 try:
     doc = md.parse(snapFile)
@@ -92,20 +78,73 @@ except:
     finish()
     pass
 
-# quit semigracefully if we don't have eactly one LAT
-lats = doc.getElementsByTagName('GLAT')
-nLats = len(lats)
-if nLats != 1:
-    if nLats == 0:
-        output.addChild("There's no LAT in this snapshot!")
-    else:
-        output.addChild("There's too many LATs in this snapshot!")
+# select LATTE or LICOS mode
+for node in doc.childNodes:
+    if node.nodeType != doc.COMMENT_NODE:
+        topNode = node
+        break
+    pass
+mode = jobOptions.modes[topNode.tagName]
+print >> sys.stderr, "Running in %s mode." % mode
+
+inFiles = [snapFile]
+if mode is jobOptions.licosMode:
+    docs = {}
+    sectionFiles = []
+    for section in jobOptions.latcBcast:
+        fileBase = doc.getElementsByTagName(section)[0].childNodes[0].nodeValue
+        fileName = os.path.join(inDir, fileBase)
+        sectionFiles.append(fileName)
+        docs[section] = md.parse(fileName)
         pass
+    inFiles += sectionFiles
+elif mode is jobOptions.latteMode:
+    jobOptions.toLatte()
+else:
+    print >> sys.stderr, "Bad mode %s." % mode
+    sys.exit(1)
+    pass
+
+# Make a header ############################################
+output = html.Page("Configuration for run %s" % runNumber)
+
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+
+lines=["Created by ConfigTables version %s from files:" % \
+       jobOptions.version]
+lines += inFiles
+output.addChild('<br/>\n'.join(lines))
+
+output.addChild("<br/>\n" + time.asctime() + "\n")
+
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+
+if mode is jobOptions.latteMode:
+    # quit semigracefully if we don't have eactly one LAT
+    lats = doc.getElementsByTagName('GLAT')
+    nLats = len(lats)
+    if nLats != 1:
+        if nLats == 0:
+            output.addChild("There's no LAT in this snapshot!")
+        else:
+            output.addChild("There's too many LATs in this snapshot!")
+            pass
+        finish()
+        pass
+    theLat = lats[0]
+    pass
+
+if mode is jobOptions.licosMode:
+    output.addChild("Sorry, LICOS support is currently rudimentary.")
     finish()
     pass
-theLat = lats[0]
 
-# make tables
+# make tables ############################################
 output.addChildren(configParser.globalStuff(doc))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
