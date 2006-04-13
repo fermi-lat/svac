@@ -19,6 +19,7 @@ modes = {
     u'algorithm': licosMode,
     u'configuration': latteMode,
     }
+mode = 'bogus'
 
 latcBcast = ['TEM', 'TDC', 'AFE', 'CFE', 'TFE', 'ARC', 'bcast', 'TCC', 'CCC', ]
 
@@ -260,10 +261,12 @@ absent = 'Absent'
 
 # These are tags that we use to determine if various subsystems are present
 presenceTags = {
+    'TEM': 'TEM',
     'TKR': 'TFE',
     'CAL': 'CFE',
     'GEM': 'GEM',
     'GLT': 'GLT',
+    'ACD': 'AFE',
     }
 
 # Modify various strings to switch from LICOS to LATTE mode

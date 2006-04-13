@@ -19,6 +19,15 @@ import temUtil
 import jobOptions
 
 #
+def hasReg(doc, reg):
+    gotOne = True
+    elts = doc.getElementsByTagName(reg)
+    if len(elts) < 1:
+        gotOne = False
+    return gotOne
+    
+
+#
 def hasGlt(doc):
     """"""
     hasGlt = True
@@ -406,15 +415,7 @@ def oneGtrcReg(doc, tag):
 #
 def hasAcd(doc):
     """@brief Do we have an ACD?"""
-
-    hasAcd = True
-
-    frontEnds = doc.getElementsByTagName("GAFE")
-    if len(frontEnds) < 1:
-        hasAcd = False
-        pass
-
-    return hasAcd
+    return hasReg(doc, jobOptions.presenceTags['ACD'])
     
 #
 def oneGarc(doc, name, mappers):
@@ -574,7 +575,7 @@ def gafeRegs(doc):
     return output
 
 #
-def acdStuff(doc):
+def acdStuff(arcDoc, afeDoc):
     """@brief ACD stuff"""
     output = []
 
@@ -583,14 +584,17 @@ def acdStuff(doc):
     output.append(html.Element("HR"))
     output.append(html.Element("HR"))
 
-    output.append(html.Heading('Voltage conversions are bogus!', 2))
-    output.append(html.Element("HR"))
-    output.extend(manyGarcs(doc, jobOptions.acdHvTags, jobOptions.voltMap))
-    output.extend(manyGarcs(doc, jobOptions.acdGarcRandom, jobOptions.hexMap))
-    output.extend(garcPha(doc))
-    output.append(html.Element("HR"))
-    output.append(html.Element("HR"))
-    output.extend(gafeRegs(doc))
+    if jobOptions.mode is jobOptions.latteMode:
+        output.append(html.Heading('Voltage conversions are bogus!', 2))
+        output.append(html.Element("HR"))
+        output.extend(manyGarcs(arcDoc, jobOptions.acdHvTags, jobOptions.voltMap))
+        output.extend(manyGarcs(arcDoc, jobOptions.acdGarcRandom, jobOptions.hexMap))
+        output.extend(garcPha(arcDoc))
+        output.append(html.Element("HR"))
+        output.append(html.Element("HR"))
+        pass
+    
+    output.extend(gafeRegs(afeDoc))
     output.append(html.Element("HR"))
         
     return output
@@ -858,7 +862,7 @@ def oneGcrcDelay(doc, tag):
 #
 def hasTem(doc):
     """@brief Do we have any TEMs?"""
-    return hasTkr(doc) or hasCal(doc)
+    return hasReg(doc, jobOptions.presenceTags['TEM'])
 
 #
 def perTem(doc):

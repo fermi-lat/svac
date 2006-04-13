@@ -71,6 +71,7 @@ def finish():
 
 # read in the config data
 try:
+    print >> sys.stderr, "Reading file %s." % snapFile
     doc = md.parse(snapFile)
 except:
     output.addChild("Snapshot file %s is missing, unreadable, or invalid.\n" %
@@ -84,24 +85,28 @@ for node in doc.childNodes:
         topNode = node
         break
     pass
-mode = jobOptions.modes[topNode.tagName]
-print >> sys.stderr, "Running in %s mode." % mode
+jobOptions.mode = jobOptions.modes[topNode.tagName]
+print >> sys.stderr, "Running in %s mode." % jobOptions.mode
 
 inFiles = [snapFile]
-if mode is jobOptions.licosMode:
+
+if jobOptions.mode is jobOptions.latteMode:
+    jobOptions.toLatte()
+
+elif jobOptions.mode is jobOptions.licosMode:
     docs = {}
     sectionFiles = []
     for section in jobOptions.latcBcast:
         fileBase = doc.getElementsByTagName(section)[0].childNodes[0].nodeValue
         fileName = os.path.join(inDir, fileBase)
         sectionFiles.append(fileName)
+        print >> sys.stderr, "Reading file %s." % fileName
         docs[section] = md.parse(fileName)
         pass
     inFiles += sectionFiles
-elif mode is jobOptions.latteMode:
-    jobOptions.toLatte()
+    
 else:
-    print >> sys.stderr, "Bad mode %s." % mode
+    print >> sys.stderr, "Bad mode %s." % jobOptions.mode
     sys.exit(1)
     pass
 
@@ -124,7 +129,7 @@ output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
 
-if mode is jobOptions.latteMode:
+if jobOptions.mode is jobOptions.latteMode:
     # quit semigracefully if we don't have eactly one LAT
     lats = doc.getElementsByTagName('GLAT')
     nLats = len(lats)
@@ -139,44 +144,76 @@ if mode is jobOptions.latteMode:
     theLat = lats[0]
     pass
 
-if mode is jobOptions.licosMode:
-    output.addChild("Sorry, LICOS support is currently rudimentary.")
-    finish()
+if jobOptions.mode is jobOptions.licosMode:
+    output.addChild(r"""These data were parsed from LATC input.
+    As such, they reflect intended, rather than actual, register values.""")
     pass
 
+if jobOptions.mode is jobOptions.latteMode:
+    globalDoc = doc
+    gemDoc = theLat
+    temDoc = theLat
+    arcDoc = theLat
+    afeDoc = theLat
+    cfeDoc = theLat
+    tfeDoc = theLat
+elif jobOptions.mode is jobOptions.licosMode:
+    globalDoc = docs['bcast']
+    gemDoc = docs['bcast']
+    temDoc = docs['TEM']
+    arcDoc = docs['ARC']
+    afeDoc = docs['AFE']
+    cfeDoc = docs['CFE']
+    tfeDoc = docs['TFE']
+else:
+    raise AssertionError, "Can't get here!"
+    pass
+    
 # make tables ############################################
-output.addChildren(configParser.globalStuff(doc))
+print >> sys.stderr, "Processing globals."
+output.addChildren(configParser.globalStuff(globalDoc))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
-output.addChildren(configParser.gemStuff(theLat))
-output.addChild(html.Element("HR"))
-output.addChild(html.Element("HR"))
-output.addChild("\n")
-if configParser.hasTem(theLat):
-    output.addChildren(configParser.perTem(theLat))
+
+if jobOptions.mode is jobOptions.latteMode:
+    print >> sys.stderr, "Processing GEM."
+    output.addChildren(configParser.gemStuff(gemDoc))
     output.addChild(html.Element("HR"))
     output.addChild(html.Element("HR"))
     output.addChild("\n")
-    pass
-output.addChildren(configParser.delays(theLat))
-output.addChild("\n")
-output.addChild(html.Element("HR"))
-output.addChild(html.Element("HR"))
-output.addChild("\n")
 
-if configParser.hasAcd(theLat):
-    output.addChildren(configParser.acdStuff(theLat))
-    pass
-
-if configParser.hasCal(theLat):
-    output.addChildren(configParser.calFeReg(theLat))
+if configParser.hasTem(temDoc):
+    print >> sys.stderr, "Processing TEMs."
+    output.addChildren(configParser.perTem(temDoc))
     output.addChild(html.Element("HR"))
     output.addChild(html.Element("HR"))
     output.addChild("\n")
     pass
 
-if configParser.hasTkr(theLat):
+if jobOptions.mode is jobOptions.latteMode:
+    print >> sys.stderr, "Processing delays."
+    output.addChildren(configParser.delays(theLat))
+    output.addChild("\n")
+    output.addChild(html.Element("HR"))
+    output.addChild(html.Element("HR"))
+    output.addChild("\n")
+
+if configParser.hasAcd(afeDoc):
+    print >> sys.stderr, "Processing ACD."
+    output.addChildren(configParser.acdStuff(arcDoc, afeDoc))
+    pass
+
+if configParser.hasCal(cfeDoc):
+    print >> sys.stderr, "Processing CAL FEs."
+    output.addChildren(configParser.calFeReg(cfeDoc))
+    output.addChild(html.Element("HR"))
+    output.addChild(html.Element("HR"))
+    output.addChild("\n")
+    pass
+
+if configParser.hasTkr(tfeDoc) and jobOptions.mode is jobOptions.latteMode:
+    print >> sys.stderr, "Processing TRCs."
     output.addChildren(configParser.perGtrc(theLat))
     output.addChild(html.Element("HR"))
     output.addChild(html.Element("HR"))
@@ -189,7 +226,8 @@ if configParser.hasTkr(theLat):
     # output.addChild(html.Element("HR"))
     # output.addChild("\n")
 
-    output.addChildren(configParser.tkrFeReg(theLat))
+    print >> sys.stderr, "Processing TFEs."
+    output.addChildren(configParser.tkrFeReg(tfeDoc))
     output.addChild(html.Element("HR"))
     output.addChild("\n")
 
