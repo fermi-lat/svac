@@ -383,10 +383,18 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    onlineReportUrl = rawDataDir + '/' + data[runIdTag] + '/'
+    # get directory where report lives
+    onlineDir = os.path.dirname(xmlFileName)
+    dirs = onlineDir.split(os.sep)
+    index = dirs.index(data[runIdTag])
+    # include run in onlineTail so we don't get an emty list
+    # onlineTail = '/'.join(dirs[index+1:])
+    onlineTail = '/'.join(dirs[index:])
+    print onlineTail
+    onlineReportUrl = '/'.join((rawDataDir, onlineTail))
     
     if(data.has_key(onlineReportTag)):
-        onlineReportUrl += data[onlineReportTag]
+        onlineReportUrl = '/'.join((onlineReportUrl, data[onlineReportTag]))
 
     # mangle serial # fields if this is an analysis run
     if data.has_key(analTag) and eval(data[analTag]):
