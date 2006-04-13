@@ -43,3 +43,7 @@ v2r3p1
 
 Make the web link for online reort point to the directory where rcReport
 lives, rather than the top-level run directory.
+
+v2r3p2
+
+Fail if we can't read or parse rcReport.

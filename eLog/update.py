@@ -245,7 +245,7 @@ except:
     msg = 'rcReport %s is missing, unreadable, or invalid.\n' % xmlFileName
     sys.stderr.write(msg)
     errFile.write(msg)
-    sys.exit(0)
+    sys.exit(1)
     
 reports = doc.getElementsByTagName(testReportTag)
 
