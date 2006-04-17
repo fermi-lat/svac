@@ -42,7 +42,7 @@ def globalStuff(doc):
     
     output = []
     
-    sectionTitle = 'LAT globals'
+    sectionTitle = 'Globals'
     output.append(html.Heading(sectionTitle, 1))
 
     if hasGlt(doc):
@@ -70,10 +70,9 @@ def globalDBStrings():
 
     values = eLogDB.query(*args)
     values = map(nicenDBStrings, values)
-
     for tag, value in zip(tags, values):
         if not value:
-            break
+            continue
         label = jobOptions.globalDBStringLabels[tag]
         line = "%s: %s\n" % (label, value)
         output.append(line)

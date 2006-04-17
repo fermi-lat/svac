@@ -146,7 +146,12 @@ if jobOptions.mode is jobOptions.latteMode:
 
 if jobOptions.mode is jobOptions.licosMode:
     output.addChild(r"""These data were parsed from LATC input.
-    As such, they reflect intended, rather than actual, register values.""")
+    As such, they reflect intended, rather than actual, register values.
+    <br/>
+    <br/>
+    LICOS support is currently somewhere between rudimentary and broken.<br/>
+    Any registers configured by broadcast are either missing or 'Absent'.
+    """)
     pass
 
 if jobOptions.mode is jobOptions.latteMode:

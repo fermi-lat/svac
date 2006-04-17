@@ -148,10 +148,12 @@ mappers = {'TKR_DAC': mappings.mapTkrDac}
 # logical values that apply to the whole LAT
 globoLogicals = ('ZERO_SUPP_GLT', 'FOUR_RANGE_GLT')
 
-globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO')
+globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO', 'RELEASE')
 globalDBStringLabels = {'NoOfTowers': 'Number of Towers',
                         'TKR_SER_NO': 'TKR Serial #s',
-                        'CAL_SER_NO': 'CAL Serial #s'}
+                        'CAL_SER_NO': 'CAL Serial #s',
+                        'RELEASE': 'LICOS/LATTE Release',
+                        }
 
 # GEM stuff
 # # stuff to display from message engines
