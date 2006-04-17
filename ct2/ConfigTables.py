@@ -74,8 +74,7 @@ try:
     print >> sys.stderr, "Reading file %s." % snapFile
     doc = md.parse(snapFile)
 except:
-    output.addChild("Snapshot file %s is missing, unreadable, or invalid.\n" %
-                    snapFile)
+    print >> sys.stderr, "Snapshot file %s is missing, unreadable, or invalid." % snapFile
     finish()
     pass
 
