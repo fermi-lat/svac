@@ -481,6 +481,56 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
   m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
 
+  //                                                                                                                                                                                                           
+  // Context information:                                                                                                                                                                                      
+  //                                                                                                                                                                                                           
+  m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
+  m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
+  m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();
+  m_ntuple.m_contextRunInfoStartTime = m_digiEvent->getMetaEvent().run().startTime();
+
+  m_ntuple.m_contextDataGramInfoModeChanges = m_digiEvent->getMetaEvent().datagram().modeChanges();
+  m_ntuple.m_contextDataGramInfoDatagrams = m_digiEvent->getMetaEvent().datagram().datagrams();
+  m_ntuple.m_contextDataGramInfoOpenAction = m_digiEvent->getMetaEvent().datagram().openAction();
+  m_ntuple.m_contextDataGramInfoOpenReason = m_digiEvent->getMetaEvent().datagram().openReason();
+  m_ntuple.m_contextDataGramInfoCrate = m_digiEvent->getMetaEvent().datagram().crate();
+  m_ntuple.m_contextDataGramInfoMode = m_digiEvent->getMetaEvent().datagram().mode();
+  m_ntuple.m_contextDataGramInfoCloseAction = m_digiEvent->getMetaEvent().datagram().closeAction();
+  m_ntuple.m_contextDataGramInfoCloseReason = m_digiEvent->getMetaEvent().datagram().closeReason();
+
+  m_ntuple.m_contextGemScalersElapsed = m_digiEvent->getMetaEvent().scalers().elapsed();
+  m_ntuple.m_contextGemScalersLivetime = m_digiEvent->getMetaEvent().scalers().livetime();
+  m_ntuple.m_contextGemScalersPrescaled = m_digiEvent->getMetaEvent().scalers().prescaled();
+  m_ntuple.m_contextGemScalersDiscarded = m_digiEvent->getMetaEvent().scalers().discarded();
+  m_ntuple.m_contextGemScalersSequence = m_digiEvent->getMetaEvent().scalers().sequence();
+  m_ntuple.m_contextGemScalersDeadzone = m_digiEvent->getMetaEvent().scalers().deadzone();
+
+  m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete = m_digiEvent->getMetaEvent().time().current().incomplete();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs = m_digiEvent->getMetaEvent().time().current().timeSecs();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling = m_digiEvent->getMetaEvent().time().current().flywheeling();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentFlags = m_digiEvent->getMetaEvent().time().current().flags();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid = m_digiEvent->getMetaEvent().time().current().flagsValid();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps = m_digiEvent->getMetaEvent().time().current().missingGps();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps = m_digiEvent->getMetaEvent().time().current().missingCpuPps();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps = m_digiEvent->getMetaEvent().time().current().missingLatPps();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone = m_digiEvent->getMetaEvent().time().current().missingTimeTone() ;
+  m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks = m_digiEvent->getMetaEvent().time().current().timeHack().hacks();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
+
+  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete = m_digiEvent->getMetaEvent().time().previous().incomplete();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs = m_digiEvent->getMetaEvent().time().previous().timeSecs();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling = m_digiEvent->getMetaEvent().time().previous().flywheeling();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlags = m_digiEvent->getMetaEvent().time().previous().flags();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid = m_digiEvent->getMetaEvent().time().previous().flagsValid();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps = m_digiEvent->getMetaEvent().time().previous().missingGps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone = m_digiEvent->getMetaEvent().time().previous().missingTimeTone() ;
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
+
+  m_ntuple.m_contextRunType = m_digiEvent->getMetaEvent().runType();
+
 
   // GEM information:
   m_ntuple.m_gemConditionsWord = m_digiEvent->getGem().getConditionSummary();
@@ -1403,6 +1453,56 @@ void RootAnalyzer::createBranches()
 
   // GLT information:
   m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
+
+  //                                                                                                                                                                                                           
+  // Context information:                                                                                                                                                                                      
+  //                                                                                                                                                                                                           
+  m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
+  m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
+  m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/I");
+  m_tree->Branch("ContextRunInfoStartTime", &(m_ntuple.m_contextRunInfoStartTime), "ContextRunInfoStartTime/I");
+
+  m_tree->Branch("ContextDataGramInfoModeChanges", &(m_ntuple.m_contextDataGramInfoModeChanges), "ContextDataGramInfoModeChanges/I");
+  m_tree->Branch("ContextDataGramInfoDatagrams", &(m_ntuple.m_contextDataGramInfoDatagrams), "ContextDataGramInfoDatagrams/I");
+  m_tree->Branch("ContextDataGramInfoOpenAction", &(m_ntuple.m_contextDataGramInfoOpenAction), "ContextDataGramInfoOpenAction/I");
+  m_tree->Branch("ContextDataGramInfoOpenReason", &(m_ntuple.m_contextDataGramInfoOpenReason), "ContextDataGramInfoOpenReason/I");
+  m_tree->Branch("ContextDataGramInfoCrate", &(m_ntuple.m_contextDataGramInfoCrate), "ContextDataGramInfoCrate/I");
+  m_tree->Branch("ContextDataGramInfoMode", &(m_ntuple.m_contextDataGramInfoMode), "ContextDataGramInfoMode/I");
+  m_tree->Branch("ContextDataGramInfoCloseAction", &(m_ntuple.m_contextDataGramInfoCloseAction), "ContextDataGramInfoCloseAction/I");
+  m_tree->Branch("ContextDataGramInfoCloseReason", &(m_ntuple.m_contextDataGramInfoCloseReason), "ContextDataGramInfoCloseReason/I");
+
+  m_tree->Branch("ContextGemScalersElapsed", &(m_ntuple.m_contextGemScalersElapsed), "ContextGemScalersElapsed/l");
+  m_tree->Branch("ContextGemScalersLivetime", &(m_ntuple.m_contextGemScalersLivetime), "ContextGemScalersLivetime/l");
+  m_tree->Branch("ContextGemScalersPrescaled", &(m_ntuple.m_contextGemScalersPrescaled), "ContextGemScalersPrescaled/l");
+  m_tree->Branch("ContextGemScalersDiscarded", &(m_ntuple.m_contextGemScalersDiscarded), "ContextGemScalersDiscarded/l");
+  m_tree->Branch("ContextGemScalersSequence", &(m_ntuple.m_contextGemScalersSequence), "ContextGemScalersSequence/l");
+  m_tree->Branch("ContextGemScalersDeadzone", &(m_ntuple.m_contextGemScalersDeadzone), "ContextGemScalersDeadzone/l");
+
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentIncomplete", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete), "ContextLsfTimeTimeToneCurrentIncomplete/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlags", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlags), "ContextLsfTimeTimeToneCurrentFlags/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps), "ContextLsfTimeTimeToneCurrentMissingLatPps/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone), "ContextLsfTimeTimeToneCurrentMissingTimeTone/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks), "ContextLsfTimeTimeToneCurrentGemTimeHacks/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks), "ContextLsfTimeTimeToneCurrentGemTimeTicks/I");
+
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousIncomplete", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete), "ContextLsfTimeTimeTonePreviousIncomplete/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlags", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlags), "ContextLsfTimeTimeTonePreviousFlags/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps), "ContextLsfTimeTimeTonePreviousMissingLatPps/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone), "ContextLsfTimeTimeTonePreviousMissingTimeTone/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks), "ContextLsfTimeTimeTonePreviousGemTimeHacks/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks), "ContextLsfTimeTimeTonePreviousGemTimeTicks/I");
+
+  m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
 
 
   // GEM information:

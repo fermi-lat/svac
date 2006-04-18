@@ -199,6 +199,61 @@ struct NtupleDef {
   // number of crystals with energy above the threshold in every tower
   int m_nCrystalHit[g_nTower];
 
+  //                                                                                                                                                                                                           
+  // Context information:                                                                                                                                                                                      
+  //                                                                                                                                                                                                           
+  int m_contextRunInfoPlatform;
+  int m_contextRunInfoDataOrigin;
+  int m_contextRunInfoID;
+  int m_contextRunInfoStartTime;
+
+  int m_contextDataGramInfoModeChanges;
+  int m_contextDataGramInfoDatagrams;
+  int m_contextDataGramInfoOpenAction;
+  int m_contextDataGramInfoOpenReason;
+  int m_contextDataGramInfoCrate;
+  int m_contextDataGramInfoMode;
+  int m_contextDataGramInfoCloseAction;
+  int m_contextDataGramInfoCloseReason;
+
+  unsigned long long m_contextGemScalersElapsed;
+  unsigned long long m_contextGemScalersLivetime;
+  unsigned long long m_contextGemScalersPrescaled;
+  unsigned long long m_contextGemScalersDiscarded;
+  unsigned long long m_contextGemScalersSequence;
+  unsigned long long m_contextGemScalersDeadzone;
+
+  int m_contextLsfTimeTimeToneCurrentIncomplete;
+  int m_contextLsfTimeTimeToneCurrentTimeSecs;
+  int m_contextLsfTimeTimeToneCurrentFlywheeling;
+  int m_contextLsfTimeTimeToneCurrentFlags;
+  int m_contextLsfTimeTimeToneCurrentFlagsValid;
+  int m_contextLsfTimeTimeToneCurrentMissingGps;
+  int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
+  int m_contextLsfTimeTimeToneCurrentMissingLatPps;
+  int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
+  int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
+  int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
+
+  int m_contextLsfTimeTimeTonePreviousIncomplete;
+  int m_contextLsfTimeTimeTonePreviousTimeSecs;
+  int m_contextLsfTimeTimeTonePreviousFlywheeling;
+  int m_contextLsfTimeTimeTonePreviousFlags;
+  int m_contextLsfTimeTimeTonePreviousFlagsValid;
+  int m_contextLsfTimeTimeTonePreviousMissingGps;
+  int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
+  int m_contextLsfTimeTimeTonePreviousMissingLatPps;
+  int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
+  int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
+  int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
+  int m_contextLsfTimeTimeToneGemTimeHacks;
+  int m_contextLsfTimeTimeToneGemTimeTicks;
+  int m_contextLsfTimeTimeTicks;
+
+  int m_contextRunType;
+
+
+
   // time information. This may change depending on future data format
   unsigned int m_ebfSecond, m_ebfNanoSecond;
   unsigned int m_upperTime, m_lowerTime;
