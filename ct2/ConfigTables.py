@@ -75,7 +75,7 @@ try:
     doc = md.parse(snapFile)
 except:
     print >> sys.stderr, "Snapshot file %s is missing, unreadable, or invalid." % snapFile
-    finish()
+    sys.exit(1)
     pass
 
 # select LATTE or LICOS mode
