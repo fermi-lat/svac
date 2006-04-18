@@ -15,7 +15,7 @@ my $svacTupleXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
 
     <name>$ENV{'svacTupleTask'}</name>
     <type>Analysis</type>
@@ -28,7 +28,7 @@ my $svacTupleXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
             <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
             <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -37,14 +37,26 @@ my $svacTupleXml =
             <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"histogram\"  file-type=\"root\"   type=\"histogram\">$ENV{'svacTupleDataDir'}</file>
-        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\"     >$ENV{'svacTupleDataDir'}</file>
-        <file name=\"script\"     file-type=\"csh\"    type=\"script\"   >$ENV{'svacTupleDataDir'}</file>
-        <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >$ENV{'svacTupleDataDir'}</file>
-        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >$ENV{'digitizationDataDir'}</file>
-        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >$ENV{'reconDataDir'}</file>
+        <file name=\"histogram\"  file-type=\"root\"   type=\"histogram\">
+            <path>$ENV{'svacTupleDataDir'}</path>
+        </file>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\"     >
+            <path>$ENV{'svacTupleDataDir'}</path>
+        </file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\"   >
+            <path>$ENV{'svacTupleDataDir'}</path>
+        </file>
+        <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
+            <path>$ENV{'svacTupleDataDir'}</path>
+        </file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >
+            <path>$ENV{'digitizationDataDir'}</path>
+        </file>
+        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >
+            <path>$ENV{'reconDataDir'}</path>
+        </file>
 
-        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"xlong-job\">
+        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"glastdataq-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"histogram\"/>

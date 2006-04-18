@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r5p5
+setenv svacVersion v3r5p7
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -72,7 +72,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
-setenv eLogFeederVersion v2r3p1
+setenv eLogFeederVersion v2r3p2
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -84,7 +84,7 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
 setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v3r2p1
+setenv configReportVersion v4r0p1
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
 setenv configTaskDir ${svacPlRoot}/configReport
@@ -113,7 +113,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r4p13
+setenv TestReportVersion v3r4p15
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe

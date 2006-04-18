@@ -376,3 +376,17 @@ v3r5p6
 This is really v3r5p5, but I messed up the tags, so what's tagged as v3r5p5 is 
 actually the same as v3r5p4.
 ---------------------------------------------------------------------------
+
+
+v3r5p7
+---------------
+TestReport v3r4p14
+eLog v2r3p2
+configReport v4r0p1 (supports LICOS) (but we still don't run it for LICOS runs)
+
+Fail when making web links if target isn't there.
+Add scripts to cleanout junk leftover from recon failures. (These are 
+not yet complete.)
+Use glastdataq for reconReport and svacTuple.
+convert svacTuple and reconReport XML to v1.1 schema.
+---------------------------------------------------------------------------

@@ -13,6 +13,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 my $runName = $ARGV[0];
 
 my $onlineDataDir = "$ENV{'onlineHead'}/$ENV{'onlineSubDir'}/$runName";
+my $licosDir = $onlineDataDir . '/LICOS';
 
 my $launcher = "$ENV{'PDB_HOME'}/createRun.pl";
 
@@ -24,14 +25,22 @@ my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
 my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
+# my $algBase = "${nextTask}_${runName}_snapshot_text.xml";
 
-my $rcReportIn = $onlineDataDir . '/LICOS/' . 'rcReport.out';
+# my $algPat = $licosDir . '/' . 'e2e*.xml';
+# my @algFiles = glob($algPat);
+# my $algFileIn = $algFiles[0]; 
+
+my $rcReportIn = $licosDir . '/' . 'rcReport.out';
 my $RetDefIn = $onlineDataDir . '/' . $runName . '.evt';
+# my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn, $algFileIn);
 my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn);
 
-my $rcReportOut = $onlineDataDir . '/LICOS/' . $rcReportBase;
-my $rcReportXml = $onlineDataDir . '/LICOS/' . $runName . '_rcReport.xml';
+my $rcReportOut = $licosDir . '/' . $rcReportBase;
+my $rcReportXml = $licosDir . '/' . $runName . '_rcReport.xml';
 my $RetDefOut = $onlineDataDir . '/' . $RetDefBase;
+# my $algFileOut = $onlineDataDir . '/' . $algBase;
+# my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut, $algFileOut);
 my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut);
 
 for (my $ii=0; $ii<=$#inFiles; $ii++) {
