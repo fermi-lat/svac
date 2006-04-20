@@ -21,7 +21,6 @@ modes = {
     }
 mode = 'bogus'
 
-latcBcast = ['TEM', 'TDC', 'AFE', 'CFE', 'TFE', 'ARC', 'bcast', 'TCC', 'CCC', ]
 
 # register subfields and their descriptions
 tables = {
