@@ -127,17 +127,32 @@ struct NtupleDef {
   // ACD MIPs:
   float m_acdMips[604][2];
 
+  // Tkr Point:
+  float m_acdTkrPointX[2];
+  float m_acdTkrPointY[2];
+  float m_acdTkrPointZ[2];
+  int m_acdTkrPointFace[2];
+
+  // ACD Gap POCA:
+  int m_acdGapPocaNbrTrack1;
+  int m_acdGapPocaNbrTrack2;
+
+  int m_acdGapPocaTrackID[2][2];
+  int m_acdGapPocaTileID[2][2];
+  float m_acdGapPocaDoca[2][2];
+
   // ACD POCA:
-  float m_acdPocaDoca[2][6];
-  float m_acdPocaDocaErr[2][6];
-  float m_acdPocaDocaRegion[2][6];
-  float m_acdPocaX[2][6];
-  float m_acdPocaY[2][6];
-  float m_acdPocaZ[2][6];
-  float m_acdPocaSlopeX[2][6];
-  float m_acdPocaSlopeY[2][6];
-  int   m_acdPocaTileID[2][6];
-  int   m_acdPocaTrackID[2][6];
+  float m_acdPocaDoca[2][2];
+  float m_acdPocaDocaErr[2][2];
+  float m_acdPocaDocaRegion[2][2];
+  float m_acdPocaX[2][2];
+  float m_acdPocaY[2][2];
+  float m_acdPocaZ[2][2];
+  float m_acdPocaDirX[2][2];
+  float m_acdPocaDirY[2][2];
+  float m_acdPocaDirZ[2][2];
+  int   m_acdPocaTileID[2][2];
+  int   m_acdPocaTrackID[2][2];
   int   m_acdPocaNbrTrack1;
   int   m_acdPocaNbrTrack2;
 

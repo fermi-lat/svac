@@ -361,8 +361,10 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA </TD> </TR> 
 <TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA  </TD> </TR> 
 <TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA  </TD> </TR> 
-<TR> <TD> AcdPocaSlopeX[TrackIndex:0-1][Tile:0-6]         </TD> <TD> Float </TD> <TD>  X-slope at POCA  </TD> </TR> 
-<TR> <TD> AcdPocaSlopeY[TrackIndex:0-1][Tile:0-6]         </TD> <TD> Float </TD> <TD>  Y-slope at POCA  </TD> </TR> 
+<TR> <TD> AcdPocaDirX[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  X-component of POCA  vector </TD> </TR> 
+<TR> <TD> AcdPocaDirY[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Y-component of POCA  vector </TD> </TR> 
+<TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of POCA  vector </TD> </TR> 
+
 
 
 

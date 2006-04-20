@@ -374,42 +374,118 @@ void RootAnalyzer::analyzeReconTree()
       m_ntuple.m_acdMips[acdID][1] = acdHit->getMips(AcdHit::B);
     }
 
-    UInt_t nAcdPoca = acdRecon->nAcdTkrPoca();
+
+    //
+    // Tkr Point
+    //
+     UInt_t nAcdTkrPoint = acdRecon->nAcdTkrPoint();
+
+    int nAcdTkrPointTrack1(0); 
+    for ( UInt_t iAcdTkrPoint(0); iAcdTkrPoint < nAcdTkrPoint; iAcdTkrPoint++ ) {
+      const AcdTkrPoint* acdTkrPoint = acdRecon->getAcdTkrPoint(iAcdTkrPoint);
+
+      int trackPointIndex = nAcdTkrPointTrack1;;
+      int acdTkrPointFace = acdTkrPoint->getFace();
+      
+      if (trackPointIndex == 0) {
+        m_ntuple.m_acdTkrPointX[0] = acdTkrPoint->getPoint().x();
+        m_ntuple.m_acdTkrPointY[0] = acdTkrPoint->getPoint().y();
+        m_ntuple.m_acdTkrPointZ[0] = acdTkrPoint->getPoint().z();
+
+        m_ntuple.m_acdTkrPointFace[0] = acdTkrPointFace;
+
+      } else if (trackPointIndex == 1) {
+
+        m_ntuple.m_acdTkrPointX[1] = acdTkrPoint->getPoint().x();
+        m_ntuple.m_acdTkrPointY[1] = acdTkrPoint->getPoint().y();
+        m_ntuple.m_acdTkrPointZ[1] = acdTkrPoint->getPoint().z();
+
+        m_ntuple.m_acdTkrPointFace[1] = acdTkrPointFace;
+      }
+      nAcdTkrPointTrack1++;
+    }
+
+
+
+    //
+    // Gap POCA
+    //
+     UInt_t nAcdGapPoca = acdRecon->nAcdTkrGapPoca();
+
+    int nGapTrack1(0); int nGapTrack2(0);
+    for ( UInt_t iAcdGapPoca(0); iAcdGapPoca < nAcdGapPoca; iAcdGapPoca++ ) {
+      const AcdTkrGapPoca* acdGapPoca = acdRecon->getAcdTkrGapPoca(iAcdGapPoca);
+
+      int trackGapIndex = acdGapPoca->getTrackIndex();
+
+      const AcdGapId& acdGapId = acdGapPoca->getGapId();
+      int acdGapID = acdGapId.asShort();
+
+      if (trackGapIndex == 0 && nGapTrack1 < 2) {
+        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]   = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1] = acdGapID;
+        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]   = trackGapIndex; 
+      } else if (trackGapIndex == 1 && nGapTrack2 < 2) {
+        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2] = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2] = acdGapID;
+        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]   = trackGapIndex; 
+      }
+      if (trackGapIndex == 0) {
+        nGapTrack1++;
+      }
+      if (trackGapIndex == 1) {
+        nGapTrack2++;
+      }
+    }
+    m_ntuple.m_acdGapPocaNbrTrack1 = nGapTrack1;
+    m_ntuple.m_acdGapPocaNbrTrack2 = nGapTrack2;
+  
+
+
+
+
+    UInt_t nAcdPoca = acdRecon->nAcdTkrHitPoca();
 
     int nTrack1(0); int nTrack2(0);
     for ( UInt_t iAcdPoca(0); iAcdPoca < nAcdPoca; iAcdPoca++ ) {
-      const AcdTkrPoca* acdPoca = acdRecon->getAcdTkrPoca(iAcdPoca);
+      const AcdTkrHitPoca* acdPoca = acdRecon->getAcdTkrHitPoca(iAcdPoca);
 
-      int trackIndex = acdPoca->getTkrIndex();
+      int trackIndex = acdPoca->getTrackIndex();
 
       const AcdId& acdId = acdPoca->getId();
       int acdID = acdId.getId();
       
-      if (trackIndex == 0 && nTrack1 < 6) {
+      if (trackIndex == 0 && nTrack1 < 2) {
         m_ntuple.m_acdPocaDoca[0][nTrack1]       = acdPoca->getDoca();
         m_ntuple.m_acdPocaDocaErr[0][nTrack1]    = acdPoca->getDocaErr();
-        m_ntuple.m_acdPocaDocaRegion[0][nTrack1] = acdPoca->getDocaRegion();
+        m_ntuple.m_acdPocaDocaRegion[0][nTrack1] = acdPoca->getRegion();
         m_ntuple.m_acdPocaX[0][nTrack1]          = acdPoca->getPoca().X(); 
         m_ntuple.m_acdPocaY[0][nTrack1]          = acdPoca->getPoca().Y(); 
         m_ntuple.m_acdPocaZ[0][nTrack1]          = acdPoca->getPoca().Z(); 
-        m_ntuple.m_acdPocaSlopeX[0][nTrack1]     = acdPoca->getParamsAtPoca().getxSlope();
-        m_ntuple.m_acdPocaSlopeY[0][nTrack1]     = acdPoca->getParamsAtPoca().getySlope();
+        m_ntuple.m_acdPocaDirX[0][nTrack1]       = acdPoca->getPocaVector().Px();
+        m_ntuple.m_acdPocaDirY[0][nTrack1]       = acdPoca->getPocaVector().Py();
+        m_ntuple.m_acdPocaDirZ[0][nTrack1]       = acdPoca->getPocaVector().Pz();
         m_ntuple.m_acdPocaTileID[0][nTrack1]     = acdID;
         m_ntuple.m_acdPocaTrackID[0][nTrack1]    = trackIndex; 
-        nTrack1++;
-      } else if (trackIndex == 1 && nTrack2 < 6) {
+      } else if (trackIndex == 1 && nTrack2 < 2) {
         m_ntuple.m_acdPocaDoca[1][nTrack2]       = acdPoca->getDoca();
         m_ntuple.m_acdPocaDocaErr[1][nTrack2]    = acdPoca->getDocaErr();
-        m_ntuple.m_acdPocaDocaRegion[1][nTrack2] = acdPoca->getDocaRegion();
+        m_ntuple.m_acdPocaDocaRegion[1][nTrack2] = acdPoca->getRegion();
         m_ntuple.m_acdPocaX[1][nTrack2]          = acdPoca->getPoca().X(); 
         m_ntuple.m_acdPocaY[1][nTrack2]          = acdPoca->getPoca().Y(); 
         m_ntuple.m_acdPocaZ[1][nTrack2]          = acdPoca->getPoca().Z(); 
-        m_ntuple.m_acdPocaSlopeX[1][nTrack2]     = acdPoca->getParamsAtPoca().getxSlope();
-        m_ntuple.m_acdPocaSlopeY[1][nTrack2]     = acdPoca->getParamsAtPoca().getySlope();
+        m_ntuple.m_acdPocaDirX[1][nTrack2]       = acdPoca->getPocaVector().Px();
+        m_ntuple.m_acdPocaDirY[1][nTrack2]       = acdPoca->getPocaVector().Py();
+        m_ntuple.m_acdPocaDirZ[1][nTrack2]       = acdPoca->getPocaVector().Pz();
         m_ntuple.m_acdPocaTileID[1][nTrack2]     = acdID;
         m_ntuple.m_acdPocaTrackID[1][nTrack2]    = trackIndex; 
-        nTrack2++;
       }
+      if (trackIndex == 0) {
+        nTrack1++;
+      } 
+      if (trackIndex == 1) {
+        nTrack2++;
+      } 
     }
     m_ntuple.m_acdPocaNbrTrack1 = nTrack1;
     m_ntuple.m_acdPocaNbrTrack2 = nTrack2;
@@ -1610,16 +1686,35 @@ void RootAnalyzer::createBranches()
   
 
   // ACD POCA:
-  m_tree->Branch("AcdPocaDoca", &(m_ntuple.m_acdPocaDoca),"AcdPocaDoca[2][6]/F");
-  m_tree->Branch("AcdPocaDocaErr", &(m_ntuple.m_acdPocaDocaErr),"AcdPocaDocaErr[2][6]/F");
-  m_tree->Branch("AcdPocaDocaRegion", &(m_ntuple.m_acdPocaDocaRegion),"AcdPocaDocaRegion[2][6]/F");
-  m_tree->Branch("AcdPocaX", &(m_ntuple.m_acdPocaX),"AcdPocaX[2][6]/F");
-  m_tree->Branch("AcdPocaY", &(m_ntuple.m_acdPocaY),"AcdPocaY[2][6]/F");
-  m_tree->Branch("AcdPocaZ", &(m_ntuple.m_acdPocaZ),"AcdPocaZ[2][6]/F");
-  m_tree->Branch("AcdPocaSlopeX", &(m_ntuple.m_acdPocaSlopeX),"AcdPocaSlopeX[2][6]/F");
-  m_tree->Branch("AcdPocaSlopeY", &(m_ntuple.m_acdPocaSlopeY),"AcdPocaSlopeY[2][6]/F");
-  m_tree->Branch("AcdPocaTileID", &(m_ntuple.m_acdPocaTileID),"AcdPocaTileID[2][6]/I");
-  m_tree->Branch("AcdPocaTrackID", &(m_ntuple.m_acdPocaTrackID),"AcdPocaTrackID[2][6]/I");
+  m_tree->Branch("AcdPocaDoca", &(m_ntuple.m_acdPocaDoca),"AcdPocaDoca[2][2]/F");
+  m_tree->Branch("AcdPocaDocaErr", &(m_ntuple.m_acdPocaDocaErr),"AcdPocaDocaErr[2][2]/F");
+  m_tree->Branch("AcdPocaDocaRegion", &(m_ntuple.m_acdPocaDocaRegion),"AcdPocaDocaRegion[2][2]/F");
+  m_tree->Branch("AcdPocaX", &(m_ntuple.m_acdPocaX),"AcdPocaX[2][2]/F");
+  m_tree->Branch("AcdPocaY", &(m_ntuple.m_acdPocaY),"AcdPocaY[2][2]/F");
+  m_tree->Branch("AcdPocaZ", &(m_ntuple.m_acdPocaZ),"AcdPocaZ[2][2]/F");
+  m_tree->Branch("AcdPocaDirX", &(m_ntuple.m_acdPocaDirX),"AcdPocaDirX[2][2]/F");
+  m_tree->Branch("AcdPocaDirY", &(m_ntuple.m_acdPocaDirY),"AcdPocaDirY[2][2]/F");
+  m_tree->Branch("AcdPocaDirZ", &(m_ntuple.m_acdPocaDirZ),"AcdPocaDirZ[2][2]/F");
+  m_tree->Branch("AcdPocaTileID", &(m_ntuple.m_acdPocaTileID),"AcdPocaTileID[2][2]/I");
+  m_tree->Branch("AcdPocaTrackID", &(m_ntuple.m_acdPocaTrackID),"AcdPocaTrackID[2][2]/I");
   m_tree->Branch("AcdPocaNbrTrack1", &(m_ntuple.m_acdPocaNbrTrack1),"AcdPocaNbrTrack1/I");
   m_tree->Branch("AcdPocaNbrTrack2", &(m_ntuple.m_acdPocaNbrTrack2),"AcdPocaNbrTrack2/I");
+
+
+  // ACD Gap POCA:
+  m_tree->Branch("AcdGapPocaDoca", &(m_ntuple.m_acdGapPocaDoca),"AcdGapPocaDoca[2][2]/F");
+  m_tree->Branch("AcdGapPocaTileID", &(m_ntuple.m_acdGapPocaTileID),"AcdGapPocaTileID[2][2]/I");
+  m_tree->Branch("AcdGapPocaTrackID", &(m_ntuple.m_acdGapPocaTrackID),"AcdGapPocaTrackID[2][2]/I");
+  m_tree->Branch("AcdGapPocaNbrTrack1", &(m_ntuple.m_acdGapPocaNbrTrack1),"AcdGapPocaNbrTrack1/I");
+  m_tree->Branch("AcdGapPocaNbrTrack2", &(m_ntuple.m_acdGapPocaNbrTrack2),"AcdGapPocaNbrTrack2/I");
+
+  // Tkr Point:
+  m_tree->Branch("AcdTkrPointX",&(m_ntuple.m_acdTkrPointX),"AcdTkrPointX[2]/F");
+  m_tree->Branch("AcdTkrPointY",&(m_ntuple.m_acdTkrPointY),"AcdTkrPointY[2]/F");
+  m_tree->Branch("AcdTkrPointZ",&(m_ntuple.m_acdTkrPointZ),"AcdTkrPointZ[2]/F");
+
+  m_tree->Branch("AcdTkrPointFace",&(m_ntuple.m_acdTkrPointFace),"AcdTkrPointFace[2]/I");
+
+
+
 }
