@@ -25,7 +25,7 @@ my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
 my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
-# my $algBase = "${nextTask}_${runName}_snapshot_text.xml";
+my $algBase = "${nextTask}_${runName}_snapshot_text.xml";
 
 # my $algPat = $licosDir . '/' . 'e2e*.xml';
 # my @algFiles = glob($algPat);
@@ -33,15 +33,22 @@ my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
 
 my $rcReportIn = $licosDir . '/' . 'rcReport.out';
 my $RetDefIn = $onlineDataDir . '/' . $runName . '.evt';
-# my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn, $algFileIn);
-my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn);
+
+my $algFileIn = `$ENV{'svacOnlineDir'}/getAlgFile.py $rcReportIn`;
+chomp($algFileIn);
+print "[$algFileIn]\n";
+$algFileIn = 'noSuchFile' unless length($algFileIn);
+$algFileIn = $licosDir . '/' . $algFileIn;
+
+my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn, $algFileIn);
+# my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn);
 
 my $rcReportOut = $licosDir . '/' . $rcReportBase;
 my $rcReportXml = $licosDir . '/' . $runName . '_rcReport.xml';
 my $RetDefOut = $onlineDataDir . '/' . $RetDefBase;
-# my $algFileOut = $onlineDataDir . '/' . $algBase;
-# my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut, $algFileOut);
-my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut);
+my $algFileOut = $licosDir . '/' . $algBase;
+my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut, $algFileOut);
+# my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut);
 
 for (my $ii=0; $ii<=$#inFiles; $ii++) {
 	my $inFile = $inFiles[$ii];

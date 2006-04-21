@@ -390,3 +390,12 @@ not yet complete.)
 Use glastdataq for reconReport and svacTuple.
 convert svacTuple and reconReport XML to v1.1 schema.
 ---------------------------------------------------------------------------
+
+
+v3r5p8
+---------------
+Run configReport on LICOS runs.  This uses a separate task, but all code is 
+the same, only difference is one path in the XML.  Bleh.  And a new wrapper in 
+updataELogDB-licos, which differs only in one string.  Double bleh.
+Don't launch configReport if snapshot is missing or empty.
+---------------------------------------------------------------------------

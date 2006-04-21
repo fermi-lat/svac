@@ -24,6 +24,7 @@ set newTask=${eLogTaskLatte}
 
 foreach dataSet ($dataSets)
     set oldName=${oldTask}_${run}_${dataSet}
+	echo $oldName
 	test -e ${oldName} || continue
 	set newName=`echo $oldName | sed s/${oldTask}/${newTask}/`
 	test -e ${newName} || ( run ln -s ${oldName} ${newName} )

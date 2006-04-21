@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r5p7
+setenv svacVersion v3r5p8
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -83,8 +83,9 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
-setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v4r0p1
+setenv configReportTaskLatte configReport-latte-${configReportTaskVersion}
+setenv configReportTaskLicos configReport-licos-${configReportTaskVersion}
+setenv configReportVersion v4r0p2
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
 setenv configTaskDir ${svacPlRoot}/configReport

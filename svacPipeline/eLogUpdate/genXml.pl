@@ -85,12 +85,18 @@ $updateElogDbXml =
         <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
             $ENV{'eLogTaskDir'}/retDefTDLaunchWrapper.pl
         </executable>
+        <executable name=\"LaunchConfRep\" version=\"$ENV{'eLogTaskVersion'}\">
+            $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
+        </executable>
 
         <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
             <working-directory>$ENV{'eLogDataDirFull'}</working-directory>
             <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
+        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >
+            <path>$ENV{'onlineDataDirFull'}/LICOS</path>
+        </file>
         <file file-type=\"evt\"  name=\"RetDef\"   type=\"RetDef\"  >
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
@@ -107,6 +113,9 @@ $updateElogDbXml =
         </processing-step>
         <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                         <input-file name=\"RetDef\"/>
+        </processing-step>
+        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"snapshot\"/>
         </processing-step>
 </pipeline>
 ";
