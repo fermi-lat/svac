@@ -219,11 +219,11 @@ struct NtupleDef {
   //                                                                                                                                                                                                           
   int m_contextRunInfoPlatform;
   int m_contextRunInfoDataOrigin;
-  int m_contextRunInfoID;
-  int m_contextRunInfoStartTime;
+  unsigned int m_contextRunInfoID;
+  unsigned int m_contextRunInfoStartTime;
 
-  int m_contextDataGramInfoModeChanges;
-  int m_contextDataGramInfoDatagrams;
+  unsigned int m_contextDataGramInfoModeChanges;
+  unsigned int m_contextDataGramInfoDatagrams;
   int m_contextDataGramInfoOpenAction;
   int m_contextDataGramInfoOpenReason;
   int m_contextDataGramInfoCrate;
@@ -238,32 +238,32 @@ struct NtupleDef {
   unsigned long long m_contextGemScalersSequence;
   unsigned long long m_contextGemScalersDeadzone;
 
-  int m_contextLsfTimeTimeToneCurrentIncomplete;
-  int m_contextLsfTimeTimeToneCurrentTimeSecs;
-  int m_contextLsfTimeTimeToneCurrentFlywheeling;
-  int m_contextLsfTimeTimeToneCurrentFlags;
+  unsigned int m_contextLsfTimeTimeToneCurrentIncomplete;
+  unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
+  unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
+  unsigned int m_contextLsfTimeTimeToneCurrentFlags;
   int m_contextLsfTimeTimeToneCurrentFlagsValid;
   int m_contextLsfTimeTimeToneCurrentMissingGps;
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
   int m_contextLsfTimeTimeToneCurrentMissingLatPps;
   int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
-  int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
-  int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
+  unsigned int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
+  unsigned int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
 
-  int m_contextLsfTimeTimeTonePreviousIncomplete;
-  int m_contextLsfTimeTimeTonePreviousTimeSecs;
-  int m_contextLsfTimeTimeTonePreviousFlywheeling;
-  int m_contextLsfTimeTimeTonePreviousFlags;
+  unsigned int m_contextLsfTimeTimeTonePreviousIncomplete;
+  unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
+  unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
+  unsigned int m_contextLsfTimeTimeTonePreviousFlags;
   int m_contextLsfTimeTimeTonePreviousFlagsValid;
   int m_contextLsfTimeTimeTonePreviousMissingGps;
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
   int m_contextLsfTimeTimeTonePreviousMissingLatPps;
   int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
-  int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
-  int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
-  int m_contextLsfTimeTimeToneGemTimeHacks;
-  int m_contextLsfTimeTimeToneGemTimeTicks;
-  int m_contextLsfTimeTimeTicks;
+  unsigned int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
+  unsigned int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
+  unsigned int m_contextLsfTimeTimeToneGemTimeHacks;
+  unsigned int m_contextLsfTimeTimeToneGemTimeTicks;
+  unsigned int m_contextLsfTimeTimeTicks;
 
   int m_contextRunType;
 

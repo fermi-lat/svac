@@ -605,6 +605,8 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
   m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
 
+  m_ntuple.m_contextLsfTimeTimeTicks = m_digiEvent->getMetaEvent().time().timeTicks();
+
   m_ntuple.m_contextRunType = m_digiEvent->getMetaEvent().runType();
 
 
@@ -1535,11 +1537,11 @@ void RootAnalyzer::createBranches()
   //                                                                                                                                                                                                           
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
   m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
-  m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/I");
-  m_tree->Branch("ContextRunInfoStartTime", &(m_ntuple.m_contextRunInfoStartTime), "ContextRunInfoStartTime/I");
+  m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/i");
+  m_tree->Branch("ContextRunInfoStartTime", &(m_ntuple.m_contextRunInfoStartTime), "ContextRunInfoStartTime/i");
 
-  m_tree->Branch("ContextDataGramInfoModeChanges", &(m_ntuple.m_contextDataGramInfoModeChanges), "ContextDataGramInfoModeChanges/I");
-  m_tree->Branch("ContextDataGramInfoDatagrams", &(m_ntuple.m_contextDataGramInfoDatagrams), "ContextDataGramInfoDatagrams/I");
+  m_tree->Branch("ContextDataGramInfoModeChanges", &(m_ntuple.m_contextDataGramInfoModeChanges), "ContextDataGramInfoModeChanges/i");
+  m_tree->Branch("ContextDataGramInfoDatagrams", &(m_ntuple.m_contextDataGramInfoDatagrams), "ContextDataGramInfoDatagrams/i");
   m_tree->Branch("ContextDataGramInfoOpenAction", &(m_ntuple.m_contextDataGramInfoOpenAction), "ContextDataGramInfoOpenAction/I");
   m_tree->Branch("ContextDataGramInfoOpenReason", &(m_ntuple.m_contextDataGramInfoOpenReason), "ContextDataGramInfoOpenReason/I");
   m_tree->Branch("ContextDataGramInfoCrate", &(m_ntuple.m_contextDataGramInfoCrate), "ContextDataGramInfoCrate/I");
@@ -1554,29 +1556,31 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextGemScalersSequence", &(m_ntuple.m_contextGemScalersSequence), "ContextGemScalersSequence/l");
   m_tree->Branch("ContextGemScalersDeadzone", &(m_ntuple.m_contextGemScalersDeadzone), "ContextGemScalersDeadzone/l");
 
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentIncomplete", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete), "ContextLsfTimeTimeToneCurrentIncomplete/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlags", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlags), "ContextLsfTimeTimeToneCurrentFlags/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentIncomplete", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete), "ContextLsfTimeTimeToneCurrentIncomplete/i");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/i");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/i");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlags", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlags), "ContextLsfTimeTimeToneCurrentFlags/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps), "ContextLsfTimeTimeToneCurrentMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone), "ContextLsfTimeTimeToneCurrentMissingTimeTone/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks), "ContextLsfTimeTimeToneCurrentGemTimeHacks/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks), "ContextLsfTimeTimeToneCurrentGemTimeTicks/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks), "ContextLsfTimeTimeToneCurrentGemTimeHacks/i");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks), "ContextLsfTimeTimeToneCurrentGemTimeTicks/i");
 
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousIncomplete", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete), "ContextLsfTimeTimeTonePreviousIncomplete/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlags", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlags), "ContextLsfTimeTimeTonePreviousFlags/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousIncomplete", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete), "ContextLsfTimeTimeTonePreviousIncomplete/i");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/i");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/i");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlags", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlags), "ContextLsfTimeTimeTonePreviousFlags/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps), "ContextLsfTimeTimeTonePreviousMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone), "ContextLsfTimeTimeTonePreviousMissingTimeTone/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks), "ContextLsfTimeTimeTonePreviousGemTimeHacks/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks), "ContextLsfTimeTimeTonePreviousGemTimeTicks/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks), "ContextLsfTimeTimeTonePreviousGemTimeHacks/i");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks), "ContextLsfTimeTimeTonePreviousGemTimeTicks/i");
+
+  m_tree->Branch("ContextLsfTimeTimeTicks",&(m_ntuple.m_contextLsfTimeTimeTicks),"ContextLsfTimeTimeTicks/i");
 
   m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
 

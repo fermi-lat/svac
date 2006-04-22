@@ -223,3 +223,7 @@ v1r16: April 19, 2006
 awb	Updated Acd Poca code to work with new AcdRecon (EM v6r070329p4).
 	Fixed bug in AcdPocaNbrTrack1/AcdPocaNbrTrack2 variables.
 	Added AcdTkrPoint and AcdGap variables.
+
+v1r17: April 21, 2006
+awb     Added one more context variable (that I had forgotten).
+	Corrected the types of some context variables.
