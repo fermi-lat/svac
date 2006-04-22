@@ -258,7 +258,7 @@ voltMap = (mappings.displayHv, voltLabel)
 hexMap = (mappings.displayHex, '')
 
 # put this in empty table cells
-absent = 'Absent'
+absent = 'Broadcast'
 
 # These are tags that we use to determine if various subsystems are present
 presenceTags = {
@@ -270,11 +270,28 @@ presenceTags = {
     'ACD': 'AFE',
     }
 
+# Shapes of register tables for the whole LAT
+shapes = {
+    'TEM': (16,),
+    'AEM': (12,),
+    'ARC': (12, 1),
+    'CCC': (16, 4),
+    'TCC': (16, 8),
+    'CRC': (16, 4, 4),
+    'TRC': (16, 8, 9),
+    'AFE': (12, 1, 18),
+    'CFE': (16, 4, 4, 12),
+    'TFE': (16, 8, 9, 24),
+    '': (),
+    }
+
 # Modify various strings to switch from LICOS to LATTE mode
 def toLatte():
+    global absent
     dictToLatte(tables)
     dictToLatte(acdMaskRegs)
     tagsToLatte(presenceTags)
+    absent = 'Absent'
     return
 
 def regToLatte(oldPath):
