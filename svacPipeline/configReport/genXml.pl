@@ -60,6 +60,7 @@ open FIELDS, '>', $configReportXmlFileName;
 print FIELDS $configReportXml;
 close FIELDS;
 
+
 $configReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -87,7 +88,7 @@ $configReportXml =
             <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >
+        <file file-type=\"xml\" name=\"algorithm\" type=\"text\"    >
             <path>$ENV{'onlineDataDirFull'}/LICOS</path>
         </file>
         <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">
@@ -95,7 +96,7 @@ $configReportXml =
         </file>
 
         <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
-                        <input-file name=\"snapshot\"/>
+                        <input-file name=\"algorithm\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
         <processing-step name=\"configReportUrl\" executable=\"configReportUrl\" batch-job-configuration=\"express-job\">

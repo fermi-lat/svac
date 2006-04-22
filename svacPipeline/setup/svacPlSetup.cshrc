@@ -28,7 +28,7 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u25
+setenv dataDisk u29
 setenv onlineDisk u25
 setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch

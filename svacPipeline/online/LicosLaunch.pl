@@ -25,7 +25,7 @@ my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
 my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
-my $algBase = "${nextTask}_${runName}_snapshot_text.xml";
+my $algBase = "${nextTask}_${runName}_algorithm_text.xml";
 
 # my $algPat = $licosDir . '/' . 'e2e*.xml';
 # my @algFiles = glob($algPat);

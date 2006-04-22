@@ -94,7 +94,7 @@ $updateElogDbXml =
             <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >
+        <file file-type=\"xml\"  name=\"algorithm\" type=\"text\"    >
             <path>$ENV{'onlineDataDirFull'}/LICOS</path>
         </file>
         <file file-type=\"evt\"  name=\"RetDef\"   type=\"RetDef\"  >
@@ -115,7 +115,7 @@ $updateElogDbXml =
                         <input-file name=\"RetDef\"/>
         </processing-step>
         <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"snapshot\"/>
+                        <input-file name=\"algorithm\"/>
         </processing-step>
 </pipeline>
 ";
