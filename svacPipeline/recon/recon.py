@@ -154,6 +154,10 @@ nDigits = int(math.ceil(math.log10(lastEvent)))
 oneFormat = '%0.' + `nDigits` + 'd'
 cFormat = oneFormat + '-' + oneFormat
 
+# Make a resource requirement string to make sure the LSF hosts have enough scratch space
+scratchSize = reconPM.reserveSize(digiFileName)
+resStr = '-R "scratch > %s"' % scratchSize
+
 jobs = []
 joFiles = []
 reconFiles = []
@@ -206,8 +210,8 @@ ApplicationMgr.EvtMax = %d;
 
     # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
     # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
-    cmd = 'exec bsub -K -q %s -G %s -o %s %s %s %s' % \
-          (os.environ['chunkQueue'], os.environ['batchgroup'], \
+    cmd = 'exec bsub -K -q %s -G %s %s -o %s %s %s %s' % \
+          (os.environ['chunkQueue'], os.environ['batchgroup'], resStr, \
            logFile, shellFile, joFile, digiFileName)
     print >> sys.stderr, cmd
     jobs.append(cmd)

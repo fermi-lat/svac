@@ -402,3 +402,15 @@ Run configReport on LICOS runs.  This uses a separate task, but all code is
 the same, only difference is one path in the XML.  Bleh.
 Don't launch configReport if snapshot is missing or empty.
 ---------------------------------------------------------------------------
+
+
+v3r5p9
+---------------
+EM v6r070329p5
+TestReport v3r4p18
+svacTuple v1r17
+
+Chunk jobs fail if they can't move their output from scratch to staging.
+use bsub -R to make sure batch hosts have enough scratch space for chunk jobs.
+Improve/finish recon cleanup scripts.
+---------------------------------------------------------------------------

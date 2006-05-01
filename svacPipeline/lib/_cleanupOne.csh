@@ -13,7 +13,13 @@ if ({ test -z "$dirs" }) then
 	echo No chunk dirs to remove.
 	exit
 else
-	echo Removing $dirs
-	rm -rf $dirs
+	foreach dir ($dirs)
+		if ({ ps uwww $dir }) then
+			echo Process still active, not removing $dir
+		else
+			echo Removing $dir
+			rm -rf $dir
+		endif
+	end
 endif
 

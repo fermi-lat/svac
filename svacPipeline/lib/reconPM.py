@@ -93,6 +93,16 @@ def concatenate_hadd(outputFileName, fileNames, treeName):
 
 concatenateFiles = concatenate_hadd
 
+def reserveSize(digiFile):
+    # This is (about) the size of the output files for one chunk.
+    chunkSize = 1.1e8
+    digiSize = os.stat(digiFile).st_size
+    size = digiSize + chunkSize
+    # this should give GB, with one digit past the decimal.
+    size = math.ceil(size / 1e8) / 10.0
+    size = '%.1f' % size
+    return size
+
 def submitBatch(shellName):
 
     return

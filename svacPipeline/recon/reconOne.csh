@@ -60,7 +60,7 @@ $reconApp || exit 1
 if ( $relocate ) then
     echo Relocating chunk files from $procDir to $stageDir
     pushd $procDir
-    run mv $reconBase $meritBase $calBase $stageDir
+    run mv $reconBase $meritBase $calBase $stageDir || exit 1
     cd $inDir
     run rm $digiBase $joBase
     popd
