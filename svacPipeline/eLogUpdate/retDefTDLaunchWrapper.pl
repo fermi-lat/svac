@@ -34,8 +34,8 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLatte'};
-my $ldfFile = $inFiles->{'ldf'};
+my $newTask = $ENV{'digitizationTaskLicos'};
+my $ldfFile = $inFiles->{'RetDef'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
 my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
