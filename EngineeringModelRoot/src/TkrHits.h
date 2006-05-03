@@ -58,12 +58,16 @@ class layerId{
       layerId( int, int, int twr=0 );
       layerId( int, std::string, int twr=0 );
       layerId( int );
+      layerId( std::string tspt, int twr=0 );
       ~layerId(){;};
       
       void setLayer( int, int, int twr=0 );
       void setTray( int, std::string, int twr=0 );
       void setUniPlane( int, int twr=0 );
       void setTower( int tw ){ tower = tw; };
+      void setSPT( std::string tspt, int twr=0 );
+
+      std::string getLayerName();
       
       void trayToUniPlane();
       void trayToLayer();
@@ -71,13 +75,15 @@ class layerId{
       inline void layerToUniPlane(){ layerToTray(); trayToUniPlane(); };
       void uniPlaneToTray();
       inline void uniPlaneToLayer(){ uniPlaneToTray(); trayToLayer(); };
+      void sptToLayer();
+      void layerToSPT();
       
       int tower;
       int layer;
       int view;
       int uniPlane;
       int tray;
-      std::string which;
+      std::string which, spt;
       
 };
 

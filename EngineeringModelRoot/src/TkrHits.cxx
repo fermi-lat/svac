@@ -31,24 +31,37 @@ inline layerId::layerId( int lyr, int vw, int twr ){
   setLayer( lyr, vw, twr ); }
 inline layerId::layerId( int tr, std::string wh, int twr ){ 
   setTray( tr, wh, twr ); }
-inline layerId::layerId( int unp ){ setUniPlane( unp ); }
+inline layerId::layerId( int unp ){ 
+  setUniPlane( unp ); }
+inline layerId::layerId( std::string tspt, int twr ){ 
+  setSPT( tspt, twr ); }
 
 inline void layerId::setLayer( int lyr, int vw, int twr ){
   layer = lyr; view = vw; tower = twr;
   layerToTray();
   trayToUniPlane();
+  layerToSPT();
 }
 
 inline void layerId::setUniPlane( int unp, int twr ){
   uniPlane = unp; tower = twr;
   uniPlaneToTray();
   trayToLayer();
+  layerToSPT();
 }
 
 inline void layerId::setTray( int tr, std::string wh, int twr ){
   tray = tr; which=wh; tower=twr;
   trayToUniPlane();
   trayToLayer();
+  layerToSPT();
+}
+
+inline void layerId::setSPT( std::string tspt, int twr ){
+  spt = tspt; tower = twr;
+  sptToLayer();
+  layerToTray();
+  trayToUniPlane();
 }
 
 inline void layerId::trayToUniPlane(){
@@ -75,11 +88,38 @@ void layerId::layerToTray(){
   }
 }
 
-
 inline void layerId::uniPlaneToTray(){
   tray = (uniPlane+1) / 2;
   if( uniPlane%2 == 0 ) which ="top";
   else which = "bot";
+}
+
+inline void layerId::layerToSPT(){
+  char cspt[] = "+x0";
+  if( view==0 )
+    if( layer%2==0 ) sprintf( cspt, "+y%d", layer/2 );
+    else sprintf( cspt, "-y%d", layer/2 );
+  else
+    if( layer%2==0 ) sprintf( cspt, "+x%d", layer/2 );
+    else sprintf( cspt, "-x%d", layer/2 );
+  spt = cspt;
+}
+
+inline void layerId::sptToLayer(){
+  // carefull this is different from normal definition.
+  if( spt.substr(1,1) == 'y' ) view = 0; 
+  else view = 1;
+  if( spt.substr(0,1) == "+" ) layer = 2*atoi(spt.substr(2,1).c_str());
+  else layer = 2*atoi(spt.substr(2,1).c_str()) + 1;
+}
+
+inline std::string layerId::getLayerName(){
+  char lname[] = "X17";
+  std::string layerName;
+  if( view==0 ) sprintf(lname, "X%d", layer );
+  else sprintf(lname, "Y%d", layer );
+  layerName = lname;
+  return layerName;
 }
 
 //
@@ -140,7 +180,6 @@ void towerVar::saveHists( bool saveTimeOcc ){
   TH1F* hist, *rhist, *dhist, *ehist, *thist, *lhist;
   char name[] = "roccT00X17w3t4";
   char dname[] = "T00";
-  char cvw[] = "XY";
 
   sprintf(dname,"T%d", towerId);
   gDirectory->mkdir( dname, dname );
@@ -148,11 +187,10 @@ void towerVar::saveHists( bool saveTimeOcc ){
 
   for( int unp=0; unp!=g_nUniPlane; unp++){
     layerId lid( unp );
-    int layer = lid.layer;
-    int view = lid.view;
-    sprintf(name,"roccT%d%c%d", towerId, cvw[view], layer);
+    std::string lname = lid.getLayerName();
+    sprintf(name,"roccT%d%s", towerId, lname.c_str());
     rhist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
-    sprintf(name,"doccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"doccT%d%s", towerId, lname.c_str());
     dhist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
     for( int strip=0; strip!=g_nStrip; strip++){
       rhist->Fill( strip+0.1, rHits[unp][strip] );
@@ -172,13 +210,12 @@ void towerVar::saveHists( bool saveTimeOcc ){
     dhist->Fill( unp+0.1, bsVar[unp].hLayer );
     rhist->Fill( unp+0.1, bsVar[unp].tLayer );
     layerId lid( unp );
-    int layer = lid.layer;
-    int view = lid.view;
-    sprintf(name,"eoccT%d%c%d", towerId, cvw[view], layer);
+    std::string lname = lid.getLayerName();
+    sprintf(name,"eoccT%d%s", towerId, lname.c_str());
     ehist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
-    sprintf(name,"toccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"toccT%d%s", towerId, lname.c_str());
     thist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
-    sprintf(name,"loccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"loccT%d%s", towerId, lname.c_str());
     lhist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
     for( int strip=0; strip!=g_nStrip; strip++){
       ehist->Fill( strip+0.1, bsVar[unp].eHits[strip] );
@@ -194,7 +231,7 @@ void towerVar::saveHists( bool saveTimeOcc ){
     if( saveTimeOcc ){
       for(int iWafer = 0; iWafer != g_nWafer; ++iWafer)
 	for( int tDiv = 0; tDiv != g_nTime; tDiv++){
-	  sprintf(name,"occT%d%c%dw%dt%d", towerId, cvw[view], layer, iWafer, tDiv);
+	  sprintf(name,"occT%d%sw%dt%d", towerId, lname.c_str(), iWafer, tDiv);
 	  hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
 	  for( int strip=0; strip!=g_nStrip; strip++)
 	    hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][tDiv] );
@@ -204,7 +241,7 @@ void towerVar::saveHists( bool saveTimeOcc ){
     }
     else{
       for(int iWafer = 0; iWafer != g_nWafer; ++iWafer){
-	sprintf(name,"occT%d%c%dw%d", towerId, cvw[view], layer, iWafer);
+	sprintf(name,"occT%d%sw%d", towerId, lname.c_str(), iWafer);
 	hist = new TH1F(name, name, g_nStrip, 0, g_nStrip);
 	for( int strip=0; strip!=g_nStrip; strip++)
 	  hist->Fill( strip+0.1, bsVar[unp].nHits[strip][iWafer][0] );
@@ -394,14 +431,12 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
   if( prof ) resProf->Add( prof );  
 #endif
 
-  char cvw[] = "XY";
   for( int unp=0; unp!=g_nUniPlane; unp++){
     layerId lid( unp );
-    int layer = lid.layer;
-    int view = lid.view;
-    sprintf(name,"roccT%d%c%d", towerId, cvw[view], layer);
+    std::string lname = lid.getLayerName();
+    sprintf(name,"roccT%d%s", towerId, lname.c_str());
     rhist = (TH1F*)hfile->FindObjectAny( name );
-    sprintf(name,"doccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"doccT%d%s", towerId, lname.c_str());
     dhist = (TH1F*)hfile->FindObjectAny( name );
     for( int strip=0; strip!=g_nStrip; strip++){      
       rHits[unp][strip] += (int)rhist->GetBinContent( strip+1 );
@@ -417,13 +452,12 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
     bsVar[unp].hLayer += (int)dhist->GetBinContent( unp+1 );
     bsVar[unp].tLayer += (int)rhist->GetBinContent( unp+1 );
     layerId lid( unp );
-    int layer = lid.layer;
-    int view = lid.view;
-    sprintf(name,"eoccT%d%c%d", towerId, cvw[view], layer);
+    std::string lname = lid.getLayerName();
+    sprintf(name,"eoccT%d%s", towerId, lname.c_str());
     ehist = (TH1F*)hfile->FindObjectAny( name );
-    sprintf(name,"toccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"toccT%d%s", towerId, lname.c_str());
     thist = (TH1F*)hfile->FindObjectAny( name );
-    sprintf(name,"loccT%d%c%d", towerId, cvw[view], layer);
+    sprintf(name,"loccT%d%s", towerId, lname.c_str());
     lhist = (TH1F*)hfile->FindObjectAny( name );
     for( int strip=0; strip!=g_nStrip; strip++){
       bsVar[unp].eHits[strip] += (int)ehist->GetBinContent( strip+1 );
@@ -431,7 +465,7 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
       bsVar[unp].lHits[strip] += (int)lhist->GetBinContent( strip+1 );
     }
     for(int iWafer = 0; iWafer != g_nWafer; ++iWafer){
-      sprintf(name,"occT%d%c%dw%d", towerId, cvw[view], layer, iWafer );
+      sprintf(name,"occT%d%sw%d", towerId, lname.c_str(), iWafer );
       hist = (TH1F*)hfile->FindObjectAny( name );
       if( hist ){ // check if simple version exist
 	int tdiv = (iRoot*g_nTime)/nRoot;
@@ -441,7 +475,7 @@ void towerVar::readHists( TFile* hfile, UInt_t iRoot, UInt_t nRoot ){
 	continue; // no need to get time dependent histograms
       }
       for( int tDiv = 0; tDiv != g_nTime; tDiv++){
-	sprintf(name,"occT%d%c%dw%dt%d", towerId, cvw[view], layer, iWafer, tDiv );
+	sprintf(name,"occT%d%sw%dt%d", towerId, lname.c_str(), iWafer, tDiv );
 	hist = (TH1F*)hfile->FindObjectAny( name );
 	int tdiv = (tDiv+iRoot*g_nTime)/nRoot;
 	for( int strip=0; strip!=g_nStrip; strip++)
@@ -614,12 +648,12 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
       ineffDist->Fill( 100*(1-eff)+0.0001 );
       if( (eff-0.98)/error<-3.0 && m_log.is_open() ){
 	layerId lid( unp );
-	char vw[] = "XY";
+	std::string lname = lid.getLayerName();
 	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
-		  << " " << vw[lid.view] << lid.layer
+		  << " " << lname
 		  << " low efficiency: " << eff << " +- " << error << std::endl;
 	m_log << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
-	      << " " << vw[lid.view] << lid.layer
+	      << " " << lname
 	      << " low efficiency: " << eff << " +- " << error << std::endl;
       }
       //
@@ -629,12 +663,12 @@ void TkrHits::saveAllHist( bool saveWaferOcc )
       if( error == 0.0 ) error = 1.0;
       if( (fabs(offset)-0.1)/error > 3.0 && m_log.is_open() ){
 	layerId lid( unp );
-	char vw[] = "XY";
+	std::string lname = lid.getLayerName();
 	std::cout << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
-		  << " " << vw[lid.view] << lid.layer
+		  << " " << lname
 		  << " large offset: " << offset << " +- " << error << std::endl;
 	m_log << m_towerVar[tw].hwserial << " T" << m_towerVar[tw].towerId 
-	      << " " << vw[lid.view] << lid.layer
+	      << " " << lname
 	      << " large offset: " << offset << " +- " << error << std::endl;
       }
     }
