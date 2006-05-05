@@ -46,7 +46,7 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     chunks.append([eventStart, eventEnd])
 
         
-    return chunks
+    return chunks, numEventsPerFile
 
 
 def concatenate_prune(outputFileName, fileNames, treeName):
@@ -93,9 +93,9 @@ def concatenate_hadd(outputFileName, fileNames, treeName):
 
 concatenateFiles = concatenate_hadd
 
-def reserveSize(digiFile):
+def reserveSize(digiFile, numEventsPerFile):
     # This is (about) the size of the output files for one chunk.
-    chunkSize = 1.1e8
+    chunkSize = 1.1e4 * numEventsPerFile
     digiSize = os.stat(digiFile).st_size
     size = digiSize + chunkSize
     # this should give GB, with one digit past the decimal.

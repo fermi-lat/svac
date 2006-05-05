@@ -15,13 +15,13 @@ my $runName = $ARGV[0];
 my $onlineDataDir = "$ENV{'onlineHead'}/$ENV{'onlineSubDir'}/$runName";
 my $licosDir = $onlineDataDir . '/LICOS';
 
+die "Directory $licosDir does not exist.\n" unless -d $licosDir;
+
 my $launcher = "$ENV{'PDB_HOME'}/createRun.pl";
 
 my $status = 0;
 
-# launch eLog task
 my $nextTask = $ENV{'eLogTaskLicos'};
-my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
 my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
@@ -60,6 +60,9 @@ for (my $ii=0; $ii<=$#inFiles; $ii++) {
 		system("touch $outFile");
 	}
 }
+
+# launch eLog task
+my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my @commands = ('date', $eLogCommand);
 

@@ -54,7 +54,8 @@ numEventsPerFile = chunkSize.chunkSize(particleType)
 print >> sys.stderr, "Particle type is %s, using chunk size %s." % (particleType, numEventsPerFile)
 
 treeName = 'Digi'
-chunks = reconPM.getFileChunks(digiFileName, treeName, numEventsPerFile)
+chunks, numEventsPerFile = \
+        reconPM.getFileChunks(digiFileName, treeName, numEventsPerFile)
 
 print >> sys.stderr, chunks
 
@@ -155,7 +156,7 @@ oneFormat = '%0.' + `nDigits` + 'd'
 cFormat = oneFormat + '-' + oneFormat
 
 # Make a resource requirement string to make sure the LSF hosts have enough scratch space
-scratchSize = reconPM.reserveSize(digiFileName)
+scratchSize = reconPM.reserveSize(digiFileName, numEventsPerFile)
 resStr = '-R "scratch > %s"' % scratchSize
 
 jobs = []
@@ -172,6 +173,12 @@ for iChunk, chunk in enumerate(chunks):
 
     cTag = cFormat % (first, last)
 
+    chunkStage = os.path.join(stageDir, cTag)
+    if not os.path.isdir(chunkStage):
+        print >> sys.stderr, 'Making dir [%s]' % chunkStage
+        os.makedirs(chunkStage)
+        pass    
+
     joFile = '%s_%s_%s_text.jobOpt' % (task, runId, cTag)
     joFiles.append(joFile)
     joFile = os.path.join(workDir, joFile)
@@ -184,21 +191,21 @@ ApplicationMgr.EvtMax = %d;
     (first, numEvents)
     joData = joHead + joEvents
 
-    reconFileBase = '%s_%s_%s_RECON.root' % (task, runId, cTag)
-    reconProcFile = os.path.join(procDir, reconFileBase)
-    reconFile = os.path.join(stageDir, reconFileBase)
+    reconChunkBase = '%s_%s_%s_RECON.root' % (task, runId, cTag)
+    reconProcFile = os.path.join(procDir, reconChunkBase)
+    reconFile = os.path.join(chunkStage, reconChunkBase)
     reconFiles.append(reconFile)
     joData += 'reconRootWriterAlg.reconRootFile = "%s";\n' % reconProcFile
     
-    meritFileBase = '%s_%s_%s_merit.root' % (task, runId, cTag)
-    meritProcFile = os.path.join(procDir, meritFileBase)
-    meritFile = os.path.join(stageDir, meritFileBase)
+    meritChunkBase = '%s_%s_%s_merit.root' % (task, runId, cTag)
+    meritProcFile = os.path.join(procDir, meritChunkBase)
+    meritFile = os.path.join(chunkStage, meritChunkBase)
     meritFiles.append(meritFile)
     joData += 'RootTupleSvc.filename = "%s";\n' % meritProcFile
 
-    calFileBase = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
-    calProcFile = os.path.join(procDir, calFileBase)
-    calFile = os.path.join(stageDir, calFileBase)
+    calChunkBase = '%s_%s_%s_calTuple.root' % (task, runId, cTag)
+    calProcFile = os.path.join(procDir, calChunkBase)
+    calFile = os.path.join(chunkStage, calChunkBase)
     calFiles.append(calFile)
     joData += 'CalTupleAlg.tupleFilename = "%s";\n' % calProcFile
 
@@ -210,9 +217,9 @@ ApplicationMgr.EvtMax = %d;
 
     # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
     # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
-    cmd = 'exec bsub -K -q %s -G %s %s -o %s %s %s %s' % \
+    cmd = 'exec bsub -K -q %s -G %s %s -o %s %s %s %s %s' % \
           (os.environ['chunkQueue'], os.environ['batchgroup'], resStr, \
-           logFile, shellFile, joFile, digiFileName)
+           logFile, shellFile, joFile, digiFileName, chunkStage)
     print >> sys.stderr, cmd
     jobs.append(cmd)
 
@@ -239,38 +246,68 @@ if status:
     pass
 
 # concat chunk files into final results
-print >> sys.stderr, "Combining cal files into %s" % calFileName
-timeLogger()
-#rcCal = reconPM.concatenateFiles(calFileName, calFiles, 'CalXtalRecTuple')
-rcCal = reconPM.concatenate_hadd(calFileName, calFiles, 'CalTuple')
-timeLogger()
-if rcCal:
-    print >> sys.stderr, "Failed to create cal file %s!" % calFileName
-    sys.exit(1)
-else:
-    print >> sys.stderr, "Created cal file %s."  % calFileName
-    pass
 
-print >> sys.stderr, "Combining merit files into %s" % meritFileName
+reconStage = os.path.join(stageDir, reconFileBase)
+print >> sys.stderr, "Combining recon files into %s" % reconStage
 timeLogger()
-rcMerit = reconPM.concatenate_hadd(meritFileName, meritFiles, 'MeritTuple')
-timeLogger()
-if rcMerit:
-    print >> sys.stderr, "Failed to create merit file %s!" % meritFileName
-    sys.exit(1)
-else:
-    print >> sys.stderr, "Created merit file %s."  % meritFileName
-    pass
-
-print >> sys.stderr, "Combining recon files into %s" % reconFileName
-timeLogger()
-rcRecon = reconPM.concatenate_prune(reconFileName, reconFiles, 'Recon')
+rcRecon = reconPM.concatenate_prune(reconStage, reconFiles, 'Recon')
 timeLogger()
 if rcRecon:
-    print >> sys.stderr, "Failed to create recon file %s!" % reconFileName
+    print >> sys.stderr, "Failed to create recon file %s!" % reconStage
     sys.exit(1)
 else:
-    print >> sys.stderr, "Created recon file %s."  % reconFileName
+    print >> sys.stderr, "Created recon file %s."  % reconStage
+    print >> sys.stderr, "Moving recon file to %s." % reconFileName
+    timeLogger()
+    status = os.system("mv %s %s" % (reconStage, reconFileName))
+    if status:
+        print >> sys.stderr, "Move failed."
+        sys.exit(1)
+        pass
+    timeLogger()
+    pass
+
+calBase = os.path.basename(calFileName)
+calStage = os.path.join(stageDir, calBase)
+print >> sys.stderr, "Combining cal files into %s" % calStage
+timeLogger()
+#rcCal = reconPM.concatenateFiles(calStage, calFiles, 'CalXtalRecTuple')
+rcCal = reconPM.concatenate_hadd(calStage, calFiles, 'CalTuple')
+timeLogger()
+if rcCal:
+    print >> sys.stderr, "Failed to create cal file %s!" % calStage
+    sys.exit(1)
+else:
+    print >> sys.stderr, "Created cal file %s."  % calStage
+    print >> sys.stderr, "Moving cal file to %s." % calFileName
+    timeLogger()
+    status = os.system("mv %s %s" % (calStage, calFileName))
+    if status:
+        print >> sys.stderr, "Move failed."
+        sys.exit(1)
+        pass
+    timeLogger()
+    pass
+
+meritBase = os.path.basename(meritFileName)
+meritStage = os.path.join(stageDir, meritBase)
+print >> sys.stderr, "Combining merit files into %s" % meritStage
+timeLogger()
+rcMerit = reconPM.concatenate_hadd(meritStage, meritFiles, 'MeritTuple')
+timeLogger()
+if rcMerit:
+    print >> sys.stderr, "Failed to create merit file %s!" % meritStage
+    sys.exit(1)
+else:
+    print >> sys.stderr, "Created merit file %s."  % meritStage
+    print >> sys.stderr, "Moving merit file to %s." % meritFileName
+    timeLogger()
+    status = os.system("mv %s %s" % (meritStage, meritFileName))
+    if status:
+        print >> sys.stderr, "Move failed."
+        sys.exit(1)
+        pass
+    timeLogger()
     pass
 
 # tar up log and JO files

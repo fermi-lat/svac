@@ -10,11 +10,11 @@ cmt show uses
 popd
 setenv JOBOPTIONS $1
 set digiFile=$2
+set stageDir=$3
 
-set stageDir=$runStageDir
 set localDir=$localDisk
 
-alias run 'echo \!* ; date ; \!*'
+alias run 'date ; echo \!* ; \!* ; date'
 
 if ( { test -d $localDir } ) then
     set relocate=1
@@ -55,7 +55,7 @@ endif
 echo Reading digi file from $inDir
 echo Writing chunk files to $procDir
 
-$reconApp || exit 1
+run $reconApp || exit 1
 
 if ( $relocate ) then
     echo Relocating chunk files from $procDir to $stageDir
