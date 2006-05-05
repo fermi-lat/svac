@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl -w
 
+# This is not actually used in the current pipeline
+
 # Demonstration script.
 # Submitted to batch by pipeline scheduler.
 # You need only modify the last section...
@@ -32,19 +34,12 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = $ENV{'taskLauncher'};
+my $tarBall = $outFiles->{'tarBall'};
+my $command = "tar czf $tarBall LICOS";
 
-my $newTask = $ENV{'digitizationTaskLatte'};
-my $ldfFile = $inFiles->{'ldf'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
-
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
-if (!$doDigi) {
-	exit(0);
+my $tbList = `ls *tarball*RAW.tgz`;
+if (length($tbList)) {
+	die("tarball already exists.");
 }
 
 print "Running command: [$command]\n";
@@ -82,3 +77,17 @@ if ( defined($rc) ) {
     #exit non-zero:
     exit(255);
 }
+
+#        <executable name=\"Archive\" version=\"$ENV{'eLogTaskVersion'}\">
+#            $ENV{'eLogTaskDir'}/archiveWrapper.pl
+#        </executable>
+#        <batch-job-configuration name=\"short-job\" queue=\"short\" group=\"$batchgroup\">
+#            <working-directory>$ENV{'onlineDataDirFull'}</working-directory>
+#            <log-file-path>$ENV{'onlineDataDirFull'}</log-file-path>
+#        </batch-job-configuration>
+#        <file file-type=\"tgz\"  name=\"tarball\"   type=\"RAW\"  >
+#            <path>$ENV{'eLogDataDirFull'}</path>
+#        </file>
+#        <processing-step name=\"archive\" executable=\"Archive\" batch-job-configuration=\"short-job\">
+#                        <output-file name=\"tarBall\"/>
+#        </processing-step>

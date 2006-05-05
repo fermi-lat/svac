@@ -21,7 +21,7 @@ set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
 set oldDir=../../../../../../nfs/farm/g/glast/u21/Integration/rawData/${run}
 set oldTask=online-v2r4p0
-set newTask=${eLogTask}
+set newTask=${eLogTaskLatte}
 
 foreach dataSet ($dataSets)
     set oldTail=${oldTask}_${run}_${dataSet}

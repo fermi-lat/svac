@@ -20,7 +20,7 @@ run cd ${dataDir}
 set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
 set oldTask=${onlineTask}
-set newTask=${eLogTask}
+set newTask=${eLogTaskLatte}
 
 foreach dataSet ($dataSets)
     set oldName=${oldTask}_${run}_${dataSet}

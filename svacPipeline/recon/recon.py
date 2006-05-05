@@ -103,7 +103,7 @@ elif hasTkr and hasCal:
     # if we get here, there should be exactly one each of TKR and CAL
     instrumentType = firstTkr + ':Cal' + firstCal
 else:
-    instrumentType = ''
+    instrumentType = 'LAT'
     pass
 
 # figure out the geometry

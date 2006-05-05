@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p9
+setenv svacVersion v3r5p3
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -11,7 +11,7 @@ setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
 #setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
 setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
-setenv EngineeringModelVersion v5r070305p4
+setenv EngineeringModelVersion v6r070305p7
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -52,6 +52,10 @@ setenv calCalibSerNo -9999
 
 setenv calibTail ${emTail}/${calibVersion}
 
+# Shouldn't normally use these, whoever is starting the run should do it.
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
+
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
@@ -66,8 +70,9 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
-setenv eLogTask updateELogDB-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p7
+setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
+setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
+setenv eLogFeederVersion v2r3p0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -90,7 +95,8 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
-setenv digitizationTask digitization-${digitizationTaskVersion}
+setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
+setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
 setenv Em2Version v2r49
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
@@ -99,6 +105,7 @@ setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
+setenv setEventsScript ${digitizationTaskDir}/setEvents.py
 setenv digitizationDataDir ${emTail}/grRoot
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
@@ -106,7 +113,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r4p9
+setenv TestReportVersion v3r4p13
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe

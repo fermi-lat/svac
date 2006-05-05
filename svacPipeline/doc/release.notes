@@ -309,13 +309,33 @@ Add some reprocessing scripts to svacTuple.
 ---------------------------------------------------------------------------
 
 
-v3r4p8
+v3r5p0
 ---------------
-Use u25 for rootData.
+EM v6r070305p3
+Work with LICOS - now have LICOS and LATTE versions of updateELogDB and 
+digitization tasks.
+eLogFeeder v2r3p0
 ---------------------------------------------------------------------------
 
 
-v3r4p9
+v3r5p1
 ---------------
-Use u25 for rawData.
+EM v6r070305p4
+---------------------------------------------------------------------------
+
+
+v3r5p2
+---------------
+EM v6r070305p5
+Fix a few bugs with JO files.
+Reprocessing scripts.
+---------------------------------------------------------------------------
+
+
+v3r5p3
+---------------
+EM v6r070305p7
+TestReport v3r4p13
+Add an extra, non-version-dependent link $run_rcReport.xml -> rcReport.out 
+for LICOS runs.
 ---------------------------------------------------------------------------
