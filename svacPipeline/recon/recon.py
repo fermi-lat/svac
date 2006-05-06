@@ -165,6 +165,7 @@ reconFiles = []
 meritFiles = []
 calFiles = []
 logFiles = []
+directories = []
 for iChunk, chunk in enumerate(chunks):
     # edit template JO file and add lines for first
     # event index and # events.
@@ -177,7 +178,8 @@ for iChunk, chunk in enumerate(chunks):
     if not os.path.isdir(chunkStage):
         print >> sys.stderr, 'Making dir [%s]' % chunkStage
         os.makedirs(chunkStage)
-        pass    
+        pass
+    directories.append(chunkStage)
 
     joFile = '%s_%s_%s_text.jobOpt' % (task, runId, cTag)
     joFiles.append(joFile)
@@ -222,6 +224,8 @@ ApplicationMgr.EvtMax = %d;
            logFile, shellFile, joFile, digiFileName, chunkStage)
     print >> sys.stderr, cmd
     jobs.append(cmd)
+    pass
+directories.append(stageDir)
 
 # run the chunks
 os.system("date")
@@ -327,8 +331,11 @@ trash = reconFiles + meritFiles + calFiles
 for junkFile in trash:
     os.unlink(junkFile)
     pass
-# and the staging directory
+# and the staging directory(s)
 # (if it's not empty, something is wrong)
-os.rmdir(stageDir)
+#os.rmdir(stageDir)
+for directory in directories:
+    os.rmdir(directory)
+    pass
 
 timeLogger()

@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r6p0
+setenv svacVersion v3r5p10
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -30,7 +30,7 @@ setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u29
 setenv onlineDisk u25
-setenv reconStageDir /nfs/farm/g/glast/u19/staging
+setenv reconStageDir /afs/slac/g/glast/ground/pipelineStaging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}

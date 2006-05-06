@@ -416,10 +416,12 @@ Improve/finish recon cleanup scripts.
 ---------------------------------------------------------------------------
 
 
-v3r6p0
+v3r5p10
 ---------------
 Make LicosLaunch die if run directory isn't in rawData.
 More & better timestamps in recon chunk script.
 Put output from each chunk in a separate subdir of staging dir.
 Merge chunks into staging dir, then move merged files to destination.
+Merge recon chunk before merit & cal.
+Use new AFS staging dir.
 ---------------------------------------------------------------------------
