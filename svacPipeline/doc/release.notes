@@ -425,3 +425,14 @@ Merge chunks into staging dir, then move merged files to destination.
 Merge recon chunk before merit & cal.
 Use new AFS staging dir.
 ---------------------------------------------------------------------------
+
+
+v3r6p0
+---------------
+Switch rootData to u34.
+
+Split recon/recon into 6 processes to get better rollback granularity.
+When recon of some chunks fail, save the output from the successful ones 
+and don't re-run them.
+
+---------------------------------------------------------------------------

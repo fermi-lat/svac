@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r5p10
+setenv svacVersion v3r6p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -28,9 +28,10 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u29
+setenv dataDisk u34
 setenv onlineDisk u25
-setenv reconStageDir /afs/slac/g/glast/ground/pipelineStaging
+#setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
+setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
@@ -135,7 +136,12 @@ setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon
-setenv reconScript ${reconTaskDir}/recon.py
+setenv reconSetupScript ${reconTaskDir}/setupRecon.py
+setenv reconDoScript ${reconTaskDir}/doRecon.py
+setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
+setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
+setenv haddMerge ${reconTaskDir}/haddMerge.py
+setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${calibTail}/grRoot
 setenv reconDataDirFull ${dataHead}/${reconDataDir}

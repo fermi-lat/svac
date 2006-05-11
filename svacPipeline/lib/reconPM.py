@@ -3,6 +3,16 @@ import sys
 import os
 
 
+def writeLines(fileName, lines):
+    fp = open(fileName, 'w')
+    fp.writelines((line + '\n' for line in lines))
+    pass
+
+def readLines(fileName):
+    lines = [line.strip() for line in open(fileName).readlines()]
+    return lines
+
+
 def getFileEvents(fileName, treeName='Digi'):
 
     from ROOT import TFile, TTree, TChain
@@ -83,7 +93,7 @@ def concatenate_prune(outputFileName, fileNames, treeName):
 
 def concatenate_hadd(outputFileName, fileNames, treeName):
 
-    fmt = '${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd -f %s' % outputFileName
+    fmt = '%s -f %s' % (os.environ['hadd'], outputFileName)
     fmt += ' %s' * len(fileNames)
     cmd = fmt % tuple(fileNames)
 
