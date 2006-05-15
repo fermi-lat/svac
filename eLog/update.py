@@ -1,18 +1,16 @@
-#!/usr/bin/env python2.4
-
+#!/afs/slac.stanford.edu/g/glast/applications/install/i386_linux22/usr/bin/python
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
 
 xmlFile is the run report (default rcReport.out)
 
 rawRoot is the root directory for the raw data tree on the FTP server
-(default is environment variable rawUrl)
+(default /glast.u01/EM2/rawData/)
 
 dataRoot is the root directory for the root data tree on the FTP server
-(default is environment variable rootUrl)
+(default /glast.u01/EM2/rootData/)
 
 """
 
-import os
 import sys
 from xml.dom.ext.reader import Sax2
 from xml.dom import Node
@@ -53,22 +51,11 @@ def parseTime(l):
 
     return time
 
-# check whether there is a new data value in the tables if so, add the new
-# value to table. This is necessary since eLog perl cgi scripts will
-# dynamically produce a drop down menu based on contents of the table
+# check whether there is a new data value in the tables for drop down menus
+# if so, add the new value to table
 def checkNewValue(value, table, col):
 
-# it is necessary to lock the table here since this script can be run in
-# multiple batch jobs to cause a race condition
-    sqlStr = 'lock table ' + table + ' in exclusive mode'
-    
-    execSql(c, sqlStr)
-    
-    id = {'eLogSite': 'Seq_eLogSiteID.NextVal',
-          'eLogPhase': 'Seq_eLogPhaseID.NextVal',
-          'eLogOrientation': 'Seq_eLogOrientationID.NextVal',
-          'eLogInstrumentType': 'Seq_eLogInstrumentTypeID.NextVal',
-          'eLogParticleType': 'Seq_eLogParticleTypeID.NextVal'}
+    id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
           
     sqlStr = 'select ' + col + ' from ' + table + ' where ' + col + ' = \'' + value + '\''
     execSql(c, sqlStr)
@@ -79,88 +66,19 @@ def checkNewValue(value, table, col):
         sqlStr = 'insert into ' + table + ' values(' + id[table] + ', \'' + value + '\')'
         execSql(c, sqlStr)
 
-# parse SerialNos tag in rcReport to reture a list containing 3 info:
-# 1. no. of towers 2. serial no. of TKRs 3. serial no. of CALs
-temRe = re.compile('GTEM\(([0-9]+),([0-9]*)\)')
-def parseSerialNosTag(value):
-    dict = eval(value)
-
-    nTowers = 0
-
-    tkrSerNo = ''
-    calSerNo = ''
-
-    for k, v in dict.iteritems():
-        match = temRe.match(k)
-        if(match):
-            nTowers += 1
-            temId = match.groups()[0]
-            if(v.has_key('tkr')):
-                tkrSerNo = tkrSerNo + v['tkr'] + '(' +temId + ')???'
-            if(v.has_key('calinstrument')):
-                calSerNo = calSerNo + v['calinstrument'] + '(' +temId + ')???'
-    
-    return [nTowers, tkrSerNo, calSerNo]
-
-# turn a string of a python list to a string of items in the list separated
-# by : in order to save storage in oracle
-def transformStrList(string):
-
-    l = eval(string)
-
-    oracleStr = ''
-
-    length = len(l)
-
-    for item in l[0:length-1]:
-        oracleStr = oracleStr + str(item) + ':'
-
-    oracleStr += str(l[length-1])
-
-    return oracleStr
-
-
-def insertIntRunConfigId(id):
-
-    sqlStr = 'lock table elogintrunconfiguration in exclusive mode'
-    
-    execSql(c, sqlStr)
-    
-    l = eval(id)
-
-    sqlStr= 'select id from elogintrunconfiguration where E2EID=\'' + l[0] + '\' and configid=' + l[1]
-
-    execSql(c, sqlStr)
-    result = c.fetchone()
-
-    if(result == None):
-        print 'new intRunConfiguration id found: ' + l[0] + ' ' + l[1] + ', adding it to the database'
-        sqlStr = 'insert into elogintrunconfiguration  values(Seq_eLogIntRunConfigurationID.NextVal, \'' +  l[0] + '\', ' + l[1]+ ', \'\')'
-        execSql(c, sqlStr)
-        sqlStr= 'select id from elogintrunconfiguration where E2EID=\'' + l[0] + '\' and configid=' + l[1]
-
-        execSql(c, sqlStr)
-        result =  c.fetchone()
-
-    [id] = result
-    return id
-
-# main codes start from here 
 #used to form ftp URL - default value
 xmlFileName = 'rcReport.out'
-#rootDataDir = '/glast.u12/EM2/rootData/'
-rootDataDir = os.environ['rootUrl']
-#rawDataDir = '/glast.u12/EM2/rawData/'
-rawDataDir = os.environ['rawUrl']
+rootDataDir = '/glast.u01/EM2/rootData/'
+rawDataDir = '/glast.u01/EM2/rawData/'
 
 # parse args
 nArg = len(sys.argv)
-if nArg == 2:
+if nArg >= 2:
     xmlFileName = sys.argv[1]
 elif nArg == 3:
-    xmlFileName, rootDataDir = sys.argv[1:]
+    rootDataDir = sys.argv[2]
 elif nArg == 4:
-    xmlFileName, rootDataDir, rawDataDir = sys.argv[1:]
+    rootDataDir = sys.argv[3]
 else:
     print __doc__
     sys.exit(99)    
@@ -198,32 +116,10 @@ orientationTag = 'Orientation'
 phaseTag = 'Phase'
 commentsTag = 'Comments'
 errorEventCountTag = 'ErrorEventCount'
-# note additionFields is not a tag in rcReport.out, it is a column in the
-# table to store any unfound tags
 additionFieldsTag = 'additionFields'
-onlineReportTag = 'ScriptReport'
-csvTestIdTag = 'csvTestId'
-serNoTag = 'SerialNos'
-suiteNameTag = 'suiteName'
-suiteRunListTag = 'suiteRunList'
-suiteTimeStampTag = 'suiteTimeStamp'
-analTag = 'Readback_mode'
-analUnitTag = 'analysisUnit'
-analTemTag = 'analysisTemId'
+onlineReportTag = 'TestReport'
 
-tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag,
-        eventCountTag, badEventCountTag, pauseCountTag,
-        startTimeTag, elapsedTimeTag, endTimeTag,
-        schemaConfigFileTag, additionalInputFilesTag, releaseTag,
-        modulesFailedVerificationTag, versionDataTag,
-        completionStatusTag, completionStatusStrTag,
-        archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag,
-        siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag,
-        commentsTag, errorEventCountTag,
-        onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag,
-        analTag, analUnitTag, analTemTag]
-
-reinsertTags = [analTag, analUnitTag, analTemTag]
+tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag]
 
 # create Reader object
 reader = Sax2.Reader()
@@ -239,14 +135,8 @@ db = DCOracle2.connect('GLAST_CAL/9square#')
 c = db.cursor()
 
 # parse the document
-try:
-    doc = reader.fromStream(xmlFile)
-except:
-    msg = 'rcReport %s is missing, unreadable, or invalid.\n' % xmlFileName
-    sys.stderr.write(msg)
-    errFile.write(msg)
-    sys.exit(1)
-    
+doc = reader.fromStream(xmlFile)
+
 reports = doc.getElementsByTagName(testReportTag)
 
 for report in reports:
@@ -263,14 +153,6 @@ for report in reports:
     
     data[additionFieldsTag] = ''
     
-    intRunConfigId = 'null'
-
-    # initialize the variables in case rcReport does not have serial number tag
-    nTowers = 0
-    tkrSerNo = ''
-    calSerNo = ''
-    readBack = False
-
     for node in report.childNodes:
 
         if (node.nodeType == Node.TEXT_NODE and \
@@ -280,13 +162,6 @@ for report in reports:
         
         name = node.nodeName
         
-        if(name == serNoTag):
-            [nTowers, tkrSerNo, calSerNo] = \
-                      parseSerialNosTag(node.childNodes[0].data)
-            
-        elif( name == csvTestIdTag ):
-            intRunConfigId = insertIntRunConfigId(node.childNodes[0].data)
-
         if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
@@ -296,12 +171,9 @@ for report in reports:
             data[additionFieldsTag] = data[additionFieldsTag] + name + '???' + node.childNodes[0].data + '!!!'
             
             continue
-
-        if ((name == startTimeTag) or (name == endTimeTag)
-            or (name == suiteTimeStampTag)):
+        
+        if (name == startTimeTag) or (name == endTimeTag):
             data[name] = parseTime(node.childNodes[0].data)
-        elif( name == suiteRunListTag ):
-            data[name] = transformStrList(node.childNodes[0].data)
         elif (
               name == releaseTag or
               name == additionalInputFilesTag
@@ -313,23 +185,17 @@ for report in reports:
             data[name] = node.childNodes[0].data
 
 # fill in default
-    if(data.has_key(eventCountTag) == 0):
-        data[eventCountTag] = '-1'
     if(data.has_key(badEventCountTag) == 0):
         data[badEventCountTag] = '0'
     if(data.has_key(errorEventCountTag) == 0):
         data[errorEventCountTag] = '0'
-        pass
-    if not data.has_key(analTag):
-        data[analTag] = 'False'
-        pass
 
     for tag in tags:
         if(data.has_key(tag) == 0):
 #            errFile.write(tag + ' is not found! Set to empty! \n')
             data[tag] = ''
 
-    print 'Processing run ' + data[runIdTag]
+    print data[runIdTag]
     
     # determine whether run is already in the database
     sqlStr = 'select * from eLogReport where RunId = ' + data[runIdTag]
@@ -342,10 +208,6 @@ for report in reports:
         print 'run ' + data[runIdTag] + ' already exists in the database, ignore this run'
         continue
 
-    sqlStr = 'lock table eLogCompletionStatus in exclusive mode'
-    
-    execSql(c, sqlStr)
-    
     #determine whether there is a new completionStatus value
     sqlStr = 'select Id from eLogCompletionStatus where Id = ' + data[completionStatusTag]
     c.execute(sqlStr)
@@ -383,38 +245,8 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    # get directory where report lives
-    onlineDir = os.path.dirname(xmlFileName)
-    dirs = onlineDir.split(os.sep)
-    index = dirs.index(data[runIdTag])
-    # include run in onlineTail so we don't get an emty list
-    # onlineTail = '/'.join(dirs[index+1:])
-    onlineTail = '/'.join(dirs[index:])
-    print onlineTail
-    onlineReportUrl = '/'.join((rawDataDir, onlineTail))
+    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + rawDataDir + data[runIdTag] + '/' + data[onlineReportTag]
     
-    if(data.has_key(onlineReportTag)):
-        onlineReportUrl = '/'.join((onlineReportUrl, data[onlineReportTag]))
-
-    # mangle serial # fields if this is an analysis run
-    if data.has_key(analTag) and eval(data[analTag]):
-        analSerNo = '%s(%s)???' % (data[analUnitTag], data[analTemTag])
-        otherSerNo = ''
-        if data[analUnitTag] in tkrSerNo:
-            tkrSerNo = analSerNo
-            calSerNo = otherSerNo
-        elif data[analUnitTag] in calSerNo:
-            calSerNo = analSerNo
-            tkrSerNo = otherSerNo
-            pass
-        # The tags we used to do this didn't go into additionFileds.
-        # Nor do they have their own columns in the DB.
-        # So insert them into additionFields now.
-        for tag in reinsertTags:
-            data[additionFieldsTag] += '%s???%s!!!' % (tag, data[tag])
-            pass
-        pass
-     
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
     # in oracle, '' is used to put ' inside a string.
@@ -422,37 +254,23 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId, additionalInputFiles) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ', :5)'
-       
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\')'
+
     try:
-        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]), str(data[additionalInputFilesTag]))
+        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
     except:
-       (exc_type, exc_value) = sys.exc_info()[:2]
+        (exc_type, exc_value) = sys.exc_info()[:2]
 
-       print sqlStr
-       print exc_type
-       print exc_value
+        print sqlStr
+        print exc_type
+        print exc_value
 
-       db.rollback()
-       exit(1)
-
-    if(data[testNameTag] == 'suiteSummary'):
-        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = :1 where runid = ' + data[runIdTag]
-
-        try:
-            c.execute(sqlStr, str(data[suiteRunListTag]))
-        except:
-            (exc_type, exc_value) = sys.exc_info()[:2]
-
-            print sqlStr
-            print exc_type
-            print exc_value
-
-            db.rollback()
-            exit(1)    
-
+        db.rollback()
+        continue
+    
     # safe to commit
     db.commit()
     
+
 #close database
 db.close()
