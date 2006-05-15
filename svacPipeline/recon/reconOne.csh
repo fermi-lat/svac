@@ -14,9 +14,6 @@ set stageDir=$3
 
 set localDir=$localDisk
 
-set nTries=5
-set delay=23
-
 alias run 'date ; echo \!* ; \!* ; date'
 
 if ( { test -d $localDir } ) then
@@ -28,25 +25,8 @@ if ( { test -d $localDir } ) then
     setenv inDir $myLocal
     setenv procDir $myLocal
 
-#     run cp $JOBOPTIONS $inDir && set unDone=0 || set unDone=1
-#     while ($unDone)
-#         sleep 19 # randomish delay
-#         run cp $JOBOPTIONS $inDir && set unDone=0 || set unDone=1
-#     end
 	echo Copying JO file to local disk
 	$tryAFewTimes cp $JOBOPTIONS $inDir || exit 1
-# 	date
-# 	foreach xxx (`seq $nTries`)
-# 		cp $JOBOPTIONS $inDir && set done=1 || set done=0
-# 		if ($done) break
-# 		sleep $delay
-# 	end
-# 	if (! $done) then
-# 		echo Failed $nTries times.
-# 		exit 1
-# 	endif
-# 	echo Succeded after $xxx tries.
-# 	date
 
     set joBase=`echo $JOBOPTIONS | awk -F/ '{print $NF}'`
     setenv JOBOPTIONS $inDir/$joBase
@@ -59,25 +39,8 @@ if ( { test -d $localDir } ) then
     set calFile=`awk -F'"' '/calTuple\.root/{print $2}' $JOBOPTIONS`
     set calBase=`basename $calFile`
 
-#     run cp $digiFile $inDir && set unDone=0 || set unDone=1
-#     while ($unDone)
-#         sleep 17 # randomish delay
-#         run cp $digiFile $inDir && set unDone=0 || set unDone=1
-#     end
 	echo Copying digi file to local disk
 	$tryAFewTimes cp $digiFile $inDir || exit 1
-# 	date
-# 	foreach xxx (`seq $nTries`)
-# 		cp $digiFile $inDir && set done=1 || set done=0
-# 		if ($done) break
-# 		sleep $delay
-# 	end
-# 	if (! $done) then
-# 		echo Failed $nTries times.
-# 		exit 1
-# 	endif
-# 	echo Succeded after $xxx tries.
-# 	date
 
 else
     set relocate=0
@@ -92,7 +55,6 @@ run $reconApp || exit 1
 if ( $relocate ) then
     echo Relocating chunk files from $procDir to $stageDir
     pushd $procDir
-#    run mv $reconBase $meritBase $calBase $stageDir || exit 1
 	foreach outFile ($reconBase $meritBase $calBase)
 		$tryAFewTimes mv $outFile $stageDir || exit 1
 	end
