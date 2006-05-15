@@ -227,3 +227,9 @@ awb	Updated Acd Poca code to work with new AcdRecon (EM v6r070329p4).
 v1r17: April 21, 2006
 awb     Added one more context variable (that I had forgotten).
 	Corrected the types of some context variables.
+
+v2r0: May 15, 2006
+awb	Added calibrated ACD variables. 
+	Renamed a few ACD MC variables. 
+	Removed obsolete ACD variable.
+	Added description of context variables.

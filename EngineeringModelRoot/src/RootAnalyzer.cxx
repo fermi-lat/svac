@@ -364,15 +364,54 @@ void RootAnalyzer::analyzeReconTree()
 
   //
   if (acdRecon) {
+
+    // Temporary max variable:
+    float tmpMax       = -9999.0;
+    int   tmpMaxTileID = -9999;
+    int   tmpMaxPmt    = -9999;
+    
+    float tmpSum = 0.0;
+
+
     UInt_t nAcdHit = acdRecon->nAcdHit();
     for ( UInt_t iAcdHit(0); iAcdHit < nAcdHit; iAcdHit++ ) {
       const AcdHit* acdHit = acdRecon->getAcdHit(iAcdHit);
 
       const AcdId& acdId = acdHit->getId();
-      int acdID = acdId.getId(); 
+      int acdID = acdId.getId();  
       m_ntuple.m_acdMips[acdID][0] = acdHit->getMips(AcdHit::A);
       m_ntuple.m_acdMips[acdID][1] = acdHit->getMips(AcdHit::B);
+
+      m_ntuple.m_acdMipsPha[acdID][0] = acdHit->getPha(AcdHit::A);
+      m_ntuple.m_acdMipsPha[acdID][1] = acdHit->getPha(AcdHit::B);
+
+      m_ntuple.m_acdMipsFlag[acdID][0] = acdHit->getFlags(AcdHit::A);
+      m_ntuple.m_acdMipsFlag[acdID][1] = acdHit->getFlags(AcdHit::B);
+
+      if ((acdHit->getMips(AcdHit::A)) > tmpMax) {
+        tmpMax       = acdHit->getMips(AcdHit::A);
+        tmpMaxTileID = acdID;
+        tmpMaxPmt    = 0;
+      }
+      if ((acdHit->getMips(AcdHit::B)) > tmpMax) {
+        tmpMax       = acdHit->getMips(AcdHit::B);
+        tmpMaxTileID = acdID;
+        tmpMaxPmt    = 1;
+      }
+      if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))>0) {
+        tmpSum = tmpSum + 0.5*((acdHit->getMips(AcdHit::A)) + (acdHit->getMips(AcdHit::B)));
+      }
+      if ((acdHit->getMips(AcdHit::A))<=0 && (acdHit->getMips(AcdHit::B))>0) {
+        tmpSum = tmpSum + acdHit->getMips(AcdHit::B);
+      }
+      if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))<=0) {
+        tmpSum = tmpSum + acdHit->getMips(AcdHit::A);
+      }
     }
+    m_ntuple.m_acdMipsMax       = tmpMax;
+    m_ntuple.m_acdMipsMaxTileID = tmpMaxTileID;
+    m_ntuple.m_acdMipsMaxPmt    = tmpMaxPmt;
+    m_ntuple.m_acdMipsSum       = tmpSum;
 
 
     //
@@ -495,7 +534,6 @@ void RootAnalyzer::analyzeReconTree()
   if (acdRecon) {
     m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
     m_ntuple.m_acdDoca       = acdRecon->getDoca();
-    m_ntuple.m_acdGammaDoca  = acdRecon->getGammaDoca();
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
     m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
@@ -584,7 +622,6 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete = m_digiEvent->getMetaEvent().time().current().incomplete();
   m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs = m_digiEvent->getMetaEvent().time().current().timeSecs();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling = m_digiEvent->getMetaEvent().time().current().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentFlags = m_digiEvent->getMetaEvent().time().current().flags();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid = m_digiEvent->getMetaEvent().time().current().flagsValid();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps = m_digiEvent->getMetaEvent().time().current().missingGps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps = m_digiEvent->getMetaEvent().time().current().missingCpuPps();
@@ -596,7 +633,6 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete = m_digiEvent->getMetaEvent().time().previous().incomplete();
   m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs = m_digiEvent->getMetaEvent().time().previous().timeSecs();
   m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling = m_digiEvent->getMetaEvent().time().previous().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlags = m_digiEvent->getMetaEvent().time().previous().flags();
   m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid = m_digiEvent->getMetaEvent().time().previous().flagsValid();
   m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps = m_digiEvent->getMetaEvent().time().previous().missingGps();
   m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
@@ -1559,7 +1595,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeToneCurrentIncomplete", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete), "ContextLsfTimeTimeToneCurrentIncomplete/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/i");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlags", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlags), "ContextLsfTimeTimeToneCurrentFlags/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
@@ -1571,7 +1606,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeTonePreviousIncomplete", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete), "ContextLsfTimeTimeTonePreviousIncomplete/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/i");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlags", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlags), "ContextLsfTimeTimeTonePreviousFlags/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
@@ -1656,9 +1690,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdNaLowDisc", &(m_ntuple.m_acdNaLowDisc), "AcdNaLowDisc[11][2]/I");
 
   // ACD recon:
-  m_tree->Branch("AcdEnergy", &(m_ntuple.m_acdEnergy),"AcdEnergy/F");
+  m_tree->Branch("AcdTileMCEnergy", &(m_ntuple.m_acdEnergy),"AcdTileMCEnergy/F");
   m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
-  m_tree->Branch("AcdGammaDoca", &(m_ntuple.m_acdGammaDoca),"AcdGammaDoca/F");
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
   m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
@@ -1687,6 +1720,14 @@ void RootAnalyzer::createBranches()
 
   // ACD MIPs:
   m_tree->Branch("AcdMips", &(m_ntuple.m_acdMips),"AcdMips[604][2]/F");
+  m_tree->Branch("AcdMipsPha", &(m_ntuple.m_acdMipsPha),"AcdMipsPha[604][2]/I");
+  m_tree->Branch("AcdMipsFlag", &(m_ntuple.m_acdMipsFlag),"AcdMipsFlag[604][2]/I");
+
+  m_tree->Branch("AcdMipsMax", &(m_ntuple.m_acdMipsMax),"AcdMipsMax/F");
+  m_tree->Branch("AcdMipsMaxTileID", &(m_ntuple.m_acdMipsMaxTileID),"AcdMipsMaxTileID/I");
+  m_tree->Branch("AcdMipsMaxPmt", &(m_ntuple.m_acdMipsMaxPmt),"AcdMipsMaxPmt/I");
+  m_tree->Branch("AcdMipsSum", &(m_ntuple.m_acdMipsSum),"AcdMipsSum/F");
+
   
 
   // ACD POCA:
@@ -1718,7 +1759,5 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdTkrPointZ",&(m_ntuple.m_acdTkrPointZ),"AcdTkrPointZ[2]/F");
 
   m_tree->Branch("AcdTkrPointFace",&(m_ntuple.m_acdTkrPointFace),"AcdTkrPointFace[2]/I");
-
-
 
 }

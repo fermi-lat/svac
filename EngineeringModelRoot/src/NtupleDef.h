@@ -127,6 +127,16 @@ struct NtupleDef {
   // ACD MIPs:
   float m_acdMips[604][2];
 
+  int m_acdMipsPha[604][2];
+  int m_acdMipsFlag[604][2];
+
+
+  float m_acdMipsMax;
+  int   m_acdMipsMaxTileID;
+  int   m_acdMipsMaxPmt;
+  float m_acdMipsSum;
+
+
   // Tkr Point:
   float m_acdTkrPointX[2];
   float m_acdTkrPointY[2];
@@ -241,7 +251,6 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeToneCurrentIncomplete;
   unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
   unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
-  unsigned int m_contextLsfTimeTimeToneCurrentFlags;
   int m_contextLsfTimeTimeToneCurrentFlagsValid;
   int m_contextLsfTimeTimeToneCurrentMissingGps;
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
@@ -253,7 +262,6 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeTonePreviousIncomplete;
   unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
   unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
-  unsigned int m_contextLsfTimeTimeTonePreviousFlags;
   int m_contextLsfTimeTimeTonePreviousFlagsValid;
   int m_contextLsfTimeTimeTonePreviousMissingGps;
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
