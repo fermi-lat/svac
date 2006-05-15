@@ -30,8 +30,8 @@ setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u34
 setenv onlineDisk u25
-#setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
-setenv reconStageDir /nfs/farm/g/glast/u19/staging
+setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
+#setenv reconStageDir /nfs/farm/g/glast/u19/staging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
@@ -186,6 +186,7 @@ setenv urlUpdateScript  ${svacPlLib}/updateUrl.py
 setenv batchgroup glastdata
 setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
 setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
+setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
 #-------------------------------- many ----------------------------------------
 
 setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root

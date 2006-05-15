@@ -24,26 +24,39 @@ else:
     pass
 
 reconFiles = reconPM.readLines(reconChunks)
+nChunks = len(reconFiles)
 
-workDir, reconFileBase = os.path.split(reconFileName)
-stageDir = os.path.join(os.environ['reconStageDir'], runId)
+if nChunks > 1:
+    workDir, reconFileBase = os.path.split(reconFileName)
+    stageDir = os.path.join(os.environ['reconStageDir'], runId)
+    
+    # concat chunk files into final results
 
-# concat chunk files into final results
+    reconStage = os.path.join(stageDir, reconFileBase)
+    print >> sys.stderr, "Combining recon files into %s" % reconStage
+    timeLogger()
+    rcRecon = reconPM.concatenate_prune(reconStage, reconFiles, 'Recon')
+    timeLogger()
+    if rcRecon:
+        print >> sys.stderr, "Failed to create recon file %s!" % reconStage
+        sys.exit(1)
+        pass
 
-reconStage = os.path.join(stageDir, reconFileBase)
-print >> sys.stderr, "Combining recon files into %s" % reconStage
-timeLogger()
-rcRecon = reconPM.concatenate_prune(reconStage, reconFiles, 'Recon')
-timeLogger()
-if rcRecon:
-    print >> sys.stderr, "Failed to create recon file %s!" % reconStage
+    print >> sys.stderr, "Created recon file %s."  % reconStage
+
+elif nChunks == 1:
+    print >> sys.stderr, "Only one chunk, moving instead of merging."
+    reconStage = reconFiles[0]
+
+else:
+    print >> sys.stderr, "No chunks, shouldn't get here."
     sys.exit(1)
     pass
 
-print >> sys.stderr, "Created recon file %s."  % reconStage
 print >> sys.stderr, "Moving recon file to %s." % reconFileName
 timeLogger()
-status = os.system("mv %s %s" % (reconStage, reconFileName))
+status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
+                                    reconStage, reconFileName))
 if status:
     print >> sys.stderr, "Move failed."
     sys.exit(1)
