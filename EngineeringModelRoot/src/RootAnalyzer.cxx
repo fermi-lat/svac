@@ -372,47 +372,49 @@ void RootAnalyzer::analyzeReconTree()
     
     float tmpSum = 0.0;
 
-
     UInt_t nAcdHit = acdRecon->nAcdHit();
     for ( UInt_t iAcdHit(0); iAcdHit < nAcdHit; iAcdHit++ ) {
       const AcdHit* acdHit = acdRecon->getAcdHit(iAcdHit);
 
       const AcdId& acdId = acdHit->getId();
       int acdID = acdId.getId();  
-      m_ntuple.m_acdMips[acdID][0] = acdHit->getMips(AcdHit::A);
-      m_ntuple.m_acdMips[acdID][1] = acdHit->getMips(AcdHit::B);
 
-      m_ntuple.m_acdMipsPha[acdID][0] = acdHit->getPha(AcdHit::A);
-      m_ntuple.m_acdMipsPha[acdID][1] = acdHit->getPha(AcdHit::B);
+      // Get rid of the NA (they have ID=899):
+      if (acdID < 604) {
+        m_ntuple.m_acdMips[acdID][0] = acdHit->getMips(AcdHit::A);
+        m_ntuple.m_acdMips[acdID][1] = acdHit->getMips(AcdHit::B);
 
-      m_ntuple.m_acdMipsFlag[acdID][0] = acdHit->getFlags(AcdHit::A);
-      m_ntuple.m_acdMipsFlag[acdID][1] = acdHit->getFlags(AcdHit::B);
+        m_ntuple.m_acdMipsPha[acdID][0] = acdHit->getPha(AcdHit::A);
+        m_ntuple.m_acdMipsPha[acdID][1] = acdHit->getPha(AcdHit::B);
 
-      if ((acdHit->getMips(AcdHit::A)) > tmpMax) {
-        tmpMax       = acdHit->getMips(AcdHit::A);
-        tmpMaxTileID = acdID;
-        tmpMaxPmt    = 0;
+        m_ntuple.m_acdMipsFlag[acdID][0] = acdHit->getFlags(AcdHit::A);
+        m_ntuple.m_acdMipsFlag[acdID][1] = acdHit->getFlags(AcdHit::B);
+
+        if ((acdHit->getMips(AcdHit::A)) > tmpMax) {
+          tmpMax       = acdHit->getMips(AcdHit::A);
+          tmpMaxTileID = acdID;
+          tmpMaxPmt    = 0;
+        }
+        if ((acdHit->getMips(AcdHit::B)) > tmpMax) {
+          tmpMax       = acdHit->getMips(AcdHit::B);
+          tmpMaxTileID = acdID;
+          tmpMaxPmt    = 1;
+        }
+        if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))>0) {
+          tmpSum = tmpSum + 0.5*((acdHit->getMips(AcdHit::A)) + (acdHit->getMips(AcdHit::B)));
+        }
+        if ((acdHit->getMips(AcdHit::A))<=0 && (acdHit->getMips(AcdHit::B))>0) {
+          tmpSum = tmpSum + acdHit->getMips(AcdHit::B);
+        }
+        if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))<=0) {
+          tmpSum = tmpSum + acdHit->getMips(AcdHit::A);
+        }
       }
-      if ((acdHit->getMips(AcdHit::B)) > tmpMax) {
-        tmpMax       = acdHit->getMips(AcdHit::B);
-        tmpMaxTileID = acdID;
-        tmpMaxPmt    = 1;
-      }
-      if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))>0) {
-        tmpSum = tmpSum + 0.5*((acdHit->getMips(AcdHit::A)) + (acdHit->getMips(AcdHit::B)));
-      }
-      if ((acdHit->getMips(AcdHit::A))<=0 && (acdHit->getMips(AcdHit::B))>0) {
-        tmpSum = tmpSum + acdHit->getMips(AcdHit::B);
-      }
-      if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))<=0) {
-        tmpSum = tmpSum + acdHit->getMips(AcdHit::A);
-      }
+      m_ntuple.m_acdMipsMax       = tmpMax;
+      m_ntuple.m_acdMipsMaxTileID = tmpMaxTileID;
+      m_ntuple.m_acdMipsMaxPmt    = tmpMaxPmt;
+      m_ntuple.m_acdMipsSum       = tmpSum;
     }
-    m_ntuple.m_acdMipsMax       = tmpMax;
-    m_ntuple.m_acdMipsMaxTileID = tmpMaxTileID;
-    m_ntuple.m_acdMipsMaxPmt    = tmpMaxPmt;
-    m_ntuple.m_acdMipsSum       = tmpSum;
-
 
     //
     // Tkr Point
@@ -741,7 +743,6 @@ void RootAnalyzer::analyzeDigiTree()
 
     // Tile ID:
     int AcdID = acdDigi->getId().getId();
-
 
     // Attached tile and ID out of bounds?
     if (acdDigi->getId().getNa()==0 && (AcdID>603 || AcdID<0)) {

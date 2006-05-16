@@ -372,7 +372,7 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile number in dense notation. </TD> </TR> 
 
 <TR> <TD> AcdNaPha[NA0-NA10][2]                 </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified n0n-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdNaRange[NA0-NA10][2]               </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
 <TR> <TD> AcdNaOddParityError[NA0-NA10][2]      </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdNaHeaderParityError[NA0-NA10][2]   </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>

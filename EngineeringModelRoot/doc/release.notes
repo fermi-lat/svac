@@ -233,3 +233,6 @@ awb	Added calibrated ACD variables.
 	Renamed a few ACD MC variables. 
 	Removed obsolete ACD variable.
 	Added description of context variables.
+
+v2r1: May 16, 2006
+awb	Fixed overwrite bug in AcdMips arrays.     
