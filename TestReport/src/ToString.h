@@ -4,10 +4,9 @@
 #include <sstream>
 #include <string>
 
-template<class X> std::string ToString(X data, int precision=2)
+template<class X> std::string ToString(X data)
 {
   std::ostringstream stream;
-  stream.precision(precision);
   stream << data;
   return stream.str();
 }
