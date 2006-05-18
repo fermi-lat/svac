@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.4
+#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
 
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
 
@@ -64,11 +64,7 @@ def checkNewValue(value, table, col):
     
     execSql(c, sqlStr)
     
-    id = {'eLogSite': 'Seq_eLogSiteID.NextVal',
-          'eLogPhase': 'Seq_eLogPhaseID.NextVal',
-          'eLogOrientation': 'Seq_eLogOrientationID.NextVal',
-          'eLogInstrumentType': 'Seq_eLogInstrumentTypeID.NextVal',
-          'eLogParticleType': 'Seq_eLogParticleTypeID.NextVal'}
+    id = {'eLogSite':'Seq_eLogSiteID.NextVal', 'eLogPhase':'Seq_eLogPhaseID.NextVal', 'eLogOrientation':'Seq_eLogOrientationID.NextVal', 'eLogInstrumentType':'Seq_eLogInstrumentTypeID.NextVal', 'eLogParticleType':'Seq_eLogParticleTypeID.NextVal'};
           
     sqlStr = 'select ' + col + ' from ' + table + ' where ' + col + ' = \'' + value + '\''
     execSql(c, sqlStr)
@@ -81,7 +77,6 @@ def checkNewValue(value, table, col):
 
 # parse SerialNos tag in rcReport to reture a list containing 3 info:
 # 1. no. of towers 2. serial no. of TKRs 3. serial no. of CALs
-temRe = re.compile('GTEM\(([0-9]+),([0-9]*)\)')
 def parseSerialNosTag(value):
     dict = eval(value)
 
@@ -91,15 +86,13 @@ def parseSerialNosTag(value):
     calSerNo = ''
 
     for k, v in dict.iteritems():
-        match = temRe.match(k)
-        if(match):
+        if(re.match('GTEM', k)):
             nTowers += 1
-            temId = match.groups()[0]
             if(v.has_key('tkr')):
-                tkrSerNo = tkrSerNo + v['tkr'] + '(' +temId + ')???'
+                tkrSerNo = tkrSerNo + v['tkr'] + '???'
             if(v.has_key('calinstrument')):
-                calSerNo = calSerNo + v['calinstrument'] + '(' +temId + ')???'
-    
+                calSerNo = calSerNo + v['calinstrument'] + '???'
+
     return [nTowers, tkrSerNo, calSerNo]
 
 # turn a string of a python list to a string of items in the list separated
@@ -207,23 +200,8 @@ serNoTag = 'SerialNos'
 suiteNameTag = 'suiteName'
 suiteRunListTag = 'suiteRunList'
 suiteTimeStampTag = 'suiteTimeStamp'
-analTag = 'Readback_mode'
-analUnitTag = 'analysisUnit'
-analTemTag = 'analysisTemId'
 
-tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag,
-        eventCountTag, badEventCountTag, pauseCountTag,
-        startTimeTag, elapsedTimeTag, endTimeTag,
-        schemaConfigFileTag, additionalInputFilesTag, releaseTag,
-        modulesFailedVerificationTag, versionDataTag,
-        completionStatusTag, completionStatusStrTag,
-        archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag,
-        siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag,
-        commentsTag, errorEventCountTag,
-        onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag,
-        analTag, analUnitTag, analTemTag]
-
-reinsertTags = [analTag, analUnitTag, analTemTag]
+tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag, eventCountTag, badEventCountTag, pauseCountTag, startTimeTag, elapsedTimeTag, endTimeTag, schemaConfigFileTag, additionalInputFilesTag, releaseTag, modulesFailedVerificationTag, versionDataTag, completionStatusTag, completionStatusStrTag, archiveFileTag, errorArchiveTag, logFileTag, fitsFileTag, siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag, commentsTag, errorEventCountTag, onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag]
 
 # create Reader object
 reader = Sax2.Reader()
@@ -245,7 +223,7 @@ except:
     msg = 'rcReport %s is missing, unreadable, or invalid.\n' % xmlFileName
     sys.stderr.write(msg)
     errFile.write(msg)
-    sys.exit(1)
+    sys.exit(0)
     
 reports = doc.getElementsByTagName(testReportTag)
 
@@ -265,12 +243,6 @@ for report in reports:
     
     intRunConfigId = 'null'
 
-    # initialize the variables in case rcReport does not have serial number tag
-    nTowers = 0
-    tkrSerNo = ''
-    calSerNo = ''
-    readBack = False
-
     for node in report.childNodes:
 
         if (node.nodeType == Node.TEXT_NODE and \
@@ -281,12 +253,10 @@ for report in reports:
         name = node.nodeName
         
         if(name == serNoTag):
-            [nTowers, tkrSerNo, calSerNo] = \
-                      parseSerialNosTag(node.childNodes[0].data)
-            
+            [nTowers, tkrSerNo, calSerNo] = parseSerialNosTag(node.childNodes[0].data)
         elif( name == csvTestIdTag ):
             intRunConfigId = insertIntRunConfigId(node.childNodes[0].data)
-
+            
         if(name not in tags):
             
             # if tag is not found, append it to data['additionFields']
@@ -313,16 +283,10 @@ for report in reports:
             data[name] = node.childNodes[0].data
 
 # fill in default
-    if(data.has_key(eventCountTag) == 0):
-        data[eventCountTag] = '-1'
     if(data.has_key(badEventCountTag) == 0):
         data[badEventCountTag] = '0'
     if(data.has_key(errorEventCountTag) == 0):
         data[errorEventCountTag] = '0'
-        pass
-    if not data.has_key(analTag):
-        data[analTag] = 'False'
-        pass
 
     for tag in tags:
         if(data.has_key(tag) == 0):
@@ -383,37 +347,10 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    # get directory where report lives
-    onlineDir = os.path.dirname(xmlFileName)
-    dirs = onlineDir.split(os.sep)
-    index = dirs.index(data[runIdTag])
-    # include run in onlineTail so we don't get an emty list
-    # onlineTail = '/'.join(dirs[index+1:])
-    onlineTail = '/'.join(dirs[index:])
-    print onlineTail
-    onlineReportUrl = '/'.join((rawDataDir, onlineTail))
+    onlineReportUrl = 'ftp://ftp-glast.slac.stanford.edu' + '/' + rawDataDir + '/' + data[runIdTag] + '/'
     
     if(data.has_key(onlineReportTag)):
-        onlineReportUrl = '/'.join((onlineReportUrl, data[onlineReportTag]))
-
-    # mangle serial # fields if this is an analysis run
-    if data.has_key(analTag) and eval(data[analTag]):
-        analSerNo = '%s(%s)???' % (data[analUnitTag], data[analTemTag])
-        otherSerNo = ''
-        if data[analUnitTag] in tkrSerNo:
-            tkrSerNo = analSerNo
-            calSerNo = otherSerNo
-        elif data[analUnitTag] in calSerNo:
-            calSerNo = analSerNo
-            tkrSerNo = otherSerNo
-            pass
-        # The tags we used to do this didn't go into additionFileds.
-        # Nor do they have their own columns in the DB.
-        # So insert them into additionFields now.
-        for tag in reinsertTags:
-            data[additionFieldsTag] += '%s???%s!!!' % (tag, data[tag])
-            pass
-        pass
+        onlineReportUrl += data[onlineReportTag]
      
     # construct sql string to input data into oracle database.
     # in python, \' is used to put ' inside a string.
@@ -422,10 +359,10 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId, additionalInputFiles) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ', :5)'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, AdditionalInputFiles, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[additionalInputFilesTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ')'
        
     try:
-        c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]), str(data[additionalInputFilesTag]))
+       c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]))
     except:
        (exc_type, exc_value) = sys.exc_info()[:2]
 
@@ -434,13 +371,13 @@ for report in reports:
        print exc_value
 
        db.rollback()
-       exit(1)
+       continue
 
     if(data[testNameTag] == 'suiteSummary'):
-        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = :1 where runid = ' + data[runIdTag]
+        sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = \'' + data[suiteRunListTag] + '\' where runid = ' + data[runIdTag]
 
         try:
-            c.execute(sqlStr, str(data[suiteRunListTag]))
+            c.execute(sqlStr)
         except:
             (exc_type, exc_value) = sys.exc_info()[:2]
 
@@ -449,7 +386,7 @@ for report in reports:
             print exc_value
 
             db.rollback()
-            exit(1)    
+            continue    
 
     # safe to commit
     db.commit()

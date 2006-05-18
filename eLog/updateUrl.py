@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.4
+#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
 
 """Usage: updateUrl.py runId urlKey targetFile [dataRoot]
 
