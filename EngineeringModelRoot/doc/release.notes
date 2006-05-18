@@ -236,3 +236,6 @@ awb	Added calibrated ACD variables.
 
 v2r1: May 16, 2006
 awb	Fixed overwrite bug in AcdMips arrays.     
+
+v2r2: May 17, 2006
+awb	Added error flags.

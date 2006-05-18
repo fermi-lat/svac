@@ -76,6 +76,26 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> EventFlags </TD> <TD> Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
 
+<TR> <TD> EventBadEventSequence </TD> <TD> Int </TD> <TD> Set if the event sequence is not monotonically increasing. </TD> </TR>
+<TR> <TD> EventBadTkrRecon      </TD> <TD> Int </TD> <TD> Set if there are too many TKR hits in the event. If so, TKR recon will not run on the event. </TD> </TR>
+<TR> <TD> EventPacketError      </TD> <TD> Int </TD> <TD> Set if there is a packet error in the event. </TD> </TR> 
+<TR> <TD> EventTemError         </TD> <TD> Int </TD> <TD> Set if there is a TEM error in the event. </TD> </TR> 
+<TR> <TD> EventTrgParityError   </TD> <TD> Int </TD> <TD> Set if there is a trigger parity error in the event. </TD> </TR> 
+<TR> <TD> EventBadLdfStatus     </TD> <TD> Int </TD> <TD> Set if there is an LDF parser problem in the event. </TD> </TR>
+<TR> <TD> EventGtrcPhase        </TD> <TD> Int </TD> <TD> Set if there is a GTRC phase error in the event. </TD> </TR> 
+<TR> <TD> EventGtfePhase        </TD> <TD> Int </TD> <TD> Set if there is a GTFE phase error in the event. </TD> </TR> 
+<TR> <TD> EventGtccFifo         </TD> <TD> Int </TD> <TD> Set if there is a GTCC FIFO (full) error in the event. </TD> </TR>
+<TR> <TD> EventGtccHdrParity    </TD> <TD> Int </TD> <TD> Set if there is a GTCC Header parity error in the event. </TD> </TR> 
+<TR> <TD> EventGtccWcParity     </TD> <TD> Int </TD> <TD> Set if there is a GTCC Word count parity error in the event. </TD> </TR>
+<TR> <TD> EventGtrcSummary      </TD> <TD> Int </TD> <TD> Set if there is a GTRC summary error in the event. </TD> </TR>
+<TR> <TD> EventGtccDataParity   </TD> <TD> Int </TD> <TD> Set if there is a GTCC Data parity error in the event. </TD> </TR>   
+<TR> <TD> EventGtccTimeout      </TD> <TD> Int </TD> <TD> Set if there is a GTCC timeout error in the event. </TD> </TR> 
+<TR> <TD> EventGtccError        </TD> <TD> Int </TD> <TD> Set if there is a GTCC error in the event. </TD> </TR>
+<TR> <TD> EventGcccError        </TD> <TD> Int </TD> <TD> Set if there is a GCCC error in the event. </TD> </TR>
+<TR> <TD> EventPhaseError       </TD> <TD> Int </TD> <TD> Set if there is an event phase error in the event. </TD> </TR>
+<TR> <TD> EventTimeoutError     </TD> <TD> Int </TD> <TD> Set if there is an event timeout error in the event. </TD> </TR> 
+
+
 <TR> <TD> TemLength[tower] </TD> <TD> Int </TD> <TD> Size in bytes of the TEM event contribution, per tower. Variable length. </TD> </TR>
 <TR> <TD> GemLength        </TD> <TD> Int </TD> <TD> Size in bytes of the GEM event contribution. Fixed size: 64 bytes        </TD> </TR>
 <TR> <TD> OswLength        </TD> <TD> Int </TD> <TD> Size in bytes of the OSW event contribution. Fixed size: 32 bytes        </TD> </TR>

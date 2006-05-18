@@ -682,9 +682,7 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime, 
-									m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,
-									m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
+  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -720,7 +718,26 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventFlags = m_digiEvent->getEventSummaryData().eventFlags();
 
   parseDiagnosticData(); 
- 
+
+  // Error flags:
+  m_ntuple.m_eventBadEventSequence = m_digiEvent->getEventSummaryData().badEventSequence();
+  m_ntuple.m_eventBadTkrRecon      = m_digiEvent->getEventSummaryData().badTkrRecon();
+  m_ntuple.m_eventPacketError      = m_digiEvent->getEventSummaryData().packetError();
+  m_ntuple.m_eventTemError         = m_digiEvent->getEventSummaryData().temError();
+  m_ntuple.m_eventTrgParityError   = m_digiEvent->getEventSummaryData().trgParityError();
+  m_ntuple.m_eventBadLdfStatus     = m_digiEvent->getEventSummaryData().badLdfStatus();
+  m_ntuple.m_eventGtrcPhase        = m_digiEvent->getEventSummaryData().gtrcPhase();
+  m_ntuple.m_eventGtfePhase        = m_digiEvent->getEventSummaryData().gtfePhase();
+  m_ntuple.m_eventGtccFifo         = m_digiEvent->getEventSummaryData().gtccFifo();
+  m_ntuple.m_eventGtccHdrParity    = m_digiEvent->getEventSummaryData().gtccHdrParity();
+  m_ntuple.m_eventGtccWcParity     = m_digiEvent->getEventSummaryData().gtccWcParity();
+  m_ntuple.m_eventGtrcSummary      = m_digiEvent->getEventSummaryData().gtrcSummary();
+  m_ntuple.m_eventGtccDataParity   = m_digiEvent->getEventSummaryData().gtccDataParity();
+  m_ntuple.m_eventGtccTimeout      = m_digiEvent->getEventSummaryData().gtccTimeout();
+  m_ntuple.m_eventGcccError        = m_digiEvent->getEventSummaryData().gcccError();
+  m_ntuple.m_eventGtccError        = m_digiEvent->getEventSummaryData().gtccError();
+  m_ntuple.m_eventPhaseError       = m_digiEvent->getEventSummaryData().phaseError();
+  m_ntuple.m_eventTimeoutError     = m_digiEvent->getEventSummaryData().timeoutError();
 
   //
   // ACD digi:
@@ -1474,6 +1491,27 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
+
+  // Error flags:
+  m_tree->Branch("EventBadEventSequence", &(m_ntuple.m_eventBadEventSequence), "EventBadEventSequence/I");
+  m_tree->Branch("EventBadTkrRecon", &(m_ntuple.m_eventBadTkrRecon), "EventBadTkrRecon/I");
+  m_tree->Branch("EventPacketError", &(m_ntuple.m_eventPacketError), "EventPacketError/I");
+  m_tree->Branch("EventTemError", &(m_ntuple.m_eventTemError), "EventTemError/I");
+  m_tree->Branch("EventTrgParityError", &(m_ntuple.m_eventTrgParityError), "EventTrgParityError/I");
+  m_tree->Branch("EventBadLdfStatus", &(m_ntuple.m_eventBadLdfStatus), "EventBadLdfStatus/I");
+  m_tree->Branch("EventGtrcPhase", &(m_ntuple.m_eventGtrcPhase), "EventGtrcPhase/I");
+  m_tree->Branch("EventGtfePhase", &(m_ntuple.m_eventGtfePhase), "EventGtfePhase/I");
+  m_tree->Branch("EventGtccFifo", &(m_ntuple.m_eventGtccFifo), "EventGtccFifo/I");
+  m_tree->Branch("EventGtccHdrParity", &(m_ntuple.m_eventGtccHdrParity), "EventGtccHdrParity/I");
+  m_tree->Branch("EventGtccWcParity", &(m_ntuple.m_eventGtccWcParity), "EventGtccWcParity/I");
+  m_tree->Branch("EventGtrcSummary", &(m_ntuple.m_eventGtrcSummary), "EventGtrcSummary/I");
+  m_tree->Branch("EventGtccDataParity", &(m_ntuple.m_eventGtccDataParity), "EventGtccDataParity/I");
+  m_tree->Branch("EventGtccTimeout", &(m_ntuple.m_eventGtccTimeout), "EventGtccTimeout/I");
+  m_tree->Branch("EventGcccError", &(m_ntuple.m_eventGcccError), "EventGcccError/I");
+  m_tree->Branch("EventGtccError", &(m_ntuple.m_eventGtccError), "EventGtccError/I");
+  m_tree->Branch("EventPhaseError", &(m_ntuple.m_eventPhaseError), "EventPhaseError/I");
+  m_tree->Branch("EventTimeoutError", &(m_ntuple.m_eventTimeoutError), "EventTimeoutError/I");
+
 
   // MC information:
   m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
