@@ -20,7 +20,7 @@ else:
 chunks = reconPM.readLines(chunkFile)
 nChunks = len(chunks)
 
-if nChunks > 1:
+if nChunks > 0:
     workDir, outFileBase = os.path.split(outFileName)
     stageDir = os.path.join(os.environ['reconStageDir'], runId)
 
@@ -38,9 +38,10 @@ if nChunks > 1:
 
     print >> sys.stderr, "Created file %s."  % outStage
 
-elif nChunks == 1:
-    print >> sys.stderr, "Only one chunk, moving instead of merging."
-    outStage = chunks[0]
+# # To enable this, uncomment and change the condition on the "if" to 1
+# elif nChunks == 1:
+#     print >> sys.stderr, "Only one chunk, moving instead of merging."
+#     outStage = chunks[0]
 
 else:
     print >> sys.stderr, "No chunks, shouldn't get here."

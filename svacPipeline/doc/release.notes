@@ -422,7 +422,7 @@ Make LicosLaunch die if run directory isn't in rawData.
 More & better timestamps in recon chunk script.
 Put output from each chunk in a separate subdir of staging dir.
 Merge chunks into staging dir, then move merged files to destination.
-Merge recon chunk before merit & cal.
+Merge recon chunks before merit & cal.
 Use new AFS staging dir.
 ---------------------------------------------------------------------------
 
@@ -434,8 +434,8 @@ Switch rootData to u34.
 Split recon/recon into 6 processes to get better rollback granularity.
 When recon of some chunks fail, save the output from the successful ones 
 and don't re-run them.
-Don't do merge on single-chunk recon runs.
-All file copies & moves performed by recon are attempted 5 times, then fail 
-(used to try until the job timed out on copies to local disk, and only once 
-for moves away from local disk or staging).
+# Don't do merge on single-chunk recon runs. # Disabled! - do do merge.
+All file copies & moves performed by recon are attempted up to 5 times, then
+fail (used to try until the job timed out on copies to local disk, and only
+once for moves away from local disk or staging).
 ---------------------------------------------------------------------------
