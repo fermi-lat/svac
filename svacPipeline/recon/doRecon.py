@@ -42,6 +42,12 @@ if len(jobs) == 0:
     sys.exit(1)
     pass
 
+print >> sys.stderr, "Jobs are:"
+for job in jobs:
+    print  >> sys.stderr, "[%s]" % job
+    pass
+print >> sys.stderr, "End Jobs."
+
 # run the chunks
 os.system("date")
 timeLogger()

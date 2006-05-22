@@ -115,7 +115,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p1
+setenv TestReportVersion v3r6p4
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -130,7 +130,7 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
+#setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt

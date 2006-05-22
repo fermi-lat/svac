@@ -50,7 +50,11 @@ endif
 echo Reading digi file from $inDir
 echo Writing chunk files to $procDir
 
-run $reconApp || exit 1
+#run $reconApp || exit 1
+date
+echo $reconApp
+$reconApp || exit 1
+date
 
 if ( $relocate ) then
     echo Relocating chunk files from $procDir to $stageDir

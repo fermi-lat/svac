@@ -429,6 +429,10 @@ Use new AFS staging dir.
 
 v3r6p0
 ---------------
+EM v6r070329p16
+TestReport v3r6p4
+EngineeringModelRoot v2r2
+
 Switch rootData to u34.
 
 Split recon/recon into 6 processes to get better rollback granularity.
