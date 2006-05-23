@@ -443,3 +443,9 @@ All file copies & moves performed by recon are attempted up to 5 times, then
 fail (used to try until the job timed out on copies to local disk, and only
 once for moves away from local disk or staging).
 ---------------------------------------------------------------------------
+
+
+v3r6p1
+---------------
+Switch staging back to u19.
+---------------------------------------------------------------------------
