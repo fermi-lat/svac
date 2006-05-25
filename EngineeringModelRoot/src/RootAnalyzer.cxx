@@ -1094,8 +1094,8 @@ void RootAnalyzer::analyzeData()
   //Load current event pointers in TkrCalibManager
   m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
   
-  //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval, int coincidence_cut, int multi_ld, int multi_hd)
-  m_tkrNoiseOcc->initAnalysis(nEvent, 1000, 1, -1, 65);
+  //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval)
+  m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
   m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
   
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
