@@ -449,3 +449,15 @@ v3r6p1
 ---------------
 Switch staging back to u19.
 ---------------------------------------------------------------------------
+
+
+v3r6p2
+---------------
+TestReport v3r6p5
+
+Switch staging back to AFS.
+
+Switch all xlong TPs to glastdataq.
+
+Convert remaining XML config files to schema v1.1
+---------------------------------------------------------------------------
