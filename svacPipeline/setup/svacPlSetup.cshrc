@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r6p2
+setenv svacVersion v3r6p3
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -15,11 +15,8 @@ setenv EngineeringModelVersion v6r070329p16
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
-#setenv svacRoot /nfs/slac/g/svac/common
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/EM-tasks
 setenv svacCmt ${svacRoot}/builds
-# svacPlRoot is set in the pipeline
-#setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 setenv svacPlLib ${svacPlRoot}/lib
 
 setenv CMTCONFIG ${SVAC_CMTCONFIG}
@@ -47,11 +44,11 @@ setenv runSymbol '$(RUN_NAME)'
 setenv cookedTail ${svacSubDir}/${runSymbol}
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
-setenv calibVersion calib-v1r0
+#setenv calibVersion calib-v1r0
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-setenv calibTail ${emTail}/${calibVersion}
+#setenv calibTail ${emTail}/${calibVersion}
 
 # Shouldn't normally use these, whoever is starting the run should do it.
 #setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
@@ -108,7 +105,8 @@ setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 setenv setEventsScript ${digitizationTaskDir}/setEvents.py
-setenv digitizationDataDir ${emTail}/grRoot
+#setenv digitizationDataDir ${emTail}/grRoot
+setenv digitizationDataDir ${emTail}/digi
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
 
@@ -143,7 +141,8 @@ setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
 setenv haddMerge ${reconTaskDir}/haddMerge.py
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
-setenv reconDataDir ${calibTail}/grRoot
+#setenv reconDataDir ${emTail}/grRoot
+setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
 setenv chunkTime 10000 
@@ -161,7 +160,7 @@ setenv reconReportVersion v1r0p0
 setenv reconReportUrl html/index.html
 setenv reconReportTaskDir ${svacPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
-setenv reconReportDataDir ${calibTail}/reconReport/${TestReportVersion}
+setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
 setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #-------------------------------- reconReport ---------------------------------
 
@@ -172,10 +171,10 @@ setenv RunRootAnalyzerVersion v2r2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
-setenv svacTupleVersion emRootv0r0
+#setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
-setenv svacTupleDataDir ${calibTail}/svacTuple/${svacTupleVersion}
+setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
 setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #-------------------------------- svacTuple -----------------------------------
 

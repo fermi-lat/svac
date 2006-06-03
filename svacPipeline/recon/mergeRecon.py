@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 
-"""usage: mergeRecon.py reconChunks reconFile runId"""
+"""usage: mergeRecon.py reconChunks digiFile reconStageList runId"""
 
 import os
 import sys
@@ -16,8 +16,8 @@ ROOT.gSystem.Load('libcommonRootData.so')
 ROOT.gSystem.Load('libdigiRootData.so')
 ROOT.gSystem.Load('libreconRootData.so')
 
-if len(sys.argv) == 4:
-    reconChunks, reconFileName, runId = sys.argv[1:]
+if len(sys.argv) == 5:
+    reconChunks, digiFile, reconStageList, runId = sys.argv[1:]
 else:
     print >> sys.stderr, __doc__
     sys.exit(1)
@@ -32,22 +32,27 @@ if nChunks > 0:
     
     # concat chunk files into final results
 
-    reconStage = os.path.join(stageDir, reconFileBase)
-    print >> sys.stderr, "Combining recon files into %s" % reconStage
+    # reconStageFile is the merged RECON.root file in the staging area.
+    # reconStageList is a text file containing the name of the merged file.
+    reconStageFile = os.path.join(stageDir, 'RECON.root')
+    reconPM.writeLines(reconStageList, [reconStageFile])
+    
+    print >> sys.stderr, "Combining recon files into %s" % reconStageFile
     timeLogger()
-    rcRecon = reconPM.concatenate_prune(reconStage, reconFiles, 'Recon')
+    rcRecon = reconPM.concatenate_prune(reconStageFile, reconFiles, 'Recon', \
+                                        expectedEntries)
     timeLogger()
     if rcRecon:
-        print >> sys.stderr, "Failed to create recon file %s!" % reconStage
+        print >> sys.stderr, "Failed to create recon file %s!" % reconStageFile
         sys.exit(1)
         pass
 
-    print >> sys.stderr, "Created recon file %s."  % reconStage
+    print >> sys.stderr, "Created recon file %s."  % reconStageFile
 
 # # To enable this, uncomment and change the condition on the "if" to 1
 # elif nChunks == 1:
 #     print >> sys.stderr, "Only one chunk, moving instead of merging."
-#     reconStage = reconFiles[0]
+#     reconStageFile = reconFiles[0]
 
 else:
     print >> sys.stderr, "No chunks, shouldn't get here."
@@ -57,7 +62,7 @@ else:
 print >> sys.stderr, "Moving recon file to %s." % reconFileName
 timeLogger()
 status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
-                                    reconStage, reconFileName))
+                                    reconStageFile, reconFileName))
 if status:
     print >> sys.stderr, "Move failed."
     sys.exit(1)

@@ -36,7 +36,8 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     numEventsPerFile = int(math.ceil(float(numEntries) / numChunks))
     print >> sys.stderr, "Run has %d events." % numEntries
     print >> sys.stderr, "Using %d chunks." % numChunks
-    print >> sys.stderr, "Reduced chunk size from %d to %d" % (maxNumEventsPerFile, numEventsPerFile)
+    print >> sys.stderr, "Reduced chunk size from %d to %d" % \
+          (maxNumEventsPerFile, numEventsPerFile)
 
     eventStart=0
     eventEnd=-1
@@ -59,45 +60,67 @@ def getFileChunks(fileName, treeName='Digi', maxNumEventsPerFile=1500):
     return chunks, numEventsPerFile
 
 
-def concatenate_prune(outputFileName, fileNames, treeName):
+def concatenate_prune(outputFileName, fileNames, treeName, expectedEntries):
 
     from ROOT import TChain, gSystem
     
     c = TChain(treeName)
     c.SetMaxTreeSize(500000000000)
 
+    print >> sys.stderr, "Expect %d entries." % expectedEntries
+
     for name in fileNames:
         print >> sys.stderr, "Adding [%s] " % name
-        c.Add(name)
+        addCode = c.Add(name, 0)
+        if not addCode: # TChain.Add returns 1 for success, 0 for failure
+            return 1
         pass
     
     numChainEntries = c.GetEntries()
     print >> sys.stderr, 'numChainEntries = ', numChainEntries
-
+    if numChainEntries != expectedEntries:
+        print >> sys.stderr, "Bad # entries after chain creation."
+        return 1
 
     gSystem.Load('libpipelineDatasets.so')
 
 
     from ROOT import pruneTuple
 
-    pt = pruneTuple(c,outputFileName)
+    print >> sys.stderr, "Merging..."
+
+    pt = pruneTuple(c, outputFileName)
 
     # we don't really care if this succeeds or not...
     junk = pt.copyHeader(fileNames[0])
 
     retCode = pt.prune()
 
+    numChainEntries = getFileEvents(outputFileName, treeName)
+    print >> sys.stderr, 'numChainEntries = ', numChainEntries
+    if numChainEntries != expectedEntries:
+        print >> sys.stderr, "Bad # entries after merge."
+        return 1
+
     #print >> sys.stderr, outputFileName, ' created\n'
 
     return retCode
 
-def concatenate_hadd(outputFileName, fileNames, treeName):
+def concatenate_hadd(outputFileName, fileNames, treeName, expectedEntries):
+
+    print >> sys.stderr, "Expect %d entries." % expectedEntries
 
     fmt = '%s -f %s' % (os.environ['hadd'], outputFileName)
     fmt += ' %s' * len(fileNames)
     cmd = fmt % tuple(fileNames)
 
     retCode = os.system(cmd)
+
+    numChainEntries = getFileEvents(outputFileName, treeName)
+    print >> sys.stderr, 'numChainEntries = ', numChainEntries
+    if numChainEntries != expectedEntries:
+        print >> sys.stderr, "Bad # entries after merge."
+        return 1
 
     return retCode
 

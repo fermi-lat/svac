@@ -461,3 +461,13 @@ Switch all xlong TPs to glastdataq.
 
 Convert remaining XML config files to schema v1.1
 ---------------------------------------------------------------------------
+
+
+v3r6p3
+---------------
+Simplify data directory structure.
+
+Improve error checking in recon merge.
+
+Remove some unused files.
+---------------------------------------------------------------------------
