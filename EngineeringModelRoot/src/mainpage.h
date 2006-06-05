@@ -27,17 +27,20 @@ LAT-TD-00605: The Tower Electronics Module (TEM) - Programming ICD specification
 <br>
 LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf
 <br>
+LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/DFI.pdf
+<br> 
 
 <TABLE>
 <CAPTION ALIGN="TOP"> Run and Event variables </CAPTION>
 
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> RunID </TD> <TD> Int </TD>  <TD> Run number taken from DigiEvent.h. </TD> </TR> 
+<TR> <TD> RunID </TD> <TD> UInt </TD>  <TD> Run number </TD> </TR> 
 
-<TR> <TD> EventID </TD> <TD> Int </TD>  <TD> Event number taken from DigiEvent.h. The event number comes from a 32 bit online counter. The event numbers are always contigous, i.e. no gaps,  
-          except for runs taken with software prescaling. For runs taken before the middle of April 2005 it came from a 17 bits online counter and wrapped around at 128k events 
-          i.e. you could have multiple events with the same event sequence number. </TD> </TR>
+<TR> <TD> EventID </TD> <TD> UInt </TD>  <TD> Event number: For Flight Software Runs this is really UInt64_t, but is currently stored as an UInt. The full event ID is stored in ContextGemScalersSequence 
+          variable. For LATTE the event number comes from a 
+          32 bit online counter. The event numbers are always contigous, i.e. no gaps, except for runs taken with software prescaling. For runs taken before the middle of April 2005 
+          it came from a 17 bits online counter and wrapped around at 128k events i.e. you could have multiple events with the same event sequence number. </TD> </TR>
 
 <TR> <TD> EventSize </TD> <TD> Int </TD>  <TD> Event size in bytes taken from the Fits file. It seems to be an 8 bytes offset with respect to the LDF event size (the FITS event size  
           being larger). </TD> </TR>
@@ -162,19 +165,20 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <CAPTION ALIGN="TOP"> Context information from Flight Software </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> ContextRunInfoPlatform   </TD> <TD> Int  </TD> <TD> The platform type this run was taken on: Lat. Testbead or Host (software simulation). </TD> </TR> 
-<TR> <TD> ContextRunInfoDataOrigin </TD> <TD> Int  </TD> <TD> The type of data from this run (Orbit, MC or ground).  </TD> </TR>
+<TR> <TD> ContextRunInfoPlatform   </TD> <TD> Int  </TD> <TD> The platform type this run was taken on (No platform, LAT, Testbead or Host (software simulation)) - See enums/enums/Lsf.h </TD> </TR> 
+<TR> <TD> ContextRunInfoDataOrigin </TD> <TD> Int  </TD> <TD> The type of data from this run (No origin, Orbit, MC, ground) - See enums/enums/Lsf.h  </TD> </TR>
 <TR> <TD> ContextRunInfoID         </TD> <TD> UInt </TD> <TD> The ground based ID of this run. This is usually defined on the ground, but if the LAT DAQ reboots on-orbit, the Ground ID can be reset. </TD> </TR>
 <TR> <TD> ContextRunInfoStartTime  </TD> <TD> UInt </TD> <TD> The start time of this run: This is the number of seconds since GLAST epoch start when the run started. </TD> </TR>
 
 <TR> <TD> ContextDataGramInfoModeChanges </TD> <TD> UInt </TD> <TD> The number of times the mode changed since the start of the run.                </TD> </TR>
 <TR> <TD> ContextDataGramInfoDatagrams   </TD> <TD> UInt </TD> <TD> The datagram sequence number within this run.                                   </TD> </TR>
-<TR> <TD> ContextDataGramInfoOpenAction  </TD> <TD> Int  </TD> <TD> Flags datagrams that occur after run state transitions.                         </TD> </TR>
-<TR> <TD> ContextDataGramInfoOpenReason  </TD> <TD> Int  </TD> <TD> The reason why the datagram was opened (usually b/c the previous one was full). </TD> </TR>
-<TR> <TD> ContextDataGramInfoCrate       </TD> <TD> Int  </TD> <TD> Which cpu the event was handled by (Epu0, Epu1, Epu2, Siu0, Siu1, Aux, Mixed).  </TD> </TR>
-<TR> <TD> ContextDataGramInfoMode        </TD> <TD> Int  </TD> <TD> The operating mode of the Lat when these data were accquired.                   </TD> </TR>
-<TR> <TD> ContextDataGramInfoCloseAction </TD> <TD> Int  </TD> <TD> Flags datagrams that occur immediately before run state transitions.            </TD> </TR>
-<TR> <TD> ContextDataGramInfoCloseReason </TD> <TD> Int  </TD> <TD> The reason why the datagram was closed (usually b/c it was full).               </TD> </TR>
+<TR> <TD> ContextDataGramInfoOpenAction  </TD> <TD> Int  </TD> <TD> The action that caused the datagram to be opened (Start, Resume, Continue, Unspecified) - See enums/enums/Lsf.h</TD> </TR>
+<TR> <TD> ContextDataGramInfoOpenReason  </TD> <TD> Int  </TD> <TD> The reason why the datagram was opened (Operator, ModeChange, TimedOut, CountedOut, Full, Unknown) - See enums/enums/Lsf.h </TD> </TR>
+<TR> <TD> ContextDataGramInfoCrate       </TD> <TD> Int  </TD> <TD> Which cpu the event was handled by (No crate, Epu0, Epu1, Epu2, Siu0, Siu1, Aux, Mixed) - See enums/enums/Lsf.h  </TD> </TR>
+<TR> <TD> ContextDataGramInfoMode        </TD> <TD> Int  </TD> <TD> The operating mode of the LAT when these data were accquired (Normal, TOO, GRB0, GRB1, GRB2, Solar, Calibration, Diagnostic) 
+                                                                    - See enums/enums/Lsf.h </TD> </TR>
+<TR> <TD> ContextDataGramInfoCloseAction </TD> <TD> Int  </TD> <TD> The action that caused the datagram to be closed (Stop, Abort, Pause, Continue, Unspecified) - See enums/enums/Lsf.h</TD> </TR>
+<TR> <TD> ContextDataGramInfoCloseReason </TD> <TD> Int  </TD> <TD> The reason why the datagram was closed (Operator, ModeChange, TimedOut, CountedOut, Full, Unknown) - See enums/enums/Lsf.h</TD> </TR>
 
 <TR> <TD> ContextGemScalersElapsed   </TD> <TD> ULong64 </TD> <TD> The number of system clock ticks (nominally 50ns) since the counters were reset i.e. use it to find the time between any two events, 
           not for an absolute time!. Not reset at begin run!                                                                                                                    </TD> </TR>
@@ -182,7 +186,7 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <TR> <TD> ContextGemScalersPrescaled </TD> <TD> ULong64 </TD> <TD> The total number of events prescaled away up to this point. Not reset at begin run!                          </TD> </TR>
 <TR> <TD> ContextGemScalersDiscarded </TD> <TD> ULong64 </TD> <TD> The total number of event discarded due to deadtime. Not reset at begin run!                                 </TD> </TR>
 <TR> <TD> ContextGemScalersSequence  </TD> <TD> ULong64 </TD> <TD> The sequence number of the event within the run as seen by the Gem. Not reset at begin run!                  </TD> </TR>
-<TR> <TD> ContextGemScalersDeadzone  </TD> <TD> ULong64 </TD> <TD> The total number of event discarded b/c they arrived during the 2tick Gem deadzone. Not reset at begin run!  </TD> </TR>
+<TR> <TD> ContextGemScalersDeadzone  </TD> <TD> ULong64 </TD> <TD> The total number of event discarded b/c they arrived during the 2 tick Gem deadzone. Not reset at begin run!  </TD> </TR>
 
 <TR> <TD> ContextLsfTimeTimeToneCurrentIncomplete      </TD> <TD> UInt </TD> <TD> Current timetone: If this is non-zero part of the time tone is missing. Check the status bits.  </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentTimeSecs        </TD> <TD> UInt </TD> <TD> Current timetone: Number of seconds since Epoch start (01.01.2001) at most recent time hack.    </TD> </TR>
