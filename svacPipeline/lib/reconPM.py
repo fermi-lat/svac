@@ -106,22 +106,14 @@ def concatenate_prune(outputFileName, fileNames, treeName, expectedEntries):
 
     return retCode
 
-def concatenate_hadd(outputFileName, fileNames, treeName, expectedEntries):
-
-    print >> sys.stderr, "Expect %d entries." % expectedEntries
+def concatenate_hadd(outputFileName, fileNames, \
+                     treeName=None, expectedEntries=None):
 
     fmt = '%s -f %s' % (os.environ['hadd'], outputFileName)
     fmt += ' %s' * len(fileNames)
     cmd = fmt % tuple(fileNames)
 
     retCode = os.system(cmd)
-
-    numChainEntries = getFileEvents(outputFileName, treeName)
-    print >> sys.stderr, 'numChainEntries = ', numChainEntries
-    if numChainEntries != expectedEntries:
-        print >> sys.stderr, "Bad # entries after merge."
-        return 1
-
     return retCode
 
 concatenateFiles = concatenate_hadd

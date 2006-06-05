@@ -27,7 +27,6 @@ reconFiles = reconPM.readLines(reconChunks)
 nChunks = len(reconFiles)
 
 if nChunks > 0:
-    workDir, reconFileBase = os.path.split(reconFileName)
     stageDir = os.path.join(os.environ['reconStageDir'], runId)
     
     # concat chunk files into final results
@@ -35,7 +34,6 @@ if nChunks > 0:
     # reconStageFile is the merged RECON.root file in the staging area.
     # reconStageList is a text file containing the name of the merged file.
     reconStageFile = os.path.join(stageDir, 'RECON.root')
-    reconPM.writeLines(reconStageList, [reconStageFile])
     
     print >> sys.stderr, "Combining recon files into %s" % reconStageFile
     timeLogger()
@@ -59,24 +57,26 @@ else:
     sys.exit(1)
     pass
 
-print >> sys.stderr, "Moving recon file to %s." % reconFileName
-timeLogger()
-status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
-                                    reconStageFile, reconFileName))
-if status:
-    print >> sys.stderr, "Move failed."
-    sys.exit(1)
-    pass
-timeLogger()
+reconPM.writeLines(reconStageList, [reconStageFile])
+    
+# print >> sys.stderr, "Moving recon file to %s." % reconFileName
+# timeLogger()
+# status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
+#                                     reconStageFile, reconFileName))
+# if status:
+#     print >> sys.stderr, "Move failed."
+#     sys.exit(1)
+#     pass
+# timeLogger()
 
-print >> sys.stderr, "Removing chunk files..."
-for junkFile in reconFiles:
-    try:
-        os.unlink(junkFile)
-    except OSError:
-        print >> sys.stderr, "Can't remove %s" % junkFile
-        pass
-    pass
-timeLogger()
+# print >> sys.stderr, "Removing chunk files..."
+# for junkFile in reconFiles:
+#     try:
+#         os.unlink(junkFile)
+#     except OSError:
+#         print >> sys.stderr, "Can't remove %s" % junkFile
+#         pass
+#     pass
+# timeLogger()
 
 

@@ -1,5 +1,10 @@
 #!/usr/local/bin/perl -w
 
+# This merges tuples using haddMerge.
+#
+# It expects a single inFile, containing a list of the chunk files.
+# It produces a single outFile, containing the name of the merged file.
+
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -28,17 +33,18 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $reconChunkList = $inFiles->{'reconChunks'};
-my $digiRootFile = $inFiles->{'digi'};
-my $reconStageList = $outFiles->{'reconStage'};
+my @inFileNames = values %$inFiles;
+die "Must have exactly one inFile!" unless scalar(@inFileNames) == 1;
+my @inFile = inFileNames[0];
 
-my $exe = $ENV{'reconMergeReconScript'};
+my @outFileNames = values %$outFiles;
+die "Must have exactly one outFile!" unless scalar(@outFileNames) == 1;
+my $outFile = $outFileNames[0];
 
-my $command = 
-	"$exe '$reconChunkList' '$digiRootFile' '$reconStageList' '$runId'";
+my $exe = $ENV{'haddMerge'};
+
+my $command = "$exe '$inFile' '$outFile' '$runId'";
 print "Running command: [$command]\n";
-
-#environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");
 
 my $ex = new Exec("$command");
 

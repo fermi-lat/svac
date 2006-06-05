@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 
-"""usage: haddMerge.py chunkFile outFile runId"""
+"""usage: haddMerge.py chunkFile stageList runId"""
 
 import os
 import sys
@@ -11,7 +11,7 @@ import timeLog
 timeLogger = timeLog.timeLog()
 
 if len(sys.argv) == 4:
-    chunkFile, outFileName, runId = sys.argv[1:]
+    chunkFile, stageList, runId = sys.argv[1:]
 else:
     print >> sys.stderr, __doc__
     sys.exit(1)
@@ -21,15 +21,17 @@ chunks = reconPM.readLines(chunkFile)
 nChunks = len(chunks)
 
 if nChunks > 0:
-    workDir, outFileBase = os.path.split(outFileName)
     stageDir = os.path.join(os.environ['reconStageDir'], runId)
 
     # concat chunk files into final results
 
-    outStage = os.path.join(stageDir, outFileBase)
+    # stageFile is the merged root file in the staging area.
+    # stageList is a text file containing the name of the merged file.
+    outStage = os.path.join(stageDir, 'mergedTuple.root')
+
     print >> sys.stderr, "Combining chunk files into %s" % outStage
     timeLogger()
-    rcOut = reconPM.concatenate_hadd(outStage, chunks, 'dummyArg')
+    rcOut = reconPM.concatenate_hadd(outStage, chunks)
     timeLogger()
     if rcOut:
         print >> sys.stderr, "Failed to create file %s!" % outStage
@@ -48,26 +50,27 @@ else:
     sys.exit(1)
     pass
 
+reconPM.writeLines(stageList, [outStage])
 
     
-print >> sys.stderr, "Moving file to %s." % outFileName
-timeLogger()
-status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
-                                    outStage, outFileName))
-if status:
-    print >> sys.stderr, "Move failed."
-    sys.exit(1)
-    pass
-timeLogger()
+# print >> sys.stderr, "Moving file to %s." % outFileName
+# timeLogger()
+# status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
+#                                     outStage, outFileName))
+# if status:
+#     print >> sys.stderr, "Move failed."
+#     sys.exit(1)
+#     pass
+# timeLogger()
 
-print >> sys.stderr, "Removing chunk files..."
-for junkFile in chunks:
-    try:
-        os.unlink(junkFile)
-    except OSError:
-        print >> sys.stderr, "Can't remove %s" % junkFile
-        pass
-    pass
-timeLogger()
+# print >> sys.stderr, "Removing chunk files..."
+# for junkFile in chunks:
+#     try:
+#         os.unlink(junkFile)
+#     except OSError:
+#         print >> sys.stderr, "Can't remove %s" % junkFile
+#         pass
+#     pass
+# timeLogger()
 
 

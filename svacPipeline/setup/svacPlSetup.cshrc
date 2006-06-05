@@ -139,6 +139,7 @@ setenv reconDoScript ${reconTaskDir}/doRecon.py
 setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
 setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
 setenv haddMerge ${reconTaskDir}/haddMerge.py
+setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
 #setenv reconDataDir ${emTail}/grRoot
@@ -186,6 +187,8 @@ setenv batchgroup glastdata
 setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
 setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
 setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
+setenv deleter ${svacPlLib}/deleteWrapper.pl
+setenv copier ${svacPlLib}/copyWrapper.pl
 #-------------------------------- many ----------------------------------------
 
 setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root
