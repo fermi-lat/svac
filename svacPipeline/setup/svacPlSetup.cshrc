@@ -138,7 +138,7 @@ setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
 setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
 setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
-setenv haddMerge ${reconTaskDir}/haddMerge.py
+setenv haddMerge ${svacPlLib}/haddMerge.py
 setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
