@@ -34,6 +34,8 @@ if nChunks > 0:
     # reconStageFile is the merged RECON.root file in the staging area.
     # reconStageList is a text file containing the name of the merged file.
     reconStageFile = os.path.join(stageDir, 'RECON.root')
+
+    expectedEntries = reconPM.getFileEvents(digiFile)
     
     print >> sys.stderr, "Combining recon files into %s" % reconStageFile
     timeLogger()

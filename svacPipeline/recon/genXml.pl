@@ -119,6 +119,7 @@ my $reconXml =
     </processing-step>
     <processing-step name=\"mergeRecon\" executable=\"mergeRecon\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"reconChunks\"/>
+                    <input-file name=\"digi\"/>
                     <output-file name=\"reconStage\"/>
     </processing-step>
     <processing-step name=\"deleteReconChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
