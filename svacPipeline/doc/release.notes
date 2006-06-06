@@ -470,4 +470,14 @@ Simplify data directory structure.
 Improve error checking in recon merge.
 
 Remove some unused files.
+
+Split recon, merit, and cal merge steps into 4 new steps each:
+ merge to stage
+ delete chunks
+ copy staged merged file to final destination
+ delete staged file
+All 6 deletion steps share the same wrapper.
+All 3 copy steps share the same wrapper.
+Neither of these wrappers uses a script.
+Cal and merit merges share a wrapper (they already shared a script).
 ---------------------------------------------------------------------------

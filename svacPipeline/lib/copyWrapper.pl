@@ -36,7 +36,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my @inFileNames = values %$inFiles;
 die "Must have exactly one inFile!" unless scalar(@inFileNames) == 1;
-my @inFile = inFileNames[0];
+my $inFile = $inFileNames[0];
 
 my @outFileNames = values %$outFiles;
 die "Must have exactly one outFile!" unless scalar(@outFileNames) == 1;
