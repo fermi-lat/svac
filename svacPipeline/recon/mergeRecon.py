@@ -60,25 +60,3 @@ else:
     pass
 
 reconPM.writeLines(reconStageList, [reconStageFile])
-    
-# print >> sys.stderr, "Moving recon file to %s." % reconFileName
-# timeLogger()
-# status = os.system("%s mv %s %s" % (os.environ['tryAFewTimes'], \
-#                                     reconStageFile, reconFileName))
-# if status:
-#     print >> sys.stderr, "Move failed."
-#     sys.exit(1)
-#     pass
-# timeLogger()
-
-# print >> sys.stderr, "Removing chunk files..."
-# for junkFile in reconFiles:
-#     try:
-#         os.unlink(junkFile)
-#     except OSError:
-#         print >> sys.stderr, "Can't remove %s" % junkFile
-#         pass
-#     pass
-# timeLogger()
-
-
