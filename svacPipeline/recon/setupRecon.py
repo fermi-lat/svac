@@ -125,7 +125,6 @@ else:
 
 joHead = \
 """#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
-#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/muonHyp.txt"
 CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
 GlastDetSvc.xmlfile = "%(geoFile)s";
 digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
