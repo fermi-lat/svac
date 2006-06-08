@@ -9,7 +9,7 @@ if ( { test -z $run } ) then
 	exit 1
 endif
 
-source ${svacPlRoot}/setup/svacPlSetup.cshrc
+source ${beamtestPlRoot}/setup/svacPlSetup.cshrc
 
 alias run 'echo \!* ; \!*'
 

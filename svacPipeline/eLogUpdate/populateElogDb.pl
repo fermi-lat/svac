@@ -1,11 +1,11 @@
 #!/usr/local/bin/perl -w
 
 use strict;
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
 
 # Use Oracle 8 libs because the script we are launching is Python.
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup8.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/dbSetup8.cshrc");
 
 if ($#ARGV != 1) {
     die "Usage: $0 shellFile rcReport";

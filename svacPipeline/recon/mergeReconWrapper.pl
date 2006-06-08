@@ -24,9 +24,9 @@ my $taskName = $proc->{'task_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $reconChunkList = $inFiles->{'reconChunks'};
 my $digiRootFile = $inFiles->{'digi'};

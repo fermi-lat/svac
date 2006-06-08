@@ -33,6 +33,6 @@ that were originally done with specific versions of the online task, which
 have the online version in their name somewhere.  There is also one,
 reprocess.csh, which works on runs that were originally processed by the
 current version of online's task (if the online task version has been
-correctly updated in svacPlRoot.cshrc - probably a good idea to check first).
+correctly updated in beamtestPlRoot.cshrc - probably a good idea to check first).
 If you need one for an online version that doesn't have one already, you could
 try to figure it out by looking at the ones that are there.

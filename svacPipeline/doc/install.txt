@@ -43,10 +43,10 @@ Check out the code (svac/svacPipeline in /nfs/slac/g/glast/ground/cvs).
 Copy svacPipeline directory to
 <PIPELINE_HOME>/svacPipeline/<tag>.
 
-setenv svacPlRoot <PIPELINE_HOME>/svacPipeline/<tag>
+setenv beamtestPlRoot <PIPELINE_HOME>/svacPipeline/<tag>
 
-Run $svacPlRoot/*/genXml.pl.  This will create several XML files in the
-current directory ($svacPlRoot is a good choice) with names like
+Run $beamtestPlRoot/*/genXml.pl.  This will create several XML files in the
+current directory ($beamtestPlRoot is a good choice) with names like
 task-version.xml.
 
 Upload the XML files created in the previous step with web front end at

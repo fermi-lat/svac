@@ -1,6 +1,6 @@
 #!/bin/tcsh
 
-source $svacPlRoot/setup/svacPlSetup.cshrc
+source $beamtestPlRoot/setup/svacPlSetup.cshrc
 
 #cd $reconStageDir
 #rm -rf *
@@ -13,5 +13,5 @@ cd $junkDir
 set hosts=`bhosts meadow veldt | awk 'NR>1{print $1}'`
 
 foreach host ($hosts)
-	bsub -q express -m $host -o $host $svacPlRoot/lib/_cleanupOne.csh
+	bsub -q express -m $host -o $host $beamtestPlRoot/lib/_cleanupOne.csh
 end

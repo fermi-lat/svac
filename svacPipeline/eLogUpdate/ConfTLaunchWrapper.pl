@@ -24,9 +24,9 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 

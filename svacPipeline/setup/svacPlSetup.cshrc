@@ -15,7 +15,7 @@ setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/BeamTest-tasks
 setenv svacCmt ${svacRoot}/builds
-setenv svacPlLib ${svacPlRoot}/lib
+setenv svacPlLib ${beamtestPlRoot}/lib
 
 setenv CMTCONFIG ${SVAC_CMTCONFIG}
 setenv GLAST_EXT ${SVAC_GLAST_EXT}
@@ -57,7 +57,7 @@ setenv calCalibSerNo -9999
 setenv onlineTaskVersion v2r4p1
 setenv onlineTask online-${onlineTaskVersion}
 setenv svacOnlineVersion ${svacVersion}
-setenv svacOnlineDir ${svacPlRoot}/online
+setenv svacOnlineDir ${beamtestPlRoot}/online
 setenv svacOnlineScript ${svacOnlineDir}/SVACLaunch.pl
 setenv onlineDataDir ${onlineSubDir}/${runSymbol}
 setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
@@ -69,7 +69,7 @@ setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
 setenv eLogFeederVersion v2r3p2
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
-setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
+setenv eLogTaskDir ${beamtestPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
 setenv decideDigiScript ${eLogTaskDir}/decideDigi.pl
 setenv eLogDataDir ${cookedTail}
@@ -83,7 +83,7 @@ setenv configReportTaskLicos configReport-licos-${configReportTaskVersion}
 setenv configReportVersion v4r0p2
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
-setenv configTaskDir ${svacPlRoot}/configReport
+setenv configTaskDir ${beamtestPlRoot}/configReport
 setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py 
 setenv configTablesDataDir ${cookedTail}/configReport/${configReportVersion}
 setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
@@ -98,7 +98,7 @@ setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv ldfFileType LDFFITS
-setenv digitizationTaskDir ${svacPlRoot}/digitization
+setenv digitizationTaskDir ${beamtestPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 setenv setEventsScript ${digitizationTaskDir}/setEvents.py
@@ -118,7 +118,7 @@ setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
 setenv digiReportVersion v1r0p0
 setenv digiReportUrl html/index.html
-setenv digiReportTaskDir ${svacPlRoot}/digiReport
+setenv digiReportTaskDir ${beamtestPlRoot}/digiReport
 setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 setenv digiReportDataDir ${emTail}/digiReport/${TestReportVersion}
 setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
@@ -130,7 +130,7 @@ setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
-setenv reconTaskDir ${svacPlRoot}/recon
+setenv reconTaskDir ${beamtestPlRoot}/recon
 setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
 setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
@@ -156,7 +156,7 @@ setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv reconReportVersion v1r0p0
 setenv reconReportUrl html/index.html
-setenv reconReportTaskDir ${svacPlRoot}/reconReport
+setenv reconReportTaskDir ${beamtestPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
 setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
@@ -170,7 +170,7 @@ setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersi
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
 #setenv svacTupleVersion emRootv0r0
-setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
+setenv svacTupleTaskDir ${beamtestPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
 setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}

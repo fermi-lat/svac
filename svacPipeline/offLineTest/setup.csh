@@ -1,3 +1,3 @@
 #!/bin/csh
 
-setenv svacPlRoot /nfs/farm/g/glast/u06/chen/svac/svacPipeline
+setenv beamtestPlRoot /nfs/farm/g/glast/u06/chen/svac/svacPipeline

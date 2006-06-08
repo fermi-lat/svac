@@ -11,9 +11,9 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup10.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/dbSetup10.cshrc");
 
 if($#ARGV+1 != 3) {
     die 'require three arguments: runId, columnName, value';

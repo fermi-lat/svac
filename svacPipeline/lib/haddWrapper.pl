@@ -29,9 +29,9 @@ my $taskName = $proc->{'task_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/svacPlSetup.cshrc");
 
 my @inFileNames = values %$inFiles;
 die "Must have exactly one inFile!" unless scalar(@inFileNames) == 1;

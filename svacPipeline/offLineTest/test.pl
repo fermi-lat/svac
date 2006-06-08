@@ -6,9 +6,9 @@ use lib $ENV{'PDB_HOME'};
 use DPFProc;
 use Exec;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'beamtestPlRoot'}/lib";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'beamtestPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $runName = '306000163';
 my $digiRootFile = '/nfs/farm/g/glast/u06/chen/temp/em_v3r0404p2/306000163/041008101639_digi.root';
