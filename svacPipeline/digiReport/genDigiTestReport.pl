@@ -32,7 +32,6 @@ my $pwd =  $ENV{PWD};
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'digiReportCmt'};
 my $exe = $ENV{'digiReportApp'};
-my $digiReportVersion = $ENV{'digiReportVersion'};
 my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
 my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
 my $calCalibSerNo = $ENV{'calCalibSerNo'};

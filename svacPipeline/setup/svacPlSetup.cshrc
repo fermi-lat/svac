@@ -93,10 +93,10 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
 setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
-setenv Em2Version v2r58
-setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
+setenv Em2Version v6r16
+setenv Em2Dir ${sasCmt}/Gleam/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
-setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
+setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/Gleam.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${beamtestPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -116,7 +116,6 @@ setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
-setenv digiReportVersion v1r0p0
 setenv digiReportUrl html/index.html
 setenv digiReportTaskDir ${beamtestPlRoot}/digiReport
 setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
@@ -128,8 +127,8 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
-setenv reconCmt ${Em2Dir}/cmt
-setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
+setenv reconCmt ${ldfToDigiCmt}
+setenv reconApp ${ldfToDigiApp}
 setenv reconTaskDir ${beamtestPlRoot}/recon
 setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
@@ -151,10 +150,9 @@ setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
 setenv reconReportTaskVersion ${svacVersion}
 setenv reconReportTask reconReport-${reconReportTaskVersion}
-setenv reconReportCmt ${TestReportDir}/cmt
-setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
-setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
-setenv reconReportVersion v1r0p0
+setenv reconReportCmt ${digiReportCmt}
+setenv reconReportApp ${digiReportApp}
+setenv reconRepDoxyFile ${digiRepDoxyFile}
 setenv reconReportUrl html/index.html
 setenv reconReportTaskDir ${beamtestPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
@@ -165,8 +163,8 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v2r2
-setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
+setenv RunRootAnalyzerVersion v0r0p1
+setenv RunRootAnalyzerDir ${sasCmt}/BeamTestTuple/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
 #setenv svacTupleVersion emRootv0r0
