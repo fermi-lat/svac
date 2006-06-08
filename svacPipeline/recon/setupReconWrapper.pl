@@ -15,8 +15,8 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runId = $proc->{'run_name'};
 my $taskName = $proc->{'task_name'};
-my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -28,23 +28,20 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $tarBall = $outFiles->{'tarBall'};
+my $digiRootFile = $inFiles->{'digi'};
+my $chunkJobs = $outFiles->{'chunkJobs'};
+my $reconChunks = $outFiles->{'reconChunks'};
+my $meritChunks = $outFiles->{'meritChunks'};
+my $calChunks = $outFiles->{'calChunks'};
+my $keepers = $outFiles->{'keepers'};
+my $junkDirs = $outFiles->{'junkDirs'};
 
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
-}
+my $exe = $ENV{'reconSetupScript'};
 
-my $exe = $ENV{'configTablesScript'};
-
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
+my $command = "$exe '$digiRootFile' '$chunkJobs' '$reconChunks' '$meritChunks' '$calChunks' '$keepers' '$junkDirs' '$taskName' '$runId'";
 print "Running command: [$command]\n";
 
+#environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");
 
 my $ex = new Exec("$command");
 

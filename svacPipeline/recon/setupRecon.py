@@ -1,12 +1,11 @@
 #!/usr/local/bin/python
 
-"""usage: recon.py digiFile reconFile meritFile tarFile task runId"""
+"""usage: setupRecon.py digiFile chunkJobs reconChunks meritChunks calChunks keepers junkDirs task runId"""
 
 import math
 import os
 import re
 import sys
-import tarfile
 
 import ROOT
 
@@ -14,7 +13,6 @@ import chunkSize
 import eLogDB
 import geometry
 import reconPM
-import runMany
 import timeLog
 
 timeLogger = timeLog.timeLog()
@@ -23,8 +21,11 @@ ROOT.gSystem.Load('libcommonRootData.so')
 ROOT.gSystem.Load('libdigiRootData.so')
 ROOT.gSystem.Load('libreconRootData.so')
 
-if len(sys.argv) == 8:
-    digiFileName, reconFileName, meritFileName, calFileName, tarFile, task, runId = sys.argv[1:]
+if len(sys.argv) == 10:
+    digiFileName, \
+        chunkJobs, reconChunks, meritChunks, calChunks, keepers, junkDirs, \
+        task, runId \
+        = sys.argv[1:]
 else:
     print >> sys.stderr, __doc__
     sys.exit(1)
@@ -32,7 +33,8 @@ else:
 
 shellFile = os.environ['reconOneScript']
 
-workDir, reconFileBase = os.path.split(reconFileName)
+workDir, chunkJobBase = os.path.split(chunkJobs)
+#workDir = os.getcwd()
 #stageDir = os.environ['reconStageDir']
 stageDir = os.path.join(os.environ['reconStageDir'], runId)
 os.environ['runStageDir'] = stageDir
@@ -123,6 +125,7 @@ else:
 
 joHead = \
 """#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
+#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/muonHyp.txt"
 CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
 GlastDetSvc.xmlfile = "%(geoFile)s";
 digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
@@ -217,125 +220,27 @@ ApplicationMgr.EvtMax = %d;
     
     open(joFile, 'w').write(joData)
 
-    # use exec so we don't have nChunk shells sitting around waiting for bsub to complete
-    # but we still get the convenience of os.system instead of the fiddliness of os.spawn*
+    # use exec so we don't have nChunk shells sitting around waiting for
+    # bsub to complete, but we still get the convenience of os.system
+    # instead of the fiddliness of os.spawn*
     cmd = 'exec bsub -K -q %s -G %s %s -o %s %s %s %s %s' % \
           (os.environ['chunkQueue'], os.environ['batchgroup'], resStr, \
            logFile, shellFile, joFile, digiFileName, chunkStage)
-    print >> sys.stderr, cmd
+    print >> sys.stderr, "Prparing command [%s]" % cmd
     jobs.append(cmd)
     pass
 directories.append(stageDir)
 
-# run the chunks
-os.system("date")
-timeLogger()
-results = runMany.pollManyResult(os.system, [(x,) for x in jobs])
-os.system("date")
-timeLogger()
-print >> sys.stderr, "rc from batch jobs ", results
+# Now we have to write out a bunch of lists.
 
-# should check rc here to see if all went well.
-# ditto on rc's for final success/fail report back to pipeline
-status = 0
-for iJob, rc in enumerate(results):
-    status |= rc
-    if rc:
-        print >> sys.stderr, "Command [%s] failed!" % jobs[iJob]
-        pass
-    pass
-if status:
-    print >> sys.stderr, "Job failed."
-    sys.exit(1)
-    pass
+reconPM.writeLines(chunkJobs, jobs)
 
-# concat chunk files into final results
+reconPM.writeLines(reconChunks, reconFiles)
+reconPM.writeLines(meritChunks, meritFiles)
+reconPM.writeLines(calChunks, calFiles)
 
-reconStage = os.path.join(stageDir, reconFileBase)
-print >> sys.stderr, "Combining recon files into %s" % reconStage
-timeLogger()
-rcRecon = reconPM.concatenate_prune(reconStage, reconFiles, 'Recon')
-timeLogger()
-if rcRecon:
-    print >> sys.stderr, "Failed to create recon file %s!" % reconStage
-    sys.exit(1)
-else:
-    print >> sys.stderr, "Created recon file %s."  % reconStage
-    print >> sys.stderr, "Moving recon file to %s." % reconFileName
-    timeLogger()
-    status = os.system("mv %s %s" % (reconStage, reconFileName))
-    if status:
-        print >> sys.stderr, "Move failed."
-        sys.exit(1)
-        pass
-    timeLogger()
-    pass
-
-calBase = os.path.basename(calFileName)
-calStage = os.path.join(stageDir, calBase)
-print >> sys.stderr, "Combining cal files into %s" % calStage
-timeLogger()
-#rcCal = reconPM.concatenateFiles(calStage, calFiles, 'CalXtalRecTuple')
-rcCal = reconPM.concatenate_hadd(calStage, calFiles, 'CalTuple')
-timeLogger()
-if rcCal:
-    print >> sys.stderr, "Failed to create cal file %s!" % calStage
-    sys.exit(1)
-else:
-    print >> sys.stderr, "Created cal file %s."  % calStage
-    print >> sys.stderr, "Moving cal file to %s." % calFileName
-    timeLogger()
-    status = os.system("mv %s %s" % (calStage, calFileName))
-    if status:
-        print >> sys.stderr, "Move failed."
-        sys.exit(1)
-        pass
-    timeLogger()
-    pass
-
-meritBase = os.path.basename(meritFileName)
-meritStage = os.path.join(stageDir, meritBase)
-print >> sys.stderr, "Combining merit files into %s" % meritStage
-timeLogger()
-rcMerit = reconPM.concatenate_hadd(meritStage, meritFiles, 'MeritTuple')
-timeLogger()
-if rcMerit:
-    print >> sys.stderr, "Failed to create merit file %s!" % meritStage
-    sys.exit(1)
-else:
-    print >> sys.stderr, "Created merit file %s."  % meritStage
-    print >> sys.stderr, "Moving merit file to %s." % meritFileName
-    timeLogger()
-    status = os.system("mv %s %s" % (meritStage, meritFileName))
-    if status:
-        print >> sys.stderr, "Move failed."
-        sys.exit(1)
-        pass
-    timeLogger()
-    pass
-
-# tar up log and JO files
 keepFiles = logFiles + joFiles
-tfp = tarfile.open(tarFile, mode='w:gz')
-for keeper in keepFiles:
-    try:
-        tfp.add(keeper)
-    except OSError:
-        print >> sys.stderr, "Log file %s missing!" % keeper
-        pass
-    pass
-tfp.close()
+reconPM.writeLines(keepers, keepFiles)
 
-# get rid of chunk files
-trash = reconFiles + meritFiles + calFiles
-for junkFile in trash:
-    os.unlink(junkFile)
-    pass
-# and the staging directory(s)
-# (if it's not empty, something is wrong)
-#os.rmdir(stageDir)
-for directory in directories:
-    os.rmdir(directory)
-    pass
+reconPM.writeLines(junkDirs, directories)
 
-timeLogger()

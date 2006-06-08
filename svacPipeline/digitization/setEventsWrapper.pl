@@ -15,7 +15,6 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
 
 #####################################################
@@ -28,23 +27,11 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $tarBall = $outFiles->{'tarBall'};
+my $digiRootFile = $inFiles->{'digi'};
 
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
-}
-
-my $exe = $ENV{'configTablesScript'};
-
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
+my $exe = $ENV{'setEventsScript'};
+my $command = "$exe '$runName' '$digiRootFile'";
 print "Running command: [$command]\n";
-
 
 my $ex = new Exec("$command");
 

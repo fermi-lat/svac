@@ -30,8 +30,25 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'configReportTask'};
-my $snapFile = $inFiles->{'snapshot'};
+my $newTask;
+my $snapFile;
+if ($taskName =~ /latte/) {
+	$newTask = $ENV{'configReportTaskLatte'};
+	$snapFile = $inFiles->{'snapshot'};
+} elsif ($taskName =~ /licos/) {
+	$newTask = $ENV{'configReportTaskLicos'};
+	$snapFile = $inFiles->{'algorithm'};
+} else {
+	print STDERR "Bad task name $taskName.\n";
+	exit(1)
+}
+
+if ((! -e $snapFile) || (-z $snapFile)) {
+	print STDERR "File $snapFile is nonexistent or empty.\n";
+	print STDERR "Not launching configReport\n";
+	exit(0);
+}
+
 my $command = "$exe '$taskName' '$newTask' '$runName' '$snapFile'";
 print "Running command: [$command]\n";
 

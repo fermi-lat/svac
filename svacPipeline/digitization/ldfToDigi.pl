@@ -11,7 +11,7 @@ my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
-my $ldfFileType = $ENV{'ldfFileType'};
+#my $ldfFileType = $ENV{'ldfFileType'};
 my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
 my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
@@ -38,6 +38,14 @@ if (-z $ldfFile) {
     print "LDF file [$ldfFile] has zero size.\n";
     exit 0;
 }
+
+my %extensions = ('evt'  => 'CCSDSFILE',
+                  'fits' => 'LDFFITS',
+                  'ldf'  => 'LDFFILE',
+                  'xml'  => 'CCSDSFILE');
+
+my @fields = split(/\./, $ldfFile);
+my $ldfFileType = $extensions{$fields[-1]};
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";

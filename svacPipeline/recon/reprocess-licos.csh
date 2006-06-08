@@ -1,7 +1,7 @@
 #!/bin/tcsh
 
-# this reprocesses runs that were originally done with the current version
-# (whatever that is) of online's task
+# this reprocesses runs that were originally digitized with the current version
+# (whatever that is) of SVAC's digitization-licos task
 
 set run=$1
 if ( { test -z $run } ) then
@@ -13,18 +13,18 @@ source ${svacPlRoot}/setup/svacPlSetup.cshrc
 
 alias run 'echo \!* ; \!*'
 
-set dataDir=`echo ${onlineDataDirFull} | sed s/'$(RUN_NAME)'/$run/`
-test -e ${dataDir} || ( run mkdir ${dataDir} )
+set dataDir=`echo ${digitizationDataDirFull} | sed s/'$(RUN_NAME)'/$run/`
+test -e ${dataDir} || ( run mkdirhier ${dataDir} )
 run cd ${dataDir}
 
-set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
+set dataSets='digi_DIGI.root'
 
-set oldTask=${onlineTask}
-set newTask=${eLogTaskLatte}
+set oldTask=${digitizationTaskLicos}
+set newTask=${reconTask}
 
 foreach dataSet ($dataSets)
     set oldName=${oldTask}_${run}_${dataSet}
-	echo $oldName
+	echo ${oldName}
 	test -e ${oldName} || continue
 	set newName=`echo $oldName | sed s/${oldTask}/${newTask}/`
 	test -e ${newName} || ( run ln -s ${oldName} ${newName} )

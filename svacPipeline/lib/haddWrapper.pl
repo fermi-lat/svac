@@ -1,5 +1,10 @@
 #!/usr/local/bin/perl -w
 
+# This merges tuples using haddMerge.
+#
+# It expects a single inFile, containing a list of the chunk files.
+# It produces a single outFile, containing the name of the merged file.
+
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -15,8 +20,8 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runId = $proc->{'run_name'};
 my $taskName = $proc->{'task_name'};
-my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -28,23 +33,18 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $tarBall = $outFiles->{'tarBall'};
+my @inFileNames = values %$inFiles;
+die "Must have exactly one inFile!" unless scalar(@inFileNames) == 1;
+my $inFile = $inFileNames[0];
 
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
-}
+my @outFileNames = values %$outFiles;
+die "Must have exactly one outFile!" unless scalar(@outFileNames) == 1;
+my $outFile = $outFileNames[0];
 
-my $exe = $ENV{'configTablesScript'};
+my $exe = $ENV{'haddMerge'};
 
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
+my $command = "$exe '$inFile' '$outFile' '$runId'";
 print "Running command: [$command]\n";
-
 
 my $ex = new Exec("$command");
 

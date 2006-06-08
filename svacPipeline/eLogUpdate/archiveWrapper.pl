@@ -1,5 +1,11 @@
 #!/usr/local/bin/perl -w
 
+# This is not actually used in the current pipeline
+
+# Demonstration script.
+# Submitted to batch by pipeline scheduler.
+# You need only modify the last section...
+
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -29,22 +35,14 @@ use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $tarBall = $outFiles->{'tarBall'};
+my $command = "tar czf $tarBall LICOS";
 
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
+my $tbList = `ls *tarball*RAW.tgz`;
+if (length($tbList)) {
+	die("tarball already exists.");
 }
 
-my $exe = $ENV{'configTablesScript'};
-
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
 print "Running command: [$command]\n";
-
 
 my $ex = new Exec("$command");
 
@@ -79,3 +77,17 @@ if ( defined($rc) ) {
     #exit non-zero:
     exit(255);
 }
+
+#        <executable name=\"Archive\" version=\"$ENV{'eLogTaskVersion'}\">
+#            $ENV{'eLogTaskDir'}/archiveWrapper.pl
+#        </executable>
+#        <batch-job-configuration name=\"short-job\" queue=\"short\" group=\"$batchgroup\">
+#            <working-directory>$ENV{'onlineDataDirFull'}</working-directory>
+#            <log-file-path>$ENV{'onlineDataDirFull'}</log-file-path>
+#        </batch-job-configuration>
+#        <file file-type=\"tgz\"  name=\"tarball\"   type=\"RAW\"  >
+#            <path>$ENV{'eLogDataDirFull'}</path>
+#        </file>
+#        <processing-step name=\"archive\" executable=\"Archive\" batch-job-configuration=\"short-job\">
+#                        <output-file name=\"tarBall\"/>
+#        </processing-step>

@@ -15,7 +15,7 @@ my $reconReportXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
 
     <name>$ENV{'reconReportTask'}</name>
     <type>Report</type>
@@ -28,7 +28,7 @@ my $reconReportXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
             <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
             <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -37,13 +37,23 @@ my $reconReportXml =
             <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'reconReportDataDir'}</file>
-        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'reconReportDataDir'}</file>
-        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">$ENV{'reconReportDataDir'}</file>
-        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
-        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\">$ENV{'reconDataDir'}</file>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">
+            <path>$ENV{'reconReportDataDir'}</path>
+        </file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\">
+            <path>$ENV{'reconReportDataDir'}</path>
+        </file>
+        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">
+            <path>$ENV{'reconReportDataDir'}</path>
+        </file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">
+            <path>$ENV{'digitizationDataDir'}</path>
+        </file>
+        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\">
+            <path>$ENV{'reconDataDir'}</path>
+        </file>
 
-        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"glastdataq-job\">
                         <input-file name=\"digi\"/>
                         <input-file name=\"recon\"/>
                         <output-file name=\"jobOptions\"/>

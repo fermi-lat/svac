@@ -32,13 +32,25 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = $ENV{'eLogLauncher'};
+my $exe = $ENV{'taskLauncher'};
 
-my $ldfFile = $inFiles->{'ldf'};
-my $command = "$exe '$taskName' '$runName' '$ldfFile'";
+my $newTask = $ENV{'digitizationTaskLicos'};
+my $ldfFile = $inFiles->{'RetDef'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
+
+my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
+chomp $doDigi;
+unless (length($doDigi)) {
+	die("Can't determine digitizability!\n");
+}
+if (!$doDigi) {
+	exit(0);
+}
 
 print "Running command: [$command]\n";
+
 my $ex = new Exec("$command");
+
 my $rc = $ex->execute();
 
 if ( defined($rc) ) {

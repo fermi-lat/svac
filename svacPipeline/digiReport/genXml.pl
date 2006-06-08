@@ -15,7 +15,7 @@ my $digiReportXml =
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
 
     <name>$ENV{'digiReportTask'}</name>
     <type>Report</type>
@@ -28,7 +28,7 @@ my $digiReportXml =
             $urlUpdater
         </executable>
 
-        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
             <working-directory>$ENV{'digiReportDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -37,12 +37,20 @@ my $digiReportXml =
             <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digiReportDataDir'}</file>
-        <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digiReportDataDir'}</file>
-        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">$ENV{'digiReportDataDir'}</file>
-        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">$ENV{'digitizationDataDir'}</file>
+        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">
+            <path>$ENV{'digiReportDataDir'}</path>
+        </file>
+        <file name=\"script\"     file-type=\"csh\"    type=\"script\">
+            <path>$ENV{'digiReportDataDir'}</path>
+        </file>
+        <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">
+            <path>$ENV{'digiReportDataDir'}</path>
+        </file>
+        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">
+            <path>$ENV{'digitizationDataDir'}</path>
+        </file>
 
-        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
+        <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"glastdataq-job\">
                         <input-file name=\"digi\"/>
                         <output-file name=\"jobOptions\"/>
                         <output-file name=\"script\"/>

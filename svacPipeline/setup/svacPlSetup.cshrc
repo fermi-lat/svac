@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r4p9
+setenv svacVersion v3r6p3-muon
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -11,15 +11,12 @@ setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
 #setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
 setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
-setenv EngineeringModelVersion v5r070305p4
+setenv EngineeringModelVersion v6r070329p16
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
-#setenv svacRoot /nfs/slac/g/svac/common
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/EM-tasks
 setenv svacCmt ${svacRoot}/builds
-# svacPlRoot is set in the pipeline
-#setenv svacPlRoot ${svacRoot}/pipeline/EM2/svacPipeline
 setenv svacPlLib ${svacPlRoot}/lib
 
 setenv CMTCONFIG ${SVAC_CMTCONFIG}
@@ -28,9 +25,9 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u25
+setenv dataDisk u34
 setenv onlineDisk u25
-setenv reconStageDir /nfs/farm/g/glast/u19/staging
+setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
@@ -46,11 +43,15 @@ setenv runSymbol '$(RUN_NAME)'
 setenv cookedTail ${svacSubDir}/${runSymbol}
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
-setenv calibVersion calib-v1r0
+#setenv calibVersion calib-v1r0
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-setenv calibTail ${emTail}/${calibVersion}
+#setenv calibTail ${emTail}/${calibVersion}
+
+# Shouldn't normally use these, whoever is starting the run should do it.
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
+#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
 
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
@@ -66,8 +67,9 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
-setenv eLogTask updateELogDB-${eLogTaskVersion}
-setenv eLogFeederVersion v2r2p7
+setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
+setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
+setenv eLogFeederVersion v2r3p2
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -78,8 +80,9 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 
 #++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
 setenv configReportTaskVersion ${svacVersion}
-setenv configReportTask configReport-${configReportTaskVersion}
-setenv configReportVersion v3r2p1
+setenv configReportTaskLatte configReport-latte-${configReportTaskVersion}
+setenv configReportTaskLicos configReport-licos-${configReportTaskVersion}
+setenv configReportVersion v4r0p2
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
 setenv configTaskDir ${svacPlRoot}/configReport
@@ -90,8 +93,9 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
-setenv digitizationTask digitization-${digitizationTaskVersion}
-setenv Em2Version v2r49
+setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
+setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
+setenv Em2Version v2r58
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
@@ -99,14 +103,16 @@ setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
-setenv digitizationDataDir ${emTail}/grRoot
+setenv setEventsScript ${digitizationTaskDir}/setEvents.py
+#setenv digitizationDataDir ${emTail}/grRoot
+setenv digitizationDataDir ${emTail}/digi
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
 
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r4p9
+setenv TestReportVersion v3r6p5
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -121,15 +127,22 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
+#setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
 setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon
-setenv reconScript ${reconTaskDir}/recon.py
-setenv reconOneScript ${reconTaskDir}/reconOne-${reconTaskVersion}.csh
-setenv reconDataDir ${calibTail}/grRoot
+setenv reconSetupScript ${reconTaskDir}/setupRecon.py
+setenv reconDoScript ${reconTaskDir}/doRecon.py
+setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
+setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
+setenv haddMerge ${svacPlLib}/haddMerge.py
+setenv haddWrapper ${svacPlLib}/haddWrapper.pl
+setenv reconCleanupScript ${reconTaskDir}/cleanup.py
+setenv reconOneScript ${reconTaskDir}/reconOne.csh
+#setenv reconDataDir ${emTail}/grRoot
+setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
 setenv chunkTime 10000 
@@ -147,21 +160,21 @@ setenv reconReportVersion v1r0p0
 setenv reconReportUrl html/index.html
 setenv reconReportTaskDir ${svacPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
-setenv reconReportDataDir ${calibTail}/reconReport/${TestReportVersion}
+setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
 setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #-------------------------------- reconReport ---------------------------------
 
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v1r14
+setenv RunRootAnalyzerVersion v2r2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
-setenv svacTupleVersion emRootv0r0
+#setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
-setenv svacTupleDataDir ${calibTail}/svacTuple/${svacTupleVersion}
+setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
 setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #-------------------------------- svacTuple -----------------------------------
 
@@ -172,6 +185,9 @@ setenv urlUpdateScript  ${svacPlLib}/updateUrl.py
 setenv batchgroup glastdata
 setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
 setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
+setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
+setenv deleter ${svacPlLib}/deleteWrapper.pl
+setenv copier ${svacPlLib}/copyWrapper.pl
 #-------------------------------- many ----------------------------------------
 
 setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root

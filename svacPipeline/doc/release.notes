@@ -319,3 +319,177 @@ v3r4p9
 ---------------
 Use u25 for rawData.
 ---------------------------------------------------------------------------
+
+
+v3r4p8
+---------------
+Use u25 for rootData.
+---------------------------------------------------------------------------
+
+
+v3r4p9
+---------------
+Use u25 for rawData.
+---------------------------------------------------------------------------
+
+
+v3r5p0
+---------------
+EM v6r070305p3
+Work with LICOS - now have LICOS and LATTE versions of updateELogDB and 
+digitization tasks.
+eLogFeeder v2r3p0
+---------------------------------------------------------------------------
+
+
+v3r5p1
+---------------
+EM v6r070305p4
+---------------------------------------------------------------------------
+
+
+v3r5p2
+---------------
+EM v6r070305p5
+Fix a few bugs with JO files.
+Reprocessing scripts.
+---------------------------------------------------------------------------
+
+
+v3r5p3
+---------------
+EM v6r070305p7
+TestReport v3r4p13
+Add an extra, non-version-dependent link $run_rcReport.xml -> rcReport.out 
+for LICOS runs.
+---------------------------------------------------------------------------
+
+
+v3r5p4
+---------------
+EM v6r070305p8
+Recon chunk script is now a static .csh file, rather than being generated at 
+the same time as the GINO .xml files.
+Don't launch recon or digiReport if there are no events after digitization.
+Fail a little more gracefully if empty run makes it to recon.
+eLogFeederVersion v2r3p1 make the web link for online reort point to the 
+directory where rcReport lives, rather than the top-level run directory.
+---------------------------------------------------------------------------
+
+
+v3r5p5
+---------------
+EM v6r070305p9
+---------------------------------------------------------------------------
+
+
+v3r5p6
+---------------
+This is really v3r5p5, but I messed up the tags, so what's tagged as v3r5p5 is 
+actually the same as v3r5p4.
+---------------------------------------------------------------------------
+
+
+v3r5p7
+---------------
+TestReport v3r4p14
+eLog v2r3p2
+configReport v4r0p1 (supports LICOS) (but we still don't run it for LICOS runs)
+
+Fail when making web links if target isn't there.
+Add scripts to cleanout junk leftover from recon failures. (These are 
+not yet complete.)
+Use glastdataq for reconReport and svacTuple.
+convert svacTuple and reconReport XML to v1.1 schema.
+---------------------------------------------------------------------------
+
+
+v3r5p8
+---------------
+configReport v4r0p2
+
+Move rootData to u29.
+
+Run configReport on LICOS runs.  This uses a separate task, but all code is 
+the same, only difference is one path in the XML.  Bleh.
+Don't launch configReport if snapshot is missing or empty.
+---------------------------------------------------------------------------
+
+
+v3r5p9
+---------------
+EM v6r070329p5
+TestReport v3r4p18
+svacTuple v1r17
+
+Chunk jobs fail if they can't move their output from scratch to staging.
+use bsub -R to make sure batch hosts have enough scratch space for chunk jobs.
+Improve/finish recon cleanup scripts.
+---------------------------------------------------------------------------
+
+
+v3r5p10
+---------------
+Make LicosLaunch die if run directory isn't in rawData.
+More & better timestamps in recon chunk script.
+Put output from each chunk in a separate subdir of staging dir.
+Merge chunks into staging dir, then move merged files to destination.
+Merge recon chunks before merit & cal.
+Use new AFS staging dir.
+---------------------------------------------------------------------------
+
+
+v3r6p0
+---------------
+EM v6r070329p16
+TestReport v3r6p4
+EngineeringModelRoot v2r2
+
+Switch rootData to u34.
+
+Split recon/recon into 6 processes to get better rollback granularity.
+When recon of some chunks fail, save the output from the successful ones 
+and don't re-run them.
+# Don't do merge on single-chunk recon runs. # Disabled! - do do merge.
+All file copies & moves performed by recon are attempted up to 5 times, then
+fail (used to try until the job timed out on copies to local disk, and only
+once for moves away from local disk or staging).
+---------------------------------------------------------------------------
+
+
+v3r6p1
+---------------
+Switch staging back to u19.
+---------------------------------------------------------------------------
+
+
+v3r6p2
+---------------
+TestReport v3r6p5
+
+Switch staging back to AFS.
+
+Switch all xlong TPs to glastdataq.
+
+Convert remaining XML config files to schema v1.1
+---------------------------------------------------------------------------
+
+
+v3r6p3
+---------------
+Simplify data directory structure.
+
+Improve error checking in recon merge.
+
+Remove some unused files.
+
+Split recon, merit, and cal merge steps into 4 new steps each:
+ merge to stage
+ delete chunks
+ copy staged merged file to final destination
+ delete staged file
+All 6 deletion steps share the same wrapper.
+All 3 copy steps share the same wrapper.
+Neither of these wrappers uses a script.
+Cal and merit merges share a wrapper (they already shared a script).
+---------------------------------------------------------------------------

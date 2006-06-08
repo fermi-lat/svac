@@ -15,8 +15,8 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $runId = $proc->{'run_name'};
 my $taskName = $proc->{'task_name'};
-my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -28,23 +28,16 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $tarBall = $outFiles->{'tarBall'};
+my $keepFile = $inFiles->{'keepers'};
+my $junkFile = $inFiles->{'junkDirs'};
+my $tarFile = $outFiles->{'tarFile'};
 
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
-}
+my $exe = $ENV{'reconCleanupScript'};
 
-my $exe = $ENV{'configTablesScript'};
-
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
+my $command = "$exe '$keepFile' '$junkFile' '$tarFile'";
 print "Running command: [$command]\n";
 
+#environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");
 
 my $ex = new Exec("$command");
 
