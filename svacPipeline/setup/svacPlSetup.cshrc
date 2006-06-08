@@ -41,15 +41,8 @@ setenv runSymbol '$(RUN_NAME)'
 setenv cookedTail ${svacSubDir}/${runSymbol}
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
-#setenv calibVersion calib-v1r0
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
-
-#setenv calibTail ${emTail}/${calibVersion}
-
-# Shouldn't normally use these, whoever is starting the run should do it.
-#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
-#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
 
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
@@ -102,7 +95,6 @@ setenv digitizationTaskDir ${beamtestPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 setenv setEventsScript ${digitizationTaskDir}/setEvents.py
-#setenv digitizationDataDir ${emTail}/grRoot
 setenv digitizationDataDir ${emTail}/digi
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
@@ -124,7 +116,6 @@ setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-#setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
 setenv reconCmt ${ldfToDigiCmt}
@@ -138,7 +129,6 @@ setenv haddMerge ${svacPlLib}/haddMerge.py
 setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
-#setenv reconDataDir ${emTail}/grRoot
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
@@ -167,7 +157,6 @@ setenv RunRootAnalyzerVersion v0r0p1
 setenv RunRootAnalyzerDir ${sasCmt}/BeamTestTuple/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
-#setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${beamtestPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
