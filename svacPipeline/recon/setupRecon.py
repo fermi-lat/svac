@@ -111,17 +111,8 @@ else:
     pass
 
 # figure out the geometry
-if em:
-    geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml'
-else:
-    geoFile = geometry.geometries[nTwr]
-    pass
-if not geoFile:
-    print >> sys.stderr, "No geometry for %d towers!" % nTwr
-    sys.exit(1)
-else:
-    print >> sys.stderr, "This run has %d towers, using geometry file %s." % (nTwr, geoFile)
-    pass
+geoFile = "$(XMLGEODBSROOT)/xml/cu/cuSegVols.xml"
+print >> sys.stderr, "Using geometry file %s" % geoFile
 
 joHead = \
 """#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"

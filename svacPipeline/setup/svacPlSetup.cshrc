@@ -143,7 +143,7 @@ setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${digiReportCmt}
 setenv reconReportApp ${digiReportApp}
 setenv reconRepDoxyFile ${digiRepDoxyFile}
-setenv reconReportUrl html/index.html
+setenv reconReportUrl ${digiReportUrl}
 setenv reconReportTaskDir ${beamtestPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
 setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
