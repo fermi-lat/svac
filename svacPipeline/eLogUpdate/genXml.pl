@@ -56,9 +56,6 @@ my $updateElogDbXml =
         <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                         <input-file name=\"ldf\"/>
         </processing-step>
-        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"snapshot\"/>
-        </processing-step>
 </pipeline>
 ";
 
@@ -113,9 +110,6 @@ $updateElogDbXml =
         </processing-step>
         <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                         <input-file name=\"RetDef\"/>
-        </processing-step>
-        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"algorithm\"/>
         </processing-step>
 </pipeline>
 ";

@@ -60,9 +60,6 @@ my $reconReportXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"tarBall\"/>
         </processing-step>
-        <processing-step name=\"reconReportUrl\" executable=\"reconReportUrl\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"tarBall\"/>
-        </processing-step>
 </pipeline>
 
 ";

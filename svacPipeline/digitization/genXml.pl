@@ -65,12 +65,6 @@ my $digitizationXml =
         <processing-step name=\"LaunchRecon\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
-        <processing-step name=\"LaunchReport\" executable=\"LaunchReport\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"digiRootFile\" executable=\"digiRootFile\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
 </pipeline>
 
 ";
@@ -140,12 +134,6 @@ $digitizationXml =
                         <input-file name=\"digi\"/>
         </processing-step>
         <processing-step name=\"LaunchRecon\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"LaunchReport\" executable=\"LaunchReport\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"digi\"/>
-        </processing-step>
-        <processing-step name=\"digiRootFile\" executable=\"digiRootFile\" batch-job-configuration=\"express-job\">
                         <input-file name=\"digi\"/>
         </processing-step>
 </pipeline>

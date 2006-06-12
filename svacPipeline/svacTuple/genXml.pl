@@ -64,9 +64,6 @@ my $svacTupleXml =
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
         </processing-step>
-        <processing-step name=\"svacRootFile\" executable=\"svacRootFile\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"svac\"/>
-        </processing-step>
 </pipeline>
 
 ";

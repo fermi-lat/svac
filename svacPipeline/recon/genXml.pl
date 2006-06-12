@@ -168,15 +168,6 @@ my $reconXml =
     <processing-step name=\"deleteCalStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"calStage\"/>
     </processing-step>
-    <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"recon\"/>
-    </processing-step>
-    <processing-step name=\"meritRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"merit\"/>
-    </processing-step>
-    <processing-step name=\"calRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"cal\"/>
-    </processing-step>
     <processing-step name=\"cleanup\" executable=\"cleanup\" batch-job-configuration=\"express-job\">
                     <input-file name=\"keepers\"/>
                     <input-file name=\"junkDirs\"/>
