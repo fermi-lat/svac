@@ -465,6 +465,8 @@ Convert remaining XML config files to schema v1.1
 
 v3r6p3
 ---------------
+EM-v6r070329p17
+
 Simplify data directory structure.
 
 Improve error checking in recon merge.
