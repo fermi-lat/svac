@@ -617,11 +617,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     m_digiBranch->SetAddress(&m_digiEvent);
   }
 
-  m_nEvent   = -1;
-  int nMc    = -1;
-  int nRecon = -1;
-  int nDigi  = -1;
-
+  int nMc, nRecon, nDigi;
   if(m_mcFile) {
     nMc = (int) m_mcTree->GetEntries();
     std::cout << "No of events in " << mcFileName << " : " << nMc << endl;
@@ -637,20 +633,6 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     std::cout << "No of events in " << digiFileName << " : " << nDigi << endl;
     m_nEvent = nDigi;
   }
-
-  // Want same number of event sin files:
-  if (nMc != -1) {
-    assert (nMc == m_nEvent);
-  }
-  if (nRecon != -1) {
-    assert (nRecon == m_nEvent);
-  }
-  if (nDigi != -1) {
-    assert (nDigi == m_nEvent);
-  }
-
-      
- 
 
   // For testing: awb
   //int nEvent = 5000;
@@ -2648,7 +2630,7 @@ void TestReport::produceCondArrivalTimesPlots()
 
   file = m_prefix;
   file += "_condArrivalTimesROI";
-  att.set(file.c_str(), "Condition arrival times for ROI triggers. Periodic triggers have been taken out. If the ROI is not allowed to open the trigger window about half will be at 31.","condArrivalTimesROI",true);
+  att.set(file.c_str(), "Condition arrival times for ROI triggers. Periodic triggers have been taken out. ","condArrivalTimesROI",true);
   producePlot(m_condArrivalTimeROI, att);
   insertPlot(att);
 
@@ -2690,7 +2672,7 @@ void TestReport::produceAcdTriggerPlots()
 
   file = m_prefix;
   file += "_acdCnoVeto";
-  att.set(file.c_str(), "Number of Acd Cno by board.  This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal.","AcdCnoPerBoard");
+  att.set(file.c_str(), "Number of Acd Cno by board.  This bit is the OR of all the CNO signals on a single board. Factor 2 variations between boards are normal.","AcdCnoPerBoard");
   m_AcdGemCnoMap->SetMinimum(0.);
   producePlot(m_AcdGemCnoMap, att);
   insertPlot(att);
@@ -2758,7 +2740,7 @@ void TestReport::produceTimeIntervalPlotGEM()
 
   file = m_prefix;
   file += "_timeIntervalGemZoom";
-  att.set(file.c_str(), "Time interval between adjacent events as measured by the GEM in system clock ticks with a cut of 1500 ticks. The time is stored in a 16 bit counter, each count is nominally 50 ns.", "timeIntervalGemZoom", true);
+  att.set(file.c_str(), "Time interval between adjacent events in milliseconds with a cut of 1 millisecond. Note that this interval is measured in the GEM. The time is stored in a 16 bit counter, each count is nominally 50 ns.", "timeIntervalGemZoom", true);
   producePlot(m_timeIntervalGemZoom, att);
   insertPlot(att);
 
@@ -2777,7 +2759,7 @@ void TestReport::produceTimeIntervalPlotGEM()
 
   file = m_prefix;
   file += "_deltaWindowOpenTimeZoom";
-  att.set(file.c_str(), "Delta window open time as measured by the GEM in system clock ticks with a cut of 1500 ticks. The time is stored in a 16 bit counter, each count is nominally 50 ns.", "deltaWindowOpenTimeZoom", true);
+  att.set(file.c_str(), "Delta window open time in milliseconds with a cut of 0.1 millisecond. Note that this interval is measured in the GEM. The time is stored in a 16 bit counter, each count is nominally 50 ns.", "deltaWindowOpenTimeZoom", true);
   producePlot(m_deltaWindowOpenTimeZoom, att);
   insertPlot(att);
 }
