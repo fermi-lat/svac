@@ -493,3 +493,9 @@ All 3 copy steps share the same wrapper.
 Neither of these wrappers uses a script.
 Cal and merit merges share a wrapper (they already shared a script).
 ---------------------------------------------------------------------------
+
+
+v3r6p4
+---------------
+Switch rootData disk to u36.
+---------------------------------------------------------------------------
