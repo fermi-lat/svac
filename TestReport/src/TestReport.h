@@ -369,29 +369,10 @@ class TestReport {
   TH1F* m_trigger;
 
   /// no of bad events indicated in event summary data
-  unsigned int m_nBadEvts;
+  unsigned m_nBadEvts;
 
   // LATTE?
   int m_isLATTE;
-
-  // Ground ID:
-  unsigned int m_firstGroundID;
-  unsigned int m_lastGroundID;
-  unsigned int m_previousGroundID;
-  int m_counterGroundID;
-
-  // Datagrams:
-  int m_counterDataDiagrams;
-  int m_nbrDataGrams;
-  unsigned int m_firstDataGram;
-  unsigned int m_thisDataGram;
-  unsigned int m_previousDataGram;
-  unsigned int m_previousPreviousDataGram;
-  
-  // Datagram closing reason:
-  int m_endRunDataGram;
-  int m_fullDataGram;
-  int m_beginRunDataGram;
 
   /// number of events in the digi root file
   int m_nEvent;
