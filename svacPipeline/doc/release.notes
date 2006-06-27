@@ -499,3 +499,11 @@ v3r6p4
 ---------------
 Switch rootData disk to u36.
 ---------------------------------------------------------------------------
+
+
+v3r6p5
+---------------
+Oops.  p4 accidentally stepped back to EM...p16.  Use p17.
+TestReport v3r6p8
+Cleanup some unused junk in svacPlSetup.cshrc
+---------------------------------------------------------------------------
