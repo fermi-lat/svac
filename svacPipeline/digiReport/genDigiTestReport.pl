@@ -45,7 +45,7 @@ print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
 print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
-print OPTFILE qq{$testReportVersion \n};
+print OPTFILE qq{$digiReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
 print OPTFILE qq{$tkrCalibSerNo \n};
 print OPTFILE qq{$calCalibSerNo \n};

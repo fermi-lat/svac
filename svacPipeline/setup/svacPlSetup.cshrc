@@ -108,10 +108,11 @@ setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
+setenv digiReportVersion ${TestReportVersion}
 setenv digiReportUrl html/index.html
 setenv digiReportTaskDir ${svacPlRoot}/digiReport
 setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
-setenv digiReportDataDir ${emTail}/digiReport/${TestReportVersion}
+setenv digiReportDataDir ${emTail}/digiReport/${digiReportVersion}
 setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
@@ -143,10 +144,11 @@ setenv reconReportTask reconReport-${reconReportTaskVersion}
 setenv reconReportCmt ${digiReportCmt}
 setenv reconReportApp ${digiReportApp}
 setenv reconRepDoxyFile ${digiRepDoxyFile}
+setenv reconReportVersion ${digiReportVersion}
 setenv reconReportUrl ${digiReportUrl}
 setenv reconReportTaskDir ${svacPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
-setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
+setenv reconReportDataDir ${emTail}/reconReport/${reconReportVersion}
 setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #-------------------------------- reconReport ---------------------------------
 
@@ -157,7 +159,6 @@ setenv RunRootAnalyzerVersion v2r2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
-#setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
