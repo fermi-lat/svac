@@ -507,3 +507,9 @@ Oops.  p4 accidentally stepped back to EM...p16.  Use p17.
 TestReport v3r6p8
 Cleanup some unused junk in svacPlSetup.cshrc
 ---------------------------------------------------------------------------
+
+
+v3r6p5
+---------------
+TestReport v3r6p9
+Fix problem with version reporting in reconreport.
