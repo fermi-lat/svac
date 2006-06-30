@@ -43,7 +43,7 @@ my $digitizationXml =
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
 
-        <file name=\"ldf\"        file-type=\"fits\"   type=\"LDF\">
+        <file name=\"ldf\"        file-type=\"ldf\"   type=\"LDF\">
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
         <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">

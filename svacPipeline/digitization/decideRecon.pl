@@ -41,25 +41,26 @@ if (grep(/^$offline$/i, @goodOffline)) {
 }
 
 
-my $particleType = `$query $run particleType`;
-chomp $particleType;
+# # Beamtest, recontruct everything for now.
+# my $particleType = `$query $run particleType`;
+# chomp $particleType;
 
-my @reconPTypes = ('Cosmics', 'Photons', 'Am241');
+# my @reconPTypes = ('Cosmics', 'Photons', 'Am241');
 
-if (grep(/^$particleType$/i, @reconPTypes)) {
-	print STDERR "Particle type '$particleType' OK.\n";
-}
-else {
-	print STDERR "Bad Particle type '$particleType'.\n";
-    noRecon();
-}
+# if (grep(/^$particleType$/i, @reconPTypes)) {
+# 	print STDERR "Particle type '$particleType' OK.\n";
+# }
+# else {
+# 	print STDERR "Bad Particle type '$particleType'.\n";
+#     noRecon();
+# }
 
 
-my @serials = (`$query $run CAL_SER_NO`, `$query $run TKR_SER_NO`);
-if (grep(/mini|em/i, @serials)) {
-	print STDERR "Weird old hardware, not reconstructing.\n";
-	noRecon();
-}
+# my @serials = (`$query $run CAL_SER_NO`, `$query $run TKR_SER_NO`);
+# if (grep(/mini|em/i, @serials)) {
+# 	print STDERR "Weird old hardware, not reconstructing.\n";
+# 	noRecon();
+# }
 
 my $nEvents = `$query $run EventCount`;
 unless (length($nEvents)) {

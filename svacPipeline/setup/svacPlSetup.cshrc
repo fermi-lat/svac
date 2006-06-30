@@ -8,8 +8,8 @@ setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume08
-setenv EngineeringModelVersion v2r0903p0
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume10
+setenv EngineeringModelVersion v3r0907p1
 setenv sasVersion BeamtestRelease-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -24,17 +24,17 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv dataDisk u34
-setenv onlineDisk u25
+setenv onlineDisk u30
 setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
 setenv urlHead ${webHead}/${subDir}
-setenv onlineHead ${diskHead}/${onlineDisk}/${phase}
-setenv onlineSubDir rawData
+setenv onlineHead ${diskHead}/${onlineDisk}
+setenv onlineSubDir MC-tasks/beamTestPisa/output
 setenv svacSubDir rootData
-setenv rawUrl ${webHead}/${onlineDisk}/${phase}/${onlineSubDir}
+setenv rawUrl ${webHead}/${onlineDisk}/${onlineSubDir}
 setenv rootUrl ${webHead}/${subDir}/${svacSubDir}
 setenv runSymbol '$(RUN_NAME)'
 
@@ -60,7 +60,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
-setenv eLogFeederVersion v2r3p2
+setenv eLogFeederVersion v1r020302p0
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${beamtestPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -86,11 +86,12 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
 setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
-setenv Em2Version v6r16
+setenv Em2Version v6r18
 setenv Em2Dir ${sasCmt}/Gleam/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/Gleam.exe
-setenv ldfFileType LDFFITS
+setenv joVersion v5r1p5
+setenv joDir ${sasCmt}/beamtest06/${joVersion}/jobOptions
 setenv digitizationTaskDir ${beamtestPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
@@ -102,7 +103,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p5
+setenv TestReportVersion v3r6p6
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -124,7 +125,6 @@ setenv reconTaskDir ${beamtestPlRoot}/recon
 setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
 setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
-setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
 setenv haddMerge ${svacPlLib}/haddMerge.py
 setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
@@ -153,7 +153,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v0r0p1
+setenv RunRootAnalyzerVersion v0r0p4
 setenv RunRootAnalyzerDir ${sasCmt}/BeamTestTuple/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
@@ -163,20 +163,21 @@ setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
 setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #-------------------------------- svacTuple -----------------------------------
 
+setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.10.00/root
+setenv rootLib ${ROOTSYS}/lib
+
 #++++++++++++++++++++++++++++++++ many ++++++++++++++++++++++++++++++++++++++++
-setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
-setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
-setenv urlUpdateScript  ${svacPlLib}/updateUrl.py
 setenv batchgroup glastdata
+setenv copier ${svacPlLib}/copyWrapper.pl
+setenv deleter ${svacPlLib}/deleteWrapper.pl
 setenv eLogQuery ${svacPlLib}/queryElogReportTable.pl
 setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
+setenv hadd ${ROOTSYS}/bin/hadd
+setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
 setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
-setenv deleter ${svacPlLib}/deleteWrapper.pl
-setenv copier ${svacPlLib}/copyWrapper.pl
+setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
+setenv urlUpdateScript  ${svacPlLib}/updateUrl.py
 #-------------------------------- many ----------------------------------------
-
-setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root
-setenv rootLib ${ROOTSYS}/lib
 
 setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}:${rootLib}
 if ( ${?PYTHONPATH} == '1' ) then

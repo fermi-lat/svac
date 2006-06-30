@@ -39,7 +39,7 @@ my $updateElogDbXml =
         <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
-        <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >
+        <file file-type=\"ldf\" name=\"ldf\"      type=\"LDF\"     >
             <path>$ENV{'onlineDataDirFull'}</path>
         </file>
         <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">

@@ -11,7 +11,6 @@ my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
-#my $ldfFileType = $ENV{'ldfFileType'};
 my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
 my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
@@ -67,12 +66,14 @@ print SHELLFILE "$exe || exit 1 \n";
 
 close(SHELLFILE);
 
+my $ldf2DigiJo = "$ENV{'joDir'}/ldf2digi.txt";
+
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
-#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/ldf2digi.txt"
+#include "$ldf2DigiJo"
 EventSelector.StorageType = "$ldfFileType";
-EventSelector.InputList = {"$ldfFile"};
+EventSelector.FileName = "$ldfFile";
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
 EOF
 

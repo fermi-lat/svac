@@ -110,22 +110,26 @@ else:
     instrumentType = 'LAT'
     pass
 
-# figure out the geometry
-geoFile = "$(XMLGEODBSROOT)/xml/cu/cuSegVols.xml"
-print >> sys.stderr, "Using geometry file %s" % geoFile
+# main jo file
+joFile = os.path.join(os.environ['joDir'], 'readigi_runrecon.txt')
+print >> sys.stderr, "Using jobOption file %s" % joFile
+
+# # figure out the geometry
+# geoFile = "$(XMLGEODBSROOT)/xml/cu/cuSegVols.xml"
+# print >> sys.stderr, "Using geometry file %s" % geoFile
+# ## GlastDetSvc.xmlfile = "%(geoFile)s";
 
 joHead = \
-"""#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
-#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/muonHyp.txt"
+"""#include "%(joFile)s"
 CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
-GlastDetSvc.xmlfile = "%(geoFile)s";
-digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
-""" % \
-{
-    'instrumentType': instrumentType,
-    'geoFile': geoFile,
-    'digiRootFile': digiWorkFile,
-    }
+digiRootReaderAlg.digiRootFile = "%(digiWorkFile)s";
+""" % locals()
+# {
+#     'joFile': joFile,
+#     'instrumentType': instrumentType,
+#     'geoFile': geoFile,
+#     'digiRootFile': digiWorkFile,
+#    }
 if particleType == 'Photons':
     joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass

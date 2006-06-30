@@ -1,2 +1,12 @@
 Branch from svacPipeline v3r6p3.
 
+v1r030603p0
+------------
+Reconstruct everything.
+Use cu geometry.
+Use BeamTestTuple.
+Use LDF input.
+Use beamtest eLog.
+rawData in u30/MC-tasks/beamTestPisa/output
+---------------------------------------------------------
+
