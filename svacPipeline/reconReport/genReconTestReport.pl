@@ -36,10 +36,9 @@ my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
 my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
 my $calCalibSerNo = $ENV{'calCalibSerNo'};
 my $latexHeaderFile = $ENV{'latexHeaderFile'};
-my $doxyFile = $ENV{'digiRepDoxyFile'};
+my $doxyFile = $ENV{'reconRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
 
-my $doxyFile = $ENV{'reconRepDoxyFile'};
 
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
