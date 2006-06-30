@@ -23,14 +23,14 @@ else:
 
 theTuple = readColumns.readTuple(inFile)
 
-ticks = theTuple['EvtTicks']
-tickDelta = ticks[1:] - ticks[:-1]
+#ticks = theTuple['EvtTicks']
+#tickDelta = ticks[1:] - ticks[:-1]
 
-ppss = theTuple['GemOnePpsSeconds']
+ppss = theTuple['ContextLsfTimeTimeToneCurrentTimeSecs']
 dppss = ppss[1:] - ppss[:-1]
-dppss[dppss < 0] += 128
+#dppss[dppss < 0] += 128
 
-ppst = theTuple['GemOnePpsTime']
+ppst = theTuple['ContextLsfTimeTimeToneCurrentGemTimeTicks']
 dppst = ppst[1:] - ppst[:-1]
 dppst[dppst < 0] += 2**25
 
@@ -38,10 +38,11 @@ mask = dppst > 1e7
 
 seconds = num.add.accumulate(dppss[mask])
 
-dppstSub = dppst[mask]
+dppst = dppst[mask]
+ticks = num.add.accumulate(dppst)
 
-data = num.array((seconds, dppstSub))
+data = num.array((seconds, dppst, ticks))
 title = 'Clock skew'
-colNames = ('Seconds', 'Cycles / PPS')
+colNames = ('Seconds', 'Cycles / PPS', 'Ticks')
 
 tableio.writehippo(data, outFile, title, colNames)
