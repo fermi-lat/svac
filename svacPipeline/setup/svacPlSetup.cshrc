@@ -2,16 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r6p4
+setenv svacVersion v3r6p7
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
-#setenv SVAC_GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/${SVAC_CMTCONFIG}
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-#setenv sasLocation /nfs/farm/g/glast/u09/builds/${SVAC_CMTCONFIG}/EngineeringModel
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
-setenv EngineeringModelVersion v6r070329p16
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
+setenv EngineeringModelVersion v6r070329p17
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -43,15 +41,8 @@ setenv runSymbol '$(RUN_NAME)'
 setenv cookedTail ${svacSubDir}/${runSymbol}
 setenv emTail ${cookedTail}/${EngineeringModelVersion}
 
-#setenv calibVersion calib-v1r0
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
-
-#setenv calibTail ${emTail}/${calibVersion}
-
-# Shouldn't normally use these, whoever is starting the run should do it.
-#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_prod.csh
-#setenv SVAC_PDB_CONFIG /u/gl/glast/pdb_config/dpf_config_test.csh
 
 #setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
@@ -104,7 +95,6 @@ setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
 setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 setenv setEventsScript ${digitizationTaskDir}/setEvents.py
-#setenv digitizationDataDir ${emTail}/grRoot
 setenv digitizationDataDir ${emTail}/digi
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #-------------------------------- digitization --------------------------------
@@ -112,26 +102,25 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p5
+setenv TestReportVersion v3r6p10
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
-setenv digiReportVersion v1r0p0
+setenv digiReportVersion ${TestReportVersion}
 setenv digiReportUrl html/index.html
 setenv digiReportTaskDir ${svacPlRoot}/digiReport
 setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
-setenv digiReportDataDir ${emTail}/digiReport/${TestReportVersion}
+setenv digiReportDataDir ${emTail}/digiReport/${digiReportVersion}
 setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
-#setenv LATCalibRoot /nfs/slac/g/glast/calibrations/
 setenv reconTaskVersion ${svacVersion}
 setenv reconTask recon-${reconTaskVersion}
-setenv reconCmt ${Em2Dir}/cmt
-setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
+setenv reconCmt ${ldfToDigiCmt}
+setenv reconApp ${ldfToDigiApp}
 setenv reconTaskDir ${svacPlRoot}/recon
 setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
@@ -141,7 +130,6 @@ setenv haddMerge ${svacPlLib}/haddMerge.py
 setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
-#setenv reconDataDir ${emTail}/grRoot
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
@@ -153,14 +141,14 @@ setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
 setenv reconReportTaskVersion ${svacVersion}
 setenv reconReportTask reconReport-${reconReportTaskVersion}
-setenv reconReportCmt ${TestReportDir}/cmt
-setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
-setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
-setenv reconReportVersion v1r0p0
-setenv reconReportUrl html/index.html
+setenv reconReportCmt ${digiReportCmt}
+setenv reconReportApp ${digiReportApp}
+setenv reconRepDoxyFile ${digiRepDoxyFile}
+setenv reconReportVersion ${digiReportVersion}
+setenv reconReportUrl ${digiReportUrl}
 setenv reconReportTaskDir ${svacPlRoot}/reconReport
 setenv reconReportScript ${reconReportTaskDir}/genReconTestReport.pl
-setenv reconReportDataDir ${emTail}/reconReport/${TestReportVersion}
+setenv reconReportDataDir ${emTail}/reconReport/${reconReportVersion}
 setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #-------------------------------- reconReport ---------------------------------
 
@@ -171,7 +159,6 @@ setenv RunRootAnalyzerVersion v2r2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
-#setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
