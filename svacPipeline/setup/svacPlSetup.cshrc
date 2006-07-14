@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r6p5
+setenv svacVersion v3r6p9
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
-setenv EngineeringModelVersion v6r070329p17
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
+setenv EngineeringModelVersion v6r070329p21
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -102,7 +102,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p8
+setenv TestReportVersion v3r6p11
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
@@ -155,7 +155,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v2r2
+setenv RunRootAnalyzerVersion v3r0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
