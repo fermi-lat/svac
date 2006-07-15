@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v1r030603p1
+setenv svacVersion v1r030603p2
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume10
-setenv EngineeringModelVersion v3r0907p1
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume05
+setenv EngineeringModelVersion v3r0907p2
 setenv sasVersion BeamtestRelease-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -90,7 +90,7 @@ setenv Em2Version v6r18
 setenv Em2Dir ${sasCmt}/Gleam/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/Gleam.exe
-setenv joVersion v5r1p5
+setenv joVersion v5r1p6
 setenv joDir ${sasCmt}/beamtest06/${joVersion}/jobOptions
 setenv digitizationTaskDir ${beamtestPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -103,8 +103,8 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p6
-setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
+setenv TestReportVersion v0r0p4
+setenv TestReportDir ${svacCmt}/BeamTestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile

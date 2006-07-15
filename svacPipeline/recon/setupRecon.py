@@ -61,54 +61,57 @@ chunks, numEventsPerFile = \
 
 print >> sys.stderr, chunks
 
-# figure out instrument type, # of towers
-tkrSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'tkr_ser_no'))
-calSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'cal_ser_no'))
-dbTwr = int(eLogDB.query(runId, 'NoOfTowers'))
+# # figure out instrument type, # of towers
+# tkrSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'tkr_ser_no'))
+# calSerNos = eLogDB.parseSerNo(eLogDB.query(runId, 'cal_ser_no'))
+# dbTwr = int(eLogDB.query(runId, 'NoOfTowers'))
 
-nTwr = max(len(tkrSerNos), len(calSerNos), dbTwr)
+# nTwr = max(len(tkrSerNos), len(calSerNos), dbTwr)
 
-if tkrSerNos:
-    firstTkr = tkrSerNos[0][0]
-    hasTkr = True
-else:
-    hasTkr = False
-    pass
-if calSerNos:
-    firstCal = calSerNos[0][0]
-    hasCal = True
-else:
-    hasCal = False
-    pass
+# if tkrSerNos:
+#     firstTkr = tkrSerNos[0][0]
+#     hasTkr = True
+# else:
+#     hasTkr = False
+#     pass
+# if calSerNos:
+#     firstCal = calSerNos[0][0]
+#     hasCal = True
+# else:
+#     hasCal = False
+#     pass
 
-if (hasTkr and re.search('Mini', firstTkr)) or (hasCal and re.search('EM2|Mini', firstCal)):
-    em = True
-else:
-    em = False
-    pass
+# if (hasTkr and re.search('Mini', firstTkr)) or (hasCal and re.search('EM2|Mini', firstCal)):
+#     em = True
+# else:
+#     em = False
+#     pass
 
-schemaFile = eLogDB.query(runId, 'SCHEMACONFIGFILE')
+# schemaFile = eLogDB.query(runId, 'SCHEMACONFIGFILE')
 
-tkrOnly = False
-calOnly = False
+# tkrOnly = False
+# calOnly = False
 
-fullLatRe = 'grid|lat'
-if re.search(fullLatRe, schemaFile, re.IGNORECASE):
-    instrumentType = 'LAT'
-elif em:
-    instrumentType = 'EM'
-elif hasTkr and not hasCal:
-    instrumentType = firstTkr
-    tkrOnly = True
-elif hasCal and not hasTkr:
-    instrumentType = 'Cal' + firstCal
-    calOnly = True
-elif hasTkr and hasCal:
-    # if we get here, there should be exactly one each of TKR and CAL
-    instrumentType = firstTkr + ':Cal' + firstCal
-else:
-    instrumentType = 'LAT'
-    pass
+# fullLatRe = 'grid|lat'
+# if re.search(fullLatRe, schemaFile, re.IGNORECASE):
+#     instrumentType = 'LAT'
+# elif em:
+#     instrumentType = 'EM'
+# elif hasTkr and not hasCal:
+#     instrumentType = firstTkr
+#     tkrOnly = True
+# elif hasCal and not hasTkr:
+#     instrumentType = 'Cal' + firstCal
+#     calOnly = True
+# elif hasTkr and hasCal:
+#     # if we get here, there should be exactly one each of TKR and CAL
+#     instrumentType = firstTkr + ':Cal' + firstCal
+# else:
+#     instrumentType = 'LAT'
+#     pass
+####
+# instrumentType = 'CU06'
+# ## CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
 
 # main jo file
 joFile = os.path.join(os.environ['joDir'], 'readigi_runrecon.txt')
@@ -121,7 +124,6 @@ print >> sys.stderr, "Using jobOption file %s" % joFile
 
 joHead = \
 """#include "%(joFile)s"
-CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
 digiRootReaderAlg.digiRootFile = "%(digiWorkFile)s";
 """ % locals()
 # {
@@ -134,16 +136,16 @@ if particleType == 'Photons':
     joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass
 
-# Deal with hardware that we don't expect to have calibrations for.
-# Gleam/EM will ask for calibrations for TKR and CAL even if one is absent.
-# Set TKR and CAL to ideal if we have EM hardware
-if tkrOnly or em:
-    # Set CAL to ideal if it is absent.
-    joHead += 'CalCalibSvc.DefaultFlavor = "ideal";\n'
-if calOnly or em:
-    # set TKR to ideal if it is absent.
-    joHead += 'TkrCalibAlg.calibFlavor = "ideal";\n'
-    pass
+# # Deal with hardware that we don't expect to have calibrations for.
+# # Gleam/EM will ask for calibrations for TKR and CAL even if one is absent.
+# # Set TKR and CAL to ideal if we have EM hardware
+# if tkrOnly or em:
+#     # Set CAL to ideal if it is absent.
+#     joHead += 'CalCalibSvc.DefaultFlavor = "ideal";\n'
+# if calOnly or em:
+#     # set TKR to ideal if it is absent.
+#     joHead += 'TkrCalibAlg.calibFlavor = "ideal";\n'
+#     pass
 
 
 # make a nice printf-style format for printing ranges of event numbers sortably
