@@ -234,7 +234,8 @@ xmlFile = open(xmlFileName)
 errFile = open('err.log', 'w')
 
 #open connection to oracle database
-db = DCOracle2.connect('GLAST_CAL/9square#')
+#db = DCOracle2.connect('GLAST_CAL/9square#')
+db = DCOracle2.connect('GLAST_BT/RD4<32#NN')
 
 c = db.cursor()
 
