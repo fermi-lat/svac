@@ -41,9 +41,12 @@ if (grep(/^$offline$/i, @goodOffline)) {
 }
 
 
-# # Beamtest, recontruct everything for now.
-# my $particleType = `$query $run particleType`;
-# chomp $particleType;
+my $particleType = `$query $run particleType`;
+chomp $particleType;
+if (grep(/None/i, $particleType)) {
+	print STDERR "Bad particle type '$particleType'.\n";
+	noRecon();
+}
 
 # my @reconPTypes = ('Cosmics', 'Photons', 'Am241');
 

@@ -27,3 +27,10 @@ recon jobOptions.
 Add deleteLinks.csh script from main branch (clears links in eLogbook to
 avoid confusing mixture of old & new files while reprocessing).  And modified
 it to work on beamtest data instead of I&T.
+---------------------------------------------------------
+
+
+v1r030603p3
+------------
+eLog v1r020302p1 (fills current, momentum, position and angle fields).
+Don't recon particletype=None.

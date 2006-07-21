@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v1r030603p2
+setenv svacVersion v1r030603p3
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -60,7 +60,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
-setenv eLogFeederVersion v1r020302p0
+setenv eLogFeederVersion v1r020302p1
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${beamtestPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
