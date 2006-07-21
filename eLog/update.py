@@ -210,6 +210,12 @@ suiteTimeStampTag = 'suiteTimeStamp'
 analTag = 'Readback_mode'
 analUnitTag = 'analysisUnit'
 analTemTag = 'analysisTemId'
+currentTag = 'MagnetCurrent'
+momentumTag = 'BeamMomentum'
+xPosTag = 'X'
+yPosTag = 'Y'
+zPosTag = 'Z'
+thetaTag = 'theta'
 
 tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag,
         eventCountTag, badEventCountTag, pauseCountTag,
@@ -221,6 +227,7 @@ tags = [timeStampTag, testNameTag, runIdTag, operatorTag, operatorIdTag,
         siteTag, particleTypeTag, instrumentTypeTag, orientationTag, phaseTag,
         commentsTag, errorEventCountTag,
         onlineReportTag, suiteNameTag, suiteRunListTag, suiteTimeStampTag,
+        momentumTag, currentTag, xPosTag, yPosTag, zPosTag, thetaTag, 
         analTag, analUnitTag, analTemTag]
 
 reinsertTags = [analTag, analUnitTag, analTemTag]
@@ -234,8 +241,11 @@ xmlFile = open(xmlFileName)
 errFile = open('err.log', 'w')
 
 #open connection to oracle database
+user = os.environ['userName']
+passwd = os.environ['passWd']
+connectString = '%s/%s' % (user, passwd)
 #db = DCOracle2.connect('GLAST_CAL/9square#')
-db = DCOracle2.connect('GLAST_BT/RD4<32#NN')
+db = DCOracle2.connect(connectString)
 
 c = db.cursor()
 
@@ -323,6 +333,14 @@ for report in reports:
         pass
     if not data.has_key(analTag):
         data[analTag] = 'False'
+        pass
+
+    for tag in (momentumTag, currentTag):
+        try:
+            junk = float(data[tag])
+        except ValueError:
+            data[tag] = '0'
+            pass
         pass
 
     for tag in tags:
@@ -423,7 +441,9 @@ for report in reports:
     # modulesFailedVerification, Comments, versionData, additionFields
     # are stored as CLOB in oracle, they need to be binded in order to insert
     
-    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId, additionalInputFiles) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ', :5)'
+    sqlStr = 'insert into eLogReport(TimeStamp, RunID, TestName, Operator, OperatorId, EventCount, BadEventCount, PauseCount, StartTime, ElapsedTime, EndTime, SchemaConfigFile, Release, ModulesFailedVerification, VersionData, CompletionStatus, ArchiveFile, ErrorArchive, LogFile, FitsFile, Site, ParticleType, InstrumentType, Orientation, Phase, Comments, AdditionFields, ErrorEventCount, OnlineReportUrl, NoOfTowers, TKR_SER_NO, CAL_SER_NO, intRunConfigId, additionalInputFiles, MAGNETCURRENT, BEAM_MOMENTUM, X_POS, Y_POS, Z_POS, BEAM_ANGLE) values( to_date(\'' + data[timeStampTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[runIdTag] + ', \'' + data[testNameTag] + '\', \'' + data[operatorTag] + '\', ' + data[operatorIdTag] + ', ' + data[eventCountTag] + ', ' + data[badEventCountTag] + ', ' + data[pauseCountTag] + ', to_date(\'' + data[startTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + data[elapsedTimeTag] + ', to_date(\'' + data[endTimeTag] + '\', \'' + oracleTimeFormat + '\'), ' + '\'' + data[schemaConfigFileTag] + '\', \'' + data[releaseTag] + '\', :1, :2, ' + data[completionStatusTag] + ', \'' + data[archiveFileTag] + '\', \'' + data[errorArchiveTag] + '\', \'' + data[logFileTag] + '\', \'' + data[fitsFileTag] + '\', \'' + data[siteTag] + '\', \'' + data[particleTypeTag] + '\', \'' + data[instrumentTypeTag] + '\', \'' + data[orientationTag] + '\', \'' + data[phaseTag] + '\', :3, :4, ' + data[errorEventCountTag] + ', \'' + onlineReportUrl + '\' ,' + str(nTowers) + ', \'' + tkrSerNo + '\', \'' + calSerNo + '\', ' + str(intRunConfigId) + ', :5, ' + data[currentTag] + ', ' + data[momentumTag] + ', ' + data[xPosTag] + ', ' + data[yPosTag] + ', ' + data[zPosTag] + ', ' + data[thetaTag] + ')'
+
+    #print >> sys.stderr, sqlStr
        
     try:
         c.execute(sqlStr, str(data[modulesFailedVerificationTag]), str(data[versionDataTag]), str(data[commentsTag]), str(data[additionFieldsTag]), str(data[additionalInputFilesTag]))
@@ -435,7 +455,7 @@ for report in reports:
        print exc_value
 
        db.rollback()
-       exit(1)
+       sys.exit(1)
 
     if(data[testNameTag] == 'suiteSummary'):
         sqlStr = 'update eLogReport set suiteName = \'' + data[suiteNameTag] + '\', suiteTimeStamp = to_date(\'' + data[suiteTimeStampTag] + '\', \'' + oracleTimeFormat + '\'), suiteRunList = :1 where runid = ' + data[runIdTag]
@@ -450,7 +470,7 @@ for report in reports:
             print exc_value
 
             db.rollback()
-            exit(1)    
+            sys.exit(1)    
 
     # safe to commit
     db.commit()

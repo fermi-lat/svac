@@ -47,3 +47,15 @@ lives, rather than the top-level run directory.
 v2r3p2
 
 Fail if we can't read or parse rcReport.
+
+--------------------------------------------------------------
+beamtest branch
+
+v1r020302p0
+
+Change DB username/password (hardcoded)
+
+v1r020302p1
+
+Get DB username/password from environment variables.
+Fill beam momentum, magnet current, CU position and angle fields.
