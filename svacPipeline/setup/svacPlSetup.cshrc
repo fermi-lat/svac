@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r6p9
+setenv svacVersion v3r7p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
-setenv EngineeringModelVersion v6r070329p21
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
+setenv EngineeringModelVersion v6r070329p24
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -44,7 +44,7 @@ setenv emTail ${cookedTail}/${EngineeringModelVersion}
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1
@@ -89,7 +89,7 @@ setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
 setenv Em2Version v2r58
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
-setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
+setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/LatIntegration.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -105,7 +105,7 @@ setenv digiReportTask digiReport-${digiReportTaskVersion}
 setenv TestReportVersion v3r6p11
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
-setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
+setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
 setenv digiReportVersion ${TestReportVersion}
@@ -158,14 +158,28 @@ setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v3r0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
-setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
+setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl
 setenv svacTupleDataDir ${emTail}/svacTuple/${RunRootAnalyzerVersion}
 setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #-------------------------------- svacTuple -----------------------------------
 
+#++++++++++++++++++++++++++++++++ tkrReport +++++++++++++++++++++++++++++++++++
+setenv tkrReportTaskVersion ${svacVersion}
+setenv tkrReportTask tkrReport-${tkrReportTaskVersion}
+setenv calibTkrUtilVersion v1r3p1
+setenv tkrReportUrl index.html
+setenv calibTkrUtilDir ${sasCmt}/calibTkrUtil/${calibTkrUtilVersion}
+setenv tkrReportCmt ${calibTkrUtilDir}/cmt
+setenv tkrReportApp ${calibTkrUtilDir}/${SVAC_CMTCONFIG}/genTkrNoiseRep.exe
+setenv tkrReportTaskDir ${svacPlRoot}/tkrReport
+setenv tkrReportDataDir ${emTail}/tkrReport/${calibTkrUtilVersion}
+setenv tkrReportDataDirFull ${dataHead}/${tkrReportDataDir}
+#-------------------------------- tkrReport -----------------------------------
+
 #++++++++++++++++++++++++++++++++ many ++++++++++++++++++++++++++++++++++++++++
+setenv taskLaunchWrapper ${svacPlLib}/LaunchWrapper.pl
 setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
 setenv urlUpdateWrapper ${svacPlLib}/urlWrapper.pl
 setenv urlUpdateScript  ${svacPlLib}/updateUrl.py

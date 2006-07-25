@@ -532,3 +532,10 @@ v3r6p9
 ---------------
 EM v6r070329p21
 EngineeringModelRoot v3r0
+---------------------------------------------------------------------------
+
+
+v3r7p0
+---------------
+EM ???
+Add new tkrReport task, using calibTkrUtil.  Launched from svacTuple.

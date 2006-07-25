@@ -27,6 +27,9 @@ my $svacTupleXml =
         <executable name=\"svacRootFile\" version=\"$ENV{'svacVersion'}\">
             $urlUpdater
         </executable>
+        <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
+            $ENV{'taskLaunchWrapper'}
+        </executable>
 
         <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
             <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
@@ -63,6 +66,9 @@ my $svacTupleXml =
                         <output-file name=\"svac\"/>
                         <output-file name=\"script\"/>
                         <output-file name=\"jobOptions\"/>
+        </processing-step>
+        <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"svac\"/>
         </processing-step>
         <processing-step name=\"svacRootFile\" executable=\"svacRootFile\" batch-job-configuration=\"express-job\">
                         <input-file name=\"svac\"/>

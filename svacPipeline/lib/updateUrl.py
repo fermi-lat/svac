@@ -18,9 +18,11 @@ import os
 reportPages = {"configReportUrl": os.environ['configReportUrl'],
                "digiReportUrl": os.environ['digiReportUrl'],
                "reconReportUrl": os.environ['reconReportUrl'],
+               "tkrReportUrl": os.environ['tkrReportUrl'],
                }
 
 goodKeys = ('configReportUrl', 'digiReportUrl', 'reconReportUrl',
+            'tkrReportUrl', 
             'digiRootFile', 'reconRootFile', 'meritRootFile', 'svacRootFile',
             'calRootFile',
             )
