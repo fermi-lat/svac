@@ -244,3 +244,6 @@ v3r0: June 5, 2006
 awb	Mutsumi's TKR stuff now depends on calibTkrUtil (version tkr-v3r3) 
         so EngineeringModelRoot and BeamTest can use the same code.
         Minor updates of ntuple description.
+
+v3r0p1: August 3, 2006:
+awb	Minor update in merge Root script so it now points to an existing release.
