@@ -540,3 +540,11 @@ v3r7p0
 EM v6r070329p27
 TestReport v3r6p12
 Add new tkrReport task, using calibTkrUtil.  Launched from svacTuple.
+---------------------------------------------------------------------------
+
+
+v3r7p1
+---------------
+EM v6r070329p28
+Use calib flavor "vanila-muongain" for LAT-71x runs.
+deleteLinks.csh also does tkrReportUrl.

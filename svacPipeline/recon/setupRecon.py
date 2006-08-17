@@ -138,6 +138,15 @@ if particleType == 'Photons':
     joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass
 
+testName = eLogDB.query(runId, 'TESTNAME')
+calibFlavors = {'LAT-71x': 'vanilla-muongain'}
+for test, flavor in calibFlavors.items():
+    if re.search(test, testName):
+        joHead += 'CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};\nCalCalibSvc.DefaultFlavor = "vanilla";\nCalCalibSvc.DefaultFlavor = "%s";\n' % flavor
+        #joHead += 'TkrCalibSvc.DefaultFlavor = "%s";\n' % flavor
+        pass
+    pass
+
 # Deal with hardware that we don't expect to have calibrations for.
 # Gleam/EM will ask for calibrations for TKR and CAL even if one is absent.
 # Set TKR and CAL to ideal if we have EM hardware
