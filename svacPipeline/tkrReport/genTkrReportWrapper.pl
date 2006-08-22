@@ -49,11 +49,11 @@ my $reportFileOut = "${workDir}/$ENV{'tkrReportUrl'}";
 symlink($reportFileIn, $reportFileOut);
 
 my $cmd;
-my $junkers = "junk.txt";
-$cmd = "cd $workDir ; ls tkrReport-* core.*> $junkers";
+my $keepers = "keepers.txt";
+$cmd = "cd $workDir ; ls | egrep -v '^(tkrReport|core)' > $keepers";
 print "$cmd\n";
 system($cmd);
-$cmd = "cd $workDir ; tar -c -z -f $tarBase --exclude $junkers --exclude-from $junkers *";
+$cmd = "cd $workDir ; tar -c -z -f $tarBase -T $keepers";
 print "$cmd\n";
 system($cmd);
 

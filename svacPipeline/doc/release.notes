@@ -548,3 +548,11 @@ v3r7p1
 EM v6r070329p28
 Use calib flavor "vanila-muongain" for LAT-71x runs.
 deleteLinks.csh also does tkrReportUrl.
+---------------------------------------------------------------------------
+
+
+v3r7p2
+---------------
+Switch to u38.
+make tkrReport read files for tarBall from a file.
+TestReport v3r6p14.
