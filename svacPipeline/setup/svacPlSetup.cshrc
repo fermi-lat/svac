@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r7p2
+setenv svacVersion v3r7p3
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -44,7 +44,7 @@ setenv emTail ${cookedTail}/${EngineeringModelVersion}
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1
@@ -133,7 +133,7 @@ setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 10000 
+setenv chunkTime 15000 
 setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
@@ -189,6 +189,7 @@ setenv eLogUpdate ${svacPlLib}/updateElogReportTable.pl
 setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
 setenv deleter ${svacPlLib}/deleteWrapper.pl
 setenv copier ${svacPlLib}/copyWrapper.pl
+setenv cleanupOne ${svacPlLib}/_cleanupOne.csh
 #-------------------------------- many ----------------------------------------
 
 setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root

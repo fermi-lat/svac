@@ -12,7 +12,7 @@ import sys
 
 # minimum scaled observed recon rate (events / SLAC LSF second)
 minRate = {
-    'Cosmics': 1.00,
+    'Cosmics': 0.9,
     'Photons': 0.5,
     'Am241': 10.90,
     }

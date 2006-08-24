@@ -556,3 +556,12 @@ v3r7p2
 Switch to u38.
 make tkrReport read files for tarBall from a file.
 TestReport v3r6p14.
+---------------------------------------------------------------------------
+
+
+v3r7p3
+---------------
+recon chunk script does cleanup instead of exiting immediately upon errors, 
+and cleans up after other chunks before exiting.
+Adjust recon rate for cosmics down and chunk target time up, giving a net 35% 
+increase in chunk size.

@@ -1,4 +1,9 @@
 #!/bin/csh
+
+set printexitvalue
+
+set anyErrors=0
+
 unsetenv LD_LIBRARY_PATH
 setenv CMTCONFIG $SVAC_CMTCONFIG
 setenv GLAST_EXT $SVAC_GLAST_EXT
@@ -16,17 +21,21 @@ set localDir=$localDisk
 
 alias run 'date ; echo \!* ; \!* ; date'
 
-if ( { test -d $localDir } ) then
-    set relocate=1
+if ( { test -d $localDir } ) set relocate=1
 
+if ( $relocate ) then
     set myLocal=$localDir/$$
-    test -d $myLocal || run mkdir $myLocal
+    mkdir -p $myLocal
+	@ anyErrors=($anyErrors | $status)
+	if ( $anyErrors != 0 ) goto cleanup
 
     setenv inDir $myLocal
     setenv procDir $myLocal
 
 	echo Copying JO file to local disk
-	$tryAFewTimes cp $JOBOPTIONS $inDir || exit 1
+	$tryAFewTimes cp $JOBOPTIONS $inDir
+	@ anyErrors=($anyErrors | $status)
+	if ( $anyErrors != 0 ) goto cleanup
 
     set joBase=`echo $JOBOPTIONS | awk -F/ '{print $NF}'`
     setenv JOBOPTIONS $inDir/$joBase
@@ -40,7 +49,9 @@ if ( { test -d $localDir } ) then
     set calBase=`basename $calFile`
 
 	echo Copying digi file to local disk
-	$tryAFewTimes cp $digiFile $inDir || exit 1
+	$tryAFewTimes cp $digiFile $inDir
+	@ anyErrors=($anyErrors | $status)
+	if ( $anyErrors != 0 ) goto cleanup
 
 else
     set relocate=0
@@ -50,20 +61,30 @@ endif
 echo Reading digi file from $inDir
 echo Writing chunk files to $procDir
 
-#run $reconApp || exit 1
 date
 echo $reconApp
-$reconApp || exit 1
+$reconApp
+@ anyErrors=($anyErrors | $status)
+if ( $anyErrors != 0 ) goto cleanup
 date
 
+cleanup:
+
 if ( $relocate ) then
-    echo Relocating chunk files from $procDir to $stageDir
-    pushd $procDir
-	foreach outFile ($reconBase $meritBase $calBase)
-		$tryAFewTimes mv $outFile $stageDir || exit 1
-	end
-    cd $inDir
-    run rm $digiBase $joBase
-    popd
-	run rmdir $myLocal 
+
+	if ( $anyErrors == 0 ) then
+		echo Relocating chunk files from $procDir to $stageDir
+		pushd $procDir
+		foreach outFile ($reconBase $meritBase $calBase)
+			$tryAFewTimes mv $outFile $stageDir
+			@ anyErrors=($anyErrors | $status)
+		end
+		popd
+	endif
+
+	run rm -rf $myLocal 
 endif
+
+run $cleanupOne
+
+exit $anyErrors
