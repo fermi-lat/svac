@@ -565,3 +565,6 @@ recon chunk script does cleanup instead of exiting immediately upon errors,
 and cleans up after other chunks before exiting.
 Adjust recon rate for cosmics down and chunk target time up, giving a net 35% 
 increase in chunk size.
+Move chunk target time back up (temporarily) to deal with slow processing of 
+MIP filter runs.
+Serve ROOT files via FTP, not HTTP.

@@ -35,7 +35,7 @@ nArg = len(sys.argv)
 if nArg == 4:
     runId, urlKey, targetFile = sys.argv[1:]
     # used to form ftp URL - default value
-    rootDataDir = os.environ['rootUrl']
+    rootDataDir = None
 elif nArg == 5:
     runId, urlKey, targetFile, rootDataDir = sys.argv[1:]    
 else:
@@ -57,10 +57,17 @@ runIndex = path.index(runId)
 del path[:runIndex]
 if urlKey in reportPages:
     # This is a report, we've gotta replace the tarball with the web page
+    # And serve the page thru HTTP
     path[-1] = reportPages[urlKey]
+    defaultRootDir = os.environ['rootUrl']
+else:
+    # not a report, serve it thru FTP
+    defaultRootDir = os.environ['rootFtp']
+    pass
 path = os.path.join(*path)
 print path
-
+if not rootDataDir:
+    rootDataDir = defaultRootDir
     
 # construct URL string
 reportUrl = "%s/%s" % (rootDataDir, path)

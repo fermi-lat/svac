@@ -23,19 +23,20 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
-setenv dataDisk u38
+setenv ftpHead ftp://ftp-glast.slac.stanford.edu/glast.
+setenv dataDisk u39
 setenv onlineDisk u25
 setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
 setenv dataHead ${diskHead}/${subDir}
-setenv urlHead ${webHead}/${subDir}
 setenv onlineHead ${diskHead}/${onlineDisk}/${phase}
 setenv onlineSubDir rawData
 setenv svacSubDir rootData
 setenv rawUrl ${webHead}/${onlineDisk}/${phase}/${onlineSubDir}
 setenv rootUrl ${webHead}/${subDir}/${svacSubDir}
+setenv rootFtp ${ftpHead}${subDir}/${svacSubDir}
 setenv runSymbol '$(RUN_NAME)'
 
 setenv cookedTail ${svacSubDir}/${runSymbol}
@@ -44,7 +45,7 @@ setenv emTail ${cookedTail}/${EngineeringModelVersion}
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1
@@ -133,7 +134,7 @@ setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 15000 
+setenv chunkTime 10000 
 setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 #-------------------------------- recon ---------------------------------------
