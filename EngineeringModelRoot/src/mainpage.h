@@ -48,8 +48,9 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> GltWord </TD> <TD> Int </TD> <TD> Trigger word made from digis: The definition of the bits can be found in enums/enums/TriggerBits.h and follows the definition of the 
           bits from the GltConditionsWord. The GltWord is the only trigger word available in the simulation as there is no GEM simulation.</TD> </TR>
 
-<TR> <TD> EvtTime </TD> <TD> Int </TD> <TD> Time in seconds since mission start, currently 1/1/2001. This is the time that is reported when doing simulations. NB! For real data, 
-          this time is from the event builder and is not the trigger time. For Flight Software runs this is the time of the creation of the datagram. </TD> </TR>
+<TR> <TD> EvtTime </TD> <TD> Double </TD> <TD> Time in seconds since mission start, currently 1/1/2001. This is the time that is reported when doing simulations. NB! For real data taken with LATTE, 
+          this time is from the event builder and is not the trigger time. For Flight Software runs this used to be the time of the creation of the datagram but it's now the real timestamp of the 
+          event. </TD> </TR>
 
 <TR> <TD> EvtSecond </TD> <TD> Int </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. NB! For real data, 
           this time is from the event builder and is not the trigger time. Do not use with Flight Software Runs!</TD> </TR>
