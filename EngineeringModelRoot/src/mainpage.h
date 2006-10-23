@@ -75,7 +75,7 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
           </TD> </TR>
 
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
-          http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf, Chapter 3.5</TD> </TR>
+          http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf Chapter 3.5</TD> </TR>
 
 <TR> <TD> EventFlags </TD> <TD> Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
