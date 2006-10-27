@@ -247,3 +247,6 @@ awb	Mutsumi's TKR stuff now depends on calibTkrUtil (version tkr-v3r3)
 
 v3r0p1: August 3, 2006:
 awb	Minor update in merge Root script so it now points to an existing release.
+
+v3r0p2: October 26, 2006
+awb	Added a few more variables.

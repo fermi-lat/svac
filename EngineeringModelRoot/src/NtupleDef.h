@@ -273,8 +273,13 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeToneGemTimeTicks;
   unsigned int m_contextLsfTimeTimeTicks;
 
+  unsigned int m_contextLsfTimeTimeHackHacks;
+  unsigned int m_contextLsfTimeTimeHackTicks;
+
+
   int m_contextRunType;
 
+  
 
 
   // time information. This may change depending on future data format
@@ -361,6 +366,19 @@ struct NtupleDef {
   int m_eventGtccError;
   int m_eventPhaseError;
   int m_eventTimeoutError;
+
+  int m_eventReadout4;
+  int m_eventZeroSuppress;
+  int m_eventMarker;
+  int m_eventCalStrobe;
+  int m_eventTag;
+  int m_eventTACK;
+
+  double m_eventMCLivetime;
+ 
+  double m_cCSDStime;
+  int    m_cCSDSapID;
+  int    m_cCSDSscID;
 
 
   // decoded trigger primitive for the tracker

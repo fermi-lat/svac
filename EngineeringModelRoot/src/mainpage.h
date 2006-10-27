@@ -2,7 +2,9 @@
 
 /*! @mainpage  Package svac/EngineeringModelRoot
 
-@author Xin Chen - Current maintainer: Anders W. Borgland
+@author Xin Chen 
+
+@section current Current maintainer: Anders W. Borgland
 
 @section intro Introduction
 
@@ -74,6 +76,8 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
           NB! This is the time when the event triggered. The values are integers, but are stored as doubles to portably get more than 32 bits. Do not use with Flight Software Runs!
           </TD> </TR>
 
+<TR> <TD> EvtMCLiveTime </TD> <TD> Double </TD> <TD> MC livetime. </TD> </TR>
+
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf Chapter 3.5</TD> </TR>
 
@@ -98,6 +102,18 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> EventGcccError        </TD> <TD> Int </TD> <TD> Set if there is a GCCC error in the event. </TD> </TR>
 <TR> <TD> EventPhaseError       </TD> <TD> Int </TD> <TD> Set if there is an event phase error in the event. </TD> </TR>
 <TR> <TD> EventTimeoutError     </TD> <TD> Int </TD> <TD> Set if there is an event timeout error in the event. </TD> </TR> 
+
+<TR> <TD> EventReadout4      </TD> <TD> Int </TD> <TD> 4-range readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>    
+<TR> <TD> EventZeroSuppress  </TD> <TD> Int </TD> <TD> Zero-suppressed readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventMarker        </TD> <TD> Int </TD> <TD> Marker - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR> 
+<TR> <TD> EventCalStrobe     </TD> <TD> Int </TD> <TD> Calstrobe - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventTag           </TD> <TD> Int </TD> <TD> Tag - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventTACK          </TD> <TD> Int </TD> <TD> TACK - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+
+<TR> <TD> CCSDSTime  </TD> <TD> Double </TD> <TD> CCSDS Time from packet secondary header. It's also known as the datagram creation time even though it's really the time when the datagram was flsuhed.
+This means that this time will be later than the time of any event time. </TD> </TR>
+<TR> <TD> CCSDSapID  </TD> <TD> Int    </TD> <TD> CCSDS AP ID </TD> </TR>
+<TR> <TD> CCSDSscID  </TD> <TD> Int    </TD> <TD> CCSDS SC ID </TD> </TR>
 
 
 <TR> <TD> TemLength[tower] </TD> <TD> Int </TD> <TD> Size in bytes of the TEM event contribution, per tower. Variable length. </TD> </TR>
@@ -213,7 +229,11 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 
 
 <TR> <TD> ContextLsfTimeTimeTicks </TD> <TD> UInt </TD> <TD> The number of system clock ticks (nominally 50ns) since last the last time hack.  </TD> </TR>
-<TR> <TD> ContextRunType          </TD> <TD> Int  </TD> <TD> Which type of run was this, particle data or charge injection.                    </TD> </TR>
+
+<TR> <TD>  ContextLsfTimeHackHacks </TD> <TD> UInt </TD> <TD> The number of 1-PPS time hacks.  This counter wraps around at 127. </TD> </TR>  
+<TR> <TD>  ContextLsfTimeHackHacks </TD> <TD> UInt </TD> <TD> The value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>  
+
+<TR> <TD> ContextRunType </TD> <TD> Int  </TD> <TD> Which type of run was this, particle data or charge injection. </TD> </TR>
 
 </TABLE>
 

@@ -597,6 +597,9 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
   m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
 
+  m_ntuple.m_eventMCLivetime = m_digiEvent->getLiveTime();
+
+
   //                                                                                                                                                                                                           
   // Context information:                                                                                                                                                                                      
   //                                                                                                                                                                                                           
@@ -644,6 +647,10 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
 
   m_ntuple.m_contextLsfTimeTimeTicks = m_digiEvent->getMetaEvent().time().timeTicks();
+
+  m_ntuple.m_contextLsfTimeTimeHackHacks = m_digiEvent->getMetaEvent().time().timeHack().hacks();
+  m_ntuple.m_contextLsfTimeTimeHackTicks = m_digiEvent->getMetaEvent().time().timeHack().ticks();
+
 
   m_ntuple.m_contextRunType = m_digiEvent->getMetaEvent().runType();
 
@@ -738,6 +745,19 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventGtccError        = m_digiEvent->getEventSummaryData().gtccError();
   m_ntuple.m_eventPhaseError       = m_digiEvent->getEventSummaryData().phaseError();
   m_ntuple.m_eventTimeoutError     = m_digiEvent->getEventSummaryData().timeoutError();
+
+  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4( );
+  m_ntuple.m_eventZeroSuppress = m_digiEvent->getEventSummaryData().zeroSuppress();
+  m_ntuple.m_eventMarker       = m_digiEvent->getEventSummaryData().marker();
+  m_ntuple.m_eventCalStrobe    = m_digiEvent->getEventSummaryData().calStrobe();
+  m_ntuple.m_eventTag          = m_digiEvent->getEventSummaryData().tag();
+  m_ntuple.m_eventTACK         = m_digiEvent->getEventSummaryData().TACK();
+  
+  // CCSDS info:
+  m_ntuple.m_cCSDStime = m_digiEvent->getCcsds().getUtc();
+  m_ntuple.m_cCSDSapID = m_digiEvent->getCcsds().getApid(); 
+  m_ntuple.m_cCSDSscID = m_digiEvent->getCcsds().getScid();
+
 
   //
   // ACD digi:
@@ -1491,6 +1511,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
+  m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
 
   // Error flags:
   m_tree->Branch("EventBadEventSequence", &(m_ntuple.m_eventBadEventSequence), "EventBadEventSequence/I");
@@ -1511,6 +1532,13 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventGtccError", &(m_ntuple.m_eventGtccError), "EventGtccError/I");
   m_tree->Branch("EventPhaseError", &(m_ntuple.m_eventPhaseError), "EventPhaseError/I");
   m_tree->Branch("EventTimeoutError", &(m_ntuple.m_eventTimeoutError), "EventTimeoutError/I");
+
+  m_tree->Branch("EventReadout4", &(m_ntuple.m_eventReadout4), "EventReadout4/I");
+  m_tree->Branch("EventZeroSuppress", &(m_ntuple.m_eventZeroSuppress), "EventZeroSuppress/I");
+  m_tree->Branch("EventMarker", &(m_ntuple.m_eventMarker), "EventMarker/I");
+  m_tree->Branch("EventCalStrobe", &(m_ntuple.m_eventCalStrobe), "EventCalStrobe/I");
+  m_tree->Branch("EventTag", &(m_ntuple.m_eventTag), "EventTag/I");
+  m_tree->Branch("EventTACK", &(m_ntuple.m_eventTACK), "EventTACK/I");
 
 
   // MC information:
@@ -1655,6 +1683,10 @@ void RootAnalyzer::createBranches()
 
   m_tree->Branch("ContextLsfTimeTimeTicks",&(m_ntuple.m_contextLsfTimeTimeTicks),"ContextLsfTimeTimeTicks/i");
 
+  m_tree->Branch("ContextLsfTimeHackHacks",&(m_ntuple.m_contextLsfTimeTimeHackHacks),"ContextLsfTimeHackHacks/i");
+  m_tree->Branch("ContextLsfTimeHackTicks",&(m_ntuple.m_contextLsfTimeTimeHackTicks),"ContextLsfTimeHackTicks/i");
+
+
   m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
 
 
@@ -1798,5 +1830,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdTkrPointZ",&(m_ntuple.m_acdTkrPointZ),"AcdTkrPointZ[2]/F");
 
   m_tree->Branch("AcdTkrPointFace",&(m_ntuple.m_acdTkrPointFace),"AcdTkrPointFace[2]/I");
+
+  m_tree->Branch("CCSDSTime", &(m_ntuple.m_cCSDStime),"CCSDSTime/D");
+  m_tree->Branch("CCSDSapID", &(m_ntuple.m_cCSDSapID),"CCSDSapID/I");
+  m_tree->Branch("CCSDSscID", &(m_ntuple.m_cCSDSscID),"CCSDSscID/I");
+
 
 }
