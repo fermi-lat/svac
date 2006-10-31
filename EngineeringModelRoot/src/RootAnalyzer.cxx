@@ -843,7 +843,7 @@ void RootAnalyzer::analyzeDigiTree()
       }
 
       if (AcdNaID<0 || AcdNaID>10) {
-	std::cout << "ACD tile ID for non-attached tile is not in range! - " << AcdID << std::endl;        
+	std::cout << "ACD tile ID for non-attached tile is not in range! AcdNaID is: " << AcdNaID << std::endl;        
       }
 
       if (AcdNaID>-1 && AcdNaID<11) {
