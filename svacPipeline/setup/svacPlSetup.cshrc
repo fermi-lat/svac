@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r7p3
+setenv svacVersion v3r7p4
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -24,8 +24,8 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv ftpHead ftp://ftp-glast.slac.stanford.edu/glast.
-setenv dataDisk u39
-setenv onlineDisk u25
+setenv dataDisk u41
+setenv onlineDisk u41
 setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
 setenv localDisk /scratch
 setenv phase Integration
@@ -74,7 +74,7 @@ setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 setenv configReportTaskVersion ${svacVersion}
 setenv configReportTaskLatte configReport-latte-${configReportTaskVersion}
 setenv configReportTaskLicos configReport-licos-${configReportTaskVersion}
-setenv configReportVersion v4r0p2
+setenv configReportVersion v4r0p3
 setenv configReportUrl ConfigTables.html
 setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
 setenv configTaskDir ${svacPlRoot}/configReport
@@ -103,7 +103,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p14
+setenv TestReportVersion v3r6p20
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -156,7 +156,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v3r0
+setenv RunRootAnalyzerVersion v3r0p2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
