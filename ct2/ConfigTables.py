@@ -163,8 +163,8 @@ if jobOptions.mode is jobOptions.licosMode:
     <br/>
     <br/>
     LICOS support is currently somewhere between rudimentary and broken.<br/>
-    Any registers configured by broadcast are either missing or 'Absent'.
-    """)
+    Any registers configured by broadcast are either missing or '%s'.
+    """ % jobOptions.absent)
     pass
 
 if jobOptions.mode is jobOptions.latteMode:
@@ -186,22 +186,22 @@ elif jobOptions.mode is jobOptions.licosMode:
     try:
         arcDoc = docs['ARC']
     except KeyError:
-        temDoc = docs['bcast']
+        arcDoc = docs['bcast']
         pass
     try:
         afeDoc = docs['AFE']
     except KeyError:
-        temDoc = docs['bcast']
+        afeDoc = docs['bcast']
         pass
     try:
         cfeDoc = docs['CFE']
     except KeyError:
-        temDoc = docs['bcast']
+        cfeDoc = docs['bcast']
         pass
     try:
         tfeDoc = docs['TFE']
     except KeyError:
-        temDoc = docs['bcast']
+        tfeDoc = docs['bcast']
         pass
 else:
     raise AssertionError, "Can't get here!"

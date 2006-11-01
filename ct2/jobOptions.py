@@ -52,7 +52,7 @@ tables = {
     'TKR_DAC': ('TEM/TCC/TRC/TFE/dac', # TKR DAC
                 'TKR DAC (range,<B>threshhold</B>)'),
 
-    'TKR_OR_STRETCH': ('TEM/TCC/TRC/csr:12-16', # WTF overlaps TKR_NR?
+    'TKR_OR_STRETCH': ('TEM/TCC/TRC/csr:12-16', 
                        'TKR OR_STRETCH'),
 
     'CAL_LAD': ('TEM/CCC/CRC/CFE/log_acpt',
