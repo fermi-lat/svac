@@ -71,7 +71,7 @@ date
 cleanup:
 
 if ( $relocate ) then
-
+	echo Cleaning up after myself...
 	if ( $anyErrors == 0 ) then
 		echo Relocating chunk files from $procDir to $stageDir
 		pushd $procDir
@@ -85,6 +85,8 @@ if ( $relocate ) then
 	run rm -rf $myLocal 
 endif
 
+echo Cleaning up after others...
 run $cleanupOne
 
+echo Done, status=$anyErrors
 exit $anyErrors

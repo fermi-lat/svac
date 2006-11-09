@@ -5,6 +5,7 @@
 import math
 import os
 import re
+import shutil
 import sys
 
 import ROOT
@@ -43,17 +44,26 @@ if not os.path.isdir(stageDir):
     os.makedirs(stageDir)
     pass
 
+# put .htaccess file in working directory to prevent HTTP downloads of 
+# ROOT files
+shutil.copyfile(os.environ['htAccess'], os.path.join(workDir, '.htaccess'))
+
+# make an empty badChunks file (it will be ignored) so we don't run into
+# problems from junk left over from previous runs of this run.
+workDir, jobBase = os.path.split(chunkJobs)
+badChunkBase = '%s_%s_badChunks_text.txt' % (task, runId)
+badChunkFile = os.path.join(workDir, badChunkBase)
+open(badChunkFile, 'w')
+
 inDir = '$inDir'
 procDir = '$procDir'
 
 digiBase = os.path.basename(digiFileName)
 digiWorkFile = os.path.join(inDir, digiBase)
 
-# figure out particle type
-particleType = eLogDB.query(runId, 'particletype')
 
-numEventsPerFile = chunkSize.chunkSize(particleType)
-print >> sys.stderr, "Particle type is %s, using chunk size %s." % (particleType, numEventsPerFile)
+numEventsPerFile = chunkSize.chunkSize(runId)
+#print >> sys.stderr, "Particle type is %s, using chunk size %s." % (particleType, numEventsPerFile)
 
 treeName = 'Digi'
 chunks, numEventsPerFile = \
@@ -120,7 +130,8 @@ if not geoFile:
     print >> sys.stderr, "No geometry for %d towers!" % nTwr
     sys.exit(1)
 else:
-    print >> sys.stderr, "This run has %d towers, using geometry file %s." % (nTwr, geoFile)
+    print >> sys.stderr, "This run has %d towers, using geometry file %s." % \
+          (nTwr, geoFile)
     pass
 
 joHead = \
@@ -134,6 +145,8 @@ digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
     'geoFile': geoFile,
     'digiRootFile': digiWorkFile,
     }
+# figure out particle type
+particleType = eLogDB.query(runId, 'particletype')
 if particleType == 'Photons':
     joHead += '#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt"\n'
     pass

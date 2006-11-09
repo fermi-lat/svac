@@ -20,6 +20,7 @@ my $proc = new DPFProc($run_num, $task_pk, $taskProcess_name);
 
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
 #####################################################
 ##
 ##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
@@ -44,7 +45,7 @@ my $shellFile = $outFiles->{'script'};
 
 my $exe = $ENV{'svacTupleScript'};
 
-my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
+my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile' '$taskName'";
 print "Running command: [$command]\n";
 
 

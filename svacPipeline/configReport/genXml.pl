@@ -10,6 +10,13 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 my $batchgroup = $ENV{'batchgroup'};
 
+use MakeMeta;
+my %metaWrappers = (MakeMeta::makeMeta($ENV{'configTaskDir'}, 
+									   "ConfigTables"),
+					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
+									   "url")
+					);
+
 my $configReportXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -21,36 +28,37 @@ my $configReportXml =
     <type>Report</type>
     <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
-            $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
-        </executable>
-        <executable name=\"configReportUrl\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
 
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
-        </batch-job-configuration>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
-            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
-        </batch-job-configuration>
+    <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
+        $metaWrappers{'ConfigTables'}
+    </executable>
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'url'}
+    </executable>
 
-        <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >
-            <path>$ENV{'onlineDataDirFull'}</path>
-        </file>
-        <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">
-            <path>$ENV{'configTablesDataDirFull'}</path>
-        </file>
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+        <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
+    </batch-job-configuration>
+    <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
+        <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
+    </batch-job-configuration>
 
-        <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
-                        <input-file name=\"snapshot\"/>
-                        <output-file name=\"tarBall\"/>
-        </processing-step>
-        <processing-step name=\"configReportUrl\" executable=\"configReportUrl\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"tarBall\"/>
-        </processing-step>
+    <file file-type=\"xml\" name=\"snapshot\" type=\"text\"    >
+        <path>$ENV{'onlineDataDirFull'}</path>
+    </file>
+    <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">
+        <path>$ENV{'configTablesDataDirFull'}</path>
+    </file>
+
+    <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
+                    <input-file name=\"snapshot\"/>
+                    <output-file name=\"tarBall\"/>
+    </processing-step>
+    <processing-step name=\"configReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"tarBall\"/>
+    </processing-step>
 </pipeline>
 
 ";
@@ -72,36 +80,37 @@ $configReportXml =
     <type>Report</type>
     <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
-            $ENV{'configTaskDir'}/ConfigTablesWrapper.pl
-        </executable>
-        <executable name=\"configReportUrl\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
 
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
-        </batch-job-configuration>
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
-            <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
-        </batch-job-configuration>
+    <executable name=\"ConfigTables\" version=\"$ENV{'configReportTaskVersion'}\">
+        $metaWrappers{'ConfigTables'}
+    </executable>
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
+       $metaWrappers{'url'}
+    </executable>
 
-        <file file-type=\"xml\" name=\"algorithm\" type=\"text\"    >
-            <path>$ENV{'onlineDataDirFull'}/LICOS</path>
-        </file>
-        <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">
-            <path>$ENV{'configTablesDataDirFull'}</path>
-        </file>
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+        <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
+    </batch-job-configuration>
+    <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
+        <working-directory>$ENV{'configTablesDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'configTablesDataDirFull'}</log-file-path>
+    </batch-job-configuration>
 
-        <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
-                        <input-file name=\"algorithm\"/>
-                        <output-file name=\"tarBall\"/>
-        </processing-step>
-        <processing-step name=\"configReportUrl\" executable=\"configReportUrl\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"tarBall\"/>
-        </processing-step>
+    <file file-type=\"xml\" name=\"algorithm\" type=\"text\"    >
+        <path>$ENV{'onlineDataDirFull'}/LICOS</path>
+    </file>
+    <file file-type=\"tgz\" name=\"tarBall\"  type=\"Analysis\">
+        <path>$ENV{'configTablesDataDirFull'}</path>
+    </file>
+
+    <processing-step name=\"ConfigTables\" executable=\"ConfigTables\" batch-job-configuration=\"medium-job\">
+                    <input-file name=\"algorithm\"/>
+                    <output-file name=\"tarBall\"/>
+    </processing-step>
+    <processing-step name=\"configReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"tarBall\"/>
+    </processing-step>
 </pipeline>
 
 ";

@@ -10,6 +10,16 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 my $batchgroup = $ENV{'batchgroup'};
 
+use MakeMeta;
+my %metaWrappers = (MakeMeta::makeMeta($ENV{'reconTaskDir'}, 
+									  "setupRecon", "doRecon", 
+									  "mergeRecon", "cleanup"),
+					MakeMeta::makeMeta($ENV{'svacPlLib'},
+									   "copy", "delete",
+									   "hadd", "url",
+									   "Launch")
+					);
+
 my $reconXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -23,34 +33,31 @@ my $reconXml =
     <run-log-path>/temp/</run-log-path>
 
     <executable name=\"setupRecon\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/setupReconWrapper.pl
+        $metaWrappers{'setupRecon'}
     </executable>
     <executable name=\"doRecon\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/doReconWrapper.pl
+        $metaWrappers{'doRecon'}
     </executable>
     <executable name=\"mergeRecon\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/mergeReconWrapper.pl
+        $metaWrappers{'mergeRecon'}
     </executable>
     <executable name=\"copyWrapper\" version=\"$ENV{'svacVersion'}\">
-        $ENV{'copier'}
+        $metaWrappers{'copy'}
     </executable>
     <executable name=\"deleteWrapper\" version=\"$ENV{'svacVersion'}\">
-        $ENV{'deleter'}
+        $metaWrappers{'delete'}
     </executable>
-    <executable name=\"RunRALaunch\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/RunRALaunchWrapper.pl
-    </executable>
-    <executable name=\"genRTRLaunch\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/genRTRLaunchWrapper.pl
+    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'Launch'}
     </executable>
     <executable name=\"haddWrapper\" version=\"$ENV{'svacVersion'}\">
-        $ENV{'haddWrapper'}
+        $metaWrappers{'hadd'}
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
-        $urlUpdater
+        $metaWrappers{'url'}
     </executable>
     <executable name=\"cleanup\" version=\"$ENV{'reconTaskVersion'}\">
-        $ENV{'reconTaskDir'}/cleanupWrapper.pl
+        $metaWrappers{'cleanup'}
     </executable>
 
     <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
@@ -132,27 +139,13 @@ my $reconXml =
     <processing-step name=\"deleteReconStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"reconStage\"/>
     </processing-step>
-    <processing-step name=\"LaunchSVAC\" executable=\"RunRALaunch\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'svacTupleTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
     </processing-step>
-    <processing-step name=\"LaunchReport\" executable=\"genRTRLaunch\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'reconReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
-    </processing-step>
-    <processing-step name=\"mergeMerit\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
-                    <input-file name=\"meritChunks\"/>
-                    <output-file name=\"meritStage\"/>
-    </processing-step>
-    <processing-step name=\"deleteMeritChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"meritChunks\"/>
-    </processing-step>
-    <processing-step name=\"copyMerit\" executable=\"copyWrapper\" batch-job-configuration=\"glastdataq-job\">
-                    <input-file name=\"meritStage\"/>
-                    <output-file name=\"merit\"/>
-    </processing-step>
-    <processing-step name=\"deleteMeritStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"meritStage\"/>
     </processing-step>
     <processing-step name=\"mergeCal\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"calChunks\"/>
@@ -167,6 +160,20 @@ my $reconXml =
     </processing-step>
     <processing-step name=\"deleteCalStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"calStage\"/>
+    </processing-step>
+    <processing-step name=\"mergeMerit\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
+                    <input-file name=\"meritChunks\"/>
+                    <output-file name=\"meritStage\"/>
+    </processing-step>
+    <processing-step name=\"deleteMeritChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"meritChunks\"/>
+    </processing-step>
+    <processing-step name=\"copyMerit\" executable=\"copyWrapper\" batch-job-configuration=\"glastdataq-job\">
+                    <input-file name=\"meritStage\"/>
+                    <output-file name=\"merit\"/>
+    </processing-step>
+    <processing-step name=\"deleteMeritStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"meritStage\"/>
     </processing-step>
     <processing-step name=\"reconRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"recon\"/>

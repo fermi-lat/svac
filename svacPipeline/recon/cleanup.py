@@ -41,7 +41,12 @@ tfp.close()
 # (if it's not empty, something is wrong)
 print >> sys.stderr, "Removing staging dirs..."
 for directory in directories:
-    os.rmdir(directory)
+    print >> sys.stderr, "Removing directory [%s]" % directory
+    if 'svacTestMode' in os.environ and int(os.environ['svacTestMode']):
+        print >> sys.stderr, "Test mode, not removing."
+    else:
+        os.rmdir(directory)
+        pass
     pass
 
 timeLogger()

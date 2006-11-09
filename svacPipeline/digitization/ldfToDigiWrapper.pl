@@ -33,8 +33,8 @@ my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
 
 my $exe = $ENV{'digitizationScript'};
-my $command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
-print "Running command: [$command]\n";
+$command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
+print STDERR "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
 

@@ -1,9 +1,5 @@
 #!/usr/local/bin/perl -w
 
-# Demonstration script.
-# Submitted to batch by pipeline scheduler.
-# You need only modify the last section...
-
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -19,8 +15,8 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
+my $taskName = $proc->{'task_name'};
 
 #####################################################
 ##
@@ -32,13 +28,10 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $exe = $ENV{'taskLauncher'};
-
-my $newTask = $ENV{'reconReportTask'};
-my $digiRootFile = $inFiles->{'digi'};
 my $reconRootFile = $inFiles->{'recon'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile' '$reconRootFile'";
 
+my $exe = $ENV{'finalCleanup'};
+my $command = "$exe '$taskName' '$runName' '$reconRootFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

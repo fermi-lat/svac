@@ -10,6 +10,13 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 my $batchgroup = $ENV{'batchgroup'};
 
+use MakeMeta;
+my %metaWrappers = (MakeMeta::makeMeta($ENV{'svacTupleTaskDir'}, 
+									   "RunRootAnalyzer"),
+					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
+									   "Launch", "url", "finalCleanup")
+					);
+
 my $svacTupleXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -21,58 +28,65 @@ my $svacTupleXml =
     <type>Analysis</type>
     <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
-            $ENV{'svacTupleTaskDir'}/RunRootAnalyzerWrapper.pl
-        </executable>
-        <executable name=\"svacRootFile\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
-        <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
-            $ENV{'taskLaunchWrapper'}
-        </executable>
 
-        <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
-            <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
-        </batch-job-configuration>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
-        </batch-job-configuration>
+    <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
+        $metaWrappers{'RunRootAnalyzer'}
+    </executable>
+    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'Launch'}
+    </executable>
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'url'}
+    </executable>
+    <executable name=\"finalCleanup\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'finalCleanup'}
+    </executable>
 
-        <file name=\"histogram\"  file-type=\"root\"   type=\"histogram\">
-            <path>$ENV{'svacTupleDataDir'}</path>
-        </file>
-        <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\"     >
-            <path>$ENV{'svacTupleDataDir'}</path>
-        </file>
-        <file name=\"script\"     file-type=\"csh\"    type=\"script\"   >
-            <path>$ENV{'svacTupleDataDir'}</path>
-        </file>
-        <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
-            <path>$ENV{'svacTupleDataDir'}</path>
-        </file>
-        <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >
-            <path>$ENV{'digitizationDataDir'}</path>
-        </file>
-        <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >
-            <path>$ENV{'reconDataDir'}</path>
-        </file>
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
+        <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
+    </batch-job-configuration>
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+        <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
+    </batch-job-configuration>
 
-        <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"glastdataq-job\">
-                        <input-file name=\"digi\"/>
-                        <input-file name=\"recon\"/>
-                        <output-file name=\"histogram\"/>
-                        <output-file name=\"svac\"/>
-                        <output-file name=\"script\"/>
-                        <output-file name=\"jobOptions\"/>
-        </processing-step>
-        <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"svac\"/>
-        </processing-step>
-        <processing-step name=\"svacRootFile\" executable=\"svacRootFile\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"svac\"/>
-        </processing-step>
+    <file name=\"histogram\"  file-type=\"root\"   type=\"histogram\">
+        <path>$ENV{'svacTupleDataDir'}</path>
+    </file>
+    <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\"     >
+        <path>$ENV{'svacTupleDataDir'}</path>
+    </file>
+    <file name=\"script\"     file-type=\"csh\"    type=\"script\"   >
+        <path>$ENV{'svacTupleDataDir'}</path>
+    </file>
+    <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
+        <path>$ENV{'svacTupleDataDir'}</path>
+    </file>
+    <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\"     >
+        <path>$ENV{'digitizationDataDir'}</path>
+    </file>
+    <file name=\"recon\"      file-type=\"root\"   type=\"RECON\"    >
+        <path>$ENV{'reconDataDir'}</path>
+    </file>
+
+    <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"glastdataq-job\">
+                    <input-file name=\"digi\"/>
+                    <input-file name=\"recon\"/>
+                    <output-file name=\"histogram\"/>
+                    <output-file name=\"svac\"/>
+                    <output-file name=\"script\"/>
+                    <output-file name=\"jobOptions\"/>
+    </processing-step>
+    <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"svac\"/>
+    </processing-step>
+    <processing-step name=\"svacRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"svac\"/>
+    </processing-step>
+    <processing-step name=\"finalCleanup\" executable=\"finalCleanup\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"recon\"/>
+    </processing-step>
 </pipeline>
 
 ";

@@ -16,6 +16,7 @@ my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
 my $runName = $proc->{'run_name'};
+my $taskName = $proc->{'task_name'};
 
 #####################################################
 ##
@@ -35,7 +36,7 @@ my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'reconReportScript'};
 
-my $command = "$exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$reconRootFile' '$optionFile' '$shellFile' '$tarBall' '$taskName'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

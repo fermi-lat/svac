@@ -568,3 +568,45 @@ increase in chunk size.
 Move chunk target time back up (temporarily) to deal with slow processing of 
 MIP filter runs.
 Serve ROOT files via FTP, not HTTP.
+---------------------------------------------------------------------------
+
+
+v3r7p4
+---------------
+Move rawData & rootData to u41.
+ConfigReport v4r0p3
+TestReport v3r6p20
+EngineeringModel v3r0p2
+---------------------------------------------------------------------------
+
+
+v3r8p0
+---------------
+TestReport v3r6p27
+EngineeringModel v3r0p3
+
+Use metawrappers generated at install time that set svacPlRoot to a hardcoded 
+value then launch the "real" wrapper, eliminating runtime dependence on the 
+"current" link and external setting of svacPlRoot.  This means that multiple 
+versions can run at the same time, and there is no need to empty the pipeline 
+(takes 18-24 Hr) before switching versions.
+Use generic wrapper to launch all tasks (have been using it for tkrReport all 
+along, but other tasks were still using custom wrappers).
+Add capability for script name to override particle type when calculating recon
+chunk size.  Use this capability to set a low rate (0.5Hz) for runs using 
+onboard MIP filter.
+Move target chunk time back to 15ks.
+Add .htaccess files to recon, reconReport, and digiReport directories to 
+prevent HTTP downloads of ROOT files.
+Update host groups in lib/cleanupRecon.csh.
+Merge CAL before merit (it's bigger, this frees up space on staging disk 
+sooner).
+lib/deleteWrapper.pl will not delete files when pipeline is in test mode.
+Delete evt and pkt files after digitization (if not in test mode).
+Don't register evt file in eLog DB.
+Delete recon file and web link to it for some run types after both reconReport 
+and svacTuple are done (if not in test mode).
+Less sensitive to debris left over from previous attemtps at a run.
+Easier install, with updated instructions.
+More comments in code.
+Scripts write to stderr instead of stdout more often.

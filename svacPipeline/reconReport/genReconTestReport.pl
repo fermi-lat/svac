@@ -2,11 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 5) {
-    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall";
+if ($#ARGV != 6) {
+    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall taskName";
 }
 
-my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall, $taskName) = @ARGV;
 
 print <<EOT;
 $0 running with:
@@ -16,7 +16,14 @@ $0 running with:
   optionFile:    [$optionFile]
   shellFile:     [$shellFile]
   tarBall:       [$tarBall]
+  taskName:      [$taskName]
 EOT
+
+my $reconDir = `dirname $reconRootFile`;
+chomp $reconDir;
+# remove leftover marker files
+my $marker = "$reconDir/$ENV{'doneUsingRecon'}.$taskName";
+unlink $marker;
 
 my $reportDir = `dirname $tarBall`;
 chomp $reportDir;

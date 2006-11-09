@@ -38,20 +38,25 @@ my $exe = 'rm -f';
 
 my $ex;
 my $rc = 0;
+my $status = 0;
 foreach (@inFileNames) {
-	print STDERR "Reading files to delete from $_";
-	open(INFILE, $_) or die "Couldn't open $_ for input!";
+	print STDERR "Reading files to delete from $_\n";
+	open(INFILE, $_) or die "Couldn't open $_ for input!\n";
 	
 	while (<INFILE>) {
 		chomp;
 		
 		my $command = "$exe '$_'";
-		print "Running command: [$command]\n";
+		print STDERR "Running command: [$command]\n";
 		
 		$ex = new Exec("$command");
 		
-		my $status = $ex->execute();
-		$rc |= $status;
+		if ($ENV{'svacTestMode'}) {
+			print STDERR "Running in test mode, not deleting file.\n";
+		} else {
+			$status = $ex->execute();
+			$rc |= $status;
+		}
 	}
 }
 

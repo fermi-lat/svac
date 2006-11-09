@@ -12,6 +12,8 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $runName = $ARGV[0];
 
+die "You must suppy a runId!" if not $runName;
+
 my $onlineDataDir = "$ENV{'onlineHead'}/$ENV{'onlineSubDir'}/$runName";
 my $licosDir = $onlineDataDir . '/LICOS';
 

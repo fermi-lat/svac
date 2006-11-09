@@ -25,7 +25,7 @@ my $value = $ARGV[2];
 
 print STDERR "Run: [$runId], Column: [$columnName], Value: [$value]\n";
 
-if ($ENV{'eLogTestOnly'}) {
+if ($ENV{'svacTestMode'}) {
 	print STDERR "Running in test mode, not updating eLog.\n";
 	exit 0;
 }

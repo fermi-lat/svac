@@ -1,8 +1,9 @@
 #!/usr/local/bin/perl -w
 
-# This deletes files.
+# This launches Tasks.
 #
-# It is assumed that all infiles contain lists of files to delete, one per line.
+# The name of the TP that uses this must  be the same as the name of 
+# the Task that it launches.
 
 use strict;
 

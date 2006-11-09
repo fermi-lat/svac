@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r7p4
+setenv svacVersion v3r8p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -14,6 +14,8 @@ setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/EM-tasks
+# We are redefinig svacPlRoot here
+setenv svacPlRoot ${svacRoot}/svacPipeline/${svacVersion}
 setenv svacCmt ${svacRoot}/builds
 setenv svacPlLib ${svacPlRoot}/lib
 
@@ -45,7 +47,9 @@ setenv emTail ${cookedTail}/${EngineeringModelVersion}
 setenv tkrCalibSerNo -9999
 setenv calCalibSerNo -9999
 
-#setenv eLogTestOnly 1 # uncomment to disable eLog updates for testing
+# uncomment to disable temp file deletion and eLog updates 
+# for testing
+# setenv svacTestMode 1 
 
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1
@@ -103,7 +107,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p20
+setenv TestReportVersion v3r6p27
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -134,9 +138,10 @@ setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 10000 
+setenv chunkTime 15000 
 setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
+setenv doneUsingRecon zzzDone
 #-------------------------------- recon ---------------------------------------
 
 #++++++++++++++++++++++++++++++++ reconReport +++++++++++++++++++++++++++++++++
@@ -156,7 +161,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v3r0p2
+setenv RunRootAnalyzerVersion v3r0p3
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
@@ -191,6 +196,8 @@ setenv tryAFewTimes ${svacPlLib}/tryAFewTimes.csh
 setenv deleter ${svacPlLib}/deleteWrapper.pl
 setenv copier ${svacPlLib}/copyWrapper.pl
 setenv cleanupOne ${svacPlLib}/_cleanupOne.csh
+setenv htAccess ${svacPlRoot}/setup/htaccess
+setenv finalCleanup ${svacPlLib}/finalCleanup.pl
 #-------------------------------- many ----------------------------------------
 
 setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root

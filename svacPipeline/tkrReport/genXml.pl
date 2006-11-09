@@ -10,6 +10,13 @@ my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
 my $batchgroup = $ENV{'batchgroup'};
 
+use MakeMeta;
+my %metaWrappers = (MakeMeta::makeMeta($ENV{'tkrReportTaskDir'}, 
+									   "genTkrReport"),
+					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
+									   "url")
+					);
+
 my $xmlData = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -21,36 +28,37 @@ my $xmlData =
     <type>Analysis</type>
     <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
-        <executable name=\"tkrReportWrapper\" version=\"$ENV{'tkrReportTaskVersion'}\">
-            $ENV{'tkrReportTaskDir'}/genTkrReportWrapper.pl
-        </executable>
-        <executable name=\"tkrReportUrlWrapper\" version=\"$ENV{'svacVersion'}\">
-            $urlUpdater
-        </executable>
 
-        <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
-            <working-directory>$ENV{'tkrReportDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'tkrReportDataDirFull'}</log-file-path>
-        </batch-job-configuration>
-        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-            <working-directory>$ENV{'tkrReportDataDirFull'}</working-directory>
-            <log-file-path>$ENV{'tkrReportDataDirFull'}</log-file-path>
-        </batch-job-configuration>
+    <executable name=\"tkrReportWrapper\" version=\"$ENV{'tkrReportTaskVersion'}\">
+        $metaWrappers{'genTkrReport'}
+    </executable>
+    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'url'}
+    </executable>
 
-        <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
-            <path>$ENV{'svacTupleDataDir'}</path>
-        </file>
-        <file name=\"tarBall\"       file-type=\"tgz\"   type=\"Analysis\"     >
-            <path>$ENV{'tkrReportDataDir'}</path>
-        </file>
+    <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
+        <working-directory>$ENV{'tkrReportDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'tkrReportDataDirFull'}</log-file-path>
+    </batch-job-configuration>
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+        <working-directory>$ENV{'tkrReportDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'tkrReportDataDirFull'}</log-file-path>
+    </batch-job-configuration>
 
-        <processing-step name=\"genReport\" executable=\"tkrReportWrapper\" batch-job-configuration=\"medium-job\">
-                        <input-file name=\"svac\"/>
-                        <output-file name=\"tarBall\"/>
-        </processing-step>
-        <processing-step name=\"tkrReportUrl\" executable=\"tkrReportUrlWrapper\" batch-job-configuration=\"express-job\">
-                        <input-file name=\"tarBall\"/>
-        </processing-step>
+    <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
+        <path>$ENV{'svacTupleDataDir'}</path>
+    </file>
+    <file name=\"tarBall\"       file-type=\"tgz\"   type=\"Analysis\"     >
+        <path>$ENV{'tkrReportDataDir'}</path>
+    </file>
+
+    <processing-step name=\"genReport\" executable=\"tkrReportWrapper\" batch-job-configuration=\"medium-job\">
+                    <input-file name=\"svac\"/>
+                    <output-file name=\"tarBall\"/>
+    </processing-step>
+    <processing-step name=\"tkrReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"tarBall\"/>
+    </processing-step>
 </pipeline>
 
 ";
