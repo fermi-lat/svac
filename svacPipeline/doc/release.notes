@@ -610,3 +610,9 @@ Less sensitive to debris left over from previous attemtps at a run.
 Easier install, with updated instructions.
 More comments in code.
 Scripts write to stderr instead of stdout more often.
+---------------------------------------------------------------------------
+
+
+v3r8p1
+---------------
+Bring back custom launch wrappers for recon and digitization.

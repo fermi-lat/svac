@@ -12,7 +12,8 @@ my $eLogDataDir = $ENV{'svacHead'};
 
 use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'eLogTaskDir'}, 
-									  "populateElogDb"),
+									  "populateElogDb", 
+									   "ldfTDLaunch", "retDefTDLaunch"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
 									   "Launch")
 					);
@@ -31,6 +32,9 @@ my $updateElogDbXml =
 
     <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
         $metaWrappers{'populateElogDb'}
+    </executable>
+    <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
+        $metaWrappers{'ldfTDLaunch'}
     </executable>
     <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'Launch'}
@@ -58,7 +62,7 @@ my $updateElogDbXml =
                     <input-file name=\"rcReport\"/>
                     <output-file name=\"script\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'digitizationTaskLatte'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'digitizationTaskLatte'}\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                     <input-file name=\"ldf\"/>
     </processing-step>
     <processing-step name=\"$ENV{'configReportTaskLatte'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
@@ -88,6 +92,9 @@ $updateElogDbXml =
     <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
         $metaWrappers{'populateElogDb'}
     </executable>
+    <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
+        $metaWrappers{'retDefTDLaunch'}
+    </executable>
     <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'Launch'}
     </executable>
@@ -114,7 +121,7 @@ $updateElogDbXml =
                     <input-file name=\"rcReport\"/>
                     <output-file name=\"script\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'digitizationTaskLicos'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'digitizationTaskLicos'}\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
                     <input-file name=\"RetDef\"/>
     </processing-step>
     <processing-step name=\"$ENV{'configReportTaskLicos'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
