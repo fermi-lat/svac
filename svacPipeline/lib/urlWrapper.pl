@@ -30,6 +30,8 @@ my $taskProcessName = $proc->{'taskProcess_name'};
 ##
 #####################################################
 
+print "svacPlRoot: [$ENV{'svacPlRoot'}]\n";
+
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");

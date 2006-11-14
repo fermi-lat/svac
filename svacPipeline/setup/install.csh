@@ -11,5 +11,6 @@ echo running setup/genHtAccess.pl
 setup/genHtAccess.pl
 
 echo =========================================================================
-echo Now upload the XML files that are in $svacPlRoot
+echo Now upload these XML files:
+ls $svacPlRoot/*.xml
 echo =========================================================================

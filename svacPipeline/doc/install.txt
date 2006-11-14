@@ -43,8 +43,12 @@ setenv svacPlRoot <PIPELINE_HOME>/svacPipeline/<tag>
 Run $svacPlRoot/setup/install.csh.  This will create (among other things) 
 several XML files in $svacPlRoot with names like task-version.xml.
 
-Upload the XML files created in the previous step with web front end at
-http://glast-ground.slac.stanford.edu/
+Upload the XML files created in the previous step via the web front end at
+http://glast-ground.slac.stanford.edu/Pipeline/upload.jsp?login=true
+The install script will print out filenames that you should be able to paste
+directly into the upload form if your browser is running on a SLAC machine.
+Otherwise you will have to copy the files to your local machine before 
+uploading.
 
 Turn off the pipeline ( 
   cd <PIPELINE_HOME>/onlinePipeline/log/

@@ -596,8 +596,8 @@ Add capability for script name to override particle type when calculating recon
 chunk size.  Use this capability to set a low rate (0.5Hz) for runs using 
 onboard MIP filter.
 Move target chunk time back to 15ks.
-Add .htaccess files to recon, reconReport, and digiReport directories to 
-prevent HTTP downloads of ROOT files.
+Add .htaccess files to recon, svacTuple, and digi directories to prevent 
+HTTP downloads of ROOT files.
 Update host groups in lib/cleanupRecon.csh.
 Merge CAL before merit (it's bigger, this frees up space on staging disk 
 sooner).
@@ -616,3 +616,12 @@ Scripts write to stderr instead of stdout more often.
 v3r8p1
 ---------------
 Bring back custom launch wrappers for recon and digitization.
+---------------------------------------------------------------------------
+
+
+v3r8p2 (2006/11/13)
+---------------
+TestReport: v3r6p28
+
+Raise recon chunk target time to 60ks to take advantage of new batch limits.
+---------------------------------------------------------------------------

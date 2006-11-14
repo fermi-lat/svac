@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r8p1
+setenv svacVersion v3r8p2
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -14,7 +14,7 @@ setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/EM-tasks
-# We are redefinig svacPlRoot here
+# We are redefining svacPlRoot here
 setenv svacPlRoot ${svacRoot}/svacPipeline/${svacVersion}
 setenv svacCmt ${svacRoot}/builds
 setenv svacPlLib ${svacPlRoot}/lib
@@ -107,7 +107,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p27
+setenv TestReportVersion v3r6p28
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -138,7 +138,7 @@ setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 15000 
+setenv chunkTime 60000 
 setenv pldVersion v0r3
 setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 setenv doneUsingRecon zzzDone
