@@ -2,6 +2,8 @@
 
 use strict;
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my ($cmd, $marker, $task);
 
 my ($taskName, $runName, $reconRootFile) = @ARGV;

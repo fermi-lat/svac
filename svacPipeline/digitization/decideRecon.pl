@@ -5,6 +5,8 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my $run = shift;
 
 my $query = $ENV{'eLogQuery'};

@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r8p2
+setenv svacVersion v3r8p3
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -107,7 +107,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p28
+setenv TestReportVersion v3r6p30
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe

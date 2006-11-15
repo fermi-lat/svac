@@ -10,6 +10,9 @@ import ROOT
 import reconPM
 import timeLog
 
+print >> sys.stderr, "%s: svacPlRoot=[%s]" % \
+      (sys.argv[0], os.environ['svacPlRoot'])
+
 timeLogger = timeLog.timeLog()
 
 ROOT.gSystem.Load('libcommonRootData.so')

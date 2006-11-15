@@ -30,11 +30,13 @@ my $taskProcessName = $proc->{'taskProcess_name'};
 ##
 #####################################################
 
-print "svacPlRoot: [$ENV{'svacPlRoot'}]\n";
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+
+print "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 my $urlKey = $taskProcessName;
 my @inFileNames = values %$inFiles;

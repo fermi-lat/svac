@@ -28,9 +28,13 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 my $exe = $ENV{'taskLauncher'};
 

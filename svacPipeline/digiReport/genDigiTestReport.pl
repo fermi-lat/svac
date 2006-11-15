@@ -6,6 +6,8 @@ if ($#ARGV != 4) {
     die "Usage: $0 digiRootFile optionFile shellFile tarBall";
 }
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my ($runName, $digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;

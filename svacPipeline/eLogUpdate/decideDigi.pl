@@ -2,6 +2,8 @@
 
 use strict;
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my $run = shift;
 my $ldfFile = shift;
 

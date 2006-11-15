@@ -625,3 +625,13 @@ TestReport: v3r6p28
 
 Raise recon chunk target time to 60ks to take advantage of new batch limits.
 ---------------------------------------------------------------------------
+
+
+v3r8p3 (2006/11/14)
+---------------
+TestReport: v3r6p30
+
+Fix a bug where the "current" lihnk was still used by DB setup scripts.
+Add statements to print svacPlRoot to many scripts and wrappers.
+Delete some old code.
+---------------------------------------------------------------------------

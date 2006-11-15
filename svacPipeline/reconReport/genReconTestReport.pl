@@ -6,6 +6,8 @@ if ($#ARGV != 6) {
     die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall taskName";
 }
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall, $taskName) = @ARGV;
 
 print <<EOT;

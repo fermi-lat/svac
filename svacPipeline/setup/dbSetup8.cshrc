@@ -3,7 +3,6 @@
 # setup for oracle db to be accessed by the SVAC pipeline
 # uses Oracle v8 libraries for Python scripts
 
-#setenv TWO_TASK SLACPROD
 setenv TWO_TASK GLASTP
 
 setenv ORACLE_HOME /afs/slac/package/oracle/current/@sys

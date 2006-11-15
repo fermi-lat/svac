@@ -13,6 +13,9 @@ import reconPM
 import runMany
 import timeLog
 
+print >> sys.stderr, "%s: svacPlRoot=[%s]" % \
+      (sys.argv[0], os.environ['svacPlRoot'])
+
 timeLogger = timeLog.timeLog()
 
 if len(sys.argv) == 4:

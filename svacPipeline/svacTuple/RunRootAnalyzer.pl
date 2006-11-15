@@ -8,6 +8,8 @@ if ($#ARGV != 7) {
     die "Usage: $0 mcRootFile digiRootFile reconRootFile svacRootFile histFile optionFile shellFile taskName";
 }
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my ($mcRootFile, $digiRootFile, $reconRootFile, $svacRootFile, $histFile, $optionFile, $shellFile, $taskName) = @ARGV;
 
 my $reconDir = `dirname $reconRootFile`;

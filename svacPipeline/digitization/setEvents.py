@@ -7,6 +7,9 @@ import sys
 
 import reconPM
 
+print >> sys.stderr, "%s: svacPlRoot=[%s]" % \
+      (sys.argv[0], os.environ['svacPlRoot'])
+
 run, digiFile = sys.argv[1:]
 
 events = reconPM.getFileEvents(digiFile)

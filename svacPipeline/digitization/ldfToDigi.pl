@@ -8,6 +8,8 @@ if ($#ARGV != 4) {
     die "Usage: $0 runName ldfFile shellFile jobOptionFile digiRootFile";
 }
 
+print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+
 my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 
 my $cmtPath = $ENV{'CMTPATH'};

@@ -15,6 +15,9 @@ dataRoot is the root directory for the run tree on the FTP server
 import sys
 import os
 
+print >> sys.stderr, "%s: svacPlRoot=[%s]" % \
+      (sys.argv[0], os.environ['svacPlRoot'])
+
 reportPages = {"configReportUrl": os.environ['configReportUrl'],
                "digiReportUrl": os.environ['digiReportUrl'],
                "reconReportUrl": os.environ['reconReportUrl'],
