@@ -22,6 +22,7 @@ defaultParticleType = 'Cosmics'
 
 scriptRate = {
     "MIPNoPer": 0.5,
+    "GammafilterNoPer": 0.5,
     }
 
 try:

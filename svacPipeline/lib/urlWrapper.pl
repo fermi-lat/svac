@@ -52,7 +52,7 @@ foreach (@inFileNames) {
 
     if (! -e $_) {
         print "File [$_] does not exist, not updating its URL\n";
-        exit(1);
+        exit(0);
     }
 
     my $cmd = "$exe $runName $urlKey $inFile";

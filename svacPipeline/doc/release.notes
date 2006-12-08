@@ -637,6 +637,15 @@ Delete some old code.
 ---------------------------------------------------------------------------
 
 
-v3r8p3 (2006/11/15)
+v3r8p4 (2006/11/15)
 ---------------
 TestReport: v3r6p31
+---------------------------------------------------------------------------
+
+
+v3r8p5 (2006/11/20)
+---------------
+TestReport: v3r6p33
+
+Set chunk rate for GammafilterNoPer runs to 0.5
+urlWrapper.pl does not fail if target file is absent.
