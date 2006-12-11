@@ -39,7 +39,7 @@ my $reconReportXml =
         $metaWrappers{'finalCleanup'}
     </executable>
 
-    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
         <working-directory>$ENV{'reconReportDataDirFull'}</working-directory>
         <log-file-path>$ENV{'reconReportDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -64,7 +64,7 @@ my $reconReportXml =
         <path>$ENV{'reconDataDir'}</path>
     </file>
 
-    <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"glastdataq-job\">
+    <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
                     <output-file name=\"jobOptions\"/>

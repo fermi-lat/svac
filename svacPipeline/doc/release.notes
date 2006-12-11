@@ -649,3 +649,9 @@ TestReport: v3r6p33
 
 Set chunk rate for GammafilterNoPer runs to 0.5
 urlWrapper.pl does not fail if target file is absent.
+---------------------------------------------------------------------------
+
+
+v3r8p5 (2006/12/08)
+---------------
+Move all glastdataq PTs to xlong (this is temporary).
