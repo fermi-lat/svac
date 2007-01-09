@@ -46,17 +46,17 @@ several XML files in $svacPlRoot with names like task-version.xml.
 Upload the XML files created in the previous step via the web front end at
 http://glast-ground.slac.stanford.edu/Pipeline/upload.jsp?login=true
 The install script will print out filenames that you should be able to paste
-directly into the upload form if your browser is running on a SLAC machine.
-Otherwise you will have to copy the files to your local machine before 
-uploading.
+directly into the upload form if your browser is running on a SLAC UNIX/Linux
+machine.  Otherwise you will probably have to copy the files to your local
+machine before uploading.
 
 Turn off the pipeline ( 
   cd <PIPELINE_HOME>/onlinePipeline/log/
+  Check for the existence of the 'running' file; if it is there, wait
+    until it isn't (should only take a couple of minutes).
   echo Manual disable by `whoami` at `date` > running
   chmod g+w running 
 ).
-Check for the existence of the 'running' file first; if it is there, wait
-until it isn't (should only take a couple of minutes).
 
 Replace the symbolic link <PIPELINE_HOME>/svacPipeline/current with one that
 points at <tag>.  Or if you're using the test server, change the

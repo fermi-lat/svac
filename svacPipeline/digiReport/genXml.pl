@@ -36,7 +36,7 @@ my $digiReportXml =
         $metaWrappers{'url'}
     </executable>
 
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'digiReportDataDirFull'}</working-directory>
         <log-file-path>$ENV{'digiReportDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -58,7 +58,7 @@ my $digiReportXml =
         <path>$ENV{'digitizationDataDir'}</path>
     </file>
 
-    <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"genReport\" executable=\"genReport\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"digi\"/>
                     <output-file name=\"jobOptions\"/>
                     <output-file name=\"script\"/>

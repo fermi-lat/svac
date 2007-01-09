@@ -60,7 +60,7 @@ my $reconXml =
         $metaWrappers{'cleanup'}
     </executable>
 
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'reconDataDirFull'}</working-directory>
         <log-file-path>$ENV{'reconDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -121,10 +121,10 @@ my $reconXml =
                     <output-file name=\"keepers\"/>
                     <output-file name=\"junkDirs\"/>
     </processing-step>
-    <processing-step name=\"doRecon\" executable=\"doRecon\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"doRecon\" executable=\"doRecon\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"chunkJobs\"/>
     </processing-step>
-    <processing-step name=\"mergeRecon\" executable=\"mergeRecon\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"mergeRecon\" executable=\"mergeRecon\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"reconChunks\"/>
                     <input-file name=\"digi\"/>
                     <output-file name=\"reconStage\"/>
@@ -132,7 +132,7 @@ my $reconXml =
     <processing-step name=\"deleteReconChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"reconChunks\"/>
     </processing-step>
-    <processing-step name=\"copyRecon\" executable=\"copyWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"copyRecon\" executable=\"copyWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"reconStage\"/>
                     <output-file name=\"recon\"/>
     </processing-step>
@@ -147,28 +147,28 @@ my $reconXml =
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
     </processing-step>
-    <processing-step name=\"mergeCal\" executable=\"haddWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"mergeCal\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"calChunks\"/>
                     <output-file name=\"calStage\"/>
     </processing-step>
     <processing-step name=\"deleteCalChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"calChunks\"/>
     </processing-step>
-    <processing-step name=\"copyCal\" executable=\"copyWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"copyCal\" executable=\"copyWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"calStage\"/>
                     <output-file name=\"cal\"/>
     </processing-step>
     <processing-step name=\"deleteCalStage\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"calStage\"/>
     </processing-step>
-    <processing-step name=\"mergeMerit\" executable=\"haddWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"mergeMerit\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"meritChunks\"/>
                     <output-file name=\"meritStage\"/>
     </processing-step>
     <processing-step name=\"deleteMeritChunks\" executable=\"deleteWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"meritChunks\"/>
     </processing-step>
-    <processing-step name=\"copyMerit\" executable=\"copyWrapper\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"copyMerit\" executable=\"copyWrapper\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"meritStage\"/>
                     <output-file name=\"merit\"/>
     </processing-step>

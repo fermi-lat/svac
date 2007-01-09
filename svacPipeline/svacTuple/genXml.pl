@@ -42,7 +42,7 @@ my $svacTupleXml =
         $metaWrappers{'finalCleanup'}
     </executable>
 
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'svacTupleDataDirFull'}</working-directory>
         <log-file-path>$ENV{'svacTupleDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -70,7 +70,7 @@ my $svacTupleXml =
         <path>$ENV{'reconDataDir'}</path>
     </file>
 
-    <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"svacTuple\" executable=\"svacTuple\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"digi\"/>
                     <input-file name=\"recon\"/>
                     <output-file name=\"histogram\"/>

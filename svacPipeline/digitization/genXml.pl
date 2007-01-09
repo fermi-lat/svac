@@ -47,7 +47,7 @@ my $digitizationXml =
         <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
         <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
     </batch-job-configuration>
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
         <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -65,7 +65,7 @@ my $digitizationXml =
         <path>$ENV{'digitizationDataDirFull'}</path>
     </file>
 
-    <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"ldf\"/>
                     <output-file name=\"digi\"/>
                     <output-file name=\"script\"/>
@@ -125,7 +125,7 @@ $digitizationXml =
         <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
         <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
     </batch-job-configuration>
-    <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
         <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
     </batch-job-configuration>
@@ -146,7 +146,7 @@ $digitizationXml =
         <path>$ENV{'digitizationDataDirFull'}</path>
     </file>
 
-    <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"xlong-job\">
+    <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"RetDef\"/>
                     <output-file name=\"digi\"/>
                     <output-file name=\"script\"/>

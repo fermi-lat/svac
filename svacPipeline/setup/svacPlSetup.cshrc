@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r8p7
+setenv svacVersion v3r8p8
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc

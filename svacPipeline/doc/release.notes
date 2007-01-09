@@ -661,3 +661,9 @@ Move all glastdataq PTs to xlong (this is temporary).
 v3r8p7 (2006/12/11)
 ---------------
 EngineeringModel-v6r070329p29em1
+---------------------------------------------------------------------------
+
+
+v3r8p8 (2007/01/02)
+---------------
+Switch back to glastdataq.
