@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r8p8
+setenv svacVersion v3r9p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
-setenv EngineeringModelVersion v6r070329p29em1
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
+setenv EngineeringModelVersion v7r0913p9
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -51,6 +51,11 @@ setenv calCalibSerNo -9999
 # for testing
 # setenv svacTestMode 1 
 
+setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.10.00/root
+setenv rootLib ${ROOTSYS}/lib
+setenv haddSys ${SVAC_GLAST_EXT}/ROOT/v5.13.1/root
+setenv haddLib ${haddSys}/lib
+
 #++++++++++++++++++++++++++++++++ online ++++++++++++++++++++++++++++++++++++++
 setenv onlineTaskVersion v2r4p1
 setenv onlineTask online-${onlineTaskVersion}
@@ -91,7 +96,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
 setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
-setenv Em2Version v2r59
+setenv Em2Version v2r64
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/LatIntegration.exe
@@ -107,7 +112,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r6p33
+setenv TestReportVersion v3r6p36
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -130,7 +135,7 @@ setenv reconTaskDir ${svacPlRoot}/recon
 setenv reconSetupScript ${reconTaskDir}/setupRecon.py
 setenv reconDoScript ${reconTaskDir}/doRecon.py
 setenv reconMergeReconScript ${reconTaskDir}/mergeRecon.py
-setenv hadd ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root/bin/hadd
+setenv hadd ${haddSys}/bin/hadd
 setenv haddMerge ${svacPlLib}/haddMerge.py
 setenv haddWrapper ${svacPlLib}/haddWrapper.pl
 setenv reconCleanupScript ${reconTaskDir}/cleanup.py
@@ -199,9 +204,6 @@ setenv cleanupOne ${svacPlLib}/_cleanupOne.csh
 setenv htAccess ${svacPlRoot}/setup/htaccess
 setenv finalCleanup ${svacPlLib}/finalCleanup.pl
 #-------------------------------- many ----------------------------------------
-
-setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v4.02.00/root
-setenv rootLib ${ROOTSYS}/lib
 
 setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}:${rootLib}
 if ( ${?PYTHONPATH} == '1' ) then

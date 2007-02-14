@@ -109,10 +109,12 @@ def concatenate_prune(outputFileName, fileNames, treeName, expectedEntries):
 def concatenate_hadd(outputFileName, fileNames, \
                      treeName=None, expectedEntries=None):
 
-    fmt = '%s -f %s' % (os.environ['hadd'], outputFileName)
+    fmt = 'LD_LIBRARY_PATH=%s ROOTSYS=%s %s -f %s' % \
+          (os.environ['haddLib'], os.environ['haddSys'], \
+           os.environ['hadd'], outputFileName)
     fmt += ' %s' * len(fileNames)
     cmd = fmt % tuple(fileNames)
-
+    print >> sys.stderr, 'About to run [%s]' % cmd
     retCode = os.system(cmd)
     return retCode
 

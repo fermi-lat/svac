@@ -80,7 +80,7 @@ open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortt
 print JOBOPTIONFILE <<EOF;
 #include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/ldf2digi.txt"
 EventSelector.StorageType = "$ldfFileType";
-EventSelector.InputList = {"$ldfFile"};
+EventSelector.FileName = "$ldfFile";
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
 EOF
 
