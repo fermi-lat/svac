@@ -26,9 +26,11 @@ public :
   inline const std::string& path() const { return m_path; }
 
   inline const std::string& jobOptionXmlFile() const { return m_jobOptionXmlFile; }
+  inline const std::string& configFile() const { return m_configFile; }
 
   inline const std::string& inputDigiFileStr() const { return m_inputDigiFileStr; }
   inline const std::string& inputReconFileStr() const { return m_inputReconFileStr; }
+  inline const std::string& inputMcFileStr() const { return m_inputMcFileStr; }
   inline const std::string& inputSvacFileStr() const { return m_inputSvacFileStr; }
   inline const std::string& inputMeritFileStr() const { return m_inputMeritFileStr; }
 
@@ -41,11 +43,13 @@ public :
 
   inline TChain* digiChain() const { return m_digiChain;}
   inline TChain* reconChain() const { return m_reconChain;}
+  inline TChain* mcChain() const { return m_mcChain;}
   inline TChain* svacChain() const { return m_svacChain;}
   inline TChain* meritChain() const { return m_meritChain;}
 
   Bool_t checkDigi() const;
   Bool_t checkRecon() const;
+  Bool_t checkMc() const;
   Bool_t checkSvac() const;
   Bool_t checkMerit() const;
    
@@ -60,9 +64,11 @@ private:
   std::string m_path;
 
   std::string m_jobOptionXmlFile;
+  std::string m_configFile;
 
   std::string m_inputDigiFileStr;
   std::string m_inputReconFileStr;
+  std::string m_inputMcFileStr;
   std::string m_inputSvacFileStr;
   std::string m_inputMeritFileStr;
 
@@ -75,6 +81,7 @@ private:
 
   TChain* m_digiChain;
   TChain* m_reconChain;
+  TChain* m_mcChain;
   TChain* m_svacChain;
   TChain* m_meritChain;
     

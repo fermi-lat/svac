@@ -24,6 +24,7 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_optval_b(10),
    m_digiChain(0),
    m_reconChain(0),
+   m_mcChain(0),
    m_svacChain(0),
    m_meritChain(0)
 {
@@ -32,10 +33,11 @@ JobConfig::JobConfig(const char* appName, const char* desc)
 
 JobConfig::~JobConfig() 
 {
-  delete m_digiChain;
-  delete m_reconChain;
-  delete m_svacChain; 
-  delete m_meritChain;
+  if (m_digiChain)delete m_digiChain;
+  if (m_reconChain) delete m_reconChain;
+  if (m_mcChain) delete m_mcChain;
+  if (m_svacChain) delete m_svacChain; 
+  if (m_meritChain) delete m_meritChain;
 }
 
 void JobConfig::usage() {
@@ -59,6 +61,7 @@ void JobConfig::usage() {
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
+       << "\t   -y <McFiles>      : comma seperated list of mc ROOT files" << endl
        << "\t   -S <svacFiles>    : comma seperated list of svac ROOT files" << endl
        << "\t   -m <meritFiles>   : comma seperated list of merit ROOT files" << endl 
        << "\tNOTE:  Different calibrations jobs take diffenent types of input files" << endl
@@ -82,14 +85,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
   using std::endl;
   using std::string;
 
-  // grab path from env
-  m_path = ::getenv("TESTREPORTROOT");
-  m_jobOptionXmlFile = m_path + string("/src/jobOptions.xml");
-  
-  // parse options
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:S:m:c:n:s:b:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:j:c:n:s:b:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -105,6 +103,10 @@ Int_t JobConfig::parse(int argn, char** argc) {
       m_inputReconFileStr += string(optarg);
       m_inputReconFileStr += ',';
       break;
+    case 'y':   // mc files
+      m_inputMcFileStr += string(optarg);
+      m_inputMcFileStr += ',';
+      break;
     case 'S':   // Svac files
       m_inputSvacFileStr += string(optarg);
       m_inputSvacFileStr += ',';
@@ -113,8 +115,11 @@ Int_t JobConfig::parse(int argn, char** argc) {
       m_inputMeritFileStr += string(optarg);
       m_inputMeritFileStr += ',';
       break;
-    case 'c':   // config file
+    case 'j':   // job option file
       m_jobOptionXmlFile = string(optarg);
+      break;
+    case 'c':   // monitoring configuration file
+      m_configFile = string(optarg);
       break;
     case 'b':   // size of bins
       m_optval_b = strtoul( optarg, &endPtr, 0 );
@@ -141,13 +146,16 @@ Int_t JobConfig::parse(int argn, char** argc) {
     return 3;
   }
 
-  // parse xml config file
+  // parse xml config file if requested
   using xmlBase::IFile;
-  IFile myFile(m_jobOptionXmlFile.c_str()); 
+  IFile* myFile=0;
+  if (m_jobOptionXmlFile != ""){
+    myFile=new IFile(m_jobOptionXmlFile.c_str()); 
 
-  // output file prefix
-  if (myFile.contains("parameters","outputPrefix") && m_outputPrefix == "" ) {
-    m_outputPrefix = myFile.getString("parameters", "outputPrefix");
+    // output file prefix
+    if (myFile->contains("parameters","outputPrefix") && m_outputPrefix == "" ) {
+      m_outputPrefix = myFile->getString("parameters", "outputPrefix");
+    }
   }
     
   // timestamp
@@ -158,8 +166,8 @@ Int_t JobConfig::parse(int argn, char** argc) {
   m_timeStamp.erase(m_timeStamp.size()-1);
 
   // digi files
-  if (myFile.contains("parameters","digiFileList")) {
-    m_inputDigiFileStr += myFile.getString("parameters", "digiFileList");
+  if (myFile && myFile->contains("parameters","digiFileList")) {
+    m_inputDigiFileStr += myFile->getString("parameters", "digiFileList");
   }
   
   if ( m_inputDigiFileStr != "" ) {
@@ -169,19 +177,29 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
 
   // recon files
-  if (myFile.contains("parameters","reconFileList")) {
-    m_inputReconFileStr += myFile.getString("parameters", "reconFileList");
+  if (myFile && myFile->contains("parameters","reconFileList")) {
+    m_inputReconFileStr += myFile->getString("parameters", "reconFileList");
   }
-  
+
   if ( m_inputReconFileStr != "" ) {
     cout << "Input recon files:" << endl;
     m_reconChain = makeChain("Recon",m_inputReconFileStr);
   }    
+  
+  // mc files
+  if (myFile && myFile->contains("parameters","mcFileList")) {
+    m_inputMcFileStr += myFile->getString("parameters", "McFileList");
+  }
+  
+  if ( m_inputMcFileStr != "" ) {
+    cout << "Input mc files:" << endl;
+    m_mcChain = makeChain("mc",m_inputMcFileStr);
+  }    
 
 
   // svac files
-  if (myFile.contains("parameters","svacFileList")) {
-    m_inputSvacFileStr += myFile.getString("parameters", "svacFileList");
+  if (myFile&& myFile->contains("parameters","svacFileList")) {
+    m_inputSvacFileStr += myFile->getString("parameters", "svacFileList");
   }
   
   if ( m_inputSvacFileStr != "" ) {
@@ -190,15 +208,22 @@ Int_t JobConfig::parse(int argn, char** argc) {
   }    
 
   // merit files
-  if (myFile.contains("parameters","meritFileList")) {
-    m_inputMeritFileStr += myFile.getString("parameters", "meritFileList");
+  if (myFile && myFile->contains("parameters","meritFileList")) {
+    m_inputMeritFileStr += myFile->getString("parameters", "meritFileList");
   }
   
   if ( m_inputMeritFileStr != "" ) {
     cout << "Input merit files:" << endl;
     m_meritChain = makeChain("MeritTuple",m_inputMeritFileStr);
   }    
-
+  // monitoring configuration file
+  if (myFile && myFile->contains ("parameters","configFile")){
+    if (m_configFile !=""){
+      cerr<<"Monitoring configuration file defined both in command line and xml file. Exiting..."<<endl;
+      return 1;
+    }
+    m_configFile=myFile->getString("parameters","configFile");
+  }
   std::cout << "output file prefix: " << m_outputPrefix << std::endl;
   std::cout << "timestamp: " << m_timeStamp << std::endl;
 
@@ -238,6 +263,16 @@ Bool_t JobConfig::checkRecon() const {
   if ( m_reconChain == 0 ) {
     std::cerr << "This job requires recon ROOT files as input." << std::endl
 	      << "\tuse -r <file> option to specify them." << std::endl
+	      << std::endl;
+    return kFALSE;
+  }
+  return kTRUE;
+}
+
+Bool_t JobConfig::checkMc() const {
+  if ( m_mcChain == 0 ) {
+    std::cerr << "This job requires mc ROOT files as input." << std::endl
+	      << "\tuse -y <file> option to specify them." << std::endl
 	      << std::endl;
     return kFALSE;
   }

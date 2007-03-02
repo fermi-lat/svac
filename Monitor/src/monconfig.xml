@@ -1,0 +1,21 @@
+<monitoring>
+
+  <inputList name="top"> 
+    <object> nACD </object>
+    <object> timestamp </object>
+  </inputList>
+
+
+  <outputList name="top">
+    <object>
+      <name> nAcd</name>
+      <formula><![CDATA[   nACD ]]></formula>
+      <cut><![CDATA[ 1 ]]></cut>
+      <type> mean </type>
+    </object>
+
+  </outputList>
+
+  <eventCut><![CDATA[ 1 ]]></eventCut>
+  <timestamp> timestamp </timestamp>
+</monitoring>

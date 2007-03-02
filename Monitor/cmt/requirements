@@ -12,7 +12,7 @@ use facilities v*
 use xmlBase v* 
 
 #the following prepend makes the includes folder available locally: avoid the package_include
-macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
+#macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
 
 macro testreport_headers   "" WIN32
 
@@ -23,3 +23,5 @@ macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -l
 macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
 
 application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
+
+application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonInput_*.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx

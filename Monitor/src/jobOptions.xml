@@ -1,15 +1,11 @@
 <?xml version="1.0" ?>
 <!-- job optin file for runMuonCalib_ped.exe -->
 
-<!DOCTYPE ifile SYSTEM "$(TESTREPORTROOT)/src/ifile.dtd" >
-
 <ifile cvs_Header="$Header$" cvs_Revision="$Revision$" >
 
   <section name="parameters"> input parameters for ACD pedestal and gain calibration
-    <item name="digiFileList" value=""> blank-delimited list of input digi root files </item>
-    <item name="reconFileList" value=""> blank-delimited list of input recon root files </item>
-    <item name="svacFileList" value=""> blank-delimited list of input svac root files </item>
-    <item name="meritFileList" value=""> blank-delimited list of input merit root files </item>   
+    <item name="digiFileList" value="/nfs/farm/g/glast/u29/Integration/rootData/077003526/v6r070305p9/grRoot/digitization-licos-v3r5p8_077003526_digi_DIGI.root"> blank-delimited list of input digi root files </item>
     <item name="outputPrefix" value="test"> output file prefix </item>
+    <item name="configFile" value="../src/monconfig.xml"> output file prefix </item>
   </section>
 </ifile>
