@@ -52,12 +52,13 @@ void JobConfig::usage() {
        << endl;
   
   cout << "Usage:" << endl
-       << "\t" << m_theApp << " -c <configFile>" << endl 
+       << "\t" << m_theApp << " -j <configfile>" << endl 
        << endl
        << "\t   <configFile>      : name of xml file with job configuration" << endl
        << endl
        << "\t" << m_theApp << " [options] [input] -o <output>" << endl 
        << endl
+       << "\t   -c <monConifg>    : name of the xml file with the monitoring configuration"<<endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
