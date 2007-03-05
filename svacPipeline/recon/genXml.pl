@@ -13,7 +13,7 @@ my $batchgroup = $ENV{'batchgroup'};
 use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'reconTaskDir'}, 
 									  "setupRecon", "doRecon", 
-									  "cleanup"),
+									  "mergeRecon", "cleanup"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'},
 									   "copy", "delete",
 									   "hadd", "url",
@@ -37,6 +37,9 @@ my $reconXml =
     </executable>
     <executable name=\"doRecon\" version=\"$ENV{'reconTaskVersion'}\">
         $metaWrappers{'doRecon'}
+    </executable>
+    <executable name=\"mergeRecon\" version=\"$ENV{'reconTaskVersion'}\">
+        $metaWrappers{'mergeRecon'}
     </executable>
     <executable name=\"copyWrapper\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'copy'}
@@ -121,7 +124,8 @@ my $reconXml =
     <processing-step name=\"doRecon\" executable=\"doRecon\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"chunkJobs\"/>
     </processing-step>
-    <processing-step name=\"mergeRecon\" executable=\"haddWrapper\" batch-job-configuration=\"glastdataq-job\">
+    <processing-step name=\"mergeRecon\" executable=\"mergeRecon\" batch-job-configuration=\"glastdataq-job\">
+                    <input-file name=\"digi\"/>
                     <input-file name=\"reconChunks\"/>
                     <output-file name=\"reconStage\"/>
     </processing-step>

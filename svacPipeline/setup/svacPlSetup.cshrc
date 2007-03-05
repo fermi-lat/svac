@@ -145,7 +145,8 @@ setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
 setenv chunkTime 60000 
 setenv pldVersion v0r3
-setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
+#setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
+setenv pldLib ${svacCmt}/lib
 setenv doneUsingRecon zzzDone
 #-------------------------------- recon ---------------------------------------
 
