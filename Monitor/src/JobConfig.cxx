@@ -26,7 +26,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_reconChain(0),
    m_mcChain(0),
    m_svacChain(0),
-   m_meritChain(0)
+   m_meritChain(0),
+   m_calChain(0)
 {
 
 }
@@ -38,6 +39,7 @@ JobConfig::~JobConfig()
   if (m_mcChain) delete m_mcChain;
   if (m_svacChain) delete m_svacChain; 
   if (m_meritChain) delete m_meritChain;
+  if (m_calChain) delete m_calChain;
 }
 
 void JobConfig::usage() {
@@ -65,6 +67,7 @@ void JobConfig::usage() {
        << "\t   -y <McFiles>      : comma seperated list of mc ROOT files" << endl
        << "\t   -S <svacFiles>    : comma seperated list of svac ROOT files" << endl
        << "\t   -m <meritFiles>   : comma seperated list of merit ROOT files" << endl 
+       << "\t   -a <calFiles>     : comma seperated list of cal ROOT files" << endl 
        << "\tNOTE:  Different calibrations jobs take diffenent types of input files" << endl
        << endl
        << "\t   -o <output>       : prefix (path or filename) to add to output files" << endl
@@ -88,7 +91,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:j:c:n:s:b:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:n:s:b:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -115,6 +118,10 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 'm':   // Merit files
       m_inputMeritFileStr += string(optarg);
       m_inputMeritFileStr += ',';
+      break;
+    case 'a':   // Cal files
+      m_inputCalFileStr += string(optarg);
+      m_inputCalFileStr += ',';
       break;
     case 'j':   // job option file
       m_jobOptionXmlFile = string(optarg);
@@ -217,6 +224,16 @@ Int_t JobConfig::parse(int argn, char** argc) {
     cout << "Input merit files:" << endl;
     m_meritChain = makeChain("MeritTuple",m_inputMeritFileStr);
   }    
+
+  // cal files
+  if (myFile && myFile->contains("parameters","calFileList")) {
+    m_inputCalFileStr += myFile->getString("parameters", "calFileList");
+  }
+  
+  if ( m_inputCalFileStr != "" ) {
+    cout << "Input cal files:" << endl;
+    m_calChain = makeChain("CalTuple",m_inputCalFileStr);
+  }    
   // monitoring configuration file
   if (myFile && myFile->contains ("parameters","configFile")){
     if (m_configFile !=""){
@@ -294,6 +311,16 @@ Bool_t JobConfig::checkMerit() const {
   if ( m_meritChain == 0 ) {
     std::cerr << "This job requires merit ROOT files as input." << std::endl
 	      << "\tuse -m <file> option to specify them." << std::endl
+	      << std::endl;
+    return kFALSE;
+  }
+  return kTRUE;
+}
+
+Bool_t JobConfig::checkCal() const {
+  if ( m_calChain == 0 ) {
+    std::cerr << "This job requires cal ROOT files as input." << std::endl
+	      << "\tuse -a <file> option to specify them." << std::endl
 	      << std::endl;
     return kFALSE;
   }

@@ -230,6 +230,11 @@ bool MonEventLooper::readEvent(Long64_t ievent){
 void MonEventLooper::filterEvent(){
   TTreeResult* res;
   res=(TTreeResult*)m_intree->Query("1",m_eventcut.c_str(),"",m_intree->GetEntriesFast()-1);
-  m_nFilter=res->GetRowCount();
+  if (res){
+    m_nFilter=res->GetRowCount();
+    delete res;
+  }else{
+    m_nFilter=0;
+  }  
 }
 

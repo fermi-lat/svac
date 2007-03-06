@@ -16,6 +16,7 @@ const std::vector<std::string> MonValue::queryTree(TTree* tree){
       obj->Delete();
       obj=(TTreeRow*)res->Next();
     }
+    delete res;
   }
   return rv;
 }

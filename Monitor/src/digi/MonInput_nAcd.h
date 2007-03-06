@@ -5,7 +5,7 @@
 // Software developed for GLAST
 #ifndef MonInput_nAcd_h
 #define MonInput_nAcd_h
-#include "MonInputObject.h"
+#include "../MonInputObject.h"
 #include "Rtypes.h"
 #include "TTree.h"
 #include "TObject.h"

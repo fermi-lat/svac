@@ -67,22 +67,49 @@ if ($type==0){
 print "What tree is the source of the data?\n";
 print "0 for DigiEvent\n";
 print "1 for ReconEvent\n";
+print "2 for ReconEvent\n";
+print "3 for MeritEvent\n";
+print "4 for SvacEvent\n";
+print "5 for CalEvent\n";
 $source=<>;
 chomp($source);
-while ($source =~ /\D/ || $source<0 || $source>1){
+while ($source =~ /\D/ || $source<0 || $source>5){
     print "Invalid entry. Try again.\n";
     print "0 for DigiEvent\n";
     print "1 for ReconEvent\n";
+    print "2 for ReconEvent\n";
+    print "3 for MeritEvent\n";
+    print "4 for SvacEvent\n";
+    print "5 for CalEvent\n";
     $source=<>;
     chomp($source);
 }
 if ($source==0){
     $monsource="DigiEvent";
-    $monsourcefile="digiRootData/DigiEvent.h"
-}else{
+    $monsourcefile="digiRootData/DigiEvent.h";
+    $subdir="digi";
+}elsif($source==1){
     $monsource="ReconEvent";
-    $monsourcefile="reconRootData/ReconEvent.h"
+    $monsourcefile="reconRootData/ReconEvent.h";
+    $subdir="recon";
+}elsif($source==2){
+    $monsource="McEvent";
+    $monsourcefile="mcRootData/McEvent.h";
+    $subdir="mc";
+}elsif($source==3){
+    $monsource="MeritEvent";
+    $monsourcefile="../MeritEvent.h";
+    $subdir="merit";
+}elsif($source==4){
+    $monsource="SvacEvent";
+    $monsourcefile="../SvacEvent.h";
+    $subdir="svac";
+}else{
+    $monsource="CalEvent";
+    $monsourcefile="../CalEvent.h";
+    $subdir="cal";
 }
+	
 print "What branch of the tree has to be activated?\n";
 $inbranch=<>;
 chomp($inbranch);
@@ -98,7 +125,7 @@ if (!($ans =~/[yY]/)){
 }
 $user=$ENV{"USER"};
 $date=gmtime;
-open(HFILE,">MonInput_$name.h");
+open(HFILE,">${subdir}/MonInput_$name.h");
 print HFILE "// 
 // Class for input of quantity $name for monitoring 
 // 
@@ -107,7 +134,7 @@ print HFILE "//
 //
 #ifndef MonInput_${name}_h
 #define MonInput_${name}_h
-#include \"MonInputObject.h\"
+#include \"../MonInputObject.h\"
 #include \"Rtypes.h\"
 #include \"TTree.h\"
 #include \"TObject.h\"
@@ -135,7 +162,7 @@ class MonInput_$name: public MonInputObject{
 \n";
 close(HFILE);
 
-open(CFILE,">MonInput_$name.cxx");
+open(CFILE,">${subdir}/MonInput_$name.cxx");
 print CFILE "// 
 // Class for input of quantity $name for monitoring 
 // 
@@ -172,7 +199,7 @@ void MonInput_${name}::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
 void MonInput_${name}::setValue(TObject* event) {
-  DigiEvent* de=dynamic_cast<MONSOURCE*>(event);
+  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<\"Using object \"<<OUTBRANCH<<\" with wrong kind of data tree (like digi, reco, etc.)\"<<std::endl;
     assert(de);
@@ -205,7 +232,7 @@ if ($ans =~/[yY]/){
 	$line=<FIN>;
     }
     print FOUT "// Last updated with object $name by user $user on $date\n";
-    print FOUT "#include \"MonInput_$name.h\"\n";
+    print FOUT "#include \"${subdir}/MonInput_$name.h\"\n";
     print FOUT $line;
     $line=<FIN>;
     while(!($line =~/tag for makeNewMonObject/)){

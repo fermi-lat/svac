@@ -1,26 +1,26 @@
 // 
-// Class for input of quantity timestamp for monitoring 
+// Class for input of quantity acdLowerTileCount for monitoring 
 // 
-// Created by kocian on Tue Feb 27 23:48:45 2007 
+// Created by kocian on Tue Mar  6 21:10:00 2007 
 // Object created automatically by script makeNewMonObject.pl
 //
-#ifndef MonInput_timestamp_h
-#define MonInput_timestamp_h
-#include "MonInputObject.h"
+#ifndef MonInput_acdLowerTileCount_h
+#define MonInput_acdLowerTileCount_h
+#include "../MonInputObject.h"
 #include "Rtypes.h"
 #include "TTree.h"
 #include "TObject.h"
 
 // user defined part
 
-#define VARTYPE UInt_t 
+#define VARTYPE Float_t 
 
 // end user defined part
 
-class MonInput_timestamp: public MonInputObject{
+class MonInput_acdLowerTileCount: public MonInputObject{
  public:
-  MonInput_timestamp();
-  ~MonInput_timestamp();
+  MonInput_acdLowerTileCount();
+  ~MonInput_acdLowerTileCount();
   int setOutputBranch(TTree*);
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;

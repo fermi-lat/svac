@@ -33,6 +33,7 @@ public :
   inline const std::string& inputMcFileStr() const { return m_inputMcFileStr; }
   inline const std::string& inputSvacFileStr() const { return m_inputSvacFileStr; }
   inline const std::string& inputMeritFileStr() const { return m_inputMeritFileStr; }
+  inline const std::string& inputCalFileStr() const { return m_inputCalFileStr; }
 
   inline const std::string& outputPrefix() const { return m_outputPrefix; }
   inline const std::string& timeStamp() const { return m_timeStamp; }
@@ -43,6 +44,7 @@ public :
 
   inline TChain* digiChain() const { return m_digiChain;}
   inline TChain* reconChain() const { return m_reconChain;}
+  inline TChain* calChain() const { return m_calChain;}
   inline TChain* mcChain() const { return m_mcChain;}
   inline TChain* svacChain() const { return m_svacChain;}
   inline TChain* meritChain() const { return m_meritChain;}
@@ -52,6 +54,7 @@ public :
   Bool_t checkMc() const;
   Bool_t checkSvac() const;
   Bool_t checkMerit() const;
+  Bool_t checkCal() const;
    
 protected:
 
@@ -71,6 +74,7 @@ private:
   std::string m_inputMcFileStr;
   std::string m_inputSvacFileStr;
   std::string m_inputMeritFileStr;
+  std::string m_inputCalFileStr;
 
   std::string m_outputPrefix;
   std::string m_timeStamp;
@@ -84,6 +88,7 @@ private:
   TChain* m_mcChain;
   TChain* m_svacChain;
   TChain* m_meritChain;
+  TChain* m_calChain;
     
 };
 
