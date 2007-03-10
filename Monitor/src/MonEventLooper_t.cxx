@@ -11,8 +11,7 @@
 
 // ROOT IO
 #include "digiRootData/DigiEvent.h"
-#include "TTreeResult.h"
-#include "TTreeRow.h"
+#include "TEventList.h"
 
 //
 //
@@ -167,20 +166,26 @@ void MonEventLooper::firstEvent(ULong64_t timeStamp)  {
 void MonEventLooper::switchBins() {
 
   m_currentFlags -= 1;
+  filterEvent();
   stripVals()->increment(m_intree);
   m_stripValCol->latchValue();
-  m_nUsed=m_intree->GetEntriesFast()-1;
-  filterEvent();
   m_tree->Fill();
   m_stripValCol->reset();
   m_intree->GetEntry(m_nUsed);
   m_intree->Reset();
+  m_intree->SetEventList(0);
   m_intree->Fill();
-
+  
   m_currentBin++;
   m_currentStart += m_binSize;
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
+  while(*m_currentTimeStamp>=m_currentEnd){
+    m_tree->Fill();
+    m_currentBin++;
+    m_currentStart += m_binSize;
+    m_currentEnd += m_binSize;
+  }
 
   // Time from Mission elapsed time to Unix time and then from PDT to GMT:
   if ( (m_currentBin % 10) == 0 ) { 
@@ -197,10 +202,10 @@ void MonEventLooper::lastEvent(ULong64_t timeStamp) {
 
   // kludge: double the last event because the last event does not get used.
   m_intree->Fill();
+
+  filterEvent();
   stripVals()->increment(m_intree);
   m_stripValCol->latchValue();
-  m_nUsed=m_intree->GetEntriesFast()-1;
-  filterEvent();
   m_tree->Fill();
   m_stripValCol->reset();
   m_intree->Reset();
@@ -228,13 +233,10 @@ bool MonEventLooper::readEvent(Long64_t ievent){
 }
 
 void MonEventLooper::filterEvent(){
-  TTreeResult* res;
-  res=(TTreeResult*)m_intree->Query("1",m_eventcut.c_str(),"",m_intree->GetEntriesFast()-1);
-  if (res){
-    m_nFilter=res->GetRowCount();
-    delete res;
-  }else{
-    m_nFilter=0;
-  }  
+  m_nUsed=m_intree->GetEntriesFast()-1;
+  m_intree->Draw(">>eventsel",m_eventcut.c_str(),"goff",m_nUsed);
+  TEventList* eventlist=(TEventList*)gDirectory->Get("eventsel");
+  m_intree->SetEventList(eventlist);
+  m_nFilter=eventlist->GetN();
 }
 

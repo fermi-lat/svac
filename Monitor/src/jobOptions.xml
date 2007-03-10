@@ -5,6 +5,7 @@
 
   <section name="parameters"> input parameters for ACD pedestal and gain calibration
     <item name="digiFileList" value="/nfs/farm/g/glast/u29/Integration/rootData/077003526/v6r070305p9/grRoot/digitization-licos-v3r5p8_077003526_digi_DIGI.root"> blank-delimited list of input digi root files </item>
+    <item name="svacFileList" value="/nfs/farm/g/glast/u36/Integration/rootData/077003526/v6r070329p27/svacTuple/v3r0/svacTuple-v3r7p0_077003526_svac_svac.root"> blank-delimited list of input svac root files </item>
     <item name="outputPrefix" value="test"> output file prefix </item>
     <item name="configFile" value="../src/monconfig.xml"> output file prefix </item>
   </section>

@@ -2,20 +2,41 @@
 
   <inputList name="top"> 
     <object> nACD </object>
+    <object> Gem_elapsed </object>
     <object> timestamp </object>
+    <object> calxtalene </object>
+    <object> condsummary </object>
   </inputList>
 
 
   <outputList name="top">
     <object>
-      <name> nAcd</name>
+      <name> nAcd  </name>
       <formula><![CDATA[   nACD ]]></formula>
       <cut><![CDATA[ 1 ]]></cut>
       <type> mean </type>
     </object>
+    <object>
+      <name> Gem_elapsed  </name>
+      <formula><![CDATA[   Gem_elapsed ]]></formula>
+      <cut><![CDATA[ 1 ]]></cut>
+      <type> counterdiff </type>
+    </object>
+    <object>
+      <name> xtalene[16][8][12][2]  </name>
+      <formula><![CDATA[ calxtalene ]]></formula>
+      <cut><![CDATA[ condsummary&16 ]]></cut>
+      <type> mean </type>
+    </object>
+    <object>
+      <name> tkrtriggers  </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ condsummary&2 ]]></cut>
+      <type> counter </type>
+    </object>
 
   </outputList>
 
-  <eventCut><![CDATA[ 1 ]]></eventCut>
+  <eventCut><![CDATA[  ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

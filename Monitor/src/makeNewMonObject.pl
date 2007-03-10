@@ -10,7 +10,7 @@ while (-e "MonInput_$name.h"){
     $name=<>;
     chomp($name);
 }
-print "What type of variable is this in the digi or recon file?\n";
+print "What type of variable is this?\n";
 print "0 for Int_t\n";
 print "1 for Bool_t\n";
 print "2 for UInt_t\n";
@@ -20,9 +20,11 @@ print "5 for UShort_t\n";
 print "6 for Float_t\n";
 print "7 for Char_t\n";
 print "8 for Short_t\n";
+print "9 for Long64_t\n";
+print "10 for ULong64_t\n";
 $type=<>;
 chomp($type);
-while ($type =~ /\D/ || $type<0 || $type>8){
+while ($type =~ /\D/ || $type<0 || $type>10){
     print "Invalid input. Try again...\n";
     print "0 for Int_t\n";
     print "1 for Bool_t\n";
@@ -33,6 +35,8 @@ while ($type =~ /\D/ || $type<0 || $type>8){
     print "6 for Float_t\n";
     print "7 for Char_t\n";
     print "8 for Short_t\n";
+    print "9 for Long64_t\n";
+    print "10 for ULong64_t\n";
     $type=<>;
     chomp($type);
 }
@@ -63,11 +67,20 @@ if ($type==0){
 }elsif ($type==8){
     $ctype="Short_t";
     $ntype="S";
+}elsif ($type==9){
+    $ctype="Long64_t";
+    $ntype="L";
+}elsif ($type==10){
+    $ctype="ULong64_t";
+    $ntype="l";
+}else{
+    print "No such type.\n";
+    exit(0);
 }
 print "What tree is the source of the data?\n";
 print "0 for DigiEvent\n";
 print "1 for ReconEvent\n";
-print "2 for ReconEvent\n";
+print "2 for McEvent\n";
 print "3 for MeritEvent\n";
 print "4 for SvacEvent\n";
 print "5 for CalEvent\n";
@@ -77,7 +90,7 @@ while ($source =~ /\D/ || $source<0 || $source>5){
     print "Invalid entry. Try again.\n";
     print "0 for DigiEvent\n";
     print "1 for ReconEvent\n";
-    print "2 for ReconEvent\n";
+    print "2 for McEvent\n";
     print "3 for MeritEvent\n";
     print "4 for SvacEvent\n";
     print "5 for CalEvent\n";

@@ -149,7 +149,7 @@ int main(int argn, char** argc) {
   MonValFactory mf;
   std::string eventcut=p.getEventCut();
   std::cout<<"Event cut "<<eventcut<<std::endl;
-  MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top",eventcut.c_str());
+  MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top");
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcol,allinpcol, eventcut,timestamp);
@@ -165,6 +165,10 @@ int main(int argn, char** argc) {
   if (digiinpcol)delete digiinpcol;
   if (reconinpcol)delete mcinpcol;
   if (mcinpcol)delete mcinpcol;
+  if (svacinpcol)delete svacinpcol;
+  if (meritinpcol)delete meritinpcol;
+  if (calinpcol)delete calinpcol;
+  delete outcol;
   return 0;
 }
 

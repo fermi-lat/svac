@@ -42,38 +42,30 @@ class MonCounter : public MonValue {
 
 public:
 
-  // Standard c'tor, just the name
-  MonCounter(const char* name, const char* formula, const char* cut) 
-    :MonValue(name,formula,cut), m_current(0),m_val(0){
-  }
+  // Standard c'tor
+  MonCounter(const char* name, const char* formula, const char* cut) ;
 
   // D'tor, no-op
-  virtual ~MonCounter(){
-  }
+  virtual ~MonCounter();
   
   // Reset just nulls the values
-  virtual void reset() {
-    m_current = 0;
-    m_val = 0;
-  }
+  virtual void reset() ;
 
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
 
-  void increment(TTree* tree) ;
+  void singleincrement(Double_t* val) ;
 
   // Just move the counter to the output value
-  virtual void latchValue() {
-    m_val = m_current;
-  }
+  virtual void latchValue() ;
 
 private:
 
   // the cached value
-  mutable ULong64_t m_current;
+  ULong64_t *m_current;
 
   // the output value
-  ULong64_t m_val;
+  ULong64_t *m_val;
 };
 
 //
@@ -84,51 +76,32 @@ class MonMean : public MonValue {
 
 public:
   
-  // Standard c'tor, just the name
-  MonMean(const char* name, const char* formula, const char* cut) 
-    :MonValue(name,formula,cut),
-     m_nVals(0),m_sum(0.),m_sum2(0.),
-     m_val(0.),m_err(0.){
-  }
+  // Standard c'tor
+  MonMean(const char* name, const char* formula, const char* cut) ;
   
-  // D'tor, no-op
-  virtual ~MonMean(){
-  }
+  // D'tor
+  virtual ~MonMean();
 
   // Latch the values, so calculate mean, rms, err_on_mean
-  virtual void latchValue() {
-    if ( m_nVals < 1 ) return;
-    m_val = m_sum / ((Double_t)m_nVals);
-    Double_t err2 = m_sum2;
-    err2 /= ((Double_t)m_nVals);
-    err2 -= m_val*m_val;    
-    err2 /= ((Double_t)m_nVals);
-    m_err = err2 > 0 ? TMath::Sqrt(err2) : 0.;
-  }
+  virtual void latchValue() ;
 
   // reset, null everything
-  virtual void reset() {
-    m_err = 0.;
-    m_val = 0.;
-    m_nVals = 0;
-    m_sum = 0.;
-    m_sum2 = 0.;
-  }
+  virtual void reset() ;
 
   // attach both mean and err_on_mean to TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void increment(TTree* tree) ;
+  void singleincrement(Double_t* val) ;
 
 private:
 
   // cached values, the running sums
-  mutable ULong64_t m_nVals;
-  mutable Double_t m_sum;
-  mutable Double_t m_sum2;
+  ULong64_t *m_nVals;
+  Double_t *m_sum;
+  Double_t *m_sum2;
 
   // output values
-  Float_t m_val;
-  Float_t m_err;
+  Float_t *m_val;
+  Float_t *m_err;
 
   
 };
@@ -144,43 +117,33 @@ protected:
   static const ULong64_t s_maxVal64;
 
 public:
-  // Standard c'tor, just the name
-  MonCounterDiff(const char* name, const char* formula, const char* cut) 
-    :MonValue(name,formula, cut),
-     m_lo(s_maxVal64),m_hi(0),m_val(0){
-  }
+  // Standard c'tor
+  MonCounterDiff(const char* name, const char* formula, const char* cut) ;
 
   // D'tor, no-op
-  virtual ~MonCounterDiff(){
-  }
+  virtual ~MonCounterDiff();
   
   // Reset, check to see if the cache makes sense
   // if so, just copy hi -> lo and go on
   // in not, reset both hi and lo
-  virtual void reset() {
-    m_lo = m_lo >= m_hi ? s_maxVal64 : m_hi;
-    m_hi = m_lo >= m_hi ? 0 : m_hi;
-    m_val = 0;
-  }
+  virtual void reset() ;
 
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void increment(TTree* tree) ;
+  void singleincrement(Double_t* val) ;
 
   // Take the difference hi-lo and move it to the output value
-  virtual void latchValue() {
-    m_val = m_lo < m_hi ? m_hi - m_lo : 0;
-  }
+  virtual void latchValue() ;
 
 
 private:
   
   // cached values, lo and hi values from current time slice
-  mutable ULong64_t m_lo;
-  mutable ULong64_t m_hi;
+  ULong64_t *m_lo;
+  ULong64_t *m_hi;
 
   // output value
-  ULong64_t m_val;
+  ULong64_t *m_val;
 };
 
 //
@@ -195,26 +158,19 @@ protected:
 
 public:
   // Standard c'tor, just the name
-  MonMinMax(const char* name, const char* formula, const char* cut) 
-    :MonValue(name,formula,cut),
-     m_min(s_huge),m_max(-s_huge){
-  }
+  MonMinMax(const char* name, const char* formula, const char* cut) ;
 
   // D'tor, no-op
-  virtual ~MonMinMax(){
-  }
+  virtual ~MonMinMax();
   
   // Reset, check to see if the cache makes sense
   // if so, just copy hi -> lo and go on
   // in not, reset both hi and lo
-  virtual void reset() {
-    m_min = s_huge;
-    m_max = -s_huge;
-  }
+  virtual void reset() ;
 
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void increment(TTree* tree) ;
+  void singleincrement(Double_t* val) ;
 
   // Take the difference hi-lo and move it to the output value
   virtual void latchValue() {
@@ -225,8 +181,8 @@ public:
 private:
   
   // lo and hi values from current time slice
-  Float_t m_min;
-  Float_t m_max;
+  Float_t *m_min;
+  Float_t *m_max;
 };
 
 //
@@ -241,9 +197,8 @@ public:
     :MonValue(name,"",""),m_prefix(prefix){
   }
   
-  // D'tor, no-op, but does clean data structure
-  virtual ~MonValueCol() {
-  }
+  // D'tor, deletes the MonValues it contains. 
+  virtual ~MonValueCol();
 
   // Add a val to this collection
   void addVal(MonValue& val);
@@ -284,8 +239,8 @@ private:
 class MonValFactory{
  public:
   MonValFactory(){}
-  MonValue* makeMonValue(std::map<std::string,std::string>, const char*);
-  MonValueCol* makeMonValueCol(std::list<std::map<std::string,std::string> >, const char*, const char*, const char* ="");
+  MonValue* makeMonValue(std::map<std::string,std::string>);
+  MonValueCol* makeMonValueCol(std::list<std::map<std::string,std::string> >, const char*, const char* ="");
 };
 
 #endif

@@ -26,8 +26,7 @@ public :
   
   // Standard c'tor, needs a name, this is where the data end up
   // on the output tree
-  MonValue(const char* name, const char* formula, const char* cut)
-    :m_name(name), m_cut(cut), m_formula(formula){}
+  MonValue(const char* name, const char* formula, const char* cut);
 
   // D'tor, no-op
   virtual ~MonValue(){
@@ -46,19 +45,21 @@ public :
   // Just return the name of this var
   inline const std::string& name() const { return m_name; }
   
-  virtual void increment(TTree* tree)=0;
+  virtual void increment(TTree* tree);
 
  protected:
   
-  const std::vector<std::string> queryTree(TTree* tree);
+  virtual void singleincrement(Double_t* val){};
   
- private:
+ protected:
   
 
   // The name of this var
-  const std::string m_name;    
+  std::string m_name;    
   const std::string m_cut;    
   const std::string m_formula;    
+  std::string m_dimstring;    
+  unsigned m_dim;
 };
 
 #endif

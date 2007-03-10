@@ -35,7 +35,7 @@ void MonInput_nAcd::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
 void MonInput_nAcd::setValue(TObject* event) {
-  DigiEvent* de=dynamic_cast<MONSOURCE*>(event);
+  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
     assert(de);
