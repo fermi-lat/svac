@@ -43,18 +43,61 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
    m_stripValCol(col),
    m_incol(incol),
    m_eventcut(eventcut),
-   m_timestampvar(timestampvar),
-   m_currentTimeStamp(0){
+   m_timestampvar(timestampvar) {
 
   // attach input chains
   for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
   //create and populate intermediate tree
   m_intree = new TTree("Internal","Used to create output");
+  static unsigned char indexarray[18];
+  for (int i=0;i<18;i++)indexarray[i]=i;
+  m_intree->Branch("indexarray",&indexarray,"indexarray[18]/b");
+  m_intree->SetAlias("foreachtower","indexarray<16");
+  m_intree->SetAlias("foreachengine","indexarray<16");
+  m_intree->SetAlias("foreachtkrlayer","indexarray<18");
+  m_intree->SetAlias("foreachcallayer","indexarray<8");
+  m_intree->SetAlias("foreachcalcolumn","indexarray<12");
+  m_intree->SetAlias("tower","Iteration$");
+  m_intree->SetAlias("engine","Iteration$");
+  m_intree->SetAlias("tkrlayer","Iteration$");
+  m_intree->SetAlias("callayer","Iteration$");
+  m_intree->SetAlias("calcolumn","Iteration$");
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->populateTableTree(m_intree);
   }
-  m_currentTimeStamp=(UInt_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress());
-  
+  const char* lstr=m_intree->GetBranch(m_timestampvar.c_str())->GetTitle();
+  assert(lstr);
+  char ty=lstr[strlen(lstr)-1];
+  switch(ty){
+  case 'S': 
+    m_currentTimestamp=new Timestamp_Short_t((Short_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 's': 
+    m_currentTimestamp=new Timestamp_UShort_t((UShort_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'I': 
+    m_currentTimestamp=new Timestamp_Int_t((Int_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'i': 
+    m_currentTimestamp=new Timestamp_UInt_t((UInt_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'F': 
+    m_currentTimestamp=new Timestamp_Float_t((Float_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'D': 
+    m_currentTimestamp=new Timestamp_Double_t((Double_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'L': 
+    m_currentTimestamp=new Timestamp_Long64_t((Long64_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  case 'l': 
+    m_currentTimestamp=new Timestamp_ULong64_t((ULong64_t*)(m_intree->GetBranch(m_timestampvar.c_str())->GetAddress()));
+    break;
+  default:
+    std::cout<<"Problem with timestamp type. Exiting"<<std::endl;
+    assert(0);
+  }
+
   //create output tree
   m_tree = new TTree("Time","Time binned data");
   //create output tree
@@ -87,7 +130,6 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
   // set up the loop
   m_startEvent = startEvent;
   m_last = numEvents;
-  UInt_t& currentTimeStamp=*m_currentTimeStamp;
 
   // Starting message
   std::cout << "Number of events used: " << m_last-startEvent << std::endl;
@@ -97,6 +139,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
   init();
 
   UInt_t unsaved(0);
+  ULong64_t currentTimeStamp;
 
   // Event loop
   for (Int_t ievent= startEvent; ievent!=m_last; ievent++ ) {
@@ -111,6 +154,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
       std::cerr << "Failed to read event " << ievent << " aborting" << std::endl;
       break;
     }    
+    currentTimeStamp=m_currentTimestamp->value();
     // initialize stuff on first event
     if ( ievent == startEvent ) {
       firstEvent(currentTimeStamp);
@@ -180,7 +224,7 @@ void MonEventLooper::switchBins() {
   m_currentStart += m_binSize;
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
-  while(*m_currentTimeStamp>=m_currentEnd){
+  while(m_currentTimestamp->value()>=m_currentEnd){
     m_tree->Fill();
     m_currentBin++;
     m_currentStart += m_binSize;
@@ -223,7 +267,6 @@ void MonEventLooper::logEvent(Long64_t /* ievent */, ULong64_t timeStamp ) {
   }
   m_timeStamp = timeStamp;
 }
-
 bool MonEventLooper::readEvent(Long64_t ievent){
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->readEvent(ievent);

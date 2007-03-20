@@ -26,6 +26,9 @@
 #include "MonInputCollection_Cal.h"
 #include "MonValueImpls_t.h"
 #include "MonConfigParser.h"
+#include "configData/gem/TrgConfigParser.h"
+#include "configData/gem/TrgConfig.h"
+#include "RFun.h"
 
 
 
@@ -150,6 +153,12 @@ int main(int argn, char** argc) {
   std::string eventcut=p.getEventCut();
   std::cout<<"Event cut "<<eventcut<<std::endl;
   MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top");
+
+
+  TrgConfigParser tp("bcast.xml");
+  TrgConfig *tcf=new TrgConfig;
+  tp.parse(tcf);
+  RFun::setTrgConfig(tcf);
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcol,allinpcol, eventcut,timestamp);

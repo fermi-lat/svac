@@ -15,7 +15,8 @@
 // 
 #include "MonValue_t.h"
 #include "MonInputCollection.h"
-
+#include "Timestamp.h"
+ 
 class MonEventLooper {
 
 public :
@@ -108,7 +109,8 @@ private:
   std::vector <MonInputCollection*> m_incol;
   std::string m_eventcut;
   std::string m_timestampvar;
-  UInt_t *m_currentTimeStamp;
+  char m_timestamptype;
+  Timestamp *m_currentTimestamp;
 
 };
 

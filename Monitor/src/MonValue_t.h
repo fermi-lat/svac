@@ -1,5 +1,6 @@
 #ifndef MonValue_h
 #define MonValue_h 
+#define MAXMEM 20e6
 
 //
 // This File has basic interface for the monitoring values

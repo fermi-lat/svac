@@ -4,7 +4,6 @@
     <object> nACD </object>
     <object> Gem_elapsed </object>
     <object> timestamp </object>
-    <object> calxtalene </object>
     <object> condsummary </object>
   </inputList>
 
@@ -23,20 +22,26 @@
       <type> counterdiff </type>
     </object>
     <object>
-      <name> xtalene[16][8][12][2]  </name>
-      <formula><![CDATA[ calxtalene ]]></formula>
-      <cut><![CDATA[ condsummary&16 ]]></cut>
-      <type> mean </type>
+      <name> alltriggers  </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ condsummary==7 ]]></cut>
+      <type> counter </type>
     </object>
     <object>
-      <name> tkrtriggers  </name>
+      <name> engine2 </name>
       <formula><![CDATA[ 1 ]]></formula>
-      <cut><![CDATA[ condsummary&2 ]]></cut>
+      <cut><![CDATA[ RFun::engine(condsummary)==7 ]]></cut>
+      <type> counter </type>
+    </object>
+    <object>
+      <name> engine[16] </name>
+      <formula><![CDATA[ (RFun::engine(condsummary)==engine) ]]></formula>
+      <cut><![CDATA[ foreachengine ]]></cut>
       <type> counter </type>
     </object>
 
   </outputList>
 
-  <eventCut><![CDATA[  ]]></eventCut>
+  <eventCut><![CDATA[ condsummary&4  ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

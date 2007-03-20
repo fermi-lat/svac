@@ -1,8 +1,9 @@
-package TestReport
+package Monitor
 version v0r0
 
 author E. Charles <echarles@slac.stanford.edu>
 
+use RootcintPolicy v* GlastPolicy
 use GlastPolicy v*
 use commonRootData v*
 use mcRootData v*
@@ -10,18 +11,35 @@ use digiRootData v*
 use reconRootData v*
 use facilities v*
 use xmlBase v* 
+use configData v*
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 #macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
 
-macro testreport_headers   "" WIN32
+
+#apply_pattern root_library headers="../src/RFun.h" \
+#                           includes="-I$(CONFIGDATAROOT)" 
+
+#macro_prepend includes   "-pthread -I/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/ROOT/v5.10.00/root/include "
 
 macro source "*.cxx" WIN32 "*.h *.cxx"
 
+macro CINTFILE dict
+macro root_includes "-I$(CONFIGDATAROOT)"
+macro root_headers "RFun.h"	
+macro root_linkdef "LinkDef.h"
+
+make_fragment runcint -header=runcint
+document runcint cint
+
+macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib"
+
 macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d"
 
-macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
+#macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
 
 application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
 
-application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx
+application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx dict.cxx RFun.cxx
+
+application gemparsertest gemparsertest.cxx dict.cxx RFun.cxx
