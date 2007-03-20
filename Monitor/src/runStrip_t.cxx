@@ -155,7 +155,7 @@ int main(int argn, char** argc) {
   MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top");
 
 
-  TrgConfigParser tp("bcast.xml");
+  TrgConfigParser tp(jc.gemFile().c_str());
   TrgConfig *tcf=new TrgConfig;
   tp.parse(tcf);
   RFun::setTrgConfig(tcf);

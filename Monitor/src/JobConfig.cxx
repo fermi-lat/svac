@@ -61,6 +61,9 @@ void JobConfig::usage() {
        << "\t" << m_theApp << " [options] [input] -o <output>" << endl 
        << endl
        << "\t   -c <monConifg>    : name of the xml file with the monitoring configuration"<<endl
+       << endl
+       << "\t   -g <gemConfig>    : name of the xml file with the GEM configuration (i.e. bcast.xml)"<<endl
+       << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
@@ -91,7 +94,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:n:s:b:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -128,6 +131,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
       break;
     case 'c':   // monitoring configuration file
       m_configFile = string(optarg);
+      break;
+    case 'g':   // GEM configuration file
+      m_gemFile = string(optarg);
       break;
     case 'b':   // size of bins
       m_optval_b = strtoul( optarg, &endPtr, 0 );
@@ -234,6 +240,14 @@ Int_t JobConfig::parse(int argn, char** argc) {
     cout << "Input cal files:" << endl;
     m_calChain = makeChain("CalTuple",m_inputCalFileStr);
   }    
+  // GEM configuration file
+  if (myFile && myFile->contains ("parameters","gemFile")){
+    if (m_gemFile !=""){
+      cerr<<"GEM configuration file defined both in command line and xml file. Exiting..."<<endl;
+      return 1;
+    }
+    m_gemFile=myFile->getString("parameters","gemFile");
+  }
   // monitoring configuration file
   if (myFile && myFile->contains ("parameters","configFile")){
     if (m_configFile !=""){

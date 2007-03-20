@@ -8,5 +8,6 @@
     <item name="svacFileList" value="/nfs/farm/g/glast/u36/Integration/rootData/077003526/v6r070329p27/svacTuple/v3r0/svacTuple-v3r7p0_077003526_svac_svac.root"> blank-delimited list of input svac root files </item>
     <item name="outputPrefix" value="test"> output file prefix </item>
     <item name="configFile" value="../src/monconfig.xml"> output file prefix </item>
+    <item name="gemFile" value="../src/bcast.xml"> output file prefix </item>
   </section>
 </ifile>
