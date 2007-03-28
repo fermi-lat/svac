@@ -6,17 +6,14 @@
 
 
 int main(){
-  TrgConfigParser tp("bcast.xml");
+  TrgConfigParser tp("../src/bcast.xml");
   TrgConfig *tcf=new TrgConfig;
   tp.parse(tcf);
   std::cout<<*tcf->configuration()<<std::endl;
   std::cout<<*tcf->periodicTrigger()<<std::endl;
   std::cout<<*tcf->windowParams()<<std::endl;
   std::cout<<*tcf->lut()<<std::endl;
-  for (int i=0;i<16;i++){
-    std::cout<<"Engine "<<i<<std::endl;
-    std::cout<<*tcf->trgEngine(i)<<std::endl;
-  }
+  std::cout<<*tcf->trgEngine()<<std::endl;
   std::cout<<*tcf->disabledChannels()<<std::endl;
   std::cout<<*tcf->roi()<<std::endl;
   std::vector<unsigned long> cv;
