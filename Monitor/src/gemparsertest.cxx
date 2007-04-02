@@ -1,32 +1,20 @@
-#include "configData/gem/TrgConfig.h"
-#include "configData/gem/TrgConfigParser.h"
+#include "configData/db/TrgConfigDB.h"
+#include "configData/db/LatcDBImplOld.h"
 #include "commonRootData/idents/AcdId.h"
 #include "RFun.h"
 #include "TTree.h"
+#include <iostream>
 
 
 int main(){
-  TrgConfigParser tp("../src/bcast.xml");
-  TrgConfig *tcf=new TrgConfig;
-  tp.parse(tcf);
-  std::cout<<*tcf->configuration()<<std::endl;
-  std::cout<<*tcf->periodicTrigger()<<std::endl;
-  std::cout<<*tcf->windowParams()<<std::endl;
-  std::cout<<*tcf->lut()<<std::endl;
-  std::cout<<*tcf->trgEngine()<<std::endl;
-  std::cout<<*tcf->disabledChannels()<<std::endl;
-  std::cout<<*tcf->roi()<<std::endl;
-  std::vector<unsigned long> cv;
-  for (int i=0;i<16;i++){
-    cv=tcf->lut()->conditionsInEngine(i);
-    std::cout<<"Engine "<<i<<std::endl;
-    for (unsigned j=0;j<cv.size();j++){
-      std::cout<<std::hex<<cv[j]<<" ";
-    }
-    std::cout<<std::dec<<std::endl;
-      
+  TrgConfigDB tcf(new LatcDBImplOld);
+  unsigned key;
+  while(1){
+    std::cin>>key;
+    tcf.updateKey(key);
+    std::cout<<tcf<<std::endl;
   }
-  RFun::setTrgConfig(tcf);
+  //RFun::setTrgConfig(tcf);
   TTree t;
   int a=22;
   unsigned char foreachtower[16];

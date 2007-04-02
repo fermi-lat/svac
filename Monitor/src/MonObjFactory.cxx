@@ -8,6 +8,8 @@
 // Last updated with object Gem_elapsed by user kocian on Fri Mar  9 19:50:55 2007
 // Last updated with object calxtalene by user kocian on Fri Mar  9 20:38:36 2007
 // Last updated with object condsummary by user kocian on Fri Mar  9 22:53:38 2007
+// Last updated with object configkey1852 by user kocian on Fri Mar 30 18:25:24 2007
+#include "digi/MonInput_configkey1852.h"
 #include "digi/MonInput_condsummary.h"
 #include "svac/MonInput_calxtalene.h"
 #include "digi/MonInput_Gem_elapsed.h"
@@ -36,6 +38,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_calxtalene;
   if (s=="condsummary")
     return new MonInput_condsummary;
+  if (s=="configkey1852")
+    return new MonInput_configkey1852;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;

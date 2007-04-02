@@ -62,8 +62,8 @@ void JobConfig::usage() {
        << endl
        << "\t   -c <monConifg>    : name of the xml file with the monitoring configuration"<<endl
        << endl
-       << "\t   -g <gemConfig>    : name of the xml file with the GEM configuration (i.e. bcast.xml)"<<endl
-       << endl
+    //       << "\t   -g <gemConfig>    : name of the xml file with the GEM configuration (i.e. bcast.xml)"<<endl
+         //  << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl

@@ -11,7 +11,7 @@ use digiRootData v*
 use reconRootData v*
 use facilities v*
 use xmlBase v* 
-use configData v*
+use configData *
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 #macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
@@ -32,9 +32,11 @@ macro root_linkdef "LinkDef.h"
 make_fragment runcint -header=runcint
 document runcint cint
 
-macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib"
+macro_append cppflags "-Wno-unused-parameter -g"
 
-macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d"
+macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib -O -g"
+
+macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d "
 
 #macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
 

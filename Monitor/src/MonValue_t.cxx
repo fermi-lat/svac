@@ -5,7 +5,6 @@
 #include "TEventList.h"
 #include <iostream>
 #include <string.h>
-#include "functions.h"
 
 MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula){
   // split up the name into the name part and the dimension part

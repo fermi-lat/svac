@@ -174,13 +174,13 @@ void MonCounterDiff::singleincrement(Double_t* val) {
 int MonMinMax::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameMin = prefix + name();
   fullNameMin += "_min";
-  std::string leafTypeMin = fullNameMin+m_dimstring + "/l";
+  std::string leafTypeMin = fullNameMin+m_dimstring + "/F";
   std::string fullNameMax = prefix + name();
-  fullNameMax += "_min";
-  std::string leafTypeMax = fullNameMax +m_dimstring+ "/l";
+  fullNameMax += "_max";
+  std::string leafTypeMax = fullNameMax +m_dimstring+ "/F";
   TBranch* b = tree.Branch(fullNameMin.c_str(),m_min,leafTypeMin.c_str());
   if ( b == 0 ) return -1;
-  b = tree.Branch(fullNameMin.c_str(),m_max,leafTypeMin.c_str());
+  b = tree.Branch(fullNameMin.c_str(),m_max,leafTypeMax.c_str());
   return b != 0 ? 2 : -1;
 }
 
@@ -209,8 +209,8 @@ void MonMinMax::reset() {
   // Update the value, check to make sure that things make sense
 void MonMinMax::singleincrement(Double_t* val) {
   for (unsigned i=0;i<m_dim;i++){
-    m_min[i] = m_min[i] < (ULong64_t)val[i] ? m_min[i] : (ULong64_t)val[i];
-    m_max[i] = m_max[i] > (ULong64_t)val[i] ? m_max[i] : (ULong64_t)val[i];
+    m_min[i] = m_min[i] < (Float_t)val[i] ? m_min[i] : (Float_t)val[i];
+    m_max[i] = m_max[i] > (Float_t)val[i] ? m_max[i] : (Float_t)val[i];
   }
 }
 

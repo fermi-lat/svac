@@ -6,6 +6,6 @@ VPATH=../src
 	cd ../src;export ROOTSYS=${ROOT_PATH};export LD_LIBRARY_PATH=${ROOT_PATH}/lib;export DYLD_LIBRARY_PATH=${ROOT_PATH}/lib;${ROOT_PATH}/bin/rootcint -f ${CINTFILE}.cxx -c $(root_includes) ${root_headers} ${root_linkdef}
 
 ${CONSTITUENT}clean ::
-	$(cleanup_echo) ${CINTFILE}.cxx
-	$(cleanup_silent) /bin/rm -f ${CINTFILE}.*
+	$(cleanup_echo) ../src/${CINTFILE}.cxx
+	$(cleanup_silent) /bin/rm -f ../src/${CINTFILE}.*
 #==================================================== 
