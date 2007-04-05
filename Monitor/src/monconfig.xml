@@ -5,6 +5,7 @@
     <object> Gem_elapsed </object>
     <object> timestamp </object>
     <object> condsummary </object>
+    <object> configkey1852 </object>
   </inputList>
 
 
@@ -12,7 +13,7 @@
     <object>
       <name> nAcd  </name>
       <formula><![CDATA[   nACD ]]></formula>
-      <cut><![CDATA[ 1 ]]></cut>
+      <cut><![CDATA[ nACD>2 ]]></cut>
       <type> mean </type>
     </object>
     <object>
@@ -22,26 +23,26 @@
       <type> counterdiff </type>
     </object>
     <object>
-      <name> alltriggers  </name>
-      <formula><![CDATA[ 1 ]]></formula>
-      <cut><![CDATA[ condsummary==7 ]]></cut>
-      <type> counter </type>
+      <name> configkey </name>
+      <formula><![CDATA[ configkey1852 ]]></formula>
+      <cut><![CDATA[  ]]></cut>
+      <type> minmax </type>
     </object>
     <object>
-      <name> engine2 </name>
-      <formula><![CDATA[ 1 ]]></formula>
-      <cut><![CDATA[ RFun::engine(condsummary)==7 ]]></cut>
-      <type> counter </type>
+      <name> engine0 </name>
+      <formula><![CDATA[   RFun::iden( nACD ) +1 ]]></formula>
+      <cut><![CDATA[ nACD> 1  ]]></cut>
+      <type> mean </type>
     </object>
     <object>
       <name> engine[16] </name>
-      <formula><![CDATA[ (RFun::engine(condsummary)==engine) ]]></formula>
-      <cut><![CDATA[ foreachengine ]]></cut>
+      <formula><![CDATA[foreachengine (RFun::engine(condsummary,configkey1852)==engine) ]]></formula>
+      <cut><![CDATA[  ]]></cut>
       <type> counter </type>
     </object>
 
   </outputList>
 
-  <eventCut><![CDATA[ condsummary&4  ]]></eventCut>
+  <eventCut><![CDATA[ nACD>4  ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

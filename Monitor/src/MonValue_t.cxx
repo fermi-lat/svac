@@ -1,12 +1,19 @@
 
 #include "MonValue_t.h"
 #include "TTree.h"
+#include "TSystem.h"
+#include "TSelector.h"
 #include "TTreeFormula.h"
 #include "TEventList.h"
 #include <iostream>
 #include <string.h>
+#include <fstream>
+#include <unistd.h>
 
-MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula){
+std::vector<double> *MonValue::m_result=new std::vector<double>;
+unsigned int MonValue::m_counter=0;
+
+MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0){
   // split up the name into the name part and the dimension part
 
   char* dimpos=strchr(name,'[');
@@ -41,9 +48,153 @@ MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut
   }
 }
   
+void MonValue::makeProxy(TTree* tree){
+  if (strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
+  bool engineloop=false;
+  bool towerloop=false;
+  bool tkrlayerloop=false;
+  std::string formula(m_formula);
+  unsigned int enginepos=formula.find("foreachengine");
+  unsigned int towerpos=formula.find("foreachtower");
+  unsigned int tkrlayerpos=formula.find("foreachtkrlayer");
+  if(enginepos!=0xffffffff){
+    if (m_dim!=16){
+      std::cerr<<"Dimension of variable "<<m_name<<" should be 16 to match foreachengine"<<std::endl;
+      assert(false);
+    }
+    engineloop=true;
+    formula.replace(enginepos,enginepos+strlen("foreachengine"),"");
     
+  }
+  if(towerpos!=0xffffffff){
+    if (m_dim!=16){
+      std::cerr<<"Dimension of variable "<<m_name<<" should be 16 to match foreachtower"<<std::endl;
+      assert(false);
+    }
+    towerloop=true;
+    formula.replace(towerpos,towerpos+strlen("foreachtower"),"");
+  }
+  if(tkrlayerpos!=0xffffffff){
+    if (m_dim!=16){
+      std::cerr<<"Dimension of variable "<<m_name<<" should be 18 to match foreachtkrlayer"<<std::endl;
+      assert(false);
+    }
+    tkrlayerloop=true;
+    formula.replace(tkrlayerpos,tkrlayerpos+strlen("foreachtkrlayer"),"");
+  }
 
-
+  std::ofstream formfile;
+  formfile.open((m_name+"_val.C_tmp").c_str());
+  formfile<<"std::vector<double> *resultvector;"<<std::endl
+	  <<"unsigned int *counter;"<<std::endl
+	  <<"double "<<m_name+"_val"<<"() {"<<std::endl;
+  formfile<<"double val;"<<std::endl;
+  if(engineloop)formfile<<"for(int engine=0;engine<16;engine++){"<<std::endl;
+  if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
+  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<18;tkrlayer++){"<<std::endl;
+  formfile <<"val = "<<formula<<";"<<std::endl
+	   <<"resultvector->push_back(val);"<<std::endl;
+  if(engineloop||towerloop||tkrlayerloop)formfile<<"}"<<std::endl;
+  formfile<<"(*counter)++;"<<std::endl;
+  formfile<<"return val;"<<std::endl<<"}"<<std::endl;
+  formfile.close();
+  formfile.open((m_name+"_val.h").c_str());
+  formfile<<"#include \"../src/RFun.h\""<<std::endl;
+  formfile.close();
+  if (m_cut!=""){
+    formfile.open((m_name+"_cut.C_tmp").c_str());
+    formfile<<"int "<<m_name+"_cut"<<"(){"<<std::endl
+	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
+    formfile.close();
+    formfile.open((m_name+"_cut.h").c_str());
+    formfile<<"#include \"../src/RFun.h\""<<std::endl;
+    formfile.close();
+  }
+  // check if we need to recompile a formula
+  bool compile=false;
+  // if there was/wasn't a cut before but now there is one we have to compile
+  if (m_cut==""){
+    if (access((m_name+"_cut.C").c_str(),F_OK)==0){
+      compile=true;
+      unlink((m_name+"_cut.C").c_str());
+    }
+  }else{
+    if (access((m_name+"_cut.C").c_str(),F_OK)!=0){
+      compile=true;
+      rename((m_name+"_cut.C_tmp").c_str(),(m_name+"_cut.C").c_str());
+     }
+  }
+  if(access((m_name+"_val.C").c_str(),F_OK)!=0){
+    rename((m_name+"_val.C_tmp").c_str(),(m_name+"_val.C").c_str());
+    compile=true;
+  }else{
+    if (compareFiles((m_name+"_val.C").c_str(),(m_name+"_val.C_tmp").c_str())!=0){
+    rename((m_name+"_val.C_tmp").c_str(),(m_name+"_val.C").c_str());
+    compile=true;
+    }else{
+      unlink((m_name+"_val.C_tmp").c_str());
+    }
+  }
+  if (m_cut!=""&& !compile){
+    if (compareFiles((m_name+"_cut.C").c_str(),(m_name+"_cut.C_tmp").c_str())!=0){
+      rename((m_name+"_cut.C_tmp").c_str(),(m_name+"_cut.C").c_str());
+      compile=true;
+    }else{
+      unlink((m_name+"_cut.C_tmp").c_str());
+    }
+  }
+  char rootcommand[128];
+  if (compile){
+    if (m_cut!=""){
+      tree->MakeProxy((m_name+"Selector").c_str(),(m_name+"_val.C").c_str(),(m_name+"_cut.C").c_str(),"nohist");
+    }else{
+      tree->MakeProxy((m_name+"Selector").c_str(),(m_name+"_val.C").c_str(),"","nohist");
+    }
+    std::cout<<"Compiling formula for "<<m_name<<std::endl;
+    sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
+    gROOT->ProcessLine(rootcommand);
+  }else{
+    std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
+    gSystem->Load((m_name+"Selector_h.so").c_str());
+  }
+  sprintf(rootcommand,"new %s((TTree*)0x%%x);",(m_name+"Selector").c_str());
+  m_sel=(TSelector*)gROOT->ProcessLineFast(Form(rootcommand,tree));
+  sprintf(rootcommand,"&((%s*)0x%%x)->resultvector;",(m_name+"Selector").c_str());
+  std::vector<double> **fVar1 = (std::vector<double>**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
+  *fVar1=m_result;
+  sprintf(rootcommand,"&((%s*)0x%%x)->counter;",(m_name+"Selector").c_str());
+  unsigned int **ct = (unsigned int**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
+  *ct=&m_counter;
+}
+  
+int MonValue::compareFiles(const char* file1, const char* file2){
+  int retval=0;
+  long begin,end;
+  std::ifstream f1 (file1);
+  begin = f1.tellg();
+  f1.seekg (0, std::ios::end);
+  end = f1.tellg();
+  long lf1=end-begin;
+  std::ifstream f2 (file2);
+  begin = f2.tellg();
+  f2.seekg (0, std::ios::end);
+  end = f2.tellg();
+  long lf2=end-begin;
+  if(lf1!=lf2)retval=1;
+  f1.seekg(0,std::ios::beg);
+  f2.seekg(0,std::ios::beg);
+  std::string s1,s2;
+  while (retval==0 &&! f1.eof()&&!f2.eof() ){
+    getline (f1,s1);
+    getline (f2,s2);
+    if (s1!=s2){
+      retval=1;
+    }
+  }
+  f1.close();
+  f2.close();
+  return retval;
+}
 
 void MonValue::increment(TTree* tree){
   // Have to reserve space for return values from tree
@@ -55,29 +206,53 @@ void MonValue::increment(TTree* tree){
   est=nev*m_dim;
   unsigned iterations=1;
   // if there is too much data we have to iterate so we don't run out of memory
-  if (est>tree->GetEstimate()){
-    if(est<MAXMEM)tree->SetEstimate(est);
-    else{
-      tree->SetEstimate(MAXMEM+m_dim);//160 MB
-      iterations=est/MAXMEM+1;
+  // no proxy case:
+  if (m_sel==0){
+    if (est>tree->GetEstimate()){
+      if(est<MAXMEM)tree->SetEstimate(est);
+      else{
+	tree->SetEstimate((long long int)MAXMEM+m_dim);//160 MB
+	iterations=(unsigned int)(est/MAXMEM+1);
+      }
     }
-  }
+    // proxy case
+  }else{
+    if (est>m_result->capacity()){
+      if(est<MAXMEM)m_result->reserve(est);
+      else{
+	m_result->reserve((unsigned int)MAXMEM+m_dim);//160 MB
+	iterations=(unsigned int)(est/MAXMEM+1);
+      }
+    }
+  }    
   unsigned evperit=nev/iterations+1;
   for (unsigned it=0;it<iterations;it++){
-    tree->Draw(m_formula.c_str(),m_cut.c_str(),"goff",evperit,evperit*it);
-    if (tree->GetPlayer()->GetVar1()->GetNdata()==m_dim){}
-    else if (tree->GetVar1()->GetNdata()==18&&strstr(m_cut.c_str(),"foreachtower")&& m_dim==16){}
-    else if (tree->GetVar1()->GetNdata()==18&&strstr(m_cut.c_str(),"foreachengine")&& m_dim==16){}
-    else if (tree->GetVar1()->GetNdata()==18&&strstr(m_cut.c_str(),"foreachcallayer")&& m_dim==8){}
-    else if (tree->GetVar1()->GetNdata()==18&&strstr(m_cut.c_str(),"foreachcalcolumn")&& m_dim==12){}
-    else{
-      std::cout<<"The dimension of the formula "<<m_formula<<" ("<<tree->GetPlayer()->GetVar1()->GetNdata()<<")"
-	     <<" does not match the definition of variable "<<m_name<<m_dimstring<<" ("<<m_dim<<")"<<std::endl;
-      assert(0);
+    if (m_sel==0){
+      tree->Draw(m_formula.c_str(),m_cut.c_str(),"goff",evperit,evperit*it);
+      if (tree->GetPlayer()->GetVar1()->GetNdata()!=(int)m_dim){
+	std::cout<<"The dimension of the formula "<<m_formula<<" ("<<tree->GetPlayer()->GetVar1()->GetNdata()<<")"
+		 <<" does not match the definition of variable "<<m_name<<m_dimstring<<" ("<<m_dim<<")"<<std::endl;
+	assert(0);
+      }
+      double *val=tree->GetV1();
+      for (int i=0;i<tree->GetSelectedRows();i+=m_dim){
+	singleincrement(&val[i]);
+      }
+    }else{
+      m_result->clear();
+      m_counter=0;
+      tree->Process(m_sel,"goff",evperit,evperit*it);
+      unsigned int fdim=0;
+      if (m_counter>0)fdim=(unsigned int)((double)m_result->size()/double(m_counter));
+      if (fdim!=m_dim){
+	std::cout<<"The dimension of the formula "<<m_formula<<" ("<<fdim<<")"
+		 <<" does not match the definition of variable "<<m_name<<m_dimstring<<" ("<<m_dim<<")"<<std::endl;
+	assert(0);
+      }
+      double *val=&((*m_result)[0]);
+      for (unsigned i=0;i<m_result->size();i+=m_dim){
+	singleincrement(&val[i]);
+      }
     }
-    double *val=tree->GetV1();
-    for (int i=0;i<tree->GetSelectedRows();i+=m_dim){
-      singleincrement(&val[i]);
-    }
-  }
+  }    
 }

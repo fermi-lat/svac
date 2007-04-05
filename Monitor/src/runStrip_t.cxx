@@ -4,10 +4,12 @@
 #include <string>
 #include <list>
 #include <fstream>
-
+#include <stdlib.h>
 //
 // ROOT-io
 #include "TFile.h"
+#include "TSystem.h"
+#include "TString.h"
 
 //
 // Job configuration and options parser
@@ -150,7 +152,12 @@ int main(int argn, char** argc) {
   std::string eventcut=p.getEventCut();
   std::cout<<"Event cut "<<eventcut<<std::endl;
   MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top");
-
+  char inclpath[512];
+  sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
+  gSystem->AddIncludePath(inclpath);
+  TString cmd = gSystem->GetMakeSharedLib(); 
+  cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
+  gSystem->SetMakeSharedLib(cmd);
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcol,allinpcol, eventcut,timestamp);

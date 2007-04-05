@@ -222,6 +222,8 @@ public:
 
   // Increment all sub-nodes
   void increment(TTree* tree);
+  // Make proxies for all subnodes
+  void makeProxy(TTree* tree);
 
 private:
 

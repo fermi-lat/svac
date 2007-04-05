@@ -49,22 +49,11 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
   for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
   //create and populate intermediate tree
   m_intree = new TTree("Internal","Used to create output");
-  static unsigned char indexarray[18];
-  for (int i=0;i<18;i++)indexarray[i]=i;
-  m_intree->Branch("indexarray",&indexarray,"indexarray[18]/b");
-  m_intree->SetAlias("foreachtower","indexarray<16");
-  m_intree->SetAlias("foreachengine","indexarray<16");
-  m_intree->SetAlias("foreachtkrlayer","indexarray<18");
-  m_intree->SetAlias("foreachcallayer","indexarray<8");
-  m_intree->SetAlias("foreachcalcolumn","indexarray<12");
-  m_intree->SetAlias("tower","Iteration$");
-  m_intree->SetAlias("engine","Iteration$");
-  m_intree->SetAlias("tkrlayer","Iteration$");
-  m_intree->SetAlias("callayer","Iteration$");
-  m_intree->SetAlias("calcolumn","Iteration$");
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->populateTableTree(m_intree);
   }
+  // make proxies for formulas if needed
+  col->makeProxy(m_intree);
   const char* lstr=m_intree->GetBranch(m_timestampvar.c_str())->GetTitle();
   assert(lstr);
   char ty=lstr[strlen(lstr)-1];

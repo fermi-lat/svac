@@ -1,10 +1,11 @@
 #ifndef RFun_h
 #define RFun_h
 
-#include "TObject.h"
+//#include "TObject.h"
 #include "configData/db/TrgConfigDB.h"
 
-class RFun:public TObject{
+//class RFun:public TObject{
+class RFun{
  public:
   RFun(){};
   static int engine(int i,unsigned key);
@@ -12,9 +13,9 @@ class RFun:public TObject{
   static int iden(int i);
  private:
   static TrgConfigDB* m_tcf;
-  ClassDef(RFun,1) 
+  //ClassDef(RFun,1) 
   
 };
 
-ClassImp(RFun)
+//ClassImp(RFun)
 #endif

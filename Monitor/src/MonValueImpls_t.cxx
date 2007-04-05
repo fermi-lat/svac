@@ -286,6 +286,14 @@ void MonValueCol::increment(TTree* tree) {
   }
 }
 
+void MonValueCol::makeProxy(TTree* tree){
+  for ( std::list<MonValue*>::iterator itr = m_vals.begin();
+	itr != m_vals.end(); itr++ ) {
+    (*itr)->makeProxy(tree);
+  }
+}
+
+
 MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string type=obj["type"];
   std::string name=obj["name"];
@@ -313,4 +321,3 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
   }
   return newcol;
 }
-    

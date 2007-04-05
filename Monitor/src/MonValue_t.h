@@ -16,6 +16,8 @@
 #include "Rtypes.h"
 
 class TTree;
+class TSelector;
+
 
 //
 // 
@@ -48,11 +50,11 @@ public :
   
   virtual void increment(TTree* tree);
 
+  virtual void makeProxy(TTree* tree);
  protected:
   
   virtual void singleincrement(Double_t* val){};
-  
- protected:
+  int compareFiles(const char* file1, const char* file2);
   
 
   // The name of this var
@@ -60,7 +62,10 @@ public :
   const std::string m_cut;    
   const std::string m_formula;    
   std::string m_dimstring;    
+  TSelector* m_sel;
   unsigned m_dim;
+  static std::vector<double> *m_result;
+  static unsigned int m_counter;
 };
 
 #endif
