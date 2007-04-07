@@ -9,6 +9,7 @@
 #include <string.h>
 #include <fstream>
 #include <unistd.h>
+#include "compareFiles.h"
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
 unsigned int MonValue::m_counter=0;
@@ -58,27 +59,14 @@ void MonValue::makeProxy(TTree* tree){
   unsigned int towerpos=formula.find("foreachtower");
   unsigned int tkrlayerpos=formula.find("foreachtkrlayer");
   if(enginepos!=0xffffffff){
-    if (m_dim!=16){
-      std::cerr<<"Dimension of variable "<<m_name<<" should be 16 to match foreachengine"<<std::endl;
-      assert(false);
-    }
     engineloop=true;
     formula.replace(enginepos,enginepos+strlen("foreachengine"),"");
-    
   }
   if(towerpos!=0xffffffff){
-    if (m_dim!=16){
-      std::cerr<<"Dimension of variable "<<m_name<<" should be 16 to match foreachtower"<<std::endl;
-      assert(false);
-    }
     towerloop=true;
     formula.replace(towerpos,towerpos+strlen("foreachtower"),"");
   }
   if(tkrlayerpos!=0xffffffff){
-    if (m_dim!=16){
-      std::cerr<<"Dimension of variable "<<m_name<<" should be 18 to match foreachtkrlayer"<<std::endl;
-      assert(false);
-    }
     tkrlayerloop=true;
     formula.replace(tkrlayerpos,tkrlayerpos+strlen("foreachtkrlayer"),"");
   }
@@ -167,34 +155,6 @@ void MonValue::makeProxy(TTree* tree){
   *ct=&m_counter;
 }
   
-int MonValue::compareFiles(const char* file1, const char* file2){
-  int retval=0;
-  long begin,end;
-  std::ifstream f1 (file1);
-  begin = f1.tellg();
-  f1.seekg (0, std::ios::end);
-  end = f1.tellg();
-  long lf1=end-begin;
-  std::ifstream f2 (file2);
-  begin = f2.tellg();
-  f2.seekg (0, std::ios::end);
-  end = f2.tellg();
-  long lf2=end-begin;
-  if(lf1!=lf2)retval=1;
-  f1.seekg(0,std::ios::beg);
-  f2.seekg(0,std::ios::beg);
-  std::string s1,s2;
-  while (retval==0 &&! f1.eof()&&!f2.eof() ){
-    getline (f1,s1);
-    getline (f2,s2);
-    if (s1!=s2){
-      retval=1;
-    }
-  }
-  f1.close();
-  f2.close();
-  return retval;
-}
 
 void MonValue::increment(TTree* tree){
   // Have to reserve space for return values from tree
@@ -244,7 +204,7 @@ void MonValue::increment(TTree* tree){
       tree->Process(m_sel,"goff",evperit,evperit*it);
       unsigned int fdim=0;
       if (m_counter>0)fdim=(unsigned int)((double)m_result->size()/double(m_counter));
-      if (fdim!=m_dim){
+      if (m_counter>0&&fdim!=m_dim){
 	std::cout<<"The dimension of the formula "<<m_formula<<" ("<<fdim<<")"
 		 <<" does not match the definition of variable "<<m_name<<m_dimstring<<" ("<<m_dim<<")"<<std::endl;
 	assert(0);

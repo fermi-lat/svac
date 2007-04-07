@@ -38,6 +38,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
    m_last(0),
    m_nFilter(0),
    m_nUsed(0),
+   m_globalCut(0),
    m_tree(0),
    m_intree(0),
    m_stripValCol(col),
@@ -54,6 +55,11 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
   }
   // make proxies for formulas if needed
   col->makeProxy(m_intree);
+  // create global cut object
+  m_globalCut=new MonGlobalCut("globalCut",m_eventcut.c_str());
+  m_globalCut->makeProxy(m_intree);
+  m_intree->SetEventList(m_globalCut->eventList());
+  // retrieve timestamp
   const char* lstr=m_intree->GetBranch(m_timestampvar.c_str())->GetTitle();
   assert(lstr);
   char ty=lstr[strlen(lstr)-1];
@@ -206,7 +212,7 @@ void MonEventLooper::switchBins() {
   m_stripValCol->reset();
   m_intree->GetEntry(m_nUsed);
   m_intree->Reset();
-  m_intree->SetEventList(0);
+  //  m_intree->SetEventList(0);
   m_intree->Fill();
   
   m_currentBin++;
@@ -265,10 +271,8 @@ bool MonEventLooper::readEvent(Long64_t ievent){
 }
 
 void MonEventLooper::filterEvent(){
-  m_nUsed=m_intree->GetEntriesFast()-1;
-  m_intree->Draw(">>eventsel",m_eventcut.c_str(),"goff",m_nUsed);
-  TEventList* eventlist=(TEventList*)gDirectory->Get("eventsel");
-  m_intree->SetEventList(eventlist);
-  m_nFilter=eventlist->GetN();
+  m_globalCut->applyCut(m_intree);
+  m_nFilter=m_globalCut->nFilter();
+  m_nUsed=m_globalCut->nUsed();
 }
 

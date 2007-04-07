@@ -54,7 +54,6 @@ public :
  protected:
   
   virtual void singleincrement(Double_t* val){};
-  int compareFiles(const char* file1, const char* file2);
   
 
   // The name of this var

@@ -13,7 +13,7 @@
     <object>
       <name> nAcd  </name>
       <formula><![CDATA[   nACD ]]></formula>
-      <cut><![CDATA[ nACD>2 ]]></cut>
+      <cut><![CDATA[  ]]></cut>
       <type> mean </type>
     </object>
     <object>
@@ -30,8 +30,8 @@
     </object>
     <object>
       <name> engine0 </name>
-      <formula><![CDATA[   RFun::iden( nACD ) +1 ]]></formula>
-      <cut><![CDATA[ nACD> 1  ]]></cut>
+      <formula><![CDATA[   RFun::iden( nACD )  ]]></formula>
+      <cut><![CDATA[ nACD>1  ]]></cut>
       <type> mean </type>
     </object>
     <object>
@@ -43,6 +43,6 @@
 
   </outputList>
 
-  <eventCut><![CDATA[ nACD>4  ]]></eventCut>
+  <eventCut><![CDATA[ nACD>2  ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

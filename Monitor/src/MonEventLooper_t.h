@@ -14,6 +14,7 @@
 // 
 // 
 #include "MonValue_t.h"
+#include "MonGlobalCut.h"
 #include "MonInputCollection.h"
 #include "Timestamp.h"
  
@@ -98,6 +99,8 @@ private:
   
   /// number of events we used
   Long64_t m_nUsed;
+  /// global cut object
+  MonGlobalCut* m_globalCut;
   
   /// The Output Tree. This is passed in by the sub-class using attachTree()
   TTree* m_tree;
