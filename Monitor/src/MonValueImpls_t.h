@@ -90,9 +90,9 @@ public:
 
   // attach both mean and err_on_mean to TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void singleincrement(Double_t* val) ;
+  virtual void singleincrement(Double_t* val) ;
 
-private:
+protected:
 
   // cached values, the running sums
   ULong64_t *m_nVals;
@@ -106,6 +106,17 @@ private:
   
 };
 
+class MonTruncatedMean:public MonMean{
+  
+ public:
+  MonTruncatedMean(const char* name, const char* formula, const char* cut, const char* type) ;
+  virtual ~MonTruncatedMean(){}
+  void singleincrement(Double_t* val) ;
+ private:
+  Float_t m_lowerbound;
+  Float_t m_upperbound;
+  
+};
 //
 // 
 // This implementation takes the difference between the 

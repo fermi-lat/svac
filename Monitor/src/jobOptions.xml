@@ -4,7 +4,7 @@
 <ifile cvs_Header="$Header$" cvs_Revision="$Revision$" >
 
   <section name="parameters"> input parameters for ACD pedestal and gain calibration
-    <item name="digiFileList" value="/nfs/farm/g/glast/u41/Integration/rootData/077014191/v7r0913p10/digi/digitization-licos-v3r9p2_077014191_digi_DIGI.root"> blank-delimited list of input digi root files </item>
+    <item name="digiFileList" value="/nfs/farm/g/glast/u29/Integration/rootData/077003526/v6r070305p9/grRoot/digitization-licos-v3r5p8_077003526_digi_DIGI.root"> blank-delimited list of input digi root files </item>
     <item name="outputPrefix" value="test"> output file prefix </item>
     <item name="configFile" value="../src/monconfig.xml"> output file prefix </item>
   </section>

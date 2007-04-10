@@ -5,6 +5,7 @@
 #include "TTree.h"
 
 #include <iostream>
+#include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
 const Float_t MonMinMax::s_huge(1e35);
@@ -104,7 +105,11 @@ int MonMean::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameErr = fullNameVal + "_err";
   std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
   TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str());
-  return bErr != 0 ? 2 : -1;
+  if ( bErr == 0 ) return -1;
+  std::string fullNameN = fullNameVal + "_n";
+  std::string leafTypeN = fullNameN + m_dimstring + "/l";
+  TBranch* bN = tree.Branch(fullNameN.c_str(),m_nVals,leafTypeN.c_str());
+  return bN != 0 ? 3 : -1;
 }
   // add a value input the mean, so add to running sums
 void MonMean::singleincrement(Double_t* val) {
@@ -114,6 +119,43 @@ void MonMean::singleincrement(Double_t* val) {
     m_sum2[i] += (val[i]*val[i]);    
   }
 }
+
+MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const char* cut, const char* type) 
+    :MonMean(name,formula,cut){
+  char* dimpos=strchr(type,'(');
+  if(dimpos==0){
+    std::cerr<<"MonTruncatedMean variable "<<name<<" needs to have bounds declared. Aborting."<<std::endl;
+    assert(dimpos);
+  }
+  char res[128];
+  char* token=strchr(type,',');
+  if(token==0){
+    std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(token);
+  }
+  strncpy(res,dimpos+1,token-dimpos);
+  m_lowerbound=atof(res);
+  dimpos=strchr(type,')');
+  if(dimpos==0){
+    std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(dimpos);
+  }
+  strncpy(res,token+1,dimpos-token);
+  m_upperbound=atof(res);
+}
+  
+  
+  
+void MonTruncatedMean::singleincrement(Double_t* val) {
+  for (unsigned i =0;i<m_dim;i++){
+    if (val[i]>=m_lowerbound && val[i]<=m_upperbound){
+      m_nVals[i]++;
+      m_sum[i] += val[i];
+      m_sum2[i] += (val[i]*val[i]);    
+    }
+  }
+}
+
 
 
 MonCounterDiff::MonCounterDiff(const char* name, const char* formula, const char* cut) 
@@ -301,6 +343,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string cut=obj["cut"];
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"truncatedmean")){
+    return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="counter"){
     return new MonCounter(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="minmax"){

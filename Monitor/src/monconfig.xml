@@ -14,7 +14,7 @@
       <name> nAcd  </name>
       <formula><![CDATA[   nACD ]]></formula>
       <cut><![CDATA[  ]]></cut>
-      <type> mean </type>
+      <type> truncatedmean (2.4,4.4444) </type>
     </object>
     <object>
       <name> Gem_elapsed  </name>
@@ -43,6 +43,6 @@
 
   </outputList>
 
-  <eventCut><![CDATA[ nACD>2  ]]></eventCut>
+  <eventCut><![CDATA[   ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>
