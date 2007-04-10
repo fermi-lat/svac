@@ -21,7 +21,7 @@ void MonEventLooper::printTime(ostream& os, ULong64_t timestamp) {
   static const int METtoGMT = 978307200 + 25200;
   ULong64_t time = timestamp + METtoGMT;
   UInt_t itime = (UInt_t)(time);
-  os << ctime((time_t*) (&itime)); 
+  os << ctime((time_t*) (&itime))<<"(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)"; 
 }
 
 //
