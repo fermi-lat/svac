@@ -15,6 +15,12 @@ int RFun::enginecounter(int i,unsigned key,int engine){
 int RFun::iden(int i ){
   return i;
 }
+
+std::vector<double> RFun::testfun(){
+  std::vector<double> retvec;
+  for (int i=0;i<16;i++)retvec.push_back((double)i);
+  return retvec;
+}
   
 TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
 

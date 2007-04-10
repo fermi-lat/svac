@@ -122,7 +122,7 @@ void MonMean::singleincrement(Double_t* val) {
 
 MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const char* cut, const char* type) 
     :MonMean(name,formula,cut){
-  char* dimpos=strchr(type,'(');
+  char* dimpos=strchr(type,'[');
   if(dimpos==0){
     std::cerr<<"MonTruncatedMean variable "<<name<<" needs to have bounds declared. Aborting."<<std::endl;
     assert(dimpos);
@@ -135,7 +135,7 @@ MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const 
   }
   strncpy(res,dimpos+1,token-dimpos);
   m_lowerbound=atof(res);
-  dimpos=strchr(type,')');
+  dimpos=strchr(type,']');
   if(dimpos==0){
     std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
     assert(dimpos);

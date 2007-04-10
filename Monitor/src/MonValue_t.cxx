@@ -50,26 +50,35 @@ MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut
 }
   
 void MonValue::makeProxy(TTree* tree){
-  if (strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
   bool engineloop=false;
   bool towerloop=false;
   bool tkrlayerloop=false;
+  bool dooutsideformula=false;
   std::string formula(m_formula);
+  std::string outsideformula;
+  unsigned int outsidepos=formula.find("runonce");
+  if(outsidepos!=0xffffffff){
+    dooutsideformula=true;
+    unsigned int endformula=formula.find("#");
+    outsideformula=formula.substr(outsidepos+strlen("runonce"),endformula-outsidepos-strlen("runonce"));
+    formula.replace(outsidepos,endformula+1,"");
+  }
   unsigned int enginepos=formula.find("foreachengine");
-  unsigned int towerpos=formula.find("foreachtower");
-  unsigned int tkrlayerpos=formula.find("foreachtkrlayer");
   if(enginepos!=0xffffffff){
     engineloop=true;
     formula.replace(enginepos,enginepos+strlen("foreachengine"),"");
   }
+  unsigned int towerpos=formula.find("foreachtower");
   if(towerpos!=0xffffffff){
     towerloop=true;
     formula.replace(towerpos,towerpos+strlen("foreachtower"),"");
   }
+  unsigned int tkrlayerpos=formula.find("foreachtkrlayer");
   if(tkrlayerpos!=0xffffffff){
     tkrlayerloop=true;
     formula.replace(tkrlayerpos,tkrlayerpos+strlen("foreachtkrlayer"),"");
   }
+  if (!engineloop && !towerloop && !tkrlayerloop && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
   formfile.open((m_name+"_val.C_tmp").c_str());
@@ -77,9 +86,10 @@ void MonValue::makeProxy(TTree* tree){
 	  <<"unsigned int *counter;"<<std::endl
 	  <<"double "<<m_name+"_val"<<"() {"<<std::endl;
   formfile<<"double val;"<<std::endl;
+  if(dooutsideformula)formfile<<"std::vector<double> outsideformula="<<outsideformula<<";"<<std::endl;
   if(engineloop)formfile<<"for(int engine=0;engine<16;engine++){"<<std::endl;
   if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
-  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<18;tkrlayer++){"<<std::endl;
+  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<36;tkrlayer++){"<<std::endl;
   formfile <<"val = "<<formula<<";"<<std::endl
 	   <<"resultvector->push_back(val);"<<std::endl;
   if(engineloop||towerloop||tkrlayerloop)formfile<<"}"<<std::endl;

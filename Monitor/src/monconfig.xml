@@ -14,7 +14,7 @@
       <name> nAcd  </name>
       <formula><![CDATA[   nACD ]]></formula>
       <cut><![CDATA[  ]]></cut>
-      <type> truncatedmean (2.4,4.4444) </type>
+      <type> truncatedmean [2.4,4.4444] </type>
     </object>
     <object>
       <name> Gem_elapsed  </name>
@@ -40,6 +40,13 @@
       <cut><![CDATA[  ]]></cut>
       <type> counter </type>
     </object>
+    <object>
+      <name> testvec[16] </name>
+      <formula><![CDATA[runonce RFun::testfun() # foreachtower outsideformula[tower] ]]></formula>
+      <cut><![CDATA[  ]]></cut>
+      <type> counter </type>
+    </object>
+    
 
   </outputList>
 
