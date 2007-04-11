@@ -25,6 +25,7 @@ class MonInput_TkrHitsTowerPlane: public MonInputObject{
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;
   std::string getInputSource();
+  std::string getDescription();
  private:
   VARTYPE m_val[16][36]; // number of hits per tower and plane
 };

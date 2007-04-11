@@ -16,6 +16,7 @@
 //#define ACCESSOR Capullo
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "GEM TKR trigger vector"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -56,6 +57,9 @@ void MonInput_TkrTriggerTower::setValue(TObject* event) {
 std::string MonInput_TkrTriggerTower::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_TkrTriggerTower::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -64,4 +68,5 @@ std::string MonInput_TkrTriggerTower::getInputSource(){
 #undef INBRANCH 
 //#undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

@@ -18,6 +18,7 @@
 // #define ACCESSOR Capullo2
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "Number of hits in a given tower and plane"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -85,6 +86,9 @@ void MonInput_TkrHitsTowerPlane::setValue(TObject* event) {
 std::string MonInput_TkrHitsTowerPlane::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_TkrHitsTowerPlane::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -93,4 +97,5 @@ std::string MonInput_TkrHitsTowerPlane::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 
