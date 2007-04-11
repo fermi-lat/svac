@@ -11,12 +11,12 @@ TestReport::TestReport(const char *filename){
   of<<"<HTML>
 <HEAD>
 <META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
-<TITLE>TRG Test Report</TITLE>
+<TITLE>Monitoring Report</TITLE>
 <STYLE media=\"print\" type=\"text/css\">#toc {display:none}p {font: 12pt serif; page-break-inside:avoid}h1,h2 {page-break-before:always}</STYLE>
 <STYLE media=\"screen\" type=\"text/css\">h1,h2 {border-top-style:solid}</STYLE>
 </HEAD>
 <BODY>
-<Title>TRG Test Report</Title>
+<Title>Monitoring Report</Title>
 <cdatanode>
     <STYLE TYPE=\"text/css\">
     H1 { font-size: x-large; color: blue }
