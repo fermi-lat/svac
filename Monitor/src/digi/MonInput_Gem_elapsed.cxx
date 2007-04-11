@@ -16,6 +16,7 @@
 #define ACCESSOR getMetaEvent().scalers().elapsed()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "Gem trigger time"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_Gem_elapsed::setValue(TObject* event) {
 std::string MonInput_Gem_elapsed::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_Gem_elapsed::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_Gem_elapsed::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

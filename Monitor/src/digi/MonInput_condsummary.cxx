@@ -16,6 +16,7 @@
 #define ACCESSOR getGem().getConditionSummary()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "conditions summary word"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_condsummary::setValue(TObject* event) {
 std::string MonInput_condsummary::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_condsummary::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_condsummary::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

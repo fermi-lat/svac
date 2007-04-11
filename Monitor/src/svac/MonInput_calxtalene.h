@@ -24,6 +24,7 @@ class MonInput_calxtalene: public MonInputObject{
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;
   std::string getInputSource();
+  std::string getDescription();
  private:
   TTree* m_tree;
   bool m_firstevent;

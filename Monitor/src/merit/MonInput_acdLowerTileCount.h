@@ -25,6 +25,7 @@ class MonInput_acdLowerTileCount: public MonInputObject{
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;
   std::string getInputSource();
+  std::string getDescription();
  private:
   VARTYPE m_val;
 };

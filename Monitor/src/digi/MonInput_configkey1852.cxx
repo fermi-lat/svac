@@ -16,6 +16,7 @@
 #define ACCESSOR 
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "fake config key, always returns 1852"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_configkey1852::setValue(TObject* event) {
 std::string MonInput_configkey1852::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_configkey1852::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_configkey1852::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

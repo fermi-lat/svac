@@ -10,6 +10,9 @@ while (-e "MonInput_$name.h"){
     $name=<>;
     chomp($name);
 }
+print "One-line description of object: ";
+$description=<>;
+chomp($description);
 print "What type of variable is this?\n";
 print "0 for Int_t\n";
 print "1 for Bool_t\n";
@@ -166,6 +169,7 @@ class MonInput_$name: public MonInputObject{
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;
   std::string getInputSource();
+  std::string getDescription();
  private:
   VARTYPE m_val;
 };
@@ -194,6 +198,7 @@ print CFILE "//
 #define ACCESSOR $access
 #define MONSOURCE $monsource
 #define INPUTSOURCE \"$monsource\"
+#define DESCRIPTION \"$description\"
 #include \"$monsourcefile\"
 
 // End user defined part 
@@ -222,6 +227,9 @@ void MonInput_${name}::setValue(TObject* event) {
 std::string MonInput_${name}::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_${name}::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -230,6 +238,7 @@ std::string MonInput_${name}::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 \n";
 close(CFILE);
 

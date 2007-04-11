@@ -16,6 +16,7 @@
 #define ACCESSOR EvtEventId
 #define MONSOURCE MeritEvent
 #define INPUTSOURCE "MeritEvent"
+#define DESCRIPTION "event id"
 #include "../MeritEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_eventid::setValue(TObject* event) {
 std::string MonInput_eventid::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_eventid::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_eventid::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

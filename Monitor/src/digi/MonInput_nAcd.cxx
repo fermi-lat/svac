@@ -17,6 +17,7 @@
 #define ACCESSOR getAcdDigiCol()->GetEntries()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "Number of ACD tiles hit"
 #include "digiRootData/DigiEvent.h"
 
 //end user defined part
@@ -45,6 +46,9 @@ void MonInput_nAcd::setValue(TObject* event) {
 std::string MonInput_nAcd::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_nAcd::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -53,3 +57,4 @@ std::string MonInput_nAcd::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION

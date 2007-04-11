@@ -16,6 +16,7 @@
 #define ACCESSOR CTBAcdLowerTileCount
 #define MONSOURCE MeritEvent
 #define INPUTSOURCE "MeritEvent"
+#define DESCRIPTION "Count of lower ACD tiles"
 #include "../MeritEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_acdLowerTileCount::setValue(TObject* event) {
 std::string MonInput_acdLowerTileCount::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_acdLowerTileCount::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_acdLowerTileCount::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

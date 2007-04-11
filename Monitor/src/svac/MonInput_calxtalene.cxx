@@ -16,6 +16,7 @@
 #define ACCESSOR CalXtalEne
 #define MONSOURCE SvacEvent
 #define INPUTSOURCE "SvacEvent"
+#define DESCRIPTION "crystal energy"
 #include "../SvacEvent.h"
 
 // End user defined part 
@@ -48,6 +49,9 @@ void MonInput_calxtalene::setValue(TObject* event) {
 std::string MonInput_calxtalene::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_calxtalene::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -56,4 +60,5 @@ std::string MonInput_calxtalene::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

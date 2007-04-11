@@ -24,6 +24,7 @@ class MonInput_nAcd: public MonInputObject{
   void enableInputBranch(TTree&);
   void setValue(TObject* event) ;
   virtual std::string getInputSource();
+  std::string getDescription();
  private:
   VARTYPE m_val;
 };

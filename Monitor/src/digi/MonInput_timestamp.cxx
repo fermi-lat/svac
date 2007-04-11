@@ -16,6 +16,7 @@
 #define ACCESSOR getMetaEvent().time().current().timeSecs()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "Time stamp (seconds since start of mission)"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -44,6 +45,9 @@ void MonInput_timestamp::setValue(TObject* event) {
 std::string MonInput_timestamp::getInputSource(){
   return INPUTSOURCE;
 }
+std::string MonInput_timestamp::getDescription(){
+  return DESCRIPTION;
+}
 
 #undef INPUTSOURCE
 #undef NAME
@@ -52,4 +56,5 @@ std::string MonInput_timestamp::getInputSource(){
 #undef INBRANCH 
 #undef ACCESSOR
 #undef MONSOURCE
+#undef DESCRIPTION
 

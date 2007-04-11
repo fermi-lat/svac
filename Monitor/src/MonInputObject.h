@@ -18,6 +18,7 @@ class MonInputObject{
   virtual void enableInputBranch (TTree& tree)=0;
   virtual int setOutputBranch (TTree* tree)=0;
   virtual std::string getInputSource()=0;
+  virtual std::string getDescription()=0;
   virtual ~MonInputObject() {}
  protected:
   MonInputObject(){}
