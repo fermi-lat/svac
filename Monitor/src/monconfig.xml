@@ -15,6 +15,7 @@
       <formula><![CDATA[   nACD ]]></formula>
       <cut><![CDATA[  ]]></cut>
       <type> truncatedmean [2.4,4.4444] </type>
+      <description> bla bla</description>
     </object>
     <object>
       <name> Gem_elapsed  </name>
@@ -36,20 +37,21 @@
     </object>
     <object>
       <name> engine[16] </name>
-      <formula><![CDATA[foreachengine (RFun::engine(condsummary,configkey1852)==engine) ]]></formula>
+      <formula><![CDATA[foreachengine: (RFun::engine(condsummary,configkey1852)==engine) ]]></formula>
       <cut><![CDATA[  ]]></cut>
       <type> counter </type>
     </object>
     <object>
       <name> testvec[16] </name>
-      <formula><![CDATA[runonce RFun::testfun() # foreachtower outsideformula[tower] ]]></formula>
+      <formula><![CDATA[runonce: RFun::testfun() # foreachtower: runonceformula[tower] ]]></formula>
       <cut><![CDATA[  ]]></cut>
       <type> counter </type>
+      <description>This is a test</description>
     </object>
     
 
   </outputList>
 
-  <eventCut><![CDATA[   ]]></eventCut>
+  <eventCut><![CDATA[ 1  ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

@@ -27,7 +27,7 @@ public :
 
   inline const std::string& jobOptionXmlFile() const { return m_jobOptionXmlFile; }
   inline const std::string& configFile() const { return m_configFile; }
-  inline const std::string& gemFile() const { return m_gemFile; }
+  inline const std::string& htmlFile() const { return m_htmlFile; }
 
   inline const std::string& inputDigiFileStr() const { return m_inputDigiFileStr; }
   inline const std::string& inputReconFileStr() const { return m_inputReconFileStr; }
@@ -69,7 +69,7 @@ private:
 
   std::string m_jobOptionXmlFile;
   std::string m_configFile;
-  std::string m_gemFile;
+  std::string m_htmlFile;
 
   std::string m_inputDigiFileStr;
   std::string m_inputReconFileStr;

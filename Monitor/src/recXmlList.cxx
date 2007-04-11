@@ -97,7 +97,8 @@ std::list<std::map<std::string,std::string> > recXmlList::readOutputList(const c
       if (currentElement){
 	std::string nm=removeWhitespace(Dom::getTagName(currentElement));
 	//	std::cout<<"node "<<nm<<std::endl;
-	std::string ous=removeWhitespace(Dom::getTextContent(currentElement));
+	std::string ous=Dom::getTextContent(currentElement);
+	if (nm!="description")ous=removeWhitespace(ous);
 		//std::cout<<"name "<<ous<<std::endl;
 	mp[nm]=ous;
       }

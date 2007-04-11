@@ -5,6 +5,7 @@
 #include <list>
 #include <fstream>
 #include <stdlib.h>
+#include <time.h>
 //
 // ROOT-io
 #include "TFile.h"
@@ -28,6 +29,8 @@
 #include "MonInputCollection_Cal.h"
 #include "MonValueImpls_t.h"
 #include "MonConfigParser.h"
+
+#include "TestReport.h"
 
 
 
@@ -77,35 +80,51 @@ int main(int argn, char** argc) {
   if (jc.meritChain())meritinpcol=new MonInputCollection_Merit(jc.meritChain(),"MeritEvent");
   if (jc.svacChain())svacinpcol=new MonInputCollection_Svac(jc.svacChain(),"SvacEvent");
   if (jc.calChain())calinpcol=new MonInputCollection_Cal(jc.calChain(),"CalEvent");
+  std::vector<std::map<std::string,std::string> > digidesc;
+  std::vector<std::map<std::string,std::string> > recondesc;
+  std::vector<std::map<std::string,std::string> > mcdesc;
+  std::vector<std::map<std::string,std::string> > svacdesc;
+  std::vector<std::map<std::string,std::string> > meritdesc;
+  std::vector<std::map<std::string,std::string> > caldesc;
   MonObjFactory fact;
   bool tsfound=false;
   for (std::list<string>::const_iterator itr=inputlist.begin();
        itr != inputlist.end();itr++){
     MonInputObject* obj=fact.getMonInputObject(*itr);
     assert(obj!=0);
+    std::map<std::string,std::string> mmap;
+    mmap["source"]=obj->getInputSource();
+    mmap["name"]=(*itr);
+    mmap["description"]=obj->getDescription();
     bool added=false;
     if(digiinpcol && obj->getInputSource()=="DigiEvent"){
       digiinpcol->addInputObject(obj);
+      digidesc.push_back(mmap);
       added=true;
     }
     if(reconinpcol && obj->getInputSource()=="ReconEvent"){
       reconinpcol->addInputObject(obj);
+      digidesc.push_back(mmap);
       added=true;
     }
     if(mcinpcol && obj->getInputSource()=="McEvent"){
       mcinpcol->addInputObject(obj);
+      mcdesc.push_back(mmap);
       added=true;
     }
     if(meritinpcol && obj->getInputSource()=="MeritEvent"){
       meritinpcol->addInputObject(obj);
+      meritdesc.push_back(mmap);
       added=true;
     }
     if(svacinpcol && obj->getInputSource()=="SvacEvent"){
       svacinpcol->addInputObject(obj);
+      svacdesc.push_back(mmap);
       added=true;
     }
     if(calinpcol && obj->getInputSource()=="CalEvent"){
       calinpcol->addInputObject(obj);
+      caldesc.push_back(mmap);
       added=true;
     }
     if ((*itr)==timestamp){
@@ -169,6 +188,97 @@ int main(int argn, char** argc) {
   fout->cd();
   d.tree()->Write();
   fout->Close();
+  // Write an html report
+  std::string html=jc.htmlFile();
+  if(html=="")html="Monitoring.html";
+  TestReport r(html.c_str());
+  r.newheadline("General information");
+  char name[128];
+  time_t rawtime;
+  struct tm * timeinfo;
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  sprintf(name,"%s",asctime(timeinfo));
+  r.additem("Date", name);
+  r.additem("Monitoring configuration file",jc.configFile().c_str());
+  r.additem("Output root file",outputFile.c_str());
+  sprintf(name,"%d",(int)numevents-jc.optval_s());
+  r.additem("Number of events",name);
+  sprintf(name,"%d",jc.optval_b());
+  r.additem("Time interval",name);
+  if(eventcut!="")r.additem("Global event cut",eventcut.c_str());
+  r.newheadline("Event input files");
+  if (digiinpcol)r.additem("Digi file(s)",jc.inputDigiFileStr().c_str());
+  if (reconinpcol)r.additem("Recon file(s)",jc.inputDigiFileStr().c_str());
+  if (mcinpcol)r.additem("Mc file(s)",jc.inputDigiFileStr().c_str());
+  if (svacinpcol)r.additem("Svac file(s)",jc.inputDigiFileStr().c_str());
+  if (meritinpcol)r.additem("Merit file(s)",jc.inputDigiFileStr().c_str());
+  if (calinpcol)r.additem("Cal file(s)",jc.inputDigiFileStr().c_str());
+  r.newheadline("Input variables");
+  char* inptable[]={"Name","Source","Description"};
+  char* line[5];
+  for (int j=0;j<5;j++)line[j]=new char[512];
+  r.starttable(inptable,3);
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=digidesc.begin();
+       itr != digidesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=recondesc.begin();
+       itr != recondesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=mcdesc.begin();
+       itr != mcdesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=meritdesc.begin();
+       itr != meritdesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=svacdesc.begin();
+       itr != svacdesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=caldesc.begin();
+       itr != caldesc.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());
+    strcpy(line[1],((*itr)["source"]).c_str());
+    strcpy(line[2],((*itr)["description"]).c_str());
+    r.addtableline(line,3);
+  }
+  r.endtable();
+  r.newheadline("Output variables");
+  char* outtable[]={"Name","Type","Formula","Cut","Description"};
+  r.starttable(outtable,5);
+  for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
+      itr !=outputlist.end();itr++){
+    strcpy(line[0],((*itr)["name"]).c_str());  
+    strcpy(line[1],((*itr)["type"]).c_str());  
+    strcpy(line[2],((*itr)["formula"]).c_str());  
+    strcpy(line[3],((*itr)["cut"]).c_str());  
+    strcpy(line[4],((*itr)["description"]).c_str());  
+    r.addtableline(line,5);
+}
+  r.endtable();
+
+  r.writereport();
+  
+  
 
   if (digiinpcol)delete digiinpcol;
   if (reconinpcol)delete mcinpcol;

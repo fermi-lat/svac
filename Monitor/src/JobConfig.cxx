@@ -62,8 +62,8 @@ void JobConfig::usage() {
        << endl
        << "\t   -c <monConifg>    : name of the xml file with the monitoring configuration"<<endl
        << endl
-    //       << "\t   -g <gemConfig>    : name of the xml file with the GEM configuration (i.e. bcast.xml)"<<endl
-         //  << endl
+       << "\t   -g <htmlFile>    : name of the html output file with the listing of the configuration"<<endl
+       << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
@@ -132,8 +132,8 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 'c':   // monitoring configuration file
       m_configFile = string(optarg);
       break;
-    case 'g':   // GEM configuration file
-      m_gemFile = string(optarg);
+    case 'g':   // html configuration file
+      m_htmlFile = string(optarg);
       break;
     case 'b':   // size of bins
       m_optval_b = strtoul( optarg, &endPtr, 0 );
@@ -240,13 +240,13 @@ Int_t JobConfig::parse(int argn, char** argc) {
     cout << "Input cal files:" << endl;
     m_calChain = makeChain("CalTuple",m_inputCalFileStr);
   }    
-  // GEM configuration file
-  if (myFile && myFile->contains ("parameters","gemFile")){
-    if (m_gemFile !=""){
-      cerr<<"GEM configuration file defined both in command line and xml file. Exiting..."<<endl;
+  // html configuration file
+  if (myFile && myFile->contains ("parameters","htmlFile")){
+    if (m_htmlFile !=""){
+      cerr<<"html configuration file defined both in command line and xml file. Exiting..."<<endl;
       return 1;
     }
-    m_gemFile=myFile->getString("parameters","gemFile");
+    m_htmlFile=myFile->getString("parameters","htmlFile");
   }
   // monitoring configuration file
   if (myFile && myFile->contains ("parameters","configFile")){
