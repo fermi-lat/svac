@@ -37,70 +37,64 @@ unsigned RFun::getconsecutiveplaneshit(const UShort_t invector[36])
   return  maxhits;
 }
 
-  
-bool RFun::isempty(bool invector[16], unsigned towerid)
+
+
+std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
+// std::vector<double> RFun::getemptytowers(const UShort_t invector[16])
 {
-  if(towerid>15)
+
+  std::vector<double> emptytowers;
+
+  // initialization of boundary towers
+  if(!m_boundarytwrdefined)
+    RFun::initboundarytowers();
+
+
+  // tmp printing
+  /*
+  std::cout << std::endl << "Evt number " << m_evtcounter << std::endl;
+  if(m_evtcounter<m_doprintUpToN)
     {
-      std::cout << "RF::isempty; ERROR"<< std::endl
-		<< "towerid (="<< towerid<<") is out of allowed range [0-15]"<< std::endl;
-      assert(0);
+     
+      std::cout << std::endl << "Printing towers which trigger" << std::endl;
+      for(unsigned itwr = 0;itwr<16;itwr++)
+	{
+	  std::cout << "Tower id = " << itwr << "; " 
+		    << invector[itwr] << std::endl;
+	}
+      m_evtcounter++;
+
     }
-  return invector[towerid];
+  */
+  // endtmp printing
 
-}
-void RFun::getemptytowers(bool invector[16], bool outvector[16])
-{
 
-  // initialization
-  
-  int boundarytwr[16][8];
+  // initialize empty tower vector to 1 (all are empty towers)
   for(unsigned itwr = 0;itwr<16;itwr++)
-    {
-      // initialize empty tower vector to 1 (all are empty towers)
-      outvector[itwr] = 1;
-      // initialize boundarytwr vector to -1 (non-existent tower)
-      for(unsigned j = 0;j<8;j++)
-	boundarytwr[itwr][j] = -1;
-    }
-  
-  // define boundary towers for each tower
-
-  // twr0
-  boundarytwr[0][0] = 1;
-  boundarytwr[0][1] = 4;
-  boundarytwr[0][2] = 5;
-   // twr1
-  boundarytwr[1][0] = 0;
-  boundarytwr[1][1] = 4;
-  boundarytwr[1][2] = 5;
-  boundarytwr[1][3] = 6;
-  boundarytwr[1][4] = 2;
-   // twr2
-  boundarytwr[2][0] = 1;
-  boundarytwr[2][1] = 5;
-  boundarytwr[2][2] = 6;
-  boundarytwr[2][3] = 7;
-  boundarytwr[2][4] = 3;
-  
-  // to be done for all towers !!!!
+    emptytowers.push_back(1);
+    
 
 
-
-  
+    
   // scan over all towers, setting the "empty tower condition" whenver 
   // the tower has a trigger and/or is boundary tower to a tower which had a trigger
   
   for(unsigned itwr = 0;itwr<16;itwr++)
     {
       if(invector[itwr])
-	outvector[itwr] = 0;  // the tower had a trigger
-      for(unsigned j = 0; j<8;j++)
-	{
-	  if(boundarytwr[itwr][j]>=0)
-	    outvector[boundarytwr[itwr][j]] = 0;
+	{ // this tower had a trigger
+	  emptytowers[itwr] = 0;  
+	  for(unsigned j = 0; j<8;j++)
+	    {
+	      if(m_boundarytwr[itwr][j]>=0)
+		emptytowers[m_boundarytwr[itwr][j]] = 0;
+	    }
 	}
     }
+
+
+ 
+  return emptytowers;
 }
 
 
@@ -110,6 +104,214 @@ std::vector<double> RFun::testfun(){
   return retvec;
 }
 
+int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
+{
+  std::cout << std::endl << "Print output of runonceformula:" << std::endl;
+ UShort_t counter = 0;
+ for(std::vector<double>::const_iterator itr=formulavector.begin();
+     itr != formulavector.end(); itr++)
+   {
+     std::cout << "Index " << counter << "; " << *itr << std::endl;
+     counter++;
+   }
+ return 1;
+}
+
+// Initialization of static data member
 
 TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
+
+int RFun::m_boundarytwr[16][8];
+bool RFun::m_boundarytwrdefined = false;
+UInt_t RFun::m_doprintUpToN = 5;
+UInt_t RFun::m_evtcounter = 0;
+
+
+void RFun::initboundarytowers()
+{
+  // tmp printing
+  /*
+  std::cout << std::endl 
+	    << "Boundary Towers are defined for all towers" << std::endl;
+  */
+  // end tmp
+
+
+  // initialize m_boundarytwr vector to -1 (non-existent tower)
+  for(unsigned itwr = 0;itwr<16;itwr++)
+    {
+      for(unsigned j = 0;j<8;j++)
+	m_boundarytwr[itwr][j] = -1;
+    }
+
+// Definition of the boundary towers
+
+ // define boundary towers for each tower
+
+  // twr0
+  m_boundarytwr[0][0] = 1;
+  m_boundarytwr[0][1] = 4;
+  m_boundarytwr[0][2] = 5;
+   // twr1
+  m_boundarytwr[1][0] = 0;
+  m_boundarytwr[1][1] = 4;
+  m_boundarytwr[1][2] = 5;
+  m_boundarytwr[1][3] = 6;
+  m_boundarytwr[1][4] = 2;
+   // twr2
+  m_boundarytwr[2][0] = 1;
+  m_boundarytwr[2][1] = 5;
+  m_boundarytwr[2][2] = 6;
+  m_boundarytwr[2][3] = 7;
+  m_boundarytwr[2][4] = 3;
+  // twr3
+  m_boundarytwr[3][0] = 2;
+  m_boundarytwr[3][1] = 6;
+  m_boundarytwr[3][2] = 7;
+
+  // twr4
+  m_boundarytwr[4][0] = 8;
+  m_boundarytwr[4][1] = 9;
+  m_boundarytwr[4][2] = 5;
+  m_boundarytwr[4][3] = 1;
+  m_boundarytwr[4][4] = 0;
+  // twr5
+  m_boundarytwr[5][0] = 8;
+  m_boundarytwr[5][1] = 9;
+  m_boundarytwr[5][2] = 10;
+  m_boundarytwr[5][3] = 6;
+  m_boundarytwr[5][4] = 2;
+  m_boundarytwr[5][5] = 1;
+  m_boundarytwr[5][6] = 0;
+  m_boundarytwr[5][7] = 4;
+
+  // twr6
+   m_boundarytwr[6][0] = 5;
+  m_boundarytwr[6][1] = 9;
+  m_boundarytwr[6][2] = 10;
+  m_boundarytwr[6][3] = 11;
+  m_boundarytwr[6][4] = 7;
+  m_boundarytwr[6][5] = 3;
+  m_boundarytwr[6][6] = 2;
+  m_boundarytwr[6][7] = 1;
+
+  // twr7
+  m_boundarytwr[7][0] = 6;
+  m_boundarytwr[7][1] = 10;
+  m_boundarytwr[7][2] = 11;
+  m_boundarytwr[7][3] = 3;
+  m_boundarytwr[7][4] = 2;
+  // twr8
+  m_boundarytwr[8][0] = 12;
+  m_boundarytwr[8][1] = 13;
+  m_boundarytwr[8][2] = 9;
+  m_boundarytwr[8][3] = 5;
+  m_boundarytwr[8][4] = 4;
+  // twr9
+  m_boundarytwr[9][0] = 8;
+  m_boundarytwr[9][1] = 12;
+  m_boundarytwr[9][2] = 13;
+  m_boundarytwr[9][3] = 14;
+  m_boundarytwr[9][4] = 10;
+  m_boundarytwr[9][5] = 6;
+  m_boundarytwr[9][6] = 5;
+  m_boundarytwr[9][7] = 4;
+  // twr10
+  m_boundarytwr[10][0] = 9;
+  m_boundarytwr[10][1] = 13;
+  m_boundarytwr[10][2] = 14;
+  m_boundarytwr[10][3] = 15;
+  m_boundarytwr[10][4] = 11;
+  m_boundarytwr[10][5] = 7;
+  m_boundarytwr[10][6] = 6;
+  m_boundarytwr[10][7] = 5;
+  // twr11
+  m_boundarytwr[11][0] = 10;
+  m_boundarytwr[11][1] = 14;
+  m_boundarytwr[11][2] = 15;
+  m_boundarytwr[11][3] = 7;
+  m_boundarytwr[11][4] = 6;
+  // twr12
+  m_boundarytwr[12][0] = 13;
+  m_boundarytwr[12][1] = 9;
+  m_boundarytwr[12][2] = 8;
+  // twr13
+  m_boundarytwr[13][0] = 12;
+  m_boundarytwr[13][1] = 14;
+  m_boundarytwr[13][2] = 10;
+  m_boundarytwr[13][3] = 9;
+  m_boundarytwr[13][4] = 8;
+  // twr14
+  m_boundarytwr[14][0] = 13;
+  m_boundarytwr[14][1] = 15;
+  m_boundarytwr[14][2] = 11;
+  m_boundarytwr[14][3] = 10;
+  m_boundarytwr[14][4] = 9;
+  // twr15
+  m_boundarytwr[15][0] = 14;
+  m_boundarytwr[15][1] = 11;
+  m_boundarytwr[15][2] = 10;
+
+  m_boundarytwrdefined = true;
+
+}
+
+
+unsigned RFun::gethitsinemptytower(double isemptytower,
+				   const UShort_t TkrHitsTowerPlane[36])
+{
+
+  if(!isemptytower)
+    return 0;
+ 
+  // compute total number of hits in tower using 
+  // vector TkrHitsTowerPlane for this tower
+  
+  unsigned hitscounter(0);
+  for(unsigned iplane =0;iplane<36;iplane++)
+      hitscounter += TkrHitsTowerPlane[iplane];
+  
+  return hitscounter;
+  
+}
+
+
+
+unsigned RFun::gethitsinemptytowerTEST(double isemptytower, int twr,
+				   const UShort_t TkrHitsTowerPlane[36])
+{
+
+  // tmp printing
+  std::cout << std::endl 
+	    << "evt number " << m_evtcounter << std::endl
+	    << "tower number " << twr << std::endl
+	    << "execution of RFun::gethitsinemptytower" << std::endl
+	    << "isemptytower = " << isemptytower << std::endl;
+  // end tmp
+  
+  if(!isemptytower)
+    return 0;
+ 
+  // compute total number of hits in tower using 
+  // vector TkrHitsTowerPlane for this tower
+  
+  unsigned hitscounter(0);
+  for(unsigned iplane =0;iplane<36;iplane++)
+    {
+      hitscounter += TkrHitsTowerPlane[iplane];
+      // tmp
+      if(m_evtcounter<m_doprintUpToN){
+	std::cout << "Plane " << iplane << "; NHits = " 
+		  << TkrHitsTowerPlane[iplane] << std::endl;
+      }
+      // end tmp
+
+    }
+  
+  return hitscounter;
+  
+}
+
+
+
 

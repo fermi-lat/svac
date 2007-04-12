@@ -3,6 +3,9 @@
 
 #include "configData/db/TrgConfigDB.h"
 #include <vector>
+#include "TBranchProxy.h"
+
+
 
 class RFun{
  public:
@@ -12,11 +15,31 @@ class RFun{
   static int iden(int i);
 
   static unsigned getconsecutiveplaneshit(const UShort_t invector[36]);
-  static bool isempty(bool invector[16], unsigned towerid);
-  static void getemptytowers(bool invector[16], bool outvector[16]);
+  //  static bool isempty(bool invector[16], unsigned towerid);
+  static std::vector<double> getemptytowers(ROOT::TArrayBoolProxy& invector);
+  //static std::vector<double> getemptytowers(const UShort_t invector[16]);
+
+  
+  static void initboundarytowers();
+  static unsigned gethitsinemptytower(double isemptytower, 
+				      const UShort_t TkrHitsTowerPlane[36]);
+
+  // Test functions
   static std::vector<double> testfun();
+  static unsigned gethitsinemptytowerTEST(double isemptytower, int twr,
+				      const UShort_t TkrHitsTowerPlane[36]);
+  static int testrunonceformulaoutput(std::vector<double>);
+  // end test functions
+
  private:
+  static int m_boundarytwr[16][8]; // boundary towers for all towers
+  static bool m_boundarytwrdefined;
   static TrgConfigDB* m_tcf;
+
+  // test data members
+  static UInt_t m_doprintUpToN;
+  static UInt_t m_evtcounter;
+  // end test data members
   
 };
 
