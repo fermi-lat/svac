@@ -53,6 +53,7 @@ void MonValue::makeProxy(TTree* tree){
   bool engineloop=false;
   bool towerloop=false;
   bool tkrlayerloop=false;
+  bool tkrplaneloop=false;
   bool dooutsideformula=false;
   std::string formula(m_formula);
   std::string outsideformula;
@@ -78,7 +79,14 @@ void MonValue::makeProxy(TTree* tree){
     tkrlayerloop=true;
     formula.replace(tkrlayerpos,tkrlayerpos+strlen("foreachtkrlayer:"),"");
   }
-  if (!engineloop && !towerloop && !tkrlayerloop && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
+  unsigned int tkrplanepos=formula.find("foreachtkrplane:");
+  if(tkrplanepos!=0xffffffff){
+    tkrplaneloop=true;
+    formula.replace(tkrplanepos,tkrplanepos+strlen("foreachtkrplane:"),"");
+  }
+  
+
+  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
   formfile.open((m_name+"_val.C_tmp").c_str());
@@ -89,21 +97,31 @@ void MonValue::makeProxy(TTree* tree){
   if(dooutsideformula)formfile<<"std::vector<double> runonceformula="<<outsideformula<<";"<<std::endl;
   if(engineloop)formfile<<"for(int engine=0;engine<16;engine++){"<<std::endl;
   if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
-  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<36;tkrlayer++){"<<std::endl;
+  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<19;tkrlayer++){"<<std::endl;
+  if(tkrplaneloop)formfile<<"for(int tkrplane=0;tkrplane<36;tkrplane++){"<<std::endl;
   formfile <<"val = "<<formula<<";"<<std::endl
 	   <<"resultvector->push_back(val);"<<std::endl;
-  if(engineloop||towerloop||tkrlayerloop)formfile<<"}"<<std::endl;
+  if(engineloop)formfile<<"}"<<std::endl;
+  if(towerloop)formfile<<"}"<<std::endl;
+  if(tkrlayerloop)formfile<<"}"<<std::endl;
+  if(tkrplaneloop)formfile<<"}"<<std::endl;
+
   formfile<<"(*counter)++;"<<std::endl;
   formfile<<"return val;"<<std::endl<<"}"<<std::endl;
   formfile.close();
+
+
   formfile.open((m_name+"_val.h").c_str());
   formfile<<"#include \"../src/RFun.h\""<<std::endl;
   formfile.close();
+
+
   if (m_cut!=""){
     formfile.open((m_name+"_cut.C_tmp").c_str());
     formfile<<"int "<<m_name+"_cut"<<"(){"<<std::endl
 	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
     formfile.close();
+
     formfile.open((m_name+"_cut.h").c_str());
     formfile<<"#include \"../src/RFun.h\""<<std::endl;
     formfile.close();
