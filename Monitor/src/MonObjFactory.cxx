@@ -9,6 +9,21 @@
 // Last updated with object calxtalene by user kocian on Fri Mar  9 20:38:36 2007
 // Last updated with object condsummary by user kocian on Fri Mar  9 22:53:38 2007
 // Last updated with object configkey1852 by user kocian on Fri Mar 30 18:25:24 2007
+// Last updated with object TkrTriggerCounter by user dpaneque on Fri Apr  6 01:33:49 2007
+// Last updated with object TkrTriggerTower by user dpaneque on Fri Apr  6 01:40:01 2007
+// Last updated with object TkrHitsTowerPlane by user dpaneque on Fri Apr  6 01:40:59 2007
+// Last updated with object ToT_Counter by user dpaneque on Fri Apr  6 01:42:22 2007
+// Last updated with object ToT_0_Counter by user dpaneque on Fri Apr  6 01:42:54 2007
+// Last updated with object ToT_250 by user dpaneque on Fri Apr  6 01:43:25 2007
+// Last updated with object ToT_M250 by user dpaneque on Fri Apr  6 01:44:13 2007
+// Last updated with object IsTkrDigi by user dpaneque on Fri Apr 13 18:40:42 2007
+// Last updated with object ToT_con0 by user dpaneque on Fri Apr 13 18:42:53 2007
+// Last updated with object ToT_con1 by user dpaneque on Fri Apr 13 18:44:21 2007
+#include "digi/MonInput_ToT_con1_TowerPlane.h"
+#include "digi/MonInput_ToT_con0_TowerPlane.h"
+#include "digi/MonInput_IsTkrDigi_TowerPlane.h"
+#include "digi/MonInput_TkrHitsTowerPlane.h"
+#include "digi/MonInput_TkrTriggerTower.h"
 #include "digi/MonInput_configkey1852.h"
 #include "digi/MonInput_condsummary.h"
 #include "svac/MonInput_calxtalene.h"
@@ -40,6 +55,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condsummary;
   if (s=="configkey1852")
     return new MonInput_configkey1852;
+  if (s=="TkrTriggerTower")
+    return new MonInput_TkrTriggerTower;
+  if (s=="TkrHitsTowerPlane")
+    return new MonInput_TkrHitsTowerPlane;
+  if (s=="IsTkrDigi_TowerPlane")
+    return new MonInput_IsTkrDigi_TowerPlane;
+  if (s=="ToT_con0_TowerPlane")
+    return new MonInput_ToT_con0_TowerPlane;
+  if (s=="ToT_con1_TowerPlane")
+    return new MonInput_ToT_con1_TowerPlane;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
