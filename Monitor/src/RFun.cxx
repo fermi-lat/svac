@@ -275,7 +275,15 @@ unsigned RFun::gethitsinemptytower(double isemptytower,
   
 }
 
+unsigned RFun::getnumbertkrdigitower (const UShort_t istkrdigi[36])
+{
+  unsigned ntkrdigis = 0;
+  for(UShort_t plane = 0; plane < 36; plane++)
+    ntkrdigis += istkrdigi[plane];
+  
+  return ntkrdigis;
 
+}
 
 unsigned RFun::gethitsinemptytowerTEST(double isemptytower, int twr,
 				   const UShort_t TkrHitsTowerPlane[36])

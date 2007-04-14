@@ -14,15 +14,19 @@ class RFun{
   static int enginecounter(int i,unsigned key, int engine);
   static int iden(int i);
 
+
+  // Tracker Related functions
+
   static unsigned getconsecutiveplaneshit(const UShort_t invector[36]);
-  //  static bool isempty(bool invector[16], unsigned towerid);
   static std::vector<double> getemptytowers(ROOT::TArrayBoolProxy& invector);
   //static std::vector<double> getemptytowers(const UShort_t invector[16]);
-
-  
   static void initboundarytowers();
   static unsigned gethitsinemptytower(double isemptytower, 
 				      const UShort_t TkrHitsTowerPlane[36]);
+
+  static unsigned getnumbertkrdigitower (const UShort_t istkrdigi[36]);
+
+  // END of tracker related functions
 
   // Test functions
   static std::vector<double> testfun();
