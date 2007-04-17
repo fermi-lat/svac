@@ -33,6 +33,8 @@
 // ROOT
 #include "Rtypes.h"
 #include "TMath.h"
+#include "TH1F.h"
+#include "TH2F.h"
 
 //
 // 
@@ -54,7 +56,7 @@ public:
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
 
-  void singleincrement(Double_t* val) ;
+  void singleincrement(Double_t* val, Double_t* val2) ;
 
   // Just move the counter to the output value
   virtual void latchValue() ;
@@ -68,6 +70,57 @@ private:
   ULong64_t *m_val;
 };
 
+// 1-d histogram
+//
+
+class MonHist1d: public MonValue{
+ public:
+  /// Standard constructor
+  MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels);
+  /// Destructor
+  virtual ~MonHist1d();
+  
+  /// Does nothing
+  virtual void reset();
+  
+  /// Attach does nothing
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  /// fill histogram
+  void singleincrement(Double_t* val, Double_t* val2);
+  
+  /// Latch does nothing
+  virtual void latchValue();
+  
+ private:
+  TH1F** m_hist;
+};
+//
+// 2-d histogram
+//
+
+class MonHist2d: public MonValue{
+ public:
+  /// Standard constructor
+  MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels);
+  /// Destructor
+  virtual ~MonHist2d();
+  
+  /// Does nothing
+  virtual void reset();
+  
+  /// Attach does nothing
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  /// fill histogram
+  void singleincrement(Double_t* val, Double_t* val2);
+  
+  /// Latch does nothing
+  virtual void latchValue();
+  
+ private:
+  TH2F** m_hist;
+};
 //
 // 
 // This implementation takes the average of several values
@@ -90,7 +143,7 @@ public:
 
   // attach both mean and err_on_mean to TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  virtual void singleincrement(Double_t* val) ;
+  virtual void singleincrement(Double_t* val, Double_t* val2) ;
 
 protected:
 
@@ -111,7 +164,7 @@ class MonTruncatedMean:public MonMean{
  public:
   MonTruncatedMean(const char* name, const char* formula, const char* cut, const char* type) ;
   virtual ~MonTruncatedMean(){}
-  void singleincrement(Double_t* val) ;
+  void singleincrement(Double_t* val, Double_t* val2) ;
  private:
   Float_t m_lowerbound;
   Float_t m_upperbound;
@@ -141,7 +194,7 @@ public:
 
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void singleincrement(Double_t* val) ;
+  void singleincrement(Double_t* val, Double_t* val2) ;
 
   // Take the difference hi-lo and move it to the output value
   virtual void latchValue() ;
@@ -181,7 +234,7 @@ public:
 
   // Attach this to a TTree
   virtual int attach(TTree& tree, const std::string& prefix) const;
-  void singleincrement(Double_t* val) ;
+  void singleincrement(Double_t* val, Double_t* val2) ;
 
   // Take the difference hi-lo and move it to the output value
   virtual void latchValue() {

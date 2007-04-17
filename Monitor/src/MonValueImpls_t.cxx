@@ -3,6 +3,8 @@
 
 // To attach to trees
 #include "TTree.h"
+#include "TH1F.h"
+#include "TH2F.h"
 
 #include <iostream>
 #include <string.h>
@@ -45,11 +47,100 @@ int MonCounter::attach(TTree& tree, const std::string& prefix) const {
   return b != 0 ? 1 : -1;
 }
   // += addition operator
-void MonCounter::singleincrement(Double_t* val) {
+void MonCounter::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     m_current[i] += (ULong64_t)val[i];
   }
 }
+MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels) 
+    :MonValue(name,formula,cut){
+  m_histdim=1;
+  float lbx,ubx;
+  int nbx;
+  lbx=ubx=0;
+  nbx=0;
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()==3){
+    lbx=atof(tt[1].c_str());
+    ubx=atof(tt[2].c_str());
+    nbx=atoi(tt[0].c_str());
+  }else{
+    std::cerr<<"MonHist1d variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+  tt=parse(axislabels,"[",",","]");
+  m_hist=new TH1F*[m_dim];
+  char nm[128];
+  for (unsigned int i=0;i<m_dim;i++){
+    sprintf(nm,"%s_%d",name,i);
+    m_hist[i]=new TH1F(name,name,nbx,lbx,ubx);
+    if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
+    if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
+  }
+}
+MonHist1d::~MonHist1d(){
+  // for (unsigned int i=0;i<m_dim;i++){
+    // m_hist[i];
+    //}
+    //delete m_hist;
+}
+void MonHist1d::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    m_hist[i]->Fill((Float_t)val[i]);
+  }
+}  
+void MonHist1d::reset(){}
+
+void MonHist1d::latchValue(){}
+
+int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
+
+MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels) 
+    :MonValue(name,formula,cut){
+  m_histdim=2;
+  float lbx,ubx,lby,uby;
+  int nbx,nby;
+  lbx=ubx=lby=uby=0;
+  nbx=nby=0;
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()==6){
+    lbx=atof(tt[1].c_str());
+    ubx=atof(tt[2].c_str());
+    nbx=atoi(tt[0].c_str());
+    lby=atof(tt[4].c_str());
+    uby=atof(tt[5].c_str());
+    nby=atoi(tt[3].c_str());
+  }else{
+    std::cerr<<"MonHist2d variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(m_histdim);
+  }
+  tt=parse(axislabels,"[",",","]");
+  m_hist=new TH2F*[m_dim];
+  char nm[128];
+  for (unsigned int i=0;i<m_dim;i++){
+    sprintf(nm,"%s_%d",name,i);
+    m_hist[i]=new TH2F(name,name,nbx,lbx,ubx,nby,lby,uby);
+    if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
+    if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
+    if (tt.size()>2)m_hist[i]->GetZaxis()->SetTitle(tt[2].c_str());
+  }
+}
+MonHist2d::~MonHist2d(){
+  // for (unsigned int i=0;i<m_dim;i++){
+    // m_hist[i];
+    //}
+    //delete m_hist;
+}
+void MonHist2d::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    m_hist[i]->Fill((Float_t)val[i],(Float_t)val2[i]);
+  }
+}  
+void MonHist2d::reset(){}
+
+void MonHist2d::latchValue(){}
+
+int MonHist2d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
 MonMean::MonMean(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula,cut),
@@ -112,7 +203,7 @@ int MonMean::attach(TTree& tree, const std::string& prefix) const {
   return bN != 0 ? 3 : -1;
 }
   // add a value input the mean, so add to running sums
-void MonMean::singleincrement(Double_t* val) {
+void MonMean::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
     m_nVals[i]++;
     m_sum[i] += val[i];
@@ -122,31 +213,18 @@ void MonMean::singleincrement(Double_t* val) {
 
 MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const char* cut, const char* type) 
     :MonMean(name,formula,cut){
-  char* dimpos=strchr(type,'[');
-  if(dimpos==0){
-    std::cerr<<"MonTruncatedMean variable "<<name<<" needs to have bounds declared. Aborting."<<std::endl;
-    assert(dimpos);
-  }
-  char res[128];
-  char* token=strchr(type,',');
-  if(token==0){
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()!=2){
     std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
-    assert(token);
+    assert(0);
   }
-  strncpy(res,dimpos+1,token-dimpos);
-  m_lowerbound=atof(res);
-  dimpos=strchr(type,']');
-  if(dimpos==0){
-    std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
-    assert(dimpos);
-  }
-  strncpy(res,token+1,dimpos-token);
-  m_upperbound=atof(res);
+  m_lowerbound=atof(tt[0].c_str());
+  m_upperbound=atof(tt[1].c_str());
 }
   
   
   
-void MonTruncatedMean::singleincrement(Double_t* val) {
+void MonTruncatedMean::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
     if (val[i]>=m_lowerbound && val[i]<=m_upperbound){
       m_nVals[i]++;
@@ -201,7 +279,7 @@ int MonCounterDiff::attach(TTree& tree, const std::string& prefix) const {
 }
 
   // Update the value, check to make sure that things make sense
-void MonCounterDiff::singleincrement(Double_t* val) {
+void MonCounterDiff::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     if ( m_lo[i] == s_maxVal64 ) {
       m_lo[i] = (ULong64_t)val[i];
@@ -249,7 +327,7 @@ void MonMinMax::reset() {
   }
 }
   // Update the value, check to make sure that things make sense
-void MonMinMax::singleincrement(Double_t* val) {
+void MonMinMax::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     m_min[i] = m_min[i] < (Float_t)val[i] ? m_min[i] : (Float_t)val[i];
     m_max[i] = m_max[i] > (Float_t)val[i] ? m_max[i] : (Float_t)val[i];
@@ -341,6 +419,7 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string name=obj["name"];
   std::string formula=obj["formula"];
   std::string cut=obj["cut"];
+  std::string axislabels=obj["axisdesc"];
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmean")){
@@ -351,6 +430,10 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"histogram-1d")){
+    return new MonHist1d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str());
+  } else if (strstr(type.c_str(),"histogram-2d")){
+    return new MonHist2d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str());
   }else{
     std::cerr<<"No such type "<<type<<std::endl;
     assert(0);

@@ -11,6 +11,7 @@
 #include "TFile.h"
 #include "TSystem.h"
 #include "TString.h"
+#include "TList.h"
 
 //
 // Job configuration and options parser
@@ -185,8 +186,12 @@ int main(int argn, char** argc) {
   d.go(numevents,jc.optval_s());    
   
   // Ok, write the output and clean up
-  fout->cd();
   d.tree()->Write();
+  TList* list=(TList*)gDirectory->GetList();
+  TIter iter(list);
+  while(TObject* obj=iter.Next()){
+    if((strstr(obj->ClassName(),"TH2")||strstr(obj->ClassName(),"TH1")) && !strstr(obj->GetName(),"htemp"))obj->Write();
+  }
   fout->Close();
   // Write an html report
   std::string html=jc.htmlFile();

@@ -12,9 +12,10 @@
 #include "compareFiles.h"
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
+std::vector<double> *MonValue::m_result2=new std::vector<double>;
 unsigned int MonValue::m_counter=0;
 
-MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0){
+MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0){
   // split up the name into the name part and the dimension part
 
   char* dimpos=strchr(name,'[');
@@ -90,17 +91,36 @@ void MonValue::makeProxy(TTree* tree){
 
   std::ofstream formfile;
   formfile.open((m_name+"_val.C_tmp").c_str());
-  formfile<<"std::vector<double> *resultvector;"<<std::endl
-	  <<"unsigned int *counter;"<<std::endl
-	  <<"double "<<m_name+"_val"<<"() {"<<std::endl;
+  formfile<<"std::vector<double> *resultvector;"<<std::endl;
+  if(m_histdim==2)formfile<<"std::vector<double> *resultvector2;"<<std::endl;
+  formfile <<"unsigned int *counter;"<<std::endl
+	   <<"double "<<m_name+"_val"<<"() {"<<std::endl;
   formfile<<"double val;"<<std::endl;
   if(dooutsideformula)formfile<<"std::vector<double> runonceformula="<<outsideformula<<";"<<std::endl;
   if(engineloop)formfile<<"for(int engine=0;engine<16;engine++){"<<std::endl;
   if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
   if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<19;tkrlayer++){"<<std::endl;
   if(tkrplaneloop)formfile<<"for(int tkrplane=0;tkrplane<36;tkrplane++){"<<std::endl;
+  //formula 2 is only used for 2-d histograms
+  std::string formula2;
+  if (m_histdim==2){
+    std::string dfo="["+formula+"]";
+    // for the parsing replace : by ; so :: does not get interpreted as a separator
+    for (unsigned int i=1;i<dfo.size()-1;i++) if(dfo[i]==':'&&dfo[i-1]!=':'&&dfo[i+1]!=':')dfo[i]=';'; 
+    std::vector<std::string> tt=parse(dfo,"[",";","]");
+    if (tt.size()!=2){
+      std::cerr<<"2-d histogram "<<m_name<<" does not have a formula for both dimensions"<<std::endl;
+      assert(0);
+    }
+    formula=tt[0];
+    formula2=tt[1];
+  }    
   formfile <<"val = "<<formula<<";"<<std::endl
 	   <<"resultvector->push_back(val);"<<std::endl;
+  if(m_histdim==2){
+    formfile <<"val = "<<formula2<<";"<<std::endl
+	     <<"resultvector2->push_back(val);"<<std::endl;
+  }
   if(engineloop)formfile<<"}"<<std::endl;
   if(towerloop)formfile<<"}"<<std::endl;
   if(tkrlayerloop)formfile<<"}"<<std::endl;
@@ -178,6 +198,11 @@ void MonValue::makeProxy(TTree* tree){
   sprintf(rootcommand,"&((%s*)0x%%x)->resultvector;",(m_name+"Selector").c_str());
   std::vector<double> **fVar1 = (std::vector<double>**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
   *fVar1=m_result;
+  if (m_histdim==2){
+    sprintf(rootcommand,"&((%s*)0x%%x)->resultvector2;",(m_name+"Selector").c_str());
+    std::vector<double> **fVar2 = (std::vector<double>**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
+    *fVar2=m_result2;
+  }
   sprintf(rootcommand,"&((%s*)0x%%x)->counter;",(m_name+"Selector").c_str());
   unsigned int **ct = (unsigned int**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
   *ct=&m_counter;
@@ -206,9 +231,13 @@ void MonValue::increment(TTree* tree){
     // proxy case
   }else{
     if (est>m_result->capacity()){
-      if(est<MAXMEM)m_result->reserve(est);
+      if(est<MAXMEM){
+	m_result->reserve(est);
+	if(m_histdim==2)m_result2->reserve(est);
+      }
       else{
 	m_result->reserve((unsigned int)MAXMEM+m_dim);//160 MB
+	if (m_histdim==2) m_result2->reserve((unsigned int)MAXMEM+m_dim);//160 MB
 	iterations=(unsigned int)(est/MAXMEM+1);
       }
     }
@@ -223,8 +252,13 @@ void MonValue::increment(TTree* tree){
 	assert(0);
       }
       double *val=tree->GetV1();
+      double *val2=tree->GetV2();
       for (int i=0;i<tree->GetSelectedRows();i+=m_dim){
-	singleincrement(&val[i]);
+	if (val2){
+	  singleincrement(&val[i],&val2[i]);
+	}else{
+	  singleincrement(&val[i]);
+	}
       }
     }else{
       m_result->clear();
@@ -238,9 +272,34 @@ void MonValue::increment(TTree* tree){
 	assert(0);
       }
       double *val=&((*m_result)[0]);
+      double *val2=&((*m_result2)[0]);
       for (unsigned i=0;i<m_result->size();i+=m_dim){
-	singleincrement(&val[i]);
+	if(m_histdim==2)singleincrement(&val[i],&val2[i]);
+	else singleincrement(&val[i]);
       }
     }
   }    
 }
+
+std::vector<std::string> MonValue::parse(const std::string str, const std::string beg, const std::string sep, const std::string end){
+  std::vector<std::string> retvec;
+  unsigned int bpos=str.find(beg);
+  if(bpos==(unsigned int)-1)return retvec;
+  unsigned int epos=str.find(end,bpos+1);
+  if(epos==(unsigned int)-1 || epos<bpos)return retvec;
+  if (sep==""){
+    retvec.push_back(str.substr(bpos+beg.length(),epos-bpos-beg.length()));
+  } else{
+    unsigned int mpos=str.find(sep,bpos+1);
+    unsigned int len=beg.length();
+    while(mpos!=(unsigned int)-1 && mpos<epos){
+      retvec.push_back(str.substr(bpos+len,mpos-bpos-len));
+      bpos=mpos;
+      mpos=str.find(sep,mpos+1);
+      len=sep.length();
+    }
+    retvec.push_back(str.substr(bpos+len,epos-bpos-len));
+  }
+  return retvec;
+}
+			    

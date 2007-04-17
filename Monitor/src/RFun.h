@@ -30,6 +30,7 @@ class RFun{
 
   // Test functions
   static std::vector<double> testfun();
+  static std::vector<double> vecfun(ROOT::TArrayUShortProxy vec);
   static unsigned gethitsinemptytowerTEST(double isemptytower, int twr,
 				      const UShort_t TkrHitsTowerPlane[36]);
   static int testrunonceformulaoutput(std::vector<double>);

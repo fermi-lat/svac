@@ -19,6 +19,10 @@
 // Last updated with object IsTkrDigi by user dpaneque on Fri Apr 13 18:40:42 2007
 // Last updated with object ToT_con0 by user dpaneque on Fri Apr 13 18:42:53 2007
 // Last updated with object ToT_con1 by user dpaneque on Fri Apr 13 18:44:21 2007
+#include "digi/MonInput_twodimshort.h"
+#include "digi/MonInput_onedimshort.h"
+#include "digi/MonInput_twodimbool.h"
+#include "digi/MonInput_onedimbool.h"
 #include "digi/MonInput_ToT_con1_TowerPlane.h"
 #include "digi/MonInput_ToT_con0_TowerPlane.h"
 #include "digi/MonInput_IsTkrDigi_TowerPlane.h"
@@ -55,6 +59,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condsummary;
   if (s=="configkey1852")
     return new MonInput_configkey1852;
+  if (s=="onedimbool")
+    return new MonInput_onedimbool;
+  if (s=="twodimbool")
+    return new MonInput_twodimbool;
+  if (s=="onedimshort")
+    return new MonInput_onedimshort;
+  if (s=="twodimshort")
+    return new MonInput_twodimshort;
   if (s=="TkrTriggerTower")
     return new MonInput_TkrTriggerTower;
   if (s=="TkrHitsTowerPlane")

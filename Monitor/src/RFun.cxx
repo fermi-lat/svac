@@ -104,6 +104,12 @@ std::vector<double> RFun::testfun(){
   return retvec;
 }
 
+std::vector<double> RFun::vecfun(ROOT::TArrayUShortProxy vec){
+  std::vector<double> retvec;
+  for (int i=0;i<3;i++)retvec.push_back(vec[i]);
+  return retvec;
+}
+
 int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
 {
   std::cout << std::endl << "Print output of runonceformula:" << std::endl;

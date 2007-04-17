@@ -52,18 +52,22 @@ public :
 
   virtual void makeProxy(TTree* tree);
  protected:
-  
-  virtual void singleincrement(Double_t* val){};
+  /// val2 is only used for 2d histograms 
+  virtual void singleincrement(Double_t* val,Double_t* val2=0){};
+  // a helper function to parse parameter strings of the type [234, 23, 44]
+  static std::vector<std::string> parse(const std::string str, const std::string beg, const std::string sep, const std::string end);
   
 
   // The name of this var
   std::string m_name;    
   const std::string m_cut;    
   const std::string m_formula;    
-  std::string m_dimstring;    
   TSelector* m_sel;
+  int m_histdim;
+  std::string m_dimstring;    
   unsigned m_dim;
   static std::vector<double> *m_result;
+  static std::vector<double> *m_result2;
   static unsigned int m_counter;
 };
 
