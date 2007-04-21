@@ -61,6 +61,27 @@
       <cut><![CDATA[ ]]></cut>
       <type> counter </type>
     </object>
+    <object>
+      <name> TkrHits </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(TkrHitsTowerPlane) ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> counter </type>
+      <description> Number of TkrHits (all towers and planes included) accumulated in time size bin </description>
+    </object>
+    <object>
+      <name> TkrHits_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> counter </type>
+      <description> Number of hits in [tower] accumulated in the especified time size bin </description>
+    </object>
+    <object>
+      <name> TkrHits_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: TkrHitsTowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> counter </type>
+      <description> Number of hits in [tower][plane] accumulated in the especified time size bin </description>
+    </object>
      <object>
       <name> TkrTriggerWithLessThan6Layers_Tower[16] </name>
       <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])<6) ]]></formula>
@@ -80,10 +101,10 @@
       <type> counter </type>
     </object>
      <object>
-      <name> HitsInEmpty_Tower[16] </name>
+      <name> HitsInEmptyTower_Tower[16] </name>
       <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: RFun::gethitsinemptytower(runonceformula[tower],TkrHitsTowerPlane[tower]) ]]></formula>
       <cut><![CDATA[ ]]></cut>
-      <type> mean </type>
+      <type> counter </type>
     </object>
      <object>
       <name> TkrDigiCounter_TowerPlane[16][36] </name>
@@ -93,9 +114,16 @@
     </object>
      <object>
       <name> TkrDigiCounter_Tower[16] </name>
-      <formula><![CDATA[foreachtower: RFun::getnumbertkrdigitower(IsTkrDigi_TowerPlane[tower]) ]]></formula>
+      <formula><![CDATA[foreachtower: RFun::loopovertkrplanes(IsTkrDigi_TowerPlane[tower]) ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> counter </type>
+    </object>
+     <object>
+      <name> TkrDigiCounter </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(IsTkrDigi_TowerPlane) ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> counter </type>
+      <description> Number of TkrDigis (all towers and planes included) accumulated in time size bin </description>
     </object>
       <object>
       <name> ToT_con0_250_TowerPlane[16][36] </name>
@@ -117,19 +145,19 @@
     </object>
     <object>
       <name> ToT_con0_0_TowerPlane[16][36] </name>
-      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]==0 ]]></formula>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con0_TowerPlane[tower][tkrplane]==0 ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> counter </type>
     </object>
      <object>
       <name> ToT_con1_0_TowerPlane[16][36] </name>
-      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con1_TowerPlane[tower][tkrplane]==0 ]]></formula>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con1_TowerPlane[tower][tkrplane]==0 ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> counter </type>
     </object>
      <object>
       <name> ToT_0_TowerPlane[16][36] </name>
-      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]==0 && ToT_con1_TowerPlane[tower][tkrplane]==0]]></formula>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con0_TowerPlane[tower][tkrplane]==0 && ToT_con1_TowerPlane[tower][tkrplane]==0 ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> counter </type>
     </object>
@@ -167,6 +195,6 @@
     
   </outputList>
 
-  <eventCut><![CDATA[ condsummary&2  ]]></eventCut>
+  <eventCut><![CDATA[ ]]></eventCut>
   <timestamp> timestamp </timestamp>
 </monitoring>

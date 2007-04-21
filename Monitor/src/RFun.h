@@ -4,6 +4,7 @@
 #include "configData/db/TrgConfigDB.h"
 #include <vector>
 #include "TBranchProxy.h"
+#include "TBranchProxyTemplate.h"
 
 
 
@@ -21,10 +22,18 @@ class RFun{
   static std::vector<double> getemptytowers(ROOT::TArrayBoolProxy& invector);
   //static std::vector<double> getemptytowers(const UShort_t invector[16]);
   static void initboundarytowers();
+
+
   static unsigned gethitsinemptytower(double isemptytower, 
 				      const UShort_t TkrHitsTowerPlane[36]);
 
-  static unsigned getnumbertkrdigitower (const UShort_t istkrdigi[36]);
+  static unsigned loopovertkrplanes(const UShort_t invector[36]);
+  
+  //static unsigned loopovertowerANDtkrplanes(const UShort_t TkrHitsTowerPlane[16][36]);
+  static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
+
+   
+
 
   // END of tracker related functions
 
@@ -35,6 +44,12 @@ class RFun{
 				      const UShort_t TkrHitsTowerPlane[36]);
   static int testrunonceformulaoutput(std::vector<double>);
   // end test functions
+
+
+  // Functions to be deleted (obsolete)
+  
+  // end of functions to be deleted
+
 
  private:
   static int m_boundarytwr[16][8]; // boundary towers for all towers

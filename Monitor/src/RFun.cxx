@@ -38,9 +38,52 @@ unsigned RFun::getconsecutiveplaneshit(const UShort_t invector[36])
 }
 
 
+unsigned RFun::loopovertkrplanes(const UShort_t invector[36])
+{
+  unsigned n_counter(0);
+  for (UShort_t iplane = 0; iplane < 36; iplane++)
+    n_counter += invector[iplane];
+  return n_counter;
+}
+
+
+unsigned RFun::gethitsinemptytower(double isemptytower,
+				   const UShort_t TkrHitsTowerPlane[36])
+{
+
+  if(!isemptytower)
+    return 0;
+ 
+  // compute total number of hits in tower using 
+  // vector TkrHitsTowerPlane for this tower
+  
+  unsigned hitscounter(0);
+  for(unsigned iplane =0;iplane<36;iplane++)
+      hitscounter += TkrHitsTowerPlane[iplane];
+  
+  return hitscounter;
+  
+}
+
+
+
+
+// unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
+unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invector)
+{
+  unsigned n_counter(0);
+  for (UShort_t itower = 0; itower < 16; itower++){
+    for (UShort_t iplane = 0; iplane < 36; iplane++)
+      n_counter += invector[itower][iplane];
+  }
+  return n_counter;
+
+}
+
+
 
 std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
-// std::vector<double> RFun::getemptytowers(const UShort_t invector[16])
+//std::vector<double> RFun::getemptytowers(const UShort_t invector[16])
 {
 
   std::vector<double> emptytowers;
@@ -73,9 +116,6 @@ std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
   for(unsigned itwr = 0;itwr<16;itwr++)
     emptytowers.push_back(1);
     
-
-
-    
   // scan over all towers, setting the "empty tower condition" whenver 
   // the tower has a trigger and/or is boundary tower to a tower which had a trigger
   
@@ -92,8 +132,6 @@ std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
 	}
     }
 
-
- 
   return emptytowers;
 }
 
@@ -263,33 +301,9 @@ void RFun::initboundarytowers()
 }
 
 
-unsigned RFun::gethitsinemptytower(double isemptytower,
-				   const UShort_t TkrHitsTowerPlane[36])
-{
 
-  if(!isemptytower)
-    return 0;
- 
-  // compute total number of hits in tower using 
-  // vector TkrHitsTowerPlane for this tower
-  
-  unsigned hitscounter(0);
-  for(unsigned iplane =0;iplane<36;iplane++)
-      hitscounter += TkrHitsTowerPlane[iplane];
-  
-  return hitscounter;
-  
-}
 
-unsigned RFun::getnumbertkrdigitower (const UShort_t istkrdigi[36])
-{
-  unsigned ntkrdigis = 0;
-  for(UShort_t plane = 0; plane < 36; plane++)
-    ntkrdigis += istkrdigi[plane];
-  
-  return ntkrdigis;
 
-}
 
 unsigned RFun::gethitsinemptytowerTEST(double isemptytower, int twr,
 				   const UShort_t TkrHitsTowerPlane[36])
@@ -326,6 +340,8 @@ unsigned RFun::gethitsinemptytowerTEST(double isemptytower, int twr,
   
 }
 
+
+// Functions to be deleted (obsolete)
 
 
 
