@@ -1,5 +1,6 @@
 
 #include "MonValue_t.h"
+#include "TROOT.h"
 #include "TTree.h"
 #include "TSystem.h"
 #include "TSelector.h"
@@ -218,6 +219,7 @@ void MonValue::increment(TTree* tree){
   else nev=el->GetN();
   est=nev*m_dim;
   unsigned iterations=1;
+  //tree->SetEstimate(5000000);
   // if there is too much data we have to iterate so we don't run out of memory
   // no proxy case:
   if (m_sel==0){
@@ -243,6 +245,7 @@ void MonValue::increment(TTree* tree){
     }
   }    
   unsigned evperit=nev/iterations+1;
+  //  std::cout<<"Estimate: "<<tree->GetEstimate()<<std::endl;
   for (unsigned it=0;it<iterations;it++){
     if (m_sel==0){
       tree->Draw(m_formula.c_str(),m_cut.c_str(),"goff",evperit,evperit*it);

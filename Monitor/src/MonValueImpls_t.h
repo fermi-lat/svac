@@ -76,7 +76,7 @@ private:
 class MonHist1d: public MonValue{
  public:
   /// Standard constructor
-  MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels);
+  MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel);
   /// Destructor
   virtual ~MonHist1d();
   
@@ -102,7 +102,7 @@ class MonHist1d: public MonValue{
 class MonHist2d: public MonValue{
  public:
   /// Standard constructor
-  MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels);
+  MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel);
   /// Destructor
   virtual ~MonHist2d();
   

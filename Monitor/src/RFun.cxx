@@ -37,6 +37,21 @@ unsigned RFun::getconsecutiveplaneshit(const UShort_t invector[36])
   return  maxhits;
 }
 
+Double_t RFun::oneTriggerTower(ROOT::TArrayBoolProxy& invector){
+  Double_t retval=-1;
+  for (int i=0;i<16;i++){
+    if (invector[i]){
+      if (retval>-1){
+	retval=0;
+	break;
+      }else{
+	retval=i;
+      }
+    }
+  }
+  return retval;
+} 
+    
 
 unsigned RFun::loopovertkrplanes(const UShort_t invector[36])
 {

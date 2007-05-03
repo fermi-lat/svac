@@ -19,6 +19,36 @@
 // Last updated with object IsTkrDigi by user dpaneque on Fri Apr 13 18:40:42 2007
 // Last updated with object ToT_con0 by user dpaneque on Fri Apr 13 18:42:53 2007
 // Last updated with object ToT_con1 by user dpaneque on Fri Apr 13 18:44:21 2007
+// Last updated with object digitimestamp by user kocian on Fri Apr 20 18:17:48 2007
+// Last updated with object filterstatus_hi by user kocian on Fri Apr 20 19:52:10 2007
+// Last updated with object CalLoTriggerTower by user kocian on Fri Apr 20 20:12:05 2007
+// Last updated with object CalHiTriggerTower by user kocian on Fri Apr 20 20:14:22 2007
+// Last updated with object tkrnumtracks by user kocian on Fri Apr 20 20:44:19 2007
+// Last updated with object tkr1theta by user kocian on Fri Apr 20 20:46:04 2007
+// Last updated with object tkr1hits by user kocian on Fri Apr 20 20:46:47 2007
+// Last updated with object calxtalmaxene by user kocian on Fri Apr 20 20:47:47 2007
+// Last updated with object gltgemsummary by user kocian on Fri Apr 20 22:06:31 2007
+// Last updated with object glttower by user kocian on Fri Apr 20 23:26:52 2007
+// Last updated with object gltnumtowers by user kocian on Fri Apr 20 23:27:36 2007
+// Last updated with object evtelapsedtime by user kocian on Fri Apr 20 23:38:22 2007
+// Last updated with object calxtalmaxtower by user kocian on Fri Apr 20 23:42:44 2007
+// Last updated with object Mfilterstatus_hi by user kocian on Sat Apr 21 00:03:41 2007
+// Last updated with object ntkrdigis by user kocian on Mon Apr 23 17:13:41 2007
+#include "digi/MonInput_ntkrdigis.h"
+#include "merit/MonInput_Mfilterstatus_hi.h"
+#include "recon/MonInput_calxtalmaxtower.h"
+#include "merit/MonInput_evtelapsedtime.h"
+#include "merit/MonInput_gltnumtowers.h"
+#include "merit/MonInput_glttower.h"
+#include "merit/MonInput_gltgemsummary.h"
+#include "merit/MonInput_calxtalmaxene.h"
+#include "merit/MonInput_tkr1hits.h"
+#include "merit/MonInput_tkr1theta.h"
+#include "merit/MonInput_tkrnumtracks.h"
+#include "digi/MonInput_CalHiTriggerTower.h"
+#include "digi/MonInput_CalLoTriggerTower.h"
+#include "digi/MonInput_filterstatus_hi.h"
+#include "digi/MonInput_digitimestamp.h"
 #include "digi/MonInput_twodimshort.h"
 #include "digi/MonInput_onedimshort.h"
 #include "digi/MonInput_twodimbool.h"
@@ -77,6 +107,36 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_ToT_con0_TowerPlane;
   if (s=="ToT_con1_TowerPlane")
     return new MonInput_ToT_con1_TowerPlane;
+  if (s=="digitimestamp")
+    return new MonInput_digitimestamp;
+  if (s=="filterstatus_hi")
+    return new MonInput_filterstatus_hi;
+  if (s=="CalLoTriggerTower")
+    return new MonInput_CalLoTriggerTower;
+  if (s=="CalHiTriggerTower")
+    return new MonInput_CalHiTriggerTower;
+  if (s=="tkrnumtracks")
+    return new MonInput_tkrnumtracks;
+  if (s=="tkr1theta")
+    return new MonInput_tkr1theta;
+  if (s=="tkr1hits")
+    return new MonInput_tkr1hits;
+  if (s=="calxtalmaxene")
+    return new MonInput_calxtalmaxene;
+  if (s=="gltgemsummary")
+    return new MonInput_gltgemsummary;
+  if (s=="glttower")
+    return new MonInput_glttower;
+  if (s=="gltnumtowers")
+    return new MonInput_gltnumtowers;
+  if (s=="evtelapsedtime")
+    return new MonInput_evtelapsedtime;
+  if (s=="calxtalmaxtower")
+    return new MonInput_calxtalmaxtower;
+  if (s=="Mfilterstatus_hi")
+    return new MonInput_Mfilterstatus_hi;
+  if (s=="ntkrdigis")
+    return new MonInput_ntkrdigis;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;

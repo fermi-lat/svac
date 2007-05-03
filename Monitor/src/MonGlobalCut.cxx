@@ -1,4 +1,5 @@
 
+#include "TROOT.h"
 #include "MonGlobalCut.h"
 #include "TTree.h"
 #include "TSystem.h"
@@ -75,6 +76,7 @@ void MonGlobalCut::applyCut(TTree* tree){
   reset();
   m_nUsed=tree->GetEntriesFast()-1;
   tree->SetEventList(0);
+  if (m_eventlist)m_eventlist->Clear();
   if(!m_sel){
     tree->Draw((">>"+m_name).c_str(),m_cut.c_str(),"goff",m_nUsed);
     //m_eventlist=(TEventList*)gDirectory->Get("eventsel");

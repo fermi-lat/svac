@@ -138,10 +138,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
 
   // Event loop
   for (Int_t ievent= startEvent; ievent!=m_last; ievent++ ) {
-
-    // Flags for later
-    Bool_t filtered(kFALSE);
-    Bool_t used(kFALSE);
+    //if(ievent%1000==0)std::cout<<"Event: "<<ievent<<std::endl;
 
     // call sub-class to read the event
     Bool_t ok = readEvent(ievent);
@@ -210,9 +207,9 @@ void MonEventLooper::switchBins() {
   m_stripValCol->latchValue();
   m_tree->Fill();
   m_stripValCol->reset();
+  m_intree->SetEventList(0);
   m_intree->GetEntry(m_nUsed);
   m_intree->Reset();
-  //  m_intree->SetEventList(0);
   m_intree->Fill();
   
   m_currentBin++;
@@ -220,6 +217,8 @@ void MonEventLooper::switchBins() {
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
   while(m_currentTimestamp->value()>=m_currentEnd){
+    m_nUsed=0;
+    m_nFilter=0;
     m_tree->Fill();
     m_currentBin++;
     m_currentStart += m_binSize;

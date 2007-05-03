@@ -52,7 +52,7 @@ void MonCounter::singleincrement(Double_t* val, Double_t* val2) {
     m_current[i] += (ULong64_t)val[i];
   }
 }
-MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels) 
+MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1;
   float lbx,ubx;
@@ -76,6 +76,7 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
     m_hist[i]=new TH1F(name,name,nbx,lbx,ubx);
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
+    if (strlen(titlelabel)!=0)m_hist[i]->SetTitle(titlelabel);
   }
 }
 MonHist1d::~MonHist1d(){
@@ -95,7 +96,7 @@ void MonHist1d::latchValue(){}
 
 int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
-MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels) 
+MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=2;
   float lbx,ubx,lby,uby;
@@ -123,6 +124,7 @@ MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, con
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
     if (tt.size()>2)m_hist[i]->GetZaxis()->SetTitle(tt[2].c_str());
+    if (strlen(titlelabel)!=0)m_hist[i]->SetTitle(titlelabel);
   }
 }
 MonHist2d::~MonHist2d(){
@@ -420,6 +422,7 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string formula=obj["formula"];
   std::string cut=obj["cut"];
   std::string axislabels=obj["axisdesc"];
+  std::string titlelabel=obj["titledesc"];
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmean")){
@@ -431,9 +434,9 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"histogram-1d")){
-    return new MonHist1d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str());
+    return new MonHist1d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   } else if (strstr(type.c_str(),"histogram-2d")){
-    return new MonHist2d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str());
+    return new MonHist2d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   }else{
     std::cerr<<"No such type "<<type<<std::endl;
     assert(0);

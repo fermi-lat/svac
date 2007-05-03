@@ -4,6 +4,7 @@
 #include "configData/db/TrgConfigDB.h"
 #include <vector>
 #include "TBranchProxy.h"
+#include "TBranchProxyDirector.h"
 #include "TBranchProxyTemplate.h"
 
 
@@ -36,7 +37,8 @@ class RFun{
 
 
   // END of tracker related functions
-
+  // Trigger related functions
+  static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
   // Test functions
   static std::vector<double> testfun();
   static std::vector<double> vecfun(ROOT::TArrayUShortProxy vec);

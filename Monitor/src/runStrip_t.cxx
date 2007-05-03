@@ -75,12 +75,55 @@ int main(int argn, char** argc) {
   MonInputCollection* meritinpcol=0;
   MonInputCollection* svacinpcol=0;
   MonInputCollection* calinpcol=0;
-  if (jc.digiChain())digiinpcol=new MonInputCollection_Digi(jc.digiChain(),"DigiEvent");
-  if (jc.reconChain())reconinpcol=new MonInputCollection_Recon(jc.reconChain(),"ReconEvent");
-  if (jc.mcChain())mcinpcol=new MonInputCollection_Mc(jc.mcChain(),"McEvent");
-  if (jc.meritChain())meritinpcol=new MonInputCollection_Merit(jc.meritChain(),"MeritEvent");
-  if (jc.svacChain())svacinpcol=new MonInputCollection_Svac(jc.svacChain(),"SvacEvent");
-  if (jc.calChain())calinpcol=new MonInputCollection_Cal(jc.calChain(),"CalEvent");
+  Int_t nTotal=0;
+  if (jc.digiChain()){
+    digiinpcol=new MonInputCollection_Digi(jc.digiChain(),"DigiEvent");
+    if (nTotal==0)nTotal=jc.digiChain()->GetEntries();
+    else if (nTotal!=jc.digiChain()->GetEntries()){
+      std::cerr<<"Different number of events in Digi chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+  if (jc.reconChain()){
+    reconinpcol=new MonInputCollection_Recon(jc.reconChain(),"ReconEvent");
+    if (nTotal==0)nTotal=jc.reconChain()->GetEntries();
+    else if (nTotal!=jc.reconChain()->GetEntries()){
+      std::cerr<<"Different number of events in Recon chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+  if (jc.mcChain()){
+    mcinpcol=new MonInputCollection_Mc(jc.mcChain(),"McEvent");
+    if (nTotal==0)nTotal=jc.mcChain()->GetEntries();
+    else if (nTotal!=jc.mcChain()->GetEntries()){
+      std::cerr<<"Different number of events in Mc chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+  if (jc.meritChain()){
+    meritinpcol=new MonInputCollection_Merit(jc.meritChain(),"MeritEvent");
+    if (nTotal==0)nTotal=jc.meritChain()->GetEntries();
+    else if (nTotal!=jc.meritChain()->GetEntries()){
+      std::cerr<<"Different number of events in Merit chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+  if (jc.svacChain()){
+    svacinpcol=new MonInputCollection_Svac(jc.svacChain(),"SvacEvent");
+    if (nTotal==0)nTotal=jc.svacChain()->GetEntries();
+    else if (nTotal!=jc.svacChain()->GetEntries()){
+      std::cerr<<"Different number of events in Svac chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+  if (jc.calChain()){
+    calinpcol=new MonInputCollection_Cal(jc.calChain(),"CalEvent");
+    if (nTotal==0)nTotal=jc.calChain()->GetEntries();
+    else if (nTotal!=jc.calChain()->GetEntries()){
+      std::cerr<<"Different number of events in cal Chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
   std::vector<std::map<std::string,std::string> > digidesc;
   std::vector<std::map<std::string,std::string> > recondesc;
   std::vector<std::map<std::string,std::string> > mcdesc;
@@ -181,7 +224,6 @@ int main(int argn, char** argc) {
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcol,allinpcol, eventcut,timestamp);
-  Int_t nTotal=jc.digiChain()->GetEntries();
   Long64_t numevents=jc.optval_n()  < 1 ? nTotal : TMath::Min(jc.optval_n()+jc.optval_s(),nTotal);
   d.go(numevents,jc.optval_s());    
   
