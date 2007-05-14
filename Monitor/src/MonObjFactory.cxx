@@ -144,8 +144,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   }
 }
 
-const std::map<std::string, std::string> MonObjFactory::getDescriptions(){
-  std::map<std::string, std::string> descriptions;
+const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::getDescriptions(){
+  std::map<std::string, std::map<std::string, std::string> > descriptions;
   std::vector<std::string> names;
   names.push_back("nACD");
   names.push_back("timestamp");
@@ -182,7 +182,8 @@ const std::map<std::string, std::string> MonObjFactory::getDescriptions(){
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
-    descriptions[names[i]]=obj->getDescription();
+    descriptions[names[i]]["Description"]=obj->getDescription();
+    descriptions[names[i]]["Source"]=obj->getInputSource();
     delete obj;
   }
   return descriptions;

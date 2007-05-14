@@ -6,13 +6,15 @@
 #define MonObjFactory_h
 
 #include <string>
+#include <map>
 #include "MonInputObject.h"
 using std::string;
 
 class MonObjFactory{
-public:
+ public:
   MonObjFactory();
   MonInputObject* getMonInputObject(string s);
+  const std::map<std::string, std::map<std::string, std::string> > getDescriptions();
 };
 
 #endif
