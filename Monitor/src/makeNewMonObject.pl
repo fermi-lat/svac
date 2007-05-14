@@ -265,6 +265,13 @@ if ($ans =~/[yY]/){
     print FOUT "    return new MonInput_$name;\n";
     print FOUT $line;
     $line=<FIN>;
+    while(!($line =~/tag used by makeNewMonObject/)){
+	print FOUT $line;
+	$line=<FIN>;
+    }
+    print FOUT "  names.push_back(\"$name\");\n";
+    print FOUT $line;
+    $line=<FIN>;
     while (!eof(FIN)){
 	print FOUT $line;
 	$line=<FIN>;

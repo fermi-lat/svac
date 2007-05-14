@@ -143,3 +143,47 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     assert(0);
   }
 }
+
+const std::map<std::string, std::string> MonObjFactory::getDescriptions(){
+  std::map<std::string, std::string> descriptions;
+  std::vector<std::string> names;
+  names.push_back("nACD");
+  names.push_back("timestamp");
+  names.push_back("acdLowerTileCount");
+  names.push_back("eventid");
+  names.push_back("Gem_elapsed");
+  names.push_back("calxtalene");
+  names.push_back("condsummary");
+  names.push_back("configkey1852");
+  names.push_back("onedimbool");
+  names.push_back("twodimbool");
+  names.push_back("onedimshort");
+  names.push_back("twodimshort");
+  names.push_back("TkrTriggerTower");
+  names.push_back("TkrHitsTowerPlane");
+  names.push_back("IsTkrDigi_TowerPlane");
+  names.push_back("ToT_con0_TowerPlane");
+  names.push_back("ToT_con1_TowerPlane");
+  names.push_back("digitimestamp");
+  names.push_back("filterstatus_hi");
+  names.push_back("CalLoTriggerTower");
+  names.push_back("CalHiTriggerTower");
+  names.push_back("tkrnumtracks");
+  names.push_back("tkr1theta");
+  names.push_back("tkr1hits");
+  names.push_back("calxtalmaxene");
+  names.push_back("gltgemsummary");
+  names.push_back("glttower");
+  names.push_back("gltnumtowers");
+  names.push_back("evtelapsedtime");
+  names.push_back("calxtalmaxtower");
+  names.push_back("Mfilterstatus_hi");
+  names.push_back("ntkrdigis");
+  // another tag used by makeNewMonObject.pl. Do not move or remove.
+  for (unsigned int i=0;i<names.size();i++){
+    MonInputObject* obj=getMonInputObject(names[i]);
+    descriptions[names[i]]=obj->getDescription();
+    delete obj;
+  }
+  return descriptions;
+}
