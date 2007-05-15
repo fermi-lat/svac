@@ -8,6 +8,9 @@ import re
 import shutil
 import sys
 
+#print >> sys.stderr, "Exiting to prevent recon of giant ETE1a muon run."
+#sys.exit(1)
+
 import ROOT
 
 import chunkSize
