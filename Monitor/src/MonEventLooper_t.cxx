@@ -26,7 +26,7 @@ void MonEventLooper::printTime(ostream& os, ULong64_t timestamp) {
 
 //
 //
-MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInputCollection*> incol, std::string eventcut, std::string timestampvar)
+MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* colsec, std::vector<MonInputCollection*> incol, std::string eventcut, std::string timestampvar)
   :m_binSize(binSize),
    m_timeStamp(0),
    m_currentStart(0),
@@ -41,7 +41,9 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
    m_globalCut(0),
    m_tree(0),
    m_intree(0),
-   m_stripValCol(col),
+   m_sectree(0),
+   m_stripValCol(colprim),
+   m_secstripValCol(colsec),
    m_incol(incol),
    m_eventcut(eventcut),
    m_timestampvar(timestampvar) {
@@ -54,7 +56,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
     (*it)->populateTableTree(m_intree);
   }
   // make proxies for formulas if needed
-  col->makeProxy(m_intree);
+  colprim->makeProxy(m_intree);
   // create global cut object
   m_globalCut=new MonGlobalCut("globalCut",m_eventcut.c_str());
   m_globalCut->makeProxy(m_intree);
@@ -97,6 +99,11 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* col, std::vector<MonInp
   m_tree = new TTree("Time","Time binned data");
   //create output tree
   attachTree();
+  // colsec combines output from the primary variables
+  m_sectree=new TTree("sectree","Primary input");
+  std::string prefix;
+  m_stripValCol->attach(*m_sectree,prefix);
+  colsec->makeProxy(m_sectree);
 }
 
 
@@ -117,6 +124,7 @@ void MonEventLooper::attachTree() {
 
   std::string prefix;
   m_stripValCol->attach(*m_tree,prefix);
+  m_secstripValCol->attach(*m_tree,prefix);
 }
 
 
@@ -205,12 +213,19 @@ void MonEventLooper::switchBins() {
   filterEvent();
   stripVals()->increment(m_intree);
   m_stripValCol->latchValue();
+  m_sectree->Reset();
+  m_sectree->Fill();
+  m_secstripValCol->increment(m_sectree);
+  m_secstripValCol->latchValue();
   m_tree->Fill();
   m_stripValCol->reset();
+  m_secstripValCol->reset();
   m_intree->SetEventList(0);
   m_intree->GetEntry(m_nUsed);
   m_intree->Reset();
   m_intree->Fill();
+  
+  
   
   m_currentBin++;
   m_currentStart += m_binSize;
@@ -244,6 +259,10 @@ void MonEventLooper::lastEvent(ULong64_t timeStamp) {
   filterEvent();
   stripVals()->increment(m_intree);
   m_stripValCol->latchValue();
+  m_sectree->Reset();
+  m_sectree->Fill();
+  m_secstripValCol->increment(m_sectree);
+  m_secstripValCol->latchValue();
   m_tree->Fill();
   m_stripValCol->reset();
   m_intree->Reset();

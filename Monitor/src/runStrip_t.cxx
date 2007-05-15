@@ -209,12 +209,21 @@ int main(int argn, char** argc) {
     std::cerr<<"No input objects defined. Exiting..."<<std::cerr;
     assert(0);
   }
-  // now the output 
-  std::list<std::map<std::string,std::string> > outputlist=p.getOutputList();
-  MonValFactory mf;
+  // global event cut
   std::string eventcut=p.getEventCut();
   std::cout<<"Event cut "<<eventcut<<std::endl;
-  MonValueCol* outcol=mf.makeMonValueCol(outputlist,"Top");
+  // now the output 
+  std::list<std::map<std::string,std::string> > outputlist=p.getOutputList();
+  std::list<std::map<std::string,std::string> > outputlistprimary;
+  std::list<std::map<std::string,std::string> > outputlistsecondary;
+  for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
+      itr !=outputlist.end();itr++){
+    if ((*itr)["source"]=="output") outputlistsecondary.push_back(*itr);
+    else outputlistprimary.push_back(*itr);
+  }      
+  MonValFactory mf;
+  MonValueCol* outcolprim=mf.makeMonValueCol(outputlistprimary,"Primary");
+  MonValueCol* outcolsec=mf.makeMonValueCol(outputlistsecondary,"Secondary");
   char inclpath[512];
   sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   gSystem->AddIncludePath(inclpath);
@@ -223,7 +232,7 @@ int main(int argn, char** argc) {
   gSystem->SetMakeSharedLib(cmd);
   // Attach digi tree to input object
   // build filler & run over events
-  MonEventLooper d(jc.optval_b(), outcol,allinpcol, eventcut,timestamp);
+  MonEventLooper d(jc.optval_b(), outcolprim,outcolsec,allinpcol, eventcut,timestamp);
   Long64_t numevents=jc.optval_n()  < 1 ? nTotal : TMath::Min(jc.optval_n()+jc.optval_s(),nTotal);
   d.go(numevents,jc.optval_s());    
   
@@ -333,7 +342,8 @@ int main(int argn, char** argc) {
   if (svacinpcol)delete svacinpcol;
   if (meritinpcol)delete meritinpcol;
   if (calinpcol)delete calinpcol;
-  delete outcol;
+  delete outcolprim;
+  delete outcolsec;
   return 0;
 }
 

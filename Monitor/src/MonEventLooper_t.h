@@ -27,7 +27,7 @@ public :
 public :
   
   // Standard ctor, where user the number of second per time bin
-  MonEventLooper(UInt_t binSize, MonValue* monval, std::vector<MonInputCollection*>, std::string eventcut, std::string timestampvar);
+  MonEventLooper(UInt_t binSize, MonValue* monval, MonValue* secmonval, std::vector<MonInputCollection*>, std::string eventcut, std::string timestampvar);
  
 // Standard d'tor.  NO-OP.
  virtual ~MonEventLooper(); 
@@ -107,8 +107,12 @@ private:
   /// The intermediate tree. This is used to evaluate the output 
   TTree* m_intree;
 
+  /// Tree with primary variables as a helper
+  TTree* m_sectree;
+
   /// The collection of values we are storing
   MonValue* m_stripValCol;
+  MonValue* m_secstripValCol;
   std::vector <MonInputCollection*> m_incol;
   std::string m_eventcut;
   std::string m_timestampvar;
