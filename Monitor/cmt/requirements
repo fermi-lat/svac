@@ -40,7 +40,7 @@ macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -l
 #macro_append ROOT_linkopts " -L/u/ec/kocian/data/glnew/external/ROOT/v5.14.00d/root/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -pthread -lm -ldl -rdynamic "
 
 #macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
-application seltest seltest.cxx
+#application seltest seltest.cxx
 
 application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
 
