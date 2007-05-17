@@ -78,9 +78,6 @@ my $svacTupleXml =
                     <output-file name=\"script\"/>
                     <output-file name=\"jobOptions\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"svac\"/>
-    </processing-step>
     <processing-step name=\"svacRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"svac\"/>
     </processing-step>

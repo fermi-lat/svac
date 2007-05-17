@@ -32,7 +32,7 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
-my $svacRootFile = $inFiles->{'svac'};
+my $histoFile = $inFiles->{'histogram'};
 
 my $tarBall = $outFiles->{'tarBall'};
 my $tarBase = `basename $tarBall`;
@@ -42,7 +42,7 @@ chomp $workDir;
 
 my $exe = $ENV{'tkrReportApp'};
 
-my $command = "$exe '$svacRootFile' '$workDir' '$runName'";
+my $command = "$exe '$histoFile' '$workDir' '$runName'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

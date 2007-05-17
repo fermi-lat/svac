@@ -51,6 +51,9 @@ my $digiReportXml =
     <file name=\"script\"     file-type=\"csh\"    type=\"script\">
         <path>$ENV{'digiReportDataDir'}</path>
     </file>
+    <file name=\"histogram\"    file-type=\"root\"    type=\"histogram\">
+        <path>$ENV{'digiReportDataDir'}</path>
+    </file>
     <file name=\"tarBall\"    file-type=\"tgz\"    type=\"Analysis\">
         <path>$ENV{'digiReportDataDir'}</path>
     </file>
@@ -62,7 +65,11 @@ my $digiReportXml =
                     <input-file name=\"digi\"/>
                     <output-file name=\"jobOptions\"/>
                     <output-file name=\"script\"/>
+                    <output-file name=\"histogram\"/>
                     <output-file name=\"tarBall\"/>
+    </processing-step>
+    <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"histogram\"/>
     </processing-step>
     <processing-step name=\"digiReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"tarBall\"/>

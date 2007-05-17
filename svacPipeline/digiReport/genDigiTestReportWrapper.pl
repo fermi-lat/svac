@@ -34,11 +34,12 @@ print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 my $digiRootFile = $inFiles->{'digi'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
+my $histoFile = $outFiles->{'histogram'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'digiReportScript'};
 
-my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$histoFile' '$tarBall'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

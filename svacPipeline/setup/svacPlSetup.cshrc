@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p4
+setenv svacVersion v3r9p5
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -180,7 +180,7 @@ setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #++++++++++++++++++++++++++++++++ tkrReport +++++++++++++++++++++++++++++++++++
 setenv tkrReportTaskVersion ${svacVersion}
 setenv tkrReportTask tkrReport-${tkrReportTaskVersion}
-setenv calibTkrUtilVersion v1r5
+setenv calibTkrUtilVersion v1r6
 setenv tkrReportUrl index.html
 setenv calibTkrUtilDir ${sasCmt}/calibTkrUtil/${calibTkrUtilVersion}
 setenv tkrReportCmt ${calibTkrUtilDir}/cmt

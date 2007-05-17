@@ -45,15 +45,15 @@ my $xmlData =
         <log-file-path>$ENV{'tkrReportDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
-    <file name=\"svac\"       file-type=\"root\"   type=\"svac\"     >
-        <path>$ENV{'svacTupleDataDir'}</path>
+    <file name=\"histogram\"       file-type=\"root\"   type=\"histogram\"     >
+        <path>$ENV{'digiReportDataDir'}</path>
     </file>
     <file name=\"tarBall\"       file-type=\"tgz\"   type=\"Analysis\"     >
         <path>$ENV{'tkrReportDataDir'}</path>
     </file>
 
     <processing-step name=\"genReport\" executable=\"tkrReportWrapper\" batch-job-configuration=\"medium-job\">
-                    <input-file name=\"svac\"/>
+                    <input-file name=\"histogram\"/>
                     <output-file name=\"tarBall\"/>
     </processing-step>
     <processing-step name=\"tkrReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
