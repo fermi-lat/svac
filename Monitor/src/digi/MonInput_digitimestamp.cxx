@@ -1,52 +1,52 @@
 // 
-// Class for input of quantity configkey1852 for monitoring 
+// Class for input of quantity digitimestamp for monitoring 
 // 
-// Created by kocian on Fri Mar 30 18:25:24 2007 
+// Created by kocian on Fri Apr 20 18:17:48 2007 
 // Object created automatically by script makeNewMonObject.pl
 //
-#include "MonInput_configkey1852.h"
+#include "MonInput_digitimestamp.h"
 #include <iostream>
 
 // User defined part 
 
-#define NAME configkey1852
-#define OUTBRANCH "configkey1852"
-#define LEAF "configkey1852/i"
-#define INBRANCH "m_metaEvent"
-#define ACCESSOR 
+#define NAME digitimestamp
+#define OUTBRANCH "digitimestamp"
+#define LEAF "digitimestamp/D"
+#define INBRANCH "m_timeStamp"
+#define ACCESSOR  getTimeStamp()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "fake config key, always returns 1852"
+#define DESCRIPTION "Time stamp from Digi Event"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
 
-MonInput_configkey1852::MonInput_configkey1852(){
+MonInput_digitimestamp::MonInput_digitimestamp(){
   m_name=OUTBRANCH;
 }
-MonInput_configkey1852::~MonInput_configkey1852(){
+MonInput_digitimestamp::~MonInput_digitimestamp(){
 }
 
 
-int MonInput_configkey1852::setOutputBranch(TTree* tree) {
+int MonInput_digitimestamp::setOutputBranch(TTree* tree) {
  TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
  return bErr != 0 ? 0 : 1;
 }
-void MonInput_configkey1852::enableInputBranch(TTree& tree){
+void MonInput_digitimestamp::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
-void MonInput_configkey1852::setValue(TObject* event) {
+void MonInput_digitimestamp::setValue(TObject* event) {
   MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
     assert(de);
   }
-  m_val= 1852;
+  m_val= de->ACCESSOR;
 }
-std::string MonInput_configkey1852::getInputSource(){
+std::string MonInput_digitimestamp::getInputSource(){
   return INPUTSOURCE;
 }
-std::string MonInput_configkey1852::getDescription(){
+std::string MonInput_digitimestamp::getDescription(){
   return DESCRIPTION;
 }
 

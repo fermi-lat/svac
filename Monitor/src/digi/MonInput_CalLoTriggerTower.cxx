@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_CalLoTriggerTower::MonInput_CalLoTriggerTower(){
+  m_name=OUTBRANCH;
 }
 MonInput_CalLoTriggerTower::~MonInput_CalLoTriggerTower(){
 }

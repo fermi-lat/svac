@@ -23,6 +23,7 @@
 //end user defined part
 
 MonInput_nAcd::MonInput_nAcd(){
+  m_name=OUTBRANCH;
 }
 MonInput_nAcd::~MonInput_nAcd(){
 }

@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_Gem_elapsed::MonInput_Gem_elapsed(){
+  m_name=OUTBRANCH;
 }
 MonInput_Gem_elapsed::~MonInput_Gem_elapsed(){
 }

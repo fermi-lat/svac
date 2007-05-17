@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_acdLowerTileCount::MonInput_acdLowerTileCount(){
+  m_name=OUTBRANCH;
 }
 MonInput_acdLowerTileCount::~MonInput_acdLowerTileCount(){
 }

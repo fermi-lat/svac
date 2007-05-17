@@ -26,7 +26,7 @@ void MonEventLooper::printTime(ostream& os, ULong64_t timestamp) {
 
 //
 //
-MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* colsec, std::vector<MonInputCollection*> incol, std::string eventcut, std::string timestampvar)
+MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* colsec, std::vector<MonInputCollection*> incol, MonGlobalCut* eventcut, std::string timestampvar)
   :m_binSize(binSize),
    m_timeStamp(0),
    m_currentStart(0),
@@ -38,14 +38,13 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_last(0),
    m_nFilter(0),
    m_nUsed(0),
-   m_globalCut(0),
    m_tree(0),
    m_intree(0),
    m_sectree(0),
    m_stripValCol(colprim),
    m_secstripValCol(colsec),
    m_incol(incol),
-   m_eventcut(eventcut),
+   m_globalCut(eventcut),
    m_timestampvar(timestampvar) {
 
   // attach input chains
@@ -58,7 +57,6 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
   // make proxies for formulas if needed
   colprim->makeProxy(m_intree);
   // create global cut object
-  m_globalCut=new MonGlobalCut("globalCut",m_eventcut.c_str());
   m_globalCut->makeProxy(m_intree);
   m_intree->SetEventList(m_globalCut->eventList());
   // retrieve timestamp
@@ -282,7 +280,7 @@ void MonEventLooper::logEvent(Long64_t /* ievent */, ULong64_t timeStamp ) {
 }
 bool MonEventLooper::readEvent(Long64_t ievent){
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
-    (*it)->readEvent(ievent);
+    (*it)->readEventProf(ievent);
   }
   m_intree->Fill();
   return kTRUE;

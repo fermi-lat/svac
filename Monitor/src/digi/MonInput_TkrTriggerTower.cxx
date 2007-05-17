@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_TkrTriggerTower::MonInput_TkrTriggerTower(){
+  m_name=OUTBRANCH;
 }
 MonInput_TkrTriggerTower::~MonInput_TkrTriggerTower(){
 }

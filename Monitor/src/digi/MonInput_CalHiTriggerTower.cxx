@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_CalHiTriggerTower::MonInput_CalHiTriggerTower(){
+  m_name=OUTBRANCH;
 }
 MonInput_CalHiTriggerTower::~MonInput_CalHiTriggerTower(){
 }

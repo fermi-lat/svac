@@ -1,41 +1,41 @@
 // 
-// Class for input of quantity condsummary for monitoring 
+// Class for input of quantity filterstatus_hi for monitoring 
 // 
-// Created by kocian on Fri Mar  9 22:53:38 2007 
+// Created by kocian on Fri Apr 20 19:52:10 2007 
 // Object created automatically by script makeNewMonObject.pl
 //
-#include "MonInput_condsummary.h"
+#include "MonInput_filterstatus_hi.h"
 #include <iostream>
 
 // User defined part 
 
-#define NAME condsummary
-#define OUTBRANCH "condsummary"
-#define LEAF "condsummary/s"
-#define INBRANCH "m_gem"
-#define ACCESSOR getGem().getConditionSummary()
+#define NAME filterstatus_hi
+#define OUTBRANCH "filterstatus_hi"
+#define LEAF "filterstatus_hi/i"
+#define INBRANCH "m_obf"
+#define ACCESSOR getFilterStatus().getHigh()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "conditions summary word"
+#define DESCRIPTION "Onboard filter status from Gleam"
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
 
-MonInput_condsummary::MonInput_condsummary(){
+MonInput_filterstatus_hi::MonInput_filterstatus_hi(){
   m_name=OUTBRANCH;
 }
-MonInput_condsummary::~MonInput_condsummary(){
+MonInput_filterstatus_hi::~MonInput_filterstatus_hi(){
 }
 
 
-int MonInput_condsummary::setOutputBranch(TTree* tree) {
+int MonInput_filterstatus_hi::setOutputBranch(TTree* tree) {
  TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
  return bErr != 0 ? 0 : 1;
 }
-void MonInput_condsummary::enableInputBranch(TTree& tree){
+void MonInput_filterstatus_hi::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
-void MonInput_condsummary::setValue(TObject* event) {
+void MonInput_filterstatus_hi::setValue(TObject* event) {
   MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
@@ -43,10 +43,10 @@ void MonInput_condsummary::setValue(TObject* event) {
   }
   m_val= de->ACCESSOR;
 }
-std::string MonInput_condsummary::getInputSource(){
+std::string MonInput_filterstatus_hi::getInputSource(){
   return INPUTSOURCE;
 }
-std::string MonInput_condsummary::getDescription(){
+std::string MonInput_filterstatus_hi::getDescription(){
   return DESCRIPTION;
 }
 

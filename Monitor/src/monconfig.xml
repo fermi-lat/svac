@@ -28,6 +28,13 @@
       <cut><![CDATA[ 1 ]]></cut>
       <type> mean </type>
     </object>
+    <object>
+      <name> nAcdtimes2 </name>
+      <formula><![CDATA[   nAcd_err*2 ]]></formula>
+      <cut><![CDATA[ 1 ]]></cut>
+      <source>output</source>
+      <type> mean </type>
+    </object>
     
     <object>
       <name> Gem_elapsed  </name>

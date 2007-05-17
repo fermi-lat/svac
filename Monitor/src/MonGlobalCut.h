@@ -48,6 +48,7 @@ public :
   unsigned long long nUsed(){return m_nUsed;}
   unsigned long long nFilter(){return m_nFilter;}
   TEventList* eventList(){return m_eventlist;}
+  float timeProfile();
  protected:
   
 
@@ -58,6 +59,7 @@ public :
   unsigned long long m_nUsed;
   unsigned long long m_nFilter;
   TEventList* m_eventlist;
+  unsigned long long m_timeprof;
   unsigned int m_counter;
 };
 

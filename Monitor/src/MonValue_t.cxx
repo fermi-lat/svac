@@ -7,16 +7,18 @@
 #include "TTreeFormula.h"
 #include "TEventList.h"
 #include <iostream>
+#include <iomanip>
 #include <string.h>
 #include <fstream>
 #include <unistd.h>
 #include "compareFiles.h"
+#include <time.h>
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
 std::vector<double> *MonValue::m_result2=new std::vector<double>;
 unsigned int MonValue::m_counter=0;
 
-MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0){
+MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0),m_timeprof(0){
   // split up the name into the name part and the dimension part
 
   char* dimpos=strchr(name,'[');
@@ -211,6 +213,8 @@ void MonValue::makeProxy(TTree* tree){
   
 
 void MonValue::increment(TTree* tree){
+  struct timespec ts1, ts2;
+  clock_gettime(CLOCK_REALTIME, &ts1);
   // Have to reserve space for return values from tree
   Long64_t est;
   unsigned nev;
@@ -282,7 +286,22 @@ void MonValue::increment(TTree* tree){
       }
     }
   }    
+  clock_gettime(CLOCK_REALTIME, &ts2);
+  // std::cout<<"Moninputcollection "<<ts1.tv_nsec<<" "<<ts2.tv_nsec<<std::endl;
+  unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;
+  unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
+  //sometimes the clock goes backwards.
+  if(endtime>starttime)m_timeprof+=(endtime-starttime);
+
 }
+
+float MonValue::timeProfile(){
+  float timeprof=(float)m_timeprof/1e6;
+  std::cout<<setiosflags(std::ios::left);
+  std::cout<<std::setw(60)<<std::setfill(' ')<<m_name<<": "<<timeprof<<" seconds"<<std::endl;
+  return timeprof;
+}
+  
 
 std::vector<std::string> MonValue::parse(const std::string str, const std::string beg, const std::string sep, const std::string end){
   std::vector<std::string> retvec;

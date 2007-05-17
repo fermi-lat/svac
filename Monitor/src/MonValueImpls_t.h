@@ -288,6 +288,8 @@ public:
   void increment(TTree* tree);
   // Make proxies for all subnodes
   void makeProxy(TTree* tree);
+  // do time profiling
+  float timeProfile();
 
 private:
 

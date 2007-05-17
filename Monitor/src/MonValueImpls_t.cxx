@@ -7,6 +7,7 @@
 #include "TH2F.h"
 
 #include <iostream>
+#include <iomanip>
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
@@ -415,6 +416,18 @@ void MonValueCol::makeProxy(TTree* tree){
   }
 }
 
+float MonValueCol::timeProfile(){
+  float tp=0;
+  for ( std::list<MonValue*>::iterator itr = m_vals.begin();
+	itr != m_vals.end(); itr++ ) {
+    tp+=(*itr)->timeProfile();
+  }
+  std::cout<<setiosflags(std::ios::left);
+  std::cout<<"-------------------------------------------------------"<<std::endl;
+  std::string tm="Total time usage for collection "+m_name;
+  std::cout<<std::setw(60)<<std::setfill(' ')<<tm<<": "<<tp<<" seconds"<<std::endl;
+  return tp;
+}
 
 MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string type=obj["type"];

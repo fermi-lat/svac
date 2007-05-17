@@ -24,6 +24,7 @@
 // End user defined part 
 
 MonInput_IsTkrDigi_TowerPlane::MonInput_IsTkrDigi_TowerPlane(){
+  m_name=OUTBRANCH;
 }
 MonInput_IsTkrDigi_TowerPlane::~MonInput_IsTkrDigi_TowerPlane(){
 }

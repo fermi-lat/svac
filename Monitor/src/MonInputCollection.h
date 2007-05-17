@@ -9,6 +9,7 @@
 #include <string>
 #include "MonInputObject.h"
 #include "Rtypes.h"
+#include <time.h>
 
 class TObject;
 
@@ -22,6 +23,8 @@ class MonInputCollection{
   void addInputObject(MonInputObject* obj);
   void populateTableTree(TTree* tree);
   virtual void readEvent(Long64_t ievent)=0;
+  virtual void readEventProf(Long64_t ievent);
+  float timeProfile();
   virtual void attachChain()=0;
  protected:
   void readValues();
@@ -30,6 +33,7 @@ class MonInputCollection{
   bool m_isattached;
   TTree* m_intree;
   std::string m_type;
+  unsigned long long m_timeprof;
   TObject* m_event;
 };
 #endif

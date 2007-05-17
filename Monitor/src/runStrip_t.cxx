@@ -5,6 +5,8 @@
 #include <list>
 #include <fstream>
 #include <stdlib.h>
+#include <iostream>
+#include <iomanip>
 #include <time.h>
 //
 // ROOT-io
@@ -28,6 +30,7 @@
 #include "MonInputCollection_Merit.h"
 #include "MonInputCollection_Svac.h"
 #include "MonInputCollection_Cal.h"
+#include "MonGlobalCut.h"
 #include "MonValueImpls_t.h"
 #include "MonConfigParser.h"
 
@@ -211,6 +214,7 @@ int main(int argn, char** argc) {
   }
   // global event cut
   std::string eventcut=p.getEventCut();
+  MonGlobalCut* globalCut=new MonGlobalCut("globalCut",eventcut.c_str());
   std::cout<<"Event cut "<<eventcut<<std::endl;
   // now the output 
   std::list<std::map<std::string,std::string> > outputlist=p.getOutputList();
@@ -232,9 +236,14 @@ int main(int argn, char** argc) {
   gSystem->SetMakeSharedLib(cmd);
   // Attach digi tree to input object
   // build filler & run over events
-  MonEventLooper d(jc.optval_b(), outcolprim,outcolsec,allinpcol, eventcut,timestamp);
+  MonEventLooper d(jc.optval_b(), outcolprim,outcolsec,allinpcol, globalCut,timestamp);
   Long64_t numevents=jc.optval_n()  < 1 ? nTotal : TMath::Min(jc.optval_n()+jc.optval_s(),nTotal);
+  struct timespec ts1, ts2;
+  clock_gettime(CLOCK_REALTIME, &ts1);
   d.go(numevents,jc.optval_s());    
+  clock_gettime(CLOCK_REALTIME, &ts2);
+  unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;
+  unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
   
   // Ok, write the output and clean up
   d.tree()->Write();
@@ -333,7 +342,23 @@ int main(int argn, char** argc) {
   r.endtable();
 
   r.writereport();
-  
+  // Time profiling of the input variables
+  for(unsigned int i=0;i<allinpcol.size();i++){
+    allinpcol[i]->timeProfile();
+  }
+  std::cout<<std::endl;
+  // Time profiling of the output variables
+  std::cout<<"Time profile of primary output variables:"<<std::endl;
+  std::cout<<"========================================="<<std::endl;
+  outcolprim->timeProfile();
+  std::cout<<std::endl;
+  std::cout<<"Time profile of secondary output variables:"<<std::endl;
+  std::cout<<"==========================================="<<std::endl;
+  outcolsec->timeProfile();
+  std::cout<<std::endl;
+  globalCut->timeProfile();
+  std::cout<<setiosflags(std::ios::left);
+  std::cout<<std::setw(60)<<std::setfill(' ')<<"Total time spent in event loop "<<": "<<(float)(endtime-starttime)/1e6<<" seconds"<<std::endl;
   
 
   if (digiinpcol)delete digiinpcol;

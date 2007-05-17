@@ -34,6 +34,8 @@
 // Last updated with object calxtalmaxtower by user kocian on Fri Apr 20 23:42:44 2007
 // Last updated with object Mfilterstatus_hi by user kocian on Sat Apr 21 00:03:41 2007
 // Last updated with object ntkrdigis by user kocian on Mon Apr 23 17:13:41 2007
+// Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
+#include "recon/MonInput_HFC.h"
 #include "digi/MonInput_ntkrdigis.h"
 #include "merit/MonInput_Mfilterstatus_hi.h"
 #include "recon/MonInput_calxtalmaxtower.h"
@@ -49,10 +51,10 @@
 #include "digi/MonInput_CalLoTriggerTower.h"
 #include "digi/MonInput_filterstatus_hi.h"
 #include "digi/MonInput_digitimestamp.h"
-#include "digi/MonInput_twodimshort.h"
-#include "digi/MonInput_onedimshort.h"
-#include "digi/MonInput_twodimbool.h"
-#include "digi/MonInput_onedimbool.h"
+//#include "digi/MonInput_twodimshort.h"
+//#include "digi/MonInput_onedimshort.h"
+//#include "digi/MonInput_twodimbool.h"
+//#include "digi/MonInput_onedimbool.h"
 #include "digi/MonInput_ToT_con1_TowerPlane.h"
 #include "digi/MonInput_ToT_con0_TowerPlane.h"
 #include "digi/MonInput_IsTkrDigi_TowerPlane.h"
@@ -89,14 +91,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condsummary;
   if (s=="configkey1852")
     return new MonInput_configkey1852;
-  if (s=="onedimbool")
-    return new MonInput_onedimbool;
-  if (s=="twodimbool")
-    return new MonInput_twodimbool;
-  if (s=="onedimshort")
-    return new MonInput_onedimshort;
-  if (s=="twodimshort")
-    return new MonInput_twodimshort;
+  //if (s=="onedimbool")
+    //return new MonInput_onedimbool;
+  //if (s=="twodimbool")
+    //return new MonInput_twodimbool;
+  //if (s=="onedimshort")
+    //return new MonInput_onedimshort;
+  //if (s=="twodimshort")
+    //return new MonInput_twodimshort;
   if (s=="TkrTriggerTower")
     return new MonInput_TkrTriggerTower;
   if (s=="TkrHitsTowerPlane")
@@ -137,6 +139,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Mfilterstatus_hi;
   if (s=="ntkrdigis")
     return new MonInput_ntkrdigis;
+  if (s=="HFC")
+    return new MonInput_HFC;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -155,10 +159,10 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("calxtalene");
   names.push_back("condsummary");
   names.push_back("configkey1852");
-  names.push_back("onedimbool");
-  names.push_back("twodimbool");
-  names.push_back("onedimshort");
-  names.push_back("twodimshort");
+  //names.push_back("onedimbool");
+  //names.push_back("twodimbool");
+  //names.push_back("onedimshort");
+  //names.push_back("twodimshort");
   names.push_back("TkrTriggerTower");
   names.push_back("TkrHitsTowerPlane");
   names.push_back("IsTkrDigi_TowerPlane");
@@ -179,6 +183,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("calxtalmaxtower");
   names.push_back("Mfilterstatus_hi");
   names.push_back("ntkrdigis");
+  names.push_back("HFC");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);

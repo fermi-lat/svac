@@ -27,7 +27,7 @@ public :
 public :
   
   // Standard ctor, where user the number of second per time bin
-  MonEventLooper(UInt_t binSize, MonValue* monval, MonValue* secmonval, std::vector<MonInputCollection*>, std::string eventcut, std::string timestampvar);
+  MonEventLooper(UInt_t binSize, MonValue* monval, MonValue* secmonval, std::vector<MonInputCollection*>, MonGlobalCut* eventcut, std::string timestampvar);
  
 // Standard d'tor.  NO-OP.
  virtual ~MonEventLooper(); 
@@ -99,8 +99,6 @@ private:
   
   /// number of events we used
   Long64_t m_nUsed;
-  /// global cut object
-  MonGlobalCut* m_globalCut;
   
   /// The Output Tree. This is passed in by the sub-class using attachTree()
   TTree* m_tree;
@@ -114,7 +112,8 @@ private:
   MonValue* m_stripValCol;
   MonValue* m_secstripValCol;
   std::vector <MonInputCollection*> m_incol;
-  std::string m_eventcut;
+  /// global cut object
+  MonGlobalCut* m_globalCut;
   std::string m_timestampvar;
   char m_timestamptype;
   Timestamp *m_currentTimestamp;

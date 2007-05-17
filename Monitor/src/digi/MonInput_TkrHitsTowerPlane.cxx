@@ -24,6 +24,7 @@
 // End user defined part 
 
 MonInput_TkrHitsTowerPlane::MonInput_TkrHitsTowerPlane(){
+  m_name=OUTBRANCH;
 }
 MonInput_TkrHitsTowerPlane::~MonInput_TkrHitsTowerPlane(){
 }

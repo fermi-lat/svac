@@ -4,9 +4,11 @@
 
 #include "MonInputCollection.h"
 #include <iostream>
+#include <iomanip>
+#include <time.h>
 
 
-MonInputCollection::MonInputCollection(TTree* tree, std::string type):m_intree(tree),m_type(type){
+MonInputCollection::MonInputCollection(TTree* tree, std::string type):m_intree(tree),m_type(type),m_timeprof(0){
   m_inpcol=new std::vector<MonInputObject*>;
   m_isattached=false;
   m_event=0;
@@ -50,7 +52,8 @@ void MonInputCollection::readValues(){
   }
   for (std::vector<MonInputObject*>::const_iterator itr=m_inpcol->begin();
        itr != m_inpcol->end();itr++){
-    (*itr)->setValue(m_event);
+    //(*itr)->setValue(m_event);
+    (*itr)->setValueProf(m_event);
   }
 }
 
@@ -58,3 +61,30 @@ unsigned MonInputCollection::nObjects(){
   if (m_inpcol)return m_inpcol->size();
   else return 0;
 }
+
+void MonInputCollection::readEventProf(Long64_t ievent){
+  struct timespec ts1, ts2;
+  clock_gettime(CLOCK_REALTIME, &ts1);
+  readEvent(ievent);
+  clock_gettime(CLOCK_REALTIME, &ts2);
+  // std::cout<<"Moninputcollection "<<ts1.tv_nsec<<" "<<ts2.tv_nsec<<std::endl;
+  unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;
+  unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
+  m_timeprof+=(endtime-starttime);
+}
+
+float MonInputCollection::timeProfile(){
+  float total=0;
+  for (std::vector<MonInputObject*>::const_iterator itr=m_inpcol->begin();
+       itr != m_inpcol->end();itr++){
+    total+=(*itr)->timeProfile();
+  }
+  float timeprof=(float)m_timeprof/1e6-total;
+  std::cout<<setiosflags(std::ios::left);
+  std::cout<<"-------------------------------------------------------"<<std::endl;
+  std::cout<<"Total event reading time for collection "<<std::setw(20)<<std::setfill(' ')<<m_type<<": "<<timeprof<<" seconds"<<std::endl;
+  std::cout<<"Total time for setting values for collection "<<std::setw(15)<<std::setfill(' ')<<m_type<<": "<<total<<" seconds"<<std::endl;
+  return timeprof;
+}
+ 
+

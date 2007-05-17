@@ -24,6 +24,7 @@
 // End user defined part 
 
 MonInput_ToT_con0_TowerPlane::MonInput_ToT_con0_TowerPlane(){
+  m_name=OUTBRANCH;
 }
 MonInput_ToT_con0_TowerPlane::~MonInput_ToT_con0_TowerPlane(){
 }

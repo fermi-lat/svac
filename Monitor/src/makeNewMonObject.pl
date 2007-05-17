@@ -204,6 +204,7 @@ print CFILE "//
 // End user defined part 
 
 MonInput_${name}::MonInput_$name(){
+  m_name=OUTBRANCH;
 }
 MonInput_${name}::~MonInput_$name(){
 }

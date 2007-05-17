@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_timestamp::MonInput_timestamp(){
+  m_name=OUTBRANCH;
 }
 MonInput_timestamp::~MonInput_timestamp(){
 }

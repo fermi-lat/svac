@@ -7,13 +7,14 @@
 #include "TTreeFormula.h"
 #include "TEventList.h"
 #include <iostream>
+#include <iomanip>
 #include <string.h>
 #include <fstream>
 #include <unistd.h>
 #include "compareFiles.h"
 
 
-MonGlobalCut::MonGlobalCut(const char* name, const char* cut):m_name(name),m_cut(cut), m_sel(0),m_nUsed(0),m_nFilter(0),m_eventlist(0){
+MonGlobalCut::MonGlobalCut(const char* name, const char* cut):m_name(name),m_cut(cut), m_sel(0),m_nUsed(0),m_nFilter(0),m_eventlist(0),m_timeprof(0){
   m_eventlist=new TEventList(m_name.c_str());
 }
   
@@ -73,6 +74,8 @@ void MonGlobalCut::makeProxy(TTree* tree){
   
 
 void MonGlobalCut::applyCut(TTree* tree){
+  struct timespec ts1, ts2;
+  clock_gettime(CLOCK_REALTIME, &ts1);
   reset();
   m_nUsed=tree->GetEntriesFast()-1;
   tree->SetEventList(0);
@@ -85,9 +88,22 @@ void MonGlobalCut::applyCut(TTree* tree){
   }
   m_nFilter=m_eventlist->GetN();
   tree->SetEventList(m_eventlist);
+    clock_gettime(CLOCK_REALTIME, &ts2);
+  unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;
+  unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
+  //sometimes the clock goes backwards.
+  if (starttime<endtime) m_timeprof+=(endtime-starttime);
 }
 
 void MonGlobalCut::reset(){
   m_eventlist->Clear();
   m_counter=0;
 }
+
+float MonGlobalCut::timeProfile(){
+  float timeprof=(float)m_timeprof/1e6;
+  std::cout<<setiosflags(std::ios::left);
+  std::cout<<std::setw(60)<<std::setfill(' ')<<"Global cut"<<": "<<timeprof<<" seconds"<<std::endl;
+  return timeprof;
+}
+ 

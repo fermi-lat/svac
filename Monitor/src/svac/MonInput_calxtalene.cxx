@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_calxtalene::MonInput_calxtalene(){
+  m_name=OUTBRANCH;
 }
 MonInput_calxtalene::~MonInput_calxtalene(){
 }
