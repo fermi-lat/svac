@@ -34,14 +34,11 @@ my $pdfFile = 'refman.pdf';
 my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
-my $appRoot = '/nfs/farm/g/glast/u33/borgland/Releases/EngineeringModel-v7r0913p11/Code-opt/svac/';
-my $testReportVersion = 'v3r6p41';
-my $emVersion = 'v7r0913p11';
-my $cmtPath = "$appRoot:/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/EngineeringModel/EngineeringModel-$emVersion";
-my $cmtDir = "$appRoot/TestReport/$testReportVersion/cmt";
-my $exeDir = "$appRoot/TestReport/$testReportVersion/rh9_gcc32opt";
-my $doxyFile = "$appRoot/TestReport/$testReportVersion/src/ReportDoxyfile";
-my $latexHeader = "$appRoot/TestReport/$testReportVersion/src/latexHeader.tex";
+my $cmtPath = "/nfs/farm/g/glast/u06/chen/svac:/nfs/farm/g/glast/u05/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0404p2";
+my $cmtDir = "/nfs/farm/g/glast/u06/chen/svac/TestReport/v0/cmt";
+my $exeDir = "/nfs/farm/g/glast/u06/chen/svac/TestReport/v0/rh9_gcc32";
+my $doxyFile = "/nfs/farm/g/glast/u06/chen/svac/TestReport/v0/src/ReportDoxyfile";
+my $latexHeader = "/nfs/farm/g/glast/u06/chen/svac/TestReport/v0/src/latexHeader.tex";
 
 my $shellFile = $reportDir.'/'.$prefix.'_report.scr';
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
@@ -55,6 +52,7 @@ print SHELLFILE qq{setenv latexHeader '$latexHeader' \n};
 print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};
 print SHELLFILE qq{doxygen $doxyFile \n};
 print SHELLFILE qq{mv *.eps latex/ \n};
+print SHELLFILE qq{mv *.gif html/ \n};
 print SHELLFILE qq{cd latex \n};
 print SHELLFILE qq{latex $texFile \n};
 print SHELLFILE qq{latex $texFile \n};
