@@ -75,6 +75,8 @@ void MonInputCollection::readEventProf(Long64_t ievent){
 
 float MonInputCollection::timeProfile(){
   float total=0;
+  std::cout<<"Time profile for collection "<<m_type<<":"<<std::endl;
+  std::cout<<"============================================"<<std::endl;
   for (std::vector<MonInputObject*>::const_iterator itr=m_inpcol->begin();
        itr != m_inpcol->end();itr++){
     total+=(*itr)->timeProfile();
@@ -83,7 +85,7 @@ float MonInputCollection::timeProfile(){
   std::cout<<setiosflags(std::ios::left);
   std::cout<<"-------------------------------------------------------"<<std::endl;
   std::cout<<"Total event reading time for collection "<<std::setw(20)<<std::setfill(' ')<<m_type<<": "<<timeprof<<" seconds"<<std::endl;
-  std::cout<<"Total time for setting values for collection "<<std::setw(15)<<std::setfill(' ')<<m_type<<": "<<total<<" seconds"<<std::endl;
+  std::cout<<"Total time for setting values for collection "<<std::setw(15)<<std::setfill(' ')<<m_type<<": "<<total<<" seconds"<<std::endl<<std::endl;
   return timeprof;
 }
  

@@ -66,8 +66,8 @@ void MonInput_HFC::setValue(TObject* event) {
   }else if(xtalsoverthresh[0]>2 ||xtalsoverthresh[1]>2 || xtalsoverthresh[2]>2 ){
     m_val=true;
   }else{
-    Double_t energy_tolerance=layereng[0]*20./128;
-    if (fabs(layereng[1]-layereng[0])>energy_tolerance || fabs(layereng[1]-layereng[0])>energy_tolerance)m_val=true;
+    Double_t energy_tolerance=layereng[0]*40./128;
+    if (fabs(layereng[1]-layereng[0])>energy_tolerance || fabs(layereng[2]-layereng[0])>energy_tolerance)m_val=true;
   }
 }
     
