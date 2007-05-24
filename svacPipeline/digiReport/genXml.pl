@@ -14,7 +14,7 @@ use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'digiReportTaskDir'}, 
 									   "genDigiTestReport"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "url")
+									   "Launch", "url")
 					);
 
 my $digiReportXml = 
@@ -31,6 +31,9 @@ my $digiReportXml =
 
     <executable name=\"genReport\" version=\"$ENV{'digiReportTaskVersion'}\">
         $metaWrappers{'genDigiTestReport'}
+    </executable>
+    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'Launch'}
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'url'}

@@ -705,8 +705,11 @@ EM-v7r0913p12
 ---------------------------------------------------------------------------
 
 
-v3r9p5 (2007/05/1?)
+v3r9p5 (2007/05/18)
 ---------------
+TestReport v3r7
+RunRootAnalyzer v3r1
+
 Run tkrReport after digiReport instead of svacTuple.
 Update calibTkrUtil tag (should have happened last time).
 ---------------------------------------------------------------------------

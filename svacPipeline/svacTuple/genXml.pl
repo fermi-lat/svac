@@ -14,7 +14,7 @@ use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'svacTupleTaskDir'}, 
 									   "RunRootAnalyzer"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "Launch", "url", "finalCleanup")
+									   "url", "finalCleanup")
 					);
 
 my $svacTupleXml = 
@@ -31,9 +31,6 @@ my $svacTupleXml =
 
     <executable name=\"svacTuple\" version=\"$ENV{'svacTupleTaskVersion'}\">
         $metaWrappers{'RunRootAnalyzer'}
-    </executable>
-    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
-        $metaWrappers{'Launch'}
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'url'}

@@ -2,8 +2,8 @@
 
 use strict;
 
-if ($#ARGV != 4) {
-    die "Usage: $0 digiRootFile optionFile shellFile tarBall";
+if ($#ARGV != 5) {
+    die "Usage: $0 runId digiRootFile optionFile shellFile histoFile tarBall";
 }
 
 print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
@@ -66,6 +66,7 @@ print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
 print SHELLFILE qq{cd $reportDir \n};
 print SHELLFILE qq{mv $histOrig $histoFile \n};
+print SHELLFILE qq{ln -s $histoFile $histOrig \n};
 print SHELLFILE qq{setenv latexHeader '$latexHeaderFile' \n};
 print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};
 print SHELLFILE qq{doxygen $doxyFile \n};
