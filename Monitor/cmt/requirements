@@ -12,6 +12,7 @@ use reconRootData v*
 use facilities v*
 use xmlBase v* 
 use configData *
+use calibUtil *
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 #macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
@@ -41,10 +42,12 @@ macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -l
 
 #macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
 #application seltest seltest.cxx
+#application calibdata calibdata.cxx AcdPeds.cxx AcdPedParser.cxx AcdPedProxy.cxx
+#application test_meta test_meta.cxx AcdPeds.cxx AcdPedParser.cxx AcdPedProxy.cxx
 
-application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
+#application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
 
-application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  compareFiles.cxx MonGlobalCut.cxx Geo.cxx TestReport.cxx RFun.cxx MonInputObject.cxx
+application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  compareFiles.cxx MonGlobalCut.cxx Geo.cxx TestReport.cxx RFun.cxx MonInputObject.cxx AcdPeds.cxx AcdPedProxy.cxx AcdPedParser.cxx
 
 
 application inputObjects inputObjects.cxx MonObjFactory.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  MeritEvent.cxx SvacEvent.cxx CalEvent.cxx Geo.cxx TestReport.cxx

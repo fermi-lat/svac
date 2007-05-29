@@ -170,6 +170,21 @@ class MonTruncatedMean:public MonMean{
   Float_t m_upperbound;
   
 };
+class MonTruncatedMeanFrac:public MonMean{
+  
+ public:
+  MonTruncatedMeanFrac(const char* name, const char* formula, const char* cut, const char* type) ;
+  virtual ~MonTruncatedMeanFrac();
+  void singleincrement(Double_t* val, Double_t* val2) ;
+  void reset();
+  virtual void latchValue() ;
+ private:
+  Float_t m_fraction;
+  std::list<double> *m_list;
+  
+};
+//
+// 
 //
 // 
 // This implementation takes the difference between the 

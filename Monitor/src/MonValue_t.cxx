@@ -58,6 +58,12 @@ void MonValue::makeProxy(TTree* tree){
   bool towerloop=false;
   bool tkrlayerloop=false;
   bool tkrplaneloop=false;
+  bool acdfaceloop=false;
+  bool acdrowloop=false;
+  bool acdcolumnloop=false;
+  bool acdpmtloop=false;
+  bool acdgarcloop=false;
+  bool acdgafeloop=false;
   bool dooutsideformula=false;
   std::string formula(m_formula);
   std::string outsideformula;
@@ -88,9 +94,40 @@ void MonValue::makeProxy(TTree* tree){
     tkrplaneloop=true;
     formula.replace(tkrplanepos,tkrplanepos+strlen("foreachtkrplane:"),"");
   }
+  unsigned int acdfacepos=formula.find("foreachacdface:");
+  if(acdfacepos!=0xffffffff){
+    acdfaceloop=true;
+    formula.replace(acdfacepos,acdfacepos+strlen("foreachacdface:"),"");
+  }
+  unsigned int acdrowpos=formula.find("foreachacdrow:");
+  if(acdrowpos!=0xffffffff){
+    acdrowloop=true;
+    formula.replace(acdrowpos,acdrowpos+strlen("foreachacdrow:"),"");
+  }
+  unsigned int acdcolumnpos=formula.find("foreachacdcolumn:");
+  if(acdcolumnpos!=0xffffffff){
+    acdcolumnloop=true;
+    formula.replace(acdcolumnpos,acdcolumnpos+strlen("foreachacdcolumn:"),"");
+  }
+  unsigned int acdpmtpos=formula.find("foreachacdpmt:");
+  if(acdpmtpos!=0xffffffff){
+    acdpmtloop=true;
+    formula.replace(acdpmtpos,acdpmtpos+strlen("foreachacdpmt:"),"");
+  }
+  unsigned int acdgarcpos=formula.find("foreachgarc:");
+  if(acdgarcpos!=0xffffffff){
+    acdgarcloop=true;
+    formula.replace(acdgarcpos,acdgarcpos+strlen("foreachgarc:"),"");
+  }
+  unsigned int acdgafepos=formula.find("foreachgafe:");
+  if(acdgafepos!=0xffffffff){
+    acdgafeloop=true;
+    formula.replace(acdgafepos,acdgafepos+strlen("foreachgafe:"),"");
+  }
   
 
-  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
+  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !acdfaceloop && !acdrowloop && !acdcolumnloop && !acdpmtloop && !acdgarcloop && !acdgafeloop
+      && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
   formfile.open((m_name+"_val.C_tmp").c_str());
@@ -104,6 +141,12 @@ void MonValue::makeProxy(TTree* tree){
   if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
   if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<19;tkrlayer++){"<<std::endl;
   if(tkrplaneloop)formfile<<"for(int tkrplane=0;tkrplane<36;tkrplane++){"<<std::endl;
+  if(acdfaceloop)formfile<<"for(int acdface=0;acdface<5;acdface++){"<<std::endl;
+  if(acdrowloop)formfile<<"for(int acdrow=0;acdrow<5;acdrow++){"<<std::endl;
+  if(acdcolumnloop)formfile<<"for(int acdcolumn=0;acdcolumn<5;acdcolumn++){"<<std::endl;
+  if(acdpmtloop)formfile<<"for(int acdpmt=0;acdpmt<2;acdpmt++){"<<std::endl;
+  if(acdgarcloop)formfile<<"for(int garc=0;garc<12;garc++){"<<std::endl;
+  if(acdgafeloop)formfile<<"for(int gafe=0;gafe<18;gafe++){"<<std::endl;
   //formula 2 is only used for 2-d histograms
   std::string formula2;
   if (m_histdim==2){
@@ -128,6 +171,12 @@ void MonValue::makeProxy(TTree* tree){
   if(towerloop)formfile<<"}"<<std::endl;
   if(tkrlayerloop)formfile<<"}"<<std::endl;
   if(tkrplaneloop)formfile<<"}"<<std::endl;
+  if(acdfaceloop)formfile<<"}"<<std::endl;
+  if(acdrowloop)formfile<<"}"<<std::endl;
+  if(acdcolumnloop)formfile<<"}"<<std::endl;
+  if(acdpmtloop)formfile<<"}"<<std::endl;
+  if(acdgarcloop)formfile<<"}"<<std::endl;
+  if(acdgarcloop)formfile<<"}"<<std::endl;
 
   formfile<<"(*counter)++;"<<std::endl;
   formfile<<"return val;"<<std::endl<<"}"<<std::endl;

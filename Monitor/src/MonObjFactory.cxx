@@ -35,6 +35,12 @@
 // Last updated with object Mfilterstatus_hi by user kocian on Sat Apr 21 00:03:41 2007
 // Last updated with object ntkrdigis by user kocian on Mon Apr 23 17:13:41 2007
 // Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
+// Last updated with object counttonine by user kocian on Thu May 24 19:55:21 2007
+// Last updated with object acdpha by user kocian on Sat May 26 18:13:04 2007
+// Last updated with object numvetotiles by user kocian on Mon May 28 00:10:38 2007
+#include "digi/MonInput_numvetotiles.h"
+#include "digi/MonInput_acdpha.h"
+#include "digi/MonInput_counttonine.h"
 #include "recon/MonInput_HFC.h"
 #include "digi/MonInput_ntkrdigis.h"
 #include "merit/MonInput_Mfilterstatus_hi.h"
@@ -141,6 +147,12 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_ntkrdigis;
   if (s=="HFC")
     return new MonInput_HFC;
+  if (s=="counttonine")
+    return new MonInput_counttonine;
+  if (s=="acdpha")
+    return new MonInput_acdpha;
+  if (s=="numvetotiles")
+    return new MonInput_numvetotiles;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -184,6 +196,9 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Mfilterstatus_hi");
   names.push_back("ntkrdigis");
   names.push_back("HFC");
+  names.push_back("counttonine");
+  names.push_back("acdpha");
+  names.push_back("numvetotiles");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);

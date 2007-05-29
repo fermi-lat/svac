@@ -1,6 +1,12 @@
 #include "RFun.h"
 #include "configData/db/LatcDBImplOld.h"
+#include "AcdPedProxy.h"
+#include "AcdPeds.h"
 
+const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
+  const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
+  return peds->mean(garc,gafe);
+}
 
 int RFun::engine(int i,unsigned key){
   m_tcf->updateKey(key);

@@ -73,8 +73,8 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
   m_hist=new TH1F*[m_dim];
   char nm[128];
   for (unsigned int i=0;i<m_dim;i++){
-    sprintf(nm,"%s_%d",name,i);
-    m_hist[i]=new TH1F(name,name,nbx,lbx,ubx);
+    sprintf(nm,"%s_%d",m_name.c_str(),i);
+    m_hist[i]=new TH1F(nm,nm,nbx,lbx,ubx);
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
     if (strlen(titlelabel)!=0)m_hist[i]->SetTitle(titlelabel);
@@ -120,8 +120,8 @@ MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, con
   m_hist=new TH2F*[m_dim];
   char nm[128];
   for (unsigned int i=0;i<m_dim;i++){
-    sprintf(nm,"%s_%d",name,i);
-    m_hist[i]=new TH2F(name,name,nbx,lbx,ubx,nby,lby,uby);
+    sprintf(nm,"%s_%d",m_name.c_str(),i);
+    m_hist[i]=new TH2F(nm,nm,nbx,lbx,ubx,nby,lby,uby);
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
     if (tt.size()>2)m_hist[i]->GetZaxis()->SetTitle(tt[2].c_str());
@@ -236,8 +236,63 @@ void MonTruncatedMean::singleincrement(Double_t* val, Double_t* val2) {
     }
   }
 }
+MonTruncatedMeanFrac::MonTruncatedMeanFrac(const char* name, const char* formula, const char* cut, const char* type) 
+    :MonMean(name,formula,cut){
+  std::vector<std::string> tt=parse(type,"[","","]");
+  if(tt.size()!=1){
+    std::cerr<<"MonTruncatedMeanFrac variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+  m_fraction=atof(tt[0].c_str());
+  m_list=new std::list<double>[m_dim];
+}
+  
+MonTruncatedMeanFrac::~MonTruncatedMeanFrac(){
+  delete [] m_list;
+}
 
+void MonTruncatedMeanFrac::reset(){
+  for (unsigned i=0;i<m_dim;i++){
+    m_list[i].clear();
+  }
+  MonMean::reset();
+}
 
+void MonTruncatedMeanFrac::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i =0;i<m_dim;i++){
+    m_list[i].push_back(val[i]);
+  }
+}
+
+void MonTruncatedMeanFrac::latchValue(){
+  for (unsigned i =0;i<m_dim;i++){
+    if (m_list[i].size()==0)continue;
+    m_list[i].sort();
+    unsigned int numentries=m_list[i].size();
+    unsigned int remove=(unsigned int)((1.-m_fraction)*numentries);
+    if (remove>0){
+      unsigned int frm=remove/2;
+      unsigned int erm=remove-frm;
+      for (unsigned int j=0;j<frm;j++)m_list[i].pop_front();
+      for (unsigned int j=0;j<erm;j++)m_list[i].pop_back();
+    }
+    if (m_list[i].size()==0)continue;
+    double sum,sum2;
+    sum=sum2=0;
+    for (std::list<double>::iterator it=m_list[i].begin();it!=m_list[i].end();it++){
+      sum+=(*it);
+      sum2+=(*it)*(*it);
+    }
+    unsigned int nvals=m_list[i].size();
+    m_nVals[i]=nvals;
+    m_val[i]=sum/(double)nvals;
+    Double_t err2 = sum2;
+    err2 /= (Double_t)nvals;
+    err2 -= m_val[i]*m_val[i];    
+    err2 /= (Double_t)nvals;
+    m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
+  }
+}
 
 MonCounterDiff::MonCounterDiff(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula, cut){
@@ -438,6 +493,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string titlelabel=obj["titledesc"];
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"truncatedmeanfrac")){
+    return new MonTruncatedMeanFrac(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"truncatedmean")){
     return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="counter"){

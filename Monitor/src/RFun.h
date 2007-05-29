@@ -12,6 +12,7 @@
 class RFun{
  public:
   RFun(){};
+  static const float acdped(unsigned int timestamp,int garc, int gafe);
   static int engine(int i,unsigned key);
   static int enginecounter(int i,unsigned key, int engine);
   static int iden(int i);
