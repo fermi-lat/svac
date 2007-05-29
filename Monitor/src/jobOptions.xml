@@ -3,7 +3,7 @@
 
 <ifile cvs_Header="$Header$" cvs_Revision="$Revision$" >
 
-  <section name="parameters"> input parameters for ACD pedestal and gain calibration
+  <section name="parameters"> Input parameters for ACD pedestal and gain calibration
     <item name="outputPrefix" value="acd"> output file prefix </item>
     <item name="configFile" value="../src/monconfigacd.xml"> output file prefix </item>
     <item name="htmlFile" value="alarms.html"> html output file </item>
