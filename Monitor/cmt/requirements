@@ -11,8 +11,9 @@ use digiRootData v*
 use reconRootData v*
 use facilities v*
 use xmlBase v* 
-use configData *
+#use configData *
 use calibUtil *
+use idents *
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 #macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "

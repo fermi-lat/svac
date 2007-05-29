@@ -1,5 +1,5 @@
 #include "RFun.h"
-#include "configData/db/LatcDBImplOld.h"
+//#include "configData/db/LatcDBImplOld.h"
 #include "AcdPedProxy.h"
 #include "AcdPeds.h"
 
@@ -7,7 +7,7 @@ const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
   return peds->mean(garc,gafe);
 }
-
+/*
 int RFun::engine(int i,unsigned key){
   m_tcf->updateKey(key);
   return m_tcf->lut()->engineNumber(i);
@@ -18,6 +18,7 @@ int RFun::enginecounter(int i,unsigned key,int engine){
   if (eng==engine)return 1;
   else return 0;
 }
+*/
 int RFun::iden(int i ){
   return i;
 }
@@ -184,7 +185,7 @@ int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
 
 // Initialization of static data member
 
-TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
+//TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
 
 int RFun::m_boundarytwr[16][8];
 bool RFun::m_boundarytwrdefined = false;

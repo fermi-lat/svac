@@ -1,7 +1,7 @@
 #ifndef RFun_h
 #define RFun_h
 
-#include "configData/db/TrgConfigDB.h"
+//#include "configData/db/TrgConfigDB.h"
 #include <vector>
 #include "TBranchProxy.h"
 #include "TBranchProxyDirector.h"
@@ -13,8 +13,8 @@ class RFun{
  public:
   RFun(){};
   static const float acdped(unsigned int timestamp,int garc, int gafe);
-  static int engine(int i,unsigned key);
-  static int enginecounter(int i,unsigned key, int engine);
+  // static int engine(int i,unsigned key);
+    //static int enginecounter(int i,unsigned key, int engine);
   static int iden(int i);
 
 
@@ -57,7 +57,7 @@ class RFun{
  private:
   static int m_boundarytwr[16][8]; // boundary towers for all towers
   static bool m_boundarytwrdefined;
-  static TrgConfigDB* m_tcf;
+  //  static TrgConfigDB* m_tcf;
 
   // test data members
   static UInt_t m_doprintUpToN;
