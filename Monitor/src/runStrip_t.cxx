@@ -229,8 +229,8 @@ int main(int argn, char** argc) {
   MonValueCol* outcolprim=mf.makeMonValueCol(outputlistprimary,"Primary");
   MonValueCol* outcolsec=mf.makeMonValueCol(outputlistsecondary,"Secondary");
   char inclpath[512];
-  //sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
-  //gSystem->AddIncludePath(inclpath);
+  sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
+  gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
   gSystem->SetMakeSharedLib(cmd);

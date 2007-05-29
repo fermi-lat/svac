@@ -1,5 +1,5 @@
 #include "RFun.h"
-//#include "configData/db/LatcDBImplOld.h"
+#include "configData/db/LatcDBImplOld.h"
 #include "AcdPedProxy.h"
 #include "AcdPeds.h"
 
@@ -185,7 +185,7 @@ int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
 
 // Initialization of static data member
 
-//TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
+TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
 
 int RFun::m_boundarytwr[16][8];
 bool RFun::m_boundarytwrdefined = false;
