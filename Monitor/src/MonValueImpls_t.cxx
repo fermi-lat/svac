@@ -73,7 +73,7 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
   m_hist=new TH1F*[m_dim];
   char nm[128];
   for (unsigned int i=0;i<m_dim;i++){
-    sprintf(nm,"%s_%d",m_name.c_str(),i);
+    sprintf(nm,"%s%s",m_name.c_str(),indexString(i).c_str());
     m_hist[i]=new TH1F(nm,nm,nbx,lbx,ubx);
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
@@ -120,7 +120,7 @@ MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, con
   m_hist=new TH2F*[m_dim];
   char nm[128];
   for (unsigned int i=0;i<m_dim;i++){
-    sprintf(nm,"%s_%d",m_name.c_str(),i);
+    sprintf(nm,"%s%s",m_name.c_str(),indexString(i).c_str());
     m_hist[i]=new TH2F(nm,nm,nbx,lbx,ubx,nby,lby,uby);
     if (tt.size()>0)m_hist[i]->GetXaxis()->SetTitle(tt[0].c_str());
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());

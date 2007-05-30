@@ -59,6 +59,7 @@ public :
   // a helper function to parse parameter strings of the type [234, 23, 44]
   static std::vector<std::string> parse(const std::string str, const std::string beg, const std::string sep, const std::string end);
   
+  const std::string indexString(int index);
 
   // The name of this var
   std::string m_name;    

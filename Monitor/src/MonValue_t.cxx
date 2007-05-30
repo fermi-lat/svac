@@ -356,7 +356,8 @@ std::vector<std::string> MonValue::parse(const std::string str, const std::strin
   std::vector<std::string> retvec;
   unsigned int bpos=str.find(beg);
   if(bpos==(unsigned int)-1)return retvec;
-  unsigned int epos=str.find(end,bpos+1);
+  unsigned int epos=str.rfind(end);
+  //unsigned int epos=str.find(end,pos+1);
   if(epos==(unsigned int)-1 || epos<bpos)return retvec;
   if (sep==""){
     retvec.push_back(str.substr(bpos+beg.length(),epos-bpos-beg.length()));
@@ -374,3 +375,22 @@ std::vector<std::string> MonValue::parse(const std::string str, const std::strin
   return retvec;
 }
 			    
+const std::string MonValue::indexString(int index){
+  int ind=index;
+  std::vector<std::string>dims=parse(m_dimstring,"[","][","]");
+  std::string retstring;
+  char tmps[128];
+  for (unsigned i=0;i<dims.size();i++){
+    int fact=1;
+    for (unsigned j=i+1;j<dims.size();j++){
+      fact*=atoi(dims[j].c_str());
+    }
+    sprintf(tmps,"_%d",ind/fact);
+    retstring+=tmps;
+    ind-=ind/fact*fact;
+  }
+  return retstring;
+}
+    
+    
+    
