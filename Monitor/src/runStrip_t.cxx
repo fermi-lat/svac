@@ -264,6 +264,7 @@ int main(int argn, char** argc) {
   time ( &rawtime );
   timeinfo = localtime ( &rawtime );
   sprintf(name,"%s",asctime(timeinfo));
+  std::string currenttime(name);
   r.additem("Date", name);
   r.additem("Monitoring configuration file",jc.configFile().c_str());
   r.additem("Output root file",outputFile.c_str());
@@ -279,7 +280,7 @@ int main(int argn, char** argc) {
   if (svacinpcol)r.additem("Svac file(s)",jc.inputDigiFileStr().c_str());
   if (meritinpcol)r.additem("Merit file(s)",jc.inputDigiFileStr().c_str());
   if (calinpcol)r.additem("Cal file(s)",jc.inputDigiFileStr().c_str());
-  r.newheadline("Input variables");
+  r.newheadline("<b><center>Input variables</b></center>");
   char* inptable[]={"Name","Source","Description"};
   char* line[5];
   for (int j=0;j<5;j++)line[j]=new char[512];
@@ -327,7 +328,7 @@ int main(int argn, char** argc) {
     r.addtableline(line,3);
   }
   r.endtable();
-  r.newheadline("Output variables");
+  r.newheadline("<b><center>Output variables</b></center>");
   char* outtable[]={"Name","Type","Formula","Cut","Description"};
   r.starttable(outtable,5);
   for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
@@ -360,6 +361,86 @@ int main(int argn, char** argc) {
   std::cout<<setiosflags(std::ios::left);
   std::cout<<std::setw(60)<<std::setfill(' ')<<"Total time spent in event loop "<<": "<<(float)(endtime-starttime)/1e6<<" seconds"<<std::endl;
   
+  // Write an html report with parameters used (input/output)
+  std::string htmlparamssuffix("_Parameters.html");
+  std::string htmlparams=html+htmlparamssuffix;
+  TestReport r2(htmlparams.c_str());
+  r2.newheadline("<center><b>Input/Output parameters information</b></center>");
+  
+  r2.additem("Date", currenttime.c_str());
+  r2.additem("Monitoring configuration file",jc.configFile().c_str());
+  
+  if(eventcut!="")r2.additem("Global event cut",eventcut.c_str());
+  
+  
+
+  r2.newheadline("<center><b>Input variables</b></center>");
+  char* inptableparams[]={"Name","Source","Description"};
+  char* lineparams[3];
+  for (int j=0;j<3;j++)lineparams[j]=new char[512];
+  r2.starttable(inptableparams,3);
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=digidesc.begin();
+       itr != digidesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=recondesc.begin();
+       itr != recondesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=mcdesc.begin();
+       itr != mcdesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=meritdesc.begin();
+       itr != meritdesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=svacdesc.begin();
+       itr != svacdesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  for (std::vector<std::map<std::string,std::string> >::iterator itr=caldesc.begin();
+       itr != caldesc.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());
+    strcpy(lineparams[1],((*itr)["source"]).c_str());
+    strcpy(lineparams[2],((*itr)["description"]).c_str());
+    r2.addtableline(lineparams,3);
+  }
+  r2.endtable();
+  r2.newheadline("<b><center>Output variables</b></center>");
+  char* outtableparams[]={"Name","Type","Description"};
+  r2.starttable(outtableparams,3);
+  for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
+      itr !=outputlist.end();itr++){
+    strcpy(lineparams[0],((*itr)["name"]).c_str());  
+    strcpy(lineparams[1],((*itr)["type"]).c_str());  
+    strcpy(lineparams[2],((*itr)["description"]).c_str());  
+    r2.addtableline(lineparams,3);
+}
+  r2.endtable();
+
+  r2.writereport();
+
+
+
+
+
+
 
   if (digiinpcol)delete digiinpcol;
   if (reconinpcol)delete mcinpcol;
