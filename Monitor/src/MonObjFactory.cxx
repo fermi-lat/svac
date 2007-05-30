@@ -19,6 +19,12 @@
 // Last updated with object IsTkrDigi by user dpaneque on Fri Apr 13 18:40:42 2007
 // Last updated with object ToT_con0 by user dpaneque on Fri Apr 13 18:42:53 2007
 // Last updated with object ToT_con1 by user dpaneque on Fri Apr 13 18:44:21 2007
+// Last updated with object CalEnergyRaw by user dpaneque on Wed Apr 18 18:28:31 2007
+// Last updated with object LivetimeLast by user dpaneque on Fri Apr 27 01:39:12 2007
+// Last updated with object DeadZoneLast by user dpaneque on Fri Apr 27 01:42:06 2007
+// Last updated with object DiscardedLast by user dpaneque on Fri Apr 27 01:43:54 2007
+// Last updated with object PrescaledLast by user dpaneque on Fri Apr 27 01:45:05 2007
+// Last updated with object ElapsedLast by user dpaneque on Fri Apr 27 01:46:29 2007
 // Last updated with object digitimestamp by user kocian on Fri Apr 20 18:17:48 2007
 // Last updated with object filterstatus_hi by user kocian on Fri Apr 20 19:52:10 2007
 // Last updated with object CalLoTriggerTower by user kocian on Fri Apr 20 20:12:05 2007
@@ -37,6 +43,13 @@
 // Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
 // Last updated with object acdpha by user kocian on Sat May 26 18:13:04 2007
 // Last updated with object numvetotiles by user kocian on Mon May 28 00:10:38 2007
+
+#include "digi/MonInput_ElapsedLast.h"
+#include "digi/MonInput_PrescaledLast.h"
+#include "digi/MonInput_DiscardedLast.h"
+#include "digi/MonInput_DeadZoneLast.h"
+#include "digi/MonInput_LivetimeLast.h"
+#include "merit/MonInput_CalEnergyRaw.h"
 #include "digi/MonInput_numvetotiles.h"
 #include "digi/MonInput_acdpha.h"
 #include "recon/MonInput_HFC.h"
@@ -55,10 +68,6 @@
 #include "digi/MonInput_CalLoTriggerTower.h"
 #include "digi/MonInput_filterstatus_hi.h"
 #include "digi/MonInput_digitimestamp.h"
-//#include "digi/MonInput_twodimshort.h"
-//#include "digi/MonInput_onedimshort.h"
-//#include "digi/MonInput_twodimbool.h"
-//#include "digi/MonInput_onedimbool.h"
 #include "digi/MonInput_ToT_con1_TowerPlane.h"
 #include "digi/MonInput_ToT_con0_TowerPlane.h"
 #include "digi/MonInput_IsTkrDigi_TowerPlane.h"
@@ -95,14 +104,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condsummary;
   if (s=="configkey1852")
     return new MonInput_configkey1852;
-  //if (s=="onedimbool")
-    //return new MonInput_onedimbool;
-  //if (s=="twodimbool")
-    //return new MonInput_twodimbool;
-  //if (s=="onedimshort")
-    //return new MonInput_onedimshort;
-  //if (s=="twodimshort")
-    //return new MonInput_twodimshort;
+
   if (s=="TkrTriggerTower")
     return new MonInput_TkrTriggerTower;
   if (s=="TkrHitsTowerPlane")
@@ -113,6 +115,18 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_ToT_con0_TowerPlane;
   if (s=="ToT_con1_TowerPlane")
     return new MonInput_ToT_con1_TowerPlane;
+  if (s=="CalEnergyRaw")
+    return new MonInput_CalEnergyRaw;
+  if (s=="LivetimeLast")
+    return new MonInput_LivetimeLast;
+  if (s=="DeadZoneLast")
+    return new MonInput_DeadZoneLast;
+  if (s=="DiscardedLast")
+    return new MonInput_DiscardedLast;
+  if (s=="PrescaledLast")
+    return new MonInput_PrescaledLast;
+  if (s=="ElapsedLast")
+    return new MonInput_ElapsedLast;
   if (s=="digitimestamp")
     return new MonInput_digitimestamp;
   if (s=="filterstatus_hi")

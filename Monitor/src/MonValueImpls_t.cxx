@@ -221,8 +221,10 @@ MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const 
     std::cerr<<"MonTruncatedMean variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
     assert(0);
   }
+
   m_lowerbound=atof(tt[0].c_str());
   m_upperbound=atof(tt[1].c_str());
+
 }
   
   
@@ -489,8 +491,10 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string name=obj["name"];
   std::string formula=obj["formula"];
   std::string cut=obj["cut"];
+
   std::string axislabels=obj["axisdesc"];
   std::string titlelabel=obj["titledesc"];
+
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanfrac")){
