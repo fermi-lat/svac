@@ -13,9 +13,10 @@ my $batchgroup = $ENV{'batchgroup'};
 use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'digitizationTaskDir'}, 
 									   "ldfToDigi", "retDefToDigi",
-									   "setEvents", "recLaunch"),
+									   "setEvents"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "Launch", "url", "delete")
+									   "Launch", "LaunchReconstructable", 
+									   "url", "delete")
 					);
 
 my $digitizationXml = 
@@ -33,8 +34,8 @@ my $digitizationXml =
     <executable name=\"Convert\" version=\"$ENV{'digitizationTaskVersion'}\">
         $metaWrappers{'ldfToDigi'}
     </executable>
-    <executable name=\"LaunchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
-        $metaWrappers{'recLaunch'}
+    <executable name=\"launchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
+        $metaWrappers{'LaunchReconstructable'}
     </executable>
     <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'Launch'}
@@ -71,7 +72,7 @@ my $digitizationXml =
                     <output-file name=\"script\"/>
                     <output-file name=\"jobOptions\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'reconTask'}\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'reconTask'}\" executable=\"launchRecon\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
     <processing-step name=\"$ENV{'digiReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
@@ -108,8 +109,8 @@ $digitizationXml =
     <executable name=\"SetEvents\" version=\"$ENV{'digitizationTaskVersion'}\">
         $metaWrappers{'setEvents'}
     </executable>
-    <executable name=\"LaunchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
-        $metaWrappers{'recLaunch'}
+    <executable name=\"launchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
+        $metaWrappers{'LaunchReconstructable'}
     </executable>
     <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'Launch'}
@@ -156,7 +157,7 @@ $digitizationXml =
     <processing-step name=\"SetEvents\" executable=\"SetEvents\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'reconTask'}\" executable=\"LaunchRecon\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'reconTask'}\" executable=\"launchRecon\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
     <processing-step name=\"$ENV{'digiReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">

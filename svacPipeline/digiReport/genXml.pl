@@ -14,7 +14,8 @@ use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'digiReportTaskDir'}, 
 									   "genDigiTestReport"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "Launch", "url")
+									   "LaunchReconstructable", 
+									   "url")
 					);
 
 my $digiReportXml = 
@@ -32,8 +33,8 @@ my $digiReportXml =
     <executable name=\"genReport\" version=\"$ENV{'digiReportTaskVersion'}\">
         $metaWrappers{'genDigiTestReport'}
     </executable>
-    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
-        $metaWrappers{'Launch'}
+    <executable name=\"launchTkrReport\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'LaunchReconstructable'}
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'url'}
@@ -71,7 +72,7 @@ my $digiReportXml =
                     <output-file name=\"histogram\"/>
                     <output-file name=\"tarBall\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'tkrReportTask'}\" executable=\"launchTkrReport\" batch-job-configuration=\"express-job\">
                     <input-file name=\"histogram\"/>
     </processing-step>
     <processing-step name=\"digiReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">

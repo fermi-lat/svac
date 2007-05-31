@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p5
+setenv svacVersion v3r9p6
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume14
-setenv EngineeringModelVersion v7r0913p12
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
+setenv EngineeringModelVersion v7r0913p13
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -103,7 +103,6 @@ setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/LatIntegration.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
-setenv decideReconScript ${digitizationTaskDir}/decideRecon.pl
 setenv setEventsScript ${digitizationTaskDir}/setEvents.py
 setenv digitizationDataDir ${emTail}/digi
 setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
@@ -180,7 +179,7 @@ setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #++++++++++++++++++++++++++++++++ tkrReport +++++++++++++++++++++++++++++++++++
 setenv tkrReportTaskVersion ${svacVersion}
 setenv tkrReportTask tkrReport-${tkrReportTaskVersion}
-setenv calibTkrUtilVersion v1r6
+setenv calibTkrUtilVersion v1r7
 setenv tkrReportUrl index.html
 setenv calibTkrUtilDir ${sasCmt}/calibTkrUtil/${calibTkrUtilVersion}
 setenv tkrReportCmt ${calibTkrUtilDir}/cmt
@@ -204,6 +203,7 @@ setenv copier ${svacPlLib}/copyWrapper.pl
 setenv cleanupOne ${svacPlLib}/_cleanupOne.csh
 setenv htAccess ${svacPlRoot}/setup/htaccess
 setenv finalCleanup ${svacPlLib}/finalCleanup.pl
+setenv decideReconScript ${svacPlLib}/decideRecon.pl
 #-------------------------------- many ----------------------------------------
 
 setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}:${rootLib}

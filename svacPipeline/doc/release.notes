@@ -713,3 +713,13 @@ RunRootAnalyzer v3r1
 Run tkrReport after digiReport instead of svacTuple.
 Update calibTkrUtil tag (should have happened last time).
 ---------------------------------------------------------------------------
+
+
+v3r9p6 (2007/05/??)
+---------------
+EngineeringModel v7r0913p13
+
+Run tkrReport only for recontructable runs.
+Use one wrapper to launch both recon and tkrReport.
+Move decideRecon script from digi dir to lib.
+---------------------------------------------------------------------------
