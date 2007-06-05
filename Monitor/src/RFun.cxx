@@ -96,14 +96,40 @@ unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invec
 }
 
 
-unsigned RFun::loopovertkrplanes(const UShort_t invector[36])
+unsigned RFun::loopovertkrplanes(const UShort_t invector[])
 {
-  unsigned n_counter(0);
-  for (UShort_t iplane = 0; iplane < 36; iplane++)
-    n_counter += invector[iplane];
-  return n_counter;
+  return loopoveronedimvect(invector,36);
 }
 
+
+
+unsigned RFun::loopovercallayers(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,8);
+}
+
+unsigned RFun::loopovercalcolumns(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,12);
+}
+
+unsigned RFun::loopovergarc(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,12);
+}
+
+unsigned RFun::loopoveracdtiles(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,128);
+}
+
+unsigned RFun::loopoveronedimvect(const UShort_t invector[], UInt_t vectdim)
+{
+  unsigned n_counter(0);
+  for (UInt_t i = 0; i < vectdim; i++)
+    n_counter += invector[i];
+  return n_counter;
+}
 
 
 std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)

@@ -30,12 +30,23 @@ class RFun{
   static unsigned gethitsinemptytower(double isemptytower, 
 				      const UShort_t TkrHitsTowerPlane[36]);
 
-  static unsigned loopovertkrplanes(const UShort_t invector[36]);
+  static unsigned loopovertkrplanes(const UShort_t invector[]);
   
   //static unsigned loopovertowerANDtkrplanes(const UShort_t TkrHitsTowerPlane[16][36]);
   static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
 
    
+
+  static unsigned loopovercallayers(const UShort_t invector[]);
+
+
+  static unsigned loopovercalcolumns(const UShort_t invector[]);
+
+  static unsigned loopovergarc(const UShort_t invector[]);
+  
+  static unsigned loopoveracdtiles(const UShort_t invector[]);
+  
+  static unsigned loopoveronedimvect(const UShort_t invector[], UInt_t vectdim);
 
 
   // END of tracker related functions
