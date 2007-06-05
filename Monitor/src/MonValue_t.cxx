@@ -184,7 +184,7 @@ void MonValue::makeProxy(TTree* tree){
 
 
   formfile.open((m_name+"_val.h").c_str());
-  formfile<<"#include \"../src/RFun.h\""<<std::endl;
+  formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile.close();
 
 
@@ -195,7 +195,7 @@ void MonValue::makeProxy(TTree* tree){
     formfile.close();
 
     formfile.open((m_name+"_cut.h").c_str());
-    formfile<<"#include \"../src/RFun.h\""<<std::endl;
+    formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
     formfile.close();
   }
   // check if we need to recompile a formula
