@@ -231,6 +231,8 @@ int main(int argn, char** argc) {
   char inclpath[512];
   sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   gSystem->AddIncludePath(inclpath);
+  sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
+  gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
   gSystem->SetMakeSharedLib(cmd);

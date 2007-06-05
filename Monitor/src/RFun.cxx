@@ -1,4 +1,4 @@
-#include "RFun.h"
+#include "Monitor/RFun.h"
 #include "configData/db/LatcDBImplOld.h"
 #include "AcdPedProxy.h"
 #include "AcdPeds.h"
@@ -7,7 +7,6 @@ const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
   return peds->mean(garc,gafe);
 }
-/*
 int RFun::engine(int i,unsigned key){
   m_tcf->updateKey(key);
   return m_tcf->lut()->engineNumber(i);
@@ -18,7 +17,6 @@ int RFun::enginecounter(int i,unsigned key,int engine){
   if (eng==engine)return 1;
   else return 0;
 }
-*/
 int RFun::iden(int i ){
   return i;
 }
@@ -83,8 +81,9 @@ unsigned RFun::gethitsinemptytower(double isemptytower,
 
 
 
-// unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
 unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invector)
+//unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
+//unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >& invector)
 {
   unsigned n_counter(0);
   for (UShort_t itower = 0; itower < 16; itower++){

@@ -3,6 +3,8 @@ version v0r0
 
 author E. Charles <echarles@slac.stanford.edu>
 
+branches Monitor cmt src
+
 use RootcintPolicy v* GlastPolicy
 use GlastPolicy v*
 use commonRootData v*
@@ -15,8 +17,9 @@ use configData *
 use calibUtil *
 use idents *
 
+apply_pattern package_headers
 #the following prepend makes the includes folder available locally: avoid the package_include
-#macro_prepend includes "-I $(TESTREPORTROOT) " WIN32 "/I $(TESTREPORTROOT) "
+macro_prepend includes "-I $(MONITORROOT) " WIN32 "/I $(MONITORROOT) "
 
 
 #apply_pattern root_library headers="../src/RFun.h" \

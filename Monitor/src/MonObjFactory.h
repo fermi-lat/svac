@@ -6,6 +6,7 @@
 #define MonObjFactory_h
 
 #include <string>
+#include <vector>
 #include <map>
 #include "MonInputObject.h"
 using std::string;

@@ -43,7 +43,16 @@
 // Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
 // Last updated with object acdpha by user kocian on Sat May 26 18:13:04 2007
 // Last updated with object numvetotiles by user kocian on Mon May 28 00:10:38 2007
-
+// Last updated with object callayers by user kocian on Wed May 30 18:47:05 2007
+// Last updated with object xoverthresh by user kocian on Thu May 31 20:39:26 2007
+// Last updated with object condarrcallo by user kocian on Thu May 31 22:59:44 2007
+// Last updated with object condarrcalhi by user kocian on Thu May 31 23:00:27 2007
+// Last updated with object mcid by user kocian on Fri Jun  1 21:41:01 2007
+#include "merit/MonInput_mcid.h"
+#include "digi/MonInput_condarrcalhi.h"
+#include "digi/MonInput_condarrcallo.h"
+#include "recon/MonInput_xoverthresh.h"
+#include "merit/MonInput_callayers.h"
 #include "digi/MonInput_ElapsedLast.h"
 #include "digi/MonInput_PrescaledLast.h"
 #include "digi/MonInput_DiscardedLast.h"
@@ -163,6 +172,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_acdpha;
   if (s=="numvetotiles")
     return new MonInput_numvetotiles;
+  if (s=="callayers")
+    return new MonInput_callayers;
+  if (s=="xoverthresh")
+    return new MonInput_xoverthresh;
+  if (s=="condarrcallo")
+    return new MonInput_condarrcallo;
+  if (s=="condarrcalhi")
+    return new MonInput_condarrcalhi;
+  if (s=="mcid")
+    return new MonInput_mcid;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -208,6 +227,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("HFC");
   names.push_back("acdpha");
   names.push_back("numvetotiles");
+  names.push_back("callayers");
+  names.push_back("xoverthresh");
+  names.push_back("condarrcallo");
+  names.push_back("condarrcalhi");
+  names.push_back("mcid");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);

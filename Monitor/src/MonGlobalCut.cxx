@@ -34,7 +34,7 @@ void MonGlobalCut::makeProxy(TTree* tree){
 	    <<"return 0;"<<std::endl<<"}"<<std::endl;
   formfile.close();
   formfile.open((m_name+"_globalCut_cut.h").c_str());
-  formfile<<"#include \"../src/RFun.h\""<<std::endl;
+  formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile<<"#include \"TEventList.h\""<<std::endl;
   formfile.close();
   // check if we need to recompile 
