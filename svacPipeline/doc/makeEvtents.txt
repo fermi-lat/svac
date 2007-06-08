@@ -1,0 +1,56 @@
+If everything downstream (all the SVAC tasks) are ready, then deleting the file 
+
+/nfs/farm/g/glast/u23/ISOC/glastops/dispatch/077005158 
+
+will make the dispatcher "forget" that it has already seen that run, and re-dispatch it.  Since the event data has now
+showed up in the archive, the RetDef.xml and .pkt files will get created, and the run will be dispatched to
+CHS-eventFile-v1r0p1.
+
+The dispatch-history directory is mode 2775 to group 'gl', so either of you should be able to delete the run-marker file and
+trigger the re-dispatch.
+
+-Bryson
+
+
+> -----Original Message-----
+> From: Anders Borgland [mailto:borgland@slac.stanford.edu] 
+> Sent: Tuesday, May 23, 2006 11:09 AM
+> To: Focke, Warren
+> Cc: Lee, Bryson
+> Subject: Re: To make evt files
+> 
+> 
+>       Correct. But, I think that if there is no data at all 
+> Bryson doesn't make any RetDef.xml. So Bryson, how do we 
+> regenerate the RetDef file?
+> 
+> anders
+> 
+> On Tue, 23 May 2006, Warren Focke wrote:
+> 
+> > It would be in 
+> > /afs/slac.stanford.edu/u/ek/focke/links/rawData/077005158,
+> > right?
+> >
+> > w
+> >
+> > On Tue, 23 May 2006, Anders Borgland wrote:
+> >
+> >>
+> >>    Then you have a problem. There isn't one for that B31 run?
+> >>
+> >> anders
+> >>
+> >> On Tue, 23 May 2006, Warren Focke wrote:
+> >>
+> >>> What if there's no retDef.xml?
+> >>>
+> >>> w
+> >>>
+> >>> On Tue, 23 May 2006, Anders Borgland wrote:
+> >>>
+> >>>>
+> >>>> /u/gl/glastops/Prod/bin/eventRet-v2r1.sh RetDef.xml 'runid'.evt
+
+
+There should be a eventRet.sh there that is a link to the current version.

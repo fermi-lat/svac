@@ -1,0 +1,32 @@
+Zach has created the tag of calibGenCAL v4r4_emi_p1, suitable for EMI
+analysis.  The following two commands show how to run the EMI analysis for one
+run (I took the run 077014731)
+
+$CALIBGENCALROOT/rh9_gcc32/genMuonPed.exe $CALIBGENCALROOT/cfg/emi_ped.cfg
+/nfs/farm/g/glast/u41/Integration/rootData/077014731/v7r0913p13/digi/digitization-licos-v3r9p6_077014731_digi_DIGI.root 3.0
+$CALIBGENCALROOT/rh9_gcc32/emiAnal.exe 077014731 3.0 v3r9p6
+
+First command generates the file
+muonPeds.digitization-licos-v3r9p6_077014731_digi_DIGI.root (in working
+directory), which is then used by the second command to generate the report:
+EMI_report_077014731.ps.  Parameter 3.0 (3-d for genMuonPed.exe and 2-nd for
+emiAnal.exe) is the time slice in seconds. For genMuonPed.exe the first
+parameter is the full digi file name. For emiAnal.exe the first parameter is
+the run number (with leaging 0), third parameter is the version (v3r9p6) used
+in digi file name and copied to pedestal histograms root file name.
+
+New tag of calibGenCAL?Hi, Anders,
+
+The new tag of calibGenCAL for emi analysis is v4r4_emi_p2.
+
+The commands to run the emi analysis are slightly modified:
+
+$CALIBGENCALROOT/rh9_gcc32/genMuonPed.exe $CALIBGENCALROOT/cfg/emi_ped.cfg
+/nfs/farm/g/glast/u40/Integration/rootData/077014769/v7r0913p13/digi/digitization-licos-v3r9p6_077014769_digi_DIGI.root 3.0
+6000
+$CALIBGENCALROOT/rh9_gcc32/emiAnal.exe 077014769 3.0 v3r9p7
+
+Last parameter of teh first command is the number of time slices in the histograms, so with 6000 slices of 3 seconds it
+could process upto 18k seconds.
+
+Sasha.

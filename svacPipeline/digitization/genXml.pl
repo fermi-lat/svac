@@ -78,6 +78,12 @@ my $digitizationXml =
     <processing-step name=\"$ENV{'digiReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
+    <processing-step name=\"$ENV{'acdReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"digi\"/>
+    </processing-step>
+    <processing-step name=\"$ENV{'calReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"digi\"/>
+    </processing-step>
     <processing-step name=\"digiRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
@@ -161,6 +167,12 @@ $digitizationXml =
                     <input-file name=\"digi\"/>
     </processing-step>
     <processing-step name=\"$ENV{'digiReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"digi\"/>
+    </processing-step>
+    <processing-step name=\"$ENV{'acdReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"digi\"/>
+    </processing-step>
+    <processing-step name=\"$ENV{'calReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
     <processing-step name=\"digiRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">

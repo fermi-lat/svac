@@ -723,3 +723,18 @@ Run tkrReport only for recontructable runs.
 Use one wrapper to launch both recon and tkrReport.
 Move decideRecon script from digi dir to lib.
 ---------------------------------------------------------------------------
+
+
+v3r9p7 (2007/06/01)
+---------------
+Move to u40
+---------------------------------------------------------------------------
+
+
+v3r9p8 (2007/06/07)
+---------------
+add acdReport
+add calReport
+re-add lib/decideRecon.pl (it was moved from digitization in p6, 
+but was not correctly added in the new location).
+---------------------------------------------------------------------------

@@ -1,0 +1,42 @@
+Oh, I forgot to mention that for the python part one may need to run the setup command
+
+eval `/afs/slac/g/glast/isoc/flightOps/rhel3_gcc32/ISOC_PROD/bin/isoc \ isoc_env -c --add-env=flightops --add-env=root`
+
+first.
+
+Martin
+
+On Tue, 29 May 2007, Martin Kocian wrote:
+
+> 
+> Hi Warren,
+> 
+> Could you please add the ACD monitoring stuff to the pipeline for EMI?
+> Here is how it works:
+> 1. Check out two packages:
+> 
+> cmt co -r acdemi2 svac/Monitor
+> cmt co -r acdemi dataMonitoring/Common
+> 
+> From the cmt subdirectory in svac/Monitor, do
+> source setup.csh
+> gmake
+> 
+> The setup is now complete. To run the monitoring, do the following from
+> the rh9_gcc32opt subdirectory (or change the path for the source option in
+> the following command line):
+> 
+> runStrip_t.exe -j ../src/jobOptions.xml -d <pathtodigifile>
+> 
+> This will produce a file acd_time.root .
+> 
+> In the second step run the following command:
+> 
+> python YOURPATH/dataMonitoring/Common/help/python/pAlarmHandler.py -c \
+> YOURPATH/dataMonitoring/Common/help/xml/configacd.xml \
+> -o alarms.xml -l 1 YOURPATH/acd_time.root >& acdlog.txt
+> 
+> The output will be a logfile which should not contain any lines that say ERROR and an xml file with the results called
+> alarms.xml.
+> 
+> I think we would like to archive the xml file, the log file, and the root file.
