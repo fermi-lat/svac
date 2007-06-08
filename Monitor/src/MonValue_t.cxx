@@ -232,6 +232,7 @@ void MonValue::makeProxy(TTree* tree){
     }
   }
   char rootcommand[128];
+  /*
   if (compile){
     if (m_cut!=""){
       tree->MakeProxy((m_name+"Selector").c_str(),(m_name+"_val.C").c_str(),(m_name+"_cut.C").c_str(),"nohist");
@@ -242,9 +243,10 @@ void MonValue::makeProxy(TTree* tree){
     sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
     gROOT->ProcessLine(rootcommand);
   }else{
-    std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
-    gSystem->Load((m_name+"Selector_h.so").c_str());
-  }
+  */
+  std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
+  gSystem->Load((std::string(getenv("MONITORROOT"))+"/src/"+m_name+"Selector_h.so").c_str());
+    // }
   sprintf(rootcommand,"new %s((TTree*)0x%%x);",(m_name+"Selector").c_str());
   m_sel=(TSelector*)gROOT->ProcessLineFast(Form(rootcommand,tree));
   sprintf(rootcommand,"&((%s*)0x%%x)->resultvector;",(m_name+"Selector").c_str());
