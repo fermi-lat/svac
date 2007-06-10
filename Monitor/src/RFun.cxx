@@ -122,6 +122,41 @@ unsigned RFun::loopoveracdtiles(const UShort_t invector[])
   return loopoveronedimvect(invector,128);
 }
 
+
+unsigned RFun::loopoverengine(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,16);
+}
+
+unsigned RFun::loopoveracdface(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,5);
+}
+
+unsigned RFun::loopoveracdrow(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,5);
+}
+
+unsigned RFun::loopoveracdcolumn(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,5);
+}
+
+unsigned RFun::loopoveracdpmt(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,2);
+}
+
+unsigned RFun::loopovergafe(const UShort_t invector[])
+{
+  return loopoveronedimvect(invector,18);
+}
+
+ 
+
+
+
 unsigned RFun::loopoveronedimvect(const UShort_t invector[], UInt_t vectdim)
 {
   unsigned n_counter(0);
@@ -129,6 +164,24 @@ unsigned RFun::loopoveronedimvect(const UShort_t invector[], UInt_t vectdim)
     n_counter += invector[i];
   return n_counter;
 }
+
+
+unsigned RFun::loopoveracdtilesbool(ROOT::TArrayBoolProxy& invector)
+{
+  return loopoveronedimvectbool(invector,128);
+}
+
+
+
+unsigned RFun::loopoveronedimvectbool(ROOT::TArrayBoolProxy& invector, UInt_t vectdim)
+{
+  unsigned n_counter(0);
+  for (UInt_t i = 0; i < vectdim; i++)
+    n_counter += invector[i];
+  return n_counter;
+}
+
+
 
 
 std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
