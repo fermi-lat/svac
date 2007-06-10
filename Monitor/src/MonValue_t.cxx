@@ -64,6 +64,9 @@ void MonValue::makeProxy(TTree* tree){
   bool acdpmtloop=false;
   bool acdgarcloop=false;
   bool acdgafeloop=false;
+  bool acdtileloop=false;
+  bool callayerloop=false;
+  bool calcolumnloop=false;
   bool dooutsideformula=false;
   std::string formula(m_formula);
   std::string outsideformula;
@@ -124,9 +127,28 @@ void MonValue::makeProxy(TTree* tree){
     acdgafeloop=true;
     formula.replace(acdgafepos,acdgafepos+strlen("foreachgafe:"),"");
   }
+
+  unsigned int acdtilepos=formula.find("foreachacdtile:");
+  if(acdtilepos!=0xffffffff){
+    acdtileloop=true;
+    formula.replace(acdtilepos,acdtilepos+strlen("foreachacdtile:"),"");
+  }
   
 
-  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !acdfaceloop && !acdrowloop && !acdcolumnloop && !acdpmtloop && !acdgarcloop && !acdgafeloop
+  unsigned int calcolumnpos=formula.find("foreachcalcolumm:");
+  if(calcolumnpos!=0xffffffff){
+    calcolumnloop=true;
+    formula.replace(calcolumnpos,calcolumnpos+strlen("foreachcalcolumn:"),"");
+  }
+
+   unsigned int callayerpos=formula.find("foreachcallayer:");
+  if(callayerpos!=0xffffffff){
+    callayerloop=true;
+    formula.replace(callayerpos,callayerpos+strlen("foreachcallayer:"),"");
+  }
+
+
+  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !acdfaceloop && !acdrowloop && !acdcolumnloop && !acdpmtloop && !acdgarcloop && !acdgafeloop && !acdtileloop && !calcolumnloop && !callayerloop
       && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
@@ -147,6 +169,13 @@ void MonValue::makeProxy(TTree* tree){
   if(acdpmtloop)formfile<<"for(int acdpmt=0;acdpmt<2;acdpmt++){"<<std::endl;
   if(acdgarcloop)formfile<<"for(int garc=0;garc<12;garc++){"<<std::endl;
   if(acdgafeloop)formfile<<"for(int gafe=0;gafe<18;gafe++){"<<std::endl;
+  if(acdtileloop)formfile<<"for(int acdtile=0;acdtile<128;acdtile++){"<<std::endl;
+  if(calcolumnloop)formfile<<"for(int calcolumn=0;calcolumn<12;calcolumn++){"<<std::endl;
+  if(callayerloop)formfile<<"for(int callayer=0;callayer<8;callayer++){"<<std::endl;
+
+
+
+
   //formula 2 is only used for 2-d histograms
   std::string formula2;
   if (m_histdim==2){
@@ -161,7 +190,7 @@ void MonValue::makeProxy(TTree* tree){
     formula=tt[0];
     formula2=tt[1];
   }    
-  formfile <<"val = "<<formula<<";"<<std::endl
+  formfile <<"val = double("<<formula<<");"<<std::endl
 	   <<"resultvector->push_back(val);"<<std::endl;
   if(m_histdim==2){
     formfile <<"val = "<<formula2<<";"<<std::endl
@@ -176,7 +205,10 @@ void MonValue::makeProxy(TTree* tree){
   if(acdcolumnloop)formfile<<"}"<<std::endl;
   if(acdpmtloop)formfile<<"}"<<std::endl;
   if(acdgarcloop)formfile<<"}"<<std::endl;
-  if(acdgarcloop)formfile<<"}"<<std::endl;
+  if(acdtileloop)formfile<<"}"<<std::endl;
+  if(calcolumnloop)formfile<<"}"<<std::endl;
+  if(callayerloop)formfile<<"}"<<std::endl;
+
 
   formfile<<"(*counter)++;"<<std::endl;
   formfile<<"return val;"<<std::endl<<"}"<<std::endl;
