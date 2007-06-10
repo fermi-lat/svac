@@ -9,6 +9,7 @@
 
 
 
+
 class RFun{
  public:
   RFun(){};
@@ -29,14 +30,33 @@ class RFun{
   static unsigned gethitsinemptytower(double isemptytower, 
 				      const UShort_t TkrHitsTowerPlane[36]);
 
-  static unsigned loopovertkrplanes(const UShort_t invector[36]);
+  static unsigned loopovertkrplanes(const UShort_t invector[]);
   
   //static unsigned loopovertowerANDtkrplanes(const UShort_t TkrHitsTowerPlane[16][36]);
   static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
-  //static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
 
    
 
+  static unsigned loopovercallayers(const UShort_t invector[]);
+
+
+  static unsigned loopovercalcolumns(const UShort_t invector[]);
+
+  static unsigned loopovergarc(const UShort_t invector[]);
+  
+  static unsigned loopoveracdtiles(const UShort_t invector[]);
+  static unsigned loopoveracdtilesbool(ROOT::TArrayBoolProxy& invector);
+  
+  static unsigned loopoverengine(const UShort_t invector[]);
+  static unsigned loopoveracdface(const UShort_t invector[]);
+  static unsigned loopoveracdrow(const UShort_t invector[]);
+  static unsigned loopoveracdcolumn(const UShort_t invector[]);
+  static unsigned loopoveracdpmt(const UShort_t invector[]);
+  static unsigned loopovergafe(const UShort_t invector[]);
+
+  
+  static unsigned loopoveronedimvect(const UShort_t invector[], UInt_t vectdim);
+  static unsigned loopoveronedimvectbool(ROOT::TArrayBoolProxy& invector, UInt_t vectdim);
 
   // END of tracker related functions
   // Trigger related functions
