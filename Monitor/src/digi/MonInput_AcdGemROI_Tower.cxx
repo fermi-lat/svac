@@ -11,7 +11,7 @@
 
 #define NAME AcdGemROI_Tower
 #define OUTBRANCH "AcdGemROI_Tower"
-#define LEAF "AcdGemROI_Tower/O"
+#define LEAF "AcdGemROI_Tower[16]/O"
 #define INBRANCH "m_gem"
 // #define ACCESSOR capullo
 #define MONSOURCE DigiEvent

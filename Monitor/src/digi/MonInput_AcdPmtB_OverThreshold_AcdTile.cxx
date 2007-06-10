@@ -11,7 +11,7 @@
 
 #define NAME AcdPmtB_OverThreshold_AcdTile
 #define OUTBRANCH "AcdPmtB_OverThreshold_AcdTile"
-#define LEAF "AcdPmtB_OverThreshold_AcdTile/O"
+#define LEAF "AcdPmtB_OverThreshold_AcdTile[128]/O"
 #define INBRANCH "m_acdDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent

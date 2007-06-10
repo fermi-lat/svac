@@ -11,7 +11,7 @@
 
 #define NAME AcdGemVeto_AcdTile
 #define OUTBRANCH "AcdGemVeto_AcdTile"
-#define LEAF "AcdGemVeto_AcdTile/O"
+#define LEAF "AcdGemVeto_AcdTile[128]/O"
 #define INBRANCH "m_gem"
 // #define ACCESSOR Capullo
 #define MONSOURCE DigiEvent

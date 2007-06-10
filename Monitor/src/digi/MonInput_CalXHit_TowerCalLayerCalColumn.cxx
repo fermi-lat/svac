@@ -11,7 +11,7 @@
 
 #define NAME CalXHit_TowerCalLayerCalColumn
 #define OUTBRANCH "CalXHit_TowerCalLayerCalColumn"
-#define LEAF "CalXHit_TowerCalLayerCalColumn/O"
+#define LEAF "CalXHit_TowerCalLayerCalColumn[16][8][12]/O"
 #define INBRANCH "m_calDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent

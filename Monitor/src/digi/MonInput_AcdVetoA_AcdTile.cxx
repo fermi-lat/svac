@@ -11,7 +11,7 @@
 
 #define NAME AcdVetoA_AcdTile
 #define OUTBRANCH "AcdVetoA_AcdTile"
-#define LEAF "AcdVetoA_AcdTile/O"
+#define LEAF "AcdVetoA_AcdTile[128]/O"
 #define INBRANCH "m_acdDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent

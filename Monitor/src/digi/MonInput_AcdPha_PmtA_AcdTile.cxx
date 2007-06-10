@@ -11,7 +11,7 @@
 
 #define NAME AcdPha_PmtA_AcdTile
 #define OUTBRANCH "AcdPha_PmtA_AcdTile"
-#define LEAF "AcdPha_PmtA_AcdTile/s"
+#define LEAF "AcdPha_PmtA_AcdTile[128]/s"
 #define INBRANCH "m_acdDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent

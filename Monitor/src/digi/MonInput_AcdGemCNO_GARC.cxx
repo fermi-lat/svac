@@ -11,7 +11,7 @@
 
 #define NAME AcdGemCNO_GARC
 #define OUTBRANCH "AcdGemCNO_GARC"
-#define LEAF "AcdGemCNO_GARC/O"
+#define LEAF "AcdGemCNO_GARC[12]/O"
 #define INBRANCH "m_gem"
 #define ACCESSOR capullo
 #define MONSOURCE DigiEvent
