@@ -43,11 +43,35 @@
 // Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
 // Last updated with object acdpha by user kocian on Sat May 26 18:13:04 2007
 // Last updated with object numvetotiles by user kocian on Mon May 28 00:10:38 2007
+// Last updated with object AcdGemVeto_AcdTile by user dpaneque on Mon Jun  4 22:34:02 2007
+// Last updated with object AcdGemROI_Tower by user dpaneque on Mon Jun  4 22:59:56 2007
+// Last updated with object AcdGemCNO_GARC by user dpaneque on Mon Jun  4 23:09:49 2007
+// Last updated with object CalXHit_TowerCalLayerCalColumn by user dpaneque on Mon Jun  4 23:37:34 2007
+// Last updated with object AcdHit_AcdTile by user dpaneque on Tue Jun  5 00:25:53 2007
+// Last updated with object AcdPmtA_OverThreshold_AcdTile by user dpaneque on Tue Jun  5 00:41:02 2007
+// Last updated with object AcdPmtB_OverThreshold_AcdTile by user dpaneque on Tue Jun  5 00:42:05 2007
+// Last updated with object AcdVetoA_AcdTile by user dpaneque on Tue Jun  5 00:43:35 2007
+// Last updated with object AcdVetoB_AcdTile by user dpaneque on Tue Jun  5 00:44:35 2007
+// Last updated with object AcdPha_PmtA_AcdTile by user dpaneque on Tue Jun  5 01:11:11 2007
+// Last updated with object AcdPha_PmtB_AcdTile by user dpaneque on Tue Jun  5 01:12:23 2007
 // Last updated with object callayers by user kocian on Wed May 30 18:47:05 2007
 // Last updated with object xoverthresh by user kocian on Thu May 31 20:39:26 2007
 // Last updated with object condarrcallo by user kocian on Thu May 31 22:59:44 2007
 // Last updated with object condarrcalhi by user kocian on Thu May 31 23:00:27 2007
 // Last updated with object mcid by user kocian on Fri Jun  1 21:41:01 2007
+
+
+#include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
+#include "digi/MonInput_AcdPha_PmtA_AcdTile.h"
+#include "digi/MonInput_AcdVetoB_AcdTile.h"
+#include "digi/MonInput_AcdVetoA_AcdTile.h"
+#include "digi/MonInput_AcdPmtB_OverThreshold_AcdTile.h"
+#include "digi/MonInput_AcdPmtA_OverThreshold_AcdTile.h"
+#include "digi/MonInput_AcdHit_AcdTile.h"
+#include "digi/MonInput_CalXHit_TowerCalLayerCalColumn.h"
+#include "digi/MonInput_AcdGemCNO_GARC.h"
+#include "digi/MonInput_AcdGemROI_Tower.h"
+#include "digi/MonInput_AcdGemVeto_AcdTile.h"
 #include "merit/MonInput_mcid.h"
 #include "digi/MonInput_condarrcalhi.h"
 #include "digi/MonInput_condarrcallo.h"
@@ -172,6 +196,28 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_acdpha;
   if (s=="numvetotiles")
     return new MonInput_numvetotiles;
+  if (s=="AcdGemVeto_AcdTile")
+    return new MonInput_AcdGemVeto_AcdTile;
+  if (s=="AcdGemROI_Tower")
+    return new MonInput_AcdGemROI_Tower;
+  if (s=="AcdGemCNO_GARC")
+    return new MonInput_AcdGemCNO_GARC;
+  if (s=="CalXHit_TowerCalLayerCalColumn")
+    return new MonInput_CalXHit_TowerCalLayerCalColumn;
+  if (s=="AcdHit_AcdTile")
+    return new MonInput_AcdHit_AcdTile;
+  if (s=="AcdPmtA_OverThreshold_AcdTile")
+    return new MonInput_AcdPmtA_OverThreshold_AcdTile;
+  if (s=="AcdPmtB_OverThreshold_AcdTile")
+    return new MonInput_AcdPmtB_OverThreshold_AcdTile;
+  if (s=="AcdVetoA_AcdTile")
+    return new MonInput_AcdVetoA_AcdTile;
+  if (s=="AcdVetoB_AcdTile")
+    return new MonInput_AcdVetoB_AcdTile;
+  if (s=="AcdPha_PmtA_AcdTile")
+    return new MonInput_AcdPha_PmtA_AcdTile;
+  if (s=="AcdPha_PmtB_AcdTile")
+    return new MonInput_AcdPha_PmtB_AcdTile;
   if (s=="callayers")
     return new MonInput_callayers;
   if (s=="xoverthresh")
@@ -227,6 +273,17 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("HFC");
   names.push_back("acdpha");
   names.push_back("numvetotiles");
+  names.push_back("AcdGemVeto_AcdTile");
+  names.push_back("AcdGemROI_Tower");
+  names.push_back("AcdGemCNO_GARC");
+  names.push_back("CalXHit_TowerCalLayerCalColumn");
+  names.push_back("AcdHit_AcdTile");
+  names.push_back("AcdPmtA_OverThreshold_AcdTile");
+  names.push_back("AcdPmtB_OverThreshold_AcdTile");
+  names.push_back("AcdVetoA_AcdTile");
+  names.push_back("AcdVetoB_AcdTile");
+  names.push_back("AcdPha_PmtA_AcdTile");
+  names.push_back("AcdPha_PmtB_AcdTile");
   names.push_back("callayers");
   names.push_back("xoverthresh");
   names.push_back("condarrcallo");
