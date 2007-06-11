@@ -69,6 +69,9 @@ void MonValue::makeProxy(TTree* tree){
   bool calcolumnloop=false;
   bool dooutsideformula=false;
   std::string formula(m_formula);
+
+  ///  std::cout << "Formula BEFORE all loops subrtraction: " << formula.c_str() << std::endl;
+
   std::string outsideformula;
   unsigned int outsidepos=formula.find("runonce:");
   if(outsidepos!=0xffffffff){
@@ -135,18 +138,20 @@ void MonValue::makeProxy(TTree* tree){
   }
   
 
-  unsigned int calcolumnpos=formula.find("foreachcalcolumm:");
-  if(calcolumnpos!=0xffffffff){
-    calcolumnloop=true;
-    formula.replace(calcolumnpos,calcolumnpos+strlen("foreachcalcolumn:"),"");
-  }
-
    unsigned int callayerpos=formula.find("foreachcallayer:");
   if(callayerpos!=0xffffffff){
     callayerloop=true;
     formula.replace(callayerpos,callayerpos+strlen("foreachcallayer:"),"");
   }
 
+
+  unsigned int calcolumnpos=formula.find("foreachcalcolumn:");
+  if(calcolumnpos!=0xffffffff){
+    calcolumnloop=true;
+    formula.replace(calcolumnpos,calcolumnpos+strlen("foreachcalcolumn:"),"");
+  }
+
+  //  std::cout << "Formula after all loops subrtraction: " << formula.c_str() << std::endl;
 
   if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !acdfaceloop && !acdrowloop && !acdcolumnloop && !acdpmtloop && !acdgarcloop && !acdgafeloop && !acdtileloop && !calcolumnloop && !callayerloop
       && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
@@ -170,10 +175,11 @@ void MonValue::makeProxy(TTree* tree){
   if(acdgarcloop)formfile<<"for(int garc=0;garc<12;garc++){"<<std::endl;
   if(acdgafeloop)formfile<<"for(int gafe=0;gafe<18;gafe++){"<<std::endl;
   if(acdtileloop)formfile<<"for(int acdtile=0;acdtile<128;acdtile++){"<<std::endl;
-  if(calcolumnloop)formfile<<"for(int calcolumn=0;calcolumn<12;calcolumn++){"<<std::endl;
   if(callayerloop)formfile<<"for(int callayer=0;callayer<8;callayer++){"<<std::endl;
+  if(calcolumnloop)formfile<<"for(int calcolumn=0;calcolumn<12;calcolumn++){"<<std::endl;
+  
 
-
+  
 
 
   //formula 2 is only used for 2-d histograms
@@ -190,6 +196,7 @@ void MonValue::makeProxy(TTree* tree){
     formula=tt[0];
     formula2=tt[1];
   }    
+ 
   formfile <<"val = double("<<formula<<");"<<std::endl
 	   <<"resultvector->push_back(val);"<<std::endl;
   if(m_histdim==2){
