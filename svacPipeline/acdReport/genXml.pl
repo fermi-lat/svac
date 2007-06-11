@@ -33,16 +33,23 @@ my $xmlData =
         $metaWrappers{'alarmHandler'}
     </executable>
 
+    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+        <working-directory>$ENV{'acdReportDataDirFull'}</working-directory>
+        <log-file-path>$ENV{'acdReportDataDirFull'}</log-file-path>
+    </batch-job-configuration>
     <batch-job-configuration name=\"medium-job\" queue=\"medium\" group=\"$batchgroup\">
         <working-directory>$ENV{'acdReportDataDirFull'}</working-directory>
         <log-file-path>$ENV{'acdReportDataDirFull'}</log-file-path>
     </batch-job-configuration>
-    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
         <working-directory>$ENV{'acdReportDataDirFull'}</working-directory>
         <log-file-path>$ENV{'acdReportDataDirFull'}</log-file-path>
     </batch-job-configuration>
 
     <file name=\"acdAlarm\"       file-type=\"xml\"   type=\"text\">
+        <path>$ENV{'acdReportDataDir'}</path>
+    </file>
+    <file name=\"acdLog\"       file-type=\"txt\"   type=\"text\">
         <path>$ENV{'acdReportDataDir'}</path>
     </file>
     <file name=\"acdTime\"       file-type=\"root\"   type=\"histogram\">
@@ -53,13 +60,14 @@ my $xmlData =
     </file>
 
 
-    <processing-step name=\"runStrip\" executable=\"runStrip\" batch-job-configuration=\"medium-job\">
+    <processing-step name=\"runStrip\" executable=\"runStrip\" batch-job-configuration=\"glastdataq-job\">
                     <input-file name=\"digi\"/>
                     <output-file name=\"acdTime\"/>
     </processing-step>
     <processing-step name=\"alarmHandler\" executable=\"alarmHandler\" batch-job-configuration=\"medium-job\">
                     <input-file name=\"acdTime\"/>
                     <output-file name=\"acdAlarm\"/>
+                    <output-file name=\"acdLog\"/>
     </processing-step>
 
 
@@ -76,7 +84,7 @@ $xmlData =
 "<?xml version=\"1.0\" ?>
 <!-- job optin file for runMuonCalib_ped.exe -->
 
-<ifile cvs_Header=\"\$Header$\" cvs_Revision=\"\$Revision$\" >
+<ifile>
 
   <section name=\"parameters\"> input parameters for ACD pedestal and gain calibration
     <item name=\"outputPrefix\" value=\"acd\"> output file prefix </item>

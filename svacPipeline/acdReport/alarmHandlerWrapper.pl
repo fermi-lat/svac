@@ -33,10 +33,11 @@ print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 my $timeFile = $inFiles->{'acdTime'};
 my $alarmFile = $outFiles->{'acdAlarm'};
+my $logFile = $outFiles->{'acdLog'};
 
 my $exe = $ENV{'acdAlarmScript'};
 
-my $command = "$exe '$timeFile' '$alarmFile'";
+my $command = "$exe '$timeFile' '$alarmFile' '$logFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

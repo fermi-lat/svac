@@ -738,3 +738,13 @@ add calReport
 re-add lib/decideRecon.pl (it was moved from digitization in p6, 
 but was not correctly added in the new location).
 ---------------------------------------------------------------------------
+
+
+v3r9p9 (2007/06/08)
+---------------
+Switch Monitor (part of acdReport) to acdemi5.
+Run first step of acdReport on glastdataq.
+Register stdout of acdReport/runStrip, and copy it (instead of xml alarm file) 
+to EMI report directory.
+Forgot to add acdReport/runStrip.pl last time, it's in now.
+---------------------------------------------------------------------------

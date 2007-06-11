@@ -2,18 +2,19 @@
 
 use strict;
 
-if ($#ARGV != 1) {
-    die "Usage: $0 acdTimeFile acdAlarmFile";
+if ($#ARGV != 2) {
+    die "Usage: $0 acdTimeFile acdAlarmFile acdLogFile";
 }
 
 print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
-my ($acdTimeFile, $acdAlarmFile) = @ARGV;
+my ($acdTimeFile, $acdAlarmFile, $acdLogFile) = @ARGV;
 
 print <<EOT;
 $0 running with:
   acdTimeFile:   [$acdTimeFile]
   acdAlarmFile:   [$acdAlarmFile]
+  acdLogFile:   [$acdLogFile]
 EOT
    
 my $exe = $ENV{'dataMonitoringApp'};
@@ -21,9 +22,11 @@ my $joFile = $ENV{'acdAlarmJo'};
 
 my $dest = $ENV{'acdReportDestination'};
 
-my $cmd = "python $exe -c '$joFile' -o '$acdAlarmFile' -l 1 '$acdTimeFile' || exit 1
+my $cmd = "
+python $exe -c '$joFile' -o '$acdAlarmFile' -l 1 '$acdTimeFile' > $acdLogFile || exit 1
 cp '$acdTimeFile' '$dest'
-cp '$acdAlarmFile' '$dest'";
+cp '$acdLogFile' '$dest'
+";
 
 print STDERR "About to run [$cmd]\n.";
 
