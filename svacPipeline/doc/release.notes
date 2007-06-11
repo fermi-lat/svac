@@ -748,3 +748,8 @@ Register stdout of acdReport/runStrip, and copy it (instead of xml alarm file)
 to EMI report directory.
 Forgot to add acdReport/runStrip.pl last time, it's in now.
 ---------------------------------------------------------------------------
+
+
+v3r9p10 (2007/06/11)
+---------------
+Switch Monitor (part of acdReport) to acdemi6.

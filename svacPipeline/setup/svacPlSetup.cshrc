@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p9
+setenv svacVersion v3r9p10
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -194,7 +194,7 @@ setenv tkrReportDataDirFull ${dataHead}/${tkrReportDataDir}
 #++++++++++++++++++++++++++++++++ acdReport +++++++++++++++++++++++++++++++++++
 setenv acdReportTaskVersion ${svacVersion}
 setenv acdReportTask acdReport-${acdReportTaskVersion}
-setenv monitorVersion acdemi5
+setenv monitorVersion acdemi6
 setenv monitorDir ${svacCmt}/Monitor/${monitorVersion}
 setenv monitorCmt ${monitorDir}/cmt
 setenv monitorApp ${monitorDir}/${SVAC_CMTCONFIG}/runStrip_t.exe
