@@ -183,7 +183,6 @@ unsigned RFun::loopoveronedimvectbool(ROOT::TArrayBoolProxy& invector, UInt_t ve
 
 
 
-
 std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
 //std::vector<double> RFun::getemptytowers(const UShort_t invector[16])
 {
@@ -236,6 +235,18 @@ std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
 
   return emptytowers;
 }
+
+
+static unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const UShort_t vectordim)
+{
+  for(UShort_t i=0; i<vectordim;i++){
+    if(invector[i]>0.0)
+      return 1;
+  }
+  return 0;
+}
+
+
 
 
 std::vector<double> RFun::testfun(){

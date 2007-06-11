@@ -19,7 +19,7 @@ class RFun{
   static int iden(int i);
 
 
-  // Tracker Related functions
+  // Acd/Tracker/Cal Related functions
 
   static unsigned getconsecutiveplaneshit(const UShort_t invector[36]);
   static std::vector<double> getemptytowers(ROOT::TArrayBoolProxy& invector);
@@ -58,7 +58,12 @@ class RFun{
   static unsigned loopoveronedimvect(const UShort_t invector[], UInt_t vectdim);
   static unsigned loopoveronedimvectbool(ROOT::TArrayBoolProxy& invector, UInt_t vectdim);
 
-  // END of tracker related functions
+  static unsigned istherenonzerocomponent(const UShort_t invector[], const UShort_t vectordim);
+  
+
+  
+
+  // END of Acd/Tracker/Cal related functions
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
   // Test functions
