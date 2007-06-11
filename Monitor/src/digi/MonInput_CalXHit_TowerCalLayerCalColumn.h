@@ -13,7 +13,7 @@
 
 // user defined part
 
-#define VARTYPE Bool_t 
+#define VARTYPE UShort_t 
 
 // end user defined part
 

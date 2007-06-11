@@ -11,12 +11,12 @@
 
 #define NAME CalXHit_TowerCalLayerCalColumn
 #define OUTBRANCH "CalXHit_TowerCalLayerCalColumn"
-#define LEAF "CalXHit_TowerCalLayerCalColumn[16][8][12]/O"
+#define LEAF "CalXHit_TowerCalLayerCalColumn[16][8][12]/s"
 #define INBRANCH "m_calDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "Vector[tower][callayer][calcolumn] reporting about the existence (1) or not (0) of a hit in that crystal defined by the coordinates tower,callayer,calcolumn."
+#define DESCRIPTION "Vector[tower][callayer][calcolumn] reporting about the number of hits in that crystal defined by the coordinates tower,callayer,calcolumn."
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -59,7 +59,6 @@ void MonInput_CalXHit_TowerCalLayerCalColumn::setValue(TObject* event) {
     UShort_t callayer = p->getPackedId().getLayer();
     UShort_t calcolumn = p->getPackedId().getColumn();
     m_val[tower][callayer][calcolumn]++;
-
   }
   
       
