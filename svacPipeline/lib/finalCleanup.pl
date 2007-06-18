@@ -24,6 +24,7 @@ my @junkScripts = (
 				   'intSeApp_e2e_LAT-71x_0.50hr',
 				   'intSeApp_e2e_LAT-20xMIPThruNoPer_0.50hr', 
 				   'intSeApp_e2e_LAT-22xGammaThruNoPer_0.50hr', 
+				   'intSeAppLrs_e2e_Other-LightTight2_0.01hr',
 				   );
 my $testScript = `$ENV{'eLogQuery'} $runName testname`;
 chomp $testScript;

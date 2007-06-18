@@ -12,10 +12,10 @@ my $batchgroup = $ENV{'batchgroup'};
 
 use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'digiReportTaskDir'}, 
-									   "genDigiTestReport"),
+									   'genDigiTestReport', 'copyTkr'),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "LaunchReconstructable", 
-									   "url")
+									   'LaunchReconstructable', 
+									   'url')
 					);
 
 my $digiReportXml = 
@@ -38,6 +38,9 @@ my $digiReportXml =
     </executable>
     <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'url'}
+    </executable>
+    <executable name=\"copyTkr\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'copyTkr'}
     </executable>
 
     <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
@@ -77,6 +80,9 @@ my $digiReportXml =
     </processing-step>
     <processing-step name=\"digiReportUrl\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
                     <input-file name=\"tarBall\"/>
+    </processing-step>
+    <processing-step name=\"copyTkr\" executable=\"copyTkr\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"histogram\"/>
     </processing-step>
 </pipeline>
 

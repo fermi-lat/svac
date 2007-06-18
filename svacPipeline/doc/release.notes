@@ -753,3 +753,10 @@ Forgot to add acdReport/runStrip.pl last time, it's in now.
 v3r9p10 (2007/06/11)
 ---------------
 Switch Monitor (part of acdReport) to acdemi6.
+---------------------------------------------------------------------------
+
+
+v3r9p11 (2007/06/12)
+---------------
+Put links to tkr histogram file in $LATMonRoot.
+Delete recon files for intSeAppLrs_e2e_Other-LightTight2_0.01hr.

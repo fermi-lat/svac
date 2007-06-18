@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p10
+setenv svacVersion v3r9p11
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -125,6 +125,9 @@ setenv digiReportTaskDir ${svacPlRoot}/digiReport
 setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 setenv digiReportDataDir ${emTail}/digiReport/${digiReportVersion}
 setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
+setenv tkrHistDir ${emiBase}/TKR
+setenv tkrCopyLimit 1800
+setenv tkrCopyScript ${digiReportTaskDir}/copyTkr.pl
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
