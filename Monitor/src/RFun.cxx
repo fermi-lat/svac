@@ -81,9 +81,9 @@ unsigned RFun::gethitsinemptytower(double isemptytower,
 
 
 
-unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invector)
+//unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invector)
 //unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
-//unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >& invector)
+unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >& invector)
 {
   unsigned n_counter(0);
   for (UShort_t itower = 0; itower < 16; itower++){

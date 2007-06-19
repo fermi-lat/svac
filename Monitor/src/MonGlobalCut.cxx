@@ -33,10 +33,16 @@ void MonGlobalCut::makeProxy(TTree* tree){
 	    <<"(*counter)++;"<<std::endl
 	    <<"return 0;"<<std::endl<<"}"<<std::endl;
   formfile.close();
-  formfile.open((m_name+"_globalCut_cut.h").c_str());
+  formfile.open((m_name+"_globalCut_cut.h_tmp").c_str());
   formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile<<"#include \"TEventList.h\""<<std::endl;
   formfile.close();
+  if(access((m_name+"_globalCut_cut.h").c_str(),F_OK)!=0 || 
+     compareFiles((m_name+"_globalCut_cut.h").c_str(),(m_name+"_globalCut_cut.h_tmp").c_str())!=0){   
+    rename((m_name+"_globalCut_cut.h_tmp").c_str(),(m_name+"_globalCut_cut.h").c_str());
+  }else{
+    unlink((m_name+"_globalCut_cut.h_tmp").c_str());
+  }
   // check if we need to recompile 
   bool compile=false;
   // if there was/wasn't a cut before but now there is one we have to compile
@@ -61,6 +67,8 @@ void MonGlobalCut::makeProxy(TTree* tree){
   }else{
     std::cout<<"Formula/cut for global cut "<<m_name<<" has not changed. Using old library"<<std::endl;
     gSystem->Load((m_name+"globalCutSelector_h.so").c_str());
+    //sprintf(rootcommand,".L %s.h+O",(m_name+"globalCutSelector").c_str());
+    //gROOT->ProcessLine(rootcommand);
   }
   sprintf(rootcommand,"new %s((TTree*)0x%%x);",(m_name+"globalCutSelector").c_str());
   m_sel=(TSelector*)gROOT->ProcessLineFast(Form(rootcommand,tree));

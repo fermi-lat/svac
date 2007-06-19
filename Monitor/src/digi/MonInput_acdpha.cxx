@@ -55,6 +55,7 @@ void MonInput_acdpha::setValue(TObject* event) {
       UInt_t garc,gafe;
       for (int pmt=0;pmt<2;pmt++){
 	AcdId::convertToGarcGafe(id.getId(),pmt,garc,gafe);
+	if(garc>11 || gafe>17)continue;
 	m_val[garc][gafe]= acddigi->getPulseHeight((AcdDigi::PmtId)pmt);
       }
     }

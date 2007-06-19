@@ -41,8 +41,8 @@ macro_append cppflags "-Wno-unused-parameter"
 
 macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib -lrt"
 
-macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d "
-#macro_append ROOT_linkopts " -L/u/ec/kocian/data/glnew/external/ROOT/v5.14.00d/root/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -pthread -lm -ldl -rdynamic "
+#macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d "
+macro_append ROOT_linkopts " -L/u/ec/kocian/data/glnew/external/ROOT/v5.14.00d/root/lib -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -pthread -lm -ldl -rdynamic "
 
 #macro testreport_linkopts "$(ROOT_linkopts) $(commonRootData_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)"
 #application seltest seltest.cxx

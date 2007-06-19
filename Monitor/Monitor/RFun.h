@@ -33,7 +33,8 @@ class RFun{
   static unsigned loopovertkrplanes(const UShort_t invector[]);
   
   //static unsigned loopovertowerANDtkrplanes(const UShort_t TkrHitsTowerPlane[16][36]);
-  static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
+  //static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
+  static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
 
    
 

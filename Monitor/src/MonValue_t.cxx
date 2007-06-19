@@ -222,9 +222,15 @@ void MonValue::makeProxy(TTree* tree){
   formfile.close();
 
 
-  formfile.open((m_name+"_val.h").c_str());
+  formfile.open((m_name+"_val.h_tmp").c_str());
   formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile.close();
+  if(access((m_name+"_val.h").c_str(),F_OK)!=0 || 
+     compareFiles((m_name+"_val.h").c_str(),(m_name+"_val.h_tmp").c_str())!=0){   
+    rename((m_name+"_val.h_tmp").c_str(),(m_name+"_val.h").c_str());
+  }else{
+    unlink((m_name+"_val.h_tmp").c_str());
+  }
 
 
   if (m_cut!=""){
@@ -233,9 +239,15 @@ void MonValue::makeProxy(TTree* tree){
 	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
     formfile.close();
 
-    formfile.open((m_name+"_cut.h").c_str());
+    formfile.open((m_name+"_cut.h_tmp").c_str());
     formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
     formfile.close();
+    if(access((m_name+"_cut.h").c_str(),F_OK)!=0 || 
+    compareFiles((m_name+"_cut.h").c_str(),(m_name+"_cut.h_tmp").c_str())!=0){   
+      rename((m_name+"_cut.h_tmp").c_str(),(m_name+"_cut.h").c_str());
+    }else{
+      unlink((m_name+"_cut.h_tmp").c_str());
+    }
   }
   // check if we need to recompile a formula
   bool compile=false;
@@ -283,6 +295,8 @@ void MonValue::makeProxy(TTree* tree){
   }else{
     std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
     gSystem->Load((m_name+"Selector_h.so").c_str());
+    //sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
+    //gROOT->ProcessLine(rootcommand);
   }
   sprintf(rootcommand,"new %s((TTree*)0x%%x);",(m_name+"Selector").c_str());
   m_sel=(TSelector*)gROOT->ProcessLineFast(Form(rootcommand,tree));

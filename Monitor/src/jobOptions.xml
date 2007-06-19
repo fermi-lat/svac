@@ -1,12 +1,11 @@
 <?xml version="1.0" ?>
 <!-- job optin file for runMuonCalib_ped.exe -->
 
-<ifile cvs_Header="$Header: " >
+<ifile cvs_Header="$Header$" cvs_Revision="$Revision$" >
 
-  <section name="parameters"> input parameters for ACD pedestal and gain calibration
-    <item name="digiFileList" value="/nfs/farm/g/glast/u34/Integration/rootData/077005521/v6r070329p16/grRoot/digitization-licos-v3r6p2_077005521_digi_DIGI.root"> blank-delimited list of input digi root files </item>
-    <item name="outputPrefix" value="test"> output file prefix </item>
-    <item name="configFile" value="../src/monconfigbkg.xml"> output file prefix </item>
-    <item name="htmlFile" value="out.html"> html output file </item>
+  <section name="parameters"> Input parameters for ACD pedestal and gain calibration
+    <item name="outputPrefix" value="acd"> output file prefix </item>
+    <item name="configFile" value="../src/monconfigacd.xml"> output file prefix </item>
+    <item name="htmlFile" value="alarms.html"> html output file </item>
   </section>
 </ifile>
