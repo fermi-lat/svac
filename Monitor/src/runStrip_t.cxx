@@ -215,6 +215,7 @@ int main(int argn, char** argc) {
   // global event cut
   std::string eventcut=p.getEventCut();
   MonGlobalCut* globalCut=new MonGlobalCut("globalCut",eventcut.c_str());
+  globalCut->setSharedLibDir(jc.sodir());
   std::cout<<"Event cut "<<eventcut<<std::endl;
   // now the output 
   std::list<std::map<std::string,std::string> > outputlist=p.getOutputList();
@@ -227,7 +228,9 @@ int main(int argn, char** argc) {
   }      
   MonValFactory mf;
   MonValueCol* outcolprim=mf.makeMonValueCol(outputlistprimary,"Primary");
+  outcolprim->setSharedLibDir(jc.sodir());
   MonValueCol* outcolsec=mf.makeMonValueCol(outputlistsecondary,"Secondary");
+  outcolsec->setSharedLibDir(jc.sodir());
   char inclpath[512];
   sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   gSystem->AddIncludePath(inclpath);

@@ -21,11 +21,11 @@ MonGlobalCut::MonGlobalCut(const char* name, const char* cut):m_name(name),m_cut
 void MonGlobalCut::makeProxy(TTree* tree){
   if (m_cut=="" || strstr(m_cut.c_str(),"RFun")==0)return;
   std::ofstream formfile;
-  formfile.open((m_name+"_globalCut_val.C").c_str());
+  formfile.open((m_sodir+m_name+"_globalCut_val.C").c_str());
   formfile<<"double "<<m_name+"_globalCut_val"<<"() {"<<std::endl;
   formfile<<"return 0;"<<std::endl<<"}"<<std::endl;
   formfile.close();
-  formfile.open((m_name+"_globalCut_cut.C_tmp").c_str());
+  formfile.open((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
   formfile<<"TEventList *resultlist;"<<std::endl
 	  <<"unsigned int *counter;"<<std::endl;
   formfile<<"int "<<m_name+"_globalCut_cut"<<"(){"<<std::endl;
@@ -33,40 +33,57 @@ void MonGlobalCut::makeProxy(TTree* tree){
 	    <<"(*counter)++;"<<std::endl
 	    <<"return 0;"<<std::endl<<"}"<<std::endl;
   formfile.close();
-  formfile.open((m_name+"_globalCut_cut.h_tmp").c_str());
+  formfile.open((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
   formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile<<"#include \"TEventList.h\""<<std::endl;
   formfile.close();
-  if(access((m_name+"_globalCut_cut.h").c_str(),F_OK)!=0 || 
-     compareFiles((m_name+"_globalCut_cut.h").c_str(),(m_name+"_globalCut_cut.h_tmp").c_str())!=0){   
-    rename((m_name+"_globalCut_cut.h_tmp").c_str(),(m_name+"_globalCut_cut.h").c_str());
+  if(access((m_sodir+m_name+"_globalCut_cut.h").c_str(),F_OK)!=0 || 
+     compareFiles((m_sodir+m_name+"_globalCut_cut.h").c_str(),(m_sodir+m_name+"_globalCut_cut.h_tmp").c_str())!=0){   
+    rename((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.h").c_str());
   }else{
-    unlink((m_name+"_globalCut_cut.h_tmp").c_str());
+    unlink((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
   }
   // check if we need to recompile 
   bool compile=false;
   // if there was/wasn't a cut before but now there is one we have to compile
-  if (access((m_name+"_globalCut_cut.C").c_str(),F_OK)!=0){
+  if (access((m_sodir+m_name+"_globalCut_cut.C").c_str(),F_OK)!=0){
     compile=true;
-    rename((m_name+"_globalCut_cut.C_tmp").c_str(),(m_name+"_globalCut_cut.C").c_str());
+    rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
   }
   if (!compile){
-    if (compareFiles((m_name+"_globalCut_cut.C").c_str(),(m_name+"_globalCut_cut.C_tmp").c_str())!=0){
-      rename((m_name+"_globalCut_cut.C_tmp").c_str(),(m_name+"_globalCut_cut.C").c_str());
+    if (compareFiles((m_sodir+m_name+"_globalCut_cut.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C_tmp").c_str())!=0){
+      rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
       compile=true;
     }else{
-      unlink((m_name+"_globalCut_cut.C_tmp").c_str());
+      unlink((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
     }
   }
   char rootcommand[128];
   if (compile){
-    tree->MakeProxy((m_name+"globalCutSelector").c_str(),(m_name+"_globalCut_val.C").c_str(),(m_name+"_globalCut_cut.C").c_str(),"nohist");
+    tree->MakeProxy((m_sodir+m_name+"globalCutSelector").c_str(),(m_sodir+m_name+"_globalCut_val.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str(),"nohist");
+    // patch for root 5.14
+    std::ifstream inf((m_sodir+m_name+"globalCutSelector.h").c_str());
+    std::ofstream outf((m_sodir+m_name+"globalCutSelector.h_tmp").c_str());
+    char st[200];
+    inf.getline(st,200);
+    while(strstr(st,"SetTree")==0){
+      outf<<st<<std::endl;
+      inf.getline(st,200);
+    }
+    outf<<st<<std::endl;
+    outf<<"   delete fHelper;"<<std::endl;
+    while(!inf.eof()){
+      inf.getline(st,200);
+      outf<<st<<std::endl;
+    }
+    rename((m_sodir+m_name+"globalCutSelector.h_tmp").c_str(),(m_sodir+m_name+"globalCutSelector.h").c_str());
+    //end patch
     std::cout<<"Compiling formula for global cut "<<m_name<<std::endl;
-    sprintf(rootcommand,".L %s.h+O",(m_name+"globalCutSelector").c_str());
+    sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"globalCutSelector").c_str());
     gROOT->ProcessLine(rootcommand);
   }else{
     std::cout<<"Formula/cut for global cut "<<m_name<<" has not changed. Using old library"<<std::endl;
-    gSystem->Load((m_name+"globalCutSelector_h.so").c_str());
+    gSystem->Load((m_sodir+m_name+"globalCutSelector_h.so").c_str());
     //sprintf(rootcommand,".L %s.h+O",(m_name+"globalCutSelector").c_str());
     //gROOT->ProcessLine(rootcommand);
   }
@@ -115,3 +132,7 @@ float MonGlobalCut::timeProfile(){
   return timeprof;
 }
  
+
+void MonGlobalCut::setSharedLibDir(std::string sodir){
+  m_sodir=sodir;
+}

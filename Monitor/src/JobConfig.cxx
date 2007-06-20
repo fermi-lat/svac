@@ -64,6 +64,8 @@ void JobConfig::usage() {
        << endl
        << "\t   -g <htmlFile>    : name of the html output file with the listing of the configuration"<<endl
        << endl
+       << "\t   -w <directory>    : location of the directory for the proxies"<<endl
+       << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
@@ -94,7 +96,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:w:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -134,6 +136,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
       break;
     case 'g':   // html configuration file
       m_htmlFile = string(optarg);
+      break;
+    case 'w':   // shared object directory
+      m_sodir = string(optarg);
       break;
     case 'b':   // size of bins
       m_optval_b = strtoul( optarg, &endPtr, 0 );
@@ -248,6 +253,14 @@ Int_t JobConfig::parse(int argn, char** argc) {
     }
     m_htmlFile=myFile->getString("parameters","htmlFile");
   }
+  // shared libraries directory
+  if (myFile && myFile->contains ("parameters","sharedLibDir")){
+    if (m_sodir !=""){
+      cerr<<"Overriding shared lib directory defined both in xml file."<<endl;
+    }
+    m_sodir=myFile->getString("parameters","sharedLibDir");
+  }
+  if (m_sodir!=""&&m_sodir[m_sodir.length()-1]!='/')m_sodir+="/";
   // monitoring configuration file
   if (myFile && myFile->contains ("parameters","configFile")){
     if (m_configFile !=""){

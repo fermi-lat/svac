@@ -472,6 +472,12 @@ void MonValueCol::makeProxy(TTree* tree){
     (*itr)->makeProxy(tree);
   }
 }
+void MonValueCol::setSharedLibDir(std::string sodir){
+  for ( std::list<MonValue*>::iterator itr = m_vals.begin();
+	itr != m_vals.end(); itr++ ) {
+    (*itr)->setSharedLibDir(sodir);
+  }
+}
 
 float MonValueCol::timeProfile(){
   float tp=0;

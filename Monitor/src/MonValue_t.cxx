@@ -157,7 +157,7 @@ void MonValue::makeProxy(TTree* tree){
       && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
-  formfile.open((m_name+"_val.C_tmp").c_str());
+  formfile.open((m_sodir+m_name+"_val.C_tmp").c_str());
   formfile<<"std::vector<double> *resultvector;"<<std::endl;
   if(m_histdim==2)formfile<<"std::vector<double> *resultvector2;"<<std::endl;
   formfile <<"unsigned int *counter;"<<std::endl
@@ -211,6 +211,7 @@ void MonValue::makeProxy(TTree* tree){
   if(acdrowloop)formfile<<"}"<<std::endl;
   if(acdcolumnloop)formfile<<"}"<<std::endl;
   if(acdpmtloop)formfile<<"}"<<std::endl;
+  if(acdgafeloop)formfile<<"}"<<std::endl;
   if(acdgarcloop)formfile<<"}"<<std::endl;
   if(acdtileloop)formfile<<"}"<<std::endl;
   if(calcolumnloop)formfile<<"}"<<std::endl;
@@ -222,79 +223,96 @@ void MonValue::makeProxy(TTree* tree){
   formfile.close();
 
 
-  formfile.open((m_name+"_val.h_tmp").c_str());
+  formfile.open((m_sodir+m_name+"_val.h_tmp").c_str());
   formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
   formfile.close();
-  if(access((m_name+"_val.h").c_str(),F_OK)!=0 || 
-     compareFiles((m_name+"_val.h").c_str(),(m_name+"_val.h_tmp").c_str())!=0){   
-    rename((m_name+"_val.h_tmp").c_str(),(m_name+"_val.h").c_str());
+  if(access((m_sodir+m_name+"_val.h").c_str(),F_OK)!=0 || 
+     compareFiles((m_sodir+m_name+"_val.h").c_str(),(m_sodir+m_name+"_val.h_tmp").c_str())!=0){   
+    rename((m_sodir+m_name+"_val.h_tmp").c_str(),(m_sodir+m_name+"_val.h").c_str());
   }else{
-    unlink((m_name+"_val.h_tmp").c_str());
+    unlink((m_sodir+m_name+"_val.h_tmp").c_str());
   }
 
 
   if (m_cut!=""){
-    formfile.open((m_name+"_cut.C_tmp").c_str());
+    formfile.open((m_sodir+m_name+"_cut.C_tmp").c_str());
     formfile<<"int "<<m_name+"_cut"<<"(){"<<std::endl
 	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
     formfile.close();
 
-    formfile.open((m_name+"_cut.h_tmp").c_str());
+    formfile.open((m_sodir+m_name+"_cut.h_tmp").c_str());
     formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
     formfile.close();
-    if(access((m_name+"_cut.h").c_str(),F_OK)!=0 || 
-    compareFiles((m_name+"_cut.h").c_str(),(m_name+"_cut.h_tmp").c_str())!=0){   
-      rename((m_name+"_cut.h_tmp").c_str(),(m_name+"_cut.h").c_str());
+    if(access((m_sodir+m_name+"_cut.h").c_str(),F_OK)!=0 || 
+    compareFiles((m_sodir+m_name+"_cut.h").c_str(),(m_sodir+m_name+"_cut.h_tmp").c_str())!=0){   
+      rename((m_sodir+m_name+"_cut.h_tmp").c_str(),(m_sodir+m_name+"_cut.h").c_str());
     }else{
-      unlink((m_name+"_cut.h_tmp").c_str());
+      unlink((m_sodir+m_name+"_cut.h_tmp").c_str());
     }
   }
   // check if we need to recompile a formula
   bool compile=false;
   // if there was/wasn't a cut before but now there is one we have to compile
   if (m_cut==""){
-    if (access((m_name+"_cut.C").c_str(),F_OK)==0){
+    if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)==0){
       compile=true;
-      unlink((m_name+"_cut.C").c_str());
+      unlink((m_sodir+m_name+"_cut.C").c_str());
     }
   }else{
-    if (access((m_name+"_cut.C").c_str(),F_OK)!=0){
+    if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)!=0){
       compile=true;
-      rename((m_name+"_cut.C_tmp").c_str(),(m_name+"_cut.C").c_str());
+      rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
      }
   }
-  if(access((m_name+"_val.C").c_str(),F_OK)!=0){
-    rename((m_name+"_val.C_tmp").c_str(),(m_name+"_val.C").c_str());
+  if(access((m_sodir+m_name+"_val.C").c_str(),F_OK)!=0){
+    rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
     compile=true;
   }else{
-    if (compareFiles((m_name+"_val.C").c_str(),(m_name+"_val.C_tmp").c_str())!=0){
-    rename((m_name+"_val.C_tmp").c_str(),(m_name+"_val.C").c_str());
+    if (compareFiles((m_sodir+m_name+"_val.C").c_str(),(m_sodir+m_name+"_val.C_tmp").c_str())!=0){
+    rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
     compile=true;
     }else{
-      unlink((m_name+"_val.C_tmp").c_str());
+      unlink((m_sodir+m_name+"_val.C_tmp").c_str());
     }
   }
   if (m_cut!=""&& !compile){
-    if (compareFiles((m_name+"_cut.C").c_str(),(m_name+"_cut.C_tmp").c_str())!=0){
-      rename((m_name+"_cut.C_tmp").c_str(),(m_name+"_cut.C").c_str());
+    if (compareFiles((m_sodir+m_name+"_cut.C").c_str(),(m_sodir+m_name+"_cut.C_tmp").c_str())!=0){
+      rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
       compile=true;
     }else{
-      unlink((m_name+"_cut.C_tmp").c_str());
+      unlink((m_sodir+m_name+"_cut.C_tmp").c_str());
     }
   }
   char rootcommand[128];
   if (compile){
     if (m_cut!=""){
-      tree->MakeProxy((m_name+"Selector").c_str(),(m_name+"_val.C").c_str(),(m_name+"_cut.C").c_str(),"nohist");
+      tree->MakeProxy((m_sodir+m_name+"Selector").c_str(),(m_sodir+m_name+"_val.C").c_str(),(m_sodir+m_name+"_cut.C").c_str(),"nohist");
     }else{
-      tree->MakeProxy((m_name+"Selector").c_str(),(m_name+"_val.C").c_str(),"","nohist");
+      tree->MakeProxy((m_sodir+m_name+"Selector").c_str(),(m_sodir+m_name+"_val.C").c_str(),"","nohist");
     }
+    // patch for root 5.14
+    std::ifstream inf((m_sodir+m_name+"Selector.h").c_str());
+    std::ofstream outf((m_sodir+m_name+"Selector.h_tmp").c_str());
+    char st[200];
+    inf.getline(st,200);
+    while(strstr(st,"SetTree")==0){
+      outf<<st<<std::endl;
+      inf.getline(st,200);
+    }
+    outf<<st<<std::endl;
+    outf<<"   delete fHelper;"<<std::endl;
+    while(!inf.eof()){
+      inf.getline(st,200);
+      outf<<st<<std::endl;
+    }
+    rename((m_sodir+m_name+"Selector.h_tmp").c_str(),(m_sodir+m_name+"Selector.h").c_str());
+    //end patch
     std::cout<<"Compiling formula for "<<m_name<<std::endl;
-    sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
+    sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"Selector").c_str());
     gROOT->ProcessLine(rootcommand);
   }else{
     std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
-    gSystem->Load((m_name+"Selector_h.so").c_str());
+    gSystem->Load((m_sodir+m_name+"Selector_h.so").c_str());
     //sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
     //gROOT->ProcessLine(rootcommand);
   }
@@ -404,6 +422,9 @@ float MonValue::timeProfile(){
   return timeprof;
 }
   
+void MonValue::setSharedLibDir(std::string sodir){
+  m_sodir=sodir;
+}
 
 std::vector<std::string> MonValue::parse(const std::string str, const std::string beg, const std::string sep, const std::string end){
   std::vector<std::string> retvec;

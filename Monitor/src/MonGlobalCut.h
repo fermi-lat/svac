@@ -49,6 +49,7 @@ public :
   unsigned long long nFilter(){return m_nFilter;}
   TEventList* eventList(){return m_eventlist;}
   float timeProfile();
+  void setSharedLibDir(std::string);
  protected:
   
 
@@ -61,6 +62,7 @@ public :
   TEventList* m_eventlist;
   unsigned long long m_timeprof;
   unsigned int m_counter;
+  std::string m_sodir;
 };
 
 #endif

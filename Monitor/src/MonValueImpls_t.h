@@ -305,6 +305,8 @@ public:
   void makeProxy(TTree* tree);
   // do time profiling
   float timeProfile();
+  // set shared lib directory
+  void setSharedLibDir(std::string);
 
 private:
 

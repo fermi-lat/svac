@@ -53,6 +53,7 @@ public :
 
   virtual void makeProxy(TTree* tree);
   float timeProfile();
+  void setSharedLibDir(std::string);
  protected:
   /// val2 is only used for 2d histograms 
   virtual void singleincrement(Double_t* val,Double_t* val2=0){};
@@ -70,6 +71,7 @@ public :
   unsigned long long m_timeprof;
   std::string m_dimstring;    
   unsigned m_dim;
+  std::string m_sodir;
   static std::vector<double> *m_result;
   static std::vector<double> *m_result2;
   static unsigned int m_counter;
