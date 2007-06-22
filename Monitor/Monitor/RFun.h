@@ -32,16 +32,19 @@ class RFun{
 
   static unsigned loopovertkrplanes(const UShort_t invector[]);
   
-  //static unsigned loopovertowerANDtkrplanes(const UShort_t TkrHitsTowerPlane[16][36]);
+ 
+ 
   //static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
   static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
-
-   
 
   static unsigned loopovercallayers(const UShort_t invector[]);
 
 
   static unsigned loopovercalcolumns(const UShort_t invector[]);
+  //  static unsigned loopovercallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 12> >&);
+  static unsigned loopovercallayersANDcalcolumns(const UShort_t[8][12]);
+
+  static unsigned loopovertowersANDcallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<UShort_t, 12>, 8> >& invector);
 
   static unsigned loopovergarc(const UShort_t invector[]);
   
@@ -61,7 +64,10 @@ class RFun{
 
   static unsigned istherenonzerocomponent(const UShort_t invector[], const UShort_t vectordim);
   
-
+  
+  static double computemean_with_outlierscut(const ULong64_t invector[], 
+					     const UInt_t vecdim, 
+					     const double rmstailcut);
   
 
   // END of Acd/Tracker/Cal related functions

@@ -1,5 +1,5 @@
 #include "Monitor/RFun.h"
-#include "configData/db/LatcDBImplOld.h"
+//#include "configData/db/LatcDBImplOld.h"
 #include "AcdPedProxy.h"
 #include "AcdPeds.h"
 
@@ -7,6 +7,7 @@ const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
   return peds->mean(garc,gafe);
 }
+/*
 int RFun::engine(int i,unsigned key){
   m_tcf->updateKey(key);
   return m_tcf->lut()->engineNumber(i);
@@ -17,8 +18,67 @@ int RFun::enginecounter(int i,unsigned key,int engine){
   if (eng==engine)return 1;
   else return 0;
 }
+*/
 int RFun::iden(int i ){
   return i;
+}
+
+
+double RFun::computemean_with_outlierscut(const ULong64_t invector[], 
+					  const UInt_t vecdim,
+					  const double rmstailcut)
+{
+  double mean(0.0),rms(0.0), cleanmean(0.0), cleanrms(0.0);
+  unsigned usefulcomponents(0);
+
+  // check for stupidity
+  if(vecdim<1 || rmstailcut <=0)
+    {
+      std::cout 
+	<< "RFun::computemean_with_outlierscut(const UShort_t invector[], " 
+	<< "const UInt_t vecdim,const double rmstailcut) : ERROR" <<std::endl
+	<< "vecdim or rmstailcut outside logical range: vecdim >=1; rmstailcut >0" 
+	<< std::endl;
+      assert(0);
+    }
+
+  // compute mean and rms
+  for(UInt_t i=0;i<vecdim;i++)
+    {
+      mean+=invector[i];
+      rms+=invector[i]*invector[i];
+    }
+  mean/=double(vecdim);
+  rms/=double(vecdim);
+  rms -= mean*mean;
+  rms /= double(vecdim);
+  rms = rms > 0. ? sqrt(rms) : 0.;
+
+  // compute mean and rms without outliers
+
+  for(UInt_t i=0;i<vecdim;i++)
+    {
+      if(fabs(mean-invector[i])<rmstailcut*rms){
+	cleanmean+=invector[i];
+	cleanrms+=invector[i]*invector[i];
+	usefulcomponents++;
+      }
+    }
+  cleanmean/=double(usefulcomponents);
+  cleanrms/=double(usefulcomponents);
+  cleanrms -= cleanmean*cleanmean;
+  cleanrms /= double(usefulcomponents);
+  cleanrms = cleanrms > 0. ? sqrt(cleanrms) : 0.;
+
+
+  // tmp
+  std::cout << std::endl << "Print results of RFun::computemean_with_outlierscut" << std::endl
+	    << "Original mean,rms: " << mean << ", " << rms << std::endl
+	    << "Corrected mean,rms: " << cleanmean << ", " << cleanrms << std::endl << std::endl;
+
+  // endtmp
+
+  return cleanmean;
 }
 
 unsigned RFun::getconsecutiveplaneshit(const UShort_t invector[36])
@@ -84,6 +144,7 @@ unsigned RFun::gethitsinemptytower(double isemptytower,
 //unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& invector)
 //unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
 unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >& invector)
+
 {
   unsigned n_counter(0);
   for (UShort_t itower = 0; itower < 16; itower++){
@@ -106,6 +167,33 @@ unsigned RFun::loopovercallayers(const UShort_t invector[])
 {
   return loopoveronedimvect(invector,8);
 }
+
+unsigned RFun::loopovercallayersANDcalcolumns(const UShort_t invector[8][12])
+//unsigned RFun::loopovercallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 12> >& invector)
+{
+  unsigned n_counter(0);
+  for (UShort_t ilayer = 0; ilayer < 8; ilayer++){
+    for (UShort_t icolumn = 0; icolumn < 12; icolumn++)
+      n_counter += invector[ilayer][icolumn];
+  }
+  return n_counter;
+}
+
+
+//unsigned RFun::loopovertowersANDcallayersANDcalcolumns(const UShort_t invector[16][8][12])
+unsigned RFun::loopovertowersANDcallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<UShort_t, 12>, 8> >& invector)
+{
+  unsigned n_counter(0);
+  for (UShort_t itower = 0; itower <16; itower++){
+    for (UShort_t ilayer = 0; ilayer < 8; ilayer++){
+      for (UShort_t icolumn = 0; icolumn < 12; icolumn++)
+	n_counter += invector[itower][ilayer][icolumn];
+    }
+  }
+  return n_counter;
+
+}
+
 
 unsigned RFun::loopovercalcolumns(const UShort_t invector[])
 {
@@ -276,7 +364,7 @@ int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
 
 // Initialization of static data member
 
-TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
+//TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
 
 int RFun::m_boundarytwr[16][8];
 bool RFun::m_boundarytwrdefined = false;
