@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "compareFiles.h"
 #include <time.h>
+#include <map>
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
 std::vector<double> *MonValue::m_result2=new std::vector<double>;
@@ -54,107 +55,100 @@ MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut
 }
   
 void MonValue::makeProxy(TTree* tree){
-  bool engineloop=false;
-  bool towerloop=false;
-  bool tkrlayerloop=false;
-  bool tkrplaneloop=false;
-  bool acdfaceloop=false;
-  bool acdrowloop=false;
-  bool acdcolumnloop=false;
-  bool acdpmtloop=false;
-  bool acdgarcloop=false;
-  bool acdgafeloop=false;
-  bool acdtileloop=false;
-  bool callayerloop=false;
-  bool calcolumnloop=false;
-  bool dooutsideformula=false;
+  
+  bool dooutsideformula = false;
   std::string formula(m_formula);
-
-  ///  std::cout << "Formula BEFORE all loops subrtraction: " << formula.c_str() << std::endl;
-
   std::string outsideformula;
-  unsigned int outsidepos=formula.find("runonce:");
-  if(outsidepos!=0xffffffff){
-    dooutsideformula=true;
-    unsigned int endformula=formula.find("#");
-    outsideformula=formula.substr(outsidepos+strlen("runonce:"),endformula-outsidepos-strlen("runonce:"));
-    formula.replace(outsidepos,endformula+1,"");
-  }
-  unsigned int enginepos=formula.find("foreachengine:");
-  if(enginepos!=0xffffffff){
-    engineloop=true;
-    formula.replace(enginepos,enginepos+strlen("foreachengine:"),"");
-  }
-  unsigned int towerpos=formula.find("foreachtower:");
-  if(towerpos!=0xffffffff){
-    towerloop=true;
-    formula.replace(towerpos,towerpos+strlen("foreachtower:"),"");
-  }
-  unsigned int tkrlayerpos=formula.find("foreachtkrlayer:");
-  if(tkrlayerpos!=0xffffffff){
-    tkrlayerloop=true;
-    formula.replace(tkrlayerpos,tkrlayerpos+strlen("foreachtkrlayer:"),"");
-  }
-  unsigned int tkrplanepos=formula.find("foreachtkrplane:");
-  if(tkrplanepos!=0xffffffff){
-    tkrplaneloop=true;
-    formula.replace(tkrplanepos,tkrplanepos+strlen("foreachtkrplane:"),"");
-  }
-  unsigned int acdfacepos=formula.find("foreachacdface:");
-  if(acdfacepos!=0xffffffff){
-    acdfaceloop=true;
-    formula.replace(acdfacepos,acdfacepos+strlen("foreachacdface:"),"");
-  }
-  unsigned int acdrowpos=formula.find("foreachacdrow:");
-  if(acdrowpos!=0xffffffff){
-    acdrowloop=true;
-    formula.replace(acdrowpos,acdrowpos+strlen("foreachacdrow:"),"");
-  }
-  unsigned int acdcolumnpos=formula.find("foreachacdcolumn:");
-  if(acdcolumnpos!=0xffffffff){
-    acdcolumnloop=true;
-    formula.replace(acdcolumnpos,acdcolumnpos+strlen("foreachacdcolumn:"),"");
-  }
-  unsigned int acdpmtpos=formula.find("foreachacdpmt:");
-  if(acdpmtpos!=0xffffffff){
-    acdpmtloop=true;
-    formula.replace(acdpmtpos,acdpmtpos+strlen("foreachacdpmt:"),"");
-  }
-  unsigned int acdgarcpos=formula.find("foreachgarc:");
-  if(acdgarcpos!=0xffffffff){
-    acdgarcloop=true;
-    formula.replace(acdgarcpos,acdgarcpos+strlen("foreachgarc:"),"");
-  }
-  unsigned int acdgafepos=formula.find("foreachgafe:");
-  if(acdgafepos!=0xffffffff){
-    acdgafeloop=true;
-    formula.replace(acdgafepos,acdgafepos+strlen("foreachgafe:"),"");
-  }
 
-  unsigned int acdtilepos=formula.find("foreachacdtile:");
-  if(acdtilepos!=0xffffffff){
-    acdtileloop=true;
-    formula.replace(acdtilepos,acdtilepos+strlen("foreachacdtile:"),"");
-  }
+  std::string::size_type formulasize=formula.size();
+  std::string::size_type spos(formulasize), spos2(formulasize);
+
+  // std::cout << "Formula BEFORE all loops subrtraction: " << formula.c_str() << std::endl;
+
+
+  // Define strings we need to look for inside formula, 
+  // and the corresponding line to be written in the proxies. 
+
+  typedef std::map<const char*,const char*> ExecutionMap_t;
+  ExecutionMap_t execmap;
+
+  execmap["runonce:"]="std::vector<double> runonceformula="; // exec line to be completed once formula is known
+  execmap["foreachtower:"]= "for(int tower=0;tower<16;tower++){";
+  execmap["foreachengine:"]= "for(int engine=0;engine<16;engine++){";
+  execmap["foreachtkrlayer:"]= "for(int tkrlayer=0;tkrlayer<19;tkrlayer++){";
+  execmap["foreachtkrplane:"]= "for(int tkrplane=0;tkrplane<36;tkrplane++){";
+  execmap["foreachacdface:"]= "for(int acdface=0;acdface<5;acdface++){";
+  execmap["foreachacdrow:"]= "for(int acdrow=0;acdrow<5;acdrow++){";
+  execmap["foreachacdcolumn:"]= "for(int acdcolumn=0;acdcolumn<5;acdcolumn++){";
+  execmap["foreachacdpmt:"]= "for(int acdpmt=0;acdpmt<2;acdpmt++){";
+  execmap["foreachgarc:"]= "for(int garc=0;garc<12;garc++){";
+  execmap["foreachgafe:"]= "for(int gafe=0;gafe<18;gafe++){";
+  execmap["foreachacdtile:"]= "for(int acdtile=0;acdtile<128;acdtile++){";
+  execmap["foreachcallayer:"]= "for(int callayer=0;callayer<8;callayer++){";
+  execmap["foreachcalcolumn:"]= "for(int calcolumn=0;calcolumn<12;calcolumn++){";
   
 
-   unsigned int callayerpos=formula.find("foreachcallayer:");
-  if(callayerpos!=0xffffffff){
-    callayerloop=true;
-    formula.replace(callayerpos,callayerpos+strlen("foreachcallayer:"),"");
+
+
+  // find positions of the different execution loops/formula to be done in proxy
+  // Execution will be done in the same order they appear in m_formu
+
+  typedef std::map<int,const char*> ExecutionList_t;
+  ExecutionList_t formulaloops;
+
+  // search in formula for the strings (keys) defined in execmap fill ExecutionList_t formulaloops;
+
+  for(ExecutionMap_t::const_iterator itr=execmap.begin(); 
+      itr!=execmap.end(); itr++){
+    spos=formula.find(itr->first);
+    if(spos<formulasize)
+      formulaloops[spos]=itr->first;
   }
+    
 
+  // tmp
+  /*
+  std::cout << "Printout of formulaloops map (map dim =" << formulaloops.size() <<")" << std::endl;
+  for(ExecutionList_t::const_iterator itr =formulaloops.begin();
+      itr!=formulaloops.end();itr++)
+    std::cout << itr->first << ", " << itr->second << std::endl;
+  */
+  // endtmp
 
-  unsigned int calcolumnpos=formula.find("foreachcalcolumn:");
-  if(calcolumnpos!=0xffffffff){
-    calcolumnloop=true;
-    formula.replace(calcolumnpos,calcolumnpos+strlen("foreachcalcolumn:"),"");
+  /// here 
+
+  // iterate over components of formulaloops and 
+  // 1 - retrieve expression for outsideformula (if any)
+  // 2 - screen the original formula against loops and outside formula
+
+  for(ExecutionList_t::const_iterator itr =formulaloops.begin();
+      itr!=formulaloops.end();itr++){
+    spos=formula.find(itr->second);
+    
+    // check for stupidity
+    if(spos>formulasize){
+      std::cout << "spos>formulasize for a string which is in formulaloops. " 
+		<< "This should not happen." << std::endl;
+      assert(0);
+    }
+
+    std::string thisexec = itr->second;
+    if(!thisexec.compare("runonce:")){
+      // outside formula is a special case
+      dooutsideformula = true;
+      spos2=formula.find("#");
+      outsideformula=formula.substr(spos+strlen(itr->second),spos2-spos-strlen(itr->second));
+      formula.replace(spos,spos2+1,"");
+    }
+    else
+      formula.replace(spos,spos+strlen(itr->second),"");
   }
+  
+  
+  // std::cout << "Formula after all loops subrtraction: " << formula.c_str() << std::endl;
 
-  //  std::cout << "Formula after all loops subrtraction: " << formula.c_str() << std::endl;
-
-  if (!engineloop && !towerloop && !tkrlayerloop && !tkrplaneloop && !acdfaceloop && !acdrowloop && !acdcolumnloop && !acdpmtloop && !acdgarcloop && !acdgafeloop && !acdtileloop && !calcolumnloop && !callayerloop
-      && !dooutsideformula &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
+  
+  if (!formulaloops.size() &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
 
   std::ofstream formfile;
   formfile.open((m_sodir+m_name+"_val.C_tmp").c_str());
@@ -163,23 +157,21 @@ void MonValue::makeProxy(TTree* tree){
   formfile <<"unsigned int *counter;"<<std::endl
 	   <<"double "<<m_name+"_val"<<"() {"<<std::endl;
   formfile<<"double val;"<<std::endl;
-  if(dooutsideformula)formfile<<"std::vector<double> runonceformula="<<outsideformula<<";"<<std::endl;
-  if(engineloop)formfile<<"for(int engine=0;engine<16;engine++){"<<std::endl;
-  if(towerloop)formfile<<"for(int tower=0;tower<16;tower++){"<<std::endl;
-  if(tkrlayerloop)formfile<<"for(int tkrlayer=0;tkrlayer<19;tkrlayer++){"<<std::endl;
-  if(tkrplaneloop)formfile<<"for(int tkrplane=0;tkrplane<36;tkrplane++){"<<std::endl;
-  if(acdfaceloop)formfile<<"for(int acdface=0;acdface<5;acdface++){"<<std::endl;
-  if(acdrowloop)formfile<<"for(int acdrow=0;acdrow<5;acdrow++){"<<std::endl;
-  if(acdcolumnloop)formfile<<"for(int acdcolumn=0;acdcolumn<5;acdcolumn++){"<<std::endl;
-  if(acdpmtloop)formfile<<"for(int acdpmt=0;acdpmt<2;acdpmt++){"<<std::endl;
-  if(acdgarcloop)formfile<<"for(int garc=0;garc<12;garc++){"<<std::endl;
-  if(acdgafeloop)formfile<<"for(int gafe=0;gafe<18;gafe++){"<<std::endl;
-  if(acdtileloop)formfile<<"for(int acdtile=0;acdtile<128;acdtile++){"<<std::endl;
-  if(callayerloop)formfile<<"for(int callayer=0;callayer<8;callayer++){"<<std::endl;
-  if(calcolumnloop)formfile<<"for(int calcolumn=0;calcolumn<12;calcolumn++){"<<std::endl;
-  
 
-  
+  // Write loops and/or runonceformula
+
+   for(ExecutionList_t::const_iterator itr =formulaloops.begin();
+       itr!=formulaloops.end();itr++){
+     ExecutionMap_t::iterator thisexec = execmap.find(itr->second);
+     formfile<< thisexec->second;
+
+     // in case the exec is runonce, then we need to also write the outsideformula
+     std::string thisexecstring = itr->second;
+     if(!thisexecstring.compare("runonce:"))
+       formfile<<outsideformula<<";";
+     
+     formfile<<std::endl;
+   }
 
 
   //formula 2 is only used for 2-d histograms
@@ -203,19 +195,14 @@ void MonValue::makeProxy(TTree* tree){
     formfile <<"val = "<<formula2<<";"<<std::endl
 	     <<"resultvector2->push_back(val);"<<std::endl;
   }
-  if(engineloop)formfile<<"}"<<std::endl;
-  if(towerloop)formfile<<"}"<<std::endl;
-  if(tkrlayerloop)formfile<<"}"<<std::endl;
-  if(tkrplaneloop)formfile<<"}"<<std::endl;
-  if(acdfaceloop)formfile<<"}"<<std::endl;
-  if(acdrowloop)formfile<<"}"<<std::endl;
-  if(acdcolumnloop)formfile<<"}"<<std::endl;
-  if(acdpmtloop)formfile<<"}"<<std::endl;
-  if(acdgafeloop)formfile<<"}"<<std::endl;
-  if(acdgarcloop)formfile<<"}"<<std::endl;
-  if(acdtileloop)formfile<<"}"<<std::endl;
-  if(calcolumnloop)formfile<<"}"<<std::endl;
-  if(callayerloop)formfile<<"}"<<std::endl;
+
+  // close all the loops
+  UInt_t ncloseloops = formulaloops.size();
+  if(dooutsideformula) ncloseloops--;
+
+  for (UInt_t i = 0; i < ncloseloops;i++)
+    formfile<<"}"<<std::endl;
+
 
 
   formfile<<"(*counter)++;"<<std::endl;
