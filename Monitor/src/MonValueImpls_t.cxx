@@ -16,10 +16,10 @@ const Float_t MonMinMax::s_huge(1e35);
 // Standard c'tor
 MonCounter::MonCounter(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula,cut){
-  m_current = new ULong64_t[m_dim];
-  m_val = new ULong64_t[m_dim];
-  reset();
-}
+    m_current = new ULong64_t[m_dim];
+    m_val = new ULong64_t[m_dim];
+    reset();
+  }
 
   // D'tor, no-op
 MonCounter::~MonCounter(){
@@ -472,7 +472,113 @@ void MonMinMax::singleincrement(Double_t* val, Double_t* val2) {
   }
 }
 
+//reset 
+void MonMinMax::latchValue(){
+}
 
+// Attach a MonValueChange node to a TTree 
+int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
+  std::string branchName;
+  std::string leafName;
+  std::string fullName = prefix + name();
+  branchName= fullName+"_nchanges";
+  leafName= branchName+m_dimstring + "/i";
+  TBranch* b = tree.Branch(branchName.c_str(),m_nvalues,leafName.c_str());
+  if ( b == 0 ) return -1;
+  branchName= fullName+"_firstval";
+  leafName= branchName+m_dimstring + "/L";
+  b = tree.Branch(branchName.c_str(),m_firstval,leafName.c_str());
+  if ( b == 0 ) return -1;
+  branchName= fullName+"_lastval";
+  leafName= branchName+m_dimstring + "/L";
+  b = tree.Branch(branchName.c_str(),m_lastval,leafName.c_str());
+  if ( b == 0 ) return -1;
+  char valname[128];
+  for (unsigned int i=0;i<m_numval;i++){
+    sprintf(valname,"_newval_%d",i);
+    branchName= fullName+valname;
+    leafName= branchName+m_dimstring + "/L";
+    b = tree.Branch(branchName.c_str(),m_values[i],leafName.c_str());
+    if ( b == 0 ) return -1;
+    sprintf(valname,"_newtime_%d",i);
+    branchName= fullName+valname;
+    leafName= branchName+m_dimstring + "/D";
+    b = tree.Branch(branchName.c_str(),m_times[i],leafName.c_str());
+    if ( b == 0 ) return -1;
+  }
+  return 0;
+}
+
+MonValueChange::MonValueChange(const char* name, const char* formula, const char* cut,const char* type) 
+    :MonValue(name,formula,cut){
+  m_histdim=2;
+  std::vector<std::string> tt=parse(type,"[","","]"); 
+  if(tt.size()!=1){
+    std::cerr<<"MonValueChange variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+  m_numval=atoi(tt[0].c_str());
+  m_firstval=new Long64_t[m_dim];
+  m_lastval=new Long64_t[m_dim];
+  m_nvalues=new UInt_t[m_dim];
+  m_startrun=new Bool_t [m_dim];
+  
+  m_values=new Long64_t*[m_numval];
+  m_times=new Double_t*[m_numval];
+  for (unsigned i=0;i<m_numval;i++){
+    m_values[i]=new Long64_t[m_dim];
+    m_times[i]=new Double_t[m_dim];
+  }
+  for (unsigned i=0;i<m_dim;i++)m_startrun[i]=true;
+  reset();
+}
+
+  // D'tor
+MonValueChange::~MonValueChange(){
+  delete [] m_firstval;
+  delete [] m_lastval;
+  delete [] m_nvalues;;
+  delete [] m_startrun;
+  for (unsigned int i=0;i<m_numval;i++){
+    delete [] m_values[i];
+    delete [] m_times[i];
+  }
+  delete [] m_values;
+  delete [] m_times;
+}
+  
+  // Reset
+void MonValueChange::reset() {
+  for (unsigned i=0;i<m_dim;i++){
+    m_firstval[i]=m_lastval[i];
+    m_nvalues[i]=0;
+    for (unsigned int j=0;j<m_numval;j++){
+      m_values[j][i]=0;
+      m_times[j][i]=0;
+    }
+  }
+}
+  // Update the value, check to make sure that things make sense
+void MonValueChange::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if (val[i]!=m_lastval[i]&&m_startrun[i]==false){
+      if(m_nvalues[i]<m_numval){
+	m_values[m_nvalues[i]][i]=(Long64_t)val[i];
+	m_times[m_nvalues[i]][i]=val2[i];
+      }
+      m_lastval[i]=(Long64_t)val[i];
+      m_nvalues[i]++;
+    }
+    if(m_startrun[i]){
+      m_firstval[i]=(Long64_t)val[i];
+      m_lastval[i]=(Long64_t)val[i];
+      m_startrun[i]=false;
+    }
+  }
+}
+
+void MonValueChange::latchValue() {
+}
 
 // Destructor for MonValueCol;
 
@@ -579,7 +685,6 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string axislabels=obj["axisdesc"];
   std::string titlelabel=obj["titledesc"];
 
-  
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanfrac")){
@@ -588,12 +693,12 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="counter"){
     return new MonCounter(name.c_str(),formula.c_str(),cut.c_str());
-  } else if (type=="rate"){
-    return new MonRate(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="minmax"){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"valuechange")){
+    return new MonValueChange(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"histogram-1d")){
     return new MonHist1d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   } else if (strstr(type.c_str(),"histogram-2d")){
@@ -612,10 +717,3 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
   }
   return newcol;
 }
-
-
-
-// Static variables
-
-ULong64_t TimeInterval::m_interval = 1000000;
-

@@ -310,10 +310,8 @@ public:
   virtual int attach(TTree& tree, const std::string& prefix) const;
   void singleincrement(Double_t* val, Double_t* val2) ;
 
-  // Take the difference hi-lo and move it to the output value
-  virtual void latchValue() {
-    return;
-  }
+  // reset values;
+  virtual void latchValue();
 
 
 private:
@@ -321,6 +319,44 @@ private:
   // lo and hi values from current time slice
   Float_t *m_min;
   Float_t *m_max;
+};
+//
+// 
+// This implementation traces the changes of a value
+class MonValueChange  : public MonValue {
+
+  
+
+public:
+  // Standard c'tor, just the name
+  MonValueChange(const char* name, const char* formula, const char* cut,const char* numval) ;
+
+  // D'tor, no-op
+  virtual ~MonValueChange();
+  
+  // Reset, check to see if the cache makes sense
+  // if so, just copy hi -> lo and go on
+  // in not, reset both hi and lo
+  virtual void reset() ;
+
+  // Attach this to a TTree
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+  void singleincrement(Double_t* val, Double_t* val2) ;
+
+  // Take the difference hi-lo and move it to the output value
+  virtual void latchValue() ;
+
+
+private:
+  
+  // lo and hi values from current time slice
+  Long64_t *m_firstval;
+  Long64_t *m_lastval;
+  UInt_t *m_nvalues;
+  Bool_t *m_startrun;
+  Long64_t **m_values;
+  Double_t **m_times;
+  UInt_t m_numval;
 };
 
 //
