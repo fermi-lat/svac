@@ -20,7 +20,7 @@
 //  MonMinMax:       Keeps track of the min and max of a value.
 //                   reset nulls the caches
 //
-
+//  TimeInterval  Keeps track of the time interval for the specific time bin.  
 //
 // Base class
 #include "MonValue_t.h"
@@ -36,13 +36,26 @@
 #include "TH1F.h"
 #include "TH2F.h"
 
+//  TimeInterval  Keeps track of the time interval for the specific time bin.  
+
+class TimeInterval{
+
+ public:
+  TimeInterval(){}
+  //inline void SetInterval(ULong64_t interval){ m_interval = interval;}
+  //inline ULong64_t GetInterval() { return m_interval;}
+  static ULong64_t m_interval;
+};
+
+
+
 //
 // 
 // This implementation is for a counter that we increment
 // either using the ++ or += operators.
 class MonCounter : public MonValue {
-
-public:
+  
+ public:
 
   // Standard c'tor
   MonCounter(const char* name, const char* formula, const char* cut) ;
@@ -69,6 +82,52 @@ private:
   // the output value
   ULong64_t *m_val;
 };
+
+
+//
+// 
+// This implementation is for computing the rates.
+// it is essentially equivalent to MonCounter, normalizing 
+// at the end by the timebin (obtained from TimeInterval) and computing 
+// the error in the rate. 
+// Note that only hte error in counter is considered and not the error 
+// in the timebin. 
+class MonRate : public MonValue {
+
+public:
+
+  // Standard c'tor
+  MonRate(const char* name, const char* formula, const char* cut) ;
+
+  // D'tor, no-op
+  virtual ~MonRate();
+ 
+    // Reset just nulls the values
+  virtual void reset() ;
+
+  void singleincrement(Double_t* val, Double_t* val2) ;
+
+  // Attach this to a TTree
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  // Just move the counter to the output value
+  virtual void latchValue() ;
+
+
+private:
+
+  // the cached value
+  ULong64_t *m_current;
+
+  // the output value
+  Double_t *m_val;
+  Double_t *m_err;
+  // TimeInterval *m_timeintervalobj;
+  ULong64_t m_timebin;
+  
+};
+
+
 
 // 1-d histogram
 //
@@ -327,5 +386,8 @@ class MonValFactory{
   MonValue* makeMonValue(std::map<std::string,std::string>);
   MonValueCol* makeMonValueCol(std::list<std::map<std::string,std::string> >, const char*, const char* ="");
 };
+
+
+
 
 #endif

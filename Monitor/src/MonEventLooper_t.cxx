@@ -1,7 +1,7 @@
 //
 // Base class
 #include "MonEventLooper_t.h"
-
+#include "MonValueImpls_t.h"
 //
 // stl
 #include <iostream>
@@ -102,10 +102,15 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
   std::string prefix;
   m_stripValCol->attach(*m_sectree,prefix);
   colsec->makeProxy(m_sectree);
+
+  // obj to hold the time interval of the specific bin
+  // m_timeintervalobj = new TimeInterval();
 }
 
 
 MonEventLooper::~MonEventLooper(){
+  //delete m_timeintervalobj;
+  
 }
 void MonEventLooper::init() {
 
@@ -201,12 +206,18 @@ void MonEventLooper::firstEvent(ULong64_t timeStamp)  {
   m_currentEnd = m_currentStart + m_binSize;
   m_currentFlags = 3;
   m_sec_first = timeStamp;
+  //m_timeintervalobj->SetInterval(m_currentEnd-m_sec_first);
+  TimeInterval::m_interval=m_currentEnd-m_sec_first;
+
   printTime(std::cout,timeStamp);
   std::cout << std::endl;
 }
 
 void MonEventLooper::switchBins() {
 
+  //m_timeintervalobj->SetInterval(m_binSize);
+  TimeInterval::m_interval=m_binSize;
+  
   m_currentFlags -= 1;
   filterEvent();
   stripVals()->increment(m_intree);
@@ -252,6 +263,9 @@ void MonEventLooper::switchBins() {
 void MonEventLooper::lastEvent(ULong64_t timeStamp) {
 
   // kludge: double the last event because the last event does not get used.
+
+  // m_timeintervalobj->SetInterval(timeStamp-m_currentStart);
+  TimeInterval::m_interval=timeStamp-m_currentStart;
   m_intree->Fill();
 
   filterEvent();

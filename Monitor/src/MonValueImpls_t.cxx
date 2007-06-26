@@ -16,10 +16,10 @@ const Float_t MonMinMax::s_huge(1e35);
 // Standard c'tor
 MonCounter::MonCounter(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula,cut){
-    m_current = new ULong64_t[m_dim];
-    m_val = new ULong64_t[m_dim];
-    reset();
-  }
+  m_current = new ULong64_t[m_dim];
+  m_val = new ULong64_t[m_dim];
+  reset();
+}
 
   // D'tor, no-op
 MonCounter::~MonCounter(){
@@ -53,6 +53,81 @@ void MonCounter::singleincrement(Double_t* val, Double_t* val2) {
     m_current[i] += (ULong64_t)val[i];
   }
 }
+
+
+
+MonRate::MonRate(const char* name, const char* formula, const char* cut)
+  :MonValue(name,formula,cut){
+  m_current = new ULong64_t[m_dim];
+  m_val = new Double_t[m_dim];
+  m_err = new Double_t[m_dim];
+  reset();
+}
+
+MonRate::~MonRate(){
+  delete [] m_current;
+  delete [] m_val;
+  delete [] m_err;
+  //  if(m_timeintervalobj)
+  // delete m_timeintervalobj;
+}
+
+void MonRate::reset() {
+  m_timebin = 100000000;
+  for (unsigned i=0;i<m_dim;i++){
+    m_current[i] = 0;
+    m_val[i] = 0.;
+    m_err[i] = 0.;
+  }
+
+  //m_timeintervalobj=new TimeInterval();
+}
+
+// += addition operator
+void MonRate::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    m_current[i] += (ULong64_t)val[i];
+  }
+}
+
+
+// Attach a MonRate node to a TTree (val and err as float)
+int MonRate::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullNameVal = prefix + name();
+  std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
+  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str());
+  if ( b == 0 ) return -1;
+  std::string fullNameErr = fullNameVal + "_err";
+  std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
+  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str());
+  return bErr != 0 ? 2 : -1;
+}
+
+void MonRate::latchValue() {
+  // get timeinterval for this bin
+  
+  m_timebin =TimeInterval::m_interval;
+ 
+  
+  if(m_timebin<1)
+    m_timebin = 1;
+
+  std::cout << "Time interval= " << m_timebin << std::endl;
+
+  // done
+
+  for (unsigned i=0;i<m_dim;i++){
+    m_val[i] = Double_t(m_current[i]);
+    m_err[i] = sqrt(m_val[i]);
+    m_val[i] /= Double_t(m_timebin);
+    m_err[i] /= Double_t(m_timebin);
+    std::cout << m_current[i] << ", " <<  m_val[i] << ", " <<  m_err[i] << std::endl;
+  }
+}
+
+
+
+
 MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1;
@@ -501,6 +576,7 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string axislabels=obj["axisdesc"];
   std::string titlelabel=obj["titledesc"];
 
+  
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanfrac")){
@@ -509,6 +585,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="counter"){
     return new MonCounter(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="rate"){
+    return new MonRate(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="minmax"){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
@@ -531,3 +609,10 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
   }
   return newcol;
 }
+
+
+
+// Static variables
+
+ULong64_t TimeInterval::m_interval = 1000000;
+
