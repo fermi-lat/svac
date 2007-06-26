@@ -59,8 +59,8 @@ void MonCounter::singleincrement(Double_t* val, Double_t* val2) {
 MonRate::MonRate(const char* name, const char* formula, const char* cut)
   :MonValue(name,formula,cut){
   m_current = new ULong64_t[m_dim];
-  m_val = new Double_t[m_dim];
-  m_err = new Double_t[m_dim];
+  m_val = new Float_t[m_dim];
+  m_err = new Float_t[m_dim];
   reset();
 }
 
@@ -108,20 +108,23 @@ void MonRate::latchValue() {
   
   m_timebin =TimeInterval::m_interval;
  
-  
-  if(m_timebin<1)
-    m_timebin = 1;
-
-  std::cout << "Time interval= " << m_timebin << std::endl;
-
   // done
 
   for (unsigned i=0;i<m_dim;i++){
-    m_val[i] = Double_t(m_current[i]);
+    m_val[i] = Float_t(m_current[i]);
     m_err[i] = sqrt(m_val[i]);
-    m_val[i] /= Double_t(m_timebin);
-    m_err[i] /= Double_t(m_timebin);
-    std::cout << m_current[i] << ", " <<  m_val[i] << ", " <<  m_err[i] << std::endl;
+    if(m_timebin>0){
+      m_val[i] /= Float_t(m_timebin);
+      m_err[i] /= Float_t(m_timebin);
+    }
+    else{
+      // time interval is somewhere between 0 and 1. 
+      // We choose a comprimise value of 0.5
+      // The numbers are certainly not fully correct... 
+      // but that is whaat we have.
+      m_val[i] /= 0.5;
+      m_err[i] /= 0.5;
+    }
   }
 }
 

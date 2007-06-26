@@ -120,8 +120,8 @@ private:
   ULong64_t *m_current;
 
   // the output value
-  Double_t *m_val;
-  Double_t *m_err;
+  Float_t *m_val;
+  Float_t *m_err;
   // TimeInterval *m_timeintervalobj;
   ULong64_t m_timebin;
   

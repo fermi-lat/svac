@@ -158,6 +158,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
       break;
     }    
     currentTimeStamp=m_currentTimestamp->value();
+
     // initialize stuff on first event
     if ( ievent == startEvent ) {
       firstEvent(currentTimeStamp);
@@ -203,11 +204,11 @@ void MonEventLooper::firstEvent(ULong64_t timeStamp)  {
   ULong64_t rem = timeStamp % m_binSize;
   m_currentBin = 0;
   m_currentStart = timeStamp - rem;
+
   m_currentEnd = m_currentStart + m_binSize;
   m_currentFlags = 3;
   m_sec_first = timeStamp;
-  //m_timeintervalobj->SetInterval(m_currentEnd-m_sec_first);
-  TimeInterval::m_interval=m_currentEnd-m_sec_first;
+   TimeInterval::m_interval=m_currentEnd-m_sec_first;
 
   printTime(std::cout,timeStamp);
   std::cout << std::endl;
@@ -215,9 +216,6 @@ void MonEventLooper::firstEvent(ULong64_t timeStamp)  {
 
 void MonEventLooper::switchBins() {
 
-  //m_timeintervalobj->SetInterval(m_binSize);
-  TimeInterval::m_interval=m_binSize;
-  
   m_currentFlags -= 1;
   filterEvent();
   stripVals()->increment(m_intree);
@@ -240,6 +238,9 @@ void MonEventLooper::switchBins() {
   m_currentStart += m_binSize;
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
+
+   TimeInterval::m_interval=m_binSize;
+ 
   while(m_currentTimestamp->value()>=m_currentEnd){
     m_nUsed=0;
     m_nFilter=0;
@@ -266,6 +267,7 @@ void MonEventLooper::lastEvent(ULong64_t timeStamp) {
 
   // m_timeintervalobj->SetInterval(timeStamp-m_currentStart);
   TimeInterval::m_interval=timeStamp-m_currentStart;
+ 
   m_intree->Fill();
 
   filterEvent();
