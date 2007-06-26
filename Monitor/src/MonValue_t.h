@@ -54,6 +54,7 @@ public :
   virtual void makeProxy(TTree* tree);
   float timeProfile();
   void setSharedLibDir(std::string);
+
  protected:
   /// val2 is only used for 2d histograms 
   virtual void singleincrement(Double_t* val,Double_t* val2=0){};
