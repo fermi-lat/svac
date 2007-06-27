@@ -1,0 +1,622 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+    <!-- TEST variables -->
+    <object> nACD </object>
+    <object> Gem_elapsed </object>
+    
+    <!-- Time stamp -->
+    <object> timestamp </object>
+
+    
+    <!-- Event classification information -->
+    <object> condsummary </object>
+    <object> LivetimeLast</object>
+    <object> ElapsedLast</object>
+    <object> DeadZoneLast</object>
+    <object> DiscardedLast</object>
+    <object> PrescaledLast</object>
+     
+    <!-- Acd Variables -->
+    
+    <object>AcdGemVeto_AcdTile</object>
+    <object>AcdGemROI_Tower </object>
+    <object>AcdGemCNO_GARC  </object>
+    <object>AcdHit_AcdTile  </object>
+    <object>AcdPmtA_OverThreshold_AcdTile  </object>
+    <object>AcdPmtB_OverThreshold_AcdTile  </object>
+    <object>AcdVetoA_AcdTile  </object>
+    <object>AcdVetoB_AcdTile  </object>
+    <object>AcdPha_PmtA_AcdTile  </object>
+    <object>AcdPha_PmtB_AcdTile  </object>
+
+    <!-- Tkr Variables -->
+    
+    <object> TkrTriggerTower </object>
+    <object> TkrHitsTowerPlane </object>
+    <object> IsTkrDigi_TowerPlane </object>
+    <object> ToT_con0_TowerPlane  </object>
+    <object> ToT_con1_TowerPlane  </object>
+
+     <!-- Cal Variables -->
+    <object> CalXHit_TowerCalLayerCalColumn </object>
+    
+  </inputList>
+
+
+  <outputList name="top">
+    <!-- TEST variables -->
+    <object>
+      <name> nAcd  </name>
+      <formula><![CDATA[   nACD ]]></formula>
+      <cut><![CDATA[ 1 ]]></cut>
+      <type> mean </type>
+      <description> TEST parameter </description>
+    </object>
+    
+    <object>
+      <name> Gem_elapsed  </name>
+      <formula><![CDATA[   Gem_elapsed ]]></formula>
+      <cut><![CDATA[ 1 ]]></cut>
+      <type> counterdiff </type>
+      <description> TEST parameter </description>
+    </object>
+    <object>
+      <name> alltriggers  </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ condsummary==7 ]]></cut>
+      <type> counter </type>
+      <description> TEST parameter </description>
+    </object>
+    
+
+     <!-- ********************  Event classification information   *********************** -->
+          
+     <object>
+      <name> Trigger_TKR </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&2  ]]></cut>
+      <type> counter </type>
+      <description> Tkracker trigger (3 bilayers in a row) </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_TKR_Rate </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&2  ]]></cut>
+      <type> rate </type>
+      <description> Tkracker trigger rate (3 bilayers in a row) </description>
+    </object>
+
+     <object>
+      <name> Trigger_CALLO </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&4  ]]></cut>
+      <type> counter </type>
+      <description> CAL-LO trigger  </description>
+    </object>
+
+
+      <object>
+      <name> Trigger_CALLO_Rate </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&4  ]]></cut>
+      <type> rate </type>
+      <description> CAL-LO trigger rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_CALHI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&8  ]]></cut>
+      <type> counter </type>
+      <description> CAL-HI trigger  </description>
+    </object>
+
+      <object>
+      <name> Trigger_CNO </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&16  ]]></cut>
+      <type> counter </type>
+      <description> CNO trigger  </description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_ROI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) && (condsummary&2)]]></cut>
+      <type> counter </type>
+      <description> TKR trigger and ROI (mostly charge particles) </description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_NotROI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(!condsummary&1) && (condsummary&2)]]></cut>
+      <type> counter </type>
+      <description> TKR trigger and not ROI (mostly non charge particles) </description>
+    </object>
+
+     <object>
+      <name> Trigger_Periodic </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&32]]></cut>
+      <type> counter </type>
+      <description> Periodic trigger </description>
+    </object>
+
+     <object>
+      <name> Trigger_NOTPeriodic </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[!(condsummary&32)]]></cut>
+      <type> counter </type>
+      <description> Number of events with NOT periodic trigger  </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_Solicited </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&64]]></cut>
+      <type> counter </type>
+      <description> Solicited trigger </description>
+    </object>
+
+     <object>
+      <name> Trigger_External </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&128]]></cut>
+      <type> counter </type>
+      <description> External trigger </description>
+    </object>
+
+     <object>
+      <name> Trigger_ANY </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&255]]></cut>
+      <type> counter </type>
+      <description> Any of the trigger bits in condsummary word </description>
+    </object>
+
+     <object>
+      <name> Trigger_ANYPhysics </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&15]]></cut>
+      <type> counter </type>
+      <description> Any non-artificially created trigger (i.e. bits [1-4]) in condsummary word  </description>
+    </object>
+      
+     
+
+    
+     <object>
+      <name> Livetime </name>
+      <formula><![CDATA[ LivetimeLast ]]></formula>
+      <cut><![CDATA[condsummary&30]]></cut>
+      <type> counterdiff </type>
+      <description> Livetime (in the time bin) in 50 ns ticks   </description>
+    </object>
+
+     <object>
+      <name> Elapsed </name>
+      <formula><![CDATA[ ElapsedLast ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counterdiff </type>
+      <description> Elapsed time (in the time bin) in 50 ns ticks   </description>
+    </object>
+
+     <object>
+      <name> DeadZone </name>
+      <formula><![CDATA[ DeadZoneLast ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counterdiff </type>
+      <description> Number of lost events  because they arrived in the 2-tick deadzone during this time bin</description>
+    </object>
+
+     <object>
+      <name> Discarded </name>
+      <formula><![CDATA[ DiscardedLast ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counterdiff </type>
+      <description> Number of discarded events because they arrived in deadtime  during this time bin </description>
+    </object>
+
+     <object>
+      <name> Prescaled </name>
+      <formula><![CDATA[ PrescaledLast ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counterdiff </type>
+      <description> Number of events prescaled away (in hardware) in this time bin </description>
+    </object>
+
+     
+
+      <!-- ********************  Detector information   *********************** -->
+
+
+      <!--  ______________  ACD  _______________ -->
+
+      <object>
+	<name> Acd_GemVeto_Counter_AcdTile[128] </name>
+	<formula><![CDATA[ foreachacdtile: AcdGemVeto_AcdTile[acdtile] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector [AcdTile] reporting the number of ACD GEM vetos during the specified time bin  </description>
+      </object>
+
+      <object>
+	<name> AcdGemROI_Counter_Tower[16] </name>
+	<formula><![CDATA[ foreachtower: AcdGemROI_Tower[tower] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector [tower] reporting the number of ACD GEM ROI during the specified time bin </description>
+      </object>
+
+       <object>
+	<name> AcdGemCNO_Counter_GARC[12] </name>
+	<formula><![CDATA[ foreachgarc: AcdGemCNO_GARC[garc] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector [GARC] reporting the number of ACD CNO triggers during the specified time bin </description>
+      </object>
+
+       <object>
+	<name> AcdHit_Counter_AcdTile[128] </name>
+	<formula><![CDATA[ foreachacdtile: AcdHit_AcdTile[acdtile] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector [AcdTile] reporting the number of ACD hits during the specified time bin  </description>
+      </object>
+
+       <object>
+	<name> AcdDigis </name>
+	<formula><![CDATA[ RFun::loopoveracdtilesbool(AcdHit_AcdTile)]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Number of ACD Digis during the specified time bin </description>
+      </object>
+
+       <object>
+	<name> AcdPmtA_OverThreshold_Counter_AcdTile[128] </name>
+	<formula><![CDATA[ foreachacdtile: AcdPmtA_OverThreshold_AcdTile[acdtile]]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector[AcdTile] reporting the number of times that PMT A was above threshold during the specified time bin  </description>
+      </object>
+
+      
+       <object>
+	<name> AcdPmtB_OverThreshold_Counter_AcdTile[128] </name>
+	<formula><![CDATA[foreachacdtile: AcdPmtB_OverThreshold_AcdTile[acdtile] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description>Vector[AcdTile] reporting the number of times that PMT B was above threshold during the specified time bin  </description>
+      </object>
+
+       <object>
+	<name> SingleAcdPmt_OverThreshold_Counter_AcdTile[128] </name>
+	<formula><![CDATA[foreachacdtile: (AcdPmtA_OverThreshold_AcdTile[acdtile] && !AcdPmtB_OverThreshold_AcdTile[acdtile]) || (AcdPmtB_OverThreshold_AcdTile[acdtile] && !AcdPmtA_OverThreshold_AcdTile[acdtile])]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description>Vector[AcdTile] reporting the number of times that ONE (and only one) of the two PMTs (A OR B) was above threshold during the specified time bin  </description>
+      </object>
+       
+
+       <object>
+	<name> AnyAcdPmt_OverThreshold_Counter_AcdTile[128] </name>
+	<formula><![CDATA[foreachacdtile: AcdPmtA_OverThreshold_AcdTile[acdtile] || AcdPmtB_OverThreshold_AcdTile[acdtile]]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description>Vector[AcdTile] reporting the number of times that at least one PMT was above threshold during the specified time bin  </description>
+      </object>
+
+        
+        <object>
+	<name> AcdVetoA_Counter_AcdTile[128]  </name>
+	<formula><![CDATA[ foreachacdtile: AcdVetoA_AcdTile[acdtile] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector[AcdTile] reporting the number of times that there was a veto from PMT A during the specified time bin  </description>
+      </object>
+
+	<object>
+	<name> AcdVetoB_Counter_AcdTile[128]  </name>
+	<formula><![CDATA[ foreachacdtile: AcdVetoB_AcdTile[acdtile] ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector[AcdTile] reporting the number of times that there was a veto from PMT B during the specified time bin  </description>
+      </object>
+    
+
+	<object>
+	<name> SingleAcdVeto_Counter_AcdTile[128]  </name>
+	<formula><![CDATA[ foreachacdtile:  (AcdVetoA_AcdTile[acdtile] && !AcdVetoB_AcdTile[acdtile]) || (!AcdVetoA_AcdTile[acdtile] && AcdVetoB_AcdTile[acdtile])   ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector[AcdTile] reporting the number of times that ONE (and only one) of the two PMTs produced a Veto during the specified time bin  </description>
+      </object>
+
+
+	<object>
+	<name> AnyAcdVeto_Counter_AcdTile[128]  </name>
+	<formula><![CDATA[ foreachacdtile:  AcdVetoA_AcdTile[acdtile] || AcdVetoB_AcdTile[acdtile]   ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> counter </type>
+	<description> Vector[AcdTile] reporting the number of times that there was an ACD Veto (produced by one or by the two PMTs)  during the specified time bin  </description>
+      </object>
+   
+	<object>
+	<name>  AcdPha_PmtA_Mean_AcdTile[128] </name>
+	<formula><![CDATA[AcdPha_PmtA_AcdTile ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> mean </type>
+	<description> Vector [AcdTile] reporting the mean pulse height from PMT A  during the specified time bin </description>
+      </object>
+
+
+      <object>
+	<name>  AcdPha_PmtB_Mean_AcdTile[128] </name>
+	<formula><![CDATA[AcdPha_PmtB_AcdTile ]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> mean </type>
+	<description> Vector [AcdTile] reporting the mean pulse height from PMT B during the specified time bin  </description>
+      </object>
+
+
+    
+
+      <!--  ______________  Tracker _______________ -->
+
+     <object>
+      <name> TkrTrigger_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower] ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Number of tracker triggers in [tower] during the specified time bin </description>
+    </object>
+
+    <object>
+      <name> TkrHits </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(TkrHitsTowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of tkracker hits (all towers and planes included) in the specified time bin </description>
+    </object>
+
+    <object>
+      <name> TkrHits_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Number of tracker hits in [tower] in the specified time bin </description>
+    </object>
+
+    <object>
+      <name> TkrHits_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: TkrHitsTowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of tracker hits in [tower][tkrplane] in the specified time bin </description>
+    </object>
+
+       <object>
+      <name> TkrHitsNormalized_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: TkrHits_TowerPlane[tower][tkrplane]/10. ]]></formula>  
+      <!-- <formula><![CDATA[foreachtower: foreachtkrplane: TkrHits_TowerPlane[tower][tkrplane]/(RFun::computemean_with_outlierscut(TkrHits_TowerPlane[tower],36,5.)) ]]></formula> -->
+      <cut><![CDATA[ ]]></cut>
+      <source>output</source>
+      <type> counter </type>
+      <description> Number of tracker hits in [tower][tkrplane] normalized to the total number of hits in that [tower]. Outliers are removed in the normalization procedure (5 sigma tail cut). The computation is performed with data accumulated in the specified time bin </description>
+    </object>
+
+    <object>
+      <name> TkrHitsWhenTkrDigiExists_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: (IsTkrDigi_TowerPlane[tower][tkrplane] > 0.5) && (TkrHitsTowerPlane[tower][tkrplane]) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> mean </type>
+      <description> Mean number of tracker hits per event in [tower][tkrplane]. Only events which have a TkrDigi associated to that [tower][tkrplane] are used in the average procedure </description>
+    </object>
+    
+
+    <object>
+      <name> ZeroTkrHitsCounter_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: TkrHitsTowerPlane[tower][tkrplane]==0 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that there are ZERO strip hits in [tower][tkrplane] in the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ZeroTkrHitsFraction_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: double(ZeroTkrHitsCounter_TowerPlane[tower][tkrplane])/double(TkrDigiCounter) ]]></formula>
+      <cut><![CDATA[]]></cut>
+      <source> output </source>
+      <type> counter </type>
+      <description> Number of times that there are ZERO strip hits in [tower][tkrplane] in the specified time bin, normalized to the number of overall TkrDigis (all towers and trkplanes) </description>
+    </object>
+
+     <object>
+      <name> ZeroTkrHitsFractionV2_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: double(ZeroTkrHitsCounter_TowerPlane[tower][tkrplane])/double(TkrDigiCounter_TowerPlane[tower][tkrplane])]]></formula>
+      <cut><![CDATA[]]></cut>
+      <source> output </source>
+      <type> counter </type>
+      <description> Number of times that there are ZERO strip hits in [tower][tkrplane] in the specified time bin, normalized to the number of TkrDigis in that specific [tower][tkrplane] </description>
+    </object>
+
+
+     <object>
+      <name> TkrTriggerWithLessThan6Layers_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])<6) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, in [tower], there was a tracker trigger and the number of consecutive tracker planes hit is less than 6 </description>
+    </object>
+
+     <object>
+      <name> ConsecutivePlanesHit_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> mean </type>
+      <description> Mean number of consecutive tracker planes hit in [tower] per event triggereing that [tower] </description>
+    </object>
+
+     <object>
+      <name> EmptyTowers_Tower[16] </name>
+      <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: runonceformula[tower] > 0.5 ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Number of times [tower] did not trigger and was not close to a tower that triggered </description>
+    </object>
+
+     <object>
+      <name> HitsInEmptyTower_Tower[16] </name>
+      <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: RFun::gethitsinemptytower(runonceformula[tower],TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of hits when the tower was empty </description>
+    </object>
+
+     <object>
+      <name> TkrDigiCounter_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane : IsTkrDigi_TowerPlane[tower][tkrplane] > 0.5 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of TkrDigi objects in each [tower][tkrplane] during the specified time bin </description>
+    </object>
+
+     <object>
+      <name> TkrDigiCounter_Tower[16] </name>
+      <formula><![CDATA[foreachtower: RFun::loopovertkrplanes(IsTkrDigi_TowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of TkrDigi objects in each [tower] during the specified time bin </description>
+    </object>
+
+     <object>
+      <name> TkrDigiCounter </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(IsTkrDigi_TowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of TkrDigis (all towers and planes included) accumulated in the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_con0_250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]==250 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that ToT==250 (saturation) in controller 0 in [tower][trkplane] in the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_con1_250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con1_TowerPlane[tower][tkrplane]==250 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that ToT==250 (saturation) in controller 1 in [tower][trkplane] in the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]==250 || ToT_con1_TowerPlane[tower][tkrplane]==250]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Number of times that ToT==250 in either controller 0 or controller 1 in [tower][trkplane] in the specified time bin </description>
+    </object>
+
+    <object>
+      <name> ToT_con0_0_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con0_TowerPlane[tower][tkrplane]==0 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, existing TkrDigi, ToT==0 in controller 0 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_con1_0_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con1_TowerPlane[tower][tkrplane]==0 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, existing TkrDigi, ToT==0 in controller 1 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_0_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: IsTkrDigi_TowerPlane[tower][tkrplane]>0.5 && ToT_con0_TowerPlane[tower][tkrplane]==0 && ToT_con1_TowerPlane[tower][tkrplane]==0 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, existing TkrDigi, ToT==0 in both controller 0 and controller 1 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+    <object>
+      <name> ToT_con0_Greater250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]>250 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, ToT>250 (overlapped trigger) in controller 0 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+    <object>
+      <name> ToT_con1_Greater250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con1_TowerPlane[tower][tkrplane]>250 ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, ToT>250 (overlapped trigger) in controller 1 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+     <object>
+      <name> ToT_Greater250_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]>250 || ToT_con1_TowerPlane[tower][tkrplane]>250]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, ToT>250 (overlapped trigger) either in controller 0 or controller 1 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+    <object>
+      <name> ToT_con0_TruncMean_1_249_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> truncatedmean[1,249] </type>
+      <description> Truncated mean (only range [1,249] is used) ToT value per event in controller 0 in [tower][trkplane] </description>
+    </object>
+
+    <object>
+      <name> ToT_con1_TruncMean_1_249_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con1_TowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> truncatedmean[1,249] </type>
+      <description> Truncated mean (only range [1,249] is used) ToT value per event in controller 1 in [tower][trkplane] </description>
+    </object>
+
+
+     <object>
+      <name> ToT_0_WhenTkrHitsExist_TowerPlane[16][36] </name>
+      <formula><![CDATA[foreachtower: foreachtkrplane: (IsTkrDigi_TowerPlane[tower][tkrplane]>0.5) && (ToT_con0_TowerPlane[tower][tkrplane]==0) && (ToT_con1_TowerPlane[tower][tkrplane]==0) && (TkrHitsTowerPlane[tower][tkrplane]>0)]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, existing TkrDigi and having at least one hit, ToT==0 in both controller 0 and controller 1 in [tower][trkplane] during the specified time bin </description>
+    </object>
+
+     <!-- Calorimeter -->
+
+
+
+     <object>
+      <name> CalXHit_NHit_Counter_TowerCalLayerCalColumn[16][8][12] </name>
+      <formula><![CDATA[CalXHit_TowerCalLayerCalColumn]]></formula>
+      <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
+      <type> counter </type>
+      <description> Vector[tower][callayer][calcolumn] reporting the number hits in a crystal defined by the coordinates tower,callayer,calcolumn in the specified time bin. Periodic triggers are NOT taken into account. </description>
+    </object>
+
+
+
+   
+  </outputList>
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> timestamp </timestamp>
+</monitoring>
