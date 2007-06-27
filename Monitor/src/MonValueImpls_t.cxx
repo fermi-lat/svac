@@ -693,6 +693,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="counter"){
     return new MonCounter(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="rate"){
+    return new MonRate(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="minmax"){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
@@ -717,3 +719,8 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
   }
   return newcol;
 }
+
+
+// initialization of static data members
+
+ULong64_t TimeInterval::m_interval = 10000000;
