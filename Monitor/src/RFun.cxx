@@ -329,7 +329,7 @@ std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
 }
 
 
-static unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const UShort_t vectordim)
+static unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const Int_t vectordim)
 {
   for(UShort_t i=0; i<vectordim;i++){
     if(invector[i]>0.0)

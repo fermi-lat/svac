@@ -232,12 +232,16 @@ int main(int argn, char** argc) {
   MonValueCol* outcolsec=mf.makeMonValueCol(outputlistsecondary,"Secondary");
   outcolsec->setSharedLibDir(jc.sodir());
   char inclpath[512];
-  sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
-  gSystem->AddIncludePath(inclpath);
+  //sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
+  //gSystem->AddIncludePath(inclpath);
   sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
   gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
+#ifdef oldROOT
+  cmd.ReplaceAll("-W ","-W -Wno-unused-parameter -DoldROOT ");
+#else
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
+#endif
   gSystem->SetMakeSharedLib(cmd);
   // Attach digi tree to input object
   // build filler & run over events

@@ -278,25 +278,25 @@ void MonValue::makeProxy(TTree* tree){
       tree->MakeProxy((m_sodir+m_name+"Selector").c_str(),(m_sodir+m_name+"_val.C").c_str(),"","nohist");
     }
 
-#ifdef oldROOT
     // patch for root 5.14
     std::ifstream inf((m_sodir+m_name+"Selector.h").c_str());
     std::ofstream outf((m_sodir+m_name+"Selector.h_tmp").c_str());
     char st[200];
     inf.getline(st,200);
-    while(strstr(st,"SetTree")==0){
+    while(strstr(st,"if (fTerminateMethod.IsValid()) fTerminateMethod.Execute(this);")==0){
+    //while(strstr(st,"SetTree")==0){
       outf<<st<<std::endl;
       inf.getline(st,200);
     }
     outf<<st<<std::endl;
     outf<<"   delete fHelper;"<<std::endl;
+    outf<<"   fHelper=0;"<<std::endl;
     while(!inf.eof()){
       inf.getline(st,200);
       outf<<st<<std::endl;
     }
     rename((m_sodir+m_name+"Selector.h_tmp").c_str(),(m_sodir+m_name+"Selector.h").c_str());
     //end patch
-#endif
 
     std::cout<<"Compiling formula for "<<m_name<<std::endl;
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"Selector").c_str());

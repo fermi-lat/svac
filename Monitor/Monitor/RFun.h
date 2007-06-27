@@ -1,7 +1,7 @@
 #ifndef RFun_h
 #define RFun_h
 
-#include "configData/db/TrgConfigDB.h"
+//#include "configData/db/TrgConfigDB.h"
 #include <vector>
 #include "TBranchProxy.h"
 #include "TBranchProxyDirector.h"
@@ -66,7 +66,7 @@ class RFun{
   static unsigned loopoveronedimvect(const UShort_t invector[], UInt_t vectdim);
   static unsigned loopoveronedimvectbool(ROOT::TArrayBoolProxy& invector, UInt_t vectdim);
 
-  static unsigned istherenonzerocomponent(const UShort_t invector[], const UShort_t vectordim);
+  static unsigned istherenonzerocomponent(const UShort_t invector[], const Int_t vectordim);
   
   
   static double computemean_with_outlierscut(const ULong64_t invector[], 
@@ -94,7 +94,7 @@ class RFun{
  private:
   static int m_boundarytwr[16][8]; // boundary towers for all towers
   static bool m_boundarytwrdefined;
-  static TrgConfigDB* m_tcf;
+  //static TrgConfigDB* m_tcf;
 
   // test data members
   static UInt_t m_doprintUpToN;
