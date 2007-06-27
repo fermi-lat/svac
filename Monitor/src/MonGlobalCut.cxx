@@ -61,6 +61,8 @@ void MonGlobalCut::makeProxy(TTree* tree){
   char rootcommand[128];
   if (compile){
     tree->MakeProxy((m_sodir+m_name+"globalCutSelector").c_str(),(m_sodir+m_name+"_globalCut_val.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str(),"nohist");
+
+#ifdef oldROOT
     // patch for root 5.14
     std::ifstream inf((m_sodir+m_name+"globalCutSelector.h").c_str());
     std::ofstream outf((m_sodir+m_name+"globalCutSelector.h_tmp").c_str());
@@ -78,6 +80,8 @@ void MonGlobalCut::makeProxy(TTree* tree){
     }
     rename((m_sodir+m_name+"globalCutSelector.h_tmp").c_str(),(m_sodir+m_name+"globalCutSelector.h").c_str());
     //end patch
+#endif
+
     std::cout<<"Compiling formula for global cut "<<m_name<<std::endl;
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"globalCutSelector").c_str());
     gROOT->ProcessLine(rootcommand);

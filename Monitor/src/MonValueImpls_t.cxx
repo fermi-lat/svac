@@ -720,7 +720,6 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
   return newcol;
 }
 
-
 // initialization of static data members
 
 ULong64_t TimeInterval::m_interval = 10000000;

@@ -277,6 +277,8 @@ void MonValue::makeProxy(TTree* tree){
     }else{
       tree->MakeProxy((m_sodir+m_name+"Selector").c_str(),(m_sodir+m_name+"_val.C").c_str(),"","nohist");
     }
+
+#ifdef oldROOT
     // patch for root 5.14
     std::ifstream inf((m_sodir+m_name+"Selector.h").c_str());
     std::ofstream outf((m_sodir+m_name+"Selector.h_tmp").c_str());
@@ -294,6 +296,8 @@ void MonValue::makeProxy(TTree* tree){
     }
     rename((m_sodir+m_name+"Selector.h_tmp").c_str(),(m_sodir+m_name+"Selector.h").c_str());
     //end patch
+#endif
+
     std::cout<<"Compiling formula for "<<m_name<<std::endl;
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"Selector").c_str());
     gROOT->ProcessLine(rootcommand);

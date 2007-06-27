@@ -33,9 +33,11 @@ class RFun{
   static unsigned loopovertkrplanes(const UShort_t invector[]);
   
  
- 
-  //static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
+#ifdef oldROOT
+  static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
+#else
   static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
+#endif
 
   static unsigned loopovercallayers(const UShort_t invector[]);
 
@@ -44,7 +46,9 @@ class RFun{
   //  static unsigned loopovercallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 12> >&);
   static unsigned loopovercallayersANDcalcolumns(const UShort_t[8][12]);
 
+#ifndef oldROOT
   static unsigned loopovertowersANDcallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<UShort_t, 12>, 8> >& invector);
+#endif
 
   static unsigned loopovergarc(const UShort_t invector[]);
   
