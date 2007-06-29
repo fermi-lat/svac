@@ -59,6 +59,16 @@
 // Last updated with object condarrcallo by user kocian on Thu May 31 22:59:44 2007
 // Last updated with object condarrcalhi by user kocian on Thu May 31 23:00:27 2007
 // Last updated with object mcid by user kocian on Fri Jun  1 21:41:01 2007
+// Last updated with object CalXHit_TowerCalLayer by user dpaneque on Thu Jun 28 23:07:31 2007
+// Last updated with object ReconNumTracks by user dpaneque on Fri Jun 29 03:03:51 2007
+// Last updated with object ReconDirXYZ by user dpaneque on Fri Jun 29 03:05:08 2007
+// Last updated with object ReconVertexPosXYZ by user dpaneque on Fri Jun 29 03:06:54 2007
+// Last updated with object ReconEnergy_TowerCalLayer by user dpaneque on Fri Jun 29 03:40:27 2007
+#include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
+#include "recon/MonInput_ReconVertexPosXYZ.h"
+#include "recon/MonInput_ReconDirXYZ.h"
+#include "recon/MonInput_ReconNumTracks.h"
+#include "digi/MonInput_CalXHit_TowerCalLayer.h"
 
 
 #include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
@@ -228,6 +238,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condarrcalhi;
   if (s=="mcid")
     return new MonInput_mcid;
+  if (s=="CalXHit_TowerCalLayer")
+    return new MonInput_CalXHit_TowerCalLayer;
+  if (s=="ReconNumTracks")
+    return new MonInput_ReconNumTracks;
+  if (s=="ReconDirXYZ")
+    return new MonInput_ReconDirXYZ;
+  if (s=="ReconVertexPosXYZ")
+    return new MonInput_ReconVertexPosXYZ;
+  if (s=="ReconEnergy_TowerCalLayer")
+    return new MonInput_ReconEnergy_TowerCalLayer;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -289,6 +309,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("condarrcallo");
   names.push_back("condarrcalhi");
   names.push_back("mcid");
+  names.push_back("CalXHit_TowerCalLayer");
+  names.push_back("ReconNumTracks");
+  names.push_back("ReconDirXYZ");
+  names.push_back("ReconVertexPosXYZ");
+  names.push_back("ReconEnergy_TowerCalLayer");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
