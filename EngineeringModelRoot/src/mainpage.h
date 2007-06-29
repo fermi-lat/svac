@@ -213,6 +213,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingCpuPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingLatPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingTimeTone </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeToneCurrentEarlyEvent      </TD> <TD> Int  </TD> <TD> Current timetone: Event arrived close to 1-PPS.                                                 </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentGemTimeHacks    </TD> <TD> UInt </TD> <TD> Current timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentGemTimeTicks    </TD> <TD> UInt </TD> <TD> Current timetone: The value of the GemTime registers at the time tone: Value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>
 
@@ -224,7 +225,8 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingCpuPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingLatPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingTimeTone </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeTonePreviousGemTimeHacks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeTonePreviousEarlyEvent      </TD> <TD> Int  </TD> <TD> Previous timetone: Event arrived close to 1-PPS.                                                 </TD> </TR><TR> 
+<TD> ContextLsfTimeTimeTonePreviousGemTimeHacks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousGemTimeTicks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>
 
 

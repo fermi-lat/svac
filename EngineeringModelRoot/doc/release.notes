@@ -257,3 +257,5 @@ awb     Fixed typo in ACD non-attached tile message.
 v3r1:	May 18, 2007
 mutsumi	move TkrNoiseOcc module to TestReport
 
+v1r1p1: June 29, 2007
+awb	Added earlyEvent flag for time tones.

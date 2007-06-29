@@ -256,6 +256,7 @@ struct NtupleDef {
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
   int m_contextLsfTimeTimeToneCurrentMissingLatPps;
   int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
+  int m_contextLsfTimeTimeToneCurrentEarlyEvent;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
 
@@ -267,6 +268,7 @@ struct NtupleDef {
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
   int m_contextLsfTimeTimeTonePreviousMissingLatPps;
   int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
+  int m_contextLsfTimeTimeTonePreviousEarlyEvent;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
   unsigned int m_contextLsfTimeTimeToneGemTimeHacks;
