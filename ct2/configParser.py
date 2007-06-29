@@ -60,11 +60,8 @@ def globalDBStrings():
     args.extend(tags)
 
     values = eLogDB.query(*args)
-    values = map(nicenDBStrings, values)
 
     for tag, value in zip(tags, values):
-        if not value:
-            break
         label = jobOptions.globalDBStringLabels[tag]
         line = "%s: %s\n" % (label, value)
         output.append(line)
@@ -72,13 +69,6 @@ def globalDBStrings():
         pass
 
     return output
-
-def nicenDBStrings(oldString):
-    """@brief make ???-delimited strings from eLogDB look nicer."""
-    strings = oldString.split('???')
-    strings = [xx for xx in strings if xx]
-    newString = ', '.join(strings)
-    return newString
 
 #
 def globoLogical(doc, tag, label):
@@ -395,7 +385,7 @@ def oneGtrcReg(doc, tag):
         hTable = table.twoDTable(array, title, axisLabels, indices)
         regTables.append(hTable)
         pass
-    nTable = html.nWay(regTables, jobOptions.rcWidth)
+    nTable = html.nWay(regTables, jobOptions.tkrSplitWidth)
     output.append(nTable)
     
     return output
@@ -483,33 +473,21 @@ def delays(doc):
     output.append(html.Heading(sectionTitle, 1))
     output.append(html.Element("HR"))    
 
-    anyTems = hasTem(doc)
-
     # per-cable times
-    if anyTems:
-        for name in jobOptions.cableDelays:
-            dTable = oneCableDelay(doc, name)
-            output.extend(dTable)
-            pass
-        output.append(html.Element("HR"))
+    for name in jobOptions.cableDelays:
+        dTable = oneCableDelay(doc, name)
+        output.extend(dTable)
         pass
+    output.append(html.Element("HR"))
 
     # GEM window width
     output.extend(gemTimes(doc))
     output.append(html.Element("HR"))    
 
     # per-TEM delays
-    if anyTems:
-        tTable = tackDelays(doc)
-        output.extend(tTable)
-        output.append(html.Element("HR"))
-        pass
-    
-    # CAL delays
-    if hasCal(doc):
-        output.extend(calDelays(doc))
-        output.append(html.Element("HR"))
-        pass
+    tTable = tackDelays(doc)
+    output.extend(tTable)
+    output.append(html.Element("HR"))    
 
     return output
 
@@ -526,8 +504,6 @@ def oneCableDelay(doc, name):
     tableTitle = regLabel + ' (ticks (ns))'
 
     ticks = tableFromXml.xTableGen(doc, regSpec)
-    if not ticks.data:
-        return []
     times = ticks.data.map(mappings.displayTime)
     timeData, labels = times.table()
     dTable = table.twoDTable(timeData, tableTitle, axisLabels, labels)
@@ -606,58 +582,7 @@ def oneTack(doc, name):
 
     return hTable
 
-#
-def calDelays(doc):
-    """@brief Show delays from GCRCs."""
-    output = []
-
-    sectionTitle = "Delays from GCRCs"
-    output.append(html.Heading(sectionTitle, 2))
-
-    for name in jobOptions.calDelays:
-        hTable = oneGcrcDelay(doc, name)
-        output.extend(hTable)
-        pass
-    
-    return output
-
-# embarassingly similar to oneGtrcReg
-def oneGcrcDelay(doc, tag):
-    """@brief Make tables for one GCRC dalay register.
-
-    """
-
-    output = []
-
-    regSpec, regLabel = jobOptions.tables[tag]
-    axisLabels = jobOptions.gcrcLabels
-
-    sectionTitle = "%s (%s)" % (regLabel, regSpec)
-    output.append(html.Heading(sectionTitle, 2))
-
-    xTable = tableFromXml.xTableGen(doc, regSpec)
-
-    regTables = []
-    tems = xTable.data.items()
-    tems.sort()
-    for iTem, temData in tems:
-        temData = temData.map(mappings.displayTime)
-        array, indices = temData.table()
-        title = "%s for Tower %d (ticks (ns))" % (regLabel, iTem)
-        hTable = table.twoDTable(array, title, axisLabels, indices)
-        regTables.append(hTable)
-        pass
-    nTable = html.nWay(regTables, jobOptions.rcWidth)
-    output.append(nTable)
-    
-    return output
-
 ######################## per-TEM stuff ##########################
-
-#
-def hasTem(doc):
-    """@brief Do we have any TEMs?"""
-    return hasTkr(doc) or hasCal(doc)
 
 #
 def perTem(doc):

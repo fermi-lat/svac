@@ -2,13 +2,17 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlUpdater = $ENV{'urlUpdateWrapper'};
 
+
 my $batchgroup = $ENV{'batchgroup'};
+
+# digitization
+#my $digiDataDir = "$ENV{'svacEmDir'}/grRoot";
 
 my $digitizationXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -30,7 +34,7 @@ my $digitizationXml =
         <executable name=\"LaunchReport\" version=\"$ENV{'digitizationTaskVersion'}\">
             $ENV{'digitizationTaskDir'}/genDTRLaunchWrapper.pl
         </executable>
-        <executable name=\"digiRootFile\" version=\"$ENV{'svacVersion'}\">
+        <executable name=\"digiRootFile\" version=\"$ENV{'svacPlLibVersion'}\">
             $urlUpdater
         </executable>
 
@@ -38,7 +42,7 @@ my $digitizationXml =
             <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
-        <batch-job-configuration name=\"xlong-job\" queue=\"xlong\" group=\"$batchgroup\">
+        <batch-job-configuration name=\"long-job\" queue=\"long\" group=\"$batchgroup\">
             <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
             <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
         </batch-job-configuration>
@@ -48,7 +52,7 @@ my $digitizationXml =
         <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">$ENV{'digitizationDataDir'}</file>
         <file name=\"script\"     file-type=\"csh\"    type=\"script\">$ENV{'digitizationDataDir'}</file>
 
-        <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"xlong-job\">
+        <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"long-job\">
                         <input-file name=\"ldf\"/>
                         <output-file name=\"digi\"/>
                         <output-file name=\"script\"/>

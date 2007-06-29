@@ -5,20 +5,16 @@
 # querid, second argument is the name of the field to be retrieved.
 # Note the field does not have to be stored as a column in the elogReport 
 # table, it could be stored in the additionFields column.
-# The script simply print query results. It exits with exited code 1 if the
-# value is not stored in the database. Note if you use system() to call this
-# utility script, the return code is the exit code shifted to left by eight,
-# so exit code 1 would become 256.
-
+# The script simply print query results
 
 use strict 'vars';
 use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/dbSetup.cshrc");
 
 if($#ARGV+1 != 2) {
     die 'require two arguments: runId and fieldName';
@@ -28,7 +24,7 @@ my $runId = $ARGV[0];
 my $fieldName = $ARGV[1];
 
 
-$dbh = DBI->connect($ENV{'dbName'}, $ENV{'userName'}, $ENV{'passWd'}) or dbErr('connect db failed: '.$dbh->errstr);
+$dbh = DBI->connect($ENV{'dbName'}, $ENV{'userName'}, $ENV{'passWd'}) or die 'connect db failed: '.$dbh->errstr;
 
 
 # check whether the field is stored as a column in the table
@@ -42,13 +38,10 @@ if(defined($isColumn)) {
 
     my $value = queryTable($sqlStr);
 
-    if(defined($value)) {
-	print "$value\n";
-	exit 0;
-    }
-    else {
-	exit(1);
-    }
+    print "$value\n";
+
+    exit 0;
+
 }
 
 # the field could be saved in additionFields column
@@ -65,7 +58,7 @@ my $additionFields = queryTable($sqlStr);
 
 $dbh->{LongReadLen} = $oldReadLen;
 
-$dbh->disconnect or dbErr('disconnect db failed: '.$dbh->errstr);
+$dbh->disconnect or die 'disconnect db failed: '.$dbh->errstr;
 
 my $result;
 foreach my $item (split(/!!!/, $additionFields)) {
@@ -76,36 +69,24 @@ foreach my $item (split(/!!!/, $additionFields)) {
 	last;
     }
 }
+print "$result\n";
 
-if(defined($result)) {
-    print "$result\n";
-    exit 0;
-}
-else {
-    exit(1);
-}
+exit 0;
+
 
 # this routine assumes query only returns maximally 1 row of data
 sub queryTable {
 
     my($sqlStr) = @_;
 
-    my $sth = $dbh->prepare($sqlStr) or dbErr("prepare sql failed: $sqlStr ".$dbh->errstr);
+    my $sth = $dbh->prepare($sqlStr) or die 'prepare sql failed: '.$dbh->errstr;
 
-    $sth->execute() or dbErr("execute sql failed: $sqlStr ".$dbh->errstr);
+    $sth->execute() or die "execute sql failed: $sqlStr".$dbh->errstr;
 
     my ($result) = $sth->fetchrow_array;
 
-    $sth->finish() or dbErr("finish sql failed: $sqlStr ".$dbh->errstr);
+    $sth->finish() or die 'finish sql failed: '.$dbh->errstr;
 
     return $result;
 
-}
-
-sub dbErr {
-    my ($errStr) = @_;
-
-    print $errStr;;
-
-    exit(1);
 }

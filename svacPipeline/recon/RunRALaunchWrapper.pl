@@ -28,9 +28,9 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
@@ -47,17 +47,15 @@ my $ex = new Exec("$command");
 
 my $rc = $ex->execute();
 
-if ( defined($rc) ) {
-    if ( $rc == 0 ) {
-        #terminated successfully
-        exit(0);
-    } else {
-        #your app failed, interpret return code
-        #and then exit non-zero
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
     
-        #(do some stuff here if you want)
-        exit($rc);         
-    }
+    #(do some stuff here if you want)
+    exit($rc);
 } else {
     if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
         # Your app is not present!!!

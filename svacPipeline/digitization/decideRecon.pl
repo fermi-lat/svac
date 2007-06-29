@@ -5,10 +5,6 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-my $run = shift;
-
-my $query = $ENV{'eLogQuery'};
-
 sub noRecon {
 	print STDERR "Not reconstructing.\n";
 	print "0\n";
@@ -21,10 +17,10 @@ sub yesRecon {
 	exit;
 }
 
-print STDERR "Determining reconstructability for run $run:\n";
+print STDERR "Determining reconstructability for run $ARGV[0]\n";
 
 
-my $offline = `$query $run offline`;
+my $offline = `$ENV{'svacPlLib'}/queryElogReportTable.pl $ARGV[0] offline`;
 chomp $offline;
 
 my @badOffline = ('norecon', 'nodigi');
@@ -41,7 +37,7 @@ if (grep(/^$offline$/i, @goodOffline)) {
 }
 
 
-my $particleType = `$query $run particleType`;
+my $particleType = `$ENV{'svacPlLib'}/queryElogReportTable.pl $ARGV[0] particleType`;
 chomp $particleType;
 
 my @reconPTypes = ('Cosmics', 'Photons', 'Am241');

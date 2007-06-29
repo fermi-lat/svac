@@ -20,7 +20,7 @@ import jobOptions
 
 
 if len(sys.argv) == 4:
-    runNumber, snapFile, tarBall = sys.argv[1:]
+    runNumber, splitFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -29,7 +29,9 @@ else:
 # insert command line options in jobOptions
 # might make a dump of jobOptions for the records
 jobOptions.runNumber = runNumber
+#jobOptions.schemaFile = schemaFile
 jobOptions.snapFile = snapFile
+jobOptions.splitFile = splitFile
 jobOptions.tarBall = tarBall
 
 destDir = os.path.dirname(tarBall) or '.'
@@ -114,42 +116,32 @@ output.addChildren(configParser.gemStuff(theLat))
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
-if configParser.hasTem(theLat):
-    output.addChildren(configParser.perTem(theLat))
-    output.addChild(html.Element("HR"))
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
-    pass
+output.addChildren(configParser.perTem(theLat))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 output.addChildren(configParser.delays(theLat))
 output.addChild("\n")
 output.addChild(html.Element("HR"))
 output.addChild(html.Element("HR"))
 output.addChild("\n")
+output.addChildren(configParser.calFeReg(theLat))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+output.addChildren(configParser.perGtrc(theLat))
+output.addChild(html.Element("HR"))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 
-if configParser.hasCal(theLat):
-    output.addChildren(configParser.calFeReg(theLat))
-    output.addChild(html.Element("HR"))
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
-    pass
+# # This is broken, and the functionality is provided by including nread and mode tables
+# output.addChildren(configParser.tkrSplits(theLat))
+# output.addChild(html.Element("HR"))
+# output.addChild(html.Element("HR"))
+# output.addChild("\n")
 
-if configParser.hasTkr(theLat):
-    output.addChildren(configParser.perGtrc(theLat))
-    output.addChild(html.Element("HR"))
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
-
-    # # This is broken, and the functionality is provided by
-    # # including nread and mode tables
-    # output.addChildren(configParser.tkrSplits(theLat))
-    # output.addChild(html.Element("HR"))
-    # output.addChild(html.Element("HR"))
-    # output.addChild("\n")
-
-    output.addChildren(configParser.tkrFeReg(theLat))
-    output.addChild(html.Element("HR"))
-    output.addChild("\n")
-
-    pass
+output.addChildren(configParser.tkrFeReg(theLat))
+output.addChild(html.Element("HR"))
+output.addChild("\n")
 
 finish()

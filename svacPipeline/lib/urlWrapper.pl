@@ -30,9 +30,9 @@ my $taskProcessName = $proc->{'taskProcess_name'};
 ##
 #####################################################
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $urlKey = $taskProcessName;
 my @inFileNames = values %$inFiles;
@@ -58,17 +58,15 @@ foreach (@inFileNames) {
     
     my $rc = $ex->execute();
 
-	if ( defined($rc) ) {
-		if ( $rc == 0 ) {
-			#terminated successfully
-			exit(0);
-		} else {
-			#your app failed, interpret return code
-			#and then exit non-zero
-			
-			#(do some stuff here if you want)
-			exit($rc);         
-		}
+    if ($rc == 0) {
+        #terminated successfully:
+        print "Updated URL for [$inFile]\n";
+    } elsif ( defined($rc) ) {
+        #your app failed, interpret return code
+        #and then exit non-zero
+    
+        #(do some stuff here if you want)
+        exit($rc);
     } else {
         if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
 	  # Your app is not present!!!
