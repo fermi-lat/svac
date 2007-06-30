@@ -84,6 +84,43 @@ private:
 };
 
 
+
+//
+// 
+// This implementation is for a quantity derived from the contents 
+// of the TTree created with the primary list of Mon output quantities (see MonEventLooper_t and runStrip_t)
+// Mon Objects in the secondary list are expected to be of this type.
+
+class MonSecondListDouble : public MonValue {
+  
+ public:
+
+  // Standard c'tor
+  MonSecondListDouble(const char* name, const char* formula, const char* cut) ;
+
+  // D'tor, no-op
+  virtual ~MonSecondListDouble();
+  
+  // Reset just nulls the values
+  virtual void reset() ;
+
+  // Attach this to a TTree
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  void singleincrement(Double_t* val, Double_t* val2) ;
+
+  // Just move the counter to the output value
+  virtual void latchValue() ;
+
+private:
+
+  // the output value
+  Double_t *m_val;
+};
+
+
+
+
 //
 // 
 // This implementation is for computing the rates.
