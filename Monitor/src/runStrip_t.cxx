@@ -370,6 +370,7 @@ int main(int argn, char** argc) {
   std::cout<<setiosflags(std::ios::left);
   std::cout<<std::setw(60)<<std::setfill(' ')<<"Total time spent in event loop "<<": "<<(float)(endtime-starttime)/1e6<<" seconds"<<std::endl;
   
+
   // Write an html report with parameters used (input/output)
   std::string htmlparamssuffix("_Parameters.html");
   std::string htmlparams=html+htmlparamssuffix;
@@ -446,18 +447,22 @@ int main(int argn, char** argc) {
   r2.writereport();
 
 
-
-
-
-
-
+  //std::cout << std::endl << "Del digi" << std::endl <<std::endl;
   if (digiinpcol)delete digiinpcol;
-  if (reconinpcol)delete mcinpcol;
+  //std::cout << std::endl << "Del recon" << std::endl <<std::endl;
+  if (reconinpcol)delete reconinpcol;
+  //std::cout << std::endl << "Del mc" << std::endl <<std::endl;
   if (mcinpcol)delete mcinpcol;
+  //std::cout << std::endl << "Del svac" << std::endl <<std::endl;
   if (svacinpcol)delete svacinpcol;
+  //std::cout << std::endl << "Del merit" << std::endl <<std::endl;
   if (meritinpcol)delete meritinpcol;
+  //std::cout << std::endl << "Del cal" << std::endl <<std::endl;
   if (calinpcol)delete calinpcol;
+
+  //std::cout << std::endl << "Del prim" << std::endl <<std::endl;
   delete outcolprim;
+  //std::cout << std::endl << "Del second" << std::endl <<std::endl;
   delete outcolsec;
   return 0;
 }
