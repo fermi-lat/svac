@@ -1,0 +1,76 @@
+// 
+// Class for input of quantity DeadZoneDelta for monitoring 
+// 
+// Created by dpaneque on Sun Jul  1 02:07:07 2007 
+// Object created automatically by script makeNewMonObject.pl
+//
+#include "MonInput_DeadZoneDelta.h"
+#include <iostream>
+
+// User defined part 
+
+#define NAME DeadZoneDelta
+#define OUTBRANCH "DeadZoneDelta"
+#define LEAF "DeadZoneDelta/L"
+#define INBRANCH "m_metaEvent"
+// #define ACCESSOR bb
+#define MONSOURCE DigiEvent
+#define INPUTSOURCE "DigiEvent"
+#define DESCRIPTION "Number of GEM deadzone events between two successive read out events."
+#include "digiRootData/DigiEvent.h"
+
+// End user defined part 
+
+MonInput_DeadZoneDelta::MonInput_DeadZoneDelta(){
+  m_name=OUTBRANCH;
+  firstevt = 1;
+  m_previous = 0;
+  m_current = 0;
+}
+MonInput_DeadZoneDelta::~MonInput_DeadZoneDelta(){
+}
+
+
+int MonInput_DeadZoneDelta::setOutputBranch(TTree* tree) {
+ TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
+ return bErr != 0 ? 0 : 1;
+}
+void MonInput_DeadZoneDelta::enableInputBranch(TTree& tree){
+  tree.SetBranchStatus(INBRANCH,1);
+}
+void MonInput_DeadZoneDelta::setValue(TObject* event) {
+  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
+  if (de==0){
+    std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
+    assert(de);
+  }
+
+  m_val = 0;
+  m_current = de->getMetaEvent().scalers().deadzone();
+  if(firstevt){
+    m_previous = m_current;
+    firstevt = 0;
+  }
+  else{
+    m_val = m_current-m_previous;
+    m_previous = m_current;
+  }
+  
+
+}
+std::string MonInput_DeadZoneDelta::getInputSource(){
+  return INPUTSOURCE;
+}
+std::string MonInput_DeadZoneDelta::getDescription(){
+  return DESCRIPTION;
+}
+
+#undef INPUTSOURCE
+#undef NAME
+#undef OUTBRANCH
+#undef LEAF
+#undef INBRANCH 
+#undef ACCESSOR
+#undef MONSOURCE
+#undef DESCRIPTION
+
