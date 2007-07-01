@@ -190,6 +190,22 @@ unsigned RFun::loopovertowerANDcallayers(ROOT::TArrayProxy<ROOT::TArrayType<USho
 
 
 
+//unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
+#ifdef oldROOT
+unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector)
+#else
+unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >& invector)
+#endif
+
+{
+  Double_t val(0.0);
+  for (UShort_t itower = 0; itower < 16; itower++){
+    for (UShort_t icallayer = 0; icallayer < 8; icallayer++)
+      val += invector[itower][icallayer];
+  }
+  return val;
+}
+
 
 unsigned RFun::loopovertkrplanes(const UShort_t invector[])
 {
