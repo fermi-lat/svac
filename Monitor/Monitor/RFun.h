@@ -22,6 +22,7 @@ class RFun{
   // Acd/Tracker/Cal Related functions
 
   static unsigned getconsecutiveplaneshit(const UShort_t invector[36]);
+  static unsigned getplaneshit(const UShort_t invector[36]);
   static std::vector<double> getemptytowers(ROOT::TArrayBoolProxy& invector);
   //static std::vector<double> getemptytowers(const UShort_t invector[16]);
   static void initboundarytowers();

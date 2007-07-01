@@ -81,6 +81,19 @@ double RFun::computemean_with_outlierscut(const ULong64_t invector[],
   return cleanmean;
 }
 
+
+unsigned RFun::getplaneshit(const UShort_t invector[36])
+{
+ unsigned n_planeshit(0);
+ for (unsigned iplane = 0; iplane < 36; iplane++)
+   {
+     if(invector[iplane]>0)
+	n_planeshit++;
+   }
+ return n_planeshit;
+}
+
+
 unsigned RFun::getconsecutiveplaneshit(const UShort_t invector[36])
 {
   unsigned n_consecutiveplaneshit(0),maxhits(0);
