@@ -11,12 +11,12 @@
 
 #define NAME ReconNumTracks
 #define OUTBRANCH "ReconNumTracks"
-#define LEAF "ReconNumTracks[10]/s"
+#define LEAF "ReconNumTracks[11]/s"
 #define INBRANCH "m_tkr"
 // #define ACCESSOR Capullo
 #define MONSOURCE ReconEvent
 #define INPUTSOURCE "ReconEvent"
-#define DESCRIPTION "Vector[10] reporting the number of tracks for this event (only component different to zero). This makes easier the computation of rates of events with n [0,10] number of tracks."
+#define DESCRIPTION "Vector[11] reporting the number of tracks for this event (only component different to zero). This makes easier the computation of rates of events with n [0,10] number of tracks."
 #include "reconRootData/ReconEvent.h"
 
 // End user defined part 
@@ -43,7 +43,7 @@ void MonInput_ReconNumTracks::setValue(TObject* event) {
   }
   
 
-  for(UInt_t i = 0; i < 10; i++)
+  for(UInt_t i = 0; i < 11; i++)
     m_val[i] = 0;
 
 

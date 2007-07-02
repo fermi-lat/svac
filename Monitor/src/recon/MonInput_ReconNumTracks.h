@@ -27,7 +27,7 @@ class MonInput_ReconNumTracks: public MonInputObject{
   std::string getInputSource();
   std::string getDescription();
  private:
-  VARTYPE m_val[10];
+  VARTYPE m_val[11];
 };
 
 #undef VARTYPE
