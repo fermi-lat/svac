@@ -200,8 +200,10 @@ unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayTy
 {
   Double_t val(0.0);
   for (UShort_t itower = 0; itower < 16; itower++){
-    for (UShort_t icallayer = 0; icallayer < 8; icallayer++)
-      val += invector[itower][icallayer];
+    for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
+      if(invector[itower][icallayer] >= 0)
+	val += invector[itower][icallayer];
+    }
   }
   return val;
 }
