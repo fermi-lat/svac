@@ -64,6 +64,16 @@
 // Last updated with object ReconDirXYZ by user dpaneque on Fri Jun 29 03:05:08 2007
 // Last updated with object ReconVertexPosXYZ by user dpaneque on Fri Jun 29 03:06:54 2007
 // Last updated with object ReconEnergy_TowerCalLayer by user dpaneque on Fri Jun 29 03:40:27 2007
+// Last updated with object condarrtkr by user dpaneque on Sun Jul  1 00:36:38 2007
+// Last updated with object condarrcno by user dpaneque on Sun Jul  1 00:37:40 2007
+// Last updated with object condarrroi by user dpaneque on Sun Jul  1 00:38:14 2007
+// Last updated with object DiscardedDelta by user dpaneque on Sun Jul  1 02:05:05 2007
+// Last updated with object DeadZoneDelta by user dpaneque on Sun Jul  1 02:07:07 2007
+#include "digi/MonInput_DeadZoneDelta.h"
+#include "digi/MonInput_DiscardedDelta.h"
+#include "digi/MonInput_condarrroi.h"
+#include "digi/MonInput_condarrcno.h"
+#include "digi/MonInput_condarrtkr.h"
 #include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
 #include "recon/MonInput_ReconVertexPosXYZ.h"
 #include "recon/MonInput_ReconDirXYZ.h"
@@ -248,6 +258,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_ReconVertexPosXYZ;
   if (s=="ReconEnergy_TowerCalLayer")
     return new MonInput_ReconEnergy_TowerCalLayer;
+  if (s=="condarrtkr")
+    return new MonInput_condarrtkr;
+  if (s=="condarrcno")
+    return new MonInput_condarrcno;
+  if (s=="condarrroi")
+    return new MonInput_condarrroi;
+  if (s=="DiscardedDelta")
+    return new MonInput_DiscardedDelta;
+  if (s=="DeadZoneDelta")
+    return new MonInput_DeadZoneDelta;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -314,6 +334,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("ReconDirXYZ");
   names.push_back("ReconVertexPosXYZ");
   names.push_back("ReconEnergy_TowerCalLayer");
+  names.push_back("condarrtkr");
+  names.push_back("condarrcno");
+  names.push_back("condarrroi");
+  names.push_back("GemDiscardedDelta");
+  names.push_back("DeadZoneDelta");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
