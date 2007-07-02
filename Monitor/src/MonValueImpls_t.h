@@ -191,6 +191,35 @@ class MonHist1d: public MonValue{
  private:
   TH1F** m_hist;
 };
+
+
+// 1-d histogram, will loop over vector components filling histo n times
+//
+
+class MonHist1d_VecDim: public MonValue{
+ public:
+  /// Standard constructor
+  MonHist1d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel);
+  /// Destructor
+  virtual ~MonHist1d_VecDim();
+  
+  /// Does nothing
+  virtual void reset();
+  
+  /// Attach does nothing
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  /// fill histogram
+  void singleincrement(Double_t* val, Double_t* val2);
+  
+  /// Latch does nothing
+  virtual void latchValue();
+  
+ private:
+  Int_t m_vecdim;
+  TH1F* m_hist;
+};
+
 //
 // 2-d histogram
 //
@@ -217,6 +246,37 @@ class MonHist2d: public MonValue{
  private:
   TH2F** m_hist;
 };
+
+
+//
+// 2-d histogram,  will loop over vector components filling histo n times
+//
+
+class MonHist2d_VecDim: public MonValue{
+ public:
+  /// Standard constructor
+  MonHist2d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel);
+  /// Destructor
+  virtual ~MonHist2d_VecDim();
+  
+  /// Does nothing
+  virtual void reset();
+  
+  /// Attach does nothing
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  /// fill histogram
+  void singleincrement(Double_t* val, Double_t* val2);
+  
+  /// Latch does nothing
+  virtual void latchValue();
+  
+ private:
+  Int_t m_vecdim[2];
+  TH2F* m_hist;
+};
+
+
 //
 // 
 // This implementation takes the average of several values

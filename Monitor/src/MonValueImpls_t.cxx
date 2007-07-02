@@ -216,6 +216,62 @@ void MonHist1d::latchValue(){}
 
 int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
+
+MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
+    :MonValue(name,formula,cut){
+  m_histdim=1;
+  float lbx,ubx;
+  int nbx;
+  lbx=ubx=0;
+  nbx=0;
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()==3){
+    lbx=atof(tt[1].c_str());
+    ubx=atof(tt[2].c_str());
+    nbx=atoi(tt[0].c_str());
+  }else{
+    std::cerr<<"MonHist1d_VecDim variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+
+  m_vecdim = Int_t(nbx);
+  m_dim = unsigned(nbx);
+  //std::cout << "Object " << name << ":m_dim set to value " << m_dim << std::endl;  
+  tt=parse(axislabels,"[",",","]");
+  char nm[128];
+  sprintf(nm,"%s",m_name.c_str());
+  m_hist=new TH1F(nm,nm,nbx,lbx,ubx);
+  if (tt.size()>0)m_hist->GetXaxis()->SetTitle(tt[0].c_str());
+  if (tt.size()>1)m_hist->GetYaxis()->SetTitle(tt[1].c_str());
+  if (strlen(titlelabel)!=0)m_hist->SetTitle(titlelabel);
+  
+}
+MonHist1d_VecDim::~MonHist1d_VecDim(){
+  // for (unsigned int i=0;i<m_dim;i++){
+    // m_hist[i];
+    //}
+    //delete m_hist;
+}
+void MonHist1d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
+  //  std::cout << m_name.c_str() << std::endl;
+  for (unsigned i=0;i<m_dim;i++){
+    //std::cout << "i,val= " << i << ", " << val[i] << std::endl;
+    m_hist->Fill(Double_t(i),(Double_t)val[i]);
+  }
+}  
+void MonHist1d_VecDim::reset(){}
+
+void MonHist1d_VecDim::latchValue(){}
+
+
+int MonHist1d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1;}
+
+
+
+
+
+
+
 MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=2;
@@ -247,6 +303,7 @@ MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, con
     if (strlen(titlelabel)!=0)m_hist[i]->SetTitle(titlelabel);
   }
 }
+
 MonHist2d::~MonHist2d(){
   // for (unsigned int i=0;i<m_dim;i++){
     // m_hist[i];
@@ -263,6 +320,68 @@ void MonHist2d::reset(){}
 void MonHist2d::latchValue(){}
 
 int MonHist2d::attach(TTree& t,const std::string& prefix) const {return 1;}
+
+
+MonHist2d_VecDim::MonHist2d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
+    :MonValue(name,formula,cut){
+  m_histdim=1; // effectively, in what concerns to formulae, it is like a 1dim histogram
+  float lbx,ubx,lby,uby;
+  int nbx,nby;
+  lbx=ubx=lby=uby=0;
+  nbx=nby=0;
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()==6){
+    lbx=atof(tt[1].c_str());
+    ubx=atof(tt[2].c_str());
+    nbx=atoi(tt[0].c_str());
+    lby=atof(tt[4].c_str());
+    uby=atof(tt[5].c_str());
+    nby=atoi(tt[3].c_str());
+  }else{
+    std::cerr<<"MonHist2d_VecDim variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(m_histdim);
+  }
+  m_vecdim[0]=Int_t(nbx);
+  m_vecdim[1]=Int_t(nby);
+  m_dim = unsigned(nbx*nby);
+
+  tt=parse(axislabels,"[",",","]");
+  char nm[128];
+  sprintf(nm,"%s",m_name.c_str());
+  m_hist=new TH2F(nm,nm,nbx,lbx,ubx,nby,lby,uby);
+  if (tt.size()>0)m_hist->GetXaxis()->SetTitle(tt[0].c_str());
+  if (tt.size()>1)m_hist->GetYaxis()->SetTitle(tt[1].c_str());
+  if (tt.size()>2)m_hist->GetZaxis()->SetTitle(tt[2].c_str());
+  if (strlen(titlelabel)!=0)m_hist->SetTitle(titlelabel);
+}
+
+
+
+MonHist2d_VecDim::~MonHist2d_VecDim(){
+  // for (unsigned int i=0;i<m_dim;i++){
+    // m_hist[i];
+    //}
+    //delete m_hist;
+}
+void MonHist2d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
+  Int_t z = 0;
+  // std::cout << m_name.c_str() << std::endl;
+  for(Int_t i = 0; i < m_vecdim[0];i++){
+    for(Int_t j = 0; j < m_vecdim[1];j++){
+      // std::cout << "i,j,val= " << i << ", " << j << ", " << val[z] << std::endl; 
+      z = i*m_vecdim[1]+j;
+      m_hist->Fill(Double_t(i),Double_t(j),Double_t(val[z]));
+    }
+  }  
+}
+
+
+void MonHist2d_VecDim::reset(){}
+
+void MonHist2d_VecDim::latchValue(){}
+
+int MonHist2d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1;}
+
 
 MonMean::MonMean(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula,cut),
@@ -726,6 +845,14 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
   std::string axislabels=obj["axisdesc"];
   std::string titlelabel=obj["titledesc"];
 
+  /*
+  if (strstr(type.c_str(),"histogram-1d")){
+    std::cout << "Name histo = " << name.c_str() << std::endl;
+    std::cout << "Axis labels = " << axislabels.c_str() << std::endl;
+    std::cout << "Title = " << titlelabel.c_str() << std::endl;
+  }
+  */
+
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanfrac")){
@@ -748,6 +875,10 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonHist1d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   } else if (strstr(type.c_str(),"histogram-2d")){
     return new MonHist2d(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
+  } else if (strstr(type.c_str(),"histogram-vecdim-1d")){
+    return new MonHist1d_VecDim(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
+  } else if (strstr(type.c_str(),"histogram-vecdim-2d")){
+    return new MonHist2d_VecDim(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   }else{
     std::cerr<<"No such type "<<type<<std::endl;
     assert(0);
