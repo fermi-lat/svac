@@ -223,7 +223,7 @@
       <formula><![CDATA[foreachtower: foreachcallayer: ReconZeroEnergy_Counter_TowerCalLayer[tower][callayer]/double(CondsummaryBitAnd30_NOTPeriodic_Counter)]]></formula>
       <cut><![CDATA[]]></cut>
       <source>output</source>
-      <type> outputdouble </type>
+      <type> outputfloat </type>
       <description> Vector [tower][callayer] containing the fraction of events with ZERO energy in the calorimeter layer defined by tower,callayer is empty. Periodic triggers are NOT taken into account.</description>
     </object>
 
