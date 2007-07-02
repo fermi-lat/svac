@@ -92,6 +92,44 @@ void MonSecondListDouble::singleincrement(Double_t* val, Double_t* val2) {
 
 
 
+// Standard c'tor
+MonSecondListFloat::MonSecondListFloat(const char* name, const char* formula, const char* cut) 
+  :MonValue(name,formula,cut){
+  m_val = new Float_t[m_dim];
+  reset();
+}
+
+  // D'tor, no-op
+MonSecondListFloat::~MonSecondListFloat(){
+  delete [] m_val;
+}
+  
+  // Reset just nulls the values
+void MonSecondListFloat::reset() {
+    for (unsigned i=0;i<m_dim;i++)
+      m_val[i] = 0.0;
+}
+
+void MonSecondListFloat::latchValue() {}
+
+// Attach a MonSecondListFloat node to a TTree (unsigned int)
+int MonSecondListFloat::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullName = prefix + name();
+  std::string leafType = fullName + m_dimstring + "/F";
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
+  return b != 0 ? 1 : -1;
+}
+  // value of m_val object is set
+void MonSecondListFloat::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    m_val[i] = (Float_t)val[i];
+  }
+}
+
+
+
+
+
 
 
 
@@ -869,6 +907,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputdouble"){
     return new MonSecondListDouble(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="outputfloat"){
+    return new MonSecondListFloat(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"valuechange")){
     return new MonValueChange(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"histogram-1d")){
