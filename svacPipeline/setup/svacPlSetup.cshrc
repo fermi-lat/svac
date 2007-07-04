@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p11
+setenv svacVersion v3r9p12
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -72,7 +72,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 setenv eLogTaskVersion ${svacVersion}
 setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
 setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
-setenv eLogFeederVersion v2r3p2
+setenv eLogFeederVersion v2r3p3
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
 setenv eLogScript ${eLogTaskDir}/populateElogDb.pl
@@ -147,7 +147,8 @@ setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue long
-setenv chunkTime 60000 
+setenv chunkTime 60000
+setenv chunkArch linux32
 setenv pldVersion v0r3
 #setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 setenv pldLib ${svacCmt}/lib

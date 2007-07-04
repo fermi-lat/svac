@@ -187,7 +187,7 @@ cFormat = oneFormat + '-' + oneFormat
 
 # Make a resource requirement string to make sure the LSF hosts have enough scratch space
 scratchSize = reconPM.reserveSize(digiFileName, numEventsPerFile)
-resStr = '-R "scratch > %s"' % scratchSize
+resStr = '-R "scratch > %s && %s"' % (scratchSize, os.environ['chunkArch'])
 
 jobs = []
 joFiles = []
