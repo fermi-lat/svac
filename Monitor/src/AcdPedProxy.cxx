@@ -36,7 +36,9 @@ const AcdPeds* AcdPedProxy::getAcdPeds(unsigned int timestamp){
     unsigned int vep=dataIdent.find(")");
     std::string var=dataIdent.substr(vsp+2,vep-vsp-2);
     std::string rest=dataIdent.substr(bpos+1,dataIdent.length()-bpos-1);
-    std::string fname=getenv(var.c_str())+rest;
+    std::string fname=getenv(var.c_str());
+    if(fname[fname.length()-1]!='/')fname+="/";
+    fname+=rest;
     std::cout<<fname<<std::endl;
     AcdPedParser par;
     par.parse(m_thepeds,fname.c_str());
