@@ -1,0 +1,39 @@
+
+# Evt classification information
+CondSummaryWord_Histo1 Sum
+CondArrCNOTrigger_Histo1 Sum
+CondArrCalHiTrigger_Histo1 Sum
+CondArrCalLowTrigger_Histo1 Sum
+CondArrROITrigger_Histo1 Sum
+CondArrTKRTrigger_Histo1 Sum
+DeadZoneDelta_Histo1 Sum
+DiscardedDelta_Histo1 Sum
+CalHiTrigger_Tower_Histo1 Sum
+CalLOWTrigger_Tower_Histo1 Sum
+# ACD
+# ACD Digi
+AcdDigis_Histo1 Sum
+AcdGemCNO_GARC_Histo1 Sum
+Acd_GemVeto_AcdTile_Histo1 Sum
+AcdGemROI_Tower_Histo1 Sum
+# ACD Recon
+#CAL
+# CAL Digi
+CalX_NHit_Histo1 Sum
+CalX_NHit_Histo1_Tower_TowerLoop Sum
+CalXHit_NHit_Counter_TowerCalLayer_Histo2 Sum
+ZeroCalXHit_NHit_Counter_TowerCalLayer_Histo2 Sum
+# CAL Recon
+#TKR
+# TKR Digi
+TkrDigis_Histo1 Sum
+TkrPlanesHit_Histo1_Tower_TowerLoop Sum
+TkrHits_Histo1 Sum
+TkrHits_Histo1_Tower_TowerLoop Sum
+TkrDigiCounter_Tower_Histo1 Sum
+HitsInEmptyTower_Tower_Histo1 Sum
+TkrTrigger_Tower_Histo1 Sum
+ZeroTkrHitsCounter_TowerPlane_Histo2 Sum
+TkrDigiCounter_TowerPlane_Histo2 Sum
+ToT_0_WhenTkrHitsExist_TowerPlane_Histo2 Sum
+# TKR Recon
