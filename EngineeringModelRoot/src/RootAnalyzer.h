@@ -12,8 +12,7 @@
 #include "digiRootData/DigiEvent.h"
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
-#include "calibTkrUtil/TkrHits.h"
-//#include "calibTkrUtil/TkrNoiseOcc.h"
+#include "TkrHits.h"
 
 class RootAnalyzer {
  public:
@@ -131,8 +130,6 @@ class RootAnalyzer {
 
   TkrHits* m_tkrCalib;
 
-  //TkrNoiseOcc* m_tkrNoiseOcc;
-  //TDirectory* m_tkrNoiseOcc_dir;
 };
 
 #endif

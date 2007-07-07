@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v3r1p1
+version v1r7
 
 
 use GlastPolicy v*
@@ -10,10 +10,10 @@ use reconRootData v*
 use ROOT v* IExternal
 use idents v*
 use Event v*
-use calibTkrUtil *
+
 
 #the following prepend makes the includes folder available locally: avoid the package_include
-macro_prepend includes "-I $(ENGINEERINGMODELROOTROOT) -I $(ENGINEERINGMODELROOTROOT)/src " WIN32 "/I $(ENGINEERINGMODELROOTROOT) /I $(ENGINEERINGMODELROOTROOT)\src  "
+macro_prepend includes "-I $(ENGINEERINGMODELROOTROOT) " WIN32 "/I $(ENGINEERINGMODELROOTROOT) "
 
 macro engineeringmodelroot_headers   "" WIN32 
 
@@ -21,9 +21,9 @@ macro source "*.cxx" WIN32 "*.h *.cxx"
 
 macro_append ROOT_linkopts " -lHist -lTreePlayer -lGraf -lGraf3d"
 
-macro engineeringmodelroot_linkopts "$(ROOT_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts) " 
+macro engineeringmodelroot_linkopts "$(ROOT_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts)" 
 
-application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx timestamps.cxx $(calibTkrUtil_srcs)
+application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx timestamps.cxx TkrHits.cxx
 
 application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 
