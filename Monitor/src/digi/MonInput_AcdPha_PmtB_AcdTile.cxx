@@ -55,7 +55,7 @@ const UShort_t nacdtile(128);
 
     UShort_t AcdGemID = getGemId ( acdDigi->getId().getId() );
     if(acdDigi->getRange(AcdDigi::B) == 0 )
-      m_val[AcdGemID]=acdDigi->getPulseHeight(AcdDigi::B);
+     if(AcdGemID>=0&&AcdGemID<128) m_val[AcdGemID]=acdDigi->getPulseHeight(AcdDigi::B);
    
   }
 }

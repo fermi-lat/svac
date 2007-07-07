@@ -55,7 +55,7 @@ void MonInput_AcdVetoB_AcdTile::setValue(TObject* event) {
 
     UShort_t AcdGemID = getGemId ( acdDigi->getId().getId() );
     if(acdDigi->getVeto(AcdDigi::B))
-      m_val[AcdGemID]++;
+     if(AcdGemID>=0&&AcdGemID<128) m_val[AcdGemID]++;
    
   }
 }
