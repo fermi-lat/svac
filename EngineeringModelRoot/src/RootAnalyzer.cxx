@@ -39,9 +39,7 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
   m_digiChain = new TChain("Digi");
   m_reconChain = new TChain("Recon");
 
-  m_tkrCalib = new TkrHits( true );
-
-  //m_tkrNoiseOcc = new TkrNoiseOcc();
+  m_tkrCalib = new TkrHits();
 
   // open output ra root file
   // No need to delete m_outputFile as ROOT will do the garbage collection
@@ -53,7 +51,6 @@ RootAnalyzer::~RootAnalyzer()
   // since root will do the garbage collection automatically for objects such
   // as TTree and TH1, we don't want to deallocate them once more
   delete m_tkrCalib;
-  //delete m_tkrNoiseOcc;
 }
 
 void RootAnalyzer::produceOutputFile()
@@ -63,7 +60,6 @@ void RootAnalyzer::produceOutputFile()
   if(m_outputFile) {
     m_outputFile->cd("TkrCalib");
     m_tkrCalib->saveAllHist();
-    //m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
@@ -359,183 +355,12 @@ void RootAnalyzer::analyzeReconTree()
 
   //
   // ACD recon:
-  //
+  //                                                                                                                                                                                                            
   AcdRecon* acdRecon = m_reconEvent->getAcdRecon();
-
-  //
-  if (acdRecon) {
-
-    // Temporary max variable:
-    float tmpMax       = -9999.0;
-    int   tmpMaxTileID = -9999;
-    int   tmpMaxPmt    = -9999;
-    
-    float tmpSum = 0.0;
-
-    UInt_t nAcdHit = acdRecon->nAcdHit();
-    for ( UInt_t iAcdHit(0); iAcdHit < nAcdHit; iAcdHit++ ) {
-      const AcdHit* acdHit = acdRecon->getAcdHit(iAcdHit);
-
-      const AcdId& acdId = acdHit->getId();
-      int acdID = acdId.getId();  
-
-      // Get rid of the NA (they have ID=899):
-      if (acdID < 604) {
-        m_ntuple.m_acdMips[acdID][0] = acdHit->getMips(AcdHit::A);
-        m_ntuple.m_acdMips[acdID][1] = acdHit->getMips(AcdHit::B);
-
-        m_ntuple.m_acdMipsPha[acdID][0] = acdHit->getPha(AcdHit::A);
-        m_ntuple.m_acdMipsPha[acdID][1] = acdHit->getPha(AcdHit::B);
-
-        m_ntuple.m_acdMipsFlag[acdID][0] = acdHit->getFlags(AcdHit::A);
-        m_ntuple.m_acdMipsFlag[acdID][1] = acdHit->getFlags(AcdHit::B);
-
-        if ((acdHit->getMips(AcdHit::A)) > tmpMax) {
-          tmpMax       = acdHit->getMips(AcdHit::A);
-          tmpMaxTileID = acdID;
-          tmpMaxPmt    = 0;
-        }
-        if ((acdHit->getMips(AcdHit::B)) > tmpMax) {
-          tmpMax       = acdHit->getMips(AcdHit::B);
-          tmpMaxTileID = acdID;
-          tmpMaxPmt    = 1;
-        }
-        if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))>0) {
-          tmpSum = tmpSum + 0.5*((acdHit->getMips(AcdHit::A)) + (acdHit->getMips(AcdHit::B)));
-        }
-        if ((acdHit->getMips(AcdHit::A))<=0 && (acdHit->getMips(AcdHit::B))>0) {
-          tmpSum = tmpSum + acdHit->getMips(AcdHit::B);
-        }
-        if ((acdHit->getMips(AcdHit::A))>0 && (acdHit->getMips(AcdHit::B))<=0) {
-          tmpSum = tmpSum + acdHit->getMips(AcdHit::A);
-        }
-      }
-      m_ntuple.m_acdMipsMax       = tmpMax;
-      m_ntuple.m_acdMipsMaxTileID = tmpMaxTileID;
-      m_ntuple.m_acdMipsMaxPmt    = tmpMaxPmt;
-      m_ntuple.m_acdMipsSum       = tmpSum;
-    }
-
-    //
-    // Tkr Point
-    //
-     UInt_t nAcdTkrPoint = acdRecon->nAcdTkrPoint();
-
-    int nAcdTkrPointTrack1(0); 
-    for ( UInt_t iAcdTkrPoint(0); iAcdTkrPoint < nAcdTkrPoint; iAcdTkrPoint++ ) {
-      const AcdTkrPoint* acdTkrPoint = acdRecon->getAcdTkrPoint(iAcdTkrPoint);
-
-      int trackPointIndex = nAcdTkrPointTrack1;;
-      int acdTkrPointFace = acdTkrPoint->getFace();
-      
-      if (trackPointIndex == 0) {
-        m_ntuple.m_acdTkrPointX[0] = acdTkrPoint->getPoint().x();
-        m_ntuple.m_acdTkrPointY[0] = acdTkrPoint->getPoint().y();
-        m_ntuple.m_acdTkrPointZ[0] = acdTkrPoint->getPoint().z();
-
-        m_ntuple.m_acdTkrPointFace[0] = acdTkrPointFace;
-
-      } else if (trackPointIndex == 1) {
-
-        m_ntuple.m_acdTkrPointX[1] = acdTkrPoint->getPoint().x();
-        m_ntuple.m_acdTkrPointY[1] = acdTkrPoint->getPoint().y();
-        m_ntuple.m_acdTkrPointZ[1] = acdTkrPoint->getPoint().z();
-
-        m_ntuple.m_acdTkrPointFace[1] = acdTkrPointFace;
-      }
-      nAcdTkrPointTrack1++;
-    }
-
-
-
-    //
-    // Gap POCA
-    //
-     UInt_t nAcdGapPoca = acdRecon->nAcdTkrGapPoca();
-
-    int nGapTrack1(0); int nGapTrack2(0);
-    for ( UInt_t iAcdGapPoca(0); iAcdGapPoca < nAcdGapPoca; iAcdGapPoca++ ) {
-      const AcdTkrGapPoca* acdGapPoca = acdRecon->getAcdTkrGapPoca(iAcdGapPoca);
-
-      int trackGapIndex = acdGapPoca->getTrackIndex();
-
-      const AcdGapId& acdGapId = acdGapPoca->getGapId();
-      int acdGapID = acdGapId.asShort();
-
-      if (trackGapIndex == 0 && nGapTrack1 < 2) {
-        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]   = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]   = trackGapIndex; 
-      } else if (trackGapIndex == 1 && nGapTrack2 < 2) {
-        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2] = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]   = trackGapIndex; 
-      }
-      if (trackGapIndex == 0) {
-        nGapTrack1++;
-      }
-      if (trackGapIndex == 1) {
-        nGapTrack2++;
-      }
-    }
-    m_ntuple.m_acdGapPocaNbrTrack1 = nGapTrack1;
-    m_ntuple.m_acdGapPocaNbrTrack2 = nGapTrack2;
-  
-
-
-
-
-    UInt_t nAcdPoca = acdRecon->nAcdTkrHitPoca();
-
-    int nTrack1(0); int nTrack2(0);
-    for ( UInt_t iAcdPoca(0); iAcdPoca < nAcdPoca; iAcdPoca++ ) {
-      const AcdTkrHitPoca* acdPoca = acdRecon->getAcdTkrHitPoca(iAcdPoca);
-
-      int trackIndex = acdPoca->getTrackIndex();
-
-      const AcdId& acdId = acdPoca->getId();
-      int acdID = acdId.getId();
-      
-      if (trackIndex == 0 && nTrack1 < 2) {
-        m_ntuple.m_acdPocaDoca[0][nTrack1]       = acdPoca->getDoca();
-        m_ntuple.m_acdPocaDocaErr[0][nTrack1]    = acdPoca->getDocaErr();
-        m_ntuple.m_acdPocaDocaRegion[0][nTrack1] = acdPoca->getRegion();
-        m_ntuple.m_acdPocaX[0][nTrack1]          = acdPoca->getPoca().X(); 
-        m_ntuple.m_acdPocaY[0][nTrack1]          = acdPoca->getPoca().Y(); 
-        m_ntuple.m_acdPocaZ[0][nTrack1]          = acdPoca->getPoca().Z(); 
-        m_ntuple.m_acdPocaDirX[0][nTrack1]       = acdPoca->getPocaVector().Px();
-        m_ntuple.m_acdPocaDirY[0][nTrack1]       = acdPoca->getPocaVector().Py();
-        m_ntuple.m_acdPocaDirZ[0][nTrack1]       = acdPoca->getPocaVector().Pz();
-        m_ntuple.m_acdPocaTileID[0][nTrack1]     = acdID;
-        m_ntuple.m_acdPocaTrackID[0][nTrack1]    = trackIndex; 
-      } else if (trackIndex == 1 && nTrack2 < 2) {
-        m_ntuple.m_acdPocaDoca[1][nTrack2]       = acdPoca->getDoca();
-        m_ntuple.m_acdPocaDocaErr[1][nTrack2]    = acdPoca->getDocaErr();
-        m_ntuple.m_acdPocaDocaRegion[1][nTrack2] = acdPoca->getRegion();
-        m_ntuple.m_acdPocaX[1][nTrack2]          = acdPoca->getPoca().X(); 
-        m_ntuple.m_acdPocaY[1][nTrack2]          = acdPoca->getPoca().Y(); 
-        m_ntuple.m_acdPocaZ[1][nTrack2]          = acdPoca->getPoca().Z(); 
-        m_ntuple.m_acdPocaDirX[1][nTrack2]       = acdPoca->getPocaVector().Px();
-        m_ntuple.m_acdPocaDirY[1][nTrack2]       = acdPoca->getPocaVector().Py();
-        m_ntuple.m_acdPocaDirZ[1][nTrack2]       = acdPoca->getPocaVector().Pz();
-        m_ntuple.m_acdPocaTileID[1][nTrack2]     = acdID;
-        m_ntuple.m_acdPocaTrackID[1][nTrack2]    = trackIndex; 
-      }
-      if (trackIndex == 0) {
-        nTrack1++;
-      } 
-      if (trackIndex == 1) {
-        nTrack2++;
-      } 
-    }
-    m_ntuple.m_acdPocaNbrTrack1 = nTrack1;
-    m_ntuple.m_acdPocaNbrTrack2 = nTrack2;
-  }
-
-  //
   if (acdRecon) {
     m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
     m_ntuple.m_acdDoca       = acdRecon->getDoca();
+    m_ntuple.m_acdGammaDoca  = acdRecon->getGammaDoca();
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
     m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
@@ -545,7 +370,6 @@ void RootAnalyzer::analyzeReconTree()
     m_ntuple.m_acdRibbonActiveDist   = acdRecon->getRibbonActiveDist();
     m_ntuple.m_acdMaxActiveDistId    = acdRecon->getMaxActDistId().getId();
     m_ntuple.m_acdRibbonActiveDistId = acdRecon->getRibbonActDistId().getId();
-    m_ntuple.m_acdCornerDoca         = acdRecon->getCornerDoca();
 
     // Eric's ACD-TKR intersection stuff:
     m_ntuple.m_acdNumTkrIntersection = acdRecon->nAcdIntersections();
@@ -554,21 +378,19 @@ void RootAnalyzer::analyzeReconTree()
       int nInter = acdRecon->nAcdIntersections();
       for ( int iInter(0); iInter < nInter; iInter++ ) {
         const AcdTkrIntersection* acdInterRoot = acdRecon->getAcdTkrIntersection(iInter);
-        if (iInter < 20) {
-          m_ntuple.m_acdTkrIntersectionTileId[iInter]                  = acdInterRoot->getTileId().getId();
-          m_ntuple.m_acdTkrIntersectionTkrIndex[iInter]                = acdInterRoot->getTrackIndex();
-          m_ntuple.m_acdTkrIntersectionGlobalX[iInter]                 = acdInterRoot->getGlobalPosition().x();
-          m_ntuple.m_acdTkrIntersectionGlobalY[iInter]                 = acdInterRoot->getGlobalPosition().y();
-          m_ntuple.m_acdTkrIntersectionGlobalZ[iInter]                 = acdInterRoot->getGlobalPosition().z();
-          m_ntuple.m_acdTkrIntersectionLocalX[iInter]                  = acdInterRoot->getLocalX();
-          m_ntuple.m_acdTkrIntersectionLocalY[iInter]                  = acdInterRoot->getLocalY();
-          m_ntuple.m_acdTkrIntersectionLocalXXCov[iInter]              = acdInterRoot->getLocalXXCov();
-          m_ntuple.m_acdTkrIntersectionLocalYYCov[iInter]              = acdInterRoot->getLocalYYCov();
-          m_ntuple.m_acdTkrIntersectionLocalXYCov[iInter]              = acdInterRoot->getLocalXYCov();  
-          m_ntuple.m_acdTkrIntersectionArcLengthToIntersection[iInter] = acdInterRoot->getArcLengthToIntersection();
-          m_ntuple.m_acdTkrIntersectionPathLengthInTile[iInter]        = acdInterRoot->getPathLengthInTile();
-          m_ntuple.m_acdTkrIntersectionTileHit[iInter]                 = acdInterRoot->tileHit();
-	}
+        m_ntuple.m_acdTkrIntersectionTileId[iInter]                  = acdInterRoot->getTileId().getId();
+        m_ntuple.m_acdTkrIntersectionTkrIndex[iInter]                = acdInterRoot->getTrackIndex();
+        m_ntuple.m_acdTkrIntersectionGlobalX[iInter]                 = acdInterRoot->getGlobalPosition().x();
+        m_ntuple.m_acdTkrIntersectionGlobalY[iInter]                 = acdInterRoot->getGlobalPosition().y();
+        m_ntuple.m_acdTkrIntersectionGlobalZ[iInter]                 = acdInterRoot->getGlobalPosition().z();
+        m_ntuple.m_acdTkrIntersectionLocalX[iInter]                  = acdInterRoot->getLocalX();
+        m_ntuple.m_acdTkrIntersectionLocalY[iInter]                  = acdInterRoot->getLocalY();
+        m_ntuple.m_acdTkrIntersectionLocalXXCov[iInter]              = acdInterRoot->getLocalXXCov();
+        m_ntuple.m_acdTkrIntersectionLocalYYCov[iInter]              = acdInterRoot->getLocalYYCov();
+        m_ntuple.m_acdTkrIntersectionLocalXYCov[iInter]              = acdInterRoot->getLocalXYCov();
+        m_ntuple.m_acdTkrIntersectionArcLengthToIntersection[iInter] = acdInterRoot->getArcLengthToIntersection();
+        m_ntuple.m_acdTkrIntersectionPathLengthInTile[iInter]        = acdInterRoot->getPathLengthInTile();
+        m_ntuple.m_acdTkrIntersectionTileHit[iInter]                 = acdInterRoot->tileHit();
       }
     }
   }
@@ -596,65 +418,6 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
   m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
-
-  m_ntuple.m_eventMCLivetime = m_digiEvent->getLiveTime();
-
-
-  //                                                                                                                                                                                                           
-  // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
-  m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
-  m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
-  m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();
-  m_ntuple.m_contextRunInfoStartTime = m_digiEvent->getMetaEvent().run().startTime();
-
-  m_ntuple.m_contextDataGramInfoModeChanges = m_digiEvent->getMetaEvent().datagram().modeChanges();
-  m_ntuple.m_contextDataGramInfoDatagrams = m_digiEvent->getMetaEvent().datagram().datagrams();
-  m_ntuple.m_contextDataGramInfoOpenAction = m_digiEvent->getMetaEvent().datagram().openAction();
-  m_ntuple.m_contextDataGramInfoOpenReason = m_digiEvent->getMetaEvent().datagram().openReason();
-  m_ntuple.m_contextDataGramInfoCrate = m_digiEvent->getMetaEvent().datagram().crate();
-  m_ntuple.m_contextDataGramInfoMode = m_digiEvent->getMetaEvent().datagram().mode();
-  m_ntuple.m_contextDataGramInfoCloseAction = m_digiEvent->getMetaEvent().datagram().closeAction();
-  m_ntuple.m_contextDataGramInfoCloseReason = m_digiEvent->getMetaEvent().datagram().closeReason();
-
-  m_ntuple.m_contextGemScalersElapsed = m_digiEvent->getMetaEvent().scalers().elapsed();
-  m_ntuple.m_contextGemScalersLivetime = m_digiEvent->getMetaEvent().scalers().livetime();
-  m_ntuple.m_contextGemScalersPrescaled = m_digiEvent->getMetaEvent().scalers().prescaled();
-  m_ntuple.m_contextGemScalersDiscarded = m_digiEvent->getMetaEvent().scalers().discarded();
-  m_ntuple.m_contextGemScalersSequence = m_digiEvent->getMetaEvent().scalers().sequence();
-  m_ntuple.m_contextGemScalersDeadzone = m_digiEvent->getMetaEvent().scalers().deadzone();
-
-  m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete = m_digiEvent->getMetaEvent().time().current().incomplete();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs = m_digiEvent->getMetaEvent().time().current().timeSecs();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling = m_digiEvent->getMetaEvent().time().current().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid = m_digiEvent->getMetaEvent().time().current().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps = m_digiEvent->getMetaEvent().time().current().missingGps();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps = m_digiEvent->getMetaEvent().time().current().missingCpuPps();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps = m_digiEvent->getMetaEvent().time().current().missingLatPps();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone = m_digiEvent->getMetaEvent().time().current().missingTimeTone();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentEarlyEvent = m_digiEvent->getMetaEvent().time().current().earlyEvent();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks = m_digiEvent->getMetaEvent().time().current().timeHack().hacks();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
-
-  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete = m_digiEvent->getMetaEvent().time().previous().incomplete();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs = m_digiEvent->getMetaEvent().time().previous().timeSecs();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling = m_digiEvent->getMetaEvent().time().previous().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid = m_digiEvent->getMetaEvent().time().previous().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps = m_digiEvent->getMetaEvent().time().previous().missingGps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone = m_digiEvent->getMetaEvent().time().previous().missingTimeTone();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent = m_digiEvent->getMetaEvent().time().previous().earlyEvent();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
-
-  m_ntuple.m_contextLsfTimeTimeTicks = m_digiEvent->getMetaEvent().time().timeTicks();
-
-  m_ntuple.m_contextLsfTimeTimeHackHacks = m_digiEvent->getMetaEvent().time().timeHack().hacks();
-  m_ntuple.m_contextLsfTimeTimeHackTicks = m_digiEvent->getMetaEvent().time().timeHack().ticks();
-
-
-  m_ntuple.m_contextRunType = m_digiEvent->getMetaEvent().runType();
 
 
   // GEM information:
@@ -691,7 +454,9 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
+  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime, 
+									m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,
+									m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -727,147 +492,57 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventFlags = m_digiEvent->getEventSummaryData().eventFlags();
 
   parseDiagnosticData(); 
-
-  // Error flags:
-  m_ntuple.m_eventBadEventSequence = m_digiEvent->getEventSummaryData().badEventSequence();
-  m_ntuple.m_eventBadTkrRecon      = m_digiEvent->getEventSummaryData().badTkrRecon();
-  m_ntuple.m_eventPacketError      = m_digiEvent->getEventSummaryData().packetError();
-  m_ntuple.m_eventTemError         = m_digiEvent->getEventSummaryData().temError();
-  m_ntuple.m_eventTrgParityError   = m_digiEvent->getEventSummaryData().trgParityError();
-  m_ntuple.m_eventBadLdfStatus     = m_digiEvent->getEventSummaryData().badLdfStatus();
-  m_ntuple.m_eventGtrcPhase        = m_digiEvent->getEventSummaryData().gtrcPhase();
-  m_ntuple.m_eventGtfePhase        = m_digiEvent->getEventSummaryData().gtfePhase();
-  m_ntuple.m_eventGtccFifo         = m_digiEvent->getEventSummaryData().gtccFifo();
-  m_ntuple.m_eventGtccHdrParity    = m_digiEvent->getEventSummaryData().gtccHdrParity();
-  m_ntuple.m_eventGtccWcParity     = m_digiEvent->getEventSummaryData().gtccWcParity();
-  m_ntuple.m_eventGtrcSummary      = m_digiEvent->getEventSummaryData().gtrcSummary();
-  m_ntuple.m_eventGtccDataParity   = m_digiEvent->getEventSummaryData().gtccDataParity();
-  m_ntuple.m_eventGtccTimeout      = m_digiEvent->getEventSummaryData().gtccTimeout();
-  m_ntuple.m_eventGcccError        = m_digiEvent->getEventSummaryData().gcccError();
-  m_ntuple.m_eventGtccError        = m_digiEvent->getEventSummaryData().gtccError();
-  m_ntuple.m_eventPhaseError       = m_digiEvent->getEventSummaryData().phaseError();
-  m_ntuple.m_eventTimeoutError     = m_digiEvent->getEventSummaryData().timeoutError();
-
-  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4( );
-  m_ntuple.m_eventZeroSuppress = m_digiEvent->getEventSummaryData().zeroSuppress();
-  m_ntuple.m_eventMarker       = m_digiEvent->getEventSummaryData().marker();
-  m_ntuple.m_eventCalStrobe    = m_digiEvent->getEventSummaryData().calStrobe();
-  m_ntuple.m_eventTag          = m_digiEvent->getEventSummaryData().tag();
-  m_ntuple.m_eventTACK         = m_digiEvent->getEventSummaryData().TACK();
-  
-  // CCSDS info:
-  m_ntuple.m_cCSDStime = m_digiEvent->getCcsds().getUtc();
-  m_ntuple.m_cCSDSapID = m_digiEvent->getCcsds().getApid(); 
-  m_ntuple.m_cCSDSscID = m_digiEvent->getCcsds().getScid();
-
+ 
 
   //
   // ACD digi:
-  //
+  //                                                                                                                                                                                              
   const TObjArray* acdDigiCol = m_digiEvent->getAcdDigiCol();
   assert(acdDigiCol != 0);
 
-  // Number of digis:
   int nAcdDigi = acdDigiCol->GetLast()+1;
+
   m_ntuple.m_acdNumDigis = nAcdDigi;
 
-  // For the first 10 digis:
   int i10Count = 0;
 
-  // Loop over all digis:
   for(int iDigi = 0; iDigi != nAcdDigi; ++iDigi) {
 
     const AcdDigi* acdDigi = dynamic_cast<const AcdDigi*>(acdDigiCol->At(iDigi));
+
     assert(acdDigi != 0);
 
-    // Tile ID:
     int AcdID = acdDigi->getId().getId();
 
-    // Attached tile and ID out of bounds?
-    if (acdDigi->getId().getNa()==0 && (AcdID>603 || AcdID<0)) {
-      std::cout << "ACD tile ID for attached tile is >603! - " << AcdID << std::endl;
+    if (AcdID > 603) {
+      std::cout << "Anders - WARNING!!!! ACD ID is " << AcdID << std::endl;
     }
 
-
-    // Attached tile?
-    if (acdDigi->getId().getNa()==0 && AcdID>-1 && AcdID<604) {
-
-      if (i10Count < 10) {
-        m_ntuple.m_acd10Ids[i10Count] = AcdID;
-        i10Count++;
-      }
-
-      m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
-      m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
-
-      m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
-      m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
-
-      m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
-      m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
-
-      m_ntuple.m_acdOddParityError[AcdID][0] = acdDigi->getOddParityError(AcdDigi::A);
-      m_ntuple.m_acdOddParityError[AcdID][1] = acdDigi->getOddParityError(AcdDigi::B);
-
-      m_ntuple.m_acdHeaderParityError[AcdID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
-      m_ntuple.m_acdHeaderParityError[AcdID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
-
-      m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
-      m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
-
-      m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
-      m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
+    if (i10Count < 10) {
+      m_ntuple.m_acd10Ids[i10Count] = AcdID;
+      i10Count++;
     }
 
+    m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
+    m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
 
-    // Non-Attached tile?
-    if (acdDigi->getId().getNa()==1) {
+    m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
+    m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
 
-      // NA tile ID:
-      int AcdNaID = -1;
+    m_ntuple.m_acdRange[AcdID][0] = acdDigi->getRange(AcdDigi::A);
+    m_ntuple.m_acdRange[AcdID][1] = acdDigi->getRange(AcdDigi::B);
 
-      // Get the name of the tile: NA0, NA1, ...., NA9, NA10
-      const char* AcdNaName = acdDigi->getTileName();
+    m_ntuple.m_acdOddParityError[AcdID][0] = acdDigi->getOddParityError(AcdDigi::A);
+    m_ntuple.m_acdOddParityError[AcdID][1] = acdDigi->getOddParityError(AcdDigi::B);
 
-      // Easier to manipulate:
-      std::string tmpAcdNaName = (std::string) AcdNaName;
+    m_ntuple.m_acdHeaderParityError[AcdID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
+    m_ntuple.m_acdHeaderParityError[AcdID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
 
-      // Lenght of string:
-      int AcdNaNameLength = tmpAcdNaName.size();
+    m_ntuple.m_acdLowDisc[AcdID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
+    m_ntuple.m_acdLowDisc[AcdID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
 
-      if ( AcdNaNameLength == 4) {
-	// Can only mean NA10:
-	AcdNaID = 10;
-      } else {
-	// Now we only have NAx:
-	char* p = &tmpAcdNaName[2];
-        AcdNaID = atoi(p);
-      }
-
-      if (AcdNaID<0 || AcdNaID>10) {
-	std::cout << "ACD tile ID for non-attached tile is not in range! AcdNaID is: " << AcdNaID << std::endl;        
-      }
-
-      if (AcdNaID>-1 && AcdNaID<11) {
-	m_ntuple.m_acdNaPha[AcdNaID][0] = acdDigi->getPulseHeight(AcdDigi::A);
-        m_ntuple.m_acdNaPha[AcdNaID][1] = acdDigi->getPulseHeight(AcdDigi::B);
-
-	m_ntuple.m_acdNaHitMap[AcdNaID][0] = acdDigi->getHitMapBit(AcdDigi::A);
-        m_ntuple.m_acdNaHitMap[AcdNaID][1] = acdDigi->getHitMapBit(AcdDigi::B);
-
-	m_ntuple.m_acdNaRange[AcdNaID][0] = acdDigi->getRange(AcdDigi::A);
-        m_ntuple.m_acdNaRange[AcdNaID][1] = acdDigi->getRange(AcdDigi::B);
-
-	m_ntuple.m_acdNaOddParityError[AcdNaID][0] = acdDigi->getOddParityError(AcdDigi::A);
-        m_ntuple.m_acdNaOddParityError[AcdNaID][1] = acdDigi->getOddParityError(AcdDigi::B);
-
-	m_ntuple.m_acdNaHeaderParityError[AcdNaID][0] = acdDigi->getHeaderParityError(AcdDigi::A);
-        m_ntuple.m_acdNaHeaderParityError[AcdNaID][1] = acdDigi->getHeaderParityError(AcdDigi::B);
-
-        m_ntuple.m_acdNaLowDisc[AcdNaID][0] = acdDigi->getAcceptMapBit(AcdDigi::A);
-        m_ntuple.m_acdNaLowDisc[AcdNaID][1] = acdDigi->getAcceptMapBit(AcdDigi::B);
-      }
-    }
+    m_ntuple.m_acdTileNumber[AcdID] = acdDigi->getTileNumber();
+    m_ntuple.m_acdMCEnergy[AcdID]   = acdDigi->getEnergy();
   }
 
 
@@ -995,7 +670,6 @@ void RootAnalyzer::parseOptionFile(const char* f)
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
   m_outputFile->mkdir("TkrCalib");
-  //m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc");
   m_tree = new TTree("Output", "Root Analyzer");
 
   // Set max file size to 500 GB:
@@ -1109,17 +783,10 @@ void RootAnalyzer::analyzeData()
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
   */
-  //nEvent = 1000;
+  //  nEvent = 100;
 
   m_tkrCalib->setNevents(nEvent);
-  m_tkrCalib->setOutputFile(m_outputFile);
-  //Load current event pointers in TkrCalibManager
-  m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
-  
-  //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval)
-  //m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
-  //m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
-  
+
   for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     m_ntuple.reset();  
@@ -1144,9 +811,11 @@ void RootAnalyzer::analyzeData()
 
     analyzeTot();
     
+    m_tkrCalib->setOutputFile(m_outputFile);
+    //Load current event pointers in TkrCalibManager
+    m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
     //Tracker Calibration Analysis
-    m_tkrCalib->analyzeEvent();
-    //m_tkrNoiseOcc->anaDigiEvt();
+    m_tkrCalib->analyzeEvents(iEvent);
 
     fillOutputTree();
     if(m_mcEvent) m_mcEvent->Clear();
@@ -1513,35 +1182,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
-  m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
-
-  // Error flags:
-  m_tree->Branch("EventBadEventSequence", &(m_ntuple.m_eventBadEventSequence), "EventBadEventSequence/I");
-  m_tree->Branch("EventBadTkrRecon", &(m_ntuple.m_eventBadTkrRecon), "EventBadTkrRecon/I");
-  m_tree->Branch("EventPacketError", &(m_ntuple.m_eventPacketError), "EventPacketError/I");
-  m_tree->Branch("EventTemError", &(m_ntuple.m_eventTemError), "EventTemError/I");
-  m_tree->Branch("EventTrgParityError", &(m_ntuple.m_eventTrgParityError), "EventTrgParityError/I");
-  m_tree->Branch("EventBadLdfStatus", &(m_ntuple.m_eventBadLdfStatus), "EventBadLdfStatus/I");
-  m_tree->Branch("EventGtrcPhase", &(m_ntuple.m_eventGtrcPhase), "EventGtrcPhase/I");
-  m_tree->Branch("EventGtfePhase", &(m_ntuple.m_eventGtfePhase), "EventGtfePhase/I");
-  m_tree->Branch("EventGtccFifo", &(m_ntuple.m_eventGtccFifo), "EventGtccFifo/I");
-  m_tree->Branch("EventGtccHdrParity", &(m_ntuple.m_eventGtccHdrParity), "EventGtccHdrParity/I");
-  m_tree->Branch("EventGtccWcParity", &(m_ntuple.m_eventGtccWcParity), "EventGtccWcParity/I");
-  m_tree->Branch("EventGtrcSummary", &(m_ntuple.m_eventGtrcSummary), "EventGtrcSummary/I");
-  m_tree->Branch("EventGtccDataParity", &(m_ntuple.m_eventGtccDataParity), "EventGtccDataParity/I");
-  m_tree->Branch("EventGtccTimeout", &(m_ntuple.m_eventGtccTimeout), "EventGtccTimeout/I");
-  m_tree->Branch("EventGcccError", &(m_ntuple.m_eventGcccError), "EventGcccError/I");
-  m_tree->Branch("EventGtccError", &(m_ntuple.m_eventGtccError), "EventGtccError/I");
-  m_tree->Branch("EventPhaseError", &(m_ntuple.m_eventPhaseError), "EventPhaseError/I");
-  m_tree->Branch("EventTimeoutError", &(m_ntuple.m_eventTimeoutError), "EventTimeoutError/I");
-
-  m_tree->Branch("EventReadout4", &(m_ntuple.m_eventReadout4), "EventReadout4/I");
-  m_tree->Branch("EventZeroSuppress", &(m_ntuple.m_eventZeroSuppress), "EventZeroSuppress/I");
-  m_tree->Branch("EventMarker", &(m_ntuple.m_eventMarker), "EventMarker/I");
-  m_tree->Branch("EventCalStrobe", &(m_ntuple.m_eventCalStrobe), "EventCalStrobe/I");
-  m_tree->Branch("EventTag", &(m_ntuple.m_eventTag), "EventTag/I");
-  m_tree->Branch("EventTACK", &(m_ntuple.m_eventTACK), "EventTACK/I");
-
 
   // MC information:
   m_tree->Branch("McSeqNo", &(m_ntuple.m_seqNo), "McSeqNo/i");
@@ -1637,62 +1277,6 @@ void RootAnalyzer::createBranches()
   // GLT information:
   m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
 
-  //                                                                                                                                                                                                           
-  // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
-  m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
-  m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
-  m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/i");
-  m_tree->Branch("ContextRunInfoStartTime", &(m_ntuple.m_contextRunInfoStartTime), "ContextRunInfoStartTime/i");
-
-  m_tree->Branch("ContextDataGramInfoModeChanges", &(m_ntuple.m_contextDataGramInfoModeChanges), "ContextDataGramInfoModeChanges/i");
-  m_tree->Branch("ContextDataGramInfoDatagrams", &(m_ntuple.m_contextDataGramInfoDatagrams), "ContextDataGramInfoDatagrams/i");
-  m_tree->Branch("ContextDataGramInfoOpenAction", &(m_ntuple.m_contextDataGramInfoOpenAction), "ContextDataGramInfoOpenAction/I");
-  m_tree->Branch("ContextDataGramInfoOpenReason", &(m_ntuple.m_contextDataGramInfoOpenReason), "ContextDataGramInfoOpenReason/I");
-  m_tree->Branch("ContextDataGramInfoCrate", &(m_ntuple.m_contextDataGramInfoCrate), "ContextDataGramInfoCrate/I");
-  m_tree->Branch("ContextDataGramInfoMode", &(m_ntuple.m_contextDataGramInfoMode), "ContextDataGramInfoMode/I");
-  m_tree->Branch("ContextDataGramInfoCloseAction", &(m_ntuple.m_contextDataGramInfoCloseAction), "ContextDataGramInfoCloseAction/I");
-  m_tree->Branch("ContextDataGramInfoCloseReason", &(m_ntuple.m_contextDataGramInfoCloseReason), "ContextDataGramInfoCloseReason/I");
-
-  m_tree->Branch("ContextGemScalersElapsed", &(m_ntuple.m_contextGemScalersElapsed), "ContextGemScalersElapsed/l");
-  m_tree->Branch("ContextGemScalersLivetime", &(m_ntuple.m_contextGemScalersLivetime), "ContextGemScalersLivetime/l");
-  m_tree->Branch("ContextGemScalersPrescaled", &(m_ntuple.m_contextGemScalersPrescaled), "ContextGemScalersPrescaled/l");
-  m_tree->Branch("ContextGemScalersDiscarded", &(m_ntuple.m_contextGemScalersDiscarded), "ContextGemScalersDiscarded/l");
-  m_tree->Branch("ContextGemScalersSequence", &(m_ntuple.m_contextGemScalersSequence), "ContextGemScalersSequence/l");
-  m_tree->Branch("ContextGemScalersDeadzone", &(m_ntuple.m_contextGemScalersDeadzone), "ContextGemScalersDeadzone/l");
-
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentIncomplete", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIncomplete), "ContextLsfTimeTimeToneCurrentIncomplete/i");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/i");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/i");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps), "ContextLsfTimeTimeToneCurrentMissingLatPps/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone), "ContextLsfTimeTimeToneCurrentMissingTimeTone/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentEarlyEvent", &(m_ntuple.m_contextLsfTimeTimeToneCurrentEarlyEvent), "ContextLsfTimeTimeToneCurrentEarlyEvent/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks), "ContextLsfTimeTimeToneCurrentGemTimeHacks/i");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks), "ContextLsfTimeTimeToneCurrentGemTimeTicks/i");
-
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousIncomplete", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete), "ContextLsfTimeTimeTonePreviousIncomplete/i");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/i");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/i");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps), "ContextLsfTimeTimeTonePreviousMissingLatPps/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone), "ContextLsfTimeTimeTonePreviousMissingTimeTone/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousEarlyEvent", &(m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent), "ContextLsfTimeTimeTonePreviousEarlyEvent/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks), "ContextLsfTimeTimeTonePreviousGemTimeHacks/i");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks), "ContextLsfTimeTimeTonePreviousGemTimeTicks/i");
-
-  m_tree->Branch("ContextLsfTimeTimeTicks",&(m_ntuple.m_contextLsfTimeTimeTicks),"ContextLsfTimeTimeTicks/i");
-
-  m_tree->Branch("ContextLsfTimeHackHacks",&(m_ntuple.m_contextLsfTimeTimeHackHacks),"ContextLsfTimeHackHacks/i");
-  m_tree->Branch("ContextLsfTimeHackTicks",&(m_ntuple.m_contextLsfTimeTimeHackTicks),"ContextLsfTimeHackTicks/i");
-
-
-  m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
-
 
   // GEM information:
   m_tree->Branch("GemConditionsWord", &(m_ntuple.m_gemConditionsWord), "GemConditionsWord/I");
@@ -1756,17 +1340,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdTileNumber", &(m_ntuple.m_acdTileNumber), "AcdTileNumber[604]/I");
   m_tree->Branch("AcdMCEnergy", &(m_ntuple.m_acdMCEnergy), "AcdMCEnergy[604]/F");
 
-  // NA ACD digis:
-  m_tree->Branch("AcdNaPha", &(m_ntuple.m_acdNaPha), "AcdNaPha[11][2]/I");
-  m_tree->Branch("AcdNaHitMap", &(m_ntuple.m_acdNaHitMap), "AcdNaHitMap[11][2]/I");
-  m_tree->Branch("AcdNaRange", &(m_ntuple.m_acdNaRange), "AcdNaRange[11][2]/I");
-  m_tree->Branch("AcdNaOddParityError", &(m_ntuple.m_acdNaOddParityError), "AcdNaOddParityError[11][2]/I");
-  m_tree->Branch("AcdNaHeaderParityError", &(m_ntuple.m_acdNaHeaderParityError), "AcdNaHeaderParityError[11][2]/I");
-  m_tree->Branch("AcdNaLowDisc", &(m_ntuple.m_acdNaLowDisc), "AcdNaLowDisc[11][2]/I");
-
   // ACD recon:
-  m_tree->Branch("AcdTileMCEnergy", &(m_ntuple.m_acdEnergy),"AcdTileMCEnergy/F");
+  m_tree->Branch("AcdEnergy", &(m_ntuple.m_acdEnergy),"AcdEnergy/F");
   m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
+  m_tree->Branch("AcdGammaDoca", &(m_ntuple.m_acdGammaDoca),"AcdGammaDoca/F");
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
   m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
@@ -1775,69 +1352,21 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdRibbonActiveDist", &(m_ntuple.m_acdRibbonActiveDist),"AcdRibbonActiveDist/F");
   m_tree->Branch("AcdMaxActiveDistId", &(m_ntuple.m_acdMaxActiveDistId),"AcdMaxActiveDistId/I");
   m_tree->Branch("AcdRibbonActiveDistId", &(m_ntuple.m_acdRibbonActiveDistId),"AcdRibbonActiveDistId/I");
-  m_tree->Branch("AcdCornerDoca", &(m_ntuple.m_acdCornerDoca),"AcdCornerDoca/F");
 
   // Eric's ACD-TKR intersection stuff:
   m_tree->Branch("AcdNumTkrIntSec", &(m_ntuple.m_acdNumTkrIntersection),"AcdNumTkrIntSec/I");
-  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[20]/I");
-  m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[20]/I");
-  m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[20]/F");
-  m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[20]/F");
-  m_tree->Branch("AcdTkrIntSecGlobalZ", &(m_ntuple.m_acdTkrIntersectionGlobalZ),"AcdTkrIntSecGlobalZ[20]/F");
-  m_tree->Branch("AcdTkrIntSecLocalX", &(m_ntuple.m_acdTkrIntersectionLocalX),"AcdTkrIntSecLocalX[20]/F");
-  m_tree->Branch("AcdTkrIntSecLocalY", &(m_ntuple.m_acdTkrIntersectionLocalY),"AcdTkrIntSecLocalY[20]/F");
-  m_tree->Branch("AcdTkrIntSecLocalXXCov", &(m_ntuple.m_acdTkrIntersectionLocalXXCov),"AcdTkrIntSecLocalXXCov[20]/F");
-  m_tree->Branch("AcdTkrIntSecLocalYYCov", &(m_ntuple.m_acdTkrIntersectionLocalYYCov),"AcdTkrIntSecLocalYYCov[20]/F");
-  m_tree->Branch("AcdTkrIntSecLocalXYCov", &(m_ntuple.m_acdTkrIntersectionLocalXYCov),"AcdTkrIntSecLocalXYCov[20]/F");
-  m_tree->Branch("AcdTkrIntSecArcLengthToIntSec", &(m_ntuple.m_acdTkrIntersectionArcLengthToIntersection),"AcdTkrIntSecArcLengthToIntSec[20]/F");
-  m_tree->Branch("AcdTkrIntSecPathLengthInTile", &(m_ntuple.m_acdTkrIntersectionPathLengthInTile),"AcdTkrIntSecPathLengthInTile[20]/F");
-  m_tree->Branch("AcdTkrIntSecTileHit", &(m_ntuple.m_acdTkrIntersectionTileHit),"AcdTkrIntSecTileHit[20]/I");
-
-  // ACD MIPs:
-  m_tree->Branch("AcdMips", &(m_ntuple.m_acdMips),"AcdMips[604][2]/F");
-  m_tree->Branch("AcdMipsPha", &(m_ntuple.m_acdMipsPha),"AcdMipsPha[604][2]/I");
-  m_tree->Branch("AcdMipsFlag", &(m_ntuple.m_acdMipsFlag),"AcdMipsFlag[604][2]/I");
-
-  m_tree->Branch("AcdMipsMax", &(m_ntuple.m_acdMipsMax),"AcdMipsMax/F");
-  m_tree->Branch("AcdMipsMaxTileID", &(m_ntuple.m_acdMipsMaxTileID),"AcdMipsMaxTileID/I");
-  m_tree->Branch("AcdMipsMaxPmt", &(m_ntuple.m_acdMipsMaxPmt),"AcdMipsMaxPmt/I");
-  m_tree->Branch("AcdMipsSum", &(m_ntuple.m_acdMipsSum),"AcdMipsSum/F");
-
-  
-
-  // ACD POCA:
-  m_tree->Branch("AcdPocaDoca", &(m_ntuple.m_acdPocaDoca),"AcdPocaDoca[2][2]/F");
-  m_tree->Branch("AcdPocaDocaErr", &(m_ntuple.m_acdPocaDocaErr),"AcdPocaDocaErr[2][2]/F");
-  m_tree->Branch("AcdPocaDocaRegion", &(m_ntuple.m_acdPocaDocaRegion),"AcdPocaDocaRegion[2][2]/F");
-  m_tree->Branch("AcdPocaX", &(m_ntuple.m_acdPocaX),"AcdPocaX[2][2]/F");
-  m_tree->Branch("AcdPocaY", &(m_ntuple.m_acdPocaY),"AcdPocaY[2][2]/F");
-  m_tree->Branch("AcdPocaZ", &(m_ntuple.m_acdPocaZ),"AcdPocaZ[2][2]/F");
-  m_tree->Branch("AcdPocaDirX", &(m_ntuple.m_acdPocaDirX),"AcdPocaDirX[2][2]/F");
-  m_tree->Branch("AcdPocaDirY", &(m_ntuple.m_acdPocaDirY),"AcdPocaDirY[2][2]/F");
-  m_tree->Branch("AcdPocaDirZ", &(m_ntuple.m_acdPocaDirZ),"AcdPocaDirZ[2][2]/F");
-  m_tree->Branch("AcdPocaTileID", &(m_ntuple.m_acdPocaTileID),"AcdPocaTileID[2][2]/I");
-  m_tree->Branch("AcdPocaTrackID", &(m_ntuple.m_acdPocaTrackID),"AcdPocaTrackID[2][2]/I");
-  m_tree->Branch("AcdPocaNbrTrack1", &(m_ntuple.m_acdPocaNbrTrack1),"AcdPocaNbrTrack1/I");
-  m_tree->Branch("AcdPocaNbrTrack2", &(m_ntuple.m_acdPocaNbrTrack2),"AcdPocaNbrTrack2/I");
-
-
-  // ACD Gap POCA:
-  m_tree->Branch("AcdGapPocaDoca", &(m_ntuple.m_acdGapPocaDoca),"AcdGapPocaDoca[2][2]/F");
-  m_tree->Branch("AcdGapPocaTileID", &(m_ntuple.m_acdGapPocaTileID),"AcdGapPocaTileID[2][2]/I");
-  m_tree->Branch("AcdGapPocaTrackID", &(m_ntuple.m_acdGapPocaTrackID),"AcdGapPocaTrackID[2][2]/I");
-  m_tree->Branch("AcdGapPocaNbrTrack1", &(m_ntuple.m_acdGapPocaNbrTrack1),"AcdGapPocaNbrTrack1/I");
-  m_tree->Branch("AcdGapPocaNbrTrack2", &(m_ntuple.m_acdGapPocaNbrTrack2),"AcdGapPocaNbrTrack2/I");
-
-  // Tkr Point:
-  m_tree->Branch("AcdTkrPointX",&(m_ntuple.m_acdTkrPointX),"AcdTkrPointX[2]/F");
-  m_tree->Branch("AcdTkrPointY",&(m_ntuple.m_acdTkrPointY),"AcdTkrPointY[2]/F");
-  m_tree->Branch("AcdTkrPointZ",&(m_ntuple.m_acdTkrPointZ),"AcdTkrPointZ[2]/F");
-
-  m_tree->Branch("AcdTkrPointFace",&(m_ntuple.m_acdTkrPointFace),"AcdTkrPointFace[2]/I");
-
-  m_tree->Branch("CCSDSTime", &(m_ntuple.m_cCSDStime),"CCSDSTime/D");
-  m_tree->Branch("CCSDSapID", &(m_ntuple.m_cCSDSapID),"CCSDSapID/I");
-  m_tree->Branch("CCSDSscID", &(m_ntuple.m_cCSDSscID),"CCSDSscID/I");
-
-
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
+  m_tree->Branch("AcdTkrIntSecTileId", &(m_ntuple.m_acdTkrIntersectionTileId),"AcdTkrIntSecTileId[10]/I");
+  m_tree->Branch("AcdTkrIntSecTkrIndex", &(m_ntuple.m_acdTkrIntersectionTkrIndex),"AcdTkrIntSecTkrIndex[10]/I");
+  m_tree->Branch("AcdTkrIntSecGlobalX", &(m_ntuple.m_acdTkrIntersectionGlobalX),"AcdTkrIntSecGlobalX[10]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalY", &(m_ntuple.m_acdTkrIntersectionGlobalY),"AcdTkrIntSecGlobalY[10]/F");
+  m_tree->Branch("AcdTkrIntSecGlobalZ", &(m_ntuple.m_acdTkrIntersectionGlobalZ),"AcdTkrIntSecGlobalZ[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalX", &(m_ntuple.m_acdTkrIntersectionLocalX),"AcdTkrIntSecLocalX[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalY", &(m_ntuple.m_acdTkrIntersectionLocalY),"AcdTkrIntSecLocalY[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXXCov", &(m_ntuple.m_acdTkrIntersectionLocalXXCov),"AcdTkrIntSecLocalXXCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalYYCov", &(m_ntuple.m_acdTkrIntersectionLocalYYCov),"AcdTkrIntSecLocalYYCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecLocalXYCov", &(m_ntuple.m_acdTkrIntersectionLocalXYCov),"AcdTkrIntSecLocalXYCov[10]/F");
+  m_tree->Branch("AcdTkrIntSecArcLengthToIntSec", &(m_ntuple.m_acdTkrIntersectionArcLengthToIntersection),"AcdTkrIntSecArcLengthToIntSec[10]/F");
+  m_tree->Branch("AcdTkrIntSecPathLengthInTile", &(m_ntuple.m_acdTkrIntersectionPathLengthInTile),"AcdTkrIntSecPathLengthInTile[10]/F");
+  m_tree->Branch("AcdTkrIntSecTileHit", &(m_ntuple.m_acdTkrIntersectionTileHit),"AcdTkrIntSecTileHit[10]/I");
 }
