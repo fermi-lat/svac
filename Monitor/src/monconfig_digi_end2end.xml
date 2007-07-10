@@ -500,7 +500,7 @@
 
      <object>
       <name> NormalizedHitsInEmptyTower_Tower[16] </name>
-      <formula><![CDATA[foreachtower: HitsInEmptyTower_Tower[tower]/EmptyTowers_Tower[tower] ]]></formula>
+      <formula><![CDATA[foreachtower: (EmptyTowers_Tower[tower] >0) && HitsInEmptyTower_Tower[tower]/EmptyTowers_Tower[tower] ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
