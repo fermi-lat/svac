@@ -220,7 +220,7 @@
 
       <object>
       <name> ReconZeroEnergy_Fraction_TowerCalLayer[16][8] </name>
-      <formula><![CDATA[foreachtower: foreachcallayer: ReconZeroEnergy_Counter_TowerCalLayer[tower][callayer]/double(CondsummaryBitAnd30_NOTPeriodic_Counter)]]></formula>
+      <formula><![CDATA[foreachtower: foreachcallayer: (CondsummaryBitAnd30_NOTPeriodic_Counter>0) && ReconZeroEnergy_Counter_TowerCalLayer[tower][callayer]/double(CondsummaryBitAnd30_NOTPeriodic_Counter)]]></formula>
       <cut><![CDATA[]]></cut>
       <source>output</source>
       <type> outputfloat </type>
