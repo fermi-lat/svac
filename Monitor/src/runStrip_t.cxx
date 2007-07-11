@@ -242,6 +242,7 @@ int main(int argn, char** argc) {
 #else
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
 #endif
+  cmd.ReplaceAll("$LinkedLibs",gSystem->GetLibraries("","SDL"));
   gSystem->SetMakeSharedLib(cmd);
   // Attach digi tree to input object
   // build filler & run over events

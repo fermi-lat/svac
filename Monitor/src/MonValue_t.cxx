@@ -272,6 +272,7 @@ void MonValue::makeProxy(TTree* tree){
   }
   char rootcommand[128];
   if (compile){
+    if(access((m_sodir+m_name+"Selector.h").c_str(),F_OK)==0)unlink((m_sodir+m_name+"Selector.h").c_str());
     if (m_cut!=""){
       tree->MakeProxy((m_sodir+m_name+"Selector").c_str(),(m_sodir+m_name+"_val.C").c_str(),(m_sodir+m_name+"_cut.C").c_str(),"nohist");
     }else{
