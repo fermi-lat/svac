@@ -54,6 +54,7 @@ public :
   virtual void makeProxy(TTree* tree);
   float timeProfile();
   void setSharedLibDir(std::string);
+  void setDontCompile(bool);
 
  protected:
   /// val2 is only used for 2d histograms 
@@ -70,6 +71,7 @@ public :
   TSelector* m_sel;
   int m_histdim;
   unsigned long long m_timeprof;
+  bool m_dontcompile;
   std::string m_dimstring;    
   unsigned m_dim;
   std::string m_sodir;

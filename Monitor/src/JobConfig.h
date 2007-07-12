@@ -29,6 +29,8 @@ public :
   inline const std::string& configFile() const { return m_configFile; }
   inline const std::string& htmlFile() const { return m_htmlFile; }
   inline const std::string& sodir() const { return m_sodir; }
+  inline const bool compile() const { return m_compile; }
+  inline const bool dontCompile() const { return m_dontcompile; }
 
   inline const std::string& inputDigiFileStr() const { return m_inputDigiFileStr; }
   inline const std::string& inputReconFileStr() const { return m_inputReconFileStr; }
@@ -86,6 +88,8 @@ private:
   int m_optval_n;
   int m_optval_s;
   int m_optval_b;
+  bool m_compile;
+  bool m_dontcompile;
 
   TChain* m_digiChain;
   TChain* m_reconChain;

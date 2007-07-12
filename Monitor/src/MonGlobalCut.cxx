@@ -14,48 +14,51 @@
 #include "compareFiles.h"
 
 
-MonGlobalCut::MonGlobalCut(const char* name, const char* cut):m_name(name),m_cut(cut), m_sel(0),m_nUsed(0),m_nFilter(0),m_eventlist(0),m_timeprof(0){
+MonGlobalCut::MonGlobalCut(const char* name, const char* cut):
+  m_name(name),m_cut(cut), m_sel(0),m_nUsed(0),m_nFilter(0),m_eventlist(0),m_timeprof(0), m_dontcompile(false){
   m_eventlist=new TEventList(m_name.c_str());
 }
   
 void MonGlobalCut::makeProxy(TTree* tree){
   if (m_cut=="" || strstr(m_cut.c_str(),"RFun")==0)return;
-  std::ofstream formfile;
-  formfile.open((m_sodir+m_name+"_globalCut_val.C").c_str());
-  formfile<<"double "<<m_name+"_globalCut_val"<<"() {"<<std::endl;
-  formfile<<"return 0;"<<std::endl<<"}"<<std::endl;
-  formfile.close();
-  formfile.open((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
-  formfile<<"TEventList *resultlist;"<<std::endl
-	  <<"unsigned int *counter;"<<std::endl;
-  formfile<<"int "<<m_name+"_globalCut_cut"<<"(){"<<std::endl;
-  formfile  <<"if("<<m_cut<<")resultlist->Enter(*counter);"<<std::endl
-	    <<"(*counter)++;"<<std::endl
-	    <<"return 0;"<<std::endl<<"}"<<std::endl;
-  formfile.close();
-  formfile.open((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
-  formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
-  formfile<<"#include \"TEventList.h\""<<std::endl;
-  formfile.close();
-  if(access((m_sodir+m_name+"_globalCut_cut.h").c_str(),F_OK)!=0 || 
-     compareFiles((m_sodir+m_name+"_globalCut_cut.h").c_str(),(m_sodir+m_name+"_globalCut_cut.h_tmp").c_str())!=0){   
-    rename((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.h").c_str());
-  }else{
-    unlink((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
-  }
-  // check if we need to recompile 
   bool compile=false;
-  // if there was/wasn't a cut before but now there is one we have to compile
-  if (access((m_sodir+m_name+"_globalCut_cut.C").c_str(),F_OK)!=0){
-    compile=true;
-    rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
-  }
-  if (!compile){
-    if (compareFiles((m_sodir+m_name+"_globalCut_cut.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C_tmp").c_str())!=0){
-      rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
-      compile=true;
+  if (!m_dontcompile){
+    std::ofstream formfile;
+    formfile.open((m_sodir+m_name+"_globalCut_val.C").c_str());
+    formfile<<"double "<<m_name+"_globalCut_val"<<"() {"<<std::endl;
+    formfile<<"return 0;"<<std::endl<<"}"<<std::endl;
+    formfile.close();
+    formfile.open((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
+    formfile<<"TEventList *resultlist;"<<std::endl
+  	  <<"unsigned int *counter;"<<std::endl;
+    formfile<<"int "<<m_name+"_globalCut_cut"<<"(){"<<std::endl;
+    formfile  <<"if("<<m_cut<<")resultlist->Enter(*counter);"<<std::endl
+  	    <<"(*counter)++;"<<std::endl
+  	    <<"return 0;"<<std::endl<<"}"<<std::endl;
+    formfile.close();
+    formfile.open((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
+    formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
+    formfile<<"#include \"TEventList.h\""<<std::endl;
+    formfile.close();
+    if(access((m_sodir+m_name+"_globalCut_cut.h").c_str(),F_OK)!=0 || 
+       compareFiles((m_sodir+m_name+"_globalCut_cut.h").c_str(),(m_sodir+m_name+"_globalCut_cut.h_tmp").c_str())!=0){   
+      rename((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.h").c_str());
     }else{
-      unlink((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
+      unlink((m_sodir+m_name+"_globalCut_cut.h_tmp").c_str());
+    }
+    // check if we need to recompile 
+    // if there was/wasn't a cut before but now there is one we have to compile
+    if (access((m_sodir+m_name+"_globalCut_cut.C").c_str(),F_OK)!=0){
+      compile=true;
+      rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
+    }
+    if (!compile){
+      if (compareFiles((m_sodir+m_name+"_globalCut_cut.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C_tmp").c_str())!=0){
+        rename((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str());
+        compile=true;
+      }else{
+        unlink((m_sodir+m_name+"_globalCut_cut.C_tmp").c_str());
+      }
     }
   }
   char rootcommand[128];
@@ -87,7 +90,8 @@ void MonGlobalCut::makeProxy(TTree* tree){
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"globalCutSelector").c_str());
     gROOT->ProcessLine(rootcommand);
   }else{
-    std::cout<<"Formula/cut for global cut "<<m_name<<" has not changed. Using old library"<<std::endl;
+    if(m_dontcompile)std::cout<<"Option p: Using old library for global cut "<<m_name<<std::endl;
+    else std::cout<<"Formula/cut for global cut "<<m_name<<" has not changed. Using old library"<<std::endl;
     gSystem->Load((m_sodir+m_name+"globalCutSelector_h.so").c_str());
     //sprintf(rootcommand,".L %s.h+O",(m_name+"globalCutSelector").c_str());
     //gROOT->ProcessLine(rootcommand);
@@ -140,4 +144,7 @@ float MonGlobalCut::timeProfile(){
 
 void MonGlobalCut::setSharedLibDir(std::string sodir){
   m_sodir=sodir;
+}
+void MonGlobalCut::setDontCompile(bool dont){
+  m_dontcompile=dont;
 }

@@ -19,7 +19,8 @@ std::vector<double> *MonValue::m_result=new std::vector<double>;
 std::vector<double> *MonValue::m_result2=new std::vector<double>;
 unsigned int MonValue::m_counter=0;
 
-MonValue::MonValue(const char* name, const char* formula, const char* cut):m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0),m_timeprof(0){
+MonValue::MonValue(const char* name, const char* formula, const char* cut):
+  m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0),m_timeprof(0),m_dontcompile(false){
   // split up the name into the name part and the dimension part
 
   char* dimpos=strchr(name,'[');
@@ -149,125 +150,126 @@ void MonValue::makeProxy(TTree* tree){
 
   
   if (!formulaloops.size() &&strstr(m_formula.c_str(),"RFun")==0 && strstr(m_cut.c_str(),"RFun")==0)return;
+  bool compile=false;
+  if (!m_dontcompile){
+    std::ofstream formfile;
+    formfile.open((m_sodir+m_name+"_val.C_tmp").c_str());
+    formfile<<"std::vector<double> *resultvector;"<<std::endl;
+    if(m_histdim==2)formfile<<"std::vector<double> *resultvector2;"<<std::endl;
+    formfile <<"unsigned int *counter;"<<std::endl
+  	   <<"double "<<m_name+"_val"<<"() {"<<std::endl;
+    formfile<<"double val;"<<std::endl;
 
-  std::ofstream formfile;
-  formfile.open((m_sodir+m_name+"_val.C_tmp").c_str());
-  formfile<<"std::vector<double> *resultvector;"<<std::endl;
-  if(m_histdim==2)formfile<<"std::vector<double> *resultvector2;"<<std::endl;
-  formfile <<"unsigned int *counter;"<<std::endl
-	   <<"double "<<m_name+"_val"<<"() {"<<std::endl;
-  formfile<<"double val;"<<std::endl;
+    // Write loops and/or runonceformula
 
-  // Write loops and/or runonceformula
+     for(ExecutionList_t::const_iterator itr =formulaloops.begin();
+         itr!=formulaloops.end();itr++){
+       ExecutionMap_t::iterator thisexec = execmap.find(itr->second);
+       formfile<< thisexec->second;
 
-   for(ExecutionList_t::const_iterator itr =formulaloops.begin();
-       itr!=formulaloops.end();itr++){
-     ExecutionMap_t::iterator thisexec = execmap.find(itr->second);
-     formfile<< thisexec->second;
-
-     // in case the exec is runonce, then we need to also write the outsideformula
-     std::string thisexecstring = itr->second;
-     if(!thisexecstring.compare("runonce:"))
-       formfile<<outsideformula<<";";
-     
-     formfile<<std::endl;
-   }
+       // in case the exec is runonce, then we need to also write the outsideformula
+       std::string thisexecstring = itr->second;
+       if(!thisexecstring.compare("runonce:"))
+         formfile<<outsideformula<<";";
+       
+       formfile<<std::endl;
+     }
 
 
-  //formula 2 is only used for 2-d histograms
-  std::string formula2;
-  if (m_histdim==2){
-    std::string dfo="["+formula+"]";
-    // for the parsing replace : by ; so :: does not get interpreted as a separator
-    for (unsigned int i=1;i<dfo.size()-1;i++) if(dfo[i]==':'&&dfo[i-1]!=':'&&dfo[i+1]!=':')dfo[i]=';'; 
-    std::vector<std::string> tt=parse(dfo,"[",";","]");
-    if (tt.size()!=2){
-      std::cerr<<"2-d histogram "<<m_name<<" does not have a formula for both dimensions"<<std::endl;
-      assert(0);
+    //formula 2 is only used for 2-d histograms
+    std::string formula2;
+    if (m_histdim==2){
+      std::string dfo="["+formula+"]";
+      // for the parsing replace : by ; so :: does not get interpreted as a separator
+      for (unsigned int i=1;i<dfo.size()-1;i++) if(dfo[i]==':'&&dfo[i-1]!=':'&&dfo[i+1]!=':')dfo[i]=';'; 
+      std::vector<std::string> tt=parse(dfo,"[",";","]");
+      if (tt.size()!=2){
+        std::cerr<<"2-d histogram "<<m_name<<" does not have a formula for both dimensions"<<std::endl;
+        assert(0);
+      }
+      formula=tt[0];
+      formula2=tt[1];
+    }    
+   
+    formfile <<"val = double("<<formula<<");"<<std::endl
+  	   <<"resultvector->push_back(val);"<<std::endl;
+    if(m_histdim==2){
+      formfile <<"val = "<<formula2<<";"<<std::endl
+  	     <<"resultvector2->push_back(val);"<<std::endl;
     }
-    formula=tt[0];
-    formula2=tt[1];
-  }    
- 
-  formfile <<"val = double("<<formula<<");"<<std::endl
-	   <<"resultvector->push_back(val);"<<std::endl;
-  if(m_histdim==2){
-    formfile <<"val = "<<formula2<<";"<<std::endl
-	     <<"resultvector2->push_back(val);"<<std::endl;
-  }
 
-  // close all the loops
-  UInt_t ncloseloops = formulaloops.size();
-  if(dooutsideformula) ncloseloops--;
+    // close all the loops
+    UInt_t ncloseloops = formulaloops.size();
+    if(dooutsideformula) ncloseloops--;
 
-  for (UInt_t i = 0; i < ncloseloops;i++)
-    formfile<<"}"<<std::endl;
+    for (UInt_t i = 0; i < ncloseloops;i++)
+      formfile<<"}"<<std::endl;
 
 
 
-  formfile<<"(*counter)++;"<<std::endl;
-  formfile<<"return val;"<<std::endl<<"}"<<std::endl;
-  formfile.close();
-
-
-  formfile.open((m_sodir+m_name+"_val.h_tmp").c_str());
-  formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
-  formfile.close();
-  if(access((m_sodir+m_name+"_val.h").c_str(),F_OK)!=0 || 
-     compareFiles((m_sodir+m_name+"_val.h").c_str(),(m_sodir+m_name+"_val.h_tmp").c_str())!=0){   
-    rename((m_sodir+m_name+"_val.h_tmp").c_str(),(m_sodir+m_name+"_val.h").c_str());
-  }else{
-    unlink((m_sodir+m_name+"_val.h_tmp").c_str());
-  }
-
-
-  if (m_cut!=""){
-    formfile.open((m_sodir+m_name+"_cut.C_tmp").c_str());
-    formfile<<"int "<<m_name+"_cut"<<"(){"<<std::endl
-	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
+    formfile<<"(*counter)++;"<<std::endl;
+    formfile<<"return val;"<<std::endl<<"}"<<std::endl;
     formfile.close();
 
-    formfile.open((m_sodir+m_name+"_cut.h_tmp").c_str());
+
+    formfile.open((m_sodir+m_name+"_val.h_tmp").c_str());
     formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
     formfile.close();
-    if(access((m_sodir+m_name+"_cut.h").c_str(),F_OK)!=0 || 
-    compareFiles((m_sodir+m_name+"_cut.h").c_str(),(m_sodir+m_name+"_cut.h_tmp").c_str())!=0){   
-      rename((m_sodir+m_name+"_cut.h_tmp").c_str(),(m_sodir+m_name+"_cut.h").c_str());
+    if(access((m_sodir+m_name+"_val.h").c_str(),F_OK)!=0 || 
+       compareFiles((m_sodir+m_name+"_val.h").c_str(),(m_sodir+m_name+"_val.h_tmp").c_str())!=0){   
+      rename((m_sodir+m_name+"_val.h_tmp").c_str(),(m_sodir+m_name+"_val.h").c_str());
     }else{
-      unlink((m_sodir+m_name+"_cut.h_tmp").c_str());
+      unlink((m_sodir+m_name+"_val.h_tmp").c_str());
     }
-  }
-  // check if we need to recompile a formula
-  bool compile=false;
-  // if there was/wasn't a cut before but now there is one we have to compile
-  if (m_cut==""){
-    if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)==0){
-      compile=true;
-      unlink((m_sodir+m_name+"_cut.C").c_str());
+
+
+    if (m_cut!=""){
+      formfile.open((m_sodir+m_name+"_cut.C_tmp").c_str());
+      formfile<<"int "<<m_name+"_cut"<<"(){"<<std::endl
+  	    <<"return "<<m_cut<<";"<<std::endl<<"}"<<std::endl;
+      formfile.close();
+
+      formfile.open((m_sodir+m_name+"_cut.h_tmp").c_str());
+      formfile<<"#include \"Monitor/RFun.h\""<<std::endl;
+      formfile.close();
+      if(access((m_sodir+m_name+"_cut.h").c_str(),F_OK)!=0 || 
+      compareFiles((m_sodir+m_name+"_cut.h").c_str(),(m_sodir+m_name+"_cut.h_tmp").c_str())!=0){   
+        rename((m_sodir+m_name+"_cut.h_tmp").c_str(),(m_sodir+m_name+"_cut.h").c_str());
+      }else{
+        unlink((m_sodir+m_name+"_cut.h_tmp").c_str());
+      }
     }
-  }else{
-    if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)!=0){
-      compile=true;
-      rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
-     }
-  }
-  if(access((m_sodir+m_name+"_val.C").c_str(),F_OK)!=0){
-    rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
-    compile=true;
-  }else{
-    if (compareFiles((m_sodir+m_name+"_val.C").c_str(),(m_sodir+m_name+"_val.C_tmp").c_str())!=0){
-    rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
-    compile=true;
+    // check if we need to recompile a formula
+    // if there was/wasn't a cut before but now there is one we have to compile
+    if (m_cut==""){
+      if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)==0){
+        compile=true;
+        unlink((m_sodir+m_name+"_cut.C").c_str());
+      }
     }else{
-      unlink((m_sodir+m_name+"_val.C_tmp").c_str());
+      if (access((m_sodir+m_name+"_cut.C").c_str(),F_OK)!=0){
+        compile=true;
+        rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
+       }
     }
-  }
-  if (m_cut!=""&& !compile){
-    if (compareFiles((m_sodir+m_name+"_cut.C").c_str(),(m_sodir+m_name+"_cut.C_tmp").c_str())!=0){
-      rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
+    if(access((m_sodir+m_name+"_val.C").c_str(),F_OK)!=0){
+      rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
       compile=true;
     }else{
-      unlink((m_sodir+m_name+"_cut.C_tmp").c_str());
+      if (compareFiles((m_sodir+m_name+"_val.C").c_str(),(m_sodir+m_name+"_val.C_tmp").c_str())!=0){
+      rename((m_sodir+m_name+"_val.C_tmp").c_str(),(m_sodir+m_name+"_val.C").c_str());
+      compile=true;
+      }else{
+        unlink((m_sodir+m_name+"_val.C_tmp").c_str());
+      }
+    }
+    if (m_cut!=""&& !compile){
+      if (compareFiles((m_sodir+m_name+"_cut.C").c_str(),(m_sodir+m_name+"_cut.C_tmp").c_str())!=0){
+        rename((m_sodir+m_name+"_cut.C_tmp").c_str(),(m_sodir+m_name+"_cut.C").c_str());
+        compile=true;
+      }else{
+        unlink((m_sodir+m_name+"_cut.C_tmp").c_str());
+      }
     }
   }
   char rootcommand[128];
@@ -303,7 +305,8 @@ void MonValue::makeProxy(TTree* tree){
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"Selector").c_str());
     gROOT->ProcessLine(rootcommand);
   }else{
-    std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
+    if(m_dontcompile)std::cout<<"Option p: Reading old library for "<<m_name<<std::endl;
+    else std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
     gSystem->Load((m_sodir+m_name+"Selector_h.so").c_str());
     //sprintf(rootcommand,".L %s.h+O",(m_name+"Selector").c_str());
     //gROOT->ProcessLine(rootcommand);
@@ -416,6 +419,9 @@ float MonValue::timeProfile(){
   
 void MonValue::setSharedLibDir(std::string sodir){
   m_sodir=sodir;
+}
+void MonValue::setDontCompile(bool dont){
+  m_dontcompile=dont;
 }
 
 std::vector<std::string> MonValue::parse(const std::string str, const std::string beg, const std::string sep, const std::string end){

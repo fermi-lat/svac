@@ -860,6 +860,12 @@ void MonValueCol::setSharedLibDir(std::string sodir){
     (*itr)->setSharedLibDir(sodir);
   }
 }
+void MonValueCol::setDontCompile(bool dont){
+  for ( std::list<MonValue*>::iterator itr = m_vals.begin();
+	itr != m_vals.end(); itr++ ) {
+    (*itr)->setDontCompile(dont);
+  }
+}
 
 float MonValueCol::timeProfile(){
   float tp=0;

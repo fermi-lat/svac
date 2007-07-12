@@ -535,6 +535,8 @@ public:
   float timeProfile();
   // set shared lib directory
   void setSharedLibDir(std::string);
+  // set no-compile flag 
+  void setDontCompile(bool);
 
 private:
 

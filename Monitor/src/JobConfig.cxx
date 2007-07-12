@@ -22,6 +22,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_optval_n(0),
    m_optval_s(0),
    m_optval_b(10),
+   m_compile(false),
+   m_dontcompile(false),
    m_digiChain(0),
    m_reconChain(0),
    m_mcChain(0),
@@ -66,6 +68,8 @@ void JobConfig::usage() {
        << endl
        << "\t   -w <directory>    : location of the directory for the proxies"<<endl
        << endl
+       << "\t   -w <directory>    : location of the directory for the proxies"<<endl
+       << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
@@ -79,6 +83,8 @@ void JobConfig::usage() {
        << endl
        << "\tOPTIONS for all jobs" << endl
        << "\t   -h                : print this message" << endl
+       << "\t   -q                : Only compile shared libraries but don't run" << endl
+       << "\t   -p                : Don't do any run-time compilation, read existing shared libraries" << endl
        << "\t   -n <nEvents>      : run over <nEvents>" << endl
        << "\t   -s <startEvent>   : start with event <startEvent>" << endl
        << endl
@@ -96,11 +102,17 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:w:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:w:pq")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
       return 1;
+    case 'q':   // compile only
+      m_compile=true;
+      break;
+    case 'p':   // don't compile 
+      m_dontcompile=true;
+      break;
     case 'o':   //  output
       m_outputPrefix = string(optarg);
       break;
