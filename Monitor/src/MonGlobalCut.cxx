@@ -69,18 +69,18 @@ void MonGlobalCut::makeProxy(TTree* tree){
     // patch for root 5.14
     std::ifstream inf((m_sodir+m_name+"globalCutSelector.h").c_str());
     std::ofstream outf((m_sodir+m_name+"globalCutSelector.h_tmp").c_str());
-    char st[200];
-    inf.getline(st,200);
+    char st[1000];
+    inf.getline(st,1000);
     while(strstr(st,"if (fTerminateMethod.IsValid()) fTerminateMethod.Execute(this);")==0){
 //    while(strstr(st,"SetTree")==0){
       outf<<st<<std::endl;
-      inf.getline(st,200);
+      inf.getline(st,1000);
     }
     outf<<st<<std::endl;
     outf<<"   delete fHelper;"<<std::endl;
     outf<<"   fHelper=0;"<<std::endl;
     while(!inf.eof()){
-      inf.getline(st,200);
+      inf.getline(st,1000);
       outf<<st<<std::endl;
     }
     rename((m_sodir+m_name+"globalCutSelector.h_tmp").c_str(),(m_sodir+m_name+"globalCutSelector.h").c_str());
