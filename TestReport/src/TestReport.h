@@ -16,6 +16,9 @@
 #include "reconRootData/AcdTkrIntersection.h"
 #include "digiRootData/AcdDigi.h"
 
+#include "calibTkrUtil/TkrNoiseOcc.h"
+
+
 /**
  * \class TestReport
  * \brief TestReport produces SVAC reports for both digi and recon data
@@ -374,6 +377,9 @@ class TestReport {
   // LATTE?
   int m_isLATTE;
 
+  // Bay 10, layer 0 split:
+  int m_bay10Layer0SplitDefault;
+
   // Ground ID:
   unsigned int m_firstGroundID;
   unsigned int m_lastGroundID;
@@ -438,8 +444,15 @@ class TestReport {
   int m_fullDataGramSiu1;
   int m_beginRunDataGramSiu1;
 
+  int m_datagramGapsEPU0;
+  int m_datagramGapsEPU1;
+  int m_datagramGapsEPU2;
+  int m_datagramGapsSIU0;
+  int m_datagramGapsSIU1;
+
   /// number of events in the digi root file
   int m_nEvent;
+  int m_nEventNoPeriodic;
 
   // Number of GEM related quantities:
   ULong64_t m_nbrPrescaled;
@@ -478,11 +491,20 @@ class TestReport {
   UInt_t m_endTime;
 
   // Livetime:
-  float m_liveTime;
+  double m_liveTime;
+ 
+  ULong64_t m_elapsedTime;
+
+  int m_nbrEventsNormal;
+  int m_nbrEvents4Range;
+  int m_nbrEvents4RangeNonZS;
 
   // Extended counters problem?
   Int_t m_extendedCountersFlag;
 
+  // Time tone problem?
+  Int_t m_backwardsTimeTone;
+  Int_t m_identicalTimeTones;
 
   // Timetone counters and flags:
   UInt_t m_nbrFlywheeling;
@@ -492,6 +514,7 @@ class TestReport {
   Int_t m_nbrMissingCpuPps;
   Int_t m_nbrMissingLatPps;
   Int_t m_nbrMissingTimeTone;
+  Int_t m_nbrEarlyEvent;
 
   /// percentage of events with TKR trigger but less than 6 digis in a tower
   TGraph* m_nDigi;
@@ -521,7 +544,7 @@ class TestReport {
   Int_t m_eventPhaseError;
   Int_t m_eventTimeoutError;
 
-
+  Int_t m_eventIsPeriodic;
 
   // Acd Digi based histograms
   TH1F* m_AcdTileIdOnePMT;
@@ -547,6 +570,8 @@ class TestReport {
 
   // Triggger rates:
   TH1F* m_triggerRate;
+  TH1F* m_triggerLivetimeRate;
+  TH1F* m_livetimeRate;
   TH1F* m_deadzoneRate;
   TH1F* m_discardedRate;
 
@@ -636,6 +661,18 @@ class TestReport {
   TH1F* m_datagramsSIU0;
   TH1F* m_datagramsSIU1;
 
+  TH1F* m_deltaTimeDGCTEvtEPU0;
+  TH1F* m_deltaTimeDGCTEvtEPU1;
+  TH1F* m_deltaTimeDGCTEvtEPU2;
+  TH1F* m_deltaTimeDGCTEvtSIU0;
+  TH1F* m_deltaTimeDGCTEvtSIU1;
+
+  TH1F* m_deltaEventIDEPU0;
+  TH1F* m_deltaEventIDEPU1;
+  TH1F* m_deltaEventIDEPU2;
+  TH1F* m_deltaEventIDSIU0;
+  TH1F* m_deltaEventIDSIU1;
+
   // GEM discarded events:
   TH1F* m_gemDiscarded;
   TH1F* m_gemDiscardedTime;
@@ -665,6 +702,9 @@ class TestReport {
 
   TH1F* m_deltaWindowOpenTime;
   TH1F* m_deltaWindowOpenTimeZoom;
+
+  TH1F* m_tick20MHzDeviation;
+  TH1F* m_tick20MHzDeviationZoom;
 
   TH1F* m_timeIntervalElapsed;
 
@@ -735,6 +775,8 @@ class TestReport {
   TH2F* m_AcdMipMapA;
   TH2F* m_AcdMipMapB;
 
-
+  // for TKR noise analysis report
+  TkrNoiseOcc* m_tkrNoiseOcc;
+  TDirectory* m_tkrNoiseOcc_dir;
 };
 #endif
