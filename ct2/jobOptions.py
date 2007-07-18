@@ -80,13 +80,6 @@ tables = {
                    'Delay from trigger TACK to TKR shaper hold'), 
     'ACD_TRGSEQ': ('GAEM/trgseq',
                    'Delay from trigger TACK to ACD shaper hold'),
-
-    'DELAY_1': ('GTEM/GCCC/GCRC/delay_1',
-                'CAL Range Decision Time (nominal=31)'),
-    'DELAY_2': ('GTEM/GCCC/GCRC/delay_2',
-                'CAL Time After Range Decision Until ADC Readout Time (nominal=53)'),
-    'DELAY_3': ('GTEM/GCCC/GCRC/delay_3',
-                'CAL ADC Readout Time (nominal=133)'),
     
     'CAL_DIAG': ('GTEM/GCCC/trg_alignment:16-23',
                  'Hold trigger primitive for TEM diagnostic latching of CAL trigger primitive'), 
@@ -155,9 +148,6 @@ tackDelayLabels = {'CAL_TRGSEQ': ('CAL (ticks (ns))', ('Tower', 'Delay')),
                    'TKR_TRGSEQ': ('TKR (ticks (ns))', ('Tower', 'Delay')),
                    'ACD_TRGSEQ': ('ACD (ticks (ns))', ('AEM', 'Delay'))}
 
-# CAL delays
-calDelays = ('DELAY_1', 'DELAY_2', 'DELAY_3')
-gcrcLabels = ('GCCC', 'GCRC')
 
 # system clock rate and period
 clock = 20e6

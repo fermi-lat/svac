@@ -38,7 +38,13 @@ int main()
 
   chainedTree1.SetAutoSave(2000000000);
 
+  // Set max file size to 25 GB:
+  Long64_t maxTreeSize = 25000000000;
+  chainedTree1.SetMaxTreeSize(maxTreeSize);
+
   TChain chainedTree2("MeritTuple");
+  chainedTree2.SetMaxTreeSize(maxTreeSize);
+
 
   while(inputFile >> fileName) {
     string svacFileName = svacDir + fileName + "_svac.root";

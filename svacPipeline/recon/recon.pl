@@ -35,6 +35,8 @@ my $instrumentType = '';
 
 my $schemaFile = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId SCHEMACONFIGFILE`;
 
+my $tkrOnly = 0;
+my $calOnly = 0;
 if($schemaFile =~ /grid/i) {
     $instrumentType = 'LAT';
 }
@@ -43,9 +45,11 @@ elsif($em) {
 }
 elsif($tkrSerNo && !$calSerNo) {
     $instrumentType = $tkrSerNo;
+    $tkrOnly = 1;
 }
 elsif(!$tkrSerNo && $calSerNo) {
     $instrumentType = 'Cal'.$calSerNo;
+    $calOnly = 1;
 }
 elsif($tkrSerNo && $calSerNo) {
     $instrumentType = $tkrSerNo.':Cal'.$calSerNo;
@@ -80,14 +84,21 @@ $geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml';
 }
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
-print JOBOPTIONFILE <<EOF;
-#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
-CalibDataSvc.CalibInstrumentName = "$instrumentType";
-GlastDetSvc.xmlfile = "$geoFile";
-digiRootReaderAlg.digiRootFile = "$digiRootFile";
-RootTupleSvc.filename = "$meritRootFile";
-reconRootWriterAlg.reconRootFile = "$reconRootFile";
-EOF
+print JOBOPTIONFILE qq(#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt" \n);
+print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "$instrumentType";\n);
+print JOBOPTIONFILE qq(GlastDetSvc.xmlfile = "$geoFile"; \n);
+print JOBOPTIONFILE qq(digiRootReaderAlg.digiRootFile = "$digiRootFile"; \n);
+print JOBOPTIONFILE qq(RootTupleSvc.filename = "$meritRootFile"; \n);
+print JOBOPTIONFILE qq(reconRootWriterAlg.reconRootFile = "$reconRootFile"; \n);
+if($tkrOnly) {
+    print JOBOPTIONFILE qq(CalCalibSvc.DefaultFlavor = "ideal"; \n);	
+}
+
+if($calOnly) {
+    print JOBOPTIONFILE qq(TkrCalibAlg.deadStripsCalibFlavor = "ideal"; \n);	
+    print JOBOPTIONFILE qq(TkrCalibAlg.hotStripsCalibFlavor = "ideal"; \n);	
+}
+	       
 close(JOBOPTIONFILE);
 system("chmod +rwx $shellFile");
 
