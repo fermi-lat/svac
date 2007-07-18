@@ -401,14 +401,14 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> Acd10Ids[10]                          </TD> <TD> Int   </TD> <TD> The tile IDs for the first 10 ACD digis. </TD> </TR>
 <TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int   </TD> <TD> Pulse Hight Analysis for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 
-<TR> <TD> AcdMips[tileID:0-603][2]              </TD> <TD> Float </TD> <TD> Calibrated PHA in MIPs.</TD> </TR>
-<TR> <TD> AcdMipsPha[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Calibrated PHA value</TD> </TR>
+<TR> <TD> AcdMips[tileID:0-603][2]              </TD> <TD> Float </TD> <TD> Calibrated PHA in MIPs by tileID, pmt</TD> </TR>
+<TR> <TD> AcdMipsPha[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> PHA value by tileID, pmt, for now this is the same as AcdPha</TD> </TR>
 
 <TR> <TD> AcdMipsFlag[tileID:0-603][2]          </TD> <TD> Int   </TD> <TD> Flag for calibrated Pha values. The bits are: PMT_ACCEPT_BIT = 0 (channel is above zero suppresion threshold (applied to digital data)), PMT_VETO_BIT = 1 (channel fired veto discriminator (applied to analog data)), PMT_RANGE_BIT = 2 (channel was read out in high range), PMT_RESERVED_BIT = 3 (just a trick to split the errors into the higher byte), PMT_ODD_PARITY_ERROR_BIT = 4 (PHA data transmission had parity error), PMT_HEADER_PARITY_ERROR_BIT = 5 (header data transmission had parity error - this should _never_happen!), PMT_DEAD_BIT = 6 (PMT was flagged as dead by offline calibration), PMT_HOT_BIT = 7 (PMT was flagged as hot by offline calibration). </TD> </TR>
 
-<TR> <TD> AcdMipsMax                            </TD> <TD> Float </TD> <TD> Maximum calibrated PHA in MIPs. </TD> </TR>
-<TR> <TD> AcdMipsMaxTileID                      </TD> <TD> Int   </TD> <TD> Tile ID of tile with the maximum calibrated PHA in MIPs. </TD> </TR> 
-<TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated PHA in MIPs. </TD> </TR>
+<TR> <TD> AcdMipsMax                            </TD> <TD> Float </TD> <TD> Maximum calibrated signal in MIPs of all the PMTs</TD> </TR>
+<TR> <TD> AcdMipsMaxTileID                      </TD> <TD> Int   </TD> <TD> Tile ID of tile with the maximum calibrated signal in MIPs. </TD> </TR> 
+<TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated signal in MIPs. </TD> </TR>
 <TR> <TD> AcdMipsSum                            </TD> <TD> Float </TD> <TD> Sum of calibrated PHA in MIPs (average of the two PMTs, or a single PMT if the other PMT is missing).</TD> </TR> 
 
 <TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int   </TD> <TD> Veto discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
@@ -416,14 +416,14 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int   </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int   </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). This bit should _never_ be set!</TD> </TR>
 <TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile number in dense notation. </TD> </TR> 
+<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Unset.  Always -1</TD> </TR> 
 
-<TR> <TD> AcdNaPha[NA0-NA10][2]                 </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaRange[NA0-NA10][2]               </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
-<TR> <TD> AcdNaOddParityError[NA0-NA10][2]      </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaHeaderParityError[NA0-NA10][2]   </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaLowDisc[NA0-Na10][2]             </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaPha[NA0-NA10:0-10][2]            </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHitMap[NA0-NA10:0-10][2]         </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaRange[NA0-NA10:0-10][2]          </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdNaOddParityError[NA0-NA10:0-10][2] </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHeaderParityError[NA0-NA10:0-10][2] </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaLowDisc[NA0-Na10:0-10][2]        </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 
 <TR> <TD> AcdMCEnergy[tileID:0-603] </TD> <TD> Float </TD> <TD> The amount of Monte Carlo energy (in MeV) deposited in this detector element. </TD> </TR>
 
@@ -473,15 +473,26 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdPocaDocaErr[TrackIndex:0-1][Tile:0-6]        </TD> <TD> Float </TD> <TD>  Error on DOCA. This is calculated using the full Kalman Filter propagation of the track to the POCA 
           and the projection of the propagated covarience matrix along the line of the DOCA. </TD> </TR>
 <TR> <TD> AcdPocaDocaRegion[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Returns a code showing which region of the tile or ribbon the POCA occured in. </TD> </TR>
-<TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA </TD> </TR> 
-<TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA  </TD> </TR> 
-<TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA  </TD> </TR> 
-<TR> <TD> AcdPocaDirX[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  X-component of POCA  vector </TD> </TR> 
-<TR> <TD> AcdPocaDirY[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Y-component of POCA  vector </TD> </TR> 
-<TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of POCA  vector </TD> </TR> 
+<TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaDirX[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  X-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
+<TR> <TD> AcdPocaDirY[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Y-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
+<TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
 
 
+<TR> <TD> AcdGapPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a gap between tiles in the ACD.  This POCA is calculated in 3D.  The doca is defined to be positive if the track goes into the gap and negative otherwise</TD> </TR> 
+<TR> <TD> AcdGapPocaNbrTrack1                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 1. Should be 1.</TD> </TR>
+<TR> <TD> AcdGApPocaNbrTrack2                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 2. Should be 1.</TD> </TR>
+<TR> <TD> AcdGapPocaTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
+<TR> <TD> AcdGapPocaTileID[TrackIndex:0-1][Tile:0-6]      </TD> <TD> Float </TD> <TD>  GAP ID of the tile the track intersects.  Exprssed as a bit mask.  GapType[0xF000] | GapNumber[0x0E00] | Face[0x01C0] | Row[0x0038] | Col[0x0007]</TD> </TR>
+<TR> <TD> AcdGapPocaDoca[TrackIndex:0-1][Tile:0-6]        </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 2D. </TD> </TR>
 
+<TR> <TD> AcdTkrPoint information                          </TD> <TD>       </TD> <TD> Information about the point where the track leaves the nominal ACD volume.  This does not account for the complexities of the geometry, but does give a good estimate of where the track hit the ACD</TD> </TR> 
+<TR> <TD> AcdTkrPointX[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  X-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrPointY[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Y-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrPointZ[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Z-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrFace[up,down:0,1]                         </TD> <TD> Int </TD> <TD>  Face of ACD struck by track 0=top, 1,3 = +- X, 2,4 = +- Y, 5 =bottom</TD> </TR>
 
 </TABLE>
 
