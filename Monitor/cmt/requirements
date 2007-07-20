@@ -43,7 +43,7 @@ macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib -lrt"
 
 # ROOT 5.14
 macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -lTreePlayer -lGraf3d "
-macro_append cppflags " -DoldROOT "
+#macro_append cppflags " -DoldROOT "
  
 # ROOT 5.15
 #macro_append ROOT_linkopts " -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lTreePlayer -lRint -lPostscript -lMatrix -lPhysics -pthread -lm -ldl -rdynamic "
@@ -57,5 +57,6 @@ macro_append cppflags " -DoldROOT "
 
 application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  compareFiles.cxx MonGlobalCut.cxx Geo.cxx TestReport.cxx RFun.cxx MonInputObject.cxx AcdPeds.cxx AcdPedProxy.cxx AcdPedParser.cxx 
 
+#application treemerge treemerge.cxx
 
 application inputObjects inputObjects.cxx MonObjFactory.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  MeritEvent.cxx SvacEvent.cxx CalEvent.cxx Geo.cxx TestReport.cxx
