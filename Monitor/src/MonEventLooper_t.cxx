@@ -5,6 +5,7 @@
 //
 // stl
 #include <iostream>
+#include <iomanip>
 #include <cstdio>
 #include <algorithm>
 #include <vector>
@@ -15,20 +16,21 @@
 
 //
 //
-void MonEventLooper::printTime(ostream& os, ULong64_t timestamp) {
+void MonEventLooper::printTime(ostream& os, Double_t timestamp) {
   
   // Time from Mission elapsed time to Unix time and then from PDT to GMT:
   static const int METtoGMT = 978307200 + 25200;
-  ULong64_t time = timestamp + METtoGMT;
+  ULong64_t time = int(timestamp) + METtoGMT;
   UInt_t itime = (UInt_t)(time);
   os << ctime((time_t*) (&itime))<<"(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)"; 
 }
+
 
 //
 //
 MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* colsec, std::vector<MonInputCollection*> incol, MonGlobalCut* eventcut, std::string timestampvar)
   :m_binSize(binSize),
-   m_timeStamp(0),
+   m_timeStamp(0.0),
    m_currentStart(0),
    m_currentEnd(0),
    m_currentFlags(0),
@@ -145,7 +147,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
   init();
 
   UInt_t unsaved(0);
-  ULong64_t currentTimeStamp;
+  Double_t currentTimeStamp(0.0);
 
   // Event loop
   for (Int_t ievent= startEvent; ievent!=m_last; ievent++ ) {
@@ -200,19 +202,32 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
 
 }
 
-void MonEventLooper::firstEvent(ULong64_t timeStamp)  {
+
+// First event with timestamp with double precision
+void MonEventLooper::firstEvent(Double_t timeStampdouble)  {
+  ULong64_t timeStamp = ULong64_t(timeStampdouble);
   ULong64_t rem = timeStamp % m_binSize;
   m_currentBin = 0;
   m_currentStart = timeStamp - rem;
 
   m_currentEnd = m_currentStart + m_binSize;
   m_currentFlags = 3;
-  m_sec_first = timeStamp;
-   TimeInterval::m_interval=m_currentEnd-m_sec_first;
+  m_sec_first = timeStampdouble;
+  TimeInterval::m_interval=m_currentEnd-m_sec_first;
+  
+  /*
+  std::cout << "Time interval; first event, " << std::endl
+	    << "m_currentEnd, m_sec_first, m_interval, " <<std::endl
+	    << setprecision(20) 
+	    << m_currentEnd << ", " <<  m_sec_first << ", " << TimeInterval::m_interval << std::endl;
+  */
 
-  printTime(std::cout,timeStamp);
+
+  printTime(std::cout,timeStampdouble);
   std::cout << std::endl;
 }
+
+
 
 void MonEventLooper::switchBins() {
 
@@ -239,7 +254,7 @@ void MonEventLooper::switchBins() {
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
 
-   TimeInterval::m_interval=m_binSize;
+  TimeInterval::m_interval=m_binSize;
  
   while(m_currentTimestamp->value()>=m_currentEnd){
     m_nUsed=0;
@@ -259,15 +274,27 @@ void MonEventLooper::switchBins() {
   else { std::cout << '.' << std::flush; }
 }
 
-//
+
+
 // Called after on the last event of the event loop
-void MonEventLooper::lastEvent(ULong64_t timeStamp) {
+// This timestamp is given with double precision
+void MonEventLooper::lastEvent(Double_t timeStampdouble) {
 
   // kludge: double the last event because the last event does not get used.
 
-  // m_timeintervalobj->SetInterval(timeStamp-m_currentStart);
-  TimeInterval::m_interval=timeStamp-m_currentStart;
+  
+  TimeInterval::m_interval=timeStampdouble-m_currentStart;
  
+  /*
+  std::cout << "Time interval; last event, " << std::endl
+	    << "m_currentStart, timeStampdouble, m_interval, " <<std::endl
+	     << setprecision(20) 
+	     << m_currentStart << ", " << timeStampdouble << ", " << TimeInterval::m_interval << std::endl;
+  */
+  
+
+
+
   m_intree->Fill();
 
   filterEvent();
@@ -281,19 +308,27 @@ void MonEventLooper::lastEvent(ULong64_t timeStamp) {
   m_stripValCol->reset();
   m_intree->Reset();
 
-  m_sec_last = timeStamp;
+  m_sec_last = timeStampdouble;
   printTime(std::cout,m_timeStamp);
   std::cout << std::endl << std::endl;
 }
 
+
+
 //
 // Called every event
-void MonEventLooper::logEvent(Long64_t /* ievent */, ULong64_t timeStamp ) {
-  if ( timeStamp < m_timeStamp ) {
+// this timestamp is given with double precision 
+void MonEventLooper::logEvent(Long64_t /* ievent */, Double_t timeStampdouble ) {
+
+  ULong64_t timeStamp = ULong64_t(timeStampdouble);
+  if ( timeStamp < ULong64_t(m_timeStamp) ) {
     m_currentFlags += 4;
   }
-  m_timeStamp = timeStamp;
+  m_timeStamp = timeStampdouble;
 }
+
+
+
 bool MonEventLooper::readEvent(Long64_t ievent){
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->readEventProf(ievent);
