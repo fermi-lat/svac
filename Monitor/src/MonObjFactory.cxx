@@ -69,6 +69,8 @@
 // Last updated with object condarrroi by user dpaneque on Sun Jul  1 00:38:14 2007
 // Last updated with object DiscardedDelta by user dpaneque on Sun Jul  1 02:05:05 2007
 // Last updated with object DeadZoneDelta by user dpaneque on Sun Jul  1 02:07:07 2007
+// Last updated with object timestampdouble by user dpaneque on Fri Jul 20 01:17:49 2007
+#include "digi/MonInput_timestampdouble.h"
 #include "digi/MonInput_DeadZoneDelta.h"
 #include "digi/MonInput_DiscardedDelta.h"
 #include "digi/MonInput_condarrroi.h"
@@ -268,6 +270,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DiscardedDelta;
   if (s=="DeadZoneDelta")
     return new MonInput_DeadZoneDelta;
+  if (s=="timestampdouble")
+    return new MonInput_timestampdouble;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -339,6 +343,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("condarrroi");
   names.push_back("GemDiscardedDelta");
   names.push_back("DeadZoneDelta");
+  names.push_back("timestampdouble");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
