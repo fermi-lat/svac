@@ -206,10 +206,11 @@ void MonRate::latchValue() {
 
     }
     else{
-      std::cout << "MonRate::latchValue; ERROR " << std::endl
+      std::cout << "MonRate::latchValue; WARNING" << std::endl
 		<< "m_timebin = " << m_timebin << std::endl
-		<< "This should never happen. Aborting ..." << std::endl;
-      assert(0);
+		<< "Rate and error set to ZERO" << std::endl;
+      m_val[i] = 0.0;
+      m_err[i] = 0.0;
     }
   }
 }
