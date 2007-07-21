@@ -1,0 +1,347 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+    <!-- TEST variables -->
+    <object> nACD </object>
+    <object> Gem_elapsed </object>
+    
+    <!-- Time stamp -->
+    <object> timestamp </object>
+    <object> timestampdouble </object>
+
+    
+    <!-- Event classification information -->
+    <object> condsummary </object>
+    <object> condarrcallo  </object>
+    <object> condarrcalhi </object>
+    <object> condarrtkr </object>
+    <object> condarrcno </object>
+    <object> condarrroi </object>
+    <object> LivetimeLast</object>
+    <object> ElapsedLast</object>
+    <object> DeadZoneLast</object>
+    <object> DiscardedLast</object>
+    <object> PrescaledLast</object>
+    <object> DeadZoneDelta </object>
+    <object> DiscardedDelta </object>
+    <object> TkrTriggerTower </object>
+    <object> CalHiTriggerTower </object> 
+    <object> CalLoTriggerTower </object>
+   
+    <!-- Acd Variables -->
+    
+    <object>AcdGemVeto_AcdTile</object>
+    <object>AcdGemROI_Tower </object>
+    <object>AcdGemCNO_GARC  </object>
+    <object>AcdHit_AcdTile  </object>
+    <object>AcdPmtA_OverThreshold_AcdTile  </object>
+    <object>AcdPmtB_OverThreshold_AcdTile  </object>
+    <object>AcdVetoA_AcdTile  </object>
+    <object>AcdVetoB_AcdTile  </object>
+    <object>AcdPha_PmtA_AcdTile  </object>
+    <object>AcdPha_PmtB_AcdTile  </object>
+
+    <!-- Tkr Variables -->
+       
+    <object> TkrHitsTowerPlane </object>
+    <object> IsTkrDigi_TowerPlane </object>
+    <object> ToT_con0_TowerPlane  </object>
+    <object> ToT_con1_TowerPlane  </object>
+
+     <!-- Cal Variables -->
+    <object> CalXHit_TowerCalLayerCalColumn </object>
+    <object> CalXHit_TowerCalLayer </object>
+
+
+  </inputList>
+
+
+  <outputList name="top">
+  
+    
+
+     <!-- ********************  Event classification information   *********************** -->
+          
+    
+     <object>
+      <name> Trigger_CALLO </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&4  ]]></cut>
+      <type> rate </type>
+      <description> CAL-LO trigger rate </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_CALHI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&8  ]]></cut>
+      <type> rate </type>
+      <description> CAL-HI trigger rate </description>
+    </object>
+
+      <object>
+      <name> Trigger_CNO </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&16  ]]></cut>
+      <type> rate </type>
+      <description> CNO trigger rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_ROI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) && (condsummary&2)]]></cut>
+      <type> counter </type>
+      <description> TKR trigger and ROI (mostly charge particles) </description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_NotROI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(!condsummary&1) && (condsummary&2)]]></cut>
+      <type> rate </type>
+      <description> TKR trigger and not ROI (mostly non charge particles) rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_Periodic </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&32]]></cut>
+      <type> rate </type>
+      <description> Periodic trigger rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_NOTPeriodic </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[!(condsummary&32)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with NOT periodic trigger  </description>
+    </object>
+
+    
+
+     <object>
+      <name> CondsummaryBitAnd30_NOTPeriodic </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
+      <type> counter </type>
+      <description> Counter of events with condsummaryBitAnd30 AND NotcondsummaryBitAnd32) </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_Solicited </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&64]]></cut>
+      <type> rate </type>
+      <description> Solicited trigger rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_External </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&128]]></cut>
+      <type> rate </type>
+      <description> External trigger rate </description>
+    </object>
+
+     <object>
+      <name> Trigger_ANY </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&255]]></cut>
+      <type> rate </type>
+      <description> Rate of any of the trigger bits in condsummary word </description>
+    </object>
+
+     <object>
+      <name> Trigger_ANYPhysics </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&15]]></cut>
+      <type> rate </type>
+      <description> Rate of any non-artificially created trigger (i.e. bits [1-4]) in condsummary word  </description>
+    </object>
+      
+       <object>
+      <name> TkrTrigger_Rate_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower] ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of tracker triggers in [tower], calculated during the specified time bin </description>
+    </object>
+
+   
+
+
+      <!-- ********************  Detector information   *********************** -->
+
+
+      <!--  ______________  ACD  _______________ -->
+
+     
+
+   
+       <object>
+	<name> AcdDigis </name>
+	<formula><![CDATA[ RFun::loopoveracdtilesbool(AcdHit_AcdTile)]]></formula>
+	<cut><![CDATA[condsummary&30]]></cut>
+	<type> rate </type>
+	<description> Number of ACD Digis during the specified time bin </description>
+      </object>
+
+     
+      <!--  ______________  Tracker _______________ -->
+
+   
+    <object>
+      <name> TkrHits </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(TkrHitsTowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> rate </type>
+      <description> Rate of tracker hits (all towers and planes included), computed in the specified time bin </description>
+    </object>
+
+
+    
+
+    <object>
+      <name> TkrHits_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> rate </type>
+      <description> Rate of tracker hits in [tower], computed in the specified time bin </description>
+    </object>
+
+    
+
+    
+
+    <object>
+      <name> TkrHits_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: TkrHitsTowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> rate </type>
+      <description> Rate of tracker hits in [tower][tkrplane], computed in the specified time bin </description>
+    </object>
+
+   
+
+     <object>
+      <name> TkrTriggerWithLessThan6Layers_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])<6) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of times that, in [tower], there was a tracker trigger and the number of consecutive tracker planes hit is less than 6 </description>
+    </object>
+
+     <object>
+      <name> ConsecutivePlanesHit_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> mean </type>
+      <description> Mean number of consecutive tracker planes hit in [tower] per event triggereing that [tower] </description>
+    </object>
+
+     <object>
+      <name> EmptyTowers_Tower[16] </name>
+      <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: runonceformula[tower] > 0.5 ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Number of times [tower] did not trigger and was not close to a tower that triggered </description>
+    </object>
+
+     <object>
+      <name> HitsInEmptyTower_Tower[16] </name>
+      <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: RFun::gethitsinemptytower(runonceformula[tower],TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of hits when the tower was empty </description>
+    </object>
+
+     <object>
+      <name> NormalizedHitsInEmptyTower_Tower[16] </name>
+      <formula><![CDATA[foreachtower: Counter_EmptyTowers_Tower[tower] >0 ? (Counter_HitsInEmptyTower_Tower[tower]/double(Counter_EmptyTowers_Tower[tower])) : 0.0 ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <source>output</source>
+      <type> outputfloat </type>
+      <description> Normalized number of hits when the tower was empty: HitsInEmptyTower_Tower/EmptyTowers_Tower </description>
+    </object>
+
+      <object>
+      <name> NormalizedHitsInEmptyTower_Tower_err[16] </name>
+      <formula><![CDATA[foreachtower: Counter_EmptyTowers_Tower[tower] >0 && Counter_HitsInEmptyTower_Tower[tower] >0 ? ((Counter_HitsInEmptyTower_Tower[tower]/double(Counter_EmptyTowers_Tower[tower]))*TMath::Sqrt(1./double(Counter_EmptyTowers_Tower[tower])+1./double(Counter_HitsInEmptyTower_Tower[tower]))) : 0.0 ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <source>output</source>
+      <type> outputfloat </type>
+      <description> Normalized number of hits when the tower was empty: HitsInEmptyTower_Tower/EmptyTowers_Tower </description>
+    </object>
+     
+
+
+
+     <object>
+      <name> TkrDigi_Tower[16] </name>
+      <formula><![CDATA[foreachtower: RFun::loopovertkrplanes(IsTkrDigi_TowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> counter </type>
+      <description> Number of TkrDigi objects in each [tower] during the specified time bin </description>
+    </object>
+
+
+     
+     <object>
+      <name> TkrDigi </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(IsTkrDigi_TowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> rate </type>
+      <description> Rate of TkrDigis (all towers and planes included), computed in the specified time bin </description>
+    </object>
+
+     
+    
+
+
+     <!-- Calorimeter -->
+
+
+
+
+
+     <object>
+      <name> CalXHit_NTowerHit_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovercallayers(CalXHit_TowerCalLayer[tower])]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
+      <type> rate </type>
+      <description> Vector[tower] reporting the rate of calorimeter crystal hits in that tower. Periodic triggers are NOT taken into account. </description>
+    </object>
+
+     
+     
+
+
+     <object>
+      <name> CalXHit_NHit </name>
+      <formula><![CDATA[ RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer)]]></formula>
+      <cut><![CDATA[condsummary&30 && !(condsummary&32) ]]></cut>
+      <type> counter </type>
+      <description> Rate of calorimeter crystal hits (all towers, layers and columns). Periodic triggers are NOT taken into account. </description>
+    </object>
+
+
+      <object>
+      <name> CalX_NHit </name>
+      <formula><![CDATA[ RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer)]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
+      <type> mean </type>
+      <description> MEAN number of calorimeter crystal hits per event (integrated over all towers, layers and columns), computed in the specified time bin. Periodic triggers are NOT taken into account. </description>
+    </object>
+
+
+
+  </outputList>
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> timestampdouble </timestamp>
+</monitoring>
