@@ -165,7 +165,7 @@
     </object>
       
        <object>
-      <name> TkrTrigger_Rate_Tower[16] </name>
+      <name> TkrTrigger_Tower[16] </name>
       <formula><![CDATA[ foreachtower: TkrTriggerTower[tower] ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> rate </type>
@@ -275,7 +275,7 @@
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Normalized number of hits when the tower was empty: HitsInEmptyTower_Tower/EmptyTowers_Tower </description>
+      <description> Error in  NormalizedHitsInEmptyTower_Tower </description>
     </object>
      
 

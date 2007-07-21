@@ -123,7 +123,7 @@
       <cut><![CDATA[]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Error on the component values of the vector [tower][callayer] containing the fraction of events with ZERO energy (as well as events whose energy in [tower][callayer] could not be reconstructed) in the calorimeter layer defined by tower,callayer. Periodic triggers are NOT taken into account.</description>
+      <description> Error in quantity ReconZeroEnergy_Fraction_TowerCalLayer.</description>
     </object>
 
 
