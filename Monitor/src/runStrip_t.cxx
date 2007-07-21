@@ -38,6 +38,42 @@
 
 
 
+// function that returns the prefix used to report about the variable type
+
+std::string GiveMeMyType(std::string type)
+{
+
+  std::string mytype;
+  
+  if (strstr(type.c_str(),"mean")){
+    mytype = "Mean_";
+  } else if (type=="counter"){
+    mytype = "Counter_";
+  } else if (type=="rate"){
+    mytype = "Rate_";
+  } else if (type=="minmax"){
+    mytype = "MinMax_";
+  } else if (type=="counterdiff"){
+    mytype = "CounterDiff_";
+  } else if (type=="outputdouble"){
+    mytype = "OutD_";
+  } else if (type=="outputfloat"){
+    mytype = "OutF_";
+  } else if (strstr(type.c_str(),"valuechange")){
+    mytype = "";
+  } else if (strstr(type.c_str(),"histogram")){
+    mytype = "";
+  } else{
+    std::cerr<<"No such type "<<type<<std::endl;
+    assert(0);
+  }
+
+
+  return mytype;
+
+}
+
+
 //
 int main(int argn, char** argc) {
 
@@ -151,7 +187,8 @@ int main(int argn, char** argc) {
     }
     if(reconinpcol && obj->getInputSource()=="ReconEvent"){
       reconinpcol->addInputObject(obj);
-      digidesc.push_back(mmap);
+      // digidesc.push_back(mmap);
+      recondesc.push_back(mmap); //DP, 2007/07/21
       added=true;
     }
     if(mcinpcol && obj->getInputSource()=="McEvent"){
@@ -301,7 +338,7 @@ int main(int argn, char** argc) {
     r.starttable(inptable,3);
     for (std::vector<std::map<std::string,std::string> >::iterator itr=digidesc.begin();
 	 itr != digidesc.end();itr++){
-      strcpy(line[0],((*itr)["name"]).c_str());
+      strcpy(line[0],((*itr)["name"]).c_str()); 
       strcpy(line[1],((*itr)["source"]).c_str());
       strcpy(line[2],((*itr)["description"]).c_str());
       r.addtableline(line,3);
@@ -347,7 +384,17 @@ int main(int argn, char** argc) {
     r.starttable(outtable,5);
     for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
 	itr !=outputlist.end();itr++){
-      strcpy(line[0],((*itr)["name"]).c_str());  
+      // get prefix reporting about variable type, which will be added to the 
+      // name of the variable 
+      std::string thistype = (*itr)["type"];
+      std::string thisname = GiveMeMyType(thistype);
+
+      
+
+      
+      thisname += ((*itr)["name"]).c_str();
+      
+      strcpy(line[0],thisname.c_str());
       strcpy(line[1],((*itr)["type"]).c_str());  
       strcpy(line[2],((*itr)["formula"]).c_str());  
       strcpy(line[3],((*itr)["cut"]).c_str());  
@@ -442,7 +489,13 @@ int main(int argn, char** argc) {
     r2.starttable(outtableparams,3);
     for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
 	itr !=outputlist.end();itr++){
-      strcpy(lineparams[0],((*itr)["name"]).c_str());  
+       // get prefix reporting about variable type, which will be added to the 
+      // name of the variable 
+      std::string thistype = (*itr)["type"];
+      std::string thisname = GiveMeMyType(thistype);
+      thisname += ((*itr)["name"]).c_str();
+      
+      strcpy(lineparams[0],thisname.c_str());
       strcpy(lineparams[1],((*itr)["type"]).c_str());  
       strcpy(lineparams[2],((*itr)["description"]).c_str());  
       r2.addtableline(lineparams,3);
