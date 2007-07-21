@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cstdio>
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
@@ -152,14 +153,13 @@ MonRate::~MonRate(){
 }
 
 void MonRate::reset() {
-  m_timebin = 100000000;
+  m_timebin = 100000000.0;
   for (unsigned i=0;i<m_dim;i++){
     m_current[i] = 0;
     m_val[i] = 0.;
     m_err[i] = 0.;
   }
 
-  //m_timeintervalobj=new TimeInterval();
 }
 
 // += addition operator
@@ -186,23 +186,31 @@ void MonRate::latchValue() {
   // get timeinterval for this bin
   
   m_timebin =TimeInterval::m_interval;
- 
+
   // done
 
   for (unsigned i=0;i<m_dim;i++){
     m_val[i] = Float_t(m_current[i]);
     m_err[i] = sqrt(m_val[i]);
-    if(m_timebin>0){
+    if(m_timebin>0.0){
       m_val[i] /= Float_t(m_timebin);
       m_err[i] /= Float_t(m_timebin);
+
+      std::cout << "MonRate::latchValue; Dimension " << i << std::endl
+		<< "Time interval retrived = "  <<std::endl
+	//<< setprecision(20) 
+		<<  m_timebin 
+		<< ",   m_current= " << m_current[i] 
+		<< std::endl
+		<< "Rate= " << m_val[i] << " +/- " << m_err[i] << std::endl;
+ 
+
     }
     else{
-      // time interval is somewhere between 0 and 1. 
-      // We choose a comprimise value of 0.5
-      // The numbers are certainly not fully correct... 
-      // but that is whaat we have.
-      m_val[i] /= 0.5;
-      m_err[i] /= 0.5;
+      std::cout << "MonRate::latchValue; ERROR " << std::endl
+		<< "m_timebin = " << m_timebin << std::endl
+		<< "This should never happen. Aborting ..." << std::endl;
+      assert(0);
     }
   }
 }
@@ -942,4 +950,4 @@ MonValueCol* MonValFactory::makeMonValueCol(std::list<std::map<std::string,std::
 
 // initialization of static data members
 
-ULong64_t TimeInterval::m_interval = 10000000;
+Double_t TimeInterval::m_interval = 10000000.0;

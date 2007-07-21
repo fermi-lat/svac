@@ -44,7 +44,8 @@ class TimeInterval{
   TimeInterval(){}
   //inline void SetInterval(ULong64_t interval){ m_interval = interval;}
   //inline ULong64_t GetInterval() { return m_interval;}
-  static ULong64_t m_interval;
+  // static ULong64_t m_interval;
+   static Double_t m_interval;
 };
 
 
@@ -195,8 +196,7 @@ private:
   // the output value
   Float_t *m_val;
   Float_t *m_err;
-  // TimeInterval *m_timeintervalobj;
-  ULong64_t m_timebin;
+  Double_t m_timebin;
   
 };
 
