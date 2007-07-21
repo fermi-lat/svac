@@ -43,7 +43,7 @@ void MonCounter::latchValue() {
 
 // Attach a MonCounter node to a TTree (unsigned int)
 int MonCounter::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + name();
+  std::string fullName = prefix + "Counter_" + name();
   std::string leafType = fullName + m_dimstring + "/l";
   TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
   return b != 0 ? 1 : -1;
@@ -79,7 +79,7 @@ void MonSecondListDouble::latchValue() {}
 
 // Attach a MonSecondListDouble node to a TTree (unsigned int)
 int MonSecondListDouble::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + name();
+  std::string fullName = prefix + "OutD_"+ name();
   std::string leafType = fullName + m_dimstring + "/D";
   TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
   return b != 0 ? 1 : -1;
@@ -115,7 +115,7 @@ void MonSecondListFloat::latchValue() {}
 
 // Attach a MonSecondListFloat node to a TTree (unsigned int)
 int MonSecondListFloat::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + name();
+  std::string fullName = prefix + "OutF_" + name();
   std::string leafType = fullName + m_dimstring + "/F";
   TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
   return b != 0 ? 1 : -1;
@@ -172,7 +172,7 @@ void MonRate::singleincrement(Double_t* val, Double_t* val2) {
 
 // Attach a MonRate node to a TTree (val and err as float)
 int MonRate::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullNameVal = prefix + name();
+  std::string fullNameVal = prefix + "Rate_"+ name();
   std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
   TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str());
   if ( b == 0 ) return -1;
@@ -195,15 +195,14 @@ void MonRate::latchValue() {
     if(m_timebin>0.0){
       m_val[i] /= Float_t(m_timebin);
       m_err[i] /= Float_t(m_timebin);
-
+      /*
       std::cout << "MonRate::latchValue; Dimension " << i << std::endl
 		<< "Time interval retrived = "  <<std::endl
-	//<< setprecision(20) 
 		<<  m_timebin 
 		<< ",   m_current= " << m_current[i] 
 		<< std::endl
 		<< "Rate= " << m_val[i] << " +/- " << m_err[i] << std::endl;
- 
+      */
 
     }
     else{
@@ -476,7 +475,7 @@ void MonMean::reset() {
 
 // Attach a MonMean node to a TTree (mean and err as float)
 int MonMean::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullNameVal = prefix + name();
+  std::string fullNameVal = prefix + "Mean_" + name();
   std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
   TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str());
   if ( b == 0 ) return -1;
@@ -615,7 +614,7 @@ void MonCounterDiff::latchValue() {
 
 // Attach a MonCounterDif node to a TTree (unsigned int)
 int MonCounterDiff::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + name();
+  std::string fullName = prefix + "CounterDiff_" + name();
   std::string leafType = fullName + m_dimstring+"/l";
   TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
   return b != 0 ? 1 : -1;
@@ -636,11 +635,11 @@ void MonCounterDiff::singleincrement(Double_t* val, Double_t* val2) {
 
 // Attach a MonMinMax node to a TTree (unsigned int)
 int MonMinMax::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullNameMin = prefix + name();
-  fullNameMin += "_min";
+  std::string fullNameMin = prefix + "Min_" + name();
+  //fullNameMin += "_min";
   std::string leafTypeMin = fullNameMin+m_dimstring + "/F";
-  std::string fullNameMax = prefix + name();
-  fullNameMax += "_max";
+  std::string fullNameMax = prefix + "Max_" +name();
+  //fullNameMax += "_max";
   std::string leafTypeMax = fullNameMax +m_dimstring+ "/F";
   TBranch* b = tree.Branch(fullNameMin.c_str(),m_min,leafTypeMin.c_str());
   if ( b == 0 ) return -1;
