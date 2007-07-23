@@ -2,14 +2,14 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p12
+setenv svacVersion v3r9p13
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume07
-setenv EngineeringModelVersion v7r0913p15
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume12
+setenv EngineeringModelVersion v8r1109p10
 setenv sasVersion EngineeringModel-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
@@ -51,9 +51,9 @@ setenv calCalibSerNo -9999
 # for testing
 # setenv svacTestMode 1 
 
-setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.10.00/root
+setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.14.00g/root
 setenv rootLib ${ROOTSYS}/lib
-setenv haddSys ${SVAC_GLAST_EXT}/ROOT/v5.13.1/root
+setenv haddSys ${SVAC_GLAST_EXT}/ROOT/v5.14.00g/root
 setenv haddLib ${haddSys}/lib
 
 setenv emiBase ${LATMonRoot}/TestReports/GD/EMC-EMI
@@ -98,7 +98,7 @@ setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
 setenv digitizationTaskVersion ${svacVersion}
 setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
 setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
-setenv Em2Version v2r65
+setenv Em2Version v2r75
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
 setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/LatIntegration.exe
@@ -113,7 +113,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r7
+setenv TestReportVersion v3r7p4
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -172,7 +172,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v3r1
+setenv RunRootAnalyzerVersion v3r1p2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
@@ -198,7 +198,7 @@ setenv tkrReportDataDirFull ${dataHead}/${tkrReportDataDir}
 #++++++++++++++++++++++++++++++++ acdReport +++++++++++++++++++++++++++++++++++
 setenv acdReportTaskVersion ${svacVersion}
 setenv acdReportTask acdReport-${acdReportTaskVersion}
-setenv monitorVersion acdemi6
+setenv monitorVersion mk20070719
 setenv monitorDir ${svacCmt}/Monitor/${monitorVersion}
 setenv monitorCmt ${monitorDir}/cmt
 setenv monitorApp ${monitorDir}/${SVAC_CMTCONFIG}/runStrip_t.exe
@@ -261,9 +261,9 @@ endif
 
 setenv PATH ${PATH}:${svacPlLib}
 
-setenv SVAC_LD_LIBARARY_PATH ${rootLib}:${sasCmt}/lib:${pldLib}
+setenv SVAC_LD_LIBRARY_PATH ${rootLib}:${sasCmt}/lib:${pldLib}
 if ( ${?LD_LIBRARY_PATH} == '1' ) then
-    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SVAC_LD_LIBARARY_PATH}
+    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SVAC_LD_LIBRARY_PATH}
 else
-    setenv LD_LIBRARY_PATH ${SVAC_LD_LIBARARY_PATH}
+    setenv LD_LIBRARY_PATH ${SVAC_LD_LIBRARY_PATH}
 endif

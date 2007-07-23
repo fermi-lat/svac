@@ -767,3 +767,15 @@ v3r9p12 (2007/06/19)
 ---------------
 Use eLogFeeder v2r3p3 (fixes out-of-date Oracle setup script).
 Explicitly request linux32 hosts for recon chunk jobs.
+---------------------------------------------------------------------------
+
+
+v3r9p13 (2007/07/20)
+---------------
+Update recon cleanup scripts: add new hosts, try to clean up after PII as well 
+as PI, but probably won't have permision.
+
+EM v8r1109p10
+TestReport v3r7p4
+EngineeringModelRoot v3r1p2
+Monitor mk20070719

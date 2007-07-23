@@ -7,8 +7,14 @@ endif
 
 cd $localDisk
 
+ls -l
+
 #set dirs=`ls -l | awk '/(glastdpf|glastdpt|glastdpd).*[:blank:][0-9]+$/{print $NF}'`
-set dirs=`ls -l | awk '/(glastdpf|glastdpt|glastdpd).*[0-9]+$/{print $NF}'`
+#set dirs=`ls -l | awk '/(glastdpf|glastdpt|glastdpd).*[0-9]+$/{print $NF}'`
+set dirs=`ls -l | awk '/(glast).*[0-9]+$/{print $NF}'`
+
+echo dirs=$dirs
+
 if ({ test -z "$dirs" }) then
 	echo No chunk dirs to remove.
 	exit
