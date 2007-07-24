@@ -37,11 +37,14 @@ class RFun{
 #ifdef oldROOT
   static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
   static unsigned loopovertowerANDcallayers(ROOT::TArray2Proxy<UShort_t, 8>& invector);
-  static unsigned loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector);
+  static Double_t loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector);
+  static Double_t loopovercallayersANDcalcolumns_double(ROOT::TArray2Proxy<Double_t, 12>& invector);
 #else
   static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
   static unsigned loopovertowerANDcallayers(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 8> >&);
-  static unsigned loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >&);
+  static Double_t loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >&);
+  // static Double_t loopovercallayersANDcalcolumns_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 12> >&);
+  static Double_t loopovercallayersANDcalcolumns_double(const Double_t [8][12]);
 #endif
 
 

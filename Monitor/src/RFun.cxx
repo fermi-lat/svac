@@ -192,9 +192,9 @@ unsigned RFun::loopovertowerANDcallayers(ROOT::TArrayProxy<ROOT::TArrayType<USho
 
 //unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
 #ifdef oldROOT
-unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector)
+Double_t RFun::loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector)
 #else
-unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >& invector)
+Double_t RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >& invector)
 #endif
 
 {
@@ -203,6 +203,24 @@ unsigned RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayTy
     for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
       if(invector[itower][icallayer] >= 0)
 	val += invector[itower][icallayer];
+    }
+  }
+  return val;
+}
+
+#ifdef oldROOT
+Double_t  RFun::loopovercallayersANDcalcolumns_double(ROOT::TArray2Proxy<Double_t, 12>& invector)
+#else
+  //Double_t  RFun::loopovercallayersANDcalcolumns_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 12> >& invector)
+Double_t RFun::loopovercallayersANDcalcolumns_double(const Double_t invector[8][12] )
+#endif
+{
+
+ Double_t val(0.0);
+  for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
+    for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
+      if(invector[icallayer][icalcolumn] >= 0)
+	val += invector[icallayer][icalcolumn];
     }
   }
   return val;
