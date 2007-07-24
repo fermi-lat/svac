@@ -262,3 +262,6 @@ awb	Added earlyEvent flag for time tones.
 
 v3r1p2: July 18, 2007
 awb	Tagging Eric's updated ntuple description.
+
+v3r1p3: July 24, 2007
+awb     Replaced 'MissingGps' with the correct name 'IsSourceGps'. Note that the accessor functions have not been updated yet.

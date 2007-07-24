@@ -252,7 +252,7 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
   unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
   int m_contextLsfTimeTimeToneCurrentFlagsValid;
-  int m_contextLsfTimeTimeToneCurrentMissingGps;
+  int m_contextLsfTimeTimeToneCurrentIsSourceGps;
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
   int m_contextLsfTimeTimeToneCurrentMissingLatPps;
   int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
@@ -264,7 +264,7 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
   unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
   int m_contextLsfTimeTimeTonePreviousFlagsValid;
-  int m_contextLsfTimeTimeTonePreviousMissingGps;
+  int m_contextLsfTimeTimeTonePreviousIsSourceGps;
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
   int m_contextLsfTimeTimeTonePreviousMissingLatPps;
   int m_contextLsfTimeTimeTonePreviousMissingTimeTone;

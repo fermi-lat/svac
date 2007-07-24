@@ -209,7 +209,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ContextLsfTimeTimeToneCurrentTimeSecs        </TD> <TD> UInt </TD> <TD> Current timetone: Number of seconds since Epoch start (01.01.2001) at most recent time hack.    </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentFlywheeling     </TD> <TD> UInt </TD> <TD> Current timetone: Number of time tones since last complete time tone.                           </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentFlagsValid      </TD> <TD> Int  </TD> <TD> Current timetone: Make sure that the flags are valid.                                           </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeToneCurrentMissingGps      </TD> <TD> Int  </TD> <TD> Current timetone: No GPS lock, message w.r.t. LAT clock.                                        </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeToneCurrentIsSOurceGps     </TD> <TD> Int  </TD> <TD> Current timetone: Is the source GPS?                                                            </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingCpuPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingLatPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingTimeTone </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>
@@ -221,7 +221,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ContextLsfTimeTimeTonePreviousTimeSecs        </TD> <TD> UInt </TD> <TD> Previous timetone: Number of seconds since Epoch start (01.01.2001) at most recent time hack.    </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousFlywheeling     </TD> <TD> UInt </TD> <TD> Previous timetone: Number of time tones since last complete time tone.                           </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousFlagsValid      </TD> <TD> Int  </TD> <TD> Previous timetone: Make sure that the flags are valid.                                           </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeTonePreviousMissingGps      </TD> <TD> Int  </TD> <TD> Previous timetone: No GPS lock, message w.r.t. LAT clock.                                        </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeTonePreviousIsSourceGp      </TD> <TD> Int  </TD> <TD> Previous timetone: Is the source GPS?                                                            </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingCpuPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingLatPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingTimeTone </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>

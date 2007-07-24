@@ -628,7 +628,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs = m_digiEvent->getMetaEvent().time().current().timeSecs();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling = m_digiEvent->getMetaEvent().time().current().flywheeling();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid = m_digiEvent->getMetaEvent().time().current().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps = m_digiEvent->getMetaEvent().time().current().missingGps();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentIsSourceGps = m_digiEvent->getMetaEvent().time().current().missingGps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps = m_digiEvent->getMetaEvent().time().current().missingCpuPps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps = m_digiEvent->getMetaEvent().time().current().missingLatPps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone = m_digiEvent->getMetaEvent().time().current().missingTimeTone();
@@ -636,17 +636,17 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks = m_digiEvent->getMetaEvent().time().current().timeHack().hacks();
   m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
 
-  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete = m_digiEvent->getMetaEvent().time().previous().incomplete();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs = m_digiEvent->getMetaEvent().time().previous().timeSecs();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling = m_digiEvent->getMetaEvent().time().previous().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid = m_digiEvent->getMetaEvent().time().previous().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps = m_digiEvent->getMetaEvent().time().previous().missingGps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete      = m_digiEvent->getMetaEvent().time().previous().incomplete();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs        = m_digiEvent->getMetaEvent().time().previous().timeSecs();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling     = m_digiEvent->getMetaEvent().time().previous().flywheeling();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid      = m_digiEvent->getMetaEvent().time().previous().flagsValid();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousIsSourceGps     = m_digiEvent->getMetaEvent().time().previous().missingGps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps   = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps   = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
   m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone = m_digiEvent->getMetaEvent().time().previous().missingTimeTone();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent = m_digiEvent->getMetaEvent().time().previous().earlyEvent();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent      = m_digiEvent->getMetaEvent().time().previous().earlyEvent();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks    = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks    = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
 
   m_ntuple.m_contextLsfTimeTimeTicks = m_digiEvent->getMetaEvent().time().timeTicks();
 
@@ -1665,7 +1665,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentIsSourceGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIsSourceGps), "ContextLsfTimeTimeToneCurrentIsSourceGps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps), "ContextLsfTimeTimeToneCurrentMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone), "ContextLsfTimeTimeToneCurrentMissingTimeTone/I");
@@ -1677,7 +1677,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousIsSourceGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIsSourceGps), "ContextLsfTimeTimeTonePreviousIsSourceGps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps), "ContextLsfTimeTimeTonePreviousMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone), "ContextLsfTimeTimeTonePreviousMissingTimeTone/I");
