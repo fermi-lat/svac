@@ -29,7 +29,7 @@ MonInput_CalLoTriggerTower::~MonInput_CalLoTriggerTower(){
 
 
 int MonInput_CalLoTriggerTower::setOutputBranch(TTree* tree) {
- TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
+ TBranch* bErr= tree->Branch(OUTBRANCH,m_val,LEAF);
  return bErr != 0 ? 0 : 1;
 }
 void MonInput_CalLoTriggerTower::enableInputBranch(TTree& tree){
