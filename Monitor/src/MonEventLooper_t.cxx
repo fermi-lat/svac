@@ -31,6 +31,9 @@ void MonEventLooper::printTime(ostream& os, Double_t timestamp) {
 MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* colsec, std::vector<MonInputCollection*> incol, MonGlobalCut* eventcut, std::string timestampvar)
   :m_binSize(binSize),
    m_timeStamp(0.0),
+   m_timeinterval(0.0),
+   m_timestamp_firstevt_inbin(0.0),
+   m_timestamp_lastevt_inbin(0.0),
    m_currentStart(0),
    m_currentEnd(0),
    m_currentFlags(0),
@@ -49,7 +52,8 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_globalCut(eventcut),
    m_timestampvar(timestampvar) {
 
-  // attach input chains
+
+   // attach input chains
   for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
   //create and populate intermediate tree
   m_intree = new TTree("Internal","Used to create output");
@@ -127,6 +131,11 @@ void MonEventLooper::attachTree() {
   m_tree->Branch("nEvents",(void*)(&m_nUsed),"nEvents/i");
   m_tree->Branch("nPassed",(void*)(&m_nFilter),"nPassed/i");
 
+  m_tree->Branch("TrueTimeInterval",(void*)(&m_timeinterval),"TrueTimeInterval/D");
+  m_tree->Branch("TimeStampFirstEvt",(void*)(&m_timestamp_firstevt_inbin),"TimeStampFirstEvt/D");
+  m_tree->Branch("TimeStampLastEvt",(void*)(&m_timestamp_lastevt_inbin),"TimeStampLastEvt/D");
+
+
   std::string prefix;
   m_stripValCol->attach(*m_tree,prefix);
   m_secstripValCol->attach(*m_tree,prefix);
@@ -166,6 +175,11 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
       firstEvent(currentTimeStamp);
     } 
 
+    if(!unsaved){
+      // first event of this bin
+      m_timestamp_firstevt_inbin = currentTimeStamp;
+    }
+     
     // check for time-bin edge
     if ( currentTimeStamp >= m_currentEnd ) {
 	// time-stamp outside of bin, jump to next bin
@@ -173,6 +187,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
       switchBins();
       unsaved = 0;
     } else {
+      m_timestamp_lastevt_inbin = currentTimeStamp;
       unsaved++;
     }
     
@@ -231,6 +246,20 @@ void MonEventLooper::firstEvent(Double_t timeStampdouble)  {
 
 void MonEventLooper::switchBins() {
 
+  m_timeinterval = TimeInterval::m_interval;
+  
+  // tmp
+  /*
+  std::cout << "Info concerning time intervals for bin " << m_currentBin << std::endl
+	    << setprecision(20) 
+	    << "m_timeinterval = " << m_timeinterval << std::endl
+	    << "m_timestamp_firstevt_inbin = " << m_timestamp_firstevt_inbin << std::endl
+	    << "m_timestamp_lastevt_inbin = " << m_timestamp_lastevt_inbin << std::endl;
+  */
+  // endtmp
+
+
+
   m_currentFlags -= 1;
   filterEvent();
   stripVals()->increment(m_intree);
@@ -259,6 +288,9 @@ void MonEventLooper::switchBins() {
   while(m_currentTimestamp->value()>=m_currentEnd){
     m_nUsed=0;
     m_nFilter=0;
+    m_timeinterval = 0.0;
+    m_timestamp_firstevt_inbin = 0.0;
+    m_timestamp_lastevt_inbin = 0.0;
     m_tree->Fill();
     m_currentBin++;
     m_currentStart += m_binSize;
@@ -284,17 +316,21 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
 
   
   TimeInterval::m_interval=timeStampdouble-m_currentStart;
- 
+  m_timeinterval =  TimeInterval::m_interval;
+  m_timestamp_lastevt_inbin = timeStampdouble;
+
+
+  // tmp
   /*
-  std::cout << "Time interval; last event, " << std::endl
-	    << "m_currentStart, timeStampdouble, m_interval, " <<std::endl
-	     << setprecision(20) 
-	     << m_currentStart << ", " << timeStampdouble << ", " << TimeInterval::m_interval << std::endl;
+  std::cout << "Info concerning time intervals for bin " << m_currentBin << std::endl
+	    << setprecision(20) 
+	    << "m_timeinterval = " << m_timeinterval << std::endl
+	    << "m_timestamp_firstevt_inbin = " << m_timestamp_firstevt_inbin << std::endl
+	    << "m_timestamp_lastevt_inbin = " << m_timestamp_lastevt_inbin << std::endl;
   */
-  
+  // endtmp
 
-
-
+ 
   m_intree->Fill();
 
   filterEvent();

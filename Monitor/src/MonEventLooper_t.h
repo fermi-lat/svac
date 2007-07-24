@@ -23,6 +23,7 @@ class MonEventLooper {
 public :
 
   static void printTime(ostream& os, ULong64_t timestamp);
+  static void printTime(ostream& os, Double_t timestamp); 
 
 public :
   
@@ -60,14 +61,18 @@ protected:
   // set the tree
   void attachTree();
 
-  // Set stuff up for the current bin
-  void firstEvent(ULong64_t timeStamp);
+  // Functions for timeStamp with Double precision
+  
+   // Set stuff up for the current bin
+  void firstEvent(Double_t timeStamp);
 
   // latch the timestamp from one event
-  void logEvent(Long64_t ievent, ULong64_t timeStamp);
+  void logEvent(Long64_t ievent, Double_t timeStamp);
 
   // called on the last event
-  void lastEvent(ULong64_t timeStamp);
+  void lastEvent(Double_t timeStamp);
+
+
   
 private:
 
@@ -75,15 +80,23 @@ private:
   UInt_t m_binSize;
 
   // cached values
-  mutable ULong64_t m_timeStamp;
+  // mutable ULong64_t m_timeStamp;
+  mutable Double_t m_timeStamp;
   mutable UInt_t m_currentBin;
   mutable ULong64_t m_currentStart;
   mutable ULong64_t m_currentEnd;
   mutable UInt_t m_currentFlags;
 
   /// some run-level chached values
-  ULong_t m_sec_first;
-  ULong_t m_sec_last;
+  Double_t m_sec_first;
+  Double_t m_sec_last;
+  
+  // Time interval and first/last event of bin
+  // those quantities are also written into the 
+  // output root file
+  Double_t m_timeinterval;
+  Double_t m_timestamp_firstevt_inbin;
+  Double_t m_timestamp_lastevt_inbin;
 
   /// starting event number in chain order
   Long64_t m_startEvent;
@@ -117,7 +130,6 @@ private:
   std::string m_timestampvar;
   char m_timestamptype;
   Timestamp *m_currentTimestamp;
-
 };
 
 #endif
