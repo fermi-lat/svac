@@ -18,8 +18,6 @@ $0 running with:
   runId: $runId
 EOT
 
-my $particleType =  `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId particletype`;
-
 my $tkrSerNo = `$ENV{'svacPlLib'}/queryElogReportTable.pl $runId tkr_ser_no`;
 $tkrSerNo =~ s/\?//g;
 $tkrSerNo =~ s/\n//g;
@@ -87,11 +85,6 @@ $geoFile = '$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml';
 
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE qq(#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt" \n);
-
-if($particleType =~ /photon/i) {
-    print JOBOPTIONFILE qq(#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/VDG.txt" \n);
-}
-
 print JOBOPTIONFILE qq(CalibDataSvc.CalibInstrumentName = "$instrumentType";\n);
 print JOBOPTIONFILE qq(GlastDetSvc.xmlfile = "$geoFile"; \n);
 print JOBOPTIONFILE qq(digiRootReaderAlg.digiRootFile = "$digiRootFile"; \n);

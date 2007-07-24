@@ -1,98 +1,13 @@
----------------------------------------------------------------------------
 pre-v3r1p2-0-p1
----------------
+
 modify recon/recon.pl to be able to reconstruct CAL only or TKR only data.
 modify lib/queryElogTable.pl to be able to query field stored in the 
 additionField column.
 
----------------------------------------------------------------------------
 pre-v3r1p2-1
----------------
+
 Move reconReport and svacTuple "main" TPs from long LSF queue to xlong.
 Move digitization from medium to long.
 Update task and code versions in setup script due to queue changes in this tag 
 and the changes in pre-v3r1p2-0-p1.
 
----------------------------------------------------------------------------
-prod-v3r1p2
----------------
-Combine previous changes.
-
----------------------------------------------------------------------------
-v3r1p3
----------------
-Pipeline tasks & code @ v3r1p3.  Unifying tags & versions required broad
-but shallow changes to code.
-
-Move to u14 ( SVAC-21 ).
-
-Change access method for reports from FTP to HTTP ( PIT-3 and SVAC-20 ).
-
-Fix SVAC-8 (this is just code cleanup, but SVAC-20 gave a good
-opportunity to fix this).
-
-Change LSF queue for digiReport ( SVAC-15 ).
-
-Change LSF queue for reconReport ( SVAC-12 ).  This was approved at the
-last round, but I goofed when installing the code.
-
----------------------------------------------------------------------------
-v3r1p4
----------------
-
-modify code to run eLogFeeder v2r2p1 which has following changes:
-modify code to use #!/usr/bin/env python2.4 (SVAC-29)
-modify code to use http instead of ftp to store online report URL (SVAC-28)
-
----------------------------------------------------------------------------
-v3r1p5
----------------
-
-switch to EM v4r060302p18
-
-switch to eLogFeeder v2r2p2:
-
-Don't crash on runs with no serial #s.
-
-svacTuple switch to EngineeringModelRoot v1r3p15:
-
-Added TrgReqTriRowBits made from trigger primitives. 
-Renamed current TriRowBits to DigiTriRowBits. 
-Updated documentation.
-
-Add CalXtalPos to describe fit position in each crystal 
-Add TkrTotalHits to describe total number of hits in each tower 
-JIRA issue (SVAC-17)
-
-Add TkrTotalClusters to describe total number of clusters in each tower 
-JIRA issue (SVAC-30)
-
-Added Eventsize (in bytes) and GEM dead zone counter.
-
----------------
-
-Add installation instructions to docs.
----------------------------------------------------------------------------
-
-v3r1p6
----------------
-
-Switch to eLogFeeder v2r2p3 to fix SVAC-40.
----------------------------------------------------------------------------
-
-v3r1p7
----------------
-
-Added some more reprocessing scripts.
-Fixed error in setup script, online version was wrong (only affected reprocessing).
-
-v3r1p8
-
-modify queryElogReportTable.pl to exit with code nonzero if the queried info is
-not in the database (JIRA issue: SVAC-46)
-
-modify recon.pl to use VDG.txt in LatIntegration job option directory to 
-reconstruct VDG photons (JIRA issue: SVAC-44)
-
-use eLogFeeder v2r2p4 to exit with exited code 1 if sql statement is not
-successfully executed

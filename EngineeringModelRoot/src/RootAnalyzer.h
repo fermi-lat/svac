@@ -12,6 +12,8 @@
 #include "digiRootData/DigiEvent.h"
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
+#include "calibTkrUtil/TkrHits.h"
+//#include "calibTkrUtil/TkrNoiseOcc.h"
 
 class RootAnalyzer {
  public:
@@ -27,9 +29,9 @@ class RootAnalyzer {
   /// produce output ntuple and histogram files based on analysis results
   void produceOutputFile();
 
-  enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
-	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, 
-	g_nCno=12};
+  //enum {g_nTower=16, g_nTkrLayer=18, g_nView=2, g_nCalLayer=8, g_nCol=12, 
+  //	g_nTot=2, g_nStripsPerLayer=1536, g_nFace=2, g_nTP=8, g_nFEC=24, 
+  //	g_nCno=12};
 
  private:
 
@@ -127,6 +129,10 @@ class RootAnalyzer {
   // number of events with negative root when doing tot correction using quadratic formula
   int m_nTotNegRoot;
 
+  TkrHits* m_tkrCalib;
+
+  //TkrNoiseOcc* m_tkrNoiseOcc;
+  //TDirectory* m_tkrNoiseOcc_dir;
 };
 
 #endif
