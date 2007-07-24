@@ -70,6 +70,10 @@
 // Last updated with object DiscardedDelta by user dpaneque on Sun Jul  1 02:05:05 2007
 // Last updated with object DeadZoneDelta by user dpaneque on Sun Jul  1 02:07:07 2007
 // Last updated with object timestampdouble by user dpaneque on Fri Jul 20 01:17:49 2007
+// Last updated with object ReconEnergy_TowerCalLayerCalColumn by user dpaneque on Sun Jul 22 23:45:43 2007
+// Last updated with object ReconEnergy_TowerCalLayerCalColumnCalXFace by user dpaneque on Mon Jul 23 02:25:22 2007
+#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace.h"
+#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
 #include "digi/MonInput_timestampdouble.h"
 #include "digi/MonInput_DeadZoneDelta.h"
 #include "digi/MonInput_DiscardedDelta.h"
@@ -272,6 +276,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DeadZoneDelta;
   if (s=="timestampdouble")
     return new MonInput_timestampdouble;
+  if (s=="ReconEnergy_TowerCalLayerCalColumn")
+    return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
+  if (s=="ReconEnergy_TowerCalLayerCalColumnCalXFace")
+    return new MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -344,6 +352,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("GemDiscardedDelta");
   names.push_back("DeadZoneDelta");
   names.push_back("timestampdouble");
+  names.push_back("ReconEnergy_TowerCalLayerCalColumn");
+  names.push_back("ReconEnergy_TowerCalLayerCalColumnCalXFace");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
