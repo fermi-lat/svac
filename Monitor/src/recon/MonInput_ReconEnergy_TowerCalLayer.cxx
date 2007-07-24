@@ -60,6 +60,8 @@ void MonInput_ReconEnergy_TowerCalLayer::setValue(TObject* event) {
 	  CalXtalId id = p->getPackedId();
 	  int tower = id.getTower();
 	  int layer = id.getLayer();
+	  if(m_val[tower][layer]<0.0)
+	    m_val[tower][layer] = 0.0;
 	  m_val[tower][layer] += p->getEnergy();
 	}
       }
