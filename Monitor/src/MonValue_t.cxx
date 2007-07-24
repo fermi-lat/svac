@@ -87,6 +87,7 @@ void MonValue::makeProxy(TTree* tree){
   execmap["foreachacdtile:"]= "for(int acdtile=0;acdtile<128;acdtile++){";
   execmap["foreachcallayer:"]= "for(int callayer=0;callayer<8;callayer++){";
   execmap["foreachcalcolumn:"]= "for(int calcolumn=0;calcolumn<12;calcolumn++){";
+  execmap["foreachcalxface:"]= "for(int calxface=0;calxface<2;calxface++){";
   
 
 
@@ -109,6 +110,10 @@ void MonValue::makeProxy(TTree* tree){
 
   // tmp
   /*
+  std::cout << "For name " << std::endl
+	    << m_name.c_str() << std::endl
+	    << "With formula " << std::endl
+	    << formula.c_str() << std::endl;
   std::cout << "Printout of formulaloops map (map dim =" << formulaloops.size() <<")" << std::endl;
   for(ExecutionList_t::const_iterator itr =formulaloops.begin();
       itr!=formulaloops.end();itr++)
@@ -125,10 +130,16 @@ void MonValue::makeProxy(TTree* tree){
   for(ExecutionList_t::const_iterator itr =formulaloops.begin();
       itr!=formulaloops.end();itr++){
     spos=formula.find(itr->second);
-    
+
+      
     // check for stupidity
     if(spos>formulasize){
-      std::cout << "spos>formulasize for a string which is in formulaloops. " 
+      std::cout << "ERROR while processing formula " << std::endl
+		<< formula.c_str() << std::endl
+		<< "from monitoring object " << m_name.c_str() << std::endl 
+		<< "spos(=" << spos << ") > formulasize(="<<formulasize<<") for string " << std::endl
+		<< itr->second << std::endl
+		<< "which is in formulaloops. " 
 		<< "This should not happen." << std::endl;
       assert(0);
     }
