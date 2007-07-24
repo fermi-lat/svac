@@ -488,7 +488,7 @@ private:
   UInt_t *m_nvalues;
   Bool_t *m_startrun;
   Long64_t **m_values;
-  Double_t **m_times;
+  Float_t **m_times;
   UInt_t m_numval;
 };
 
