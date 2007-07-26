@@ -483,12 +483,12 @@ public:
 private:
   
   // lo and hi values from current time slice
-  Long64_t *m_firstval;
-  Long64_t *m_lastval;
+  Double_t *m_firstval;
+  Double_t *m_lastval;
   UInt_t *m_nvalues;
   Bool_t *m_startrun;
-  Long64_t **m_values;
-  Float_t **m_times;
+  Double_t **m_values;
+  Double_t **m_times;
   UInt_t m_numval;
 };
 

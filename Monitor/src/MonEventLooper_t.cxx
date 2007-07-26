@@ -315,9 +315,10 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
   // kludge: double the last event because the last event does not get used.
 
   
-  TimeInterval::m_interval=timeStampdouble-m_currentStart;
-  m_timeinterval =  TimeInterval::m_interval;
   m_timestamp_lastevt_inbin = timeStampdouble;
+  if (m_currentBin>0) TimeInterval::m_interval=timeStampdouble-m_currentStart;
+  else TimeInterval::m_interval=timeStampdouble-m_timestamp_firstevt_inbin;
+  m_timeinterval =  TimeInterval::m_interval;
 
 
   // tmp

@@ -692,23 +692,23 @@ int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
   TBranch* b = tree.Branch(branchName.c_str(),m_nvalues,leafName.c_str());
   if ( b == 0 ) return -1;
   branchName= fullName+"_firstval";
-  leafName= branchName+m_dimstring + "/L";
+  leafName= branchName+m_dimstring + "/D";
   b = tree.Branch(branchName.c_str(),m_firstval,leafName.c_str());
   if ( b == 0 ) return -1;
   branchName= fullName+"_lastval";
-  leafName= branchName+m_dimstring + "/L";
+  leafName= branchName+m_dimstring + "/D";
   b = tree.Branch(branchName.c_str(),m_lastval,leafName.c_str());
   if ( b == 0 ) return -1;
   char valname[128];
   for (unsigned int i=0;i<m_numval;i++){
     sprintf(valname,"_newval_%d",i);
     branchName= fullName+valname;
-    leafName= branchName+m_dimstring + "/L";
+    leafName= branchName+m_dimstring + "/D";
     b = tree.Branch(branchName.c_str(),m_values[i],leafName.c_str());
     if ( b == 0 ) return -1;
     sprintf(valname,"_newtime_%d",i);
     branchName= fullName+valname;
-    leafName= branchName+m_dimstring + "/F";
+    leafName= branchName+m_dimstring + "/D";
     b = tree.Branch(branchName.c_str(),m_times[i],leafName.c_str());
     if ( b == 0 ) return -1;
   }
@@ -724,16 +724,16 @@ MonValueChange::MonValueChange(const char* name, const char* formula, const char
     assert(0);
   }
   m_numval=atoi(tt[0].c_str());
-  m_firstval=new Long64_t[m_dim];
-  m_lastval=new Long64_t[m_dim];
+  m_firstval=new Double_t[m_dim];
+  m_lastval=new Double_t[m_dim];
   m_nvalues=new UInt_t[m_dim];
   m_startrun=new Bool_t [m_dim];
   
-  m_values=new Long64_t*[m_numval];
-  m_times=new Float_t*[m_numval];
+  m_values=new Double_t*[m_numval];
+  m_times=new Double_t*[m_numval];
   for (unsigned i=0;i<m_numval;i++){
-    m_values[i]=new Long64_t[m_dim];
-    m_times[i]=new Float_t[m_dim];
+    m_values[i]=new Double_t[m_dim];
+    m_times[i]=new Double_t[m_dim];
   }
   for (unsigned i=0;i<m_dim;i++)m_startrun[i]=true;
   reset();
@@ -769,15 +769,15 @@ void MonValueChange::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     if (val[i]!=m_lastval[i]&&m_startrun[i]==false){
       if(m_nvalues[i]<m_numval){
-	m_values[m_nvalues[i]][i]=(Long64_t)val[i];
-	m_times[m_nvalues[i]][i]=Float_t(val2[i]);
+	m_values[m_nvalues[i]][i]=(Double_t)val[i];
+	m_times[m_nvalues[i]][i]=Double_t(val2[i]);
       }
-      m_lastval[i]=(Long64_t)val[i];
+      m_lastval[i]=(Double_t)val[i];
       m_nvalues[i]++;
     }
     if(m_startrun[i]){
-      m_firstval[i]=(Long64_t)val[i];
-      m_lastval[i]=(Long64_t)val[i];
+      m_firstval[i]=(Double_t)val[i];
+      m_lastval[i]=(Double_t)val[i];
       m_startrun[i]=false;
     }
   }
