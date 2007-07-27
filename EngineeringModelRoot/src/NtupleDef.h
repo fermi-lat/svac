@@ -127,42 +127,17 @@ struct NtupleDef {
   // ACD MIPs:
   float m_acdMips[604][2];
 
-  int m_acdMipsPha[604][2];
-  int m_acdMipsFlag[604][2];
-
-
-  float m_acdMipsMax;
-  int   m_acdMipsMaxTileID;
-  int   m_acdMipsMaxPmt;
-  float m_acdMipsSum;
-
-
-  // Tkr Point:
-  float m_acdTkrPointX[2];
-  float m_acdTkrPointY[2];
-  float m_acdTkrPointZ[2];
-  int m_acdTkrPointFace[2];
-
-  // ACD Gap POCA:
-  int m_acdGapPocaNbrTrack1;
-  int m_acdGapPocaNbrTrack2;
-
-  int m_acdGapPocaTrackID[2][2];
-  int m_acdGapPocaTileID[2][2];
-  float m_acdGapPocaDoca[2][2];
-
   // ACD POCA:
-  float m_acdPocaDoca[2][2];
-  float m_acdPocaDocaErr[2][2];
-  float m_acdPocaDocaRegion[2][2];
-  float m_acdPocaX[2][2];
-  float m_acdPocaY[2][2];
-  float m_acdPocaZ[2][2];
-  float m_acdPocaDirX[2][2];
-  float m_acdPocaDirY[2][2];
-  float m_acdPocaDirZ[2][2];
-  int   m_acdPocaTileID[2][2];
-  int   m_acdPocaTrackID[2][2];
+  float m_acdPocaDoca[2][6];
+  float m_acdPocaDocaErr[2][6];
+  float m_acdPocaDocaRegion[2][6];
+  float m_acdPocaX[2][6];
+  float m_acdPocaY[2][6];
+  float m_acdPocaZ[2][6];
+  float m_acdPocaSlopeX[2][6];
+  float m_acdPocaSlopeY[2][6];
+  int   m_acdPocaTileID[2][6];
+  int   m_acdPocaTrackID[2][6];
   int   m_acdPocaNbrTrack1;
   int   m_acdPocaNbrTrack2;
 
@@ -223,66 +198,6 @@ struct NtupleDef {
 
   // number of crystals with energy above the threshold in every tower
   int m_nCrystalHit[g_nTower];
-
-  //                                                                                                                                                                                                           
-  // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
-  int m_contextRunInfoPlatform;
-  int m_contextRunInfoDataOrigin;
-  unsigned int m_contextRunInfoID;
-  unsigned int m_contextRunInfoStartTime;
-
-  unsigned int m_contextDataGramInfoModeChanges;
-  unsigned int m_contextDataGramInfoDatagrams;
-  int m_contextDataGramInfoOpenAction;
-  int m_contextDataGramInfoOpenReason;
-  int m_contextDataGramInfoCrate;
-  int m_contextDataGramInfoMode;
-  int m_contextDataGramInfoCloseAction;
-  int m_contextDataGramInfoCloseReason;
-
-  unsigned long long m_contextGemScalersElapsed;
-  unsigned long long m_contextGemScalersLivetime;
-  unsigned long long m_contextGemScalersPrescaled;
-  unsigned long long m_contextGemScalersDiscarded;
-  unsigned long long m_contextGemScalersSequence;
-  unsigned long long m_contextGemScalersDeadzone;
-
-  unsigned int m_contextLsfTimeTimeToneCurrentIncomplete;
-  unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
-  unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
-  int m_contextLsfTimeTimeToneCurrentFlagsValid;
-  int m_contextLsfTimeTimeToneCurrentIsSourceGps;
-  int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
-  int m_contextLsfTimeTimeToneCurrentMissingLatPps;
-  int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
-  int m_contextLsfTimeTimeToneCurrentEarlyEvent;
-  unsigned int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
-  unsigned int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
-
-  unsigned int m_contextLsfTimeTimeTonePreviousIncomplete;
-  unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
-  unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
-  int m_contextLsfTimeTimeTonePreviousFlagsValid;
-  int m_contextLsfTimeTimeTonePreviousIsSourceGps;
-  int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
-  int m_contextLsfTimeTimeTonePreviousMissingLatPps;
-  int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
-  int m_contextLsfTimeTimeTonePreviousEarlyEvent;
-  unsigned int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
-  unsigned int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
-  unsigned int m_contextLsfTimeTimeToneGemTimeHacks;
-  unsigned int m_contextLsfTimeTimeToneGemTimeTicks;
-  unsigned int m_contextLsfTimeTimeTicks;
-
-  unsigned int m_contextLsfTimeTimeHackHacks;
-  unsigned int m_contextLsfTimeTimeHackTicks;
-
-
-  int m_contextRunType;
-
-  
-
 
   // time information. This may change depending on future data format
   unsigned int m_ebfSecond, m_ebfNanoSecond;
@@ -348,40 +263,6 @@ struct NtupleDef {
 
   // Event quality:
   unsigned int m_eventFlags;
-
-  // Error flags:
-  int m_eventBadEventSequence;
-  int m_eventBadTkrRecon;
-  int m_eventPacketError;
-  int m_eventTemError;
-  int m_eventTrgParityError;
-  int m_eventBadLdfStatus;
-  int m_eventGtrcPhase;
-  int m_eventGtfePhase;
-  int m_eventGtccFifo;
-  int m_eventGtccHdrParity;
-  int m_eventGtccWcParity;
-  int m_eventGtrcSummary;
-  int m_eventGtccDataParity;
-  int m_eventGtccTimeout;
-  int m_eventGcccError;
-  int m_eventGtccError;
-  int m_eventPhaseError;
-  int m_eventTimeoutError;
-
-  int m_eventReadout4;
-  int m_eventZeroSuppress;
-  int m_eventMarker;
-  int m_eventCalStrobe;
-  int m_eventTag;
-  int m_eventTACK;
-
-  double m_eventMCLivetime;
- 
-  double m_cCSDStime;
-  int    m_cCSDSapID;
-  int    m_cCSDSscID;
-
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request
