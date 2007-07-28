@@ -53,10 +53,11 @@ void MonInput_ReconNumTracks::setValue(TObject* event) {
   if(tkrRecon) 
     numtracks = tkrRecon->getTrackCol()->GetLast()+1;
 
-  if(numtracks<=10)
+  if(numtracks>=0 && numtracks<=10)
     m_val[numtracks]++;
   else{
-    std::cout << "Retrieved number of tracks LARGER than 10. This is not allowed. Something wrong happened."
+    std::cout << "Retrieved number of tracks = " << numtracks 
+	      << " .This is not allowed. Something wrong happened."
 	      << std:: endl;
     assert(0);
   }
