@@ -66,10 +66,20 @@ void MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace::setValue(TObject* even
 	  UShort_t layer = id.getLayer();
 	  UShort_t column = id.getColumn();
 	  UShort_t xface = id.getFace();
-
+	  
+	  if(tower<16 && layer<8 && column<12 && xface<2){
 	  if(m_val[tower][layer][column][xface]<0.0)
 	    m_val[tower][layer][column][xface] = 0.0;
 	  m_val[tower][layer][column][xface] += p->getEnergy();
+	  }
+	  else{
+	    std::cout << "MonInput_ReconEnergy_TowerCalLayerCalColumn::setValue; WARNING" 
+		      << std::endl
+		      << "Indices tower,layer,column,xface out of range: tower = " << tower
+		      << ", layer = " << layer << ", column = " << column 
+		      << ", xface = " << xface << std::endl;
+	  }
+
 	}
       }
     }

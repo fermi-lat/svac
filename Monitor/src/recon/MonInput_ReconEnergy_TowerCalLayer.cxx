@@ -60,9 +60,18 @@ void MonInput_ReconEnergy_TowerCalLayer::setValue(TObject* event) {
 	  CalXtalId id = p->getPackedId();
 	  int tower = id.getTower();
 	  int layer = id.getLayer();
-	  if(m_val[tower][layer]<0.0)
-	    m_val[tower][layer] = 0.0;
-	  m_val[tower][layer] += p->getEnergy();
+	  if(tower<16 && layer<8){
+	    if(m_val[tower][layer]<0.0)
+	      m_val[tower][layer] = 0.0;
+	    m_val[tower][layer] += p->getEnergy();
+	  }
+	  else{
+	    std::cout << "MonInput_ReconEnergy_TowerCalLayer::setValue; WARNING" 
+		      << std::endl
+		      << "Indices tower,layer out of range: tower = " << tower
+		      << ", layer = " << layer << std::endl;
+	  }
+	  	    
 	}
       }
     }

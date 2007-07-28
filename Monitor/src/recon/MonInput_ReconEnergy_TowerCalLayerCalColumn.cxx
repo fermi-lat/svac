@@ -63,9 +63,17 @@ void MonInput_ReconEnergy_TowerCalLayerCalColumn::setValue(TObject* event) {
 	  UShort_t tower = id.getTower();
 	  UShort_t layer = id.getLayer();
 	  UShort_t column = id.getColumn();
-	  if(m_val[tower][layer][column]<0.0)
-	    m_val[tower][layer][column] = 0.0;
-	  m_val[tower][layer][column] += p->getEnergy();
+	   if(tower<16 && layer<8 && column<12){
+	     if(m_val[tower][layer][column]<0.0)
+	       m_val[tower][layer][column] = 0.0;
+	     m_val[tower][layer][column] += p->getEnergy();
+	   }
+	   else{
+	    std::cout << "MonInput_ReconEnergy_TowerCalLayerCalColumn::setValue; WARNING" 
+		      << std::endl
+		      << "Indices tower,layer,column out of range: tower = " << tower
+		      << ", layer = " << layer << ", column = " << column << std::endl;
+	  }
 	}
       }
     }
