@@ -2,6 +2,8 @@
 //#include "configData/db/LatcDBImplOld.h"
 #include "AcdPedProxy.h"
 #include "AcdPeds.h"
+#include "CalPedProxy.h"
+#include "CalPeds.h"
 
 const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
@@ -23,6 +25,12 @@ int RFun::iden(int i ){
   return i;
 }
 
+#ifndef oldROOT
+const float RFun::calped(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
+  const CalPeds* peds=CalPedProxy::getCalPeds(timestamp);
+  return peds->mean(tower,callayer,calcolumn,calend,calrange);
+}
+#endif
 
 double RFun::computemean_with_outlierscut(const ULong64_t invector[], 
 					  const UInt_t vecdim,

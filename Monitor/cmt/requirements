@@ -55,7 +55,7 @@ macro_append ROOT_linkopts " -lHist -lGpad -lGraf -lGui -lGraf3d -lPostscript -l
 
 #application runStrip JobConfig.cxx MonValueImpls.cxx MonDataFiller.cxx DigiFiller.cxx MonEventLooper.cxx MonEventLooper_Digi.cxx runStrip.cxx
 
-application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  compareFiles.cxx MonGlobalCut.cxx Geo.cxx TestReport.cxx RFun.cxx MonInputObject.cxx AcdPeds.cxx AcdPedProxy.cxx AcdPedParser.cxx 
+application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInputCollection.cxx MonInputCollection_*.cxx MonEventLooper_t.cxx runStrip_t.cxx MonObjFactory.cxx MonConfigParser.cxx recXmlList.cxx MeritEvent.cxx SvacEvent.cxx CalEvent.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  compareFiles.cxx MonGlobalCut.cxx Geo.cxx TestReport.cxx RFun.cxx MonInputObject.cxx AcdPeds.cxx AcdPedProxy.cxx AcdPedParser.cxx CalPeds.cxx CalPedProxy.cxx CalPedParser.cxx
 
 application treemerge treemerge.cxx
 
