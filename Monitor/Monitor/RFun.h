@@ -15,6 +15,7 @@ class RFun{
   RFun(){};
 #ifndef oldROOT
   static const float calped(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange);
+  static const float calpedwidth(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange);
 #endif
   static const float acdped(unsigned int timestamp,int garc, int gafe);
   static int engine(int i,unsigned key);

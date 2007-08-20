@@ -30,6 +30,10 @@ const float RFun::calped(unsigned int timestamp,int tower,int callayer, int calc
   const CalPeds* peds=CalPedProxy::getCalPeds(timestamp);
   return peds->mean(tower,callayer,calcolumn,calend,calrange);
 }
+const float RFun::calpedwidth(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
+  const CalPeds* peds=CalPedProxy::getCalPeds(timestamp);
+  return peds->width(tower,callayer,calcolumn,calend,calrange);
+}
 #endif
 
 double RFun::computemean_with_outlierscut(const ULong64_t invector[], 
