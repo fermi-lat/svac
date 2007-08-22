@@ -44,8 +44,13 @@ void MonCounter::latchValue() {
 // Attach a MonCounter node to a TTree (unsigned int)
 int MonCounter::attach(TTree& tree, const std::string& prefix) const {
   std::string fullName = prefix + "Counter_" + name();
+  
   std::string leafType = fullName + m_dimstring + "/l";
-  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "l");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
   return b != 0 ? 1 : -1;
 }
   // += addition operator
@@ -81,7 +86,11 @@ void MonSecondListDouble::latchValue() {}
 int MonSecondListDouble::attach(TTree& tree, const std::string& prefix) const {
   std::string fullName = prefix + "OutD_"+ name();
   std::string leafType = fullName + m_dimstring + "/D";
-  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "D");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
   return b != 0 ? 1 : -1;
 }
   // value of m_val object is set
@@ -117,7 +126,11 @@ void MonSecondListFloat::latchValue() {}
 int MonSecondListFloat::attach(TTree& tree, const std::string& prefix) const {
   std::string fullName = prefix + "OutF_" + name();
   std::string leafType = fullName + m_dimstring + "/F";
-  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
+  
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
   return b != 0 ? 1 : -1;
 }
   // value of m_val object is set
@@ -126,13 +139,6 @@ void MonSecondListFloat::singleincrement(Double_t* val, Double_t* val2) {
     m_val[i] = (Float_t)val[i];
   }
 }
-
-
-
-
-
-
-
 
 
 
@@ -174,11 +180,20 @@ void MonRate::singleincrement(Double_t* val, Double_t* val2) {
 int MonRate::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameVal = prefix + "Rate_"+ name();
   std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
-  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeVal.c_str());
+
+  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
   if ( b == 0 ) return -1;
   std::string fullNameErr = fullNameVal + "_err";
   std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
-  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str());
+
+  BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeErr.c_str());
+
+
+  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str(),BufSize);
   return bErr != 0 ? 2 : -1;
 }
 
@@ -478,15 +493,29 @@ void MonMean::reset() {
 int MonMean::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameVal = prefix + "Mean_" + name();
   std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
-  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeVal.c_str());
+
+
+  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
   if ( b == 0 ) return -1;
   std::string fullNameErr = fullNameVal + "_err";
   std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
-  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str());
+
+  BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeErr.c_str());
+
+  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str(),BufSize);
   if ( bErr == 0 ) return -1;
   std::string fullNameN = fullNameVal + "_n";
   std::string leafTypeN = fullNameN + m_dimstring + "/l";
-  TBranch* bN = tree.Branch(fullNameN.c_str(),m_nVals,leafTypeN.c_str());
+
+  BufSize = GetBufSize(Int_t(m_dim), "l");
+  CheckLeafName(leafTypeN.c_str());
+
+
+  TBranch* bN = tree.Branch(fullNameN.c_str(),m_nVals,leafTypeN.c_str(),BufSize);
   return bN != 0 ? 3 : -1;
 }
   // add a value input the mean, so add to running sums
@@ -580,6 +609,75 @@ void MonTruncatedMeanFrac::latchValue(){
   }
 }
 
+MonTruncatedMeanBoundsAndFrac::MonTruncatedMeanBoundsAndFrac(const char* name, 
+							     const char* formula, 
+							     const char* cut, const char* type) 
+    :MonMean(name,formula,cut){
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()!=3){
+    std::cerr<<"MonTruncatedMeanBoundsAndFrac variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+  m_lowerbound=atof(tt[0].c_str());
+  m_upperbound=atof(tt[1].c_str());
+  m_fraction=atof(tt[2].c_str());
+  m_list=new std::list<double>[m_dim];
+}
+
+
+MonTruncatedMeanBoundsAndFrac::~MonTruncatedMeanBoundsAndFrac(){
+  delete [] m_list;
+}
+
+void MonTruncatedMeanBoundsAndFrac::reset(){
+  for (unsigned i=0;i<m_dim;i++){
+    m_list[i].clear();
+  }
+  MonMean::reset();
+}
+
+
+void MonTruncatedMeanBoundsAndFrac::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i =0;i<m_dim;i++){
+    if(val[i] >=m_lowerbound && val[i]<=m_upperbound) 
+      m_list[i].push_back(val[i]);
+  }
+}
+
+
+void MonTruncatedMeanBoundsAndFrac::latchValue(){
+  for (unsigned i =0;i<m_dim;i++){
+    if (m_list[i].size()==0)continue;
+    m_list[i].sort();
+    unsigned int numentries=m_list[i].size();
+    unsigned int remove=(unsigned int)((1.-m_fraction)*numentries);
+    if (remove>0){
+      unsigned int frm=remove/2;
+      unsigned int erm=remove-frm;
+      for (unsigned int j=0;j<frm;j++)m_list[i].pop_front();
+      for (unsigned int j=0;j<erm;j++)m_list[i].pop_back();
+    }
+    if (m_list[i].size()==0)continue;
+    double sum,sum2;
+    sum=sum2=0;
+    for (std::list<double>::iterator it=m_list[i].begin();it!=m_list[i].end();it++){
+      sum+=(*it);
+      sum2+=(*it)*(*it);
+    }
+    unsigned int nvals=m_list[i].size();
+    m_nVals[i]=nvals;
+    m_val[i]=sum/(double)nvals;
+    Double_t err2 = sum2;
+    err2 /= (Double_t)nvals;
+    err2 -= m_val[i]*m_val[i];    
+    err2 /= (Double_t)nvals;
+    m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
+  }
+}
+
+
+
+
 MonCounterDiff::MonCounterDiff(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula, cut){
   m_lo=new ULong64_t[m_dim];
@@ -617,7 +715,12 @@ void MonCounterDiff::latchValue() {
 int MonCounterDiff::attach(TTree& tree, const std::string& prefix) const {
   std::string fullName = prefix + "CounterDiff_" + name();
   std::string leafType = fullName + m_dimstring+"/l";
-  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "l");
+  CheckLeafName(leafType.c_str());
+
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
   return b != 0 ? 1 : -1;
 
 }
@@ -639,12 +742,20 @@ int MonMinMax::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameMin = prefix + "Min_" + name();
   //fullNameMin += "_min";
   std::string leafTypeMin = fullNameMin+m_dimstring + "/F";
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeMin.c_str());
+
+
   std::string fullNameMax = prefix + "Max_" +name();
   //fullNameMax += "_max";
   std::string leafTypeMax = fullNameMax +m_dimstring+ "/F";
-  TBranch* b = tree.Branch(fullNameMin.c_str(),m_min,leafTypeMin.c_str());
+
+  CheckLeafName(leafTypeMax.c_str());
+
+  TBranch* b = tree.Branch(fullNameMin.c_str(),m_min,leafTypeMin.c_str(),BufSize);
   if ( b == 0 ) return -1;
-  b = tree.Branch(fullNameMin.c_str(),m_max,leafTypeMax.c_str());
+  b = tree.Branch(fullNameMin.c_str(),m_max,leafTypeMax.c_str(),BufSize);
   return b != 0 ? 2 : -1;
 }
 
@@ -689,27 +800,37 @@ int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
   std::string fullName = prefix + "ValChange_" +name();
   branchName= fullName+"_nchanges";
   leafName= branchName+m_dimstring + "/i";
-  TBranch* b = tree.Branch(branchName.c_str(),m_nvalues,leafName.c_str());
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "i");
+  CheckLeafName(leafName.c_str());
+  
+
+  TBranch* b = tree.Branch(branchName.c_str(),m_nvalues,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
   branchName= fullName+"_firstval";
   leafName= branchName+m_dimstring + "/D";
-  b = tree.Branch(branchName.c_str(),m_firstval,leafName.c_str());
+  BufSize = GetBufSize(Int_t(m_dim), "D");
+  CheckLeafName(leafName.c_str());
+  b = tree.Branch(branchName.c_str(),m_firstval,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
   branchName= fullName+"_lastval";
   leafName= branchName+m_dimstring + "/D";
-  b = tree.Branch(branchName.c_str(),m_lastval,leafName.c_str());
+  CheckLeafName(leafName.c_str());
+  b = tree.Branch(branchName.c_str(),m_lastval,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
   char valname[128];
   for (unsigned int i=0;i<m_numval;i++){
     sprintf(valname,"_newval_%d",i);
     branchName= fullName+valname;
     leafName= branchName+m_dimstring + "/D";
-    b = tree.Branch(branchName.c_str(),m_values[i],leafName.c_str());
+    CheckLeafName(leafName.c_str());
+    b = tree.Branch(branchName.c_str(),m_values[i],leafName.c_str(),BufSize);
     if ( b == 0 ) return -1;
     sprintf(valname,"_newtime_%d",i);
     branchName= fullName+valname;
     leafName= branchName+m_dimstring + "/D";
-    b = tree.Branch(branchName.c_str(),m_times[i],leafName.c_str());
+    CheckLeafName(leafName.c_str());
+    b = tree.Branch(branchName.c_str(),m_times[i],leafName.c_str(),BufSize);
     if ( b == 0 ) return -1;
   }
   return 0;
@@ -907,11 +1028,13 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
 
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"truncatedmeanboundandfrac")){
+    return new MonTruncatedMeanBoundsAndFrac(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanfrac")){
     return new MonTruncatedMeanFrac(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"truncatedmean")){
     return new MonTruncatedMean(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
-  } else if (type=="counter"){
+  }  else if (type=="counter"){
     return new MonCounter(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="rate"){
     return new MonRate(name.c_str(),formula.c_str(),cut.c_str());

@@ -375,6 +375,23 @@ class MonTruncatedMeanFrac:public MonMean{
   std::list<double> *m_list;
   
 };
+
+class MonTruncatedMeanBoundsAndFrac:public MonMean{
+ public:
+  MonTruncatedMeanBoundsAndFrac(const char* name, const char* formula, const char* cut, const char* type) ;
+  virtual ~MonTruncatedMeanBoundsAndFrac();
+  void singleincrement(Double_t* val, Double_t* val2) ;
+  void reset();
+  virtual void latchValue() ;
+ private:
+  Float_t m_lowerbound;
+  Float_t m_upperbound;
+  Float_t m_fraction;
+  std::list<double> *m_list;
+};
+
+
+
 //
 // 
 //
