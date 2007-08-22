@@ -58,7 +58,14 @@ void MonInput_CalXHit_TowerCalLayerCalColumn::setValue(TObject* event) {
     UShort_t tower = p->getPackedId().getTower();
     UShort_t callayer = p->getPackedId().getLayer();
     UShort_t calcolumn = p->getPackedId().getColumn();
-    m_val[tower][callayer][calcolumn]++;
+
+    if(tower<16 && callayer<8 && calcolumn<12)
+      m_val[tower][callayer][calcolumn]++;
+    else
+      std::cout << "MonInput_CalXHit_TowerCalLayerCalColumn::setValue; WARNING" 
+		 << std::endl
+		 << "Indices tower,layer,column out of range: tower = " << tower
+		 << ", layer = " << callayer << ", column = " << calcolumn << std::endl;
   }
   
       
