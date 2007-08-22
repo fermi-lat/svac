@@ -94,6 +94,27 @@ double RFun::computemean_with_outlierscut(const ULong64_t invector[],
 }
 
 
+double RFun::computeratio(Short_t signal1, float ped1, 
+			  Short_t signal2, float ped2,
+			  Short_t MinSignal)
+{
+  double sig1 = double(signal1)-double(ped1);
+  double sig2 = double(signal2)-double(ped2);
+  
+  double ratio = -1; // silly value returned in case signals are not large enough to 
+  // compute a sensible ratio. 
+
+  // Check minimum signla required
+  if(sig1 < MinSignal || sig2 < MinSignal)
+    return ratio;
+  else
+    ratio = sig1/sig2;
+
+  return ratio;
+}
+
+
+
 unsigned RFun::getplaneshit(const UShort_t invector[36])
 {
  unsigned n_planeshit(0);

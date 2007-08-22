@@ -90,6 +90,11 @@ class RFun{
 					     const double rmstailcut);
   
 
+  static double computeratio(Short_t signal1, float ped1, 
+			     Short_t signal2, float ped2,
+			     Short_t MinSignal);
+
+
   // END of Acd/Tracker/Cal related functions
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
