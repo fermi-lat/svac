@@ -56,6 +56,11 @@ public :
   void setSharedLibDir(std::string);
   void setDontCompile(bool);
 
+  Int_t GetBufSize(Int_t dim, const char* type);
+  
+
+  Bool_t CheckLeafName(const char* leafname);
+
  protected:
   /// val2 is only used for 2d histograms 
   virtual void singleincrement(Double_t* val,Double_t* val2=0){};

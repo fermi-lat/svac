@@ -54,7 +54,64 @@ MonValue::MonValue(const char* name, const char* formula, const char* cut):
     m_dim=dims;
   }
 }
+
+// Checks the buf size needed for this object. 
+// if size smaller than 32M, then it returns 32M,
+// which is the recomended value by root. Otherwise, 
+// it returns the size of the object
+
   
+Int_t MonValue::GetBufSize(Int_t dim,const char* type)
+{
+  UInt_t RecomendedBufSize = 32000;
+  //std::cout << "dim,type = " << dim << ", " << type << std::endl; 
+  std::string thistype(type);
+  UChar_t BytesNeeded = 0;
+  if(thistype=="b" || thistype=="B" || thistype=="O"){
+    BytesNeeded = 1;
+  }else if(thistype=="s" || thistype=="S"){
+    BytesNeeded = 2;
+  }else if(thistype=="I" || thistype=="i" || thistype=="F"){
+    BytesNeeded = 4;
+  }else if(thistype=="D" || thistype=="L" || thistype=="l"){
+    BytesNeeded = 8;
+  }else{
+    std::cerr<<"No such type "<<type<<std::endl;
+    assert(0);
+  }
+  
+  UInt_t TotalBytesNeeded = Int_t(dim*BytesNeeded);
+  
+  //std::cout << "TotalBytesNeeded = " << TotalBytesNeeded  << std::endl;
+  if(TotalBytesNeeded<=RecomendedBufSize)
+    return Int_t(RecomendedBufSize);
+  else
+    return Int_t(TotalBytesNeeded);
+}
+
+// If leafname (excluding type) is larger than 64 chars, the 
+// function makes an assert(0). Currently root versions 5.16 and lower 
+// have a limit of 64 chars for leafnmaes.
+
+Bool_t MonValue::CheckLeafName(const char* leafname)
+{
+  const UShort_t leafnameMaxlength = 64;
+  std::string name(leafname);
+  std::string type(strstr(leafname,"/"));
+  
+  if((name.size()- type.size()) > leafnameMaxlength)
+    {
+      std::cerr << " MonValue::CheckLeafName: ERROR" << std::endl
+		<< " Leaf name " <<  name.c_str() << " is " << (name.size()- type.size()) 
+		<< " char long (excluding type). Root only allows leafnames shorter or equal to " 
+		<< leafnameMaxlength << std::endl
+		<< " Aborting... " << std::endl;
+      assert(0);
+    }
+  return 0;
+}
+
+
 void MonValue::makeProxy(TTree* tree){
   
   bool dooutsideformula = false;
@@ -64,8 +121,10 @@ void MonValue::makeProxy(TTree* tree){
   std::string::size_type formulasize=formula.size();
   std::string::size_type spos(formulasize), spos2(formulasize);
 
-  // std::cout << "Formula BEFORE all loops subrtraction: " << formula.c_str() << std::endl;
-
+  /*
+  std::cout << "Starting proxy for name " <<  m_name.c_str() << std::endl;
+  std::cout << "Formula BEFORE all loops subrtraction: " << formula.c_str() << std::endl;
+  */
 
   // Define strings we need to look for inside formula, 
   // and the corresponding line to be written in the proxies. 
@@ -88,7 +147,7 @@ void MonValue::makeProxy(TTree* tree){
   execmap["foreachcallayer:"]= "for(int callayer=0;callayer<8;callayer++){";
   execmap["foreachcalcolumn:"]= "for(int calcolumn=0;calcolumn<12;calcolumn++){";
   execmap["foreachcalxface:"]= "for(int calxface=0;calxface<2;calxface++){";
-  
+  execmap["foreachcalxrange:"]= "for(int calxrange=0;calxrange<4;calxrange++){";
 
 
 
@@ -315,6 +374,7 @@ void MonValue::makeProxy(TTree* tree){
     std::cout<<"Compiling formula for "<<m_name<<std::endl;
     sprintf(rootcommand,".L %s.h+O",(m_sodir+m_name+"Selector").c_str());
     gROOT->ProcessLine(rootcommand);
+    std::cout << "Done" << std::endl;
   }else{
     if(m_dontcompile)std::cout<<"Option p: Reading old library for "<<m_name<<std::endl;
     else std::cout<<"Formula/cut for "<<m_name<<" has not changed. Using old library"<<std::endl;
@@ -335,6 +395,7 @@ void MonValue::makeProxy(TTree* tree){
   sprintf(rootcommand,"&((%s*)0x%%x)->counter;",(m_name+"Selector").c_str());
   unsigned int **ct = (unsigned int**)gROOT->ProcessLineFast(Form(rootcommand,m_sel));
   *ct=&m_counter;
+  // std::cout << "Done with this proxy" << std::endl;
 }
   
 
