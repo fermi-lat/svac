@@ -92,12 +92,6 @@ int main(int argn, char** argc) {
 
   // strip chart output do this before the event loop
   // so that we abort the output won't work
-  std::string outputFile = jc.outputPrefix() + "_time.root";
-  TFile* fout = TFile::Open(outputFile.c_str(),"RECREATE");
-  if ( fout == 0 || fout->IsZombie() ) {
-    std::cerr << "Failed to open output File " << outputFile << std::endl;
-    return -1;
-  }
   // parse the monitoring configuration xml file
   MonConfigParser p(jc.configFile().c_str());
   std::list<std::string> inputlist=p.getInputList();
@@ -297,8 +291,15 @@ int main(int argn, char** argc) {
     unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
     
     // Ok, write the output and clean up
-    d.tree()->Write();
+    gROOT->cd();
     TList* list=(TList*)gDirectory->GetList();
+    std::string outputFile = jc.outputPrefix() + "_time.root";
+    TFile* fout = TFile::Open(outputFile.c_str(),"RECREATE");
+    if ( fout == 0 || fout->IsZombie() ) {
+      std::cerr << "Failed to open output File " << outputFile << std::endl;
+      return -1;
+    }
+    d.tree()->Write();
     TIter iter(list);
     while(TObject* obj=iter.Next()){
       if((strstr(obj->ClassName(),"TH2")||strstr(obj->ClassName(),"TH1")) && !strstr(obj->GetName(),"htemp"))obj->Write();
