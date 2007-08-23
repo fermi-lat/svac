@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_ElapsedLast::MonInput_ElapsedLast(){
+  m_name=OUTBRANCH;
 }
 MonInput_ElapsedLast::~MonInput_ElapsedLast(){
 }

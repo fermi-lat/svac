@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_DiscardedLast::MonInput_DiscardedLast(){
+  m_name=OUTBRANCH;
 }
 MonInput_DiscardedLast::~MonInput_DiscardedLast(){
 }

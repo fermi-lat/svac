@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_DeadZoneLast::MonInput_DeadZoneLast(){
+  m_name=OUTBRANCH;
 }
 MonInput_DeadZoneLast::~MonInput_DeadZoneLast(){
 }

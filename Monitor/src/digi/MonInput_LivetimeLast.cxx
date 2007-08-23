@@ -22,6 +22,7 @@
 // End user defined part 
 
 MonInput_LivetimeLast::MonInput_LivetimeLast(){
+  m_name=OUTBRANCH;
 }
 MonInput_LivetimeLast::~MonInput_LivetimeLast(){
 }
