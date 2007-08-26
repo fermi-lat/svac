@@ -314,6 +314,38 @@ class MonHist2d_VecDim: public MonValue{
 
 
 //
+// 2-d histogram,  where indeces are specified in xml file. 
+// the function singleincrement will loop, using these indices [0-maxindex) 
+// over a vector and will fill maxindex times the histogram.
+//
+
+class MonHist2d_Index: public MonValue{
+ public:
+  /// Standard constructor
+  MonHist2d_Index(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel);
+  /// Destructor
+  virtual ~MonHist2d_Index();
+  
+  /// Does nothing
+  virtual void reset();
+  
+  /// Attach does nothing
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+
+  /// fill histogram
+  void singleincrement(Double_t* val, Double_t* val2);
+  
+  /// Latch does nothing
+  virtual void latchValue();
+  
+ private:
+  UInt_t m_maxindex;
+  TH2F* m_hist;
+};
+
+
+
+//
 // 
 // This implementation takes the average of several values
 // using running sums of n, v and v2

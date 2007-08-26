@@ -444,6 +444,72 @@ void MonHist2d_VecDim::latchValue(){}
 int MonHist2d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1;}
 
 
+
+
+/////
+
+MonHist2d_Index::MonHist2d_Index(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
+    :MonValue(name,formula,cut){
+  m_histdim=1; // effectively, in what concerns to formulae, it is like a 1dim histogram
+  float lbx,ubx,lby,uby;
+  int nbx,nby;
+  lbx=ubx=lby=uby=0;
+  nbx=nby=0;
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  if(tt.size()==6){
+    lbx=atof(tt[1].c_str());
+    ubx=atof(tt[2].c_str());
+    nbx=atoi(tt[0].c_str()); 
+    lby=atof(tt[4].c_str());
+    uby=atof(tt[5].c_str());
+    nby=atoi(tt[3].c_str());
+    m_maxindex = nbx; // this will be used to loop over vector components, filling nbx times this histo
+  }else{
+    std::cerr<<"MonHist2d_Index variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
+    assert(m_histdim);
+  }
+  
+  m_maxindex = unsigned(nbx); // this will be used to loop over vector components, filling nbx times this histo
+  m_dim = m_maxindex;
+
+  tt=parse(axislabels,"[",",","]");
+  char nm[128];
+  sprintf(nm,"%s",m_name.c_str());
+  m_hist=new TH2F(nm,nm,nbx,lbx,ubx,nby,lby,uby);
+  if (tt.size()>0)m_hist->GetXaxis()->SetTitle(tt[0].c_str());
+  if (tt.size()>1)m_hist->GetYaxis()->SetTitle(tt[1].c_str());
+  if (tt.size()>2)m_hist->GetZaxis()->SetTitle(tt[2].c_str());
+  if (strlen(titlelabel)!=0)m_hist->SetTitle(titlelabel);
+}
+
+
+
+MonHist2d_Index::~MonHist2d_Index(){
+  // for (unsigned int i=0;i<m_dim;i++){
+    // m_hist[i];
+    //}
+    //delete m_hist;
+}
+void MonHist2d_Index::singleincrement(Double_t* val, Double_t* val2) {
+  
+  // std::cout << m_name.c_str() << std::endl;
+  for(unsigned index = 0; index < m_maxindex;index++){
+      // std::cout << "index,val= " << index << ", " << val[z] << std::endl; 
+    m_hist->Fill(index, (Float_t)val[index]);
+    }
+}  
+
+
+
+void MonHist2d_Index::reset(){}
+
+void MonHist2d_Index::latchValue(){}
+
+int MonHist2d_Index::attach(TTree& t,const std::string& prefix) const {return 1;}
+
+
+
+
 MonMean::MonMean(const char* name, const char* formula, const char* cut) 
     :MonValue(name,formula,cut),
      m_nVals(0),m_sum(0),m_sum2(0),
@@ -1056,6 +1122,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonHist1d_VecDim(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   } else if (strstr(type.c_str(),"histogram-vecdim-2d")){
     return new MonHist2d_VecDim(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
+  } else if (strstr(type.c_str(),"histogram-index-2d")){
+    return new MonHist2d_Index(name.c_str(),formula.c_str(),cut.c_str(),type.c_str(),axislabels.c_str(),titlelabel.c_str());
   }else{
     std::cerr<<"No such type "<<type<<std::endl;
     assert(0);
