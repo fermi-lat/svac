@@ -1,0 +1,139 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+    <!-- TEST variables -->
+    <object> nACD </object>
+    <object> Gem_elapsed </object>
+    
+    <!-- Time stamp -->
+    <object> timestampdouble </object>
+    <object> timestamp </object> <!-- some functions need time stamp as int -->
+
+    <!-- Event classification information -->
+    <object> condsummary </object>
+    <object> condarrcallo  </object>
+    <object> condarrcalhi </object>
+    <object> condarrtkr </object>
+    <object> condarrcno </object>
+    <object> condarrroi </object>
+    <object> LivetimeLast</object>
+    <object> ElapsedLast</object>
+    <object> DeadZoneLast</object>
+    <object> DiscardedLast</object>
+    <object> PrescaledLast</object>
+    <object> DeadZoneDelta </object>
+    <object> DiscardedDelta </object>
+    <object> TkrTriggerTower </object>
+    <object> CalHiTriggerTower </object> 
+    <object> CalLoTriggerTower </object>
+    <object> CalReadoutRange </object>
+    <object> Range4 </object>
+
+    <!-- Acd Variables -->
+    
+    <object>AcdGemVeto_AcdTile</object>
+    <object>AcdGemROI_Tower </object>
+    <object>AcdGemCNO_GARC  </object>
+    <object>AcdHit_AcdTile  </object>
+    <object>AcdPmtA_OverThreshold_AcdTile  </object>
+    <object>AcdPmtB_OverThreshold_AcdTile  </object>
+    <object>AcdVetoA_AcdTile  </object>
+    <object>AcdVetoB_AcdTile  </object>
+    <object>AcdPha_PmtA_AcdTile  </object>
+    <object>AcdPha_PmtB_AcdTile  </object>
+
+    <!-- Tkr Variables -->
+       
+    <object> TkrHitsTowerPlane </object>
+    <object> IsTkrDigi_TowerPlane </object>
+    <object> ToT_con0_TowerPlane  </object>
+    <object> ToT_con1_TowerPlane  </object>
+
+     <!-- Cal Variables -->
+    <object> CalXHit_TowerCalLayerCalColumn </object>
+    <object> CalXHit_TowerCalLayer </object>
+    <object> CalXAdc_TowerCalLayerCalColumnFaceRange </object>
+
+  </inputList>
+
+
+  <outputList name="top">
+  
+    
+     <object>
+      <name> CalXAdc_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
+      <formula><![CDATA[CalXAdc_TowerCalLayerCalColumnFaceRange]]></formula>
+      <cut><![CDATA[condsummary&32 && Range4]]></cut>
+      <type> truncatedmeanfrac[0.8] </type>
+      <description> Vector[tower][callayer][calcolumn][face][range] reporting the mean (and rms by means of the the CalXAdc_TowerCalLayerCalColumnFaceRange_err quantity) pedestal. The mean (and rms) is computed removing (truncating) 10 percent of the events located at each of the sides (beginning+end) of the distribution of values; that is with the 80 percent central values. This is done to remove outliers. Only periodic triggers with 4 range readout events are being used. </description>
+    </object>
+
+      
+      <object>
+	<name> CalXAdcPed_Histo1_TowerCalLayerCalColumnFaceRange[16][8][12][2][4] </name>
+	<formula><![CDATA[Mean_CalXAdc_TowerCalLayerCalColumnFR]]></formula>
+	<cut><![CDATA[]]></cut>
+	<source>output</source>
+	<type> histogram-1d[7000,0,70000] </type>
+	<titledesc> Distribution pedestal means (ADC counts). Only Periodic triggers considered. </titledesc>
+	<axisdesc> [ADC counts, N] </axisdesc>
+	<description> Distribution pedestal means (ADC counts). Only Periodic triggers considered.  </description>
+      </object>
+
+
+       <object>
+	<name> CalXAdcPed_Histo1_TowerCalLayerCalColumnFaceRange_RMS[16][8][12][2][4] </name>
+	<formula><![CDATA[Mean_CalXAdc_TowerCalLayerCalColumnFR_err]]></formula>
+	<cut><![CDATA[]]></cut>
+	<source>output</source>
+	<type> histogram-1d[10000,0,10000] </type>
+	<titledesc> Distribution pedestal RMS (ADC counts). Only Periodic triggers considered. </titledesc>
+	<axisdesc> [ADC counts, N] </axisdesc>
+	<description> Distribution pedestal RMS (ADC counts). Only Periodic triggers considered.  </description>
+      </object>
+
+
+
+      <object>
+      <name> CalXPedDev_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
+      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn:foreachcalxface: foreachcalxrange: CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][calxface][calxrange] - RFun::calped(timestamp,tower,callayer,calcolumn,calxface,calxrange)]]></formula>
+      <cut><![CDATA[condsummary&32 && Range4]]></cut>
+      <type> truncatedmeanfrac[0.8] </type>
+      <description> Vector[tower][callayer][calcolumn][face][range] reporting the mean deviations between the measured pedestals and the ones retrieved from the data base (and rms by means of the the CalXPedDev_TowerCalLayerCalColumnFR_err quantity). The mean (and rms) is computed removing (truncating) 10 percent of the events located at each of the sides (beginning+end) of the distribution of values; that is with the 80 percent central values. Only periodic triggers with 4 range readout events are being used. </description>
+    </object>
+      
+      <object>
+      <name> RPM_TowerCalLayerCalColumnFR[16][8][12] </name>
+      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][0],RFun::calped(timestamp,tower,callayer,calcolumn,0,0), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][0], RFun::calped(timestamp,tower,callayer,calcolumn,1,0), 50)]]></formula>
+      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <type> truncatedmeanboundandfrac[0,70000,0.8] </type>
+      <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(plus face) / LEX1(minus face) = P/M. This ratio is expected to be close to 1. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values. Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
+    </object>
+
+
+      <object>
+      <name> RPp_TowerCalLayerCalColumnFR[16][8][12] </name>
+      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][1],RFun::calped(timestamp,tower,callayer,calcolumn,0,1), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][2], RFun::calped(timestamp,tower,callayer,calcolumn,0,2), 50)]]></formula>
+      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <type> truncatedmeanboundandfrac[0,70000,0.8] </type>
+      <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(plus face) / HEX8 (plus face) = P/p. This ratio is expected to be close to 6. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values.  Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
+    </object>
+
+       <object>
+      <name> RMm_TowerCalLayerCalColumnFR[16][8][12] </name>
+      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][1],RFun::calped(timestamp,tower,callayer,calcolumn,1,1), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][2], RFun::calped(timestamp,tower,callayer,calcolumn,1,2), 50)]]></formula>
+      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <type>  truncatedmeanboundandfrac[0,70000,0.8] </type>
+      <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(minus face) / HEX8(minus face) = M/m. This ratio is expected to be close to 6. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values.  Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
+    </object>
+      
+      
+
+     
+
+  </outputList>
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> timestampdouble </timestamp>
+</monitoring>
