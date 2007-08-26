@@ -41,19 +41,35 @@ class RFun{
 #ifdef oldROOT
   static unsigned loopovertowerANDtkrplanes(ROOT::TArray2Proxy<UShort_t, 36>& TkrHitsTowerPlane);
   static unsigned loopovertowerANDcallayers(ROOT::TArray2Proxy<UShort_t, 8>& invector);
-  static Double_t loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector);
-  static Double_t loopovercallayersANDcalcolumns_double(ROOT::TArray2Proxy<Double_t, 12>& invector);
+  static Double_t loopovertowerANDcallayers_float(ROOT::TArray2Proxy<Float_t, 8>& invector);
+  static Double_t loopovercallayersANDcalcolumns_float(ROOT::TArray2Proxy<Float_t, 12>& invector);
 #else
   static unsigned loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
   static unsigned loopovertowerANDcallayers(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 8> >&);
-  static Double_t loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >&);
+  static Double_t loopovertowerANDcallayers_float(ROOT::TArrayProxy<ROOT::TArrayType<Float_t, 8> >&);
   // static Double_t loopovercallayersANDcalcolumns_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 12> >&);
-  static Double_t loopovercallayersANDcalcolumns_double(const Double_t [8][12]);
+  static Double_t loopovercallayersANDcalcolumns_float(const Float_t [8][12]);
 #endif
 
 
+  // I guess this only work for hte root versions 5.14g and later
 
+  static Double_t loopovercalcolumns_float(const Float_t [12]);
+  static Double_t loopovertowerANDcallayersANDcalcolumns_float(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t, 12>, 8> >&);
 
+  
+  // Functions to be removed, since Xfaces will be combined in the reconstruction processes, 
+  // and should not be combined in the monitoring code.
+  /*
+  static Double_t loopoverTowerANDcallayersANDcalcolumnsANDXfaces_float(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t,2>, 12>, 8> >&);
+  
+
+  static Double_t loopovercallayersANDcalcolumnsANDXfaces_float(const Float_t [8][12][2]);
+  static Double_t loopovercalcolumnsANDXfaces_float(const Float_t [12][2]);
+  static Double_t loopoverXfaces_float(const Float_t [2]);
+  */
+
+  // end of functions that only work with root versions 5.14g and later
 
   static unsigned loopovercallayers(const UShort_t invector[]);
 
@@ -93,6 +109,18 @@ class RFun{
   static double computeratio(Short_t signal1, float ped1, 
 			     Short_t signal2, float ped2,
 			     Short_t MinSignal);
+
+
+  // function scans invector (CalXtalFaceSignal[16][8][12][2]) and returns 
+  // Either the Energy (Energy =1) or Channel (Energy =0) of the channel with 
+  // the highest energy (level =0), or the second highest (level = 1) or the third highest (level = 2) 
+  // etc, etc....
+
+  static double getChannelEnergyHighest(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t,2>, 12>, 8> >&, int Level, int Energy);
+
+
+  // Get cal index [0-3071] corresponding to coordinates tower,layer,column,face. 
+  static unsigned GetOveralIndex_TowerCalLayerCalColumnCalFace(int tower, int layer, int column, int face);
 
 
   // END of Acd/Tracker/Cal related functions

@@ -114,6 +114,62 @@ double RFun::computeratio(Short_t signal1, float ped1,
 }
 
 
+double RFun::getChannelEnergyHighest(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t,2>, 12>, 8> >& invector, int Level, int Energy)
+{
+
+  if(Level <0 || Level > 16*8*12*2)
+    {
+      std::cout << " RFun::getChannelEnergyHighest" << std::endl
+		<< " LEvel is larger than 3072 or negative" << std::endl
+		<< "Aborting" << std::endl;
+      assert(0);
+    }
+
+
+  typedef std::map<int,float> MapEnergyChannel;
+  MapEnergyChannel data;  
+  std::list<float> EnergyList;
+  std::vector<float> EnergySorted;
+
+  int listpos(0);
+  for (UShort_t itower = 0; itower <16; itower++){
+    for (UShort_t ilayer = 0; ilayer < 8; ilayer++){
+      for (UShort_t icolumn = 0; icolumn < 12; icolumn++){
+	for (UShort_t iface = 0; iface < 2; iface++){
+	  EnergyList.push_back(invector[itower][ilayer][icolumn][iface]);
+	  listpos = itower*8*12*2 + ilayer*12*2 + icolumn*2 + iface;
+	  data[listpos] = invector[itower][ilayer][icolumn][iface];
+	}
+      }
+    }
+  }
+
+  EnergyList.sort();
+  EnergyList.reverse();
+  for (std::list<float>::iterator it=EnergyList.begin();it!=EnergyList.end();it++)
+    EnergySorted.push_back(*it);
+
+  // print info
+  /* 
+  std::cout << "RFun::getChannelEnergyHighest: First = " <<  EnergySorted[0] << std::endl;
+  std::cout << "RFun::getChannelEnergyHighest : second = " <<  EnergySorted[1] << std::endl;
+  std::cout << "RFun::getChannelEnergyHighest : third = " <<  EnergySorted[2] << std::endl;
+  */
+  if(Energy)
+    return EnergySorted[Level];
+  else{
+    // search for the channel with the Energy in LEvel position
+    for(MapEnergyChannel::const_iterator it=data.begin();it!=data.end();it++)
+      {
+	if(it->second == EnergySorted[Level]){
+	  // std::cout << "PosHighest == " << it->first << std::endl;
+	  return it->first;
+	}
+      }
+  }
+  return -1;
+}
+
 
 unsigned RFun::getplaneshit(const UShort_t invector[36])
 {
@@ -225,9 +281,9 @@ unsigned RFun::loopovertowerANDcallayers(ROOT::TArrayProxy<ROOT::TArrayType<USho
 
 //unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
 #ifdef oldROOT
-Double_t RFun::loopovertowerANDcallayers_double(ROOT::TArray2Proxy<Double_t, 8>& invector)
+Double_t RFun::loopovertowerANDcallayers_float(ROOT::TArray2Proxy<Float_t, 8>& invector)
 #else
-Double_t RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 8> >& invector)
+Double_t RFun::loopovertowerANDcallayers_float(ROOT::TArrayProxy<ROOT::TArrayType<Float_t, 8> >& invector)
 #endif
 
 {
@@ -242,10 +298,10 @@ Double_t RFun::loopovertowerANDcallayers_double(ROOT::TArrayProxy<ROOT::TArrayTy
 }
 
 #ifdef oldROOT
-Double_t  RFun::loopovercallayersANDcalcolumns_double(ROOT::TArray2Proxy<Double_t, 12>& invector)
+Double_t  RFun::loopovercallayersANDcalcolumns_float(ROOT::TArray2Proxy<Float_t, 12>& invector)
 #else
   //Double_t  RFun::loopovercallayersANDcalcolumns_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 12> >& invector)
-Double_t RFun::loopovercallayersANDcalcolumns_double(const Double_t invector[8][12] )
+Double_t RFun::loopovercallayersANDcalcolumns_float(const Float_t invector[8][12] )
 #endif
 {
 
@@ -256,6 +312,33 @@ Double_t RFun::loopovercallayersANDcalcolumns_double(const Double_t invector[8][
 	val += invector[icallayer][icalcolumn];
     }
   }
+  return val;
+}
+
+
+Double_t RFun::loopovertowerANDcallayersANDcalcolumns_float(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t, 12>, 8> >& invector)
+{
+  Double_t val(0.0);
+  for (UShort_t itower = 0; itower < 8; itower++){
+    for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
+      for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
+	if(invector[itower][icallayer][icalcolumn] >= 0)
+	  val += invector[itower][icallayer][icalcolumn];
+      }
+    }
+  }
+  return val;
+}
+
+
+Double_t RFun::loopovercalcolumns_float(const Float_t invector[12])
+{
+  Double_t val(0.0);
+  for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
+    if(invector[icalcolumn] >= 0)
+      val += invector[icalcolumn];
+  }
+  
   return val;
 }
 
@@ -430,7 +513,7 @@ std::vector<double> RFun::getemptytowers(ROOT::TArrayBoolProxy& invector)
 }
 
 
-static unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const Int_t vectordim)
+unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const Int_t vectordim)
 {
   for(UShort_t i=0; i<vectordim;i++){
     if(invector[i]>0.0)
@@ -607,7 +690,40 @@ void RFun::initboundarytowers()
 }
 
 
+unsigned RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace(int tower, int layer, int column, int face)
+{
+  // check that indeces make sense
+  if(tower<0 || tower>15){
+    std::cout << "RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace: ERROR" << std::endl
+	      << "Tower= " << tower << " is out of bounds [0-15] " << std::endl
+	      << "Aborting... " << std::endl;
+    assert(0);
+  }
 
+   if(layer<0 || layer>15){
+    std::cout << "RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace: ERROR" << std::endl
+	      << "Layer= " << layer << " is out of bounds [0-7] " << std::endl
+	      << "Aborting... " << std::endl;
+    assert(0);
+   }
+   
+   if(column<0 || column>12){
+     std::cout << "RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace: ERROR" << std::endl
+	       << "Column= " << column << " is out of bounds [0-11] " << std::endl
+	       << "Aborting... " << std::endl;
+     assert(0);
+   }
+    if(face<0 || face>1){
+    std::cout << "RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace: ERROR" << std::endl
+	      << "Face= " << face << " is out of bounds [0-1] " << std::endl
+	      << "Aborting... " << std::endl;
+    assert(0);
+  }
+
+    unsigned index = tower*8*12*2 + layer*12*2 + column*2 + face;
+
+    return index;
+}
 
 
 
