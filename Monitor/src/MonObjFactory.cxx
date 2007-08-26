@@ -75,6 +75,10 @@
 // Last updated with object Tick20MHzDeviation by user dpaneque on Fri Aug 17 19:07:09 2007
 // Last updated with object CalXAdc_TowerCalLayerCalColumnFaceRange by user dpaneque on Fri Aug 17 22:14:39 2007
 // Last updated with object Range4 by user dpaneque on Tue Aug 21 23:20:51 2007
+// Last updated with object CalXtalFaceSignal by user dpaneque on Thu Aug 23 18:28:31 2007
+// Last updated with object CalReadoutRange by user dpaneque on Sun Aug 26 17:38:54 2007
+#include "digi/MonInput_CalReadoutRange.h"
+#include "cal/MonInput_CalXtalFaceSignal.h"
 #include "digi/MonInput_Range4.h"
 #include "digi/MonInput_CalXAdc_TowerCalLayerCalColumnFaceRange.h"
 #include "digi/MonInput_Tick20MHzDeviation.h"
@@ -292,6 +296,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalXAdc_TowerCalLayerCalColumnFaceRange;
   if (s=="Range4")
     return new MonInput_Range4;
+  if (s=="CalXtalFaceSignal")
+    return new MonInput_CalXtalFaceSignal;
+  if (s=="CalReadoutRange")
+    return new MonInput_CalReadoutRange;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -369,6 +377,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Tick20MHzDeviation");
   names.push_back("CalXAdc_TowerCalLayerCalColumnFaceRange");
   names.push_back("Range4");
+  names.push_back("CalXtalFaceSignal");
+  names.push_back("CalReadoutRange");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
