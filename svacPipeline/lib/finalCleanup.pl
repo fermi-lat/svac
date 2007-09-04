@@ -20,6 +20,7 @@ system($cmd);
 # check if this run was taken with one of the scripts that
 # we don't want to save recon for
 my @junkScripts = (
+				   'intSeApp_e2e_LAT-22x',
 				   'intSeApp_e2e_LAT-22x_0.50hr',
 				   'intSeApp_e2e_LAT-71x_0.50hr',
 				   'intSeApp_e2e_LAT-20xMIPThruNoPer_0.50hr', 
