@@ -37,7 +37,7 @@ macro source "*.cxx" WIN32 "*.h *.cxx"
 #make_fragment runcint -header=runcint
 #document runcint cint
 
-macro_append cppflags "-Wno-unused-parameter "
+macro_append cppflags "-Wno-unused-parameter"
 
 macro Monitor_linkopts "-L$(commonRootData_cmtpath)/lib -lrt"
 

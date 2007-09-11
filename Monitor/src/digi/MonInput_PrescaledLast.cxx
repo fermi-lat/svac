@@ -22,7 +22,6 @@
 // End user defined part 
 
 MonInput_PrescaledLast::MonInput_PrescaledLast(){
-  m_name=OUTBRANCH;
 }
 MonInput_PrescaledLast::~MonInput_PrescaledLast(){
 }
