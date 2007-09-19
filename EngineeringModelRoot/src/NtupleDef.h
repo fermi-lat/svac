@@ -127,16 +127,6 @@ struct NtupleDef {
   // ACD MIPs:
   float m_acdMips[604][2];
 
-  int m_acdMipsPha[604][2];
-  int m_acdMipsFlag[604][2];
-
-
-  float m_acdMipsMax;
-  int   m_acdMipsMaxTileID;
-  int   m_acdMipsMaxPmt;
-  float m_acdMipsSum;
-
-
   // Tkr Point:
   float m_acdTkrPointX[2];
   float m_acdTkrPointY[2];
@@ -251,37 +241,32 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeToneCurrentIncomplete;
   unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
   unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
+  unsigned int m_contextLsfTimeTimeToneCurrentFlags;
   int m_contextLsfTimeTimeToneCurrentFlagsValid;
-  int m_contextLsfTimeTimeToneCurrentIsSourceGps;
+  int m_contextLsfTimeTimeToneCurrentMissingGps;
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
   int m_contextLsfTimeTimeToneCurrentMissingLatPps;
   int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
-  int m_contextLsfTimeTimeToneCurrentEarlyEvent;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
 
   unsigned int m_contextLsfTimeTimeTonePreviousIncomplete;
   unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
   unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
+  unsigned int m_contextLsfTimeTimeTonePreviousFlags;
   int m_contextLsfTimeTimeTonePreviousFlagsValid;
-  int m_contextLsfTimeTimeTonePreviousIsSourceGps;
+  int m_contextLsfTimeTimeTonePreviousMissingGps;
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
   int m_contextLsfTimeTimeTonePreviousMissingLatPps;
   int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
-  int m_contextLsfTimeTimeTonePreviousEarlyEvent;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
   unsigned int m_contextLsfTimeTimeToneGemTimeHacks;
   unsigned int m_contextLsfTimeTimeToneGemTimeTicks;
   unsigned int m_contextLsfTimeTimeTicks;
 
-  unsigned int m_contextLsfTimeTimeHackHacks;
-  unsigned int m_contextLsfTimeTimeHackTicks;
-
-
   int m_contextRunType;
 
-  
 
 
   // time information. This may change depending on future data format
@@ -348,40 +333,6 @@ struct NtupleDef {
 
   // Event quality:
   unsigned int m_eventFlags;
-
-  // Error flags:
-  int m_eventBadEventSequence;
-  int m_eventBadTkrRecon;
-  int m_eventPacketError;
-  int m_eventTemError;
-  int m_eventTrgParityError;
-  int m_eventBadLdfStatus;
-  int m_eventGtrcPhase;
-  int m_eventGtfePhase;
-  int m_eventGtccFifo;
-  int m_eventGtccHdrParity;
-  int m_eventGtccWcParity;
-  int m_eventGtrcSummary;
-  int m_eventGtccDataParity;
-  int m_eventGtccTimeout;
-  int m_eventGcccError;
-  int m_eventGtccError;
-  int m_eventPhaseError;
-  int m_eventTimeoutError;
-
-  int m_eventReadout4;
-  int m_eventZeroSuppress;
-  int m_eventMarker;
-  int m_eventCalStrobe;
-  int m_eventTag;
-  int m_eventTACK;
-
-  double m_eventMCLivetime;
- 
-  double m_cCSDStime;
-  int    m_cCSDSapID;
-  int    m_cCSDSscID;
-
 
   // decoded trigger primitive for the tracker
   // e.g.: m_tkrReq[0][3][0][0]=1 means tower 0, lower half of layer X3 sends the trigger request
