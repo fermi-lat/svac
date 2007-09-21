@@ -37,12 +37,6 @@ struct NtupleDef {
   // every tot values 
   int m_tot[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //tot
 
-  // every corrected tot values using Hiro's linear correction 
-  float m_totCorrLinear[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //totCorr
-
-  // every corrected tot values using Hiro's linear correction 
-  float m_totCorrQuad[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //totCorr
-
   // energy deposited in each tower, each layer and each view
   float m_depositEne[g_nTower][g_nTkrLayer][g_nView]; //depositEne
 
@@ -218,7 +212,7 @@ struct NtupleDef {
 
   // energy deposited in each crystal
   // default values are -9999
-  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol][g_nFace];
+  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol];
 
   // maximal deposited energy in a single crystal
   float m_maxCalEnergy;
@@ -286,10 +280,7 @@ struct NtupleDef {
   
 
 
-  // time information. This may change depending on future data format
-  unsigned int m_ebfSecond, m_ebfNanoSecond;
-  unsigned int m_upperTime, m_lowerTime;
-  double m_timeSeconds;
+  // Warren's time stamp:
   double m_triggerTicks;
 
 

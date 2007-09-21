@@ -288,14 +288,12 @@ void RootAnalyzer::analyzeReconTree()
 
 	  float ene = calData->getEnergy();
           
-          float eneNeg = calData->getEnergy(0,CalXtalId::NEG);
           float enePos = calData->getEnergy(0,CalXtalId::POS);
 
 	  if(ene >= 0) ++(m_ntuple.m_nCrystalHit[iTower]);
 
 	  // CAL layer end energies:
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][0] = enePos;
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][1] = eneNeg;
+          m_ntuple.m_xtalEne[iTower][iLayer][iCol] = enePos;
 
 	  if(ene > m_ntuple.m_maxCalEnergy) m_ntuple.m_maxCalEnergy = ene;
 
@@ -592,13 +590,6 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_timeStamp = m_digiEvent->getTimeStamp();
 
-  m_ntuple.m_ebfSecond = m_digiEvent->getEbfTimeSec();
-  m_ntuple.m_ebfNanoSecond =  m_digiEvent->getEbfTimeNanoSec();
-
-  m_ntuple.m_upperTime   = m_digiEvent->getEbfUpperPpcTimeBase();
-  m_ntuple.m_lowerTime   = m_digiEvent->getEbfLowerPpcTimeBase();
-  m_ntuple.m_timeSeconds = m_digiEvent->getEbfPpcTimeSeconds();
-
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
   m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
 
@@ -696,7 +687,11 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
+
+  unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
+  unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
+
+  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,tmpEbfSecond, tmpEbfNanoSecond);
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -1095,25 +1090,8 @@ void RootAnalyzer::analyzeData()
     m_digiChain->SetBranchAddress("DigiEvent", &m_digiEvent);
   }
 
-  /*
-  if(m_mcFile == 0) { 
-    // read in tot correction constants for Hiro's linear formula
-    readTotCorrLinear(1, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x1.txt");
-    readTotCorrLinear(1, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y1.txt");
-    readTotCorrLinear(2, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x2.txt");
-    readTotCorrLinear(2, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y2.txt");
-    readTotCorrLinear(3, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x3.txt");
-    readTotCorrLinear(3, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y3.txt");
 
-    // read in tot correction constants for Hiro's quadratic formula
-    readTotCorrQuad(1, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX1_101003530.tnt");
-    readTotCorrQuad(1, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY1_101003530.tnt");
-    readTotCorrQuad(2, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX2_101003530.tnt");
-    readTotCorrQuad(2, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY2_101003530.tnt");
-    readTotCorrQuad(3, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX3_101003530.tnt");
-    readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
-  }
-  */
+  // awb
   //nEvent = 1000;
 
   m_tkrCalib->setNevents(nEvent);
@@ -1216,207 +1194,6 @@ void RootAnalyzer::fillStripHits(const TkrDigi* tkrDigi)
   saveDir->cd();
 }
 
-void RootAnalyzer::readTotCorrLinear(int layer, int view, const char* file)
-{
-
-  m_aveTotGain[layer][view] = 0;
-  m_aveTotOffset[layer][view] = 0;
-
-  std::ifstream corrFile(file);
-  for(int i = 0; i != 14; ++i) {
-    std::string temp;
-    std::getline(corrFile, temp);
-  }
- 
-  int stripId;
-  float gain, offset;
-
-  int count = 0;
-  while(corrFile >> stripId >> gain >> offset) {
-    ++count;
-    m_totGain[layer][view][stripId] = gain;
-    m_totOffset[layer][view][stripId] = offset;
-    m_aveTotGain[layer][view] += gain;
-    m_aveTotOffset[layer][view] += offset;
-  }
-
-  assert( count == g_nStripsPerLayer);
-
-  m_aveTotGain[layer][view] /= count;
-  m_aveTotOffset[layer][view] /= count;
-
-}
-
-void RootAnalyzer::readTotCorrQuad(int layer, int view, const char* file)
-{
-
-  std::ifstream corrFile(file);
-  for(int i = 0; i != 2; ++i) {
-    std::string temp;
-    std::getline(corrFile, temp);
-  }
-
-  int stripId, feId;
-  float p0, p1, p2, chi2;
-
-  int count = 0;
-  while(corrFile >> stripId >> feId >> p0 >> p1 >> p2 >> chi2) {
-    ++count;
-    m_totP0[layer][view][stripId] = p0;
-    m_totP1[layer][view][stripId] = p1;
-    m_totP2[layer][view][stripId] = p2;
-  }
-
-  assert( count == g_nStripsPerLayer);
-
-}
-
-int RootAnalyzer::midStripId(int iLayer, GlastAxis::axis iView) const
-{
-  if(iLayer == 1 && iView == GlastAxis::X) {
-    return g_nStripsPerLayer / g_nFEC * 4;
-  }
-  else {
-    return g_nStripsPerLayer / 2;
-  }
-}
-
-void RootAnalyzer::correctTotDataLinear(const TkrDigi* tkrDigi)
-{
-  int iTower = tkrDigi->getTower().id();
-  int iLayer = tkrDigi->getBilayer();
-  GlastAxis::axis view = tkrDigi->getView();
-
-  int boundary = midStripId(iLayer, view);
-
-  // iView = 0 means measureX, 1 means measure Y
-  int iView;
-
-  if(view == GlastAxis::X) {
-    iView = 0;
-  }
-  else {
-    iView = 1;
-  }
-
-  int nhits = tkrDigi->getNumHits();
-
-  vector<int> hits;
-  for(int i = 0; i != nhits; ++i) {
-    hits.push_back(tkrDigi->getHit(i));
-  }
-
-  // convert TOT raw count to micro second
-  float totTime[2];
-  totTime[0] = ((tkrDigi->getToT(0)) << 2) * 0.05;
-  totTime[1] = ((tkrDigi->getToT(1)) << 2) * 0.05;
-
-  // since we don't know which strip has longest tot, we simply do an averaged
-  // correction here
-  float charge0 = 0, charge1 = 0;
-  int count0 = 0, count1 = 0;
-
-  for(int i = 0; i != nhits; ++i) {
-    if(hits[i] < boundary) {      
-      charge0 += (totTime[0] - m_totOffset[iLayer][iView][hits[i]]) / m_totGain[iLayer][iView][hits[i]];
-      ++count0;
-    }
-    else {
-      charge1 += (totTime[1] - m_totOffset[iLayer][iView][hits[i]]) / m_totGain[iLayer][iView][hits[i]];
-      ++count1;
-    }
-  }
-
-  if(count0 != 0) charge0 /= count0;
-  if(count1 != 0) charge1 /= count1;
-
-  m_ntuple.m_totCorrLinear[iTower][iLayer][iView][0] = charge0;
-  m_ntuple.m_totCorrLinear[iTower][iLayer][iView][0] = charge1;
-
-}
-
-void RootAnalyzer::correctTotDataQuad(const TkrDigi* tkrDigi)
-{
-  int iTower = tkrDigi->getTower().id();
-  int iLayer = tkrDigi->getBilayer();
-  GlastAxis::axis view = tkrDigi->getView();
-
-  int boundary = midStripId(iLayer, view);
-
-  // iView = 0 means measureX, 1 means measure Y
-  int iView;
-
-  if(view == GlastAxis::X) {
-    iView = 0;
-  }
-  else {
-    iView = 1;
-  }
-
-  int nhits = tkrDigi->getNumHits();
-
-  vector<int> hits;
-  for(int i = 0; i != nhits; ++i) {
-    hits.push_back(tkrDigi->getHit(i));
-  }
-
-  // convert TOT raw count to micro second
-  float totTime[2];
-  totTime[0] = ((tkrDigi->getToT(0)) << 2) * 0.05;
-  totTime[1] = ((tkrDigi->getToT(1)) << 2) * 0.05;
-
-  // since we don't know which strip has longest tot, we simply do an averaged
-  // correction here
-  float charge0 = 0, charge1 = 0;
-  int count0 = 0, count1 = 0;
-
-  for(int i = 0; i != nhits; ++i) {
-    if(hits[i] < boundary) {   
-      double temp = quadTotFormula(iLayer, iView, hits[i], totTime[0]);
-      if(temp > 0) {   
-	charge0 += temp;
-	++count0;
-      }
-    }
-    else {
-      double temp = quadTotFormula(iLayer, iView, hits[i], totTime[0]);
-      if(temp > 0) {   
-	charge1 += temp;
-	++count1;
-      }
-    }
-  }
-
-  if(count0 != 0) charge0 /= count0;
-  if(count1 != 0) charge1 /= count1;
-
-  m_ntuple.m_totCorrQuad[iTower][iLayer][iView][0] = charge0;
-  m_ntuple.m_totCorrQuad[iTower][iLayer][iView][0] = charge1;
-
-}
-
-double RootAnalyzer::quadTotFormula(int layer, int view, int strip, double tot)
-{
-  if(m_totP2[layer][view][strip] == 0) {
-    double charge =  (tot - m_totP0[layer][view][strip]) / m_totP1[layer][view][strip];
-    if(charge < 0) ++ m_nTotNegRoot;
-    return charge;
-  }
-
-  double temp = m_totP1[layer][view][strip]*m_totP1[layer][view][strip] - 4.*m_totP2[layer][view][strip]*(m_totP0[layer][view][strip]-tot);
-
-  if(temp < 0) {
-    ++ m_nTotNoRoot;
-    return -9999;
-  }
-
-  double charge = (-m_totP1[layer][view][strip] + sqrt(temp)) / (2.*m_totP2[layer][view][strip]);
-
-  if(charge < 0) ++m_nTotNegRoot;
-
-  return charge;
-}
-
 void RootAnalyzer::analyzeTot()
 {
   for(int iTower = 0; iTower != g_nTower; ++iTower) {
@@ -1511,11 +1288,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
-  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/i");
-  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
-  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
-  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
-  m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
@@ -1570,8 +1342,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("TkrNumDigis", &(m_ntuple.m_nTkrDigis), "TkrNumDigis/I");
   m_tree->Branch("TkrNumStrips", &(m_ntuple.m_nStrips), "TkrNumStrips[16][18][2]/I");
   m_tree->Branch("tot", &(m_ntuple.m_tot), "tot[16][18][2][2]/I");
-  m_tree->Branch("totCorrL", &(m_ntuple.m_totCorrLinear), "totCorrL[16][18][2][2]/F");
-  m_tree->Branch("totCorrQ", &(m_ntuple.m_totCorrQuad), "totCorrQ[16][18][2][2]/F");
   m_tree->Branch("TkrDepositEne", &(m_ntuple.m_depositEne), "TkrDepositEne[16][18][2]/F");
   m_tree->Branch("TkrNumClusters", &(m_ntuple.m_nTkrClusters), "TkrNumClusters[16][18][2]/I");
   m_tree->Branch("TkrNumTracks", &(m_ntuple.m_nTkrTracks), "TkrNumTracks/I");
@@ -1614,7 +1384,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
   m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
   m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");
-  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12][2]/F");
+  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12]/F");
   m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");

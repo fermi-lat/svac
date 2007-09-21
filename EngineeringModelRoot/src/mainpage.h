@@ -54,23 +54,6 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
           this time is from the event builder and is not the trigger time. For Flight Software runs this used to be the time of the creation of the datagram but it's now the real timestamp of the 
           event. </TD> </TR>
 
-<TR> <TD> EvtSecond </TD> <TD> Int </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. NB! For real data, 
-          this time is from the event builder and is not the trigger time. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtNanoSecond </TD> <TD> Int </TD> <TD> The number of nano-seconds, since 1/1/1970, used in conjunction with getEbfTimeSec for a measure of absolute time. NB! For real data, 
-          this time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtUpperTime </TD> <TD> Int </TD> <TD> The UpperPpcTimeBase word as stored in the LDF from real data. Used in conjunction with EvtLowerTime (getEbfLowerPpcTimeBase), 
-          these words can be used to determine the spacing of real test events. NB! This time is from the event builder and is not the time when 
-          the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtLowerTime </TD> <TD> Int </TD> <TD> The LowerPpcTimeBase word stored in the LDF from real data. Used in conjunction with getEbfUpperPpcTimeBase, these words can be 
-          used to determine the spacing of real data events. NB! This time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtTimeSeconds </TD> <TD> Int </TD> <TD> Uses the data words stored in the UpperPpcTimeBase and LowerPpcTimeBase to calculate seconds since power on. This time is used to 
-          determine the spacing of real data events - NOT as an absolute time. NB! This time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!
-          </TD> </TR>
-
 <TR> <TD> EvtTicks </TD> <TD> Double </TD> <TD> Uses the data words stored in the GemTriggerTime, GemOnePpsSeconds, GemOnePpsTime, EvtSecond, and EvtNanoSecond to calculate LAT ticks for each event. 
           This time is used to determine the spacing of real data events - NOT as an absolute time.  The "zero point" is arbitrary.
           NB! This is the time when the event triggered. The values are integers, but are stored as doubles to portably get more than 32 bits. Do not use with Flight Software Runs!
@@ -294,12 +277,6 @@ This means that this time will be later than the time of any event time. </TD> <
           End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane. 
           However this could be changed during real data taking. Please check the configuration report to find out whether the devision is really in the middle</TD> </TR>
 
-<TR> <TD> totCorrL[tower][layer][view][end]  </TD> <TD> Int </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, 
-          using Hiro's linear correction formula. At the moment only valid for EM1 data. </TD> </TR>
-
-<TR> <TD> totCorrQ[tower][layer][view][end]  </TD> <TD> Int </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, 
-          using Hiro's quadratic correction formula. At the moment only valid for EM1 data. </TD> </TR>
-
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> Int </TD> <TD> A 3 dimension array which describes the number of clusters at every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
 
@@ -350,8 +327,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 
-<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column (and end). 
-          Currently both ends contain the best total energy estimate i.e. use either [end=0] or [end=1], but not both. To get the end energies you need to look at the CAL ntuple.</TD> </TR>
+<TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer and column. To get the log end energies you need to look at the CAL ntuple.</TD> </TR>
 
 <TR> <TD> CalMaxEne </TD> <TD> Float </TD> <TD> Maximal measured energy (in MeV) in a single crystal </TD> </TR>
 

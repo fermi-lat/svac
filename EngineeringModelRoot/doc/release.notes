@@ -268,3 +268,10 @@ awb     Replaced 'MissingGps' with the correct name 'IsSourceGps'. Note that the
 
 v3r2: September 21, 2007
 awb	Added two ACD variables. Redefined/corrected another.
+
+v3r3: September 21, 2007
+awb	- Removed some old pre-FSW time variables that were not filled anymore.
+	- Resized the CAL Xtal energy array to remove end dimension since both ends have the same (total) energy.
+	
+
+

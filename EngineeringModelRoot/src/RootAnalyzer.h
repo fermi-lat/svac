@@ -76,20 +76,6 @@ class RootAnalyzer {
   // calculate a couple of tot values based on event topology
   void analyzeTot();
 
-  // read in constants used in TOT correction
-  void readTotCorrLinear(int layer, int view, const char* file);
-  void readTotCorrQuad(int layer, int view, const char* file);
-
-  // for real data, we need to do strip by strip correction, only works
-  // for EM data. Using two functions provided b Hiro
-  void correctTotDataLinear(const TkrDigi* tkrDigi);
-  void correctTotDataQuad(const TkrDigi* tkrDigi);
-
-  double quadTotFormula(int layer, int view, int strip, double tot);
-
-  // determine boundary of tot0 and tot1, only valid for EM1
-  int midStripId(int iLayer, GlastAxis::axis iView) const;
-
   // create branches for each ntuple variable
   void createBranches();
 
