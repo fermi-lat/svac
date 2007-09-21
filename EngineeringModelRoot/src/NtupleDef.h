@@ -147,9 +147,11 @@ struct NtupleDef {
   int m_acdGapPocaNbrTrack1;
   int m_acdGapPocaNbrTrack2;
 
-  int m_acdGapPocaTrackID[2][2];
-  int m_acdGapPocaTileID[2][2];
-  float m_acdGapPocaDoca[2][2];
+  int m_acdGapPocaTrackID[2][4];
+  int m_acdGapPocaTileID[2][4];
+  float m_acdGapPocaDoca[2][4];
+  int m_acdGapPocaGapIndex[2][2];
+  int m_acdGapPocaGapType[2][2];
 
   // ACD POCA:
   float m_acdPocaDoca[2][2];

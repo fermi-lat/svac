@@ -265,3 +265,6 @@ awb	Tagging Eric's updated ntuple description.
 
 v3r1p3: July 24, 2007
 awb     Replaced 'MissingGps' with the correct name 'IsSourceGps'. Note that the accessor functions have not been updated yet.
+
+v3r2: September 21, 2007
+awb	Added two ACD variables. Redefined/corrected another.

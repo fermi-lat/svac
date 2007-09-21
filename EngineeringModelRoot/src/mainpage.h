@@ -482,11 +482,14 @@ This means that this time will be later than the time of any event time. </TD> <
 
 
 <TR> <TD> AcdGapPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a gap between tiles in the ACD.  This POCA is calculated in 3D.  The doca is defined to be positive if the track goes into the gap and negative otherwise</TD> </TR> 
-<TR> <TD> AcdGapPocaNbrTrack1                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 1. Should be 1.</TD> </TR>
-<TR> <TD> AcdGApPocaNbrTrack2                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 2. Should be 1.</TD> </TR>
-<TR> <TD> AcdGapPocaTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
-<TR> <TD> AcdGapPocaTileID[TrackIndex:0-1][Tile:0-6]      </TD> <TD> Float </TD> <TD>  GAP ID of the tile the track intersects.  Exprssed as a bit mask.  GapType[0xF000] | GapNumber[0x0E00] | Face[0x01C0] | Row[0x0038] | Col[0x0007]</TD> </TR>
-<TR> <TD> AcdGapPocaDoca[TrackIndex:0-1][Tile:0-6]        </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 2D. </TD> </TR>
+<TR> <TD> AcdGapPocaNbrTrack1                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 1.</TD> </TR>
+<TR> <TD> AcdGApPocaNbrTrack2                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 2.</TD> </TR>
+<TR> <TD> AcdGapPocaTrackID[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
+<TR> <TD> AcdGapPocaTileID[TrackIndex:0-1][Tile:0-3]      </TD> <TD> Float </TD> <TD>  GAP ID of the tile the track intersects.  Exprssed as a bit mask.  GapType[0xF000] | GapNumber[0x0E00] | Face[0x01C0] | Row[0x0038] | Col[0x0007]</TD> </TR>
+<TR> <TD> AcdGapPocaDoca[TrackIndex:0-1][Tile:0-3]        </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 2D. </TD> </TR>
+<TR> <TD> AcdGapPocaGapIndex[TrackIndex:0-1][Tile:0-3]    </TD> <TD> Int   </TD> <TD>  Index saying which gap the DOCA is being calculated with respect to. </TD> </TR>
+<TR> <TD> AcdGapPocaGapType[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Int   </TD> <TD>  What type of gap we are talking about: X_RibbonSide = 1, Y_RibbonSide = 2, Y_RibbonTop = 3, CornerRay = 4, TopCornerEdge = 5, TileHole = 6. </TD> </TR> 
+
 
 <TR> <TD> AcdTkrPoint information                          </TD> <TD>       </TD> <TD> Information about the point where the track leaves the nominal ACD volume.  This does not account for the complexities of the geometry, but does give a good estimate of where the track hit the ACD</TD> </TR> 
 <TR> <TD> AcdTkrPointX[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  X-component of point where track struck ACD</TD> </TR>

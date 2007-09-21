@@ -462,14 +462,19 @@ void RootAnalyzer::analyzeReconTree()
       const AcdGapId& acdGapId = acdGapPoca->getGapId();
       int acdGapID = acdGapId.asShort();
 
-      if (trackGapIndex == 0 && nGapTrack1 < 2) {
-        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]   = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]   = trackGapIndex; 
-      } else if (trackGapIndex == 1 && nGapTrack2 < 2) {
-        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2] = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]   = trackGapIndex; 
+      if (trackGapIndex == 0 && nGapTrack1 < 4) {
+        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]     = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1]   = acdGapPoca->getGapId().closestTile();
+        m_ntuple.m_acdGapPocaGapIndex[0][nGapTrack1] = acdGapPoca->getGapId().gap();
+        m_ntuple.m_acdGapPocaGapType[0][nGapTrack1]  = acdGapPoca->getGapId().gapType();
+        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]  = trackGapIndex; 
+
+      } else if (trackGapIndex == 1 && nGapTrack2 < 4) {
+        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2]     = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2]   = acdGapPoca->getGapId().closestTile();
+        m_ntuple.m_acdGapPocaGapIndex[1][nGapTrack2] = acdGapPoca->getGapId().gap();
+        m_ntuple.m_acdGapPocaGapType[1][nGapTrack2]  = acdGapPoca->getGapId().gapType();
+        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]  = trackGapIndex; 
       }
       if (trackGapIndex == 0) {
         nGapTrack1++;
@@ -1824,6 +1829,8 @@ void RootAnalyzer::createBranches()
   // ACD Gap POCA:
   m_tree->Branch("AcdGapPocaDoca", &(m_ntuple.m_acdGapPocaDoca),"AcdGapPocaDoca[2][2]/F");
   m_tree->Branch("AcdGapPocaTileID", &(m_ntuple.m_acdGapPocaTileID),"AcdGapPocaTileID[2][2]/I");
+  m_tree->Branch("AcdGapPocaGapIndex", &(m_ntuple.m_acdGapPocaGapIndex),"AcdGapPocaGapIndex[2][4]/I");
+  m_tree->Branch("AcdGapPocaGapType", &(m_ntuple.m_acdGapPocaGapType),"AcdGapPocaGapType[2][4]/I");
   m_tree->Branch("AcdGapPocaTrackID", &(m_ntuple.m_acdGapPocaTrackID),"AcdGapPocaTrackID[2][2]/I");
   m_tree->Branch("AcdGapPocaNbrTrack1", &(m_ntuple.m_acdGapPocaNbrTrack1),"AcdGapPocaNbrTrack1/I");
   m_tree->Branch("AcdGapPocaNbrTrack2", &(m_ntuple.m_acdGapPocaNbrTrack2),"AcdGapPocaNbrTrack2/I");
