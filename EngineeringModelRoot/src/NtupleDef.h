@@ -274,10 +274,14 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeHackHacks;
   unsigned int m_contextLsfTimeTimeHackTicks;
 
-
   int m_contextRunType;
 
-  
+
+  // OBF:
+  int m_obfPassedGamma;
+  int m_obfPassedMip;
+  int m_obfPassedHFC;
+  int m_obfPassedDFC; 
 
 
   // Warren's time stamp:

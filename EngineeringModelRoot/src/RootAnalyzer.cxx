@@ -595,6 +595,31 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_eventMCLivetime = m_digiEvent->getLiveTime();
 
+  //
+  // OBF:
+  //
+  m_ntuple.m_obfPassedGamma = 0;
+  m_ntuple.m_obfPassedMip   = 0;
+  m_ntuple.m_obfPassedHFC   = 0;
+  m_ntuple.m_obfPassedDFC   = 0;
+
+  
+  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit())
+      == 0) {
+    m_ntuple.m_obfPassedGamma = 1;
+  }
+  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit())
+      == 0) {
+    m_ntuple.m_obfPassedMip = 1;
+  }
+  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) 
+      == 0) {
+    m_ntuple.m_obfPassedHFC = 1;
+  }
+  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) 
+      == 0) {
+    m_ntuple.m_obfPassedDFC = 1;
+  }
 
   //                                                                                                                                                                                                           
   // Context information:                                                                                                                                                                                      
@@ -1467,6 +1492,12 @@ void RootAnalyzer::createBranches()
 
 
   m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
+
+  // OBF:
+  m_tree->Branch("ObfPassedGamma", &(m_ntuple.m_obfPassedGamma), "ObfPassedGamma/I");
+  m_tree->Branch("ObfPassedMip", &(m_ntuple.m_obfPassedMip), "ObfPassedMip/I");
+  m_tree->Branch("ObfPassedHFC", &(m_ntuple.m_obfPassedHFC), "ObfPassedHFC/I");
+  m_tree->Branch("ObfPassedDFC", &(m_ntuple.m_obfPassedDFC), "ObfPassedDFC/I");
 
 
   // GEM information:
