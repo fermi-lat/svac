@@ -46,7 +46,7 @@ void MonInput_CalHiTriggerTower::setValue(TObject* event) {
 
   // Get condsummary word and check if there is tkr trigger
   int cond = de->getGem().getConditionSummary();
-  if(cond&2)
+  if(cond&8)
     {// 3 in a row TKR trigger; update vector with triggers per tower
       int heVector = de->getGem().getCalHeVector();
       for(int i = 0; i < 16; ++i) {
