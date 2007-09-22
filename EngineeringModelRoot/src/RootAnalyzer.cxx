@@ -604,26 +604,30 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_obfPassedDFC   = 0;
 
   
-  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit())
-      == 0) {
-    m_ntuple.m_obfPassedGamma = 1;
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedGamma = 1;
+    }
   }
-  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit())
-      == 0) {
-    m_ntuple.m_obfPassedMip = 1;
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedMip = 1;
+    }
   }
-  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) 
-      == 0) {
-    m_ntuple.m_obfPassedHFC = 1;
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedHFC = 1;
+    }
   }
-  if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) 
-      == 0) {
-    m_ntuple.m_obfPassedDFC = 1;
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedDFC = 1;
+    }
   }
 
-  //                                                                                                                                                                                                           
-  // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
+  //
+  // Context information:
+  //
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
   m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
   m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();

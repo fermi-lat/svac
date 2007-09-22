@@ -276,3 +276,7 @@ awb	- Removed some old pre-FSW time variables that were not filled anymore.
 v3r3p0: September 21, 2007
 awb	- Added OBF (offline version) filter bits.
 
+v3r3p1: September 22, 2007
+awb	- Must protect agains null pointer with OBF bits.
+
+
