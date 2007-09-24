@@ -279,4 +279,6 @@ awb	- Added OBF (offline version) filter bits.
 v3r3p1: September 22, 2007
 awb	- Must protect agains null pointer with OBF bits.
 
+v3r3p2:	September 24, 2007
+awb	Added trigger engines found from GltWord and GemWord.
 

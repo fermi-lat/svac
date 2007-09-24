@@ -296,6 +296,10 @@ struct NtupleDef {
   // event summary word
   unsigned int m_summaryWord;
 
+  // Trigger engines:
+  int m_trgEngineGlt;
+  int m_trgEngineGem;
+
   // GEM information:
   int m_gemConditionsWord;
 

@@ -595,6 +595,10 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_eventMCLivetime = m_digiEvent->getLiveTime();
 
+  m_ntuple.m_trgEngineGlt = m_digiEvent->getL1T().getGltEngine();
+  m_ntuple.m_trgEngineGem = m_digiEvent->getL1T().getGemEngine();
+
+
   //
   // OBF:
   //
@@ -1320,6 +1324,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
+  
+  m_tree->Branch("TrgEngineGlt", &(m_ntuple.m_trgEngineGlt), "TrgEngineGlt/I");
+  m_tree->Branch("TrgEngineGem", &(m_ntuple.m_trgEngineGem), "TrgEngineGem/I");
+
 
   // Error flags:
   m_tree->Branch("EventBadEventSequence", &(m_ntuple.m_eventBadEventSequence), "EventBadEventSequence/I");

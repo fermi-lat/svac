@@ -109,6 +109,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> GemConditionsWord  </TD> <TD> Int </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. 
           For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf Chapter 4 </TD> </TR>
 
+<TR> <TD> TrgEngineGlt </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GltWord. </TD> </TR>
+<TR> <TD> TrgEngineGem </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GemConditionsWord. </TD> </TR>
+
 <TR> <TD> GemTkrVector[16]   </TD> <TD> Int </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
           </TD> </TR>
 <TR> <TD> GemRoiVector[16]   </TD> <TD> Int </TD> <TD> GEM ROI vector: 16 bits - the meaning depends on whether the ROI was used as a trigger or a veto. The bit is set if a ROI was 
@@ -338,7 +341,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 
-<TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer and column. To get the log end energies you need to look at the CAL ntuple.</TD> </TR>
+<TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer and column. To get the log end energies you need to look at the CAL ntuple. Note that prior to October 2007 this array also contained '[end]'. This is no longer the case as it was unnecessary.</TD> </TR>
 
 <TR> <TD> CalMaxEne </TD> <TD> Float </TD> <TD> Maximal measured energy (in MeV) in a single crystal </TD> </TR>
 
