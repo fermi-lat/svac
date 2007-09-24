@@ -3,10 +3,10 @@
 // Software developed for GLAST
 
 #include "MonInputCollection_Svac.h"
-#include "SvacEvent.h"
 #include "TTree.h"
 
-MonInputCollection_Svac::MonInputCollection_Svac(TTree* tree, std::string type): MonInputCollection(tree,type){};
+MonInputCollection_Svac::MonInputCollection_Svac(TTree* tree, std::string type): MonInputCollection(tree,type){
+ };
 
 void MonInputCollection_Svac::readEvent(Long64_t ievent){
   m_intree->GetEntry(ievent);
@@ -14,7 +14,6 @@ void MonInputCollection_Svac::readEvent(Long64_t ievent){
 
 }
 void MonInputCollection_Svac::attachChain(){
-  m_event=new SvacEvent(m_intree);
   m_intree->SetBranchStatus("*",0);
   attachInputTree();
 }

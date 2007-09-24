@@ -17,7 +17,6 @@
 #define MONSOURCE MeritEvent
 #define INPUTSOURCE "MeritEvent"
 #define DESCRIPTION "Cal energy per layer"
-#include "../MeritEvent.h"
 
 // End user defined part 
 
@@ -34,21 +33,16 @@ int MonInput_callayers::setOutputBranch(TTree* tree) {
 }
 void MonInput_callayers::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
+  tree.SetBranchAddress("CalELayer0",&m_val[0]);
+  tree.SetBranchAddress("CalELayer1",&m_val[1]);
+  tree.SetBranchAddress("CalELayer2",&m_val[2]);
+  tree.SetBranchAddress("CalELayer3",&m_val[3]);
+  tree.SetBranchAddress("CalELayer4",&m_val[4]);
+  tree.SetBranchAddress("CalELayer5",&m_val[5]);
+  tree.SetBranchAddress("CalELayer6",&m_val[6]);
+  tree.SetBranchAddress("CalELayer7",&m_val[7]);
 }
 void MonInput_callayers::setValue(TObject* event) {
-  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
-  if (de==0){
-    std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
-    assert(de);
-  }
-    m_val[0]= de->CalELayer0;
-    m_val[1]= de->CalELayer1;
-    m_val[2]= de->CalELayer2;
-    m_val[3]= de->CalELayer3;
-    m_val[4]= de->CalELayer4;
-    m_val[5]= de->CalELayer5;
-    m_val[6]= de->CalELayer6;
-    m_val[7]= de->CalELayer7;
 }
 std::string MonInput_callayers::getInputSource(){
   return INPUTSOURCE;

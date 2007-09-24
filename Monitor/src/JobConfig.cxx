@@ -302,7 +302,6 @@ TChain* JobConfig::makeChain(const char* name, const std::string& fileString) co
     std::cout << "   " << iFile+1 << ") " << token[iFile] << std::endl;
   }
   return chain;
-  
 }
 
 

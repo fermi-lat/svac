@@ -12,7 +12,7 @@
 #include "TObject.h"
 
 // user defined part
-
+#define VARTYPE Float_t 
 
 // end user defined part
 
@@ -26,9 +26,8 @@ class MonInput_calxtalene: public MonInputObject{
   std::string getInputSource();
   std::string getDescription();
  private:
-  TTree* m_tree;
-  bool m_firstevent;
+  VARTYPE m_val[16][8][12][2];
 };
-
+#undef VARTYPE
 #endif
 

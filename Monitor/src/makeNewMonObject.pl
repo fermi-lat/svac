@@ -102,27 +102,27 @@ while ($source =~ /\D/ || $source<0 || $source>5){
 }
 if ($source==0){
     $monsource="DigiEvent";
-    $monsourcefile="digiRootData/DigiEvent.h";
+    $monsourcefile="#include \"digiRootData/DigiEvent.h\"";
     $subdir="digi";
 }elsif($source==1){
     $monsource="ReconEvent";
-    $monsourcefile="reconRootData/ReconEvent.h";
+    $monsourcefile="#include \"reconRootData/ReconEvent.h\"";
     $subdir="recon";
 }elsif($source==2){
     $monsource="McEvent";
-    $monsourcefile="mcRootData/McEvent.h";
+    $monsourcefile="#include \"mcRootData/McEvent.h\"";
     $subdir="mc";
 }elsif($source==3){
     $monsource="MeritEvent";
-    $monsourcefile="../MeritEvent.h";
+    $monsourcefile="";
     $subdir="merit";
 }elsif($source==4){
     $monsource="SvacEvent";
-    $monsourcefile="../SvacEvent.h";
+    $monsourcefile="";
     $subdir="svac";
 }else{
     $monsource="CalEvent";
-    $monsourcefile="../CalEvent.h";
+    $monsourcefile="";
     $subdir="cal";
 }
 	
@@ -199,7 +199,7 @@ print CFILE "//
 #define MONSOURCE $monsource
 #define INPUTSOURCE \"$monsource\"
 #define DESCRIPTION \"$description\"
-#include \"$monsourcefile\"
+$monsourcefile
 
 // End user defined part 
 
@@ -216,15 +216,21 @@ int MonInput_${name}::setOutputBranch(TTree* tree) {
 }
 void MonInput_${name}::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
+";
+if($monsource eq "SvacEvent" || $monsource eq "MeritEvent" || $monsource eq "CalEvent"){
+    print CFILE "  tree.SetBranchAddress(INBRANCH,&m_val);\n";
 }
-void MonInput_${name}::setValue(TObject* event) {
-  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
+print CFILE "}
+void MonInput_${name}::setValue(TObject* event) {\n";
+if ($monsource eq "DigiEvent" || $monsource eq "ReconEvent" || $monsource eq "McEvent"){
+print CFILE "  MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<\"Using object \"<<OUTBRANCH<<\" with wrong kind of data tree (like digi, reco, etc.)\"<<std::endl;
     assert(de);
   }
-  m_val= de->ACCESSOR;
+  m_val= de->ACCESSOR;\n";
 }
+print CFILE "}
 std::string MonInput_${name}::getInputSource(){
   return INPUTSOURCE;
 }
