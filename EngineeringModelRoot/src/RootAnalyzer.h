@@ -12,6 +12,8 @@
 #include "digiRootData/DigiEvent.h"
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
+#include "calibTkrUtil/TkrHits.h"
+//#include "calibTkrUtil/TkrNoiseOcc.h"
 
 class RootAnalyzer {
  public:
@@ -74,20 +76,6 @@ class RootAnalyzer {
   // calculate a couple of tot values based on event topology
   void analyzeTot();
 
-  // read in constants used in TOT correction
-  void readTotCorrLinear(int layer, int view, const char* file);
-  void readTotCorrQuad(int layer, int view, const char* file);
-
-  // for real data, we need to do strip by strip correction, only works
-  // for EM data. Using two functions provided b Hiro
-  void correctTotDataLinear(const TkrDigi* tkrDigi);
-  void correctTotDataQuad(const TkrDigi* tkrDigi);
-
-  double quadTotFormula(int layer, int view, int strip, double tot);
-
-  // determine boundary of tot0 and tot1, only valid for EM1
-  int midStripId(int iLayer, GlastAxis::axis iView) const;
-
   // create branches for each ntuple variable
   void createBranches();
 
@@ -127,6 +115,10 @@ class RootAnalyzer {
   // number of events with negative root when doing tot correction using quadratic formula
   int m_nTotNegRoot;
 
+  TkrHits* m_tkrCalib;
+
+  //TkrNoiseOcc* m_tkrNoiseOcc;
+  //TDirectory* m_tkrNoiseOcc_dir;
 };
 
 #endif
