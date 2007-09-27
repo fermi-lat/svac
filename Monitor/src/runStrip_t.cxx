@@ -55,6 +55,8 @@ std::string GiveMeMyType(std::string type)
     mytype = "MinMax_";
   } else if (type=="counterdiff"){
     mytype = "CounterDiff_";
+  } else if (type=="counterdiffrate"){
+    mytype = "CounterDiffRate_";
   } else if (type=="outputdouble"){
     mytype = "OutD_";
   } else if (type=="outputfloat"){
