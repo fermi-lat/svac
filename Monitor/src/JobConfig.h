@@ -22,6 +22,10 @@ public :
   
   Int_t parse(int argn, char** argc);
 
+
+  
+ 
+  static bool getIsMC(); 
   inline const std::string& theApp() const { return m_theApp; }
   inline const std::string& path() const { return m_path; }
 
@@ -97,7 +101,8 @@ private:
   TChain* m_svacChain;
   TChain* m_meritChain;
   TChain* m_calChain;
-    
+  bool m_IsMC;
+  std::string m_datatype;
 };
 
 #endif

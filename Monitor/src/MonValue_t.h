@@ -13,8 +13,13 @@
 #include <time.h>
 #include <vector>
 
+
 // ROOT
 #include "Rtypes.h"
+
+// Monitoring stuff
+
+#include "JobConfig.h"
 
 class TTree;
 class TSelector;
@@ -83,6 +88,7 @@ public :
   static std::vector<double> *m_result;
   static std::vector<double> *m_result2;
   static unsigned int m_counter;
+  bool m_IsMC;
 };
 
 #endif

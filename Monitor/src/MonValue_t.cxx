@@ -21,6 +21,16 @@ unsigned int MonValue::m_counter=0;
 
 MonValue::MonValue(const char* name, const char* formula, const char* cut):
   m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0),m_timeprof(0),m_dontcompile(false){
+
+  // Define whether we deal with data or MC
+
+  m_IsMC = JobConfig::getIsMC();
+
+  /*
+  if(m_IsMC)
+    std::cout << "We are dealing with MC data" << std::endl;
+  */
+
   // split up the name into the name part and the dimension part
 
   char* dimpos=strchr(name,'[');

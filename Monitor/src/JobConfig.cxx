@@ -15,10 +15,10 @@
 #include "xmlBase/IFile.h"
 #include "facilities/Util.h"
 
-
 JobConfig::JobConfig(const char* appName, const char* desc)
   :m_theApp(appName),
    m_description(desc),
+   m_IsMC(0),
    m_optval_n(0),
    m_optval_s(0),
    m_optval_b(10),
@@ -87,6 +87,7 @@ void JobConfig::usage() {
        << "\t   -p                : Don't do any run-time compilation, read existing shared libraries" << endl
        << "\t   -n <nEvents>      : run over <nEvents>" << endl
        << "\t   -s <startEvent>   : start with event <startEvent>" << endl
+       << "\t   -t <datatype>     : Data type. Currently only MC/Data" << endl
        << endl
        << "\tOPTIONS for specific jobs (will be ignored by other jobs)"  << endl
        << "\t   -b <binSize>         : size of time bins in seconds [10]" << endl   
@@ -102,7 +103,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:d:r:y:S:m:a:j:c:g:n:s:b:w:pq")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:j:c:g:n:s:b:w:pq")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -161,6 +162,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 's':   // start event
       m_optval_s = strtoul( optarg, &endPtr, 0 );
       break;
+    case 't':
+      m_datatype = string(optarg);
+      break;
     case '?':
       usage();
       return 2;
@@ -189,6 +193,14 @@ Int_t JobConfig::parse(int argn, char** argc) {
     }
   }
     
+
+  // data type
+  if(strstr(m_datatype.c_str(),"MC"))
+    {
+      m_IsMC = 1;
+      std::cout << "Data type: MC" << std::endl;
+    }
+
   // timestamp
   std::time_t theTime = std::time(0);
   const char* timeString = std::ctime(&theTime);
@@ -287,6 +299,12 @@ Int_t JobConfig::parse(int argn, char** argc) {
   return 0;
 }
 
+
+bool JobConfig::getIsMC()
+{
+  //return m_IsMC;
+  return 1;
+}
 
 TChain* JobConfig::makeChain(const char* name, const std::string& fileString) const {
 
