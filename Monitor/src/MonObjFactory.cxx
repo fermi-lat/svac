@@ -77,6 +77,16 @@
 // Last updated with object Range4 by user dpaneque on Tue Aug 21 23:20:51 2007
 // Last updated with object CalXtalFaceSignal by user dpaneque on Thu Aug 23 18:28:31 2007
 // Last updated with object CalReadoutRange by user dpaneque on Sun Aug 26 17:38:54 2007
+// Last updated with object OBFStatus by user dpaneque on Wed Sep 26 01:24:44 2007
+// Last updated with object AcdPhaMips_PmtA_AcdTile by user dpaneque on Wed Sep 26 03:52:14 2007
+// Last updated with object AcdPhaMips_PmtB_AcdTile by user dpaneque on Wed Sep 26 03:52:50 2007
+// Last updated with object Sequence by user dpaneque on Wed Sep 26 22:12:04 2007
+// Last updated with object FilterBits by user dpaneque on Thu Sep 27 18:08:37 2007
+#include "digi/MonInput_FilterBits.h"
+#include "digi/MonInput_Sequence.h"
+#include "recon/MonInput_AcdPhaMips_PmtB_AcdTile.h"
+#include "recon/MonInput_AcdPhaMips_PmtA_AcdTile.h"
+#include "digi/MonInput_OBFStatus.h"
 #include "digi/MonInput_CalReadoutRange.h"
 #include "cal/MonInput_CalXtalFaceSignal.h"
 #include "digi/MonInput_Range4.h"
@@ -300,6 +310,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalXtalFaceSignal;
   if (s=="CalReadoutRange")
     return new MonInput_CalReadoutRange;
+  if (s=="OBFStatus")
+    return new MonInput_OBFStatus;
+  if (s=="AcdPhaMips_PmtA_AcdTile")
+    return new MonInput_AcdPhaMips_PmtA_AcdTile;
+  if (s=="AcdPhaMips_PmtB_AcdTile")
+    return new MonInput_AcdPhaMips_PmtB_AcdTile;
+  if (s=="Sequence")
+    return new MonInput_Sequence;
+  if (s=="FilterBits")
+    return new MonInput_FilterBits;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -379,6 +399,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Range4");
   names.push_back("CalXtalFaceSignal");
   names.push_back("CalReadoutRange");
+  names.push_back("OBFStatus");
+  names.push_back("AcdPhaMips_PmtA_AcdTile");
+  names.push_back("AcdPhaMips_PmtB_AcdTile");
+  names.push_back("Sequence");
+  names.push_back("FilterBits");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
