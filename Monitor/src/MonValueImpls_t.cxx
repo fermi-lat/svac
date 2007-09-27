@@ -12,6 +12,7 @@
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
+const ULong64_t MonCounterDiffRate::s_maxVal64(0xFFFFFFFFFFFFFFFF);
 const Float_t MonMinMax::s_huge(1e35);
 
 // Standard c'tor
@@ -803,6 +804,157 @@ void MonCounterDiff::singleincrement(Double_t* val, Double_t* val2) {
   }
 }
 
+
+
+
+MonCounterDiffRate::MonCounterDiffRate(const char* name, const char* formula, const char* cut) 
+    :MonValue(name,formula, cut){
+  m_lo=new ULong64_t[m_dim];
+  m_hi=new ULong64_t[m_dim];
+  m_hi_previous=new ULong64_t[m_dim];
+  m_offset=new ULong64_t[m_dim];
+  m_val=new Float_t[m_dim];
+  m_err = new Float_t[m_dim];
+
+  // initialize offset for this object
+  for (unsigned i=0;i<m_dim;i++)
+    m_offset[i] = 0;
+
+  reset();
+}
+
+  // D'tor, no-op
+MonCounterDiffRate::~MonCounterDiffRate(){
+  delete [] m_lo;
+  delete [] m_hi;
+  delete [] m_hi_previous;
+  delete [] m_offset;
+  delete [] m_val;
+  delete [] m_err;
+}
+  
+  // Reset, check to see if the cache makes sense
+  // if so, just copy hi -> lo, hi -> hi_previous and go on
+  // in not, reset hi, hi_previous and lo
+void MonCounterDiffRate::reset() {
+  m_timebin = 100000000.0;
+  for (unsigned i=0;i<m_dim;i++){
+    m_lo[i] = m_lo[i] >= m_hi[i] ? s_maxVal64 : m_hi[i];
+    m_hi[i] = m_lo[i] >= m_hi[i] ? 0 : m_hi[i];
+    m_hi_previous[i] = m_lo[i] >= m_hi[i] ? s_maxVal64 : m_hi[i];
+    
+    m_val[i] = 0.;
+    m_err[i] = 0.;
+  }
+}
+
+  // Take the difference hi-lo and move it to the output value
+void MonCounterDiffRate::latchValue() {
+
+  // get timeinterval for this bin
+  
+  m_timebin =TimeInterval::m_interval;
+
+  for (unsigned i=0;i<m_dim;i++){
+    m_val[i] = m_lo[i] < m_hi[i] ? Float_t(m_hi[i] - m_lo[i]) : 0.0;
+     m_err[i] = sqrt(m_val[i]);
+    if(m_timebin>0.0){
+      m_val[i] /= Float_t(m_timebin);
+      m_err[i] /= Float_t(m_timebin);
+      /*
+      std::cout << "MonCounterDiffRate::latchValue; Dimension " << i << std::endl
+		<< "Time interval retrived = "  <<std::endl
+		<<  m_timebin 
+		<< ",   m_current= " << m_current[i] 
+		<< std::endl
+		<< "Rate= " << m_val[i] << " +/- " << m_err[i] << std::endl;
+      */
+
+    }
+    else{
+      std::cout << "MonCounterDiffRate::latchValue; WARNING" << std::endl
+		<< "m_timebin = " << m_timebin << std::endl
+		<< "Rate and error set to ZERO" << std::endl;
+      m_val[i] = 0.0;
+      m_err[i] = 0.0;
+    }
+  }
+}
+
+// Attach a MonCounterDif node to a TTree (unsigned int)
+int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullNameVal = prefix + "CounterDiffRate_" + name();
+  std::string leafTypeVal = fullNameVal + m_dimstring+"/F";
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeVal.c_str());
+
+  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
+  if ( b == 0 ) return -1;
+  std::string fullNameErr = fullNameVal + "_err";
+  std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
+
+  BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeErr.c_str());
+
+
+  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str(),BufSize);
+  return bErr != 0 ? 2 : -1;
+
+
+}
+
+
+  // Update the value, check to make sure that things make sense
+void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if ( m_lo[i] == s_maxVal64 ) {
+      m_lo[i] = (ULong64_t)val[i] - m_offset[i];
+    }
+
+    if(m_IsMC && strstr(name().c_str(),"Sequence")){
+      // is mc data and we are dealing with m_sequence
+      //expect pow(2,17) jumps in m_sequence values
+      // the vector m_hi_previous is being used to catch these jumps
+      
+      if ( (val[i]-m_offset[i]) > m_hi[i])
+	{
+	  // val[i] is supposed to always increase
+	  m_hi_previous[i] = m_hi[i]>m_lo[i] ? m_hi[i] : m_lo[i];
+	  
+	  if((val[i]-m_offset[i])-m_hi_previous[i] >= (pow(2,17)-1))
+	    { // there was a jump; update offset
+	      m_offset[i] += pow(2,17)-1;
+	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
+			<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
+	    }
+	  m_hi[i] = ULong64_t(val[i])-m_offset[i];
+	}
+      else
+	{
+	  std::cout << std::endl 
+		    << "MonCounterDiffRate::singleincrement: WARNING" << std::endl
+		    << "When dealing with quantity " << name().c_str() << "," << std::endl
+		    << "it was found that  val[i] <= m_hi[i] for i = " << i << std::endl
+		    << "val[i] = " << val[i] << "; m_hi[i] = " << m_hi[i] << std::endl
+		    << "This should not happen for this parameter" << std::endl 
+		    << std::endl;
+	}
+    }
+
+    else{ // is experimental data, or mc data but we are not dealing with Sequence 
+      // the vector m_hi_previous is not being used
+      if ( val[i] > m_hi[i] ) {
+	m_hi[i] = (ULong64_t)val[i];
+      }
+      
+    }
+    
+  }
+  
+}
+
+
 // Attach a MonMinMax node to a TTree (unsigned int)
 int MonMinMax::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameMin = prefix + "Min_" + name();
@@ -1108,6 +1260,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="counterdiffrate"){
+    return new MonCounterDiffRate(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputdouble"){
     return new MonSecondListDouble(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputfloat"){
