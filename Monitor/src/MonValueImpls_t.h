@@ -466,6 +466,66 @@ private:
   ULong64_t *m_val;
 };
 
+
+//
+// 
+//
+// 
+// This implementation takes the difference between the 
+// first and last values of a counter
+class MonCounterDiffRate  : public MonValue {
+
+protected:
+  
+  static const ULong64_t s_maxVal64;
+
+public:
+  // Standard c'tor
+  MonCounterDiffRate(const char* name, const char* formula, const char* cut) ;
+
+  // D'tor, no-op
+  virtual ~MonCounterDiffRate();
+  
+  // Reset, check to see if the cache makes sense
+  // if so, just copy hi -> lo and go on
+  // in not, reset both hi and lo
+  virtual void reset() ;
+
+  // Attach this to a TTree
+  virtual int attach(TTree& tree, const std::string& prefix) const;
+  void singleincrement(Double_t* val, Double_t* val2) ;
+
+  // Take the difference hi-lo and move it to the output value
+  virtual void latchValue() ;
+
+
+private:
+  
+  // cached values, lo and hi values from current time slice
+  ULong64_t *m_lo;
+  ULong64_t *m_hi;
+  ULong64_t *m_hi_previous; // will be used only with MC data and sequence param
+  ULong64_t *m_offset; // will be used only with MC data and sequence param
+  
+
+   // the output value
+  Float_t *m_val;
+  Float_t *m_err;
+  Double_t m_timebin;
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
 //
 // 
 // This implementation stores the min and max
