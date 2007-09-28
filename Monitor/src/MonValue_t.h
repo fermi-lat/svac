@@ -17,9 +17,6 @@
 // ROOT
 #include "Rtypes.h"
 
-// Monitoring stuff
-
-#include "JobConfig.h"
 
 class TTree;
 class TSelector;
