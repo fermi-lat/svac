@@ -24,6 +24,7 @@
     <object> PrescaledLast</object>
     <object> DeadZoneDelta </object>
     <object> DiscardedDelta </object>
+    <object> PrescaledDelta </object>
     <object> TkrTriggerTower </object>
     <object> CalHiTriggerTower </object> 
     <object> CalLoTriggerTower </object>
@@ -234,7 +235,31 @@
       <description> Vector [32] storing the rate of evts passing the 32 Gamma filters. </description>
     </object>
      
+       <object>
+      <name> Deadzone </name>
+      <formula><![CDATA[ DeadZoneDelta ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of GEM deadzone events </description>
+    </object>
 
+         <object>
+      <name> Discarded </name>
+      <formula><![CDATA[ DiscardedDelta ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of GEM discarded events </description>
+    </object>
+
+    <object>
+      <name> Prescaled </name>
+      <formula><![CDATA[ PrescaledDelta  ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of GEM prescaled events </description>
+    </object>
+
+     
      
 
       <!-- ********************  Detector information   *********************** -->
