@@ -11,7 +11,7 @@
 
 #define NAME FilterBits
 #define OUTBRANCH "FilterBits"
-#define LEAF "FilterBits[32]/O"
+#define LEAF "FilterBits[32]/I"
 #define INBRANCH "m_obfFilterStatus"
 // #define ACCESSOR capullo
 #define MONSOURCE DigiEvent

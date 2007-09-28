@@ -11,7 +11,7 @@
 
 #define NAME OBFStatus
 #define OUTBRANCH "OBFStatus"
-#define LEAF "OBFStatus[4]/O"
+#define LEAF "OBFStatus[4]/I"
 #define INBRANCH "m_obfFilterStatus"
 //#define ACCESSOR Capullo
 #define MONSOURCE DigiEvent
