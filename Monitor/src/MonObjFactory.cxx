@@ -82,6 +82,8 @@
 // Last updated with object AcdPhaMips_PmtB_AcdTile by user dpaneque on Wed Sep 26 03:52:50 2007
 // Last updated with object Sequence by user dpaneque on Wed Sep 26 22:12:04 2007
 // Last updated with object FilterBits by user dpaneque on Thu Sep 27 18:08:37 2007
+// Last updated with object PrescaledDelta by user dpaneque on Fri Sep 28 18:41:04 2007
+#include "digi/MonInput_PrescaledDelta.h"
 #include "digi/MonInput_FilterBits.h"
 #include "digi/MonInput_Sequence.h"
 #include "recon/MonInput_AcdPhaMips_PmtB_AcdTile.h"
@@ -320,6 +322,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Sequence;
   if (s=="FilterBits")
     return new MonInput_FilterBits;
+  if (s=="PrescaledDelta")
+    return new MonInput_PrescaledDelta;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -404,6 +408,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdPhaMips_PmtB_AcdTile");
   names.push_back("Sequence");
   names.push_back("FilterBits");
+  names.push_back("PrescaledDelta");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
