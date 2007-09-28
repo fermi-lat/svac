@@ -22,14 +22,9 @@ unsigned int MonValue::m_counter=0;
 MonValue::MonValue(const char* name, const char* formula, const char* cut):
   m_cut(cut), m_formula(formula),m_sel(0),m_histdim(0),m_timeprof(0),m_dontcompile(false){
 
-  // Define whether we deal with data or MC
-
-  m_IsMC = JobConfig::getIsMC();
-
-  /*
-  if(m_IsMC)
-    std::cout << "We are dealing with MC data" << std::endl;
-  */
+  // Data type set to "Normal", default
+  
+  m_datatype = "Normal";
 
   // split up the name into the name part and the dimension part
 
@@ -504,6 +499,9 @@ void MonValue::setSharedLibDir(std::string sodir){
 }
 void MonValue::setDontCompile(bool dont){
   m_dontcompile=dont;
+}
+void MonValue::setDataType(std::string type){
+  m_datatype = type;
 }
 
 std::vector<std::string> MonValue::parse(const std::string str, const std::string beg, const std::string sep, const std::string end){

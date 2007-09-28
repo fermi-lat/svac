@@ -25,7 +25,7 @@ public :
 
   
  
-  static bool getIsMC(); 
+  
   inline const std::string& theApp() const { return m_theApp; }
   inline const std::string& path() const { return m_path; }
 
@@ -63,6 +63,8 @@ public :
   Bool_t checkSvac() const;
   Bool_t checkMerit() const;
   Bool_t checkCal() const;
+
+  std::string getDataType(){ return m_datatype;} 
    
 protected:
 
@@ -101,7 +103,6 @@ private:
   TChain* m_svacChain;
   TChain* m_meritChain;
   TChain* m_calChain;
-  bool m_IsMC;
   std::string m_datatype;
 };
 

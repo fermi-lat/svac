@@ -12,7 +12,7 @@
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
-const ULong64_t MonCounterDiffRate::s_maxVal64(0xFFFFFFFFFFFFFFFF);
+const ULong64_t MonCounterDiffRate::s_BigNumber(10000000000000);
 const Float_t MonMinMax::s_huge(1e35);
 
 // Standard c'tor
@@ -817,9 +817,14 @@ MonCounterDiffRate::MonCounterDiffRate(const char* name, const char* formula, co
   m_err = new Float_t[m_dim];
 
   // initialize offset for this object
-  for (unsigned i=0;i<m_dim;i++)
+  for (unsigned i=0;i<m_dim;i++){
     m_offset[i] = 0;
-
+    m_lo[i] = 0;
+    m_hi[i] = 0;
+    m_hi_previous[i] = 0;
+    m_val[i] = 0;
+    m_err[i] = 0;
+  }
   reset();
 }
 
@@ -837,15 +842,28 @@ MonCounterDiffRate::~MonCounterDiffRate(){
   // if so, just copy hi -> lo, hi -> hi_previous and go on
   // in not, reset hi, hi_previous and lo
 void MonCounterDiffRate::reset() {
+
+ 
+	    
+
   m_timebin = 100000000.0;
   for (unsigned i=0;i<m_dim;i++){
-    m_lo[i] = m_lo[i] >= m_hi[i] ? s_maxVal64 : m_hi[i];
+    m_lo[i] = m_lo[i] >= m_hi[i] ? s_BigNumber : m_hi[i];
     m_hi[i] = m_lo[i] >= m_hi[i] ? 0 : m_hi[i];
-    m_hi_previous[i] = m_lo[i] >= m_hi[i] ? s_maxVal64 : m_hi[i];
+    m_hi_previous[i] = m_lo[i] >= m_hi[i] ? m_lo[i] : m_hi[i];
     
     m_val[i] = 0.;
     m_err[i] = 0.;
   }
+
+  // tmp
+  /*
+   std::cout << "MonCounterDiffRate::reset()" << std::endl
+	     << "m_dim= " << m_dim << std::endl
+	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl;
+  */  
+  // endmp
+
 }
 
   // Take the difference hi-lo and move it to the output value
@@ -854,6 +872,8 @@ void MonCounterDiffRate::latchValue() {
   // get timeinterval for this bin
   
   m_timebin =TimeInterval::m_interval;
+
+  //std::cout << "Time interval = " << m_timebin << std::endl;
 
   for (unsigned i=0;i<m_dim;i++){
     m_val[i] = m_lo[i] < m_hi[i] ? Float_t(m_hi[i] - m_lo[i]) : 0.0;
@@ -879,6 +899,18 @@ void MonCounterDiffRate::latchValue() {
       m_err[i] = 0.0;
     }
   }
+
+   // tmp
+  /*
+   std::cout << "MonCounterDiffRate::latch()" << std::endl
+	     << "m_dim= " << m_dim << std::endl
+	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl
+	     << "Rate = " << m_val[0] << "+/-" << m_err[0] << std::endl; 
+  */
+  // endmp
+
+
+
 }
 
 // Attach a MonCounterDif node to a TTree (unsigned int)
@@ -908,27 +940,46 @@ int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
   // Update the value, check to make sure that things make sense
 void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
-    if ( m_lo[i] == s_maxVal64 ) {
+    if ( m_lo[i] == s_BigNumber ) {
       m_lo[i] = (ULong64_t)val[i] - m_offset[i];
     }
 
-    if(m_IsMC && strstr(name().c_str(),"Sequence")){
-      // is mc data and we are dealing with m_sequence
+    if(getDataType()== "MCOktTest" && strstr(name().c_str(),"GemRate")){
+      // is mc data from oktober tests and we are dealing with m_sequence
       //expect pow(2,17) jumps in m_sequence values
       // the vector m_hi_previous is being used to catch these jumps
       
-      if ( (val[i]-m_offset[i]) > m_hi[i])
+      // tmp
+      /*
+      std::cout << "MonCounterDiffRate::singleincrement " << std::endl
+		<< "Parameter = " << name() << std::endl
+		<< "Data type = " << getDataType() << std::endl
+		<< "Special arrangement .... " << std::endl;
+      
+      std::cout << "MonCounterDiffRate::singleincrement " << std::endl
+		<< "Outside" <<std::endl; 
+      std::cout << i << "\t" << val[i] << "\t"<< m_offset[i] << std::endl;
+      */
+
+      // endtmp
+
+      if ( (val[i]-m_offset[i]) >= m_hi[i])
 	{
 	  // val[i] is supposed to always increase
 	  m_hi_previous[i] = m_hi[i]>m_lo[i] ? m_hi[i] : m_lo[i];
 	  
-	  if((val[i]-m_offset[i])-m_hi_previous[i] >= (pow(2,17)-1))
+
+	  if((val[i]-m_offset[i])-m_lo[i] > ((pow(2,17)-10000)))
 	    { // there was a jump; update offset
-	      m_offset[i] += pow(2,17)-1;
-	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
-			<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
+	      m_jumpcounter++;
+	      m_offset[i] = ULong64_t(m_jumpcounter* pow(2,17)) -  m_hi_previous[i]; 
+
+	      //	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
+	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
 	  m_hi[i] = ULong64_t(val[i])-m_offset[i];
+	  // std::cout << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
+
 	}
       else
 	{
@@ -1213,6 +1264,14 @@ void MonValueCol::setDontCompile(bool dont){
     (*itr)->setDontCompile(dont);
   }
 }
+void MonValueCol::setDataType(std::string type){
+  for ( std::list<MonValue*>::iterator itr = m_vals.begin();
+	itr != m_vals.end(); itr++ ) {
+    (*itr)->setDataType(type);
+  }
+}
+
+
 
 float MonValueCol::timeProfile(){
   float tp=0;

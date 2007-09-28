@@ -264,9 +264,12 @@ int main(int argn, char** argc) {
   MonValueCol* outcolprim=mf.makeMonValueCol(outputlistprimary,"Primary");
   outcolprim->setSharedLibDir(jc.sodir());
   outcolprim->setDontCompile(jc.dontCompile());
+  outcolprim->setDataType(jc.getDataType());
+
   MonValueCol* outcolsec=mf.makeMonValueCol(outputlistsecondary,"Secondary");
   outcolsec->setSharedLibDir(jc.sodir());
   outcolsec->setDontCompile(jc.dontCompile());
+  outcolsec->setDataType(jc.getDataType());
   char inclpath[512];
   //sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   //gSystem->AddIncludePath(inclpath);

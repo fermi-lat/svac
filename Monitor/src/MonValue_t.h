@@ -66,6 +66,10 @@ public :
 
   Bool_t CheckLeafName(const char* leafname);
 
+  void setDataType(std::string type);
+  std::string getDataType(){return m_datatype;}
+  
+
  protected:
   /// val2 is only used for 2d histograms 
   virtual void singleincrement(Double_t* val,Double_t* val2=0){};
@@ -88,7 +92,7 @@ public :
   static std::vector<double> *m_result;
   static std::vector<double> *m_result2;
   static unsigned int m_counter;
-  bool m_IsMC;
+  std::string m_datatype;
 };
 
 #endif

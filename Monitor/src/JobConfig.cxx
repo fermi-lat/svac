@@ -18,10 +18,10 @@
 JobConfig::JobConfig(const char* appName, const char* desc)
   :m_theApp(appName),
    m_description(desc),
-   m_IsMC(0),
    m_optval_n(0),
    m_optval_s(0),
    m_optval_b(10),
+   m_datatype("Normal"),
    m_compile(false),
    m_dontcompile(false),
    m_digiChain(0),
@@ -195,11 +195,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
     
 
   // data type
-  if(strstr(m_datatype.c_str(),"MC"))
-    {
-      m_IsMC = 1;
-      std::cout << "Data type: MC" << std::endl;
-    }
+  
+  std::cout << "Data type : " << m_datatype.c_str() << std::endl;
+  
 
   // timestamp
   std::time_t theTime = std::time(0);
@@ -299,12 +297,6 @@ Int_t JobConfig::parse(int argn, char** argc) {
   return 0;
 }
 
-
-bool JobConfig::getIsMC()
-{
-  //return m_IsMC;
-  return 1;
-}
 
 TChain* JobConfig::makeChain(const char* name, const std::string& fileString) const {
 

@@ -477,7 +477,7 @@ class MonCounterDiffRate  : public MonValue {
 
 protected:
   
-  static const ULong64_t s_maxVal64;
+  static const ULong64_t s_BigNumber;
 
 public:
   // Standard c'tor
@@ -506,7 +506,7 @@ private:
   ULong64_t *m_hi;
   ULong64_t *m_hi_previous; // will be used only with MC data and sequence param
   ULong64_t *m_offset; // will be used only with MC data and sequence param
-  
+  UInt_t m_jumpcounter; // will be used only with MC data and sequence param
 
    // the output value
   Float_t *m_val;
@@ -646,6 +646,8 @@ public:
   void setSharedLibDir(std::string);
   // set no-compile flag 
   void setDontCompile(bool);
+  // set the IsMC flag
+  void setDataType(std::string);
 
 private:
 
