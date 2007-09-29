@@ -432,10 +432,6 @@ class MonTruncatedMeanBoundsAndFrac:public MonMean{
 // first and last values of a counter
 class MonCounterDiff  : public MonValue {
 
-protected:
-  
-  static const ULong64_t s_maxVal64;
-
 public:
   // Standard c'tor
   MonCounterDiff(const char* name, const char* formula, const char* cut) ;
@@ -455,7 +451,7 @@ public:
   // Take the difference hi-lo and move it to the output value
   virtual void latchValue() ;
 
-
+  static const ULong64_t s_maxVal64;
 private:
   
   // cached values, lo and hi values from current time slice
@@ -474,10 +470,6 @@ private:
 // This implementation takes the difference between the 
 // first and last values of a counter
 class MonCounterDiffRate  : public MonValue {
-
-protected:
-  
-  static const ULong64_t s_BigNumber;
 
 public:
   // Standard c'tor

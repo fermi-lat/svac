@@ -12,7 +12,6 @@
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
-const ULong64_t MonCounterDiffRate::s_BigNumber(10000000000000);
 const Float_t MonMinMax::s_huge(1e35);
 
 // Standard c'tor
@@ -848,7 +847,7 @@ void MonCounterDiffRate::reset() {
 
   m_timebin = 100000000.0;
   for (unsigned i=0;i<m_dim;i++){
-    m_lo[i] = m_lo[i] >= m_hi[i] ? s_BigNumber : m_hi[i];
+    m_lo[i] = m_lo[i] >= m_hi[i] ? MonCounterDiff::s_maxVal64 : m_hi[i];
     m_hi[i] = m_lo[i] >= m_hi[i] ? 0 : m_hi[i];
     m_hi_previous[i] = m_lo[i] >= m_hi[i] ? m_lo[i] : m_hi[i];
     
@@ -861,7 +860,7 @@ void MonCounterDiffRate::reset() {
    std::cout << "MonCounterDiffRate::reset()" << std::endl
 	     << "m_dim= " << m_dim << std::endl
 	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl;
-  */  
+  */
   // endmp
 
 }
@@ -940,7 +939,7 @@ int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
   // Update the value, check to make sure that things make sense
 void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
-    if ( m_lo[i] == s_BigNumber ) {
+    if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) {
       m_lo[i] = (ULong64_t)val[i] - m_offset[i];
     }
 
