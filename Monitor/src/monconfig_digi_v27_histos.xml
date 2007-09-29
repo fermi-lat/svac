@@ -1,0 +1,476 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+    <!-- TEST variables -->
+    <object> nACD </object>
+    <object> Gem_elapsed </object>
+    
+    <!-- Time stamp -->
+    <object> timestampdouble </object>
+
+    <!-- Event classification information -->
+    <object> condsummary </object>
+    <object> condarrcallo  </object>
+    <object> condarrcalhi </object>
+    <object> condarrtkr </object>
+    <object> condarrcno </object>
+    <object> condarrroi </object>
+    <object> LivetimeLast</object>
+    <object> ElapsedLast</object>
+    <object> DeadZoneLast</object>
+    <object> DiscardedLast</object>
+    <object> PrescaledLast</object>
+    <object> DeadZoneDelta </object>
+    <object> DiscardedDelta </object>
+    <object> TkrTriggerTower </object>
+    <object> CalHiTriggerTower </object> 
+    <object> CalLoTriggerTower </object>
+    <object> CalReadoutRange </object>
+    <object> Range4 </object>
+
+    <!-- Acd Variables -->
+    
+    <object>AcdGemVeto_AcdTile</object>
+    <object>AcdGemROI_Tower </object>
+    <object>AcdGemCNO_GARC  </object>
+    <object>AcdHit_AcdTile  </object>
+    <object>AcdPmtA_OverThreshold_AcdTile  </object>
+    <object>AcdPmtB_OverThreshold_AcdTile  </object>
+    <object>AcdVetoA_AcdTile  </object>
+    <object>AcdVetoB_AcdTile  </object>
+    <object>AcdPha_PmtA_AcdTile  </object>
+    <object>AcdPha_PmtB_AcdTile  </object>
+
+    <!-- Tkr Variables -->
+       
+    <object> TkrHitsTowerPlane </object>
+    <object> IsTkrDigi_TowerPlane </object>
+    <object> ToT_con0_TowerPlane  </object>
+    <object> ToT_con1_TowerPlane  </object>
+
+     <!-- Cal Variables -->
+    <object> CalXHit_TowerCalLayerCalColumn </object>
+    <object> CalXHit_TowerCalLayer </object>
+    <object> CalXAdc_TowerCalLayerCalColumnFaceRange </object>
+
+  </inputList>
+
+
+  <outputList name="top">
+  
+    
+
+     <!-- ********************  Event classification information   *********************** -->
+          
+     <object>
+      <name> CondSummaryWord_TH1 </name>
+      <formula><![CDATA[ condsummary ]]></formula>
+      <cut><![CDATA[  ]]></cut>
+      <type> histogram-1d[51,-10.5,40.5] </type>
+      <titledesc> Distribution of CondSummary Word values </titledesc>
+      <axisdesc> [condsummary value, N] </axisdesc>
+      <description> Distribution of condsumary word values </description>
+    </object>
+
+
+      <object>
+      <name> CondArrTKRTrigger_TH1 </name>
+      <formula><![CDATA[ condarrtkr ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[41,-0.5,40.5] </type>
+      <titledesc> Distribution of Condition arrival TKR triggers </titledesc>
+      <axisdesc> [Condition arrival times for TKR triggers (nomially 50 ns ticks), N] </axisdesc>
+      <description> Distribution of Condition arrival times for TKR triggers. Periodic triggers have been taken out. </description>
+    </object>
+
+      <object>
+      <name> CondArrCalLowTrigger_TH1 </name>
+      <formula><![CDATA[ condarrcallo ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[41,-0.5,40.5] </type>
+      <titledesc> Distribution of Condition arrival Cal-Low triggers </titledesc>
+      <axisdesc> [Condition arrival times for Cal-Low triggers (nomially 50 ns ticks), N] </axisdesc>
+      <description> Distribution of Condition arrival times for Cal-Low triggers. Periodic triggers have been taken out. </description>
+    </object>
+
+      <object>
+      <name> CondArrCalHiTrigger_TH1 </name>
+      <formula><![CDATA[ condarrcalhi ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[41,-0.5,40.5] </type>
+      <titledesc> Distribution of Condition arrival Cal-Hi triggers </titledesc>
+      <axisdesc> [Condition arrival times for Cal-Hi triggers (nomially 50 ns ticks), N] </axisdesc>
+      <description> Distribution of Condition arrival times for Cal-Hi triggers. Periodic triggers have been taken out. </description>
+    </object>
+
+      <object>
+      <name> CondArrCNOTrigger_TH1 </name>
+      <formula><![CDATA[ condarrcno ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[41,-0.5,40.5] </type>
+      <titledesc> Distribution of Condition arrival CNO triggers </titledesc>
+      <axisdesc> [Condition arrival times for CNO triggers (nomially 50 ns ticks), N] </axisdesc>
+      <description> Distribution of Condition arrival times for CNO triggers. Periodic triggers have been taken out. </description>
+    </object>
+
+       <object>
+      <name> CondArrROITrigger_TH1 </name>
+      <formula><![CDATA[ condarrroi ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[41,-0.5,40.5] </type>
+      <titledesc> Distribution of Condition arrival ROI triggers </titledesc>
+      <axisdesc> [Condition arrival times for ROI triggers (nomially 50 ns ticks), N] </axisdesc>
+      <description> Distribution of Condition arrival times for ROI triggers. Periodic triggers have been taken out. </description>
+    </object>
+
+       
+      <object>
+      <name> DiscardedDelta_TH1 </name>
+      <formula><![CDATA[ DiscardedDelta ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[31,-0.5,30.5] </type>
+      <titledesc> Number of GEM discarded events between two successive read out events. </titledesc>
+      <axisdesc> [Number Gem discarded events, N] </axisdesc>
+      <description> Number of GEM discarded events between two successive read out events. Periodic triggers have been taken out. </description>
+    </object>
+
+     <object>
+      <name> DeadZoneDelta_TH1 </name>
+      <formula><![CDATA[ DeadZoneDelta ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[31,-0.5,30.5] </type>
+      <titledesc> Number of GEM deadzone events between two successive read out events. </titledesc>
+      <axisdesc> [Number Gem deadzone events, N] </axisdesc>
+      <description> Number of GEM deadzone events between two successive read out events. Periodic triggers have been taken out. </description>
+    </object>
+
+
+     
+        <object>
+      <name> TkrTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ TkrTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of tracker triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of tracker triggers per tower </description>
+    </object>
+
+
+   
+  
+
+         <object>
+      <name> CalHiTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalHiTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal HI triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal HI triggers  per tower </description>
+    </object>
+
+
+
+
+     <object>
+      <name> CalLoTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalLoTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal LOW triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal LOW triggers  per tower </description>
+    </object>
+
+
+     
+        <object>
+      <name> TkrTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ TkrTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of tracker triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of tracker triggers per tower </description>
+    </object>
+
+
+   
+  
+
+         <object>
+      <name> CalHiTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalHiTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal HI triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal HI triggers  per tower </description>
+    </object>
+
+
+
+
+     <object>
+      <name> CalLoTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalLoTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal LOW triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal LOW triggers  per tower </description>
+    </object>
+
+
+
+
+          
+
+      <!-- ********************  Detector information   *********************** -->
+
+
+      <!--  ______________  ACD  _______________ -->
+
+     
+      <object>
+      <name> Acd_GemVeto_AcdTile_TH1 </name>
+      <formula><![CDATA[ AcdGemVeto_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc> Number of Acd Gem vetos by tile. Expect to see spikes at 15,31,47,63. These are the large tiles at the bottom of the sides of the ACD. </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Acd Gem vetos by tile. Expect to see spikes at 15,31,47,63. These are the large tiles at the bottom of the sides of the ACD. </description>
+    </object>
+
+
+
+
+
+           <object>
+      <name> AcdGemROI_Tower_TH1 </name>
+      <formula><![CDATA[ AcdGemROI_Tower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Acd ROI by tower. This bit is set if any of the tile in the ROI fired a veto. This bit is independent of if the Tower bit is set. </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Acd ROI by tower. This bit is set if any of the tile in the ROI fired a veto. This bit is independent of if the Tower bit is set. </description>
+    </object>
+
+      
+
+
+
+     <object>
+      <name> AcdGemCNO_GARC_TH1 </name>
+      <formula><![CDATA[ AcdGemCNO_GARC ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[12,-0.5,11.5] </type>
+      <titledesc>  Number of Acd CNO by board. This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal. </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Acd Cno by board. This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal. </description>
+    </object>
+
+      
+
+
+        <object>
+      <name> AcdDigis_TH1 </name>
+      <formula><![CDATA[ RFun::loopoveracdtilesbool(AcdHit_AcdTile) ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-1d[111,-0.5,110] </type>
+      <titledesc> Distribution of ACD Digis per event</titledesc>
+      <axisdesc> [Number of ACD Digis, N] </axisdesc>
+      <description> Distribution of ACD digis per event. This is just the total number of tiles that have at least one PMT above the zero suppression threshold. </description>
+    </object>
+
+
+      <!--  ______________  Tracker _______________ -->
+
+   
+       <object>
+      <name> TkrHits_TH1 </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(TkrHitsTowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[300,0.0,3000] </type>
+      <titledesc> Distribution of strip hits per event  (all towers included). </titledesc>
+      <axisdesc> [Number of strip hits, N] </axisdesc>
+      <description> Distribution of the number of strip hits per event (all towers included).  </description>
+    </object>
+
+
+       
+      <object>
+      <name> TkrHits_TH1_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[200,0,1000] </type>
+      <!--<titledesc> Number of strip hits in a tower </titledesc>-->
+      <axisdesc> [Number of strip hits, N] </axisdesc>
+      <description> Distribution of the number of strip hits per tower.  </description>
+    </object>
+
+
+
+        
+     <object>
+      <name> TkrPlanesHit_TH1_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::getplaneshit(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[38,-0.5,37.5] </type>
+      <!--<titledesc> Number of planes hit in a tower </titledesc>-->
+      <axisdesc> [Number of planes hit, N] </axisdesc>
+      <description> Distribution of the number of planes hit in a tower.  </description>
+    </object>
+
+
+         <object>
+      <name> TkrHitsCounter_TowerPlane_TH2 </name>
+      <formula><![CDATA[ TkrHitsTowerPlane ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 36, -0.5,35.5] </type>
+      <titledesc>  Number of strip hits vs Tower and Tkr plane. </titledesc>
+      <axisdesc> [Tower number, Tracker plane, N] </axisdesc>
+      <description> Number of strip hits vs Tower and Tkr plane. </description>
+    </object>
+
+     
+      <object>
+      <name> ZeroTkrHitsCounter_TowerPlane_TH2 </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: (TkrHitsTowerPlane[tower][tkrplane] <=0)]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 36, -0.5,35.5] </type>
+      <titledesc>  Counter for ZERO strip hits vs Tower and Tracker plane. </titledesc>
+      <axisdesc> [Tower number, Tracker plane, N] </axisdesc>
+      <description> Counter for ZERO strip hits vs Tower and Tracker plane.  </description>
+    </object>
+
+
+
+      
+      <object>
+      <name> HitsInEmptyTower_Tower_TH1 </name>
+      <formula><![CDATA[ runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: RFun::gethitsinemptytower(runonceformula[tower],TkrHitsTowerPlane[tower])  ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc>  Number of hits when the tower was empty vs tower number  </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of hits when the tower was empty vs tower number </description>
+    </object>
+
+
+
+       <object>
+      <name> TkrDigiCounter_TowerPlane_TH2 </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane : IsTkrDigi_TowerPlane[tower][tkrplane] > 0.5]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 36, -0.5,35.5] </type>
+      <titledesc>  Number of TkrDigi objects in each vs Tower and Tracker plane.  </titledesc>
+      <axisdesc> [Tower number, Tracker plane, N] </axisdesc>
+      <description> Number of TkrDigi objects in each vs Tower and Tracker plane.  </description>
+    </object>
+
+
+         
+      <object>
+      <name> TkrDigiCounter_Tower_TH1 </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(IsTkrDigi_TowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc>  Number of TkrDigi objects vs tower number  </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of TkrDigi objects vs tower number. </description>
+    </object>
+
+         
+     <object>
+      <name> TkrDigis_TH1 </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(IsTkrDigi_TowerPlane)]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[201,-0.5,200.5] </type>
+      <titledesc> Distribution of tracker Digis per event  (all towers included). </titledesc>
+      <axisdesc> [Number of TkrDigis, N] </axisdesc>
+      <description> Distribution of the number of TkrDigis per event (all towers included).  </description>
+    </object>
+
+
+     
+        <object>
+      <name> ToT_0_WhenTkrHitsExist_TowerPlane_TH2 </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: (IsTkrDigi_TowerPlane[tower][tkrplane]>0.5) && (ToT_con0_TowerPlane[tower][tkrplane]==0) && (ToT_con1_TowerPlane[tower][tkrplane]==0) && (TkrHitsTowerPlane[tower][tkrplane]>0) ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 36, -0.5,35.5] </type>
+      <titledesc>  Number of times that, existing TkrDigi and having at least one hit, ToT==0 in both controller 0 and controller 1 in [tower][trkplane]  </titledesc>
+      <axisdesc> [Tower number, Tracker plane, N] </axisdesc>
+      <description> Number of times that, existing TkrDigi and having at least one hit, ToT==0 in both controller 0 and controller 1 in [tower][trkplane]  </description>
+    </object>
+
+
+
+
+     <!-- Calorimeter -->
+
+     <object>
+      <name> CalXHit_NHit_Counter_TowerCalLayer_TH2 </name>
+      <formula><![CDATA[ CalXHit_TowerCalLayer ]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 8, -0.5,7.5] </type>
+      <titledesc>  Number of hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account.   </titledesc>
+      <axisdesc> [Tower number, Cal-Layer, N] </axisdesc>
+      <description> Number of hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account.  </description>
+    </object>
+
+      <object>
+      <name> ZeroCalXHit_NHit_Counter_TowerCalLayer_TH2 </name>
+      <formula><![CDATA[ foreachtower: foreachcallayer: (CalXHit_TowerCalLayer[tower][callayer]<0.5) ]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
+      <type> histogram-vecdim-2d[16,-0.5,15.5, 8, -0.5,7.5] </type>
+      <titledesc>  Number of times there is ZERO hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account.   </titledesc>
+      <axisdesc> [Tower number, Cal-layer, N] </axisdesc>
+      <description> Number of times there is ZERO hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account.  </description>
+    </object>
+
+          
+     <object>
+      <name> CalX_NHit_TH1_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovercallayers(CalXHit_TowerCalLayer[tower])]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[151,-0.5,150.5] </type>
+     <!-- <titledesc> Distribution of Cal crystals hits per event in this tower </titledesc>-->
+      <axisdesc> [Number of CalX_Hits in this tower, N] </axisdesc>
+      <description> Distribution of  Cal crystals hits per event in this tower.  </description>
+    </object>
+
+
+
+     
+      <object>
+      <name> CalX_Total_NHit_TH1 </name>
+      <formula><![CDATA[ RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer)]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[201,-0.5,200.5] </type>
+      <titledesc> Distribution of Cal crystals hits per event (all towers included). </titledesc>
+      <axisdesc> [Number of CalX_Hits, N] </axisdesc>
+      <description> Distribution of  Cal crystals hits  per event (all towers included).  </description>
+    </object>
+
+
+    
+      
+       <object>
+      <name> CalXReadoutRange_TH2 </name>
+      <formula><![CDATA[ CalReadoutRange ]]></formula>
+      <cut><![CDATA[!(condsummary&32)]]></cut>
+      <type> histogram-index-2d[3072,-0.5,3071.5, 5, -0.5,4.5] </type>
+      <titledesc> Cal readout range used vs cal channel. Periodic triggers are NOT taken into account.   </titledesc>
+      <axisdesc> [Cal channel, Range, N] </axisdesc>
+      <description> Cal readout range used vs cal channel. Periodic triggers are NOT taken into account.  </description>
+    </object>
+
+
+  </outputList>
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> timestampdouble </timestamp>
+</monitoring>

@@ -1,0 +1,64 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+
+    <!-- Time stamp -->
+    <object> timestampdouble </object>
+    
+    <!-- Trigger related vars -->
+    <object>GltWord</object>
+
+
+    <!-- FT1 related vars -->
+    <object>FT1ZenithTheta</object>  
+
+    <!-- Filter variables -->
+    <object>Mfilterstatus_hi</object>
+
+
+    <!-- CTB variables -->
+        
+    <object>CTBBestZDir</object>		
+    <object>CTBClassLevel</object>		
+    <object>CTBBestEnergyProb</object>
+    <object>CTBCORE</object>			
+    <object>CTBBestEnergy</object>		
+    <object>CTBBestEnergyRatio</object>
+
+   
+  </inputList>
+
+
+  <outputList name="top">
+  
+
+    <object>
+      <name> EvtsBeforeCuts </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of events before applicaltion of cuts.</description>
+    </object>
+
+
+
+     <object>
+      <name> EvtsAfterStandardGammaCuts </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[((GltWord&10)>0) && ((GltWord&7)!=3) && (Mfilterstatus_hi==0) && (CTBBestZDir<-0.5||FT1ZenithTheta<95) && (CTBClassLevel>0) && (CTBBestEnergyProb>0.1) && (CTBCORE>0.1) && (CTBBestEnergy>10) && (CTBBestEnergyRatio<5) ]]></cut>
+      <type> rate </type>
+      <description> Rate of events after application of standard gamma cuts for pass5. Give proper reference to Bill's presentation.</description>
+    </object>
+
+
+
+
+
+  
+
+  </outputList>
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> timestampdouble </timestamp>
+</monitoring>
