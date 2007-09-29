@@ -59,4 +59,6 @@ application runStrip_t JobConfig.cxx MonValue_t.cxx MonValueImpls_t.cxx MonInput
 
 application treemerge treemerge.cxx
 
+application MergeHistFiles MergeHistFiles.cxx
+
 application inputObjects inputObjects.cxx MonObjFactory.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  Geo.cxx TestReport.cxx
