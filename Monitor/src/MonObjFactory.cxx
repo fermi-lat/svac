@@ -83,6 +83,22 @@
 // Last updated with object Sequence by user dpaneque on Wed Sep 26 22:12:04 2007
 // Last updated with object FilterBits by user dpaneque on Thu Sep 27 18:08:37 2007
 // Last updated with object PrescaledDelta by user dpaneque on Fri Sep 28 18:41:04 2007
+// Last updated with object GltWord by user dpaneque on Sat Sep 29 01:03:08 2007
+// Last updated with object CTBBestZDir by user dpaneque on Sat Sep 29 01:06:01 2007
+// Last updated with object FT1ZenithTheta by user dpaneque on Sat Sep 29 01:08:22 2007
+// Last updated with object CTBClassLevel by user dpaneque on Sat Sep 29 01:10:02 2007
+// Last updated with object CTBBestEnergyProb by user dpaneque on Sat Sep 29 01:10:45 2007
+// Last updated with object CTBCORE by user dpaneque on Sat Sep 29 01:11:28 2007
+// Last updated with object CTBBestEnergy by user dpaneque on Sat Sep 29 01:12:23 2007
+// Last updated with object CTBBestEnergyRatio by user dpaneque on Sat Sep 29 01:13:23 2007
+#include "merit/MonInput_CTBBestEnergyRatio.h"
+#include "merit/MonInput_CTBBestEnergy.h"
+#include "merit/MonInput_CTBCORE.h"
+#include "merit/MonInput_CTBBestEnergyProb.h"
+#include "merit/MonInput_CTBClassLevel.h"
+#include "merit/MonInput_FT1ZenithTheta.h"
+#include "merit/MonInput_CTBBestZDir.h"
+#include "merit/MonInput_GltWord.h"
 #include "digi/MonInput_PrescaledDelta.h"
 #include "digi/MonInput_FilterBits.h"
 #include "digi/MonInput_Sequence.h"
@@ -324,6 +340,22 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FilterBits;
   if (s=="PrescaledDelta")
     return new MonInput_PrescaledDelta;
+  if (s=="GltWord")
+    return new MonInput_GltWord;
+  if (s=="CTBBestZDir")
+    return new MonInput_CTBBestZDir;
+  if (s=="FT1ZenithTheta")
+    return new MonInput_FT1ZenithTheta;
+  if (s=="CTBClassLevel")
+    return new MonInput_CTBClassLevel;
+  if (s=="CTBBestEnergyProb")
+    return new MonInput_CTBBestEnergyProb;
+  if (s=="CTBCORE")
+    return new MonInput_CTBCORE;
+  if (s=="CTBBestEnergy")
+    return new MonInput_CTBBestEnergy;
+  if (s=="CTBBestEnergyRatio")
+    return new MonInput_CTBBestEnergyRatio;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -409,6 +441,14 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Sequence");
   names.push_back("FilterBits");
   names.push_back("PrescaledDelta");
+  names.push_back("GltWord");
+  names.push_back("CTBBestZDir");
+  names.push_back("FT1ZenithTheta");
+  names.push_back("CTBClassLevel");
+  names.push_back("CTBBestEnergyProb");
+  names.push_back("CTBCORE");
+  names.push_back("CTBBestEnergy");
+  names.push_back("CTBBestEnergyRatio");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
