@@ -101,6 +101,14 @@
       <description> TKR trigger rate </description>
     </object>
 
+       <object>
+      <name> Trigger_ROI </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[condsummary&1]]></cut>
+      <type> rate </type>
+      <description> ROI trigger rate </description>
+    </object>
+
 
      <object>
       <name> Trigger_TRK_And_ROI </name>
@@ -113,7 +121,7 @@
      <object>
       <name> Trigger_TRK_And_NotROI </name>
       <formula><![CDATA[ 1 ]]></formula>
-      <cut><![CDATA[(!condsummary&1) && (condsummary&2)]]></cut>
+      <cut><![CDATA[!(condsummary&1) && (condsummary&2)]]></cut>
       <type> rate </type>
       <description> Rate TKR trigger and not ROI (mostly non charge particles) rate </description>
     </object>
@@ -185,10 +193,10 @@
       <description> Rate of tracker triggers in [tower], calculated during the specified time bin. </description>
     </object>
 
-        <object>
+       <object>
       <name> OBF_GammaFilter </name>
       <formula><![CDATA[ OBFStatus[0] ]]></formula>
-      <cut><![CDATA[ ]]></cut>
+      <cut><![CDATA[ OBFStatus[0]>0 ]]></cut>
       <type> rate </type>
       <description> Rate of evts passing the onboard gamma filter, calculated during the specified time bin. </description>
     </object>
@@ -196,7 +204,7 @@
 	  <object>
       <name> OBF_MipFilter </name>
       <formula><![CDATA[ OBFStatus[1] ]]></formula>
-      <cut><![CDATA[ ]]></cut>
+      <cut><![CDATA[ OBFStatus[1]>0 ]]></cut>
       <type> rate </type>
       <description> Rate of evts passing the onboard Mip filter, calculated during the specified time bin. </description>
     </object>
@@ -205,7 +213,7 @@
 	    <object>
       <name> OBF_HFCFilter </name>
       <formula><![CDATA[ OBFStatus[2] ]]></formula>
-      <cut><![CDATA[ ]]></cut>
+      <cut><![CDATA[ OBFStatus[2]>0 ]]></cut>
       <type> rate </type>
       <description> Rate of evts passing the onboard HFC filter, calculated during the specified time bin. </description>
     </object>
@@ -213,10 +221,44 @@
 	    <object>
       <name> OBF_DFCFilter </name>
       <formula><![CDATA[ OBFStatus[3] ]]></formula>
-      <cut><![CDATA[ ]]></cut>
+      <cut><![CDATA[OBFStatus[3]>0 ]]></cut>
       <type> rate </type>
       <description> Rate of evts passing the onboard DFC filter, calculated during the specified time bin. </description>
     </object>
+
+      <object>
+      <name> ComputationFailed_OBF_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ OBFStatus[0]<0 ]]></cut>
+      <type> rate </type>
+      <description> Rate of evts for which the Gamma Filter could not be computed. </description>
+    </object>
+
+	  <object>
+      <name> ComputationFailed_OBF_MipFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ OBFStatus[1]<0 ]]></cut>
+      <type> rate </type>
+      <description> Rate of evts for which the Mip Filter  could not be computed. </description>
+    </object>
+
+
+	    <object>
+      <name> ComputationFailed_OBF_HFCFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ OBFStatus[2]<0 ]]></cut>
+      <type> rate </type>
+      <description> Rate of evts for which the HFC Filter  could not be computed. </description>
+    </object>
+
+	    <object>
+      <name> ComputationFailed_OBF_DFCFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[OBFStatus[3]<0 ]]></cut>
+      <type> rate </type>
+      <description> Rate of evts for which the DFC Filter  could not be computed.</description>
+    </object>
+
 
        
      <object>
@@ -227,12 +269,23 @@
       <description> Rate of evts before any filter (computed using DigiEvent->getMetaEvent().scalers().sequence(). </description>
     </object>
 
+     <!-- The cut FilterBits[0]>0 is to ensure that the filter bits were computed
+	  If computation could not be done, then all components are set 
+	  to -1 in FilterBits vector -->
       <object>
       <name> GammaFilterBit[32] </name>
       <formula><![CDATA[ FilterBits ]]></formula>
-      <cut><![CDATA[ ]]></cut>
+      <cut><![CDATA[ FilterBits[0]>0]]></cut>
       <type> rate </type>
       <description> Vector [32] storing the rate of evts passing the 32 Gamma filters. </description>
+    </object>
+
+       <object>
+      <name> GammaFilterBit_ComputationFailed </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[ FilterBits[0]<0]]></cut>
+      <type> rate </type>
+      <description> Rate of evts for which the GammaFilterBits could not be computed. </description>
     </object>
      
        <object>
@@ -260,6 +313,124 @@
     </object>
 
      
+    <object>
+      <name> Trigger_CALLO_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&4)  && (OBFStatus[0]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CAL-LO trigger AND GammaFilter </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_CALHI_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&8) && (OBFStatus[0]>0)  ]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CAL-HI trigger AND GammaFilter  </description>
+    </object>
+
+      <object>
+      <name> Trigger_CNO_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&16) && (OBFStatus[0]>0)  ]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CNO  trigger AND GammaFilter  </description>
+    </object>
+
+       <object>
+      <name> Trigger_TRK_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&2) && (OBFStatus[0]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with TKR trigger AND GammaFilter  </description>
+    </object>
+
+         <object>
+      <name> Trigger_ROI_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) &&  (OBFStatus[0]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with ROI trigger AND GammaFilter  </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_TRK_And_ROI_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) && (condsummary&2) && (OBFStatus[0]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of TKR trigger and ROI (mostly charge particles) AND GammaFilter. We expect to have very low rates of events fulfilling those somewhat contradictory requirements.</description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_NotROI_And_GammaFilter </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[!(condsummary&1) && (condsummary&2) && (OBFStatus[0]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of TKR trigger and not ROI (mostly non charge particles) AND GammaFilter. We expect to have essentially the same rate as without the GammaFilter. </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_CALLO_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&4)  && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CAL-LO trigger AND ANY of the following Filters: Mip OR HFC OR DFC.  </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_CALHI_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&8) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)  ]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CAL-HI trigger AND ANY of the following Filters: Mip OR HFC OR DFC.  </description>
+    </object>
+
+      <object>
+      <name> Trigger_CNO_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&16) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)  ]]></cut>
+      <type> rate </type>
+      <description> Rate of events with CNO trigger AND ANY of the following Filters: Mip OR HFC OR DFC.  </description>
+    </object>
+
+       <object>
+      <name> Trigger_TRK_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&2) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with TKR trigger AND ANY of the following Filters: Mip OR HFC OR DFC.  </description>
+    </object>
+
+           <object>
+      <name> Trigger_ROI_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of events with ROI trigger AND ANY of the following Filters: Mip OR HFC OR DFC.  </description>
+    </object>
+
+
+     <object>
+      <name> Trigger_TRK_And_ROI_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[(condsummary&1) && (condsummary&2) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate of TKR trigger and ROI (mostly charge particles) AND ANY of the following Filters: Mip OR HFC OR DFC. </description>
+    </object>
+
+     <object>
+      <name> Trigger_TRK_And_NotROI_And_OneOfOther3Filters </name>
+      <formula><![CDATA[ 1 ]]></formula>
+      <cut><![CDATA[!(condsummary&1) && (condsummary&2) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
+      <type> rate </type>
+      <description> Rate TKR trigger and not ROI (mostly non charge particles) AND ANY of the following Filters: Mip OR HFC OR DFC. </description>
+    </object>
+
+
      
 
       <!-- ********************  Detector information   *********************** -->
