@@ -357,7 +357,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       }
       continue;
     }
-    if (leaves[i].find("Rate_")==0 && leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
+    if ((leaves[i].find("Rate_")==0 || leaves[i].find("CounterDiffRate_")==0 )&& leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
       used[i]=true;
       unsigned errindex=0;
       it=find(leaves.begin(),leaves.end(),leaves[i]+"_err");
