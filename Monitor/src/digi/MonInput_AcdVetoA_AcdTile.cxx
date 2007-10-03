@@ -56,7 +56,7 @@ void MonInput_AcdVetoA_AcdTile::setValue(TObject* event) {
 
     UShort_t AcdGemID = AcdId::gemIndexFromTile(acdDigi->getId().getId());
     if(acdDigi->getVeto(AcdDigi::A)){
-      if(AcdGemID>=0&&AcdGemID<128) m_val[AcdGemID]++;
+      if(AcdGemID<128) m_val[AcdGemID]++;
       else{
 	if(acdDigi->getId().getId() != 899)// NA values are set to 899
 	  {

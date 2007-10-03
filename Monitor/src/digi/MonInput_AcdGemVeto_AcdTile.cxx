@@ -42,7 +42,7 @@ void MonInput_AcdGemVeto_AcdTile::setValue(TObject* event) {
     assert(de);
   }
 
-  const n_acdtiles = 128;
+  const UShort_t n_acdtiles = 128;
   // initialize vector for this event
   for(UShort_t i = 0; i < n_acdtiles; i++)
     m_val[i] = 0;

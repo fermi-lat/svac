@@ -58,10 +58,10 @@ public :
   void setSharedLibDir(std::string);
   void setDontCompile(bool);
 
-  Int_t GetBufSize(Int_t dim, const char* type);
+  static Int_t GetBufSize(Int_t dim, const char* type);
   
 
-  Bool_t CheckLeafName(const char* leafname);
+  static Bool_t CheckLeafName(const char* leafname);
 
   void setDataType(std::string type);
   std::string getDataType(){return m_datatype;}

@@ -57,7 +57,7 @@ const UShort_t nacdtile(128);
 
     UShort_t AcdGemID = AcdId::gemIndexFromTile(acdDigi->getId().getId());
     if(acdDigi->getRange(AcdDigi::A) == 0 ){
-      if(AcdGemID>=0&&AcdGemID<128) m_val[AcdGemID]=acdDigi->getPulseHeight(AcdDigi::A);
+      if(AcdGemID<128) m_val[AcdGemID]=acdDigi->getPulseHeight(AcdDigi::A);
       else{
       if(acdDigi->getId().getId() != 899)// NA values are set to 899
 	{

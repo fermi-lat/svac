@@ -21,7 +21,6 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_optval_n(0),
    m_optval_s(0),
    m_optval_b(10),
-   m_datatype("Normal"),
    m_compile(false),
    m_dontcompile(false),
    m_digiChain(0),
@@ -29,7 +28,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_mcChain(0),
    m_svacChain(0),
    m_meritChain(0),
-   m_calChain(0)
+   m_calChain(0),
+   m_datatype("Normal")
 {
 
 }
