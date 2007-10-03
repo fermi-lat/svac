@@ -23,6 +23,9 @@
     <object> PrescaledLast</object>
     <object> DeadZoneDelta </object>
     <object> DiscardedDelta </object>
+    <object> PrescaledDelta </object>
+    <object> DeltaWindowOpen </object>
+    <object> DeltaEventTime </object>
     <object> TkrTriggerTower </object>
     <object> CalHiTriggerTower </object> 
     <object> CalLoTriggerTower </object>
@@ -67,10 +70,20 @@
       <name> CondSummaryWord_TH1 </name>
       <formula><![CDATA[ condsummary ]]></formula>
       <cut><![CDATA[  ]]></cut>
-      <type> histogram-1d[51,-10.5,40.5] </type>
+      <type> histogram-1d[34,-0.5,33.5] </type>
       <titledesc> Distribution of CondSummary Word values </titledesc>
       <axisdesc> [condsummary value, N] </axisdesc>
-      <description> Distribution of condsumary word values </description>
+      <description> Distribution of condsumary word values. Values up to 33 are being displayed. </description>
+    </object>
+
+      <object>
+      <name> CondSummaryWord_Extended_TH1 </name>
+      <formula><![CDATA[ condsummary ]]></formula>
+      <cut><![CDATA[  ]]></cut>
+      <type> histogram-1d[201,-0.5,200.5] </type>
+      <titledesc> Distribution of CondSummary Word values </titledesc>
+      <axisdesc> [condsummary value, N] </axisdesc>
+      <description> Distribution of condsumary word values. Values up to 250 are being displayed. </description>
     </object>
 
 
@@ -145,43 +158,14 @@
       <description> Number of GEM deadzone events between two successive read out events. Periodic triggers have been taken out. </description>
     </object>
 
-
-     
-        <object>
-      <name> TkrTrigger_Tower_TH1 </name>
-      <formula><![CDATA[ TkrTriggerTower ]]></formula>
-      <cut><![CDATA[ condsummary&30 ]]></cut>
-      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
-      <titledesc> Number of tracker triggers per tower </titledesc>
-      <axisdesc> [Tower number, N] </axisdesc>
-      <description> Number of tracker triggers per tower </description>
-    </object>
-
-
-   
-  
-
-         <object>
-      <name> CalHiTrigger_Tower_TH1 </name>
-      <formula><![CDATA[ CalHiTriggerTower ]]></formula>
-      <cut><![CDATA[ condsummary&30 ]]></cut>
-      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
-      <titledesc> Number of Cal HI triggers per tower </titledesc>
-      <axisdesc> [Tower number, N] </axisdesc>
-      <description> Number of Cal HI triggers  per tower </description>
-    </object>
-
-
-
-
-     <object>
-      <name> CalLoTrigger_Tower_TH1 </name>
-      <formula><![CDATA[ CalLoTriggerTower ]]></formula>
-      <cut><![CDATA[ condsummary&30 ]]></cut>
-      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
-      <titledesc> Number of Cal LOW triggers per tower </titledesc>
-      <axisdesc> [Tower number, N] </axisdesc>
-      <description> Number of Cal LOW triggers  per tower </description>
+      <object>
+      <name> PrescaledDelta_TH1 </name>
+      <formula><![CDATA[ PrescaledDelta ]]></formula>
+      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <type> histogram-1d[31,-0.5,30.5] </type>
+      <titledesc> Number of GEM prescaled events between two successive read out events. </titledesc>
+      <axisdesc> [Number Gem prescaled events, N] </axisdesc>
+      <description> Number of GEM prescaled events between two successive read out events. Periodic triggers have been taken out. </description>
     </object>
 
 
@@ -224,7 +208,89 @@
     </object>
 
 
+     
+        <object>
+      <name> TkrTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ TkrTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of tracker triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of tracker triggers per tower </description>
+    </object>
 
+
+   
+  
+
+         <object>
+      <name> CalHiTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalHiTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal HI triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal HI triggers  per tower </description>
+    </object>
+
+
+
+
+     <object>
+      <name> CalLoTrigger_Tower_TH1 </name>
+      <formula><![CDATA[ CalLoTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc> Number of Cal LOW triggers per tower </titledesc>
+      <axisdesc> [Tower number, N] </axisdesc>
+      <description> Number of Cal LOW triggers  per tower </description>
+    </object>
+
+     <object>
+      <name> DeltaWindowOpen_TH1 </name>
+      <formula><![CDATA[ DeltaWindowOpen*0.00005 ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-1d[100,0.,4] </type>
+      <titledesc>  GEM Delta window open time in milliseconds </titledesc>
+      <axisdesc> [DeltaWindowOpen time (ms), N] </axisdesc>
+      <description> GEM Delta window open time in milliseconds. </description>
+    </object>
+
+
+
+     <object>
+      <name> DeltaEventTime_TH1 </name>
+      <formula><![CDATA[ DeltaEventTime*0.00005 ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-1d[100,0.,4] </type>
+      <titledesc>  GEM Delta Event time in milliseconds </titledesc>
+      <axisdesc> [DeltaEvent time (ms), N] </axisdesc>
+      <description> GEM Delta Event time in milliseconds. </description>
+    </object>
+
+
+
+     <object>
+      <name> DeltaWindowOpen_Zoom_TH1 </name>
+      <formula><![CDATA[ DeltaWindowOpen ]]></formula>
+      <cut><![CDATA[ (condsummary&30) && (DeltaWindowOpen<1500)]]></cut>
+      <type> histogram-1d[160,0.,1600] </type>
+      <titledesc>  GEM Delta window open time in 50 ns ticks </titledesc>
+      <axisdesc> [DeltaWindowOpen time (nominally 50 ns ticks), N] </axisdesc>
+      <description> Delta window open time as measured by the GEM in system clock ticks with a cut of 1500 ticks. </description>
+    </object>
+
+
+
+     <object>
+      <name> DeltaEventTime_Zoom_TH1 </name>
+      <formula><![CDATA[ DeltaEventTime ]]></formula>
+      <cut><![CDATA[ (condsummary&30) && (DeltaWindowOpen<1500)]]></cut>
+      <type> histogram-1d[160,0.,1600] </type>
+      <titledesc>  GEM Delta Event time in 50 ns ticks </titledesc>
+      <axisdesc> [DeltaEvent time (ms), N] </axisdesc>
+      <description> Delta event time as measured by the GEM in system clock ticks with a cut of 1500 ticks. </description>
+    </object>
 
           
 

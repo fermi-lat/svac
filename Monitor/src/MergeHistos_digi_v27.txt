@@ -1,4 +1,5 @@
        CondSummaryWord_TH1  Sum
+       CondSummaryWord_Extended_TH1  Sum
        CondArrTKRTrigger_TH1  Sum
        CondArrCalLowTrigger_TH1  Sum
        CondArrCalHiTrigger_TH1  Sum
@@ -6,12 +7,17 @@
        CondArrROITrigger_TH1  Sum
        DiscardedDelta_TH1  Sum
        DeadZoneDelta_TH1  Sum
+       PrescaledDelta_TH1  Sum
        TkrTrigger_Tower_TH1  Sum
        CalHiTrigger_Tower_TH1  Sum
        CalLoTrigger_Tower_TH1  Sum
        TkrTrigger_Tower_TH1  Sum
        CalHiTrigger_Tower_TH1  Sum
        CalLoTrigger_Tower_TH1  Sum
+       DeltaWindowOpen_TH1  Sum
+       DeltaEventTime_TH1  Sum
+       DeltaWindowOpen_Zoom_TH1  Sum
+       DeltaEventTime_Zoom_TH1  Sum
        Acd_GemVeto_AcdTile_TH1  Sum
        AcdGemROI_Tower_TH1  Sum
        AcdGemCNO_GARC_TH1  Sum
