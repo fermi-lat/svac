@@ -100,12 +100,15 @@ class RFun{
 
   static unsigned istherenonzerocomponent(const UShort_t invector[], const Int_t vectordim);
   
+  static int returnnonzerocomponent(ROOT::TArrayUShortProxy& invector, int vectordim);
+
   
   static double computemean_with_outlierscut(const ULong64_t invector[], 
 					     const UInt_t vecdim, 
 					     const double rmstailcut);
   
 
+  
   static double computeratio(Short_t signal1, float ped1, 
 			     Short_t signal2, float ped2,
 			     Short_t MinSignal);

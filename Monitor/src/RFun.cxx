@@ -522,7 +522,19 @@ unsigned RFun::istherenonzerocomponent(const UShort_t invector[], const Int_t ve
   return 0;
 }
 
+// Returns the non zero coponent of a vector (e.g. ReconNumTracks[11], 
+// the non-zero component is the number of tracks). 
 
+// IF all components are zero, then it returns -1 
+
+int RFun::returnnonzerocomponent(ROOT::TArrayUShortProxy& invector, int vectordim)
+{
+  for(int i=0; i<vectordim;i++){
+    if(invector[i]>0.0)
+      return i;
+  }
+  return -1;
+}
 
 
 std::vector<double> RFun::testfun(){
