@@ -44,11 +44,17 @@
       <formula><![CDATA[ReconNumTracks]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
       <type> rate </type>
-      <description> Vector[10] reporting the rate of events with n tracks [0,10]. Periodic triggers are NOT taken into account. </description>
+      <description> Vector[11] reporting the rate of events with n tracks [0,10]. Periodic triggers are NOT taken into account. </description>
     </object>
 
 
-
+     <object>
+      <name> ReconTracks </name>
+      <formula><![CDATA[RFun::returnnonzerocomponent(ReconNumTracks,11)]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && (RFun::returnnonzerocomponent(ReconNumTracks,11) >= 0)]]></cut>
+      <type> mean </type>
+      <description> Mean number of reconstructed tracks. Periodic triggers are NOT taken into account. </description>
+    </object>
 
      <object>
       <name> ReconVertexDir_XYZ[3] </name>
@@ -62,9 +68,9 @@
      <object>
       <name> ReconVertexPos_XYZ[3] </name>
       <formula><![CDATA[ReconVertexPosXYZ]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && ReconVertexPosXYZ[0]<1000000]]></cut>
       <type> mean </type>
-      <description> Vector[3] reporting the MEAN reconstructed Vertex position X, Y and Z. Periodic triggers are NOT taken into account. </description>
+      <description> Vector[3] reporting the MEAN reconstructed Vertex position X, Y and Z. Periodic triggers are NOT taken into account. Only events with TkrVertex objects are being considered. </description>
     </object>
 
 
