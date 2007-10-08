@@ -93,6 +93,10 @@
 // Last updated with object CTBBestEnergyRatio by user dpaneque on Sat Sep 29 01:13:23 2007
 // Last updated with object DeltaEventTime by user dpaneque on Wed Oct  3 00:27:24 2007
 // Last updated with object DeltaWindowOpen by user dpaneque on Wed Oct  3 00:33:15 2007
+// Last updated with object DeltaEventTimeManual by user dpaneque on Mon Oct  8 19:35:18 2007
+// Last updated with object TriggerEngine by user dpaneque on Mon Oct  8 20:00:57 2007
+#include "digi/MonInput_TriggerEngine.h"
+#include "digi/MonInput_DeltaEventTimeManual.h"
 #include "digi/MonInput_DeltaWindowOpen.h"
 #include "digi/MonInput_DeltaEventTime.h"
 #include "merit/MonInput_CTBBestEnergyRatio.h"
@@ -364,6 +368,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DeltaEventTime;
   if (s=="DeltaWindowOpen")
     return new MonInput_DeltaWindowOpen;
+  if (s=="DeltaEventTimeManual")
+    return new MonInput_DeltaEventTimeManual;
+  if (s=="TriggerEngine")
+    return new MonInput_TriggerEngine;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -459,6 +467,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CTBBestEnergyRatio");
   names.push_back("DeltaEventTime");
   names.push_back("DeltaWindowOpen");
+  names.push_back("DeltaEventTimeManual");
+  names.push_back("TriggerEngine");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
