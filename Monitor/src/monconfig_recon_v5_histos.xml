@@ -220,7 +220,7 @@
      <object>
       <name> SuspCalHi_Highest0_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8 && !(condsummary&4)]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8 ]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 100,3000] </type>
       <titledesc>  Suspect CALHi (highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
@@ -230,7 +230,7 @@
      <object>
       <name> SuspCalHi_Highest1_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,1,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,1,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8 && !(condsummary&4)]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 100,3000] </type>
       <titledesc>  Suspect CALHi (highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
@@ -240,7 +240,7 @@
       <object>
       <name> SuspCalHi_Highest2_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,2,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,2,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8 && !(condsummary&4)]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&8 ]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 100,3000] </type>
       <titledesc>  Suspect CALHi (third highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
@@ -251,7 +251,7 @@
      <object>
       <name> SuspCalLo_Highest0_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4 && !(condsummary&8) ]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
@@ -261,7 +261,7 @@
      <object>
       <name> SuspCalLo_Highest1_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,1,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,1,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4 && !(condsummary&8)]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (second highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
@@ -271,7 +271,7 @@
       <object>
       <name> SuspCalLo_Highest2_TH2 </name>
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,2,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,2,1)]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4 ]]></cut>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4 && !(condsummary&8)]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (third highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
