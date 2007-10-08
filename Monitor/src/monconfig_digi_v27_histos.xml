@@ -288,7 +288,7 @@
       <cut><![CDATA[ (condsummary&30) && (DeltaWindowOpen<1500)]]></cut>
       <type> histogram-1d[160,0.,1600] </type>
       <titledesc>  GEM Delta Event time in 50 ns ticks </titledesc>
-      <axisdesc> [DeltaEvent time (ms), N] </axisdesc>
+      <axisdesc> [DeltaEvent time (50 ns ticks), N] </axisdesc>
       <description> Delta event time as measured by the GEM in system clock ticks with a cut of 1500 ticks. </description>
     </object>
 
