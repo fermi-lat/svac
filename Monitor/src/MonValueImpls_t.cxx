@@ -856,11 +856,11 @@ void MonCounterDiffRate::reset() {
   }
 
   // tmp
-  
+  /*
    std::cout << "MonCounterDiffRate::reset()" << std::endl
 	     << "m_dim= " << m_dim << std::endl
 	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl;
-  
+  */
   // endmp
 
 }
@@ -900,12 +900,12 @@ void MonCounterDiffRate::latchValue() {
   }
 
    // tmp
-  
+  /*
    std::cout << "MonCounterDiffRate::latch()" << std::endl
 	     << "m_dim= " << m_dim << std::endl
 	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl
 	     << "Rate = " << m_val[0] << "+/-" << m_err[0] << std::endl; 
-  
+  */
   // endmp
 
 
@@ -950,7 +950,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       // the vector m_hi_previous is being used to catch these jumps
       
       // tmp
-      
+      /*
       std::cout << "MonCounterDiffRate::singleincrement " << std::endl
 		<< "Parameter = " << name() << std::endl
 		<< "Data type = " << getDataType() << std::endl
@@ -959,7 +959,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       std::cout << "MonCounterDiffRate::singleincrement " << std::endl
 		<< "Outside" <<std::endl; 
       std::cout << i << "\t" << val[i] << "\t"<< m_offset[i] << std::endl;
-      
+      */
 
       // endtmp
 
@@ -978,7 +978,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
 	  m_hi[i] = ULong64_t(val[i])-m_offset[i];
-	  std::cout << "Jump: " << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
+	  //std::cout << "Jump: " << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
 
 	}
       else
