@@ -940,8 +940,22 @@ int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
 void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) { // First event
-      m_offset[i] = (ULong64_t)val[i];
+      if(getDataType()== "MCOktTest" && strstr(name().c_str(),"GemRate")){
+	m_offset[i] = (ULong64_t)val[i];
+	if(m_offset[i]/(pow(2,17)-1.0))
+	  m_jumpcounter = Int_t(m_offset[i]/(pow(2,17)-1.0) + 0.5);
+      }
       m_lo[i] = (ULong64_t)val[i] - m_offset[i];
+
+      // tmp
+      /*
+      std::cout << "First Event of chunk: " <<std::endl
+		<< "m_lo[0], m_offset[0],m_jumpcounter  = " 
+		<< m_lo[0] << ", " << m_offset[0] << ", " << m_jumpcounter 
+		<< std::endl; 
+      */
+      // endtmp
+
     }
 
     if(getDataType()== "MCOktTest" && strstr(name().c_str(),"GemRate")){
@@ -959,8 +973,8 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       std::cout << "MonCounterDiffRate::singleincrement " << std::endl
 		<< "Outside" <<std::endl; 
       std::cout << i << "\t" << val[i] << "\t"<< m_offset[i] << std::endl;
+     
       */
-
       // endtmp
 
       if ( (val[i]-m_offset[i]) >= m_hi[i])
@@ -978,7 +992,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
 	  m_hi[i] = ULong64_t(val[i])-m_offset[i];
-	  //std::cout << "Jump: " << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
+	  // std::cout << "Jump: " << m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
 
 	}
       else
