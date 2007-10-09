@@ -18,6 +18,9 @@
        DeltaEventTime_TH1  Sum
        DeltaWindowOpen_Zoom_TH1  Sum
        DeltaEventTime_Zoom_TH1  Sum
+       TriggerEngine_TH1  Sum
+       DeltaEventTimeManual_TH1  Sum
+       DeltaEventTimeManual_Zoom_TH1  Sum
        Acd_GemVeto_AcdTile_TH1  Sum
        AcdGemROI_Tower_TH1  Sum
        AcdGemCNO_GARC_TH1  Sum
