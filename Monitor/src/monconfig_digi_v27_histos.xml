@@ -31,6 +31,8 @@
     <object> CalLoTriggerTower </object>
     <object> CalReadoutRange </object>
     <object> Range4 </object>
+    <object> TriggerEngine </object>
+    <object> DeltaEventTimeManual </object> 
 
     <!-- Acd Variables -->
     
@@ -294,6 +296,41 @@
 
           
 
+      <object>
+      <name> TriggerEngine_TH1 </name>
+      <formula><![CDATA[ TriggerEngine ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> histogram-vecdim-1d[16,-0.5,15.5] </type>
+      <titledesc>  Distribution of Trigger Engines  </titledesc>
+      <axisdesc> [Trigger Engine, N] </axisdesc>
+      <description> Distribution of Trigger Engines. </description>
+    </object>
+
+      
+
+      
+       <object>
+      <name> DeltaEventTimeManual_TH1 </name>
+      <formula><![CDATA[ DeltaEventTimeManual*1000. ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-1d[4100,0.0,4.1] </type>
+      <titledesc> Distribution of Delta Event Time computed manually</titledesc>
+      <axisdesc> [Time (ms), N] </axisdesc>
+      <description>  Distribution of Delta Event Time computed manually using the event time stamp.</description>
+    </object>
+
+
+        <object>
+      <name> DeltaEventTimeManual_Zoom_TH1 </name>
+      <formula><![CDATA[ DeltaEventTimeManual*1000. ]]></formula>
+      <cut><![CDATA[ condsummary&30 && (DeltaEventTimeManual*1000. < 0.4)]]></cut>
+      <type> histogram-1d[4100,0.0,0.41] </type>
+      <titledesc> Distribution of Delta Event Time computed manually</titledesc>
+      <axisdesc> [Time (ms), N] </axisdesc>
+      <description>  Distribution of Delta Event Time computed manually using the event time stamp. Only Delta times smaller than 0.4 ms are displayed. </description>
+    </object>
+
+     
       <!-- ********************  Detector information   *********************** -->
 
 

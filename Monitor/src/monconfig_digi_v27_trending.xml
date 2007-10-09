@@ -25,6 +25,8 @@
     <object> DeadZoneDelta </object>
     <object> DiscardedDelta </object>
     <object> PrescaledDelta </object>
+    <object> DeltaWindowOpen </object>
+    <object> DeltaEventTime </object>
     <object> TkrTriggerTower </object>
     <object> CalHiTriggerTower </object> 
     <object> CalLoTriggerTower </object>
@@ -33,6 +35,8 @@
     <object> OBFStatus </object>
     <object> Sequence </object>
     <object> FilterBits </object>
+     <object> TriggerEngine </object>
+    <object> DeltaEventTimeManual </object> 
 
     <!-- Acd Variables -->
     
@@ -431,7 +435,14 @@
     </object>
 
 
-     
+      <object>
+      <name> TriggerEngine[16] </name>
+      <formula><![CDATA[ TriggerEngine ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> rate </type>
+      <description> Rate of Trigger Engines (DigiEvent->getL1T().getGemEngine()) </description>
+    </object>
+
 
       <!-- ********************  Detector information   *********************** -->
 
@@ -607,6 +618,14 @@
       <description> Rate of tracker hits (all towers and planes included). </description>
     </object>
 
+    <object>
+      <name> TkrTotalHitsPerEvt </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes(TkrHitsTowerPlane) ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> mean </type>
+      <description> Mean number of tracker hits (all towers and planes included) per event. </description>
+    </object>
+
 
     
 
@@ -616,6 +635,15 @@
       <cut><![CDATA[condsummary&30 ]]></cut>
       <type> rate </type>
       <description> Rate of tracker hits in [tower]. </description>
+    </object>
+
+
+    <object>
+      <name> TkrHitsPerEvt_Tower[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes(TkrHitsTowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description> Mean number of tracker hits in [tower]. </description>
     </object>
 
     
@@ -628,6 +656,18 @@
       <type> rate </type>
       <description> Rate of tracker hits in [tower][tkrplane]. </description>
     </object>
+
+    
+     <object>
+      <name> TkrHitsPerEvt_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: TkrHitsTowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> mean </type>
+      <description> Mean number of tracker hits in [tower][tkrplane]. </description>
+    </object>
+
+
+    
 
  
      <object>
