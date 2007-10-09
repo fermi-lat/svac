@@ -313,7 +313,7 @@
       <name> DeltaEventTimeManual_TH1 </name>
       <formula><![CDATA[ DeltaEventTimeManual*1000. ]]></formula>
       <cut><![CDATA[ condsummary&30 ]]></cut>
-      <type> histogram-1d[4100,0.0,4.1] </type>
+      <type> histogram-1d[10100,0.0,10.1] </type>
       <titledesc> Distribution of Delta Event Time computed manually</titledesc>
       <axisdesc> [Time (ms), N] </axisdesc>
       <description>  Distribution of Delta Event Time computed manually using the event time stamp.</description>
