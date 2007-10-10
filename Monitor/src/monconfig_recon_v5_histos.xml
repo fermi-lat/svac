@@ -98,6 +98,28 @@
     </object>
 
 
+         <object>
+      <name> ReconVertex_XDir_TH1 </name>
+      <formula><![CDATA[ ReconDirXYZ[0] ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[50,-1.0,1.0] </type>
+      <titledesc> Reconstructed event direction along the X axis.The value is obtained from the first reconstructed vertex. </titledesc>
+      <axisdesc> [Reconstructed X direction, N] </axisdesc>
+      <description> Reconstructed event direction along the X axis.The value is obtained from the first reconstructed vertex.  </description>
+    </object>
+
+
+	       <object>
+      <name> ReconVertex_YDir_TH1 </name>
+      <formula><![CDATA[ ReconDirXYZ[1] ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[50,-1.0,1.0] </type>
+      <titledesc> Reconstructed event direction along the Y axis.The value is obtained from the first reconstructed vertex. </titledesc>
+      <axisdesc> [Reconstructed Y direction, N] </axisdesc>
+      <description> Reconstructed event direction along the Y axis.The value is obtained from the first reconstructed vertex.  </description>
+    </object>
+
+
 
    
 
@@ -120,6 +142,29 @@
       <titledesc> Reconstructed event position along the Z axis.The value is obtained from the first reconstructed vertex. </titledesc>
       <axisdesc> [Reconstructed Z position (mm), N] </axisdesc>
       <description> Reconstructed event position along the Z axis.The value is obtained from the first reconstructed vertex.  </description>
+    </object>
+
+
+
+         <object>
+      <name> ReconVertex_XPos_TH1 </name>
+      <formula><![CDATA[ ReconVertexPosXYZ[0] ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[180,-900.,900.] </type>
+      <titledesc> Reconstructed event position along the X axis.The value is obtained from the first reconstructed vertex. </titledesc>
+      <axisdesc> [Reconstructed X position (mm), N] </axisdesc>
+      <description> Reconstructed event position along the X axis.The value is obtained from the first reconstructed vertex.  </description>
+    </object>
+
+
+	    <object>
+      <name> ReconVertex_YPos_TH1 </name>
+      <formula><![CDATA[ ReconVertexPosXYZ[1] ]]></formula>
+      <cut><![CDATA[ condsummary&30  ]]></cut>
+      <type> histogram-1d[180,-900.,900.] </type>
+      <titledesc> Reconstructed event position along the Y axis.The value is obtained from the first reconstructed vertex. </titledesc>
+      <axisdesc> [Reconstructed Y position (mm), N] </axisdesc>
+      <description> Reconstructed event position along the Y axis.The value is obtained from the first reconstructed vertex.  </description>
     </object>
 
 
@@ -157,7 +202,7 @@
       <type> histogram-vecdim-2d[16,-0.5,15.5, 8, -0.5,7.5] </type>
       <titledesc>  Number of times that the measured energy is ZERO, vs tower and cal-layer.  </titledesc>
       <axisdesc> [Tower number, Cal-layer, N] </axisdesc>
-      <description> Number of times that the measured energy is ZERO, vs tower and cal-layer. Periodic triggers are NOT taken into account.  </description>
+      <description> 2D histogram (tower, callayer) showing the number of times that the measured energy is ZERO. Periodic triggers are NOT taken into account.  </description>
     </object>
 
       <object>
@@ -167,7 +212,7 @@
       <type> histogram-vecdim-2d[16,-0.5,15.5, 8, -0.5,7.5] </type>
       <titledesc>  Number of times that the energy could not be reconstructed, vs tower and cal-layer.  </titledesc>
       <axisdesc> [Tower number, Cal-layer, N] </axisdesc>
-      <description> Number of times that the energy could not be reconstructed measured, vs tower and cal-layer. Periodic triggers are NOT taken into account.  </description>
+      <description> 2D histogram (tower,callayer) showing the number of times that the energy could not be reconstructed. Periodic triggers are NOT taken into account.  </description>
     </object>
  
 
@@ -249,13 +294,13 @@
 
 
      <object>
-      <name> SuspCalLo_Highest0_TH2 </name>
+      <name> SuspCalLo_Highest0_TH2 </name>                   
       <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,0):RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,1)]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32) && condsummary&4 && !(condsummary&8) ]]></cut>
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
-      <description> 2D histogram showing the highest energy vs channel when CALHi was asserted. Periodic triggers are NOT taken into account.  </description>
+      <description> 2D histogram showing the highest energy vs channel when CAL-Lo (and not CAL-Hi) was asserted. Periodic triggers are NOT taken into account.  </description>
     </object>
 
      <object>
@@ -265,7 +310,7 @@
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (second highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
-      <description> 2D histogram showing the second highest energy vs channel when CALHi was asserted. Periodic triggers are NOT taken into account.  </description>
+      <description> 2D histogram showing the second highest energy vs channel when CAL-Lo (and not CAL-Hi) was asserted. Periodic triggers are NOT taken into account.  </description>
     </object>
 
       <object>
@@ -275,9 +320,30 @@
       <type> histogram-2d[3072,-0.5,3071.5, 100, 1,300] </type>
       <titledesc>  Suspect CALLo (third highest energy)  </titledesc>
       <axisdesc> [channel number, Energy in MeV, N] </axisdesc>
-      <description> 2D histogram showing the third highest energy vs channel when CALHi was asserted. Periodic triggers are NOT taken into account.  </description>
+      <description> 2D histogram showing the third highest energy vs channel when CAL-Lo (and not CAL-Hi) was asserted. Periodic triggers are NOT taken into account.  </description>
     </object>
    
+
+         <object>
+      <name> SuspCalLo_Highest0_EnergyDistribution_TH1 </name>
+      <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,1) ]]></formula>
+      <cut><![CDATA[  condsummary&30 && !(condsummary&32) && condsummary&4 && !(condsummary&8) ]]></cut>
+      <type> histogram-1d[500,0.,500.] </type>
+      <titledesc> Distribution of highest energy when CAL-Lo (and not CAL-Hi) was asserted. </titledesc>
+      <axisdesc> [Energy (MeV), N] </axisdesc>
+      <description> Distribution of highest energy when CAL-Lo (and not CAL-Hi) was asserted. </description>
+    </object>
+
+     <object>
+      <name> SuspCalHi_Highest0_EnergyDistribution_TH1 </name>
+      <formula><![CDATA[ RFun::getChannelEnergyHighest(CalXtalFaceSignal,0,1) ]]></formula>
+      <cut><![CDATA[  condsummary&30 && !(condsummary&32) && condsummary&8 ]]></cut>
+      <type> histogram-1d[500,0.,5000.] </type>
+      <titledesc> Distribution of highest energy when CAL-Hi was asserted. </titledesc>
+      <axisdesc> [Energy (MeV), N] </axisdesc>
+      <description> Distribution of highest energy when CAL-Hi was asserted. </description>
+    </object>
+
 
   </outputList>
 

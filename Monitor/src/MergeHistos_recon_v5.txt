@@ -3,8 +3,12 @@
        ReconNumTracks_TH1  Sum
        ReconVertex_YXDir_TH2  Sum
        ReconVertex_ZDir_TH1  Sum
+       ReconVertex_XDir_TH1  Sum
+       ReconVertex_YDir_TH1  Sum
        ReconVertex_YXPos_TH2  Sum
        ReconVertex_ZPos_TH1  Sum
+       ReconVertex_XPos_TH1  Sum
+       ReconVertex_YPos_TH1  Sum
        ReconEnergy_TH1_TowerCalLayer_TowerLoop_CalLayerLoop  Sum
        ReconEnergy_TowerCalLayer_TH2  Sum
        ZeroReconEnergy_TowerCalLayer_TH2  Sum
@@ -16,6 +20,8 @@
        SuspCalHi_Highest0_TH2  Sum
        SuspCalHi_Highest1_TH2  Sum
        SuspCalHi_Highest2_TH2  Sum
-       SuspCalLo_Highest0_TH2  Sum
+       SuspCalLo_Highest0_TH2  Sum                   
        SuspCalLo_Highest1_TH2  Sum
        SuspCalLo_Highest2_TH2  Sum
+       SuspCalLo_Highest0_EnergyDistribution_TH1  Sum
+       SuspCalHi_Highest0_EnergyDistribution_TH1  Sum

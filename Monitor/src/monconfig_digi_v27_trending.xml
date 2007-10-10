@@ -270,7 +270,7 @@
       <formula><![CDATA[ Sequence ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> counterdiffrate </type>
-      <description> Rate of evts before any filter (computed using DigiEvent->getMetaEvent().scalers().sequence(). </description>
+      <description> Rate of evts before any filter (computed using DigiEvent->getMetaEvent().scalers().sequence().) </description>
     </object>
 
      <!-- The cut FilterBits[0]>0 is to ensure that the filter bits were computed
@@ -707,7 +707,7 @@
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Vector [tower] reporting the normalized of number of events in which there was a tracker trigger and the number of consecutive tracker planes hit is less than 6. The used normalization factor is the Tkr Triggers in the specific [tower]. This is a meanigful parameter reporting about the HIT EFFICIENCY in that [tower]. </description>
+      <description> Vector [tower] reporting the normalized number of events in which there was a tracker trigger and the number of consecutive tracker planes hit is less than 6. The used normalization factor is the Tkr Triggers in the specific [tower]. This is a meanigful parameter reporting about the HIT EFFICIENCY in that [tower]. </description>
     </object>
 
 
@@ -724,7 +724,7 @@
 
      <object>
       <name> ConsecutivePlanesHit_Tower[16] </name>
-      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]&&(RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) ]]></formula>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]>0 ? (RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) : 0.0 ]]></formula>
       <cut><![CDATA[ condsummary&30]]></cut>
       <type> mean </type>
       <description> Mean number of consecutive tracker planes hit in [tower] per event triggereing that [tower] </description>
@@ -735,7 +735,7 @@
       <formula><![CDATA[runonce: RFun::getemptytowers(TkrTriggerTower)# foreachtower: runonceformula[tower] > 0.5 ]]></formula>
       <cut><![CDATA[condsummary&30 ]]></cut>
       <type> counter </type>
-      <description> Number of times [tower] did not trigger and was not close to a tower that triggered </description>
+      <description> Number of times [tower] did not trigger and was not boundary to a tower that triggered </description>
     </object>
 
      <object>
@@ -877,7 +877,7 @@
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Vector [tower][tkrplane] reporting the normalized of number of events in with ToT==0  for both controller 0 and controller 1. The used normalization factor is the number of Tkr Digis in that [tower][tkrplane]. This is a good indicator of events with TIMING PROBLEMS. </description>
+      <description> Vector [tower][tkrplane] reporting the normalized of number of events with ToT==0  for both controller 0 and controller 1. The used normalization factor is the number of Tkr Digis in that [tower][tkrplane]. This is a good indicator of events with TIMING PROBLEMS. </description>
     </object>
 
 
@@ -900,7 +900,7 @@
       <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]>250 ]]></formula>
       <cut><![CDATA[ condsummary&30]]></cut>
       <type> rate </type>
-      <description> Vector [tower][tkrplane] reporting the rate of Number of ToT>250 (overlapped trigger) in controller 0.  </description>
+      <description> Vector [tower][tkrplane] reporting the rate of evts with ToT>250 (overlapped trigger) in controller 0.  </description>
     </object>
 
     <object>
@@ -908,7 +908,7 @@
       <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con1_TowerPlane[tower][tkrplane]>250 ]]></formula>
       <cut><![CDATA[ condsummary&30]]></cut>
       <type> rate </type>
-      <description> Vector [tower][tkrplane] reporting the rate of Number of ToT>250 (overlapped trigger) in controller 1.  </description>
+      <description> Vector [tower][tkrplane] reporting the rate of evts with ToT>250 (overlapped trigger) in controller 1.  </description>
     </object>
 
      <object>
@@ -916,7 +916,7 @@
       <formula><![CDATA[foreachtower: foreachtkrplane: ToT_con0_TowerPlane[tower][tkrplane]>250 || ToT_con1_TowerPlane[tower][tkrplane]>250]]></formula>
       <cut><![CDATA[ condsummary&30]]></cut>
       <type> rate </type>
-      <description> Vector [tower][tkrplane] reporting the rate of Number of ToT>250 (overlapped trigger) in either controller 0 or controller 1.  </description>
+      <description> Vector [tower][tkrplane] reporting the rate of evts with ToT>250 (overlapped trigger) in either controller 0 or controller 1.  </description>
     </object>
 
 
@@ -926,7 +926,7 @@
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Vector [tower][tkrplane] reporting the normalized of number of events with ToT> 250  for either controller 0 or controller 1. The used normalization factor is the number of Tkr Digis in that [tower][tkrplane]. This is a good indicator of events with REMNANT INFORMATION FROM PREVIOUS EVENTS. </description>
+      <description> Vector [tower][tkrplane] reporting the normalized number of events with ToT> 250  for either controller 0 or controller 1. The used normalization factor is the number of Tkr Digis in that [tower][tkrplane]. This is a good indicator of events with REMNANT INFORMATION FROM PREVIOUS EVENTS. </description>
     </object>
 
 
@@ -1033,33 +1033,7 @@
     </object>
 
 
-      <object>
-      <name> CalXHit_NHit_TowerCalLayerCalColumn[16][8][12] </name>
-      <formula><![CDATA[CalXHit_TowerCalLayerCalColumn]]></formula>
-      <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
-      <type> counter </type>
-      <description> Vector[tower][callayer][calcolumn] reporting the hit rate in a crystal defined by the coordinates tower,callayer,calcolumn. Periodic triggers are NOT taken into account. </description>
-    </object>
-
-     <object>
-      <name> CalXHit_NHit_TowerCalLayer[16][8] </name>
-      <formula><![CDATA[CalXHit_TowerCalLayer]]></formula>
-      <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
-      <type> counter </type>
-      <description> Vector[tower][callayer] reporting the number of hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. </description>
-    </object>
-
-
-     <object>
-      <name> CalXHit_NHit_TowerCalLayer_v2[16][8] </name>
-      <formula><![CDATA[ foreachtower: foreachcallayer: RFun::loopovercalcolumns(CalXHit_TowerCalLayerCalColumn[tower][callayer])]]></formula>
-      <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> counter </type>
-      <description> Vector[tower][callayer] reporting the number of hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. The difference with respect to parameter CalXHit_NHit_TowerCalLayer is the way it is computed; this one uses 3D vectors operations. </description>
-    </object>
-
-
-
+    
 
      <object>
       <name> CalXHit_ZEROHit_TowerCalLayerCalColumn[16][8][12] </name>
