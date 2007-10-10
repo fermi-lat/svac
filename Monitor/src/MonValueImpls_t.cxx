@@ -957,7 +957,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	if(m_offset[i]/(pow(2,17)-1.0))
 	  m_jumpcounter = Int_t(m_offset[i]/(pow(2,17)-1.0) + 0.5);
       }
-      m_lo[i] = (ULong64_t)val[i] - m_offset[i];
+      m_lo[i] = ULong64_t((ULong64_t)val[i] - m_offset[i]);
 
       // tmp
       /*
@@ -985,8 +985,8 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       std::cout << "MonCounterDiffRate::singleincrement " << std::endl
 		<< "Outside" <<std::endl; 
       std::cout << i << "\t" << val[i] << "\t"<< m_offset[i] << std::endl;
-     
       */
+      
       // endtmp
 
       if ( (val[i]-m_offset[i]) >= m_hi[i])
@@ -994,19 +994,31 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	  // val[i] is supposed to always increase
 	  m_hi_previous[i] = m_hi[i]>m_lo[i] ? m_hi[i] : m_lo[i];
 	  
-
-	  if((val[i]-m_offset[i])-m_lo[i] > ((pow(2,17)-10000)))
+	  Int_t jump = 0;
+	  if((val[i]-m_offset[i])-m_hi_previous[i] > ((pow(2,17)-10000)))
 	    { // there was a jump; update offset
 	      m_jumpcounter++;
+	      jump = 1;
 	      m_offset[i] = ULong64_t(m_jumpcounter* pow(2,17)) -  m_hi_previous[i]; 
 
 	      //	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
 	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
-	  if(ULong64_t(val[i])-m_offset[i] >0)
+	  if((val[i]-m_offset[i]) >=0)
 	    m_hi[i] = ULong64_t(val[i])-m_offset[i];
-	  // std::cout << "Jump: " << m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
-
+	  else
+	    {
+	      std::cout << "MonCounterDiffRate::singleincrement: ERROR" << std::endl
+			<< "Object " << name().c_str() << std::endl
+			<< "Weird values: val[i]-m_offset[i] <0 " << std::endl
+			<< "Jump,lo, previous, hi, offset: : " 
+			<< m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] 
+			<< "\t" << m_hi[i] << "\t" << m_offset[i]<< std::endl;
+	    }
+	   /*
+	  std::cout << "Info on value " << std::endl
+		    << "Current Jump, lo, previous, hi, offset: " << m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << "\t" << m_offset[i] <<std::endl;
+	  */
 	}
       else
 	{
