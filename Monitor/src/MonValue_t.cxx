@@ -269,7 +269,7 @@ void MonValue::makeProxy(TTree* tree){
     formfile <<"val = double("<<formula<<");"<<std::endl
   	   <<"resultvector->push_back(val);"<<std::endl;
     if(m_histdim==2){
-      formfile <<"val = "<<formula2<<";"<<std::endl
+      formfile <<"val = double("<<formula2<<");"<<std::endl
   	     <<"resultvector2->push_back(val);"<<std::endl;
     }
 
@@ -461,6 +461,7 @@ void MonValue::increment(TTree* tree){
       }
     }else{
       m_result->clear();
+      m_result2->clear();
       m_counter=0;
       tree->Process(m_sel,"goff",evperit,evperit*it);
       unsigned int fdim=0;
@@ -473,8 +474,10 @@ void MonValue::increment(TTree* tree){
       double *val=&((*m_result)[0]);
       double *val2=&((*m_result2)[0]);
       for (unsigned i=0;i<m_result->size();i+=m_dim){
-	if(m_histdim==2)singleincrement(&val[i],&val2[i]);
-	else singleincrement(&val[i]);
+	if(m_histdim==2)
+	  singleincrement(&val[i],&val2[i]);
+	else 
+	  singleincrement(&val[i]);
       }
     }
   }    
