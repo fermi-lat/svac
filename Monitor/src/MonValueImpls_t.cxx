@@ -374,6 +374,18 @@ MonHist2d::~MonHist2d(){
 void MonHist2d::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     m_hist[i]->Fill((Float_t)val[i],(Float_t)val2[i]);
+    // tmp
+    /*
+    if(strstr(name().c_str(),"SuspCalHi_Highest") || strstr(name().c_str(),"SuspCalLo_Highest") ){
+      std::cout << "MonHist2d::singleincrement() for object " 
+		<< name().c_str() << std::endl
+		<< "Histo filled in bins x, y = " << val[i] 
+		<< ", " << val2[i] << std::endl;
+    }
+    */
+    // endtmp
+
+
   }
 }  
 void MonHist2d::reset(){}
@@ -991,7 +1003,8 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	      //	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
 	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
-	  m_hi[i] = ULong64_t(val[i])-m_offset[i];
+	  if(ULong64_t(val[i])-m_offset[i] >0)
+	    m_hi[i] = ULong64_t(val[i])-m_offset[i];
 	  // std::cout << "Jump: " << m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] << "\t" << m_hi[i] << std::endl;
 
 	}
