@@ -912,7 +912,7 @@ void MonCounterDiffRate::latchValue() {
   }
 
    // tmp
-  /*
+  /*  
    std::cout << "MonCounterDiffRate::latch()" << std::endl
 	     << "m_dim= " << m_dim << std::endl
 	     << m_lo[0] << "\t" << m_hi_previous[0] << "\t" << m_hi[0] << std::endl
@@ -989,13 +989,13 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       // endtmp
 
 
-
+      ULong64_t previous_offset = m_offset[i]; // only used if weird stuff occurs... 
       if ( (val[i]-m_offset[i]) >= m_hi[i])
 	{
 	  // val[i] is supposed to always increase
 	  m_hi_previous[i] = m_hi[i]>m_lo[i] ? m_hi[i] : m_lo[i];
 	  
-	  if((val[i]-m_offset[i])-m_hi_previous[i] > ((pow(2,17)-30000)))
+	  if((val[i]-m_offset[i])-m_hi_previous[i] > 10000)
 	    { // there was a jump; update offset
 	      m_jumpcounter++;
 	      if(ULong64_t(m_jumpcounter* pow(2,17))<m_hi_previous[i])
@@ -1011,10 +1011,8 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 		}
 	      else
 		m_offset[i] = ULong64_t(ULong64_t(m_jumpcounter* pow(2,17)) -  m_hi_previous[i]); 
-
-	      //	      std::cout << "MonCounterDiffRate::singleincrement:" <<std::endl
-	      //	<< "Offset for component i = " << i << " is now " << m_offset[i] <<std::endl; 
 	    }
+
 	  if((val[i]-m_offset[i]) >=0)
 	    m_hi[i] = ULong64_t(val[i])-m_offset[i];
 	  else
@@ -1026,6 +1024,18 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 			<< m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] 
 			<< "\t" << m_hi[i] << "\t" << m_offset[i]<< "\t" << val[i] 
 			<< "\t" << m_hi[i]-m_lo[i] <<  std::endl;
+
+	      m_jumpcounter--;
+	      m_offset[i] = previous_offset;
+	      std::cout << "The offset was certainly to large... probably i should not jumped before... " 
+			<< std::endl
+			<< "Reducing the jumpcounter by one and retrieving the prevoius offset:" << std::endl
+			<< "Current jumpcounter, offset = " << m_jumpcounter 
+			<< "\t" << m_offset[i] << std::endl;
+
+	      if((val[i]-m_offset[i]) >=0)
+		m_hi[i] = ULong64_t(val[i])-m_offset[i];
+
 	    }
 	   /*
 	  std::cout << "Info on value " << std::endl
