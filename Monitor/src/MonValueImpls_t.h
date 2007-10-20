@@ -473,7 +473,7 @@ class MonCounterDiffRate  : public MonValue {
 
 public:
   // Standard c'tor
-  MonCounterDiffRate(const char* name, const char* formula, const char* cut) ;
+  MonCounterDiffRate(const char* name, const char* formula, const char* cut, const char* type) ;
 
   // D'tor, no-op
   virtual ~MonCounterDiffRate();
@@ -496,14 +496,25 @@ private:
   // cached values, lo and hi values from current time slice
   ULong64_t *m_lo;
   ULong64_t *m_hi;
-  ULong64_t *m_hi_previous; // will be used only with MC data and sequence param
-  ULong64_t *m_offset; // will be used only with MC data and sequence param
-  UInt_t m_jumpcounter; // will be used only with MC data and sequence param
+
+  // Quantities that will be used only with MC data and sequence param
+  // START
+  ULong64_t *m_hi_previous; 
+  ULong64_t *m_offset; 
+  UInt_t m_jumpcounter;
+  
+  UInt_t m_jumpid; // value used to identify a jump in the quantity
+  UShort_t m_jumpmagbit;// num bits determining the jump magnitude: jump = pow(2,m_jumpmagbit)
+  std::string m_dataparamtype; // string identifying the data parameter type. 
+  // Actions will be taken depending on this value
+  // END
+
 
    // the output value
   Float_t *m_val;
   Float_t *m_err;
   Double_t m_timebin;
+
 
 };
 

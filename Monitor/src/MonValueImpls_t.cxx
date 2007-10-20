@@ -818,7 +818,7 @@ void MonCounterDiff::singleincrement(Double_t* val, Double_t* val2) {
 
 
 
-MonCounterDiffRate::MonCounterDiffRate(const char* name, const char* formula, const char* cut) 
+MonCounterDiffRate::MonCounterDiffRate(const char* name, const char* formula, const char* cut, const char* type) 
     :MonValue(name,formula, cut){
   m_lo=new ULong64_t[m_dim];
   m_hi=new ULong64_t[m_dim];
@@ -836,6 +836,36 @@ MonCounterDiffRate::MonCounterDiffRate(const char* name, const char* formula, co
     m_val[i] = 0;
     m_err[i] = 0;
   }
+
+  // fetch values from type argument
+
+  std::vector<std::string> tt=parse(type,"[",",","]");
+  
+ 
+  if(tt.size()!=3){
+    std::cerr<<" MonCounterDiffRate variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+
+  if(atoi(tt[1].c_str()) < 0 || atoi(tt[1].c_str()) > 50)
+    {
+      std::cerr << "MonCounterDiffRate variable "<<name
+		<< ": second argument (m_jumpmagbit) is out of bounds [0,50]. Aborting." <<std::endl;
+      assert(0);
+    }
+
+  if(atoi(tt[0].c_str()) < 1000)
+    {
+      std::cerr << "MonCounterDiffRate variable "<<name
+		<< ": first argument (m_jumpid) is NOT >1000. Aborting." <<std::endl;
+      assert(0);
+    }
+
+  
+  m_jumpid=UInt_t(atoi(tt[0].c_str()));
+  m_jumpmagbit= UShort_t(atof(tt[1].c_str()));
+  m_dataparamtype = tt[2]; 
+
   reset();
 }
 
@@ -952,10 +982,10 @@ int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
 void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
     if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) { // First event
-      if(getDataType()== "MCOktTest" && strstr(name().c_str(),"GemRate")){
+      if(getDataType()== "MCOktTest" && getDataType() == m_dataparamtype){
 	m_offset[i] = (ULong64_t)val[i];
-	if(m_offset[i]/(pow(2,17)-1.0))
-	  m_jumpcounter = Int_t(m_offset[i]/(pow(2,17)-1.0) + 0.5);
+	if(m_offset[i]/(pow(2,m_jumpmagbit)-1.0))
+	  m_jumpcounter = Int_t(m_offset[i]/(pow(2,m_jumpmagbit)-1.0) + 0.5);
       }
       m_lo[i] = ULong64_t((ULong64_t)val[i] - m_offset[i]);
 
@@ -970,7 +1000,8 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 
     }
 
-    if(getDataType()== "MCOktTest" && strstr(name().c_str(),"GemRate")){
+
+    if(getDataType()== "MCOktTest" && getDataType() == m_dataparamtype){
       // is mc data from oktober tests and we are dealing with m_sequence
       //expect pow(2,17) jumps in m_sequence values
       // the vector m_hi_previous is being used to catch these jumps
@@ -989,20 +1020,21 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
       // endtmp
 
 
+
       ULong64_t previous_offset = m_offset[i]; // only used if weird stuff occurs... 
       if ( (val[i]-m_offset[i]) >= m_hi[i])
 	{
 	  // val[i] is supposed to always increase
 	  m_hi_previous[i] = m_hi[i]>m_lo[i] ? m_hi[i] : m_lo[i];
 	  
-	  if((val[i]-m_offset[i])-m_hi_previous[i] > 10000)
+	  if((val[i]-m_offset[i])-m_hi_previous[i] > m_jumpid)
 	    { // there was a jump; update offset
 	      m_jumpcounter++;
-	      if(ULong64_t(m_jumpcounter* pow(2,17))<m_hi_previous[i])
+	      if(ULong64_t(m_jumpcounter* pow(2,m_jumpmagbit))<m_hi_previous[i])
 		{
 		   std::cout << "MonCounterDiffRate::singleincrement: ERROR" << std::endl
 			     << "Object " << name().c_str() << std::endl
-			     << "Weird values: m_jumpcounter* pow(2,17))<m_hi_previous[i]" << std::endl
+			     << "Weird values: m_jumpcounter* pow(2," << m_jumpmagbit << "))<m_hi_previous[i]" << std::endl
 			     << "Jump,lo, previous, hi, offset, val, hi-lo: " 
 			     << m_jumpcounter << "\t" << m_lo[i] << "\t" << m_hi_previous[i] 
 			     << "\t" << m_hi[i] << "\t" << m_offset[i] << "\t" << val[i] 
@@ -1010,7 +1042,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 
 		}
 	      else
-		m_offset[i] = ULong64_t(ULong64_t(m_jumpcounter* pow(2,17)) -  m_hi_previous[i]); 
+		m_offset[i] = ULong64_t(ULong64_t(m_jumpcounter* pow(2,m_jumpmagbit)) -  m_hi_previous[i]); 
 	    }
 
 	  if((val[i]-m_offset[i]) >=0)
@@ -1380,8 +1412,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
-  } else if (type=="counterdiffrate"){
-    return new MonCounterDiffRate(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"counterdiffrate")){
+    return new MonCounterDiffRate(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="outputdouble"){
     return new MonSecondListDouble(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputfloat"){

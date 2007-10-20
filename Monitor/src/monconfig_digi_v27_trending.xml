@@ -269,7 +269,7 @@
       <name> GemRate </name>
       <formula><![CDATA[ Sequence ]]></formula>
       <cut><![CDATA[ ]]></cut>
-      <type> counterdiffrate </type>
+      <type> counterdiffrate[10000,17,MCOktTest] </type>
       <description> Rate of evts before any filter (computed using DigiEvent->getMetaEvent().scalers().sequence().) </description>
     </object>
 
@@ -423,7 +423,7 @@
       <formula><![CDATA[ 1 ]]></formula>
       <cut><![CDATA[(condsummary&1) && (condsummary&2) && (OBFStatus[1]>0 || OBFStatus[2]>0 || OBFStatus[2]>0)]]></cut>
       <type> rate </type>
-      <description> Rate of TKR trigger and ROI (mostly charge particles) AND ANY of the following Filters: Mip OR HFC OR DFC. </description>
+      <description> Rate of TKR trigger and ROI (mostly charged particles) AND ANY of the following Filters: Mip OR HFC OR DFC. </description>
     </object>
 
      <object>
