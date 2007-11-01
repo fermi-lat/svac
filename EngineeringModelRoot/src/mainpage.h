@@ -406,7 +406,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int   </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int   </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). This bit should _never_ be set!</TD> </TR>
 <TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Unset.  Always -1</TD> </TR> 
+<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile ID in dense notation.</TD> </TR> 
 
 <TR> <TD> AcdNaPha[NA0-NA10:0-10][2]            </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdNaHitMap[NA0-NA10:0-10][2]         </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
@@ -430,9 +430,8 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdRibbonActiveDist    </TD> <TD> Float </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
 <TR> <TD> AcdRibbonActiveDistId  </TD> <TD> Int   </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
-
-
-<TR> <TD> AcdTkrIntersection                              </TD> <TD>       </TD> <TD> Information about the expected intersection of a track with the ACD. </TD> </TR>
+<TR> <TD>                                                 </TD> <TD>       </TD> <TD>                                                                      </TD> </TR>
+<TR> <TD> AcdTkrIntersection variables: Information about the expected intersection of a track with the ACD. </TD> <TD>       </TD> <TD>                                                                      </TD> </TR>
 <TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections.</TD> </TR>
 <TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-19]             </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
 <TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-19]           </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>
@@ -452,9 +451,9 @@ This means that this time will be later than the time of any event time. </TD> <
 
 
 
-
-<TR> <TD> AcdTkrPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
-          (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise  </TD> </TR> 
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdTkrPoca variables: Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
+          (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise </TD> <TD>       </TD> <TD> </TD> </TR> 
 <TR> <TD> AcdPocaNbrTrack1                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 1. NB! May be larger than 5! </TD> </TR>
 <TR> <TD> AcdPocaNbrTrack2                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 2. NB! May be larger than 5! </TD> </TR>
 <TR> <TD> AcdPocaAcdTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
@@ -471,7 +470,8 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
 
 
-<TR> <TD> AcdGapPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a gap between tiles in the ACD.  This POCA is calculated in 3D.  The doca is defined to be positive if the track goes into the gap and negative otherwise</TD> </TR> 
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdGapPoca variables:Information about the Point of Closest Approach (POCA) between an extrapolated track and a gap between tiles in the ACD.  This POCA is calculated in 3D.  The doca is defined to be positive if the track goes into the gap and negative otherwise </TD> <TD> </TD> </TR>
 <TR> <TD> AcdGapPocaNbrTrack1                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 1.</TD> </TR>
 <TR> <TD> AcdGApPocaNbrTrack2                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 2.</TD> </TR>
 <TR> <TD> AcdGapPocaTrackID[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
@@ -481,7 +481,8 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdGapPocaGapType[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Int   </TD> <TD>  What type of gap we are talking about: X_RibbonSide = 1, Y_RibbonSide = 2, Y_RibbonTop = 3, CornerRay = 4, TopCornerEdge = 5, TileHole = 6. </TD> </TR> 
 
 
-<TR> <TD> AcdTkrPoint information                          </TD> <TD>       </TD> <TD> Information about the point where the track leaves the nominal ACD volume.  This does not account for the complexities of the geometry, but does give a good estimate of where the track hit the ACD</TD> </TR> 
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdTkrPoint variables: Information about the point where the track leaves the nominal ACD volume.  This does not account for the complexities of the geometry, but does give a good estimate of where the track hit the ACD </TD> <TD> </TD> </TR>
 <TR> <TD> AcdTkrPointX[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  X-component of point where track struck ACD</TD> </TR>
 <TR> <TD> AcdTkrPointY[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Y-component of point where track struck ACD</TD> </TR>
 <TR> <TD> AcdTkrPointZ[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Z-component of point where track struck ACD</TD> </TR>

@@ -282,3 +282,5 @@ awb	- Must protect agains null pointer with OBF bits.
 v3r3p2:	September 24, 2007
 awb	Added trigger engines found from GltWord and GemWord.
 
+not tagged: November 1, 2007
+awb	Cleaned up variable description.     
