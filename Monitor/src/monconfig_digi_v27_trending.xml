@@ -68,9 +68,29 @@
 
   <outputList name="top">
   
-    
 
-     <!-- ********************  Event classification information   *********************** -->
+    <!-- ************* livetime ********************** -->
+    
+     <object>
+      <name> LiveTimeFraction </name>
+      <formula><![CDATA[ LivetimeLast*0.00000005*100 ]]></formula>
+      <cut><![CDATA[condsummary&30]]></cut>
+      <type> doublediffrate </type>
+      <description> Fraction of livetime (in percent) per time interval </description>
+    </object>
+
+      <object>
+      <name> TriggerRate_ANYPhysics_LiveTimeCorrected </name>
+      <formula><![CDATA[foronetime: DoubleDiffRate_LiveTimeFraction>0 ? (Rate_Trigger_ANYPhysics*100/DoubleDiffRate_LiveTimeFraction) : 0.0]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <source>output</source>
+      <type> outputfloat </type>
+      <description> Rate of any non-artificially created trigger (i.e. bits [1-4]) in condsummary word, corrected for the livetime.  </description>
+    </object>
+
+
+
+    <!-- ********************  Event classification information   *********************** -->
           
      <object>
       <name> Trigger_CALLO </name>

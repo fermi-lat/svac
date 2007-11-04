@@ -33,6 +33,8 @@
     <object> Range4 </object>
     <object> TriggerEngine </object>
     <object> DeltaEventTimeManual </object> 
+    <object> Tick20MHzDeviation </object>
+    <object> CrateNumber </object>
 
     <!-- Acd Variables -->
     
@@ -294,6 +296,27 @@
       <description> Delta event time as measured by the GEM in system clock ticks with a cut of 1500 ticks. </description>
     </object>
 
+      <object>
+      <name> TimeLastDiscardedEvt_TH1 </name>
+      <formula><![CDATA[ DeltaEventTime-DeltaWindowOpen ]]></formula>
+      <cut><![CDATA[ (condsummary&30) && (DeltaWindowOpen<65500) && (DeltaEventTime<65500)]]></cut>
+      <type> histogram-1d[210,-1000.,20000] </type>
+      <titledesc>  Time of last discarded event in 50 ns ticks </titledesc>
+      <axisdesc> [Time of last discarded event (50 ns ticks), N] </axisdesc>
+      <description> Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns). Only non-saturated values of the GEM time counters have been used. </description>
+    </object>
+
+       <object>
+      <name> TimeLastDiscardedEvt_Zoom_TH1 </name>
+      <formula><![CDATA[ DeltaEventTime-DeltaWindowOpen ]]></formula>
+      <cut><![CDATA[ (condsummary&30) && (DeltaWindowOpen<65500) && (DeltaEventTime<65500) && (DeltaEventTime-DeltaWindowOpen < 2000)]]></cut>
+      <type> histogram-1d[210,-100.,2000] </type>
+      <titledesc>  Time of last discarded event in 50 ns ticks (ZOOM below 2000 ticks) </titledesc>
+      <axisdesc> [Time of last discarded event (50 ns ticks), N] </axisdesc>
+      <description> Time between the previous read out event and the last discarded event in system clock ticks (nominally 50 ns). Only non-saturated values of the GEM time counters have been used. Only clock ticks up to 2000 are being displayed. </description>
+    </object>
+
+     
           
 
       <object>
@@ -330,7 +353,38 @@
       <description>  Distribution of Delta Event Time computed manually using the event time stamp. Only Delta times smaller than 0.4 ms are displayed. </description>
     </object>
 
-     
+	 <object>
+      <name> Tick20MHzDeviation_TH1 </name>
+      <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-1d[200,-10000,10000] </type>
+      <titledesc> Number of ticks between successive 1-PPS</titledesc>
+      <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
+      <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz.</description>
+    </object>
+
+
+     <object>
+      <name> Tick20MHzDeviation_Zoom_TH1 </name>
+      <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
+      <cut><![CDATA[ condsummary&30 && (Tick20MHzDeviation<200) && (Tick20MHzDeviation> -200)]]></cut>
+      <type> histogram-1d[200,-200,200] </type>
+      <titledesc> Number of ticks between successive 1-PPS</titledesc>
+      <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
+      <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz. Only deviations smaller than 200 ticks are being displayed.</description>
+    </object>
+
+     <object>
+      <name> CrateNumber_TH1 </name>
+      <formula><![CDATA[ CrateNumber ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> histogram-1d[12,-1.5,10.5] </type>
+      <titledesc> Crate Number </titledesc>
+      <axisdesc> [Crate number, N] </axisdesc>
+      <description>  Crate number (Epu0 - Epu1 - Epu2 - Siu0 - Siu1 - Aux); source from which this datagram comes from.  </description>
+    </object>
+
+
       <!-- ********************  Detector information   *********************** -->
 
 
