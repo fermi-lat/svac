@@ -1,54 +1,52 @@
 // 
-// Class for input of quantity LivetimeLast for monitoring 
+// Class for input of quantity CrateNumber for monitoring 
 // 
-// Created by dpaneque on Fri Apr 27 01:39:12 2007 
+// Created by dpaneque on Wed Oct 31 01:51:55 2007 
 // Object created automatically by script makeNewMonObject.pl
 //
-#include "MonInput_LivetimeLast.h"
+#include "MonInput_CrateNumber.h"
 #include <iostream>
 
 // User defined part 
 
-#define NAME LivetimeLast
-#define OUTBRANCH "LivetimeLast"
-#define LEAF "LivetimeLast/l"
+#define NAME CrateNumber
+#define OUTBRANCH "CrateNumber"
+#define LEAF "CrateNumber/I"
 #define INBRANCH "m_metaEvent"
-#define ACCESSOR getMetaEvent().scalers().livetime()
+#define ACCESSOR getMetaEvent().datagram().crate()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "Elapsed livetime since the start of the run in 50 ns ticks"
+#define DESCRIPTION "Crate number; source from which this datagram comes from."
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
 
-MonInput_LivetimeLast::MonInput_LivetimeLast(){
+MonInput_CrateNumber::MonInput_CrateNumber(){
   m_name=OUTBRANCH;
 }
-MonInput_LivetimeLast::~MonInput_LivetimeLast(){
+MonInput_CrateNumber::~MonInput_CrateNumber(){
 }
 
 
-int MonInput_LivetimeLast::setOutputBranch(TTree* tree) {
+int MonInput_CrateNumber::setOutputBranch(TTree* tree) {
  TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
  return bErr != 0 ? 0 : 1;
 }
-void MonInput_LivetimeLast::enableInputBranch(TTree& tree){
+void MonInput_CrateNumber::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
-void MonInput_LivetimeLast::setValue(TObject* event) {
+void MonInput_CrateNumber::setValue(TObject* event) {
   MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
     assert(de);
   }
   m_val= de->ACCESSOR;
-
-  
 }
-std::string MonInput_LivetimeLast::getInputSource(){
+std::string MonInput_CrateNumber::getInputSource(){
   return INPUTSOURCE;
 }
-std::string MonInput_LivetimeLast::getDescription(){
+std::string MonInput_CrateNumber::getDescription(){
   return DESCRIPTION;
 }
 
