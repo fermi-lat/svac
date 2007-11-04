@@ -95,6 +95,14 @@
 // Last updated with object DeltaWindowOpen by user dpaneque on Wed Oct  3 00:33:15 2007
 // Last updated with object DeltaEventTimeManual by user dpaneque on Mon Oct  8 19:35:18 2007
 // Last updated with object TriggerEngine by user dpaneque on Mon Oct  8 20:00:57 2007
+// Last updated with object CrateNumber by user dpaneque on Wed Oct 31 01:51:55 2007
+// Last updated with object AcdVetoA_OR_B_AcdTile by user dpaneque on Wed Oct 31 19:29:40 2007
+// Last updated with object AcdSingleHit by user dpaneque on Wed Oct 31 22:24:42 2007
+// Last updated with object AcdSingleVeto by user dpaneque on Wed Oct 31 22:39:07 2007
+#include "digi/MonInput_AcdSingleVeto.h"
+#include "digi/MonInput_AcdSingleHit.h"
+#include "digi/MonInput_AcdVetoA_OR_B_AcdTile.h"
+#include "digi/MonInput_CrateNumber.h"
 #include "digi/MonInput_TriggerEngine.h"
 #include "digi/MonInput_DeltaEventTimeManual.h"
 #include "digi/MonInput_DeltaWindowOpen.h"
@@ -372,6 +380,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DeltaEventTimeManual;
   if (s=="TriggerEngine")
     return new MonInput_TriggerEngine;
+  if (s=="CrateNumber")
+    return new MonInput_CrateNumber;
+  if (s=="AcdVetoA_OR_B_AcdTile")
+    return new MonInput_AcdVetoA_OR_B_AcdTile;
+  if (s=="AcdSingleHit")
+    return new MonInput_AcdSingleHit;
+  if (s=="AcdSingleVeto")
+    return new MonInput_AcdSingleVeto;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -469,6 +485,10 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("DeltaWindowOpen");
   names.push_back("DeltaEventTimeManual");
   names.push_back("TriggerEngine");
+  names.push_back("CrateNumber");
+  names.push_back("AcdVetoA_OR_B_AcdTile");
+  names.push_back("AcdSingleHit");
+  names.push_back("AcdSingleVeto");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
