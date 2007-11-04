@@ -12,7 +12,8 @@
 #include <string.h>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
-const Float_t MonMinMax::s_huge(1e35);
+const Double_t MonDoubleDiffRate::s_BigValDouble(1.e35);
+const Float_t MonMinMax::s_huge(1.e35);
 
 // Standard c'tor
 MonCounter::MonCounter(const char* name, const char* formula, const char* cut) 
@@ -1099,6 +1100,147 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 }
 
 
+MonDoubleDiffRate::MonDoubleDiffRate(const char* name, const char* formula, const char* cut) 
+    :MonValue(name,formula, cut){
+  m_lo=new Double_t[m_dim];
+  m_hi=new Double_t[m_dim];
+  //m_hi_previous=new ULong64_t[m_dim];
+  //m_offset=new ULong64_t[m_dim];
+  m_val=new Float_t[m_dim];
+  //m_err = new Float_t[m_dim];
+
+  // initialize values for this object
+  for (unsigned i=0;i<m_dim;i++){
+    //m_offset[i] = 0;
+    m_lo[i] = 0.;
+    m_hi[i] = 0.;
+    //m_hi_previous[i] = 0;
+    m_val[i] = 0.;
+    //m_err[i] = 0.;
+  }
+
+  reset();
+}
+
+  // D'tor, no-op
+MonDoubleDiffRate::~MonDoubleDiffRate(){
+  delete [] m_lo;
+  delete [] m_hi;
+  //delete [] m_hi_previous;
+  //delete [] m_offset;
+  delete [] m_val;
+  //delete [] m_err;
+}
+  
+  // Reset, check to see if the cache makes sense
+  // if so, just copy hi -> lo, and go on
+  // in not, reset hi, and lo
+void MonDoubleDiffRate::reset() {
+
+ 
+	    
+
+  m_timebin = 100000000.0;
+  for (unsigned i=0;i<m_dim;i++){
+    m_lo[i] = m_lo[i] >= m_hi[i] ? MonDoubleDiffRate::s_BigValDouble : m_hi[i];
+    m_hi[i] = m_lo[i] >= m_hi[i] ? 0 : m_hi[i];
+    //m_hi_previous[i] = m_lo[i] >= m_hi[i] ? m_lo[i] : m_hi[i];
+    
+    m_val[i] = 0.;
+    //m_err[i] = 0.;
+  }
+
+}
+
+  // Take the difference hi-lo and move it to the output value
+void MonDoubleDiffRate::latchValue() {
+
+  // get timeinterval for this bin
+  
+  m_timebin =TimeInterval::m_interval;
+
+  //std::cout << "Time interval = " << m_timebin << std::endl;
+
+  for (unsigned i=0;i<m_dim;i++){
+    m_val[i] = m_lo[i] < m_hi[i] ? Float_t(m_hi[i] - m_lo[i]) : 0.0;
+    // m_err[i] = sqrt(m_val[i]);
+    if(m_timebin>0.0){
+      m_val[i] /= Float_t(m_timebin);
+      //m_err[i] /= Float_t(m_timebin);
+      
+      /*
+      std::cout << "MonDoubleDiffRate::latchValue; Dimension " << i << std::endl
+		<< "Time interval retrived = "  <<std::endl
+		<<  m_timebin 
+		<< ",   m_lo, m_hi= " << m_lo[i] << " " << m_hi[i] << std::endl 
+		<< std::endl
+		<< "Rate= " << m_val[i] << std::endl;
+      */
+
+    }
+    else{
+      std::cout << "MonDoubleDiffRate::latchValue; WARNING" << std::endl
+		<< "m_timebin = " << m_timebin << std::endl
+		<< "Rate set to ZERO" << std::endl;
+      m_val[i] = 0.0;
+      // m_err[i] = 0.0;
+    }
+  }
+
+
+}
+
+// Attach a MonCounterDif node to a TTree (unsigned int)
+int MonDoubleDiffRate::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullNameVal = prefix + "DoubleDiffRate_" + name();
+  std::string leafTypeVal = fullNameVal + m_dimstring+"/F";
+
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeVal.c_str());
+
+  TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
+  if ( b == 0 ) return -1;
+
+  /*  ERRORS DO NOT APPLY TO THIS OBJECT
+  std::string fullNameErr = fullNameVal + "_err";
+  std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
+
+  BufSize = GetBufSize(Int_t(m_dim), "F");
+  CheckLeafName(leafTypeErr.c_str());
+
+
+  TBranch* bErr = tree.Branch(fullNameErr.c_str(),m_err,leafTypeErr.c_str(),BufSize);
+  return bErr != 0 ? 2 : -1;
+  */
+
+}
+
+
+  // Update the value, check to make sure that things make sense
+void MonDoubleDiffRate::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if ( m_lo[i] == MonDoubleDiffRate::s_BigValDouble ) { // First event
+      m_lo[i] = (Double_t)val[i];
+    }
+
+    if ( val[i] > m_hi[i] ) {
+      m_hi[i] = (Double_t)val[i];
+    }
+    /*
+    std::cout << "MonDoubleDiffRate::singleincrement; Dimension " << i << std::endl
+	      << "m_lo, m_hi= " << m_lo[i] << ", " << m_hi[i] << std::endl 
+	      << std::endl;
+    */
+
+    
+  }
+    
+}
+
+
+
+
+
 // Attach a MonMinMax node to a TTree (unsigned int)
 int MonMinMax::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameMin = prefix + "Min_" + name();
@@ -1412,6 +1554,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="doublediffrate"){
+    return new MonDoubleDiffRate(name.c_str(),formula.c_str(),cut.c_str());
   } else if (strstr(type.c_str(),"counterdiffrate")){
     return new MonCounterDiffRate(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="outputdouble"){
