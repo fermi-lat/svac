@@ -57,20 +57,22 @@ void MonInput_AcdSingleVeto::setValue(TObject* event) {
     Bool_t VetoA = acdDigi->getVeto(AcdDigi::A);
     Bool_t VetoB = acdDigi->getVeto(AcdDigi::B);
 
-    if(AcdGemID<128 && ((VetoA && !VetoB) || (!VetoA && VetoB)))
-      m_val[AcdGemID]++; // single hit for this tile
-    else{
-      if(acdDigi->getId().getId() != 899)// NA values are set to 899
-	{
-	  std::cout << "MonInput_AcdHit_AcdTile::setValue: WARNING" << std::endl
-		    << " AcdGemID = " <<  AcdGemID << std::endl
-		    << " acdDigi->getId().getId() = " << acdDigi->getId().getId()
-		    << " , which is NOT the conventional NA value (=899)"
-		    << std::endl;
-	}
+    if((VetoA && !VetoB) || (!VetoA && VetoB)){
+      if(AcdGemID<128)
+	m_val[AcdGemID]++; // single hit for this tile
+      else{
+	if(acdDigi->getId().getId() != 899)// NA values are set to 899
+	  {
+	    std::cout << "MonInput_AcdSingleVeto::setValue: WARNING" << std::endl
+		      << " AcdGemID = " <<  AcdGemID << std::endl
+		      << " acdDigi->getId().getId() = " << acdDigi->getId().getId()
+		      << " , which is NOT the conventional NA value (=899)"
+		      << std::endl;
+	  }
+      }
     }
   }
-
+  
 }
 std::string MonInput_AcdSingleVeto::getInputSource(){
   return INPUTSOURCE;

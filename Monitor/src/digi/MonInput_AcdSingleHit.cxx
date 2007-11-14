@@ -57,17 +57,19 @@ void MonInput_AcdSingleHit::setValue(TObject* event) {
     Bool_t hitPmtA = acdDigi->getLowDiscrim(AcdDigi::A);
     Bool_t hitPmtB = acdDigi->getLowDiscrim(AcdDigi::B);
 
-    if(AcdGemID<128 && ((hitPmtA && !hitPmtB) || (!hitPmtA && hitPmtB)))
-      m_val[AcdGemID]++; // single hit for this tile
-    else{
-      if(acdDigi->getId().getId() != 899)// NA values are set to 899
-	{
-	  std::cout << "MonInput_AcdHit_AcdTile::setValue: WARNING" << std::endl
-		    << " AcdGemID = " <<  AcdGemID << std::endl
-		    << " acdDigi->getId().getId() = " << acdDigi->getId().getId()
-		    << " , which is NOT the conventional NA value (=899)"
-		    << std::endl;
-	}
+    if((hitPmtA && !hitPmtB) || (!hitPmtA && hitPmtB)){
+      if(AcdGemID<128)
+	m_val[AcdGemID]++; // single hit for this tile
+      else{
+	if(acdDigi->getId().getId() != 899)// NA values are set to 899
+	  {
+	    std::cout << "MonInput_AcdSingleHit::setValue: WARNING" << std::endl
+		      << " AcdGemID = " <<  AcdGemID << std::endl
+		      << " acdDigi->getId().getId() = " << acdDigi->getId().getId()
+		      << " , which is NOT the conventional NA value (=899)"
+		      << std::endl;
+	  }
+      }
     }
   }
 }
