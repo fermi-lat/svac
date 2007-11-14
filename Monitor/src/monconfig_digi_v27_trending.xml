@@ -44,10 +44,12 @@
     <object>AcdGemROI_Tower </object>
     <object>AcdGemCNO_GARC  </object>
     <object>AcdHit_AcdTile  </object>
+    <object>AcdSingleHit </object>
     <object>AcdPmtA_OverThreshold_AcdTile  </object>
     <object>AcdPmtB_OverThreshold_AcdTile  </object>
     <object>AcdVetoA_AcdTile  </object>
     <object>AcdVetoB_AcdTile  </object>
+    <object>AcdVetoA_OR_B_AcdTile </object>
     <object>AcdPha_PmtA_AcdTile  </object>
     <object>AcdPha_PmtB_AcdTile  </object>
 
@@ -86,6 +88,16 @@
       <source>output</source>
       <type> outputfloat </type>
       <description> Rate of any non-artificially created trigger (i.e. bits [1-4]) in condsummary word, corrected for the livetime.  </description>
+    </object>
+      
+      <!-- Error of livetime is NOT taken into account, since that cannot be computed -->
+    <object>
+      <name> TriggerRate_ANYPhysics_LiveTimeCorrected_err </name>
+      <formula><![CDATA[ foronetime: DoubleDiffRate_LiveTimeFraction>0 ? (Rate_Trigger_ANYPhysics_err*100/DoubleDiffRate_LiveTimeFraction) : 0.0]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <source>output</source>
+      <type> outputfloat </type>
+      <description> Error in Rate of any non-artificially created trigger (i.e. bits [1-4]) in condsummary word, corrected for the livetime.   </description>
     </object>
 
 
