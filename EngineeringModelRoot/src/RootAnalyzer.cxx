@@ -602,30 +602,30 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // OBF:
   //
-  m_ntuple.m_obfPassedGamma = 0;
-  m_ntuple.m_obfPassedMip   = 0;
-  m_ntuple.m_obfPassedHFC   = 0;
-  m_ntuple.m_obfPassedDFC   = 0;
+  m_ntuple.m_obfPassedGAMMA = 0;
+  m_ntuple.m_obfPassedMIP   = 0;
+  m_ntuple.m_obfPassedHIP   = 0;
+  m_ntuple.m_obfPassedDGN   = 0;
 
   
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {
     if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit()) == 0) {
-      m_ntuple.m_obfPassedGamma = 1;
+      m_ntuple.m_obfPassedGAMMA = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
     if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit()) == 0) {
-      m_ntuple.m_obfPassedMip = 1;
+      m_ntuple.m_obfPassedMIP = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
     if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) == 0) {
-      m_ntuple.m_obfPassedHFC = 1;
+      m_ntuple.m_obfPassedHIP = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
     if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) == 0) {
-      m_ntuple.m_obfPassedDFC = 1;
+      m_ntuple.m_obfPassedDGN = 1;
     }
   }
 
