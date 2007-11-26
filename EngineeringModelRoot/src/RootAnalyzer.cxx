@@ -1506,10 +1506,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
 
   // OBF:
-  m_tree->Branch("ObfPassedGamma", &(m_ntuple.m_obfPassedGamma), "ObfPassedGamma/I");
-  m_tree->Branch("ObfPassedMip", &(m_ntuple.m_obfPassedMip), "ObfPassedMip/I");
-  m_tree->Branch("ObfPassedHFC", &(m_ntuple.m_obfPassedHFC), "ObfPassedHFC/I");
-  m_tree->Branch("ObfPassedDFC", &(m_ntuple.m_obfPassedDFC), "ObfPassedDFC/I");
+  m_tree->Branch("ObfPassedGAMMA", &(m_ntuple.m_obfPassedGAMMA), "ObfPassedGAMMA/I");
+  m_tree->Branch("ObfPassedMIP", &(m_ntuple.m_obfPassedMIP), "ObfPassedMIP/I");
+  m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
+  m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
 
 
   // GEM information:

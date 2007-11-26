@@ -284,3 +284,6 @@ awb	Added trigger engines found from GltWord and GemWord.
 
 not tagged: November 1, 2007
 awb	Cleaned up variable description.     
+
+v3r4:	November 26, 2007
+awb	Renamed the OBF variables to follow the new naming convention.

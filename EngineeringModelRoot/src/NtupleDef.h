@@ -278,10 +278,10 @@ struct NtupleDef {
 
 
   // OBF:
-  int m_obfPassedGamma;
-  int m_obfPassedMip;
-  int m_obfPassedHFC;
-  int m_obfPassedDFC; 
+  int m_obfPassedGAMMA;
+  int m_obfPassedMIP;
+  int m_obfPassedHIP;
+  int m_obfPassedDGN; 
 
 
   // Warren's time stamp:
