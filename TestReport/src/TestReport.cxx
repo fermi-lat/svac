@@ -389,25 +389,6 @@ void TestReport::setGraphParameters(TGraph* h, const GraphAttribute& att)
   h->SetMarkerSize(att.m_markerSize);
 }
 
-
-UShort_t TestReport::getGemId(UInt_t id) {
-  UInt_t face = id / 100;
-  UInt_t row = (id % 100 ) / 10;
-  UInt_t col = (id % 10 );
-  switch ( face ) {
-  case 0:  return 64 + 5*row + col;  // top:      64 - 89
-  case 1:  return 32 + 5*row + col;  // -x side:  32 - 47
-  case 2:  return      5*row + col;  // -y side    0 - 15
-  case 3:  return 48 + 5*row + col;  // +x side   48 - 63
-  case 4:  return 16 + 5*row + col;  // +y side   16 - 31
-  case 5:                                   // x ribbons 96 - 99
-    return 96 + col;
-  case 6:                                   // y ribbons 100- 103
-    return 100 + col;
-  }
-  return 0xFFFF;
-}
-
 void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 			      const char* digiFileName="digi.root",
 			      const char* reconFileName="recon.root")
@@ -462,13 +443,13 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   }
 
   // For testing:
-  //int nEvent = 5000;
-  //m_nEvent = nEvent;
+  int nEvent = 5000;
+  m_nEvent = nEvent;
 
 
   for(int iEvent = 0; iEvent != m_nEvent; ++iEvent) {
 
-    if ( iEvent % 1000 == 0 ) {
+    if ( iEvent % 100 == 0 ) {
       cout << iEvent << endl;
     }
 
@@ -625,7 +606,7 @@ void TestReport::analyzeReconTree()
     UInt_t nAcdInter = acdRecon->nAcdIntersections();
     for ( UInt_t iAcdInter(0); iAcdInter < nAcdInter; iAcdInter++ ) {
       const AcdTkrIntersection* acdInter = acdRecon->getAcdTkrIntersection(iAcdInter);
-      UShort_t acdGemId = getGemId( acdInter->getTileId().getId() );
+      UShort_t acdGemId = acdInter->getTileId().getGemId();
       if ( acdInter->tileHit() ) {
 	m_AcdEfficMap->Fill( acdGemId );
       } else {
@@ -849,7 +830,7 @@ void TestReport::analyzeDigiTree()
     const AcdDigi* acdDigi = dynamic_cast<const AcdDigi*>(acdDigiCol->At(iDigi));
     assert(acdDigi != 0);
 
-    int AcdGemID = getGemId ( acdDigi->getId().getId() );
+    int AcdGemID = acdDigi->getId().getGemId();
 
     // add to hit map
     m_AcdHitMap->Fill(AcdGemID);

@@ -185,3 +185,108 @@ v1r8p6: December 15, 2005
 awb	Added protection for array index out of range for ACD arrays.
 	Checking to see if a tile is attached or not.
 	Added separate arrays for non-attached tiles.
+
+
+v1r8p7: January 19, 2006
+awb     Added AcdTkrPoca variables.
+ 
+
+v1r8p8: January 20, 2006
+awb for Hiro	TkrCalib updates
+
+v1r8p9: January 20, 2006
+awb   Forgot to do a cvs ci first  
+
+v1r9: January 21, 2006
+	TKR flare monitoring added.
+
+v1r10: January 22, 2006
+awb for Hiro: Deleting histograms at end of job in TkrCalib.
+
+v1r11: January 22, 2006
+awb	Cut-and-paste error in PocaDoca arrays caused overwrite.
+
+v1r12: January 23, 2006
+awb	Added two new ACD poca variables.
+	Bugfix in Tkr occupancy monitoring (Mutsumi).
+
+v1r13: February 7, 2006
+awb     Fixed bug in ACD arrays. Not filled for Tile ID==0.
+
+v1r14: February 7, 2006
+awb for Mutsumi: Bug fix in TkrNoiseOcc (TOT distribution of TKR noise). 
+
+v1r15: April 17, 2006
+awb 	Added FSW context information.
+
+v1r16: April 19, 2006
+awb	Updated Acd Poca code to work with new AcdRecon (EM v6r070329p4).
+	Fixed bug in AcdPocaNbrTrack1/AcdPocaNbrTrack2 variables.
+	Added AcdTkrPoint and AcdGap variables.
+
+v1r17: April 21, 2006
+awb     Added one more context variable (that I had forgotten).
+	Corrected the types of some context variables.
+
+v2r0: May 15, 2006
+awb	Added calibrated ACD variables. 
+	Renamed a few ACD MC variables. 
+	Removed obsolete ACD variable.
+	Added description of context variables.
+
+v2r1: May 16, 2006
+awb	Fixed overwrite bug in AcdMips arrays.     
+
+v2r2: May 17, 2006
+awb	Added error flags.
+
+v3r0: June 5, 2006
+awb	Mutsumi's TKR stuff now depends on calibTkrUtil (version tkr-v3r3) 
+        so EngineeringModelRoot and BeamTest can use the same code.
+        Minor updates of ntuple description.
+
+v3r0p1: August 3, 2006:
+awb	Minor update in merge Root script so it now points to an existing release.
+
+v3r0p2: October 26, 2006
+awb	Added a few more variables.
+
+v3r0p3: October 31, 2006
+awb     Fixed typo in ACD non-attached tile message.
+
+v3r1:	May 18, 2007
+mutsumi	move TkrNoiseOcc module to TestReport
+
+v3r1p1: June 29, 2007
+awb	Added earlyEvent flag for time tones.
+
+v3r1p2: July 18, 2007
+awb	Tagging Eric's updated ntuple description.
+
+v3r1p3: July 24, 2007
+awb     Replaced 'MissingGps' with the correct name 'IsSourceGps'. Note that the accessor functions have not been updated yet.
+
+v3r2: September 21, 2007
+awb	Added two ACD variables. Redefined/corrected another.
+
+v3r3: September 21, 2007
+awb	- Removed some old pre-FSW time variables that were not filled anymore.
+	- Resized the CAL Xtal energy array to remove end dimension since both ends have the same (total) energy.
+	
+v3r3p0: September 21, 2007
+awb	- Added OBF (offline version) filter bits.
+
+v3r3p1: September 22, 2007
+awb	- Must protect agains null pointer with OBF bits.
+
+v3r3p2:	September 24, 2007
+awb	Added trigger engines found from GltWord and GemWord.
+
+not tagged: November 1, 2007
+awb	Cleaned up variable description.     
+
+v3r4:	November 26, 2007
+awb	Renamed the OBF variables to follow the new naming convention.
+
+v3r4p1:	November 26, 2007
+awb     Maybe make sure it compiles. Sigh ....
