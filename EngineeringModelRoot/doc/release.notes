@@ -290,3 +290,6 @@ awb	Renamed the OBF variables to follow the new naming convention.
 
 v3r4p1:	November 26, 2007
 awb     Maybe make sure it compiles. Sigh ....
+
+v3r5:	November 27, 2007
+awb	Added array TkrToTMips with ToT in MIPs. Renamed tot to TkrToTRaw, Tkr1ConvTot to Vtx1ConvToT and TkrTopTot to TkrTopToT.

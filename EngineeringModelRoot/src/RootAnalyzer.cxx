@@ -184,16 +184,30 @@ void RootAnalyzer::analyzeReconTree()
 	TowerId tId(cluster->getTkrId().getTowerX(), cluster->getTkrId().getTowerY());
 	int iTower = tId.id();
 	int iLayer = cluster->getLayer();
-	int iView = cluster->getTkrId().getView();
+	int iView  = cluster->getTkrId().getView();
 
 	assert(iLayer >= 0 && iLayer <= g_nTkrLayer - 1);
 
 	++m_ntuple.m_nTkrClusters[iTower][iLayer][iView];
 	++m_ntuple.m_totalClusters[iTower];
 
+	// Calibrated cluster ToT:
+	int itmpView = 0;  
+        if (iView == GlastAxis::Y) {
+          itmpView = 1;
+	}
+      
+        int nHalf = cluster->getEnd();
+
+        if (m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] == -9999.0) {
+          m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] = cluster->getMips();
+        } else {
+          m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] = -1.0;
+        }
       }
     }
   }
+
 
   m_ntuple.m_nTkrTracks = tkrRecon->getTrackCol()->GetLast()+1;
   m_ntuple.m_nTkrVertices = tkrRecon->getVertexCol()->GetLast()+1;
@@ -903,10 +917,6 @@ void RootAnalyzer::analyzeDigiTree()
     }
   }
 
-
-
-
-
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
 
@@ -928,22 +938,14 @@ void RootAnalyzer::analyzeDigiTree()
 
     if(iView == GlastAxis::X) {
       m_ntuple.m_nStrips[iTower][iLayer][0] = nStrips;
-      m_ntuple.m_tot[iTower][iLayer][0][0] = tkrDigi->getToT(0);
-      m_ntuple.m_tot[iTower][iLayer][0][1] = tkrDigi->getToT(1);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][0] = tkrDigi->getToT(0);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][1] = tkrDigi->getToT(1);
     }
     else if(iView == GlastAxis::Y) {
       m_ntuple.m_nStrips[iTower][iLayer][1] = nStrips;
-      m_ntuple.m_tot[iTower][iLayer][1][0] = tkrDigi->getToT(0);
-      m_ntuple.m_tot[iTower][iLayer][1][1] = tkrDigi->getToT(1);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][0] = tkrDigi->getToT(0);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][1] = tkrDigi->getToT(1);
     }
-
-      // fill in corrected tot
-    /*
-      if(m_mcFile == 0) {
-	correctTotDataLinear(tkrDigi);
-	correctTotDataQuad(tkrDigi);
-      }
-    */
   }
 
   /*
@@ -1136,7 +1138,7 @@ void RootAnalyzer::analyzeData()
   //m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
   //m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
   
-  for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
+  for(Long64_t iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     m_ntuple.reset();  
     if(m_mcEvent) m_mcEvent->Clear();
@@ -1235,12 +1237,12 @@ void RootAnalyzer::analyzeTot()
       if(m_ntuple.m_nStrips[iTower][iLayer][0] > 0 &&
 	 m_ntuple.m_nStrips[iTower][iLayer][1] > 0) {
 
-	float totX = std::max(m_ntuple.m_tot[iTower][iLayer][0][0], 
-			      m_ntuple.m_tot[iTower][iLayer][0][1]);
-	float totY = std::max(m_ntuple.m_tot[iTower][iLayer][1][0], 
-			      m_ntuple.m_tot[iTower][iLayer][1][1]);
+	float totX = std::max(m_ntuple.m_tkrToTRaw[iTower][iLayer][0][0], 
+			      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][1]);
+	float totY = std::max(m_ntuple.m_tkrToTRaw[iTower][iLayer][1][0], 
+			      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][1]);
 
-	m_ntuple.m_topTot[iTower] = std::max(totX, totY);
+	m_ntuple.m_topToT[iTower] = std::max(totX, totY);
 	break;
       }
     }
@@ -1263,12 +1265,12 @@ void RootAnalyzer::analyzeTot()
 	int convTower = tId.id();
 
 	assert(convLayer >= 0 && convLayer <g_nTkrLayer);
-	float totX = std::max(m_ntuple.m_tot[convTower][convLayer][0][0], 
-			      m_ntuple.m_tot[convTower][convLayer][0][1]);
-	float totY = std::max(m_ntuple.m_tot[convTower][convLayer][1][0], 
-			      m_ntuple.m_tot[convTower][convLayer][1][1]);
+	float totX = std::max(m_ntuple.m_tkrToTRaw[convTower][convLayer][0][0], 
+			      m_ntuple.m_tkrToTRaw[convTower][convLayer][0][1]);
+	float totY = std::max(m_ntuple.m_tkrToTRaw[convTower][convLayer][1][0], 
+			      m_ntuple.m_tkrToTRaw[convTower][convLayer][1][1]);
 
-	m_ntuple.m_convTot = std::max(totX, totY);
+	m_ntuple.m_convToT = std::max(totX, totY);
       }
     }
   }
@@ -1378,7 +1380,8 @@ void RootAnalyzer::createBranches()
   // TKR information:
   m_tree->Branch("TkrNumDigis", &(m_ntuple.m_nTkrDigis), "TkrNumDigis/I");
   m_tree->Branch("TkrNumStrips", &(m_ntuple.m_nStrips), "TkrNumStrips[16][18][2]/I");
-  m_tree->Branch("tot", &(m_ntuple.m_tot), "tot[16][18][2][2]/I");
+  m_tree->Branch("TkrToTRaw", &(m_ntuple.m_tkrToTRaw), "TkrToTRaw[16][18][2][2]/I");
+  m_tree->Branch("TkrToTMips", &(m_ntuple.m_tkrToTMips), "TkrToTMips[16][18][2][2]/F");
   m_tree->Branch("TkrDepositEne", &(m_ntuple.m_depositEne), "TkrDepositEne[16][18][2]/F");
   m_tree->Branch("TkrNumClusters", &(m_ntuple.m_nTkrClusters), "TkrNumClusters[16][18][2]/I");
   m_tree->Branch("TkrNumTracks", &(m_ntuple.m_nTkrTracks), "TkrNumTracks/I");
@@ -1401,8 +1404,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Tkr2EndPos", &(m_ntuple.m_tkr2EndPos), "Tkr2EndPos[3]/F");
   m_tree->Branch("Tkr1EndDir", &(m_ntuple.m_tkr1EndDir), "Tkr1EndDir[3]/F");
   m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
-  m_tree->Branch("TkrTopTot", &(m_ntuple.m_topTot), "TkrTopTot[16]/F");
-  m_tree->Branch("Tkr1ConvTot", &(m_ntuple.m_convTot), "Tkr1ConvTot/F");
+  m_tree->Branch("TkrTopToT", &(m_ntuple.m_topToT), "TkrTopToT[16]/F");
+
 
 
   // Vertex information:
@@ -1414,6 +1417,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("VtxZDir", &(m_ntuple.m_dir[2]), "VtxZDir/F");
   m_tree->Branch("Vtx1Energy", &(m_ntuple.m_fitTotalEnergy), "Vtx1Energy/F");
   m_tree->Branch("Vtx1NumTkrs", &(m_ntuple.m_vtxTrks), "Vtx1NumTkrs/I");
+  m_tree->Branch("Vtx1ConvToT", &(m_ntuple.m_convToT), "Vtx1ConvToT/F");
 
 
   // CAL information:

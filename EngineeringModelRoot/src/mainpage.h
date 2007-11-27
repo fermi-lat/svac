@@ -31,6 +31,8 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <br>
 LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/DFI.pdf
 <br> 
+For all the variables the default value is -9999.
+<br>
 
 <TABLE>
 <CAPTION ALIGN="TOP"> Run and Event variables </CAPTION>
@@ -157,8 +159,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> GemAcdTilesRbn        </TD> <TD> Int </TD> <TD> GEM ACD RNB (Ribbons) tile list: See section 4.9 in the GEM document for details.      </TD> </TR>
 <TR> <TD> GemAcdTilesNa         </TD> <TD> Int </TD> <TD> GEM ACD NA (Not Assigned) tile list:  See section 4.9 in the GEM document for details. </TD> </TR>
 
-<TR> <TD> DigiTriRowBits[tower]        </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from TKR digis </TD> </TR>
-<TR> <TD> TrgReqTriRowBits[tower]      </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives) </TD> </TR>  
+<TR> <TD> DigiTriRowBits[tower]        </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from TKR digis. Note that this is independent of any trigger primitives. </TD> </TR>
+<TR> <TD> TrgReqTriRowBits[tower]      </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives).  Note that this is only filled if we are actually 
+          running with trigger primitives enabled. Which is usually not the case.  </TD> </TR>  
 </TABLE>
 
 
@@ -277,6 +280,8 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> Vtx1NumTkrs </TD> <TD> Int   </TD> <TD> Number of tracks associated with the first vertex </TD> </TR>
 <TR> <TD> Vtx1Energy  </TD> <TD> Float </TD> <TD> Energy (in MeV) stored in first vertex  </TD> </TR>
+<TR> <TD> Vtx1ConvToT[tower] </TD> <TD> Int </TD> <TD>A one dimensional array which describes the raw ToT value at the layer of the first vertex. 
+          The value is actually the maximum of 4 ToT values at the biPlane.</TD> </TR>
 </TABLE>
 
 <TABLE>
@@ -287,9 +292,14 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> TkrNumStrips[tower][layer][view]   </TD> <TD> Int </TD> <TD> A 3 dimensional array which describes the number of strips in every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y </TD> </TR>
 
-<TR> <TD> tot[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes tot value at every tower, layer, view and end. 
+<TR> <TD> TkrToTRaw[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes the raw ToT value at every tower, layer, view and end. 
           End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane. 
           However this could be changed during real data taking. Please check the configuration report to find out whether the devision is really in the middle</TD> </TR>
+
+<TR> <TD> TkrToTMips[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes the calibrated ToT value for each TKR cluster. 
+          This is filled only for the case of one cluster per layer end! If there are more than one cluster per half-plane the entry it set to -1.   
+          End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane. 
+          However this could be changed during real data taking. Please check the configuration report to find out whether the division really is in the middle</TD> </TR>
 
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> Int </TD> <TD> A 3 dimension array which describes the number of clusters at every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
@@ -316,16 +326,17 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> Tkr1EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 1 </TD> </TR>
 <TR> <TD> Tkr2EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 2 </TD> </TR>
 
-<TR> <TD> TkrTopTot[tower]   </TD> <TD> Int </TD> <TD>A one dimensional array which describes tot value at the top hit layer for each tower. 
-          The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR> 
-<TR> <TD> Tkr1ConvTot[tower] </TD> <TD> Int </TD> <TD>A one dimensional array which describes tot value at the layer of the first vertex. 
-          The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR>
-<TR> <TD> TkrTp[tower][tp]   </TD> <TD> Int </TD> <TD>A two dimensional array which describes tracker trigger primitive for each tower. 
+<TR> <TD> TkrTopToT[tower]   </TD> <TD> Int </TD> <TD>A one dimensional array which describes the raw TOT value at the top hit layer for each tower. 
+          The value is actually the maximum of 4 ToT values at the biPlane.</TD> </TR> 
+
+<TR> <TD> TkrTp[tower][tp]   </TD> <TD> Int </TD> <TD>A two dimensional array which describes tracker trigger primitive for each tower. Note that this is only filled if we are actually running with 
+          trigger primitives enabled. Which is usually not the case. 
           For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
 
 <TR> <TD> TkrReq[tower][layer][view][end] </TD> <TD> Int </TD> <TD>A 4 dimensional array which describes tracker trigger request. For example: TkrReq[8][7][0][0]=1 means a 
           trigger request was sent from tower 8, layer 7, measure X and lower end of the tray.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high 
-          end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
+          end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. Note that this is only filled if we are actually running with 
+          trigger primitives enabled. Which is usually not the case.</TD> </TR>
 
 <TR> <TD> TkrTotalHits[tower]     </TD> <TD> Int </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
 <TR> <TD> TkrTotalClusters[tower] </TD> <TD> Int </TD> <TD>Total number of clusters in each tower.</TD> </TR>
@@ -348,11 +359,12 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> CalNumHit[tower] </TD> <TD> Int </TD> <TD> A one dimensional array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
 
 <TR> <TD> CalTp[tower][tp] </TD> <TD> Int </TD> <TD>A two dimensional array which describes the calorimeter trigger primitive for each tower.  
-          For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.)</TD> </TR>
+          For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.) 
+          Note that this is only filled if we are actually running with trigger primitives enabled. Which is usually not the case. </TD> </TR>
 
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD> Int </TD> <TD>A 3 dimensional array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means a trigger request 
           was sent to the low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to the high energy trigger; =3 means the trigger request was sent 
-          to both triggera.  </TD> </TR>
+          to both triggera. Note that this is only filled if we are actually running with trigger primitives enabled. Which is usually not the case. </TD> </TR>
 
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD> Int </TD> <TD>A 3 dimensional array which describe the log accepts contained in the CAL trigger diagnostic information.  
           For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>

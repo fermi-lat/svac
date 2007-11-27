@@ -34,8 +34,9 @@ struct NtupleDef {
   // no of hit strips per tower, per layer, per view
   int m_nStrips[g_nTower][g_nTkrLayer][g_nView];    //nStrips
 
-  // every tot values 
-  int m_tot[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //tot
+  // TOT values 
+  int m_tkrToTRaw[g_nTower][g_nTkrLayer][g_nView][g_nTot]; 
+  float m_tkrToTMips[g_nTower][g_nTkrLayer][g_nView][g_nTot]; 
 
   // energy deposited in each tower, each layer and each view
   float m_depositEne[g_nTower][g_nTkrLayer][g_nView]; //depositEne
@@ -205,10 +206,10 @@ struct NtupleDef {
   float m_convAngle;
 
   // maximal TOT value at the top hit layer at each tower
-  float m_topTot[g_nTower];
+  float m_topToT[g_nTower];
 
   // maximal TOT value at the layer of the fit vertex point
-  float m_convTot;
+  float m_convToT;
 
   // energy deposited in each crystal
   // default values are -9999
