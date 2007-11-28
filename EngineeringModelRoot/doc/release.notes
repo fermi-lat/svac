@@ -293,3 +293,7 @@ awb     Maybe make sure it compiles. Sigh ....
 
 v3r5:	November 27, 2007
 awb	Added array TkrToTMips with ToT in MIPs. Renamed tot to TkrToTRaw, Tkr1ConvTot to Vtx1ConvToT and TkrTopTot to TkrTopToT.
+
+v3r6:   November 27, 2007
+awb 	Removed all the CalMip variables as we don't run the MIP-finder anymore.
+    

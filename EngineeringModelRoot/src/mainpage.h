@@ -372,27 +372,6 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD> Float </TD> <TD>A 3 dimensional array which describes fit position in each CAL crystal: coord=0 means fitted X coordinate, 
           coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate. (For experts only.) </TD> </TR>
 
-
-<TR> <TD> CalMipNum       </TD> <TD> Int   </TD> <TD> Total number of MIPs from the CAL MIP finder  </TD> </TR> 
-<TR> <TD> CalMip1Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position centroid coordinates for the best MIP: 0=X, 1=Y and 2=Z. </TD> </TR> 
-<TR> <TD> CalMip1Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for the best MIP: 0=X, 1=Y and 2=Z. </TD> </TR>
-<TR> <TD> CalMip1Chi2     </TD> <TD> Float </TD> <TD> Chi2 of the direction fit (combination of least squares in XZ and YZ planes) for the best MIP. </TD> </TR>
-<TR> <TD> CalMip1D2edge   </TD> <TD> Float </TD> <TD> Best track distance to CAL closest edge (mm) for the best MIP. </TD> </TR> 
-<TR> <TD> CalMip1ArcLen   </TD> <TD> Float </TD> <TD> Track length (mm) of the best MIP. </TD> </TR>
-<TR> <TD> CalMip1Ecor     </TD> <TD> Float </TD> <TD> Mean vertical-equivalent energy (MeV), obtained by averaging path-length corrected energies on a layer basis for the best MIP. </TD> </TR>
-<TR> <TD> CalMip1EcorRms  </TD> <TD> Float </TD> <TD> Track RMS of the above corrected energie for the best MIP. </TD> </TR> 
-<TR> <TD> CalMip1Erm      </TD> <TD> Float </TD> <TD> Total energy (MeV) contained in a cylinder of 1 Moliere radius around the best MIP. </TD> </TR>                    
-
-
-<TR> <TD> CalMip2Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position centroid coordinates for the second best MIP: 0=X, 1=Y and 2=Z. </TD> </TR> 
-<TR> <TD> CalMip2Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for the second best MIP 2: 0=X, 1=Y and 2=Z. </TD> </TR>            
-<TR> <TD> CalMip2Chi2     </TD> <TD> Float </TD> <TD> Chi2 of the direction fit (combination of least squares in XZ and YZ planes) for the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2D2edge   </TD> <TD> Float </TD> <TD> Best track distance to CAL closest edge (mm) for the second best MIP. </TD> </TR> 
-<TR> <TD> CalMip2ArcLen   </TD> <TD> Float </TD> <TD> Track length (mm) of the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2Ecor     </TD> <TD> Float </TD> <TD> Mean vertical-equivalent energy (MeV), obtained by averaging path-length corrected energies on a layer basis for the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2EcorRms  </TD> <TD> Float </TD> <TD> Track RMS of the above corrected energie for the second best MIP. </TD> </TR> 
-<TR> <TD> CalMip2Erm      </TD> <TD> Float </TD> <TD> Total energy (MeV) contained in a cylinder of 1 Moliere radius around the second best MIP. </TD> </TR>                    
-
 </TABLE>
 
 

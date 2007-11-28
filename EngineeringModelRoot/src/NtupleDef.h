@@ -163,27 +163,6 @@ struct NtupleDef {
   int   m_acdPocaNbrTrack1;
   int   m_acdPocaNbrTrack2;
 
-  // CAL MIP information:
-  int m_calMipNum;
-
-  float m_calMip1Pos[3];
-  float m_calMip1Dir[3];
-  float m_calMip1Chi2;
-  float m_calMip1D2edge;
-  float m_calMip1ArcLen;
-  float m_calMip1Ecor;
-  float m_calMip1EcorRms;
-  float m_calMip1Erm;
-
-  float m_calMip2Pos[3];
-  float m_calMip2Dir[3];
-  float m_calMip2Chi2;
-  float m_calMip2D2edge;
-  float m_calMip2ArcLen;
-  float m_calMip2Ecor;
-  float m_calMip2EcorRms;
-  float m_calMip2Erm;
-
   // Cal measured energy
   float m_calEnergy;
 
