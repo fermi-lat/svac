@@ -31,6 +31,7 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <br>
 LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/DFI.pdf
 <br> 
+<br> 
 For all the variables the default value is -9999.
 <br>
 
