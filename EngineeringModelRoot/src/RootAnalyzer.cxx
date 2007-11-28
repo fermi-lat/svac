@@ -41,7 +41,7 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
 
   m_tkrCalib = new TkrHits( true );
 
-  m_tkrNoiseOcc = new TkrNoiseOcc();
+  //m_tkrNoiseOcc = new TkrNoiseOcc();
 
   // open output ra root file
   // No need to delete m_outputFile as ROOT will do the garbage collection
@@ -53,7 +53,7 @@ RootAnalyzer::~RootAnalyzer()
   // since root will do the garbage collection automatically for objects such
   // as TTree and TH1, we don't want to deallocate them once more
   delete m_tkrCalib;
-  delete m_tkrNoiseOcc;
+  //delete m_tkrNoiseOcc;
 }
 
 void RootAnalyzer::produceOutputFile()
@@ -63,7 +63,7 @@ void RootAnalyzer::produceOutputFile()
   if(m_outputFile) {
     m_outputFile->cd("TkrCalib");
     m_tkrCalib->saveAllHist();
-    m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
+    //m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
@@ -184,16 +184,30 @@ void RootAnalyzer::analyzeReconTree()
 	TowerId tId(cluster->getTkrId().getTowerX(), cluster->getTkrId().getTowerY());
 	int iTower = tId.id();
 	int iLayer = cluster->getLayer();
-	int iView = cluster->getTkrId().getView();
+	int iView  = cluster->getTkrId().getView();
 
 	assert(iLayer >= 0 && iLayer <= g_nTkrLayer - 1);
 
 	++m_ntuple.m_nTkrClusters[iTower][iLayer][iView];
 	++m_ntuple.m_totalClusters[iTower];
 
+	// Calibrated cluster ToT:
+	int itmpView = 0;  
+        if (iView == GlastAxis::Y) {
+          itmpView = 1;
+	}
+      
+        int nHalf = cluster->getEnd();
+
+        if (m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] == -9999.0) {
+          m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] = cluster->getMips();
+        } else {
+          m_ntuple.m_tkrToTMips[iTower][iLayer][itmpView][nHalf] = -1.0;
+        }
       }
     }
   }
+
 
   m_ntuple.m_nTkrTracks = tkrRecon->getTrackCol()->GetLast()+1;
   m_ntuple.m_nTkrVertices = tkrRecon->getVertexCol()->GetLast()+1;
@@ -288,14 +302,12 @@ void RootAnalyzer::analyzeReconTree()
 
 	  float ene = calData->getEnergy();
           
-          float eneNeg = calData->getEnergy(0,CalXtalId::NEG);
           float enePos = calData->getEnergy(0,CalXtalId::POS);
 
 	  if(ene >= 0) ++(m_ntuple.m_nCrystalHit[iTower]);
 
 	  // CAL layer end energies:
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][0] = enePos;
-          m_ntuple.m_xtalEne[iTower][iLayer][iCol][1] = eneNeg;
+          m_ntuple.m_xtalEne[iTower][iLayer][iCol] = enePos;
 
 	  if(ene > m_ntuple.m_maxCalEnergy) m_ntuple.m_maxCalEnergy = ene;
 
@@ -305,53 +317,6 @@ void RootAnalyzer::analyzeReconTree()
 	  m_ntuple.m_xtalPos[iTower][iLayer][iCol][2] = pos.z();
 
 	}
-      }
-    }
-
-    TObjArray* calMipTrackCol = calRecon->getCalMipTrackCol();
-    if (calMipTrackCol) {
-      int nCalMip = calMipTrackCol->GetLast() + 1;
-      m_ntuple.m_calMipNum = nCalMip;
-
-      for (int i = 0; i< std::min(2,nCalMip); i++) {
-        CalMipTrack* calMip = dynamic_cast<CalMipTrack*>(calMipTrackCol->At(i));
-        if (calMip) {
-          TVector3 pos =  calMip->getPoint();
-          TVector3 dir =  calMip->getDir();
-
-          if (i == 0) {
-            m_ntuple.m_calMip1Pos[0] = pos.x();
-            m_ntuple.m_calMip1Pos[1] = pos.y();
-            m_ntuple.m_calMip1Pos[2] = pos.z();
-
-            m_ntuple.m_calMip1Dir[0] = dir.x();
-            m_ntuple.m_calMip1Dir[1] = dir.y();
-            m_ntuple.m_calMip1Dir[2] = dir.z();
-
-            m_ntuple.m_calMip1Chi2    = calMip->getChi2();
-            m_ntuple.m_calMip1D2edge  = calMip->getD2Edge();
-            m_ntuple.m_calMip1ArcLen  = calMip->getArcLen();
-            m_ntuple.m_calMip1Ecor    = calMip->getEcor();
-            m_ntuple.m_calMip1EcorRms = calMip->getEcorRms();
-            m_ntuple.m_calMip1Erm     = calMip->getErm();
-          }
-          if (i == 1) {
-            m_ntuple.m_calMip2Pos[0] = pos.x();
-            m_ntuple.m_calMip2Pos[1] = pos.y();
-            m_ntuple.m_calMip2Pos[2] = pos.z();
-
-            m_ntuple.m_calMip2Dir[0] = dir.x();
-            m_ntuple.m_calMip2Dir[1] = dir.y();
-            m_ntuple.m_calMip2Dir[2] = dir.z();
-
-            m_ntuple.m_calMip2Chi2    = calMip->getChi2();
-            m_ntuple.m_calMip2D2edge  = calMip->getD2Edge();
-            m_ntuple.m_calMip2ArcLen  = calMip->getArcLen();
-            m_ntuple.m_calMip2Ecor    = calMip->getEcor();
-            m_ntuple.m_calMip2EcorRms = calMip->getEcorRms();
-            m_ntuple.m_calMip2Erm     = calMip->getErm();
-          }
-        }
       }
     }
   }  // calRecon
@@ -462,14 +427,19 @@ void RootAnalyzer::analyzeReconTree()
       const AcdGapId& acdGapId = acdGapPoca->getGapId();
       int acdGapID = acdGapId.asShort();
 
-      if (trackGapIndex == 0 && nGapTrack1 < 2) {
-        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]   = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]   = trackGapIndex; 
-      } else if (trackGapIndex == 1 && nGapTrack2 < 2) {
-        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2] = acdGapPoca->getDoca();
-        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2] = acdGapID;
-        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]   = trackGapIndex; 
+      if (trackGapIndex == 0 && nGapTrack1 < 4) {
+        m_ntuple.m_acdGapPocaDoca[0][nGapTrack1]     = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[0][nGapTrack1]   = acdGapPoca->getGapId().closestTile();
+        m_ntuple.m_acdGapPocaGapIndex[0][nGapTrack1] = acdGapPoca->getGapId().gap();
+        m_ntuple.m_acdGapPocaGapType[0][nGapTrack1]  = acdGapPoca->getGapId().gapType();
+        m_ntuple.m_acdGapPocaTrackID[0][nGapTrack1]  = trackGapIndex; 
+
+      } else if (trackGapIndex == 1 && nGapTrack2 < 4) {
+        m_ntuple.m_acdGapPocaDoca[1][nGapTrack2]     = acdGapPoca->getDoca();
+        m_ntuple.m_acdGapPocaTileID[1][nGapTrack2]   = acdGapPoca->getGapId().closestTile();
+        m_ntuple.m_acdGapPocaGapIndex[1][nGapTrack2] = acdGapPoca->getGapId().gap();
+        m_ntuple.m_acdGapPocaGapType[1][nGapTrack2]  = acdGapPoca->getGapId().gapType();
+        m_ntuple.m_acdGapPocaTrackID[1][nGapTrack2]  = trackGapIndex; 
       }
       if (trackGapIndex == 0) {
         nGapTrack1++;
@@ -535,7 +505,6 @@ void RootAnalyzer::analyzeReconTree()
   //
   if (acdRecon) {
     m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
-    m_ntuple.m_acdDoca       = acdRecon->getDoca();
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
     m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
@@ -587,22 +556,48 @@ void RootAnalyzer::analyzeDigiTree()
 
   m_ntuple.m_timeStamp = m_digiEvent->getTimeStamp();
 
-  m_ntuple.m_ebfSecond = m_digiEvent->getEbfTimeSec();
-  m_ntuple.m_ebfNanoSecond =  m_digiEvent->getEbfTimeNanoSec();
-
-  m_ntuple.m_upperTime   = m_digiEvent->getEbfUpperPpcTimeBase();
-  m_ntuple.m_lowerTime   = m_digiEvent->getEbfLowerPpcTimeBase();
-  m_ntuple.m_timeSeconds = m_digiEvent->getEbfPpcTimeSeconds();
-
   m_ntuple.m_summaryWord = m_digiEvent->getEventSummaryData().summary();
   m_ntuple.m_eventSize   = m_digiEvent->getEventSummaryData().eventSizeInBytes();
 
   m_ntuple.m_eventMCLivetime = m_digiEvent->getLiveTime();
 
+  m_ntuple.m_trgEngineGlt = m_digiEvent->getL1T().getGltEngine();
+  m_ntuple.m_trgEngineGem = m_digiEvent->getL1T().getGemEngine();
 
-  //                                                                                                                                                                                                           
-  // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
+
+  //
+  // OBF:
+  //
+  m_ntuple.m_obfPassedGAMMA = 0;
+  m_ntuple.m_obfPassedMIP   = 0;
+  m_ntuple.m_obfPassedHIP   = 0;
+  m_ntuple.m_obfPassedDGN   = 0;
+
+  
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedGAMMA = 1;
+    }
+  }
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedMIP = 1;
+    }
+  }
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedHIP = 1;
+    }
+  }
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
+    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) == 0) {
+      m_ntuple.m_obfPassedDGN = 1;
+    }
+  }
+
+  //
+  // Context information:
+  //
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
   m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
   m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();
@@ -628,23 +623,25 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs = m_digiEvent->getMetaEvent().time().current().timeSecs();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling = m_digiEvent->getMetaEvent().time().current().flywheeling();
   m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid = m_digiEvent->getMetaEvent().time().current().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps = m_digiEvent->getMetaEvent().time().current().missingGps();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentIsSourceGps = m_digiEvent->getMetaEvent().time().current().missingGps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps = m_digiEvent->getMetaEvent().time().current().missingCpuPps();
   m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps = m_digiEvent->getMetaEvent().time().current().missingLatPps();
-  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone = m_digiEvent->getMetaEvent().time().current().missingTimeTone() ;
+  m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone = m_digiEvent->getMetaEvent().time().current().missingTimeTone();
+  m_ntuple.m_contextLsfTimeTimeToneCurrentEarlyEvent = m_digiEvent->getMetaEvent().time().current().earlyEvent();
   m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks = m_digiEvent->getMetaEvent().time().current().timeHack().hacks();
   m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
 
-  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete = m_digiEvent->getMetaEvent().time().previous().incomplete();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs = m_digiEvent->getMetaEvent().time().previous().timeSecs();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling = m_digiEvent->getMetaEvent().time().previous().flywheeling();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid = m_digiEvent->getMetaEvent().time().previous().flagsValid();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps = m_digiEvent->getMetaEvent().time().previous().missingGps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone = m_digiEvent->getMetaEvent().time().previous().missingTimeTone() ;
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
-  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousIncomplete      = m_digiEvent->getMetaEvent().time().previous().incomplete();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs        = m_digiEvent->getMetaEvent().time().previous().timeSecs();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling     = m_digiEvent->getMetaEvent().time().previous().flywheeling();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid      = m_digiEvent->getMetaEvent().time().previous().flagsValid();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousIsSourceGps     = m_digiEvent->getMetaEvent().time().previous().missingGps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps   = m_digiEvent->getMetaEvent().time().previous().missingCpuPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps   = m_digiEvent->getMetaEvent().time().previous().missingLatPps();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone = m_digiEvent->getMetaEvent().time().previous().missingTimeTone();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent      = m_digiEvent->getMetaEvent().time().previous().earlyEvent();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks    = m_digiEvent->getMetaEvent().time().previous().timeHack().hacks();
+  m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks    = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
 
   m_ntuple.m_contextLsfTimeTimeTicks = m_digiEvent->getMetaEvent().time().timeTicks();
 
@@ -689,7 +686,11 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,m_ntuple.m_ebfSecond, m_ntuple.m_ebfNanoSecond);
+
+  unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
+  unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
+
+  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,tmpEbfSecond, tmpEbfNanoSecond);
 
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
@@ -868,10 +869,6 @@ void RootAnalyzer::analyzeDigiTree()
     }
   }
 
-
-
-
-
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
 
@@ -893,22 +890,14 @@ void RootAnalyzer::analyzeDigiTree()
 
     if(iView == GlastAxis::X) {
       m_ntuple.m_nStrips[iTower][iLayer][0] = nStrips;
-      m_ntuple.m_tot[iTower][iLayer][0][0] = tkrDigi->getToT(0);
-      m_ntuple.m_tot[iTower][iLayer][0][1] = tkrDigi->getToT(1);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][0] = tkrDigi->getToT(0);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][1] = tkrDigi->getToT(1);
     }
     else if(iView == GlastAxis::Y) {
       m_ntuple.m_nStrips[iTower][iLayer][1] = nStrips;
-      m_ntuple.m_tot[iTower][iLayer][1][0] = tkrDigi->getToT(0);
-      m_ntuple.m_tot[iTower][iLayer][1][1] = tkrDigi->getToT(1);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][0] = tkrDigi->getToT(0);
+      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][1] = tkrDigi->getToT(1);
     }
-
-      // fill in corrected tot
-    /*
-      if(m_mcFile == 0) {
-	correctTotDataLinear(tkrDigi);
-	correctTotDataQuad(tkrDigi);
-      }
-    */
   }
 
   /*
@@ -993,7 +982,7 @@ void RootAnalyzer::parseOptionFile(const char* f)
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
   m_outputFile->mkdir("TkrCalib");
-  m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc");
+  //m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc");
   m_tree = new TTree("Output", "Root Analyzer");
 
   // Set max file size to 500 GB:
@@ -1088,25 +1077,8 @@ void RootAnalyzer::analyzeData()
     m_digiChain->SetBranchAddress("DigiEvent", &m_digiEvent);
   }
 
-  /*
-  if(m_mcFile == 0) { 
-    // read in tot correction constants for Hiro's linear formula
-    readTotCorrLinear(1, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x1.txt");
-    readTotCorrLinear(1, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y1.txt");
-    readTotCorrLinear(2, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x2.txt");
-    readTotCorrLinear(2, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y2.txt");
-    readTotCorrLinear(3, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x3.txt");
-    readTotCorrLinear(3, 1, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_y3.txt");
 
-    // read in tot correction constants for Hiro's quadratic formula
-    readTotCorrQuad(1, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX1_101003530.tnt");
-    readTotCorrQuad(1, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY1_101003530.tnt");
-    readTotCorrQuad(2, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX2_101003530.tnt");
-    readTotCorrQuad(2, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY2_101003530.tnt");
-    readTotCorrQuad(3, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX3_101003530.tnt");
-    readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
-  }
-  */
+  // awb
   //nEvent = 1000;
 
   m_tkrCalib->setNevents(nEvent);
@@ -1115,10 +1087,10 @@ void RootAnalyzer::analyzeData()
   m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
   
   //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval)
-  m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
-  m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
+  //m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
+  //m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
   
-  for(Long64_t  iEvent = 0; iEvent != nEvent; ++iEvent) {
+  for(Long64_t iEvent = 0; iEvent != nEvent; ++iEvent) {
 
     m_ntuple.reset();  
     if(m_mcEvent) m_mcEvent->Clear();
@@ -1144,7 +1116,7 @@ void RootAnalyzer::analyzeData()
     
     //Tracker Calibration Analysis
     m_tkrCalib->analyzeEvent();
-    m_tkrNoiseOcc->anaDigiEvt();
+    //m_tkrNoiseOcc->anaDigiEvt();
 
     fillOutputTree();
     if(m_mcEvent) m_mcEvent->Clear();
@@ -1209,207 +1181,6 @@ void RootAnalyzer::fillStripHits(const TkrDigi* tkrDigi)
   saveDir->cd();
 }
 
-void RootAnalyzer::readTotCorrLinear(int layer, int view, const char* file)
-{
-
-  m_aveTotGain[layer][view] = 0;
-  m_aveTotOffset[layer][view] = 0;
-
-  std::ifstream corrFile(file);
-  for(int i = 0; i != 14; ++i) {
-    std::string temp;
-    std::getline(corrFile, temp);
-  }
- 
-  int stripId;
-  float gain, offset;
-
-  int count = 0;
-  while(corrFile >> stripId >> gain >> offset) {
-    ++count;
-    m_totGain[layer][view][stripId] = gain;
-    m_totOffset[layer][view][stripId] = offset;
-    m_aveTotGain[layer][view] += gain;
-    m_aveTotOffset[layer][view] += offset;
-  }
-
-  assert( count == g_nStripsPerLayer);
-
-  m_aveTotGain[layer][view] /= count;
-  m_aveTotOffset[layer][view] /= count;
-
-}
-
-void RootAnalyzer::readTotCorrQuad(int layer, int view, const char* file)
-{
-
-  std::ifstream corrFile(file);
-  for(int i = 0; i != 2; ++i) {
-    std::string temp;
-    std::getline(corrFile, temp);
-  }
-
-  int stripId, feId;
-  float p0, p1, p2, chi2;
-
-  int count = 0;
-  while(corrFile >> stripId >> feId >> p0 >> p1 >> p2 >> chi2) {
-    ++count;
-    m_totP0[layer][view][stripId] = p0;
-    m_totP1[layer][view][stripId] = p1;
-    m_totP2[layer][view][stripId] = p2;
-  }
-
-  assert( count == g_nStripsPerLayer);
-
-}
-
-int RootAnalyzer::midStripId(int iLayer, GlastAxis::axis iView) const
-{
-  if(iLayer == 1 && iView == GlastAxis::X) {
-    return g_nStripsPerLayer / g_nFEC * 4;
-  }
-  else {
-    return g_nStripsPerLayer / 2;
-  }
-}
-
-void RootAnalyzer::correctTotDataLinear(const TkrDigi* tkrDigi)
-{
-  int iTower = tkrDigi->getTower().id();
-  int iLayer = tkrDigi->getBilayer();
-  GlastAxis::axis view = tkrDigi->getView();
-
-  int boundary = midStripId(iLayer, view);
-
-  // iView = 0 means measureX, 1 means measure Y
-  int iView;
-
-  if(view == GlastAxis::X) {
-    iView = 0;
-  }
-  else {
-    iView = 1;
-  }
-
-  int nhits = tkrDigi->getNumHits();
-
-  vector<int> hits;
-  for(int i = 0; i != nhits; ++i) {
-    hits.push_back(tkrDigi->getHit(i));
-  }
-
-  // convert TOT raw count to micro second
-  float totTime[2];
-  totTime[0] = ((tkrDigi->getToT(0)) << 2) * 0.05;
-  totTime[1] = ((tkrDigi->getToT(1)) << 2) * 0.05;
-
-  // since we don't know which strip has longest tot, we simply do an averaged
-  // correction here
-  float charge0 = 0, charge1 = 0;
-  int count0 = 0, count1 = 0;
-
-  for(int i = 0; i != nhits; ++i) {
-    if(hits[i] < boundary) {      
-      charge0 += (totTime[0] - m_totOffset[iLayer][iView][hits[i]]) / m_totGain[iLayer][iView][hits[i]];
-      ++count0;
-    }
-    else {
-      charge1 += (totTime[1] - m_totOffset[iLayer][iView][hits[i]]) / m_totGain[iLayer][iView][hits[i]];
-      ++count1;
-    }
-  }
-
-  if(count0 != 0) charge0 /= count0;
-  if(count1 != 0) charge1 /= count1;
-
-  m_ntuple.m_totCorrLinear[iTower][iLayer][iView][0] = charge0;
-  m_ntuple.m_totCorrLinear[iTower][iLayer][iView][0] = charge1;
-
-}
-
-void RootAnalyzer::correctTotDataQuad(const TkrDigi* tkrDigi)
-{
-  int iTower = tkrDigi->getTower().id();
-  int iLayer = tkrDigi->getBilayer();
-  GlastAxis::axis view = tkrDigi->getView();
-
-  int boundary = midStripId(iLayer, view);
-
-  // iView = 0 means measureX, 1 means measure Y
-  int iView;
-
-  if(view == GlastAxis::X) {
-    iView = 0;
-  }
-  else {
-    iView = 1;
-  }
-
-  int nhits = tkrDigi->getNumHits();
-
-  vector<int> hits;
-  for(int i = 0; i != nhits; ++i) {
-    hits.push_back(tkrDigi->getHit(i));
-  }
-
-  // convert TOT raw count to micro second
-  float totTime[2];
-  totTime[0] = ((tkrDigi->getToT(0)) << 2) * 0.05;
-  totTime[1] = ((tkrDigi->getToT(1)) << 2) * 0.05;
-
-  // since we don't know which strip has longest tot, we simply do an averaged
-  // correction here
-  float charge0 = 0, charge1 = 0;
-  int count0 = 0, count1 = 0;
-
-  for(int i = 0; i != nhits; ++i) {
-    if(hits[i] < boundary) {   
-      double temp = quadTotFormula(iLayer, iView, hits[i], totTime[0]);
-      if(temp > 0) {   
-	charge0 += temp;
-	++count0;
-      }
-    }
-    else {
-      double temp = quadTotFormula(iLayer, iView, hits[i], totTime[0]);
-      if(temp > 0) {   
-	charge1 += temp;
-	++count1;
-      }
-    }
-  }
-
-  if(count0 != 0) charge0 /= count0;
-  if(count1 != 0) charge1 /= count1;
-
-  m_ntuple.m_totCorrQuad[iTower][iLayer][iView][0] = charge0;
-  m_ntuple.m_totCorrQuad[iTower][iLayer][iView][0] = charge1;
-
-}
-
-double RootAnalyzer::quadTotFormula(int layer, int view, int strip, double tot)
-{
-  if(m_totP2[layer][view][strip] == 0) {
-    double charge =  (tot - m_totP0[layer][view][strip]) / m_totP1[layer][view][strip];
-    if(charge < 0) ++ m_nTotNegRoot;
-    return charge;
-  }
-
-  double temp = m_totP1[layer][view][strip]*m_totP1[layer][view][strip] - 4.*m_totP2[layer][view][strip]*(m_totP0[layer][view][strip]-tot);
-
-  if(temp < 0) {
-    ++ m_nTotNoRoot;
-    return -9999;
-  }
-
-  double charge = (-m_totP1[layer][view][strip] + sqrt(temp)) / (2.*m_totP2[layer][view][strip]);
-
-  if(charge < 0) ++m_nTotNegRoot;
-
-  return charge;
-}
-
 void RootAnalyzer::analyzeTot()
 {
   for(int iTower = 0; iTower != g_nTower; ++iTower) {
@@ -1418,12 +1189,12 @@ void RootAnalyzer::analyzeTot()
       if(m_ntuple.m_nStrips[iTower][iLayer][0] > 0 &&
 	 m_ntuple.m_nStrips[iTower][iLayer][1] > 0) {
 
-	float totX = std::max(m_ntuple.m_tot[iTower][iLayer][0][0], 
-			      m_ntuple.m_tot[iTower][iLayer][0][1]);
-	float totY = std::max(m_ntuple.m_tot[iTower][iLayer][1][0], 
-			      m_ntuple.m_tot[iTower][iLayer][1][1]);
+	float totX = std::max(m_ntuple.m_tkrToTRaw[iTower][iLayer][0][0], 
+			      m_ntuple.m_tkrToTRaw[iTower][iLayer][0][1]);
+	float totY = std::max(m_ntuple.m_tkrToTRaw[iTower][iLayer][1][0], 
+			      m_ntuple.m_tkrToTRaw[iTower][iLayer][1][1]);
 
-	m_ntuple.m_topTot[iTower] = std::max(totX, totY);
+	m_ntuple.m_topToT[iTower] = std::max(totX, totY);
 	break;
       }
     }
@@ -1446,12 +1217,12 @@ void RootAnalyzer::analyzeTot()
 	int convTower = tId.id();
 
 	assert(convLayer >= 0 && convLayer <g_nTkrLayer);
-	float totX = std::max(m_ntuple.m_tot[convTower][convLayer][0][0], 
-			      m_ntuple.m_tot[convTower][convLayer][0][1]);
-	float totY = std::max(m_ntuple.m_tot[convTower][convLayer][1][0], 
-			      m_ntuple.m_tot[convTower][convLayer][1][1]);
+	float totX = std::max(m_ntuple.m_tkrToTRaw[convTower][convLayer][0][0], 
+			      m_ntuple.m_tkrToTRaw[convTower][convLayer][0][1]);
+	float totY = std::max(m_ntuple.m_tkrToTRaw[convTower][convLayer][1][0], 
+			      m_ntuple.m_tkrToTRaw[convTower][convLayer][1][1]);
 
-	m_ntuple.m_convTot = std::max(totX, totY);
+	m_ntuple.m_convToT = std::max(totX, totY);
       }
     }
   }
@@ -1504,14 +1275,13 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
-  m_tree->Branch("EvtSecond", &(m_ntuple.m_ebfSecond), "EvtSecond/i");
-  m_tree->Branch("EvtNanoSecond", &(m_ntuple.m_ebfNanoSecond), "EvtNanoSecond/i");
-  m_tree->Branch("EvtUpperTime", &(m_ntuple.m_upperTime), "EvtUpperTime/i");
-  m_tree->Branch("EvtLowerTime", &(m_ntuple.m_lowerTime), "EvtLowerTime/i");
-  m_tree->Branch("EvtTimeSeconds", &(m_ntuple.m_timeSeconds),"EvtTimeSeconds/D");
   m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
+  
+  m_tree->Branch("TrgEngineGlt", &(m_ntuple.m_trgEngineGlt), "TrgEngineGlt/I");
+  m_tree->Branch("TrgEngineGem", &(m_ntuple.m_trgEngineGem), "TrgEngineGem/I");
+
 
   // Error flags:
   m_tree->Branch("EventBadEventSequence", &(m_ntuple.m_eventBadEventSequence), "EventBadEventSequence/I");
@@ -1562,9 +1332,8 @@ void RootAnalyzer::createBranches()
   // TKR information:
   m_tree->Branch("TkrNumDigis", &(m_ntuple.m_nTkrDigis), "TkrNumDigis/I");
   m_tree->Branch("TkrNumStrips", &(m_ntuple.m_nStrips), "TkrNumStrips[16][18][2]/I");
-  m_tree->Branch("tot", &(m_ntuple.m_tot), "tot[16][18][2][2]/I");
-  m_tree->Branch("totCorrL", &(m_ntuple.m_totCorrLinear), "totCorrL[16][18][2][2]/F");
-  m_tree->Branch("totCorrQ", &(m_ntuple.m_totCorrQuad), "totCorrQ[16][18][2][2]/F");
+  m_tree->Branch("TkrToTRaw", &(m_ntuple.m_tkrToTRaw), "TkrToTRaw[16][18][2][2]/I");
+  m_tree->Branch("TkrToTMips", &(m_ntuple.m_tkrToTMips), "TkrToTMips[16][18][2][2]/F");
   m_tree->Branch("TkrDepositEne", &(m_ntuple.m_depositEne), "TkrDepositEne[16][18][2]/F");
   m_tree->Branch("TkrNumClusters", &(m_ntuple.m_nTkrClusters), "TkrNumClusters[16][18][2]/I");
   m_tree->Branch("TkrNumTracks", &(m_ntuple.m_nTkrTracks), "TkrNumTracks/I");
@@ -1587,8 +1356,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Tkr2EndPos", &(m_ntuple.m_tkr2EndPos), "Tkr2EndPos[3]/F");
   m_tree->Branch("Tkr1EndDir", &(m_ntuple.m_tkr1EndDir), "Tkr1EndDir[3]/F");
   m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
-  m_tree->Branch("TkrTopTot", &(m_ntuple.m_topTot), "TkrTopTot[16]/F");
-  m_tree->Branch("Tkr1ConvTot", &(m_ntuple.m_convTot), "Tkr1ConvTot/F");
+  m_tree->Branch("TkrTopToT", &(m_ntuple.m_topToT), "TkrTopToT[16]/F");
+
 
 
   // Vertex information:
@@ -1600,6 +1369,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("VtxZDir", &(m_ntuple.m_dir[2]), "VtxZDir/F");
   m_tree->Branch("Vtx1Energy", &(m_ntuple.m_fitTotalEnergy), "Vtx1Energy/F");
   m_tree->Branch("Vtx1NumTkrs", &(m_ntuple.m_vtxTrks), "Vtx1NumTkrs/I");
+  m_tree->Branch("Vtx1ConvToT", &(m_ntuple.m_convToT), "Vtx1ConvToT/F");
 
 
   // CAL information:
@@ -1607,30 +1377,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
   m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
   m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");
-  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12][2]/F");
+  m_tree->Branch("CalXtalEne", &(m_ntuple.m_xtalEne), "CalXtalEne[16][8][12]/F");
   m_tree->Branch("CalMaxEne", &(m_ntuple.m_maxCalEnergy), "CalMaxEne/F");
   m_tree->Branch("CalNumHit", &(m_ntuple.m_nCrystalHit), "CalNumHit[16]/I");
   m_tree->Branch("CalXtalPos", &(m_ntuple.m_xtalPos), "CalXtalPos[16][8][12][3]/F");
-
-  m_tree->Branch("CalMipNum", &(m_ntuple.m_calMipNum),"CalMipNum/I");
-
-  m_tree->Branch("CalMip1Pos", &(m_ntuple.m_calMip1Pos),"CalMip1Pos[3]/F");
-  m_tree->Branch("CalMip1Dir", &(m_ntuple.m_calMip1Dir),"CalMip1Dir[3]/F");
-  m_tree->Branch("CalMip1Chi2", &(m_ntuple.m_calMip1Chi2),"CalMip1Chi2/F");
-  m_tree->Branch("CalMip1D2edge", &(m_ntuple.m_calMip1D2edge),"CalMip1D2edge");
-  m_tree->Branch("CalMip1ArcLen", &(m_ntuple.m_calMip1ArcLen),"CalMip1ArcLen/F");
-  m_tree->Branch("CalMip1Ecor", &(m_ntuple.m_calMip1Ecor),"CalMip1Ecor/F");
-  m_tree->Branch("CalMip1EcorRms", &(m_ntuple.m_calMip1EcorRms),"CalMip1EcorRms/F");
-  m_tree->Branch("CalMip1Erm", &(m_ntuple.m_calMip1Erm),"CalMip1Erm/F");
-
-  m_tree->Branch("CalMip2Pos", &(m_ntuple.m_calMip2Pos),"CalMip2Pos[3]/F");
-  m_tree->Branch("CalMip2Dir", &(m_ntuple.m_calMip2Dir),"CalMip2Dir[3]/F");
-  m_tree->Branch("CalMip2Chi2", &(m_ntuple.m_calMip2Chi2),"CalMip2Chi2/F"); 
-  m_tree->Branch("CalMip2D2edge", &(m_ntuple.m_calMip2D2edge),"CalMip2D2edge");
-  m_tree->Branch("CalMip2ArcLen", &(m_ntuple.m_calMip2ArcLen),"CalMip2ArcLen/F");
-  m_tree->Branch("CalMip2Ecor", &(m_ntuple.m_calMip2Ecor),"CalMip2Ecor/F");
-  m_tree->Branch("CalMip2EcorRms", &(m_ntuple.m_calMip2EcorRms),"CalMip2EcorRms/F");
-  m_tree->Branch("CalMip2Erm", &(m_ntuple.m_calMip2Erm),"CalMip2Erm/F");
 
   // GLT information:
   m_tree->Branch("GltWord", &(m_ntuple.m_trigger), "GltWord/i");
@@ -1663,10 +1413,11 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeToneCurrentTimeSecs", &(m_ntuple.m_contextLsfTimeTimeToneCurrentTimeSecs), "ContextLsfTimeTimeToneCurrentTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlywheeling", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlywheeling), "ContextLsfTimeTimeToneCurrentFlywheeling/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentFlagsValid", &(m_ntuple.m_contextLsfTimeTimeToneCurrentFlagsValid), "ContextLsfTimeTimeToneCurrentFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingGps), "ContextLsfTimeTimeToneCurrentMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentIsSourceGps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentIsSourceGps), "ContextLsfTimeTimeToneCurrentIsSourceGps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingCpuPps), "ContextLsfTimeTimeToneCurrentMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingLatPps), "ContextLsfTimeTimeToneCurrentMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeToneCurrentMissingTimeTone), "ContextLsfTimeTimeToneCurrentMissingTimeTone/I");
+  m_tree->Branch("ContextLsfTimeTimeToneCurrentEarlyEvent", &(m_ntuple.m_contextLsfTimeTimeToneCurrentEarlyEvent), "ContextLsfTimeTimeToneCurrentEarlyEvent/I");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeHacks), "ContextLsfTimeTimeToneCurrentGemTimeHacks/i");
   m_tree->Branch("ContextLsfTimeTimeToneCurrentGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeToneCurrentGemTimeTicks), "ContextLsfTimeTimeToneCurrentGemTimeTicks/i");
 
@@ -1674,10 +1425,11 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ContextLsfTimeTimeTonePreviousTimeSecs", &(m_ntuple.m_contextLsfTimeTimeTonePreviousTimeSecs), "ContextLsfTimeTimeTonePreviousTimeSecs/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlywheeling", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlywheeling), "ContextLsfTimeTimeTonePreviousFlywheeling/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousFlagsValid", &(m_ntuple.m_contextLsfTimeTimeTonePreviousFlagsValid), "ContextLsfTimeTimeTonePreviousFlagsValid/I");
-  m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingGps), "ContextLsfTimeTimeTonePreviousMissingGps/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousIsSourceGps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousIsSourceGps), "ContextLsfTimeTimeTonePreviousIsSourceGps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingCpuPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingCpuPps), "ContextLsfTimeTimeTonePreviousMissingCpuPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingLatPps", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingLatPps), "ContextLsfTimeTimeTonePreviousMissingLatPps/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousMissingTimeTone", &(m_ntuple.m_contextLsfTimeTimeTonePreviousMissingTimeTone), "ContextLsfTimeTimeTonePreviousMissingTimeTone/I");
+  m_tree->Branch("ContextLsfTimeTimeTonePreviousEarlyEvent", &(m_ntuple.m_contextLsfTimeTimeTonePreviousEarlyEvent), "ContextLsfTimeTimeTonePreviousEarlyEvent/I");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeHacks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeHacks), "ContextLsfTimeTimeTonePreviousGemTimeHacks/i");
   m_tree->Branch("ContextLsfTimeTimeTonePreviousGemTimeTicks", &(m_ntuple.m_contextLsfTimeTimeTonePreviousGemTimeTicks), "ContextLsfTimeTimeTonePreviousGemTimeTicks/i");
 
@@ -1688,6 +1440,12 @@ void RootAnalyzer::createBranches()
 
 
   m_tree->Branch("ContextRunType", &(m_ntuple.m_contextRunType), "ContextRunType/I");
+
+  // OBF:
+  m_tree->Branch("ObfPassedGAMMA", &(m_ntuple.m_obfPassedGAMMA), "ObfPassedGAMMA/I");
+  m_tree->Branch("ObfPassedMIP", &(m_ntuple.m_obfPassedMIP), "ObfPassedMIP/I");
+  m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
+  m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
 
 
   // GEM information:
@@ -1762,7 +1520,6 @@ void RootAnalyzer::createBranches()
 
   // ACD recon:
   m_tree->Branch("AcdTileMCEnergy", &(m_ntuple.m_acdEnergy),"AcdTileMCEnergy/F");
-  m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
   m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
@@ -1820,6 +1577,8 @@ void RootAnalyzer::createBranches()
   // ACD Gap POCA:
   m_tree->Branch("AcdGapPocaDoca", &(m_ntuple.m_acdGapPocaDoca),"AcdGapPocaDoca[2][2]/F");
   m_tree->Branch("AcdGapPocaTileID", &(m_ntuple.m_acdGapPocaTileID),"AcdGapPocaTileID[2][2]/I");
+  m_tree->Branch("AcdGapPocaGapIndex", &(m_ntuple.m_acdGapPocaGapIndex),"AcdGapPocaGapIndex[2][4]/I");
+  m_tree->Branch("AcdGapPocaGapType", &(m_ntuple.m_acdGapPocaGapType),"AcdGapPocaGapType[2][4]/I");
   m_tree->Branch("AcdGapPocaTrackID", &(m_ntuple.m_acdGapPocaTrackID),"AcdGapPocaTrackID[2][2]/I");
   m_tree->Branch("AcdGapPocaNbrTrack1", &(m_ntuple.m_acdGapPocaNbrTrack1),"AcdGapPocaNbrTrack1/I");
   m_tree->Branch("AcdGapPocaNbrTrack2", &(m_ntuple.m_acdGapPocaNbrTrack2),"AcdGapPocaNbrTrack2/I");
