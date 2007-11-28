@@ -91,7 +91,6 @@ struct NtupleDef {
   float m_acdEnergy;
   float m_acdGammaDoca;
   float m_acdActiveDist;
-  int   m_acdMinDocaId;
   int   m_acdTileCount;
 
   float m_acdRibbonActiveDist;

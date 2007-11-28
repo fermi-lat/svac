@@ -507,7 +507,6 @@ void RootAnalyzer::analyzeReconTree()
     m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
-    m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
 
     m_ntuple.m_acdRibbonMCEnergy     = acdRecon->getRibbonEnergy();
     m_ntuple.m_acdRibbonCount        = acdRecon->getRibbonCount();
@@ -1522,7 +1521,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdTileMCEnergy", &(m_ntuple.m_acdEnergy),"AcdTileMCEnergy/F");
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
-  m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
   m_tree->Branch("AcdRibbonMCEnergy", &(m_ntuple.m_acdRibbonMCEnergy),"AcdRibbonMCEnergy/F");
   m_tree->Branch("AcdRibbonCount", &(m_ntuple.m_acdRibbonCount),"AcdRibbonCount/I");
   m_tree->Branch("AcdRibbonActiveDist", &(m_ntuple.m_acdRibbonActiveDist),"AcdRibbonActiveDist/F");
