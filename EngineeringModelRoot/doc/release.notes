@@ -297,3 +297,6 @@ awb	Added array TkrToTMips with ToT in MIPs. Renamed tot to TkrToTRaw, Tkr1ConvT
 v3r6:   November 27, 2007
 awb 	Removed all the CalMip variables as we don't run the MIP-finder anymore.
     
+v3r7:   November 27, 2007
+awb 	Removed AcdDoca which now is obsolete.
+    

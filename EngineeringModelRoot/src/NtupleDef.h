@@ -89,7 +89,6 @@ struct NtupleDef {
 
   // ACD Recon information:
   float m_acdEnergy;
-  float m_acdDoca;
   float m_acdGammaDoca;
   float m_acdActiveDist;
   int   m_acdMinDocaId;

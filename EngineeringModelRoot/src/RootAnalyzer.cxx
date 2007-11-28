@@ -505,7 +505,6 @@ void RootAnalyzer::analyzeReconTree()
   //
   if (acdRecon) {
     m_ntuple.m_acdEnergy     = acdRecon->getEnergy();
-    m_ntuple.m_acdDoca       = acdRecon->getDoca();
     m_ntuple.m_acdTileCount  = acdRecon->getTileCount();
     m_ntuple.m_acdActiveDist = acdRecon->getActiveDist();
     m_ntuple.m_acdMinDocaId  = acdRecon->getMinDocaId().getId();
@@ -1521,7 +1520,6 @@ void RootAnalyzer::createBranches()
 
   // ACD recon:
   m_tree->Branch("AcdTileMCEnergy", &(m_ntuple.m_acdEnergy),"AcdTileMCEnergy/F");
-  m_tree->Branch("AcdDoca", &(m_ntuple.m_acdDoca),"AcdDoca/F");
   m_tree->Branch("AcdTileCount", &(m_ntuple.m_acdTileCount),"AcdTileCount/I");
   m_tree->Branch("AcdActiveDist", &(m_ntuple.m_acdActiveDist),"AcdActiveDist/F");
   m_tree->Branch("AcdMinDocaId", &(m_ntuple.m_acdMinDocaId),"AcdMinDocaId/I");
