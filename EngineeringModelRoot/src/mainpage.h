@@ -410,7 +410,6 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> AcdTileMCEnergy        </TD> <TD> Float </TD> <TD> Total amount of Monte Carlo energy (in MeV) deposited in the ACD. </TD> </TR> 
 <TR> <TD> AcdTileCount           </TD> <TD> Int   </TD> <TD> Total number of ACD tiles with the accept bit set (above the low threshold).  </TD> </TR> 
-<TR> <TD> AcdMinDocaId           </TD> <TD> Float </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
 <TR> <TD> AcdCornerDoca          </TD> <TD> Float </TD> <TD> Measure DOCA to rays along corner side gaps. </TD> </TR>
 <TR> <TD> AcdActiveDist          </TD> <TD> Float </TD> <TD> Returns the maximum Active Distance for all tracks and ACD tiles. </TD> </TR>
 <TR> <TD> AcdMaxActiveDistId     </TD> <TD> Int   </TD> <TD> The tile ID of the ACD tile associated with the maximum active distance.  </TD> </TR>
