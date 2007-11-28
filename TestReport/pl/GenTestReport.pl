@@ -34,10 +34,10 @@ my $pdfFile = 'refman.pdf';
 my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
-my $appRoot = '/nfs/farm/g/glast/u33/borgland/Releases/EngineeringModel-v6r070329p25/Code-opt/svac/';
-my $testReportVersion = 'v3r6p12';
-my $emVersion = 'v6r070329p25';
-my $cmtPath = "$appRoot:/nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel/EngineeringModel-$emVersion";
+my $appRoot = '/nfs/farm/g/glast/u33/borgland/Releases/EngineeringModel-v8r1109p6/Code-opt/svac/';
+my $testReportVersion = 'v3r7p1';
+my $emVersion = 'v8r1109p6';
+my $cmtPath = "$appRoot:/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/EngineeringModel/EngineeringModel-$emVersion";
 my $cmtDir = "$appRoot/TestReport/$testReportVersion/cmt";
 my $exeDir = "$appRoot/TestReport/$testReportVersion/rh9_gcc32opt";
 my $doxyFile = "$appRoot/TestReport/$testReportVersion/src/ReportDoxyfile";

@@ -2,7 +2,9 @@
 
 /*! @mainpage  Package svac/EngineeringModelRoot
 
-@author Xin Chen - Current maintainer: Anders W. Borgland
+@author Xin Chen 
+
+@section current Current maintainer: Anders W. Borgland
 
 @section intro Introduction
 
@@ -29,6 +31,8 @@ LAT-TD-01545: The GLT Electronics Module (GEM) - Programming ICD specification, 
 <br>
 LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/DFI.pdf
 <br> 
+For all the variables the default value is -9999.
+<br>
 
 <TABLE>
 <CAPTION ALIGN="TOP"> Run and Event variables </CAPTION>
@@ -48,33 +52,19 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> GltWord </TD> <TD> Int </TD> <TD> Trigger word made from digis: The definition of the bits can be found in enums/enums/TriggerBits.h and follows the definition of the 
           bits from the GltConditionsWord. The GltWord is the only trigger word available in the simulation as there is no GEM simulation.</TD> </TR>
 
-<TR> <TD> EvtTime </TD> <TD> Int </TD> <TD> Time in seconds since mission start, currently 1/1/2001. This is the time that is reported when doing simulations. NB! For real data, 
-          this time is from the event builder and is not the trigger time. For Flight Software runs this is the time of the creation of the datagram. </TD> </TR>
-
-<TR> <TD> EvtSecond </TD> <TD> Int </TD> <TD> The number of seconds, since 1/1/1970, used in conjunction with getEbfTimeNanoSec for a measure of absolute time. NB! For real data, 
-          this time is from the event builder and is not the trigger time. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtNanoSecond </TD> <TD> Int </TD> <TD> The number of nano-seconds, since 1/1/1970, used in conjunction with getEbfTimeSec for a measure of absolute time. NB! For real data, 
-          this time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtUpperTime </TD> <TD> Int </TD> <TD> The UpperPpcTimeBase word as stored in the LDF from real data. Used in conjunction with EvtLowerTime (getEbfLowerPpcTimeBase), 
-          these words can be used to determine the spacing of real test events. NB! This time is from the event builder and is not the time when 
-          the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtLowerTime </TD> <TD> Int </TD> <TD> The LowerPpcTimeBase word stored in the LDF from real data. Used in conjunction with getEbfUpperPpcTimeBase, these words can be 
-          used to determine the spacing of real data events. NB! This time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!</TD> </TR>
-
-<TR> <TD> EvtTimeSeconds </TD> <TD> Int </TD> <TD> Uses the data words stored in the UpperPpcTimeBase and LowerPpcTimeBase to calculate seconds since power on. This time is used to 
-          determine the spacing of real data events - NOT as an absolute time. NB! This time is from the event builder and is not the time when the event triggered. Do not use with Flight Software Runs!
-          </TD> </TR>
+<TR> <TD> EvtTime </TD> <TD> Double </TD> <TD> Time in seconds since mission start, currently 1/1/2001. This is the time that is reported when doing simulations. NB! For real data taken with LATTE, 
+          this time is from the event builder and is not the trigger time. For Flight Software runs this used to be the time of the creation of the datagram but it's now the real timestamp of the 
+          event. </TD> </TR>
 
 <TR> <TD> EvtTicks </TD> <TD> Double </TD> <TD> Uses the data words stored in the GemTriggerTime, GemOnePpsSeconds, GemOnePpsTime, EvtSecond, and EvtNanoSecond to calculate LAT ticks for each event. 
           This time is used to determine the spacing of real data events - NOT as an absolute time.  The "zero point" is arbitrary.
           NB! This is the time when the event triggered. The values are integers, but are stored as doubles to portably get more than 32 bits. Do not use with Flight Software Runs!
           </TD> </TR>
 
+<TR> <TD> EvtMCLiveTime </TD> <TD> Double </TD> <TD> MC livetime. </TD> </TR>
+
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
-          http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf, Chapter 3.5</TD> </TR>
+          http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf Chapter 3.5</TD> </TR>
 
 <TR> <TD> EventFlags </TD> <TD> Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
@@ -98,6 +88,18 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> EventPhaseError       </TD> <TD> Int </TD> <TD> Set if there is an event phase error in the event. </TD> </TR>
 <TR> <TD> EventTimeoutError     </TD> <TD> Int </TD> <TD> Set if there is an event timeout error in the event. </TD> </TR> 
 
+<TR> <TD> EventReadout4      </TD> <TD> Int </TD> <TD> 4-range readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>    
+<TR> <TD> EventZeroSuppress  </TD> <TD> Int </TD> <TD> Zero-suppressed readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventMarker        </TD> <TD> Int </TD> <TD> Marker - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR> 
+<TR> <TD> EventCalStrobe     </TD> <TD> Int </TD> <TD> Calstrobe - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventTag           </TD> <TD> Int </TD> <TD> Tag - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+<TR> <TD> EventTACK          </TD> <TD> Int </TD> <TD> TACK - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>
+
+<TR> <TD> CCSDSTime  </TD> <TD> Double </TD> <TD> CCSDS Time from packet secondary header. It's also known as the datagram creation time even though it's really the time when the datagram was flsuhed.
+This means that this time will be later than the time of any event time. </TD> </TR>
+<TR> <TD> CCSDSapID  </TD> <TD> Int    </TD> <TD> CCSDS AP ID </TD> </TR>
+<TR> <TD> CCSDSscID  </TD> <TD> Int    </TD> <TD> CCSDS SC ID </TD> </TR>
+
 
 <TR> <TD> TemLength[tower] </TD> <TD> Int </TD> <TD> Size in bytes of the TEM event contribution, per tower. Variable length. </TD> </TR>
 <TR> <TD> GemLength        </TD> <TD> Int </TD> <TD> Size in bytes of the GEM event contribution. Fixed size: 64 bytes        </TD> </TR>
@@ -108,6 +110,9 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 
 <TR> <TD> GemConditionsWord  </TD> <TD> Int </TD> <TD> GEM Conditions Summary word. The definition of the bits can be found in enums/enums/GemConditionSummary.h. 
           For a detailed explanation, see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf Chapter 4 </TD> </TR>
+
+<TR> <TD> TrgEngineGlt </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GltWord. </TD> </TR>
+<TR> <TD> TrgEngineGem </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GemConditionsWord. </TD> </TR>
 
 <TR> <TD> GemTkrVector[16]   </TD> <TD> Int </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
           </TD> </TR>
@@ -154,8 +159,9 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> GemAcdTilesRbn        </TD> <TD> Int </TD> <TD> GEM ACD RNB (Ribbons) tile list: See section 4.9 in the GEM document for details.      </TD> </TR>
 <TR> <TD> GemAcdTilesNa         </TD> <TD> Int </TD> <TD> GEM ACD NA (Not Assigned) tile list:  See section 4.9 in the GEM document for details. </TD> </TR>
 
-<TR> <TD> DigiTriRowBits[tower]        </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from TKR digis </TD> </TR>
-<TR> <TD> TrgReqTriRowBits[tower]      </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives) </TD> </TR>  
+<TR> <TD> DigiTriRowBits[tower]        </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from TKR digis. Note that this is independent of any trigger primitives. </TD> </TR>
+<TR> <TD> TrgReqTriRowBits[tower]      </TD> <TD> Int </TD> <TD> 3-in-a-row trigger bits made from the real trigger requests (trigger primitives).  Note that this is only filled if we are actually 
+          running with trigger primitives enabled. Which is usually not the case.  </TD> </TR>  
 </TABLE>
 
 
@@ -192,10 +198,11 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> ContextLsfTimeTimeToneCurrentTimeSecs        </TD> <TD> UInt </TD> <TD> Current timetone: Number of seconds since Epoch start (01.01.2001) at most recent time hack.    </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentFlywheeling     </TD> <TD> UInt </TD> <TD> Current timetone: Number of time tones since last complete time tone.                           </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentFlagsValid      </TD> <TD> Int  </TD> <TD> Current timetone: Make sure that the flags are valid.                                           </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeToneCurrentMissingGps      </TD> <TD> Int  </TD> <TD> Current timetone: No GPS lock, message w.r.t. LAT clock.                                        </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeToneCurrentIsSourceGps     </TD> <TD> Int  </TD> <TD> Current timetone: Is the source GPS?                                                            </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingCpuPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingLatPps   </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentMissingTimeTone </TD> <TD> Int  </TD> <TD> Current timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeToneCurrentEarlyEvent      </TD> <TD> Int  </TD> <TD> Current timetone: Event arrived close to 1-PPS.                                                 </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentGemTimeHacks    </TD> <TD> UInt </TD> <TD> Current timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeToneCurrentGemTimeTicks    </TD> <TD> UInt </TD> <TD> Current timetone: The value of the GemTime registers at the time tone: Value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>
 
@@ -203,17 +210,33 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> ContextLsfTimeTimeTonePreviousTimeSecs        </TD> <TD> UInt </TD> <TD> Previous timetone: Number of seconds since Epoch start (01.01.2001) at most recent time hack.    </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousFlywheeling     </TD> <TD> UInt </TD> <TD> Previous timetone: Number of time tones since last complete time tone.                           </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousFlagsValid      </TD> <TD> Int  </TD> <TD> Previous timetone: Make sure that the flags are valid.                                           </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeTonePreviousMissingGps      </TD> <TD> Int  </TD> <TD> Previous timetone: No GPS lock, message w.r.t. LAT clock.                                        </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeTonePreviousIsSourceGp      </TD> <TD> Int  </TD> <TD> Previous timetone: Is the source GPS?                                                            </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingCpuPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the CPU level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingLatPps   </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the LAT level.                                             </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousMissingTimeTone </TD> <TD> Int  </TD> <TD> Previous timetone: No 1-PPS signal at the Spacecraft.                                            </TD> </TR>
-<TR> <TD> ContextLsfTimeTimeTonePreviousGemTimeHacks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeTonePreviousEarlyEvent      </TD> <TD> Int  </TD> <TD> Previous timetone: Event arrived close to 1-PPS.                                                 </TD> </TR><TR> 
+<TD> ContextLsfTimeTimeTonePreviousGemTimeHacks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Nnumber of 1-PPS time hacks. This counter wraps around at 127. </TD> </TR>
 <TR> <TD> ContextLsfTimeTimeTonePreviousGemTimeTicks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>
 
 
 <TR> <TD> ContextLsfTimeTimeTicks </TD> <TD> UInt </TD> <TD> The number of system clock ticks (nominally 50ns) since last the last time hack.  </TD> </TR>
-<TR> <TD> ContextRunType          </TD> <TD> Int  </TD> <TD> Which type of run was this, particle data or charge injection.                    </TD> </TR>
 
+<TR> <TD>  ContextLsfTimeHackHacks </TD> <TD> UInt </TD> <TD> The number of 1-PPS time hacks.  This counter wraps around at 127. </TD> </TR>  
+<TR> <TD>  ContextLsfTimeHackTicks </TD> <TD> UInt </TD> <TD> The value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>  
+
+<TR> <TD> ContextRunType </TD> <TD> Int  </TD> <TD> Which type of run was this, particle data or charge injection. </TD> </TR>
+
+</TABLE>
+
+
+<TABLE>
+<CAPTION ALIGN="TOP"> Onboard Filter (Offline version)  </CAPTION>
+<TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
+
+<TR> <TD> ObfPassedGAMMA   </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the GAMMA-filter and 0 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedMIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the MIP-filter and 0 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedHIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the HIP (Heavy ion filter) and 0 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedDGN     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the DGN (Diagnostic filter) and 0 if it didn't. </TD> </TR> 
 </TABLE>
 
 
@@ -257,6 +280,8 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 
 <TR> <TD> Vtx1NumTkrs </TD> <TD> Int   </TD> <TD> Number of tracks associated with the first vertex </TD> </TR>
 <TR> <TD> Vtx1Energy  </TD> <TD> Float </TD> <TD> Energy (in MeV) stored in first vertex  </TD> </TR>
+<TR> <TD> Vtx1ConvToT[tower] </TD> <TD> Int </TD> <TD>A one dimensional array which describes the raw ToT value at the layer of the first vertex. 
+          The value is actually the maximum of 4 ToT values at the biPlane.</TD> </TR>
 </TABLE>
 
 <TABLE>
@@ -267,15 +292,14 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> TkrNumStrips[tower][layer][view]   </TD> <TD> Int </TD> <TD> A 3 dimensional array which describes the number of strips in every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y </TD> </TR>
 
-<TR> <TD> tot[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes tot value at every tower, layer, view and end. 
+<TR> <TD> TkrToTRaw[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes the raw ToT value at every tower, layer, view and end. 
           End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane. 
           However this could be changed during real data taking. Please check the configuration report to find out whether the devision is really in the middle</TD> </TR>
 
-<TR> <TD> totCorrL[tower][layer][view][end]  </TD> <TD> Int </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, 
-          using Hiro's linear correction formula. At the moment only valid for EM1 data. </TD> </TR>
-
-<TR> <TD> totCorrQ[tower][layer][view][end]  </TD> <TD> Int </TD> <TD> A 4 dimension array which describes corrected tot value at every tower, layer, view and end, 
-          using Hiro's quadratic correction formula. At the moment only valid for EM1 data. </TD> </TR>
+<TR> <TD> TkrToTMips[tower][layer][view][end]       </TD> <TD> Int </TD> <TD> A 4 dimensional array which describes the calibrated ToT value for each TKR cluster. 
+          This is filled only for the case of one cluster per layer end! If there are more than one cluster per half-plane the entry it set to -1.   
+          End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high end with stripId from 768 to 1536. Normally division is at middle of the plane. 
+          However this could be changed during real data taking. Please check the configuration report to find out whether the division really is in the middle</TD> </TR>
 
 <TR> <TD> TkrNumClusters[tower][layer][view] </TD> <TD> Int </TD> <TD> A 3 dimension array which describes the number of clusters at every tower, layer and view. 
            View=0 refers to measure X while View=1 refers to measure Y. </TD> </TR>
@@ -302,16 +326,17 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> Tkr1EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 1 </TD> </TR>
 <TR> <TD> Tkr2EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 2 </TD> </TR>
 
-<TR> <TD> TkrTopTot[tower]   </TD> <TD> Int </TD> <TD>A one dimensional array which describes tot value at the top hit layer for each tower. 
-          The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR> 
-<TR> <TD> Tkr1ConvTot[tower] </TD> <TD> Int </TD> <TD>A one dimensional array which describes tot value at the layer of the first vertex. 
-          The value is actually the maximum of 4 tot values at the biPlane.</TD> </TR>
-<TR> <TD> TkrTp[tower][tp]   </TD> <TD> Int </TD> <TD>A two dimensional array which describes tracker trigger primitive for each tower. 
+<TR> <TD> TkrTopToT[tower]   </TD> <TD> Int </TD> <TD>A one dimensional array which describes the raw TOT value at the top hit layer for each tower. 
+          The value is actually the maximum of 4 ToT values at the biPlane.</TD> </TR> 
+
+<TR> <TD> TkrTp[tower][tp]   </TD> <TD> Int </TD> <TD>A two dimensional array which describes tracker trigger primitive for each tower. Note that this is only filled if we are actually running with 
+          trigger primitives enabled. Which is usually not the case. 
           For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3</TD> </TR>
 
 <TR> <TD> TkrReq[tower][layer][view][end] </TD> <TD> Int </TD> <TD>A 4 dimensional array which describes tracker trigger request. For example: TkrReq[8][7][0][0]=1 means a 
           trigger request was sent from tower 8, layer 7, measure X and lower end of the tray.  End=0 refers to low end with stripId from 0 to 768 while end=1 refers to high 
-          end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking.</TD> </TR>
+          end with stripId from 768 to 1536. Normally division is at middle of the plane, however this could be changed during real data taking. Note that this is only filled if we are actually running with 
+          trigger primitives enabled. Which is usually not the case.</TD> </TR>
 
 <TR> <TD> TkrTotalHits[tower]     </TD> <TD> Int </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
 <TR> <TD> TkrTotalClusters[tower] </TD> <TD> Int </TD> <TD>Total number of clusters in each tower.</TD> </TR>
@@ -327,46 +352,25 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 
-<TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer, column (and end). 
-          Currently both ends contain the best total energy estimate i.e. use either [end=0] or [end=1], but not both. To get the end energies you need to look at the CAL ntuple.</TD> </TR>
+<TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer and column. To get the log end energies you need to look at the CAL ntuple. Note that prior to October 2007 this array also contained '[end]'. This is no longer the case as it was unnecessary.</TD> </TR>
 
 <TR> <TD> CalMaxEne </TD> <TD> Float </TD> <TD> Maximal measured energy (in MeV) in a single crystal </TD> </TR>
 
 <TR> <TD> CalNumHit[tower] </TD> <TD> Int </TD> <TD> A one dimensional array which describes number of crystals in each tower with measured energy larger than zero suppression threshold </TD> </TR>
 
 <TR> <TD> CalTp[tower][tp] </TD> <TD> Int </TD> <TD>A two dimensional array which describes the calorimeter trigger primitive for each tower.  
-          For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.)</TD> </TR>
+          For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3. (For experts only.) 
+          Note that this is only filled if we are actually running with trigger primitives enabled. Which is usually not the case. </TD> </TR>
 
 <TR> <TD> CalReq[tower][layer][end] </TD> <TD> Int </TD> <TD>A 3 dimensional array which describes calorimeter trigger request. For example: CalReq[8][7][0]=1 means a trigger request 
           was sent to the low energy trigger from tower 8, layer 7 and end 0; =2 means the trigger request was sent to the high energy trigger; =3 means the trigger request was sent 
-          to both triggera.  </TD> </TR>
+          to both triggera. Note that this is only filled if we are actually running with trigger primitives enabled. Which is usually not the case. </TD> </TR>
 
 <TR> <TD> CalLogAccepts[tower][layer][end]</TD> <TD> Int </TD> <TD>A 3 dimensional array which describe the log accepts contained in the CAL trigger diagnostic information.  
           For a more detailed description, please see the onLine document at http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, chapter 4.3  </TD> </TR>
 
 <TR> <TD> CalXtalPos[tower][layer][col][coord] </TD> <TD> Float </TD> <TD>A 3 dimensional array which describes fit position in each CAL crystal: coord=0 means fitted X coordinate, 
           coord=1 means fitted Y coordinate and coord=2 means fitted Z coodinate. (For experts only.) </TD> </TR>
-
-
-<TR> <TD> CalMipNum       </TD> <TD> Int   </TD> <TD> Total number of MIPs from the CAL MIP finder  </TD> </TR> 
-<TR> <TD> CalMip1Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position centroid coordinates for the best MIP: 0=X, 1=Y and 2=Z. </TD> </TR> 
-<TR> <TD> CalMip1Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for the best MIP: 0=X, 1=Y and 2=Z. </TD> </TR>
-<TR> <TD> CalMip1Chi2     </TD> <TD> Float </TD> <TD> Chi2 of the direction fit (combination of least squares in XZ and YZ planes) for the best MIP. </TD> </TR>
-<TR> <TD> CalMip1D2edge   </TD> <TD> Float </TD> <TD> Best track distance to CAL closest edge (mm) for the best MIP. </TD> </TR> 
-<TR> <TD> CalMip1ArcLen   </TD> <TD> Float </TD> <TD> Track length (mm) of the best MIP. </TD> </TR>
-<TR> <TD> CalMip1Ecor     </TD> <TD> Float </TD> <TD> Mean vertical-equivalent energy (MeV), obtained by averaging path-length corrected energies on a layer basis for the best MIP. </TD> </TR>
-<TR> <TD> CalMip1EcorRms  </TD> <TD> Float </TD> <TD> Track RMS of the above corrected energie for the best MIP. </TD> </TR> 
-<TR> <TD> CalMip1Erm      </TD> <TD> Float </TD> <TD> Total energy (MeV) contained in a cylinder of 1 Moliere radius around the best MIP. </TD> </TR>                    
-
-
-<TR> <TD> CalMip2Pos[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track position centroid coordinates for the second best MIP: 0=X, 1=Y and 2=Z. </TD> </TR> 
-<TR> <TD> CalMip2Dir[0-2] </TD> <TD> Float </TD> <TD> A 3 dimensional array which describes the CAL MIP track direction for the second best MIP 2: 0=X, 1=Y and 2=Z. </TD> </TR>            
-<TR> <TD> CalMip2Chi2     </TD> <TD> Float </TD> <TD> Chi2 of the direction fit (combination of least squares in XZ and YZ planes) for the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2D2edge   </TD> <TD> Float </TD> <TD> Best track distance to CAL closest edge (mm) for the second best MIP. </TD> </TR> 
-<TR> <TD> CalMip2ArcLen   </TD> <TD> Float </TD> <TD> Track length (mm) of the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2Ecor     </TD> <TD> Float </TD> <TD> Mean vertical-equivalent energy (MeV), obtained by averaging path-length corrected energies on a layer basis for the second best MIP. </TD> </TR>
-<TR> <TD> CalMip2EcorRms  </TD> <TD> Float </TD> <TD> Track RMS of the above corrected energie for the second best MIP. </TD> </TR> 
-<TR> <TD> CalMip2Erm      </TD> <TD> Float </TD> <TD> Total energy (MeV) contained in a cylinder of 1 Moliere radius around the second best MIP. </TD> </TR>                    
 
 </TABLE>
 
@@ -378,14 +382,14 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> Acd10Ids[10]                          </TD> <TD> Int   </TD> <TD> The tile IDs for the first 10 ACD digis. </TD> </TR>
 <TR> <TD> AcdPha[tileID:0-603][2]               </TD> <TD> Int   </TD> <TD> Pulse Hight Analysis for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 
-<TR> <TD> AcdMips[tileID:0-603][2]              </TD> <TD> Float </TD> <TD> Calibrated PHA in MIPs.</TD> </TR>
-<TR> <TD> AcdMipsPha[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Calibrated PHA value</TD> </TR>
+<TR> <TD> AcdMips[tileID:0-603][2]              </TD> <TD> Float </TD> <TD> Calibrated PHA in MIPs by tileID, pmt</TD> </TR>
+<TR> <TD> AcdMipsPha[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> PHA value by tileID, pmt, for now this is the same as AcdPha</TD> </TR>
 
 <TR> <TD> AcdMipsFlag[tileID:0-603][2]          </TD> <TD> Int   </TD> <TD> Flag for calibrated Pha values. The bits are: PMT_ACCEPT_BIT = 0 (channel is above zero suppresion threshold (applied to digital data)), PMT_VETO_BIT = 1 (channel fired veto discriminator (applied to analog data)), PMT_RANGE_BIT = 2 (channel was read out in high range), PMT_RESERVED_BIT = 3 (just a trick to split the errors into the higher byte), PMT_ODD_PARITY_ERROR_BIT = 4 (PHA data transmission had parity error), PMT_HEADER_PARITY_ERROR_BIT = 5 (header data transmission had parity error - this should _never_happen!), PMT_DEAD_BIT = 6 (PMT was flagged as dead by offline calibration), PMT_HOT_BIT = 7 (PMT was flagged as hot by offline calibration). </TD> </TR>
 
-<TR> <TD> AcdMipsMax                            </TD> <TD> Float </TD> <TD> Maximum calibrated PHA in MIPs. </TD> </TR>
-<TR> <TD> AcdMipsMaxTileID                      </TD> <TD> Int   </TD> <TD> Tile ID of tile with the maximum calibrated PHA in MIPs. </TD> </TR> 
-<TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated PHA in MIPs. </TD> </TR>
+<TR> <TD> AcdMipsMax                            </TD> <TD> Float </TD> <TD> Maximum calibrated signal in MIPs of all the PMTs</TD> </TR>
+<TR> <TD> AcdMipsMaxTileID                      </TD> <TD> Int   </TD> <TD> Tile ID of tile with the maximum calibrated signal in MIPs. </TD> </TR> 
+<TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated signal in MIPs. </TD> </TR>
 <TR> <TD> AcdMipsSum                            </TD> <TD> Float </TD> <TD> Sum of calibrated PHA in MIPs (average of the two PMTs, or a single PMT if the other PMT is missing).</TD> </TR> 
 
 <TR> <TD> AcdHitMap[tileID:0-603][2]            </TD> <TD> Int   </TD> <TD> Veto discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
@@ -393,20 +397,19 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> AcdOddParityError[tileID:0-603][2]    </TD> <TD> Int   </TD> <TD> Odd parity error bit for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
 <TR> <TD> AcdHeaderParityError[tileID:0-603][2] </TD> <TD> Int   </TD> <TD> Header parity error bit for the specified attached tile/ribbon and PMT (A or B). This bit should _never_ be set!</TD> </TR>
 <TR> <TD> AcdLowDisc[tileID:0-603][2]           </TD> <TD> Int   </TD> <TD> Low discriminator set or not for the specified attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile number in dense notation. </TD> </TR> 
+<TR> <TD> AcdTileNumber[tileID:0-603]           </TD> <TD> Int   </TD> <TD> Tile ID in dense notation.</TD> </TR> 
 
-<TR> <TD> AcdNaPha[NA0-NA10][2]                 </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaHitMap[NA0-NA10][2]              </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaRange[NA0-NA10][2]               </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
-<TR> <TD> AcdNaOddParityError[NA0-NA10][2]      </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaHeaderParityError[NA0-NA10][2]   </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
-<TR> <TD> AcdNaLowDisc[NA0-Na10][2]             </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaPha[NA0-NA10:0-10][2]            </TD> <TD> Int </TD> <TD> Pulse Hight Analysis for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHitMap[NA0-NA10:0-10][2]         </TD> <TD> Int </TD> <TD> Veto discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaRange[NA0-NA10:0-10][2]          </TD> <TD> Int </TD> <TD> Range for the specified non-attached tile/ribbon and PMT (A or B).</TD> </TR>
+<TR> <TD> AcdNaOddParityError[NA0-NA10:0-10][2] </TD> <TD> Int </TD> <TD> Odd parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaHeaderParityError[NA0-NA10:0-10][2] </TD> <TD> Int </TD> <TD> Header parity error bit for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
+<TR> <TD> AcdNaLowDisc[NA0-Na10:0-10][2]        </TD> <TD> Int </TD> <TD> Low discriminator set or not for the specified non-attached tile/ribbon and PMT (A or B). </TD> </TR>
 
 <TR> <TD> AcdMCEnergy[tileID:0-603] </TD> <TD> Float </TD> <TD> The amount of Monte Carlo energy (in MeV) deposited in this detector element. </TD> </TR>
 
 <TR> <TD> AcdTileMCEnergy        </TD> <TD> Float </TD> <TD> Total amount of Monte Carlo energy (in MeV) deposited in the ACD. </TD> </TR> 
 <TR> <TD> AcdTileCount           </TD> <TD> Int   </TD> <TD> Total number of ACD tiles with the accept bit set (above the low threshold).  </TD> </TR> 
-<TR> <TD> AcdDoca                </TD> <TD> Float </TD> <TD> The minimal Distance of Closest Approach (DOCA) wrt the center of the tile. </TD> </TR>
 <TR> <TD> AcdMinDocaId           </TD> <TD> Float </TD> <TD> The ID of the Acd Tile associated with the minimum DOCA. </TD> </TR> 
 <TR> <TD> AcdCornerDoca          </TD> <TD> Float </TD> <TD> Measure DOCA to rays along corner side gaps. </TD> </TR>
 <TR> <TD> AcdActiveDist          </TD> <TD> Float </TD> <TD> Returns the maximum Active Distance for all tracks and ACD tiles. </TD> </TR>
@@ -417,9 +420,8 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> AcdRibbonActiveDist    </TD> <TD> Float </TD> <TD> The maximum Active Distance for all tracks and ACD ribbons. </TD> </TR>
 <TR> <TD> AcdRibbonActiveDistId  </TD> <TD> Int   </TD> <TD> The ribbon ID of the ACD ribbon associated with the maximum Active Distance. </TD> </TR>
 
-
-
-<TR> <TD> AcdTkrIntersection                              </TD> <TD>       </TD> <TD> Information about the expected intersection of a track with the ACD. </TD> </TR>
+<TR> <TD>                                                 </TD> <TD>       </TD> <TD>                                                                      </TD> </TR>
+<TR> <TD> AcdTkrIntersection variables: Information about the expected intersection of a track with the ACD. </TD> <TD>       </TD> <TD>                                                                      </TD> </TR>
 <TR> <TD> AcdNumTkrIntSec                                 </TD> <TD> Int   </TD> <TD> Total number of ACD-TKR intersections.</TD> </TR>
 <TR> <TD> AcdTkrIntSecTileId[iTkrIntSec:0-19]             </TD> <TD> Int   </TD> <TD> The tile/ribbon ID of the ACD tile/ribbon intersected by the track. </TD> </TR>
 <TR> <TD> AcdTkrIntSecTkrIndex[iTkrIntSec:0-19]           </TD> <TD> Int   </TD> <TD> The track index of the intersecting track.  </TD> </TR>
@@ -439,9 +441,9 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 
 
 
-
-<TR> <TD> AcdTkrPoca information                          </TD> <TD>       </TD> <TD> Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
-          (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise  </TD> </TR> 
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdTkrPoca variables: Information about the Point of Closest Approach (POCA) between an extrapolated track and a hit Acd element 
+          (tile or ribbon). This POCA is calculated in 3D.  The doca is defined to be positive if the track goes inside the active distance and negative otherwise </TD> <TD>       </TD> <TD> </TD> </TR> 
 <TR> <TD> AcdPocaNbrTrack1                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 1. NB! May be larger than 5! </TD> </TR>
 <TR> <TD> AcdPocaNbrTrack2                                </TD> <TD> Int   </TD> <TD>  Total number of hit tiles for track 2. NB! May be larger than 5! </TD> </TR>
 <TR> <TD> AcdPocaAcdTrackID[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
@@ -450,15 +452,31 @@ LAT-TD-05601: DataFlow Public Interface (DFI), http://www-glast.slac.stanford.ed
 <TR> <TD> AcdPocaDocaErr[TrackIndex:0-1][Tile:0-6]        </TD> <TD> Float </TD> <TD>  Error on DOCA. This is calculated using the full Kalman Filter propagation of the track to the POCA 
           and the projection of the propagated covarience matrix along the line of the DOCA. </TD> </TR>
 <TR> <TD> AcdPocaDocaRegion[TrackIndex:0-1][Tile:0-6]     </TD> <TD> Float </TD> <TD>  Returns a code showing which region of the tile or ribbon the POCA occured in. </TD> </TR>
-<TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA </TD> </TR> 
-<TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA  </TD> </TR> 
-<TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA  </TD> </TR> 
-<TR> <TD> AcdPocaDirX[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  X-component of POCA  vector </TD> </TR> 
-<TR> <TD> AcdPocaDirY[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Y-component of POCA  vector </TD> </TR> 
-<TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of POCA  vector </TD> </TR> 
+<TR> <TD> AcdPocaX[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global X-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaY[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Y-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaZ[TrackIndex:0-1][Tile:0-6]              </TD> <TD> Float </TD> <TD>  Global Z-coordinate of POCA.  This point occurs along the track trajectory.</TD> </TR> 
+<TR> <TD> AcdPocaDirX[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  X-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
+<TR> <TD> AcdPocaDirY[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Y-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
+<TR> <TD> AcdPocaDirZ[TrackIndex:0-1][Tile:0-6]           </TD> <TD> Float </TD> <TD>  Z-component of vector from POCA to the detector element.  AcdPoca-AcdPocaDir gives the point on the detector element closest to the track.</TD> </TR> 
 
 
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdGapPoca variables:Information about the Point of Closest Approach (POCA) between an extrapolated track and a gap between tiles in the ACD.  This POCA is calculated in 3D.  The doca is defined to be positive if the track goes into the gap and negative otherwise </TD> <TD> </TD> </TR>
+<TR> <TD> AcdGapPocaNbrTrack1                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 1.</TD> </TR>
+<TR> <TD> AcdGApPocaNbrTrack2                             </TD> <TD> Int   </TD> <TD>  Total number of relevent gaps for track 2.</TD> </TR>
+<TR> <TD> AcdGapPocaTrackID[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Float </TD> <TD>  Track index of intersecting track. Only information for the first two tracks are stored. </TD> </TR> 
+<TR> <TD> AcdGapPocaTileID[TrackIndex:0-1][Tile:0-3]      </TD> <TD> Float </TD> <TD>  GAP ID of the tile the track intersects.  Exprssed as a bit mask.  GapType[0xF000] | GapNumber[0x0E00] | Face[0x01C0] | Row[0x0038] | Col[0x0007]</TD> </TR>
+<TR> <TD> AcdGapPocaDoca[TrackIndex:0-1][Tile:0-3]        </TD> <TD> Float </TD> <TD>  Distance of closet approach (DOCA) - calculated in 2D. </TD> </TR>
+<TR> <TD> AcdGapPocaGapIndex[TrackIndex:0-1][Tile:0-3]    </TD> <TD> Int   </TD> <TD>  Index saying which gap the DOCA is being calculated with respect to. </TD> </TR>
+<TR> <TD> AcdGapPocaGapType[TrackIndex:0-1][Tile:0-3]     </TD> <TD> Int   </TD> <TD>  What type of gap we are talking about: X_RibbonSide = 1, Y_RibbonSide = 2, Y_RibbonTop = 3, CornerRay = 4, TopCornerEdge = 5, TileHole = 6. </TD> </TR> 
 
+
+<TR> <TD>  </TD> <TD>       </TD> <TD> </TD> </TR>
+<TR> <TD> AcdTkrPoint variables: Information about the point where the track leaves the nominal ACD volume.  This does not account for the complexities of the geometry, but does give a good estimate of where the track hit the ACD </TD> <TD> </TD> </TR>
+<TR> <TD> AcdTkrPointX[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  X-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrPointY[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Y-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrPointZ[up,down:0,1]                       </TD> <TD> Float </TD> <TD>  Z-component of point where track struck ACD</TD> </TR>
+<TR> <TD> AcdTkrFace[up,down:0,1]                         </TD> <TD> Int </TD> <TD>  Face of ACD struck by track 0=top, 1,3 = +- X, 2,4 = +- Y, 5 =bottom</TD> </TR>
 
 </TABLE>
 
