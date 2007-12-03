@@ -309,23 +309,6 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> TkrNumTracks   </TD> <TD> Int </TD> <TD> Number of reconstructed tracks. Currently recon allows maximum of 10 tracks.</TD> </TR>
 <TR> <TD> TkrNumVertices </TD> <TD> Int </TD> <TD> Number of reconstructed vertices</TD> </TR>
-<TR> <TD> Tkr1NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in first track </TD> </TR>
-<TR> <TD> Tkr2NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in second track </TD> </TR>
-
-<TR> <TD> Tkr1Chisq      </TD> <TD> Float </TD> <TD> Chi square of first track. Note that the Merit variable Tkr1Chisq is the smooth chi2 which here is called Tkr1ChisqS. </TD> </TR>
-<TR> <TD> Tkr2Chisq      </TD> <TD> Float </TD> <TD> Chi square of second track. Note that the Merit variable Tkr2Chisq is the smooth chi2 which here is called Tkr2ChisqS.  </TD> </TR>
-<TR> <TD> Tkr1ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of first track </TD> </TR>
-<TR> <TD> Tkr2ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of second track </TD> </TR>
-<TR> <TD> Tkr1Rms        </TD> <TD> Float </TD> <TD> Rms value of first track </TD> </TR>
-<TR> <TD> Tkr2Rms        </TD> <TD> Float </TD> <TD> Rms value of second track </TD> </TR>
-<TR> <TD> Tkr1KalThetaMs </TD> <TD> Float </TD> <TD> Multiple scattering angle of first track calculated by the Kalman filter</TD> </TR>
-<TR> <TD> Tkr2KalThetaMs </TD> <TD> Float </TD> <TD> Multiple scattering angle of second track calculated by the Kalman filter</TD> </TR>
-<TR> <TD> Tkr1KalEne     </TD> <TD> Float </TD> <TD> Energy (in MeV) of first track calculated by the Kalman filter</TD> </TR>
-<TR> <TD> Tkr2KalEne     </TD> <TD> Float </TD> <TD> Energy (in MeV) of second track calculated by the Kalman filter</TD> </TR>
-<TR> <TD> Tkr1EndPos[3]  </TD> <TD> Float </TD> <TD> End-of-track position (in mm) of track 1  </TD> </TR>
-<TR> <TD> Tkr2EndPos[3]  </TD> <TD> Float </TD> <TD> End-of-track position (in mm) of track 2  </TD> </TR>
-<TR> <TD> Tkr1EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 1 </TD> </TR>
-<TR> <TD> Tkr2EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction (in mm) of track 2 </TD> </TR>
 
 <TR> <TD> TkrTopToT[tower]   </TD> <TD> Int </TD> <TD>A one dimensional array which describes the raw TOT value at the top hit layer for each tower. 
           The value is actually the maximum of 4 ToT values at the biPlane.</TD> </TR> 
@@ -341,6 +324,44 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> TkrTotalHits[tower]     </TD> <TD> Int </TD> <TD>Total number of strip hits in each tower.</TD> </TR>
 <TR> <TD> TkrTotalClusters[tower] </TD> <TD> Int </TD> <TD>Total number of clusters in each tower.</TD> </TR>
+</TABLE>
+
+
+<TABLE>
+<CAPTION ALIGN="TOP"> TKR1/TKR2 variables </CAPTION>
+<TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
+
+<TR> <TD> Tkr1NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in first track </TD> </TR>
+<TR> <TD> Tkr2NumHits    </TD> <TD> Int </TD> <TD> Number of clusters in second track </TD> </TR>
+<TR> <TD> Tkr1Chisq      </TD> <TD> Float </TD> <TD> Chi square of first track. Note that the Merit variable Tkr1Chisq is the smooth chi2 which here is called Tkr1ChisqS. </TD> </TR>
+<TR> <TD> Tkr2Chisq      </TD> <TD> Float </TD> <TD> Chi square of second track. Note that the Merit variable Tkr2Chisq is the smooth chi2 which here is called Tkr2ChisqS.  </TD> </TR>
+<TR> <TD> Tkr1ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of first track </TD> </TR>
+<TR> <TD> Tkr2ChisqS     </TD> <TD> Float </TD> <TD> Smoothed chi square of second track </TD> </TR>
+<TR> <TD> Tkr1Rms        </TD> <TD> Float </TD> <TD> Rms value of first track </TD> </TR>
+<TR> <TD> Tkr2Rms        </TD> <TD> Float </TD> <TD> Rms value of second track </TD> </TR>
+<TR> <TD> Tkr1KalThetaMs </TD> <TD> Float </TD> <TD> Multiple scattering angle of first track calculated by the Kalman filter</TD> </TR>
+<TR> <TD> Tkr2KalThetaMs </TD> <TD> Float </TD> <TD> Multiple scattering angle of second track calculated by the Kalman filter</TD> </TR>
+<TR> <TD> Tkr1KalEne     </TD> <TD> Float </TD> <TD> Energy (in MeV) of first track calculated by the Kalman filter</TD> </TR>
+<TR> <TD> Tkr2KalEne     </TD> <TD> Float </TD> <TD> Energy (in MeV) of second track calculated by the Kalman filter</TD> </TR>
+
+<TR> <TD> Tkr1X0         </TD> <TD> Float </TD> <TD> Beginning of track X position (in mm) of track 1  </TD> </TR> 
+<TR> <TD> Tkr1Y0         </TD> <TD> Float </TD> <TD> Beginning of track Y position (in mm) of track 1  </TD> </TR> 
+<TR> <TD> Tkr1Z0         </TD> <TD> Float </TD> <TD> Beginning of track Z position (in mm) of track 1  </TD> </TR> 
+<TR> <TD> Tkr2X0         </TD> <TD> Float </TD> <TD> Beginning of track X position (in mm) of track 2  </TD> </TR> 
+<TR> <TD> Tkr2Y0         </TD> <TD> Float </TD> <TD> Beginning of track Y position (in mm) of track 2  </TD> </TR> 
+<TR> <TD> Tkr2Z0         </TD> <TD> Float </TD> <TD> Beginning of track Z position (in mm) of track 2  </TD> </TR> 
+
+<TR> <TD> Tkr1XDir       </TD> <TD> Float </TD> <TD> Beginning of track X direction of track 1  </TD> </TR> 
+<TR> <TD> Tkr1YDir       </TD> <TD> Float </TD> <TD> Beginning of track Y direction of track 1  </TD> </TR> 
+<TR> <TD> Tkr1ZDir       </TD> <TD> Float </TD> <TD> Beginning of track Z direction of track 1  </TD> </TR> 
+<TR> <TD> Tkr2XDir       </TD> <TD> Float </TD> <TD> Beginning of track X direction of track 2  </TD> </TR> 
+<TR> <TD> Tkr2YDir       </TD> <TD> Float </TD> <TD> Beginning of track Y direction of track 2  </TD> </TR> 
+<TR> <TD> Tkr2ZDir       </TD> <TD> Float </TD> <TD> Beginning of track Z direction of track 2  </TD> </TR> 
+
+<TR> <TD> Tkr1EndPos[3]  </TD> <TD> Float </TD> <TD> End-of-track position (in mm) of track 1  </TD> </TR>
+<TR> <TD> Tkr2EndPos[3]  </TD> <TD> Float </TD> <TD> End-of-track position (in mm) of track 2  </TD> </TR>
+<TR> <TD> Tkr1EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction of track 1 </TD> </TR>
+<TR> <TD> Tkr2EndDir[3]  </TD> <TD> Float </TD> <TD> End-of-track direction of track 2 </TD> </TR>
 </TABLE>
 
 

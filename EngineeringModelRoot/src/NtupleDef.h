@@ -67,6 +67,13 @@ struct NtupleDef {
   float m_tkr2EndPos[3];
   float m_tkr2EndDir[3];
 
+  float m_tkr1Pos[3];
+  float m_tkr2Pos[3];
+  float m_tkr1Dir[3];
+  float m_tkr2Dir[3];
+
+
+
   // ACD Digi information:
   float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];

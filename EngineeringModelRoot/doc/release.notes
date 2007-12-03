@@ -303,3 +303,5 @@ awb 	Removed AcdDoca which now is obsolete.
 v3r7p1:	November 27, 2007
 awb 	Then also remove AcdMinDocaId.
     
+v3r7p2: December 3, 2007:
+awb	Added Tkr1/2 initial position and direction.

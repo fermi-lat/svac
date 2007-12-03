@@ -243,6 +243,9 @@ void RootAnalyzer::analyzeReconTree()
       m_ntuple.m_msAngle[i] = tkrTrack->getKalThetaMS();
       m_ntuple.m_tkrEnergy[i] = tkrTrack->getKalEnergy();
 
+      // Initial position and direction:
+      TVector3 x1 = tkrTrack->getInitialPosition();
+      TVector3 t1 = tkrTrack->getInitialDirection();
 
       // End-of-track parameters:
       TkrTrackHit* hit = (TkrTrackHit*) tkrTrack->Last();
@@ -251,6 +254,13 @@ void RootAnalyzer::analyzeReconTree()
       TVector3 endSlope = endSlopeTmp.Unit();
 
       if (i == 0) {
+        m_ntuple.m_tkr1Pos[0] = x1.x(); 
+        m_ntuple.m_tkr1Pos[1] = x1.y(); 
+        m_ntuple.m_tkr1Pos[2] = x1.z(); 
+        m_ntuple.m_tkr1Dir[0] = t1.x(); 
+        m_ntuple.m_tkr1Dir[1] = t1.y(); 
+        m_ntuple.m_tkr1Dir[2] = t1.z(); 
+
         m_ntuple.m_tkr1EndPos[0] = endPos.x();
         m_ntuple.m_tkr1EndPos[1] = endPos.y();
         m_ntuple.m_tkr1EndPos[2] = endPos.z();
@@ -259,6 +269,13 @@ void RootAnalyzer::analyzeReconTree()
         m_ntuple.m_tkr1EndDir[1] = -1.0*endSlope.y();
         m_ntuple.m_tkr1EndDir[2] = -1.0*endSlope.z();
       } else {
+        m_ntuple.m_tkr2Pos[0] = x1.x(); 
+        m_ntuple.m_tkr2Pos[1] = x1.y(); 
+        m_ntuple.m_tkr2Pos[2] = x1.z(); 
+        m_ntuple.m_tkr2Dir[0] = t1.x(); 
+        m_ntuple.m_tkr2Dir[1] = t1.y(); 
+        m_ntuple.m_tkr2Dir[2] = t1.z(); 
+
         m_ntuple.m_tkr2EndPos[0] = endPos.x();
         m_ntuple.m_tkr2EndPos[1] = endPos.y();
         m_ntuple.m_tkr2EndPos[2] = endPos.z();
@@ -1339,6 +1356,22 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("TkrNumVertices", &(m_ntuple.m_nTkrVertices), "TkrNumVertices/I");
   m_tree->Branch("TkrTotalHits", &(m_ntuple.m_totalStripHits), "TkrTotalHits[16]/i");
   m_tree->Branch("TkrTotalClusters", &(m_ntuple.m_totalClusters), "TkrTotalClusters[16]/i");
+  m_tree->Branch("TkrTopToT", &(m_ntuple.m_topToT), "TkrTopToT[16]/F");
+
+  m_tree->Branch("Tkr1X0", &(m_ntuple.m_tkr1Pos[0]), "Tkr1X0/F");
+  m_tree->Branch("Tkr1Y0", &(m_ntuple.m_tkr1Pos[1]), "Tkr1Y0/F");
+  m_tree->Branch("Tkr1Z0", &(m_ntuple.m_tkr1Pos[2]), "Tkr1Z0/F");
+  m_tree->Branch("Tkr2X0", &(m_ntuple.m_tkr2Pos[0]), "Tkr2X0/F");
+  m_tree->Branch("Tkr2Y0", &(m_ntuple.m_tkr2Pos[1]), "Tkr2Y0/F");
+  m_tree->Branch("Tkr2Z0", &(m_ntuple.m_tkr2Pos[2]), "Tkr2Z0/F");
+
+  m_tree->Branch("Tkr1XDir", &(m_ntuple.m_tkr1Dir[0]), "Tkr1XDir/F");
+  m_tree->Branch("Tkr1YDir", &(m_ntuple.m_tkr1Dir[1]), "Tkr1YDir/F");
+  m_tree->Branch("Tkr1ZDir", &(m_ntuple.m_tkr1Dir[2]), "Tkr1ZDir/F");
+  m_tree->Branch("Tkr2XDir", &(m_ntuple.m_tkr2Dir[0]), "Tkr2XDir/F");
+  m_tree->Branch("Tkr2YDir", &(m_ntuple.m_tkr2Dir[1]), "Tkr2YDir/F");
+  m_tree->Branch("Tkr2ZDir", &(m_ntuple.m_tkr2Dir[2]), "Tkr2ZDir/F");
+
   m_tree->Branch("Tkr1NumHits", &(m_ntuple.m_nFit[0]), "Tkr1NumHits/I");
   m_tree->Branch("Tkr2NumHits", &(m_ntuple.m_nFit[1]), "Tkr2NumHits/I");
   m_tree->Branch("Tkr1Chisq", &(m_ntuple.m_chi2[0]), "Tkr1Chisq/F");
@@ -1355,7 +1388,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("Tkr2EndPos", &(m_ntuple.m_tkr2EndPos), "Tkr2EndPos[3]/F");
   m_tree->Branch("Tkr1EndDir", &(m_ntuple.m_tkr1EndDir), "Tkr1EndDir[3]/F");
   m_tree->Branch("Tkr2EndDir", &(m_ntuple.m_tkr2EndDir), "Tkr2EndDir[3]/F");
-  m_tree->Branch("TkrTopToT", &(m_ntuple.m_topToT), "TkrTopToT[16]/F");
+
 
 
 
