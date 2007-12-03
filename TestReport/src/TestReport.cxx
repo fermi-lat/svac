@@ -84,6 +84,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_trigger(0), 
     m_nBadEvts(0), 
     m_isLATTE(0),
+    m_bay10Layer0SplitDefault(0),
     m_firstGroundID(0),
     m_lastGroundID(0),
     m_previousGroundID(0),
@@ -96,7 +97,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_previousDataGramEpu0(0),
     m_previousPreviousDataGramEpu0(0),
     m_endRunDataGramEpu0(0),
-     m_fullDataGramEpu0(0),
+    m_fullDataGramEpu0(0),
     m_beginRunDataGramEpu0(0),
     m_counterDataDiagramsEpu1(0),
     m_nbrDataGramsEpu1(0),
@@ -106,7 +107,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_previousDataGramEpu1(0),
     m_previousPreviousDataGramEpu1(0),
     m_endRunDataGramEpu1(0),
-     m_fullDataGramEpu1(0),
+    m_fullDataGramEpu1(0),
     m_beginRunDataGramEpu1(0),
     m_counterDataDiagramsEpu2(0),
     m_nbrDataGramsEpu2(0),
@@ -140,9 +141,16 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_endCountDataGramSiu1(0),
     m_fullDataGramSiu1(0),
     m_beginRunDataGramSiu1(0),
-    m_nEvent(0), 
+    m_datagramGapsEPU0(0),
+    m_datagramGapsEPU1(0),
+    m_datagramGapsEPU2(0),
+    m_datagramGapsSIU0(0),
+    m_datagramGapsSIU1(0),
+    m_nEvent(0),
+    m_nEventNoPeriodic(0), 
     m_nbrPrescaled(0), 
-    m_nbrDeadZone(0), 
+    m_nbrDeadZone(0),
+    m_nbrDiscarded(0), 
     m_deltaSequenceNbrEvents(0),
     m_nTkrTrigger(0), 
     m_nEventBadStrip(0), 
@@ -154,14 +162,21 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_nEventBadTot(0), 
     m_startTime(0), 
     m_endTime(0),
-    m_liveTime(0), 
+    m_liveTime(0),
+    m_elapsedTime(0),
+    m_nbrEventsNormal(0),
+    m_nbrEvents4Range(0),
+    m_nbrEvents4RangeNonZS(0), 
     m_extendedCountersFlag(0),
+    m_backwardsTimeTone(0),
+    m_identicalTimeTones(0),
     m_nbrFlywheeling(0), 
     m_nbrIncomplete(0), 
     m_nbrMissingGps(0), 
     m_nbrMissingCpuPps(0), 
     m_nbrMissingLatPps(0), 
-    m_nbrMissingTimeTone(0), 
+    m_nbrMissingTimeTone(0),
+    m_nbrEarlyEvent(0), 
     m_nDigi(0), 
     m_nAcdOddParityError(0), 
     m_nAcdHeaderParityError(0),
@@ -183,6 +198,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
     m_eventGtccError(0),
     m_eventPhaseError(0),
     m_eventTimeoutError(0),
+    m_eventIsPeriodic(0),
     m_AcdTileIdOnePMT(0), 
     m_AcdTileIdOneVeto(0),
     m_AcdHitMap(0), 
@@ -219,6 +235,7 @@ TestReport::TestReport(const char* dir, const char* prefix,
   r += prefix;
   r += "_hist.root";
   m_outputFile = new TFile(r.c_str(), "RECREATE");
+  m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc"); // for TKR noise histograms
 
   std::fill((int*) m_nFec, ((int*) m_nFec)+g_nTower*g_nLayer*g_nView*2, 12);
 
@@ -392,11 +409,59 @@ TestReport::TestReport(const char* dir, const char* prefix,
   att.set("Number of events per datagram - SIU1","Number of events");
   setHistParameters(m_datagramsSIU1,att);
 
+  m_deltaTimeDGCTEvtEPU0 = new TH1F("deltaTimeDGCTEvtEPU0","CCSDS Secondary Header Time minus the event time for events from EPU0 [seconds]",50,0.0,1.0);
+  att.set("CCSDS time minus the event time for events from EPU0 [seconds]","Number of events");
+  setHistParameters(m_deltaTimeDGCTEvtEPU0,att);
+
+  m_deltaTimeDGCTEvtEPU1 = new TH1F("deltaTimeDGCTEvtEPU1","CCSDS Secondary Header Time minus the event time for events from EPU1 [seconds]",50,0.0,1.0);
+  att.set("CCSDS Time minus the event time for events from EPU1 [seconds]","Number of events");
+  setHistParameters(m_deltaTimeDGCTEvtEPU1,att);
+
+  m_deltaTimeDGCTEvtEPU2 = new TH1F("deltaTimeDGCTEvtEPU2","CCSDS Secondary Header Time minus the event time for events from EPU2 [seconds]",50,0.0,1.0);
+  att.set("CCSDS Time minus the event time for events from EPU2 [seconds]","Number of events");
+  setHistParameters(m_deltaTimeDGCTEvtEPU2,att);
+
+  m_deltaTimeDGCTEvtSIU0 = new TH1F("deltaTimeDGCTEvtSIU0","CCSDS Secondary Header Time minus the event time for events from SIU0 [seconds]",50,0.0,1.0);
+  att.set("CCSDS Time minus the event time for events from SIU0 [seconds]","Number of events");
+  setHistParameters(m_deltaTimeDGCTEvtSIU0,att);
+
+  m_deltaTimeDGCTEvtSIU1 = new TH1F("deltaTimeDGCTEvtSIU1","CCSDS Secondary Header Time minus the event time for events from SIU1 [seconds]",50,0.0,1.0);
+  att.set("CCSDS Time minus the event time for events from SIU1 [seconds]","Number of events");
+  setHistParameters(m_deltaTimeDGCTEvtSIU1,att);
+
+  m_deltaEventIDEPU0 = new TH1F("deltaEventIDEPU0","Delta Event ID For Successive Events From EPU0",50,0.0,3.0);
+  att.set("Delta Event ID For Successive Events From EPU0","Number of events");
+  setHistParameters(m_deltaEventIDEPU0,att);
+
+  m_deltaEventIDEPU1 = new TH1F("deltaEventIDEPU1","Delta Event ID For Successive Events From EPU1",50,0.0,3.0);
+  att.set("Delta Event ID For Successive Events From EPU1","Number of events");
+  setHistParameters(m_deltaEventIDEPU1,att);
+
+  m_deltaEventIDEPU2 = new TH1F("deltaEventIDEPU2","Delta Event ID For Successive Events From EPU2",50,0.0,3.0);
+  att.set("Delta Event ID For Successive Events From EPU2","Number of events");
+  setHistParameters(m_deltaEventIDEPU2,att);
+
+  m_deltaEventIDSIU0 = new TH1F("deltaEventIDSIU0","Delta Event ID For Successive Events From SIU0",50,0.0,3.0);
+  att.set("Delta Event ID For Successive Events From SIU0","Number of events");
+  setHistParameters(m_deltaEventIDSIU0,att);
+
+  m_deltaEventIDSIU1 = new TH1F("deltaEventIDSIU1","Delta Event ID For Successive Events From SIU1",50,0.0,3.0);
+  att.set("Delta Event ID For Successive Events From SIU1","Number of events");
+  setHistParameters(m_deltaEventIDSIU1,att);
+
 
 
   m_triggerRate = new TH1F("triggerRate","Trigger rate for 30 equally spaced time intervals",30,0,30);
   att.set("Trigger rate for 30 time intervals","Trigger rate [Hz]");
   setHistParameters(m_triggerRate,att);
+
+  m_triggerLivetimeRate = new TH1F("triggerLivetimeRate","Livetime corrected trigger rate for 30 equally spaced time intervals",30,0,30);
+  att.set("Livetime corrected trigger rate for 30 time intervals","Livetime corrected trigger rate [Hz]");
+  setHistParameters(m_triggerLivetimeRate,att);
+
+  m_livetimeRate = new TH1F("livetimeRate","Livetime for 30 equally spaced time intervals",30,0,30);
+  att.set("Livetime for 30 time intervals","Livetime [%]");
+  setHistParameters(m_livetimeRate,att);
 
   m_deadzoneRate = new TH1F("deadzoneRate","Deadzone rate for 30 equally spaced time intervals",30,0,30);
   att.set("Deadzone rate for 30 time intervals","Deadzone rate [Hz]");
@@ -442,6 +507,14 @@ TestReport::TestReport(const char* dir, const char* prefix,
   m_deltaWindowOpenTimeZoom = new TH1F("deltaWindowOpenTimeZoom", "Delta window open time in system clock ticks (nominally 50 ns) as measured by the GEM with a cut of 1500 ticks", 100, 0., 1500);
   att.set("Delta window open time (nominally 50 ns ticks)", "Number of events");
   setHistParameters(m_deltaWindowOpenTimeZoom, att);
+
+  m_tick20MHzDeviation = new TH1F("tick20MHzDeviation", "Number of ticks between successive 1-PPS - Deviation from 20 MHz", 100, 0., 1500);
+  att.set("Number of ticks between successive 1-PPS", "Number of events");
+  setHistParameters(m_tick20MHzDeviation, att);
+
+  m_tick20MHzDeviationZoom = new TH1F("tick20MHzDeviationZoom", "Number of ticks between successive 1-PPS - Deviation from 20 MHz - Zoomed", 100, 0., 200);
+  att.set("Number of ticks between successive 1-PPS - Zoom", "Number of events");
+  setHistParameters(m_tick20MHzDeviationZoom, att);
 
   m_timeIntervalElapsed = new TH1F("timeIntervalElapsed", "Elapsed time between adjacent events in milliseconds", 100, 0., 5.);
   att.set("Elapsed time between adjacent events (ms)", "Number of events");
@@ -577,12 +650,15 @@ TestReport::TestReport(const char* dir, const char* prefix,
   att.set("ACD GEM ID","MIPs");
   att.m_canRebin = false;
   setHistParameters(m_AcdMipMapB,att);
+ 
+  m_tkrNoiseOcc = new TkrNoiseOcc();
   
 }
 
 TestReport::~TestReport()
 {
   if(m_outputFile) {
+    m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
@@ -596,6 +672,8 @@ TestReport::~TestReport()
   delete m_digiFile;
   delete m_reconFile;
   delete m_report;
+
+  delete m_tkrNoiseOcc;
 }
 
 void TestReport::setHistParameters(TH1* h, const HistAttribute& att)
@@ -697,7 +775,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     m_digiBranch->SetAddress(&m_digiEvent);
   }
 
-  // Make sure we have the same number of event sin the input files:
+  // Make sure we have the same number of events in the input files:
   m_nEvent   = -1;
   int nMc    = -1;
   int nRecon = -1;
@@ -734,7 +812,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
  
 
   // For testing: awb
-  //int nEvent = 20000;
+  //int nEvent = 50000;
   //m_nEvent = nEvent;
 
   // List of datagrams:
@@ -757,6 +835,10 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 
   Int_t eventCounter = 0;
 
+  ULong64_t livetimeFirst = 0;
+  ULong64_t livetimeLast = 0;
+
+
   ULong64_t deadzoneCounter  = 0;
   ULong64_t discardedCounter = 0;
 
@@ -768,6 +850,15 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   ULong64_t previousSequence  = 0;
   ULong64_t previousPrescaled = 0;
 
+
+  // Time tones going backwards?
+  UInt_t previousTimeToneCurrentSec  = 0;
+  UInt_t previousTimeTonePreviousSec = 0;
+
+  UInt_t previousTimeToneCurrentTicks  = 0;
+  UInt_t previousTimeTonePreviousTicks = 0;
+
+
   //
   // Time tone counters and flags:
   //
@@ -777,12 +868,19 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   m_nbrMissingCpuPps   = 0;
   m_nbrMissingLatPps   = 0;
   m_nbrMissingTimeTone = 0;  
+  m_nbrEarlyEvent      = 0;
 
   UInt_t firstFlywheeling;
   UInt_t lastFlywheeling;
 
   // Extended counter flag:
   m_extendedCountersFlag = 0;
+
+  // Time tone going backwards flag:
+  m_backwardsTimeTone = 0;
+
+  // Current and previous time tones identical?
+  m_identicalTimeTones = 0;  
 
   // Ground ID changes?
   m_counterGroundID = 0;
@@ -797,12 +895,30 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   }
 
 
+  // Delta Event ID doe each CPU:
+  ULong64_t previousEventIDEPU0 = 0;
+  ULong64_t currentEventIDEPU0  = 0;
+
+  ULong64_t previousEventIDEPU1 = 0;
+  ULong64_t currentEventIDEPU1  = 0;
+
+  ULong64_t previousEventIDEPU2 = 0;
+  ULong64_t currentEventIDEPU2  = 0;
+
+  ULong64_t previousEventIDSIU0 = 0;
+  ULong64_t currentEventIDSIU0  = 0;
+
+  ULong64_t previousEventIDSIU1 = 0;
+  ULong64_t currentEventIDSIU1  = 0;
+
+
   // Look at first and last event:
   if(m_digiFile) {
     m_digiBranch->GetEntry(0);
     ULong64_t gemSequenceFirst  = m_digiEvent->getMetaEvent().scalers().sequence();
     ULong64_t gemPrescaledFirst = m_digiEvent->getMetaEvent().scalers().prescaled();
     ULong64_t gemDeadZoneFirst  = m_digiEvent->getMetaEvent().scalers().deadzone();
+    ULong64_t gemDiscardedFirst = m_digiEvent->getMetaEvent().scalers().discarded();
     ULong64_t liveTimeFirst     = m_digiEvent->getMetaEvent().scalers().livetime();
     elapsedTimeFirst            = m_digiEvent->getMetaEvent().scalers().elapsed();
     firstFlywheeling            = m_digiEvent->getMetaEvent().time().current().flywheeling();
@@ -814,6 +930,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     ULong64_t gemSequenceLast  = m_digiEvent->getMetaEvent().scalers().sequence();
     ULong64_t gemPrescaledLast = m_digiEvent->getMetaEvent().scalers().prescaled();
     ULong64_t gemDeadZoneLast  = m_digiEvent->getMetaEvent().scalers().deadzone();
+    ULong64_t gemDiscardedLast = m_digiEvent->getMetaEvent().scalers().discarded();
     ULong64_t liveTimeLast     = m_digiEvent->getMetaEvent().scalers().livetime();
     elapsedTimeLast            = m_digiEvent->getMetaEvent().scalers().elapsed();
     lastFlywheeling            = m_digiEvent->getMetaEvent().time().current().flywheeling();
@@ -828,6 +945,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     // Context information:
     m_nbrPrescaled           = gemPrescaledLast - gemPrescaledFirst;
     m_nbrDeadZone            = gemDeadZoneLast  - gemDeadZoneFirst;
+    m_nbrDiscarded           = gemDiscardedLast - gemDiscardedFirst;
     m_deltaSequenceNbrEvents = m_nEvent - (gemSequenceLast-gemSequenceFirst + 1);
 
     // Livetime: 
@@ -838,6 +956,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
     } else {
       m_liveTime = -1.0;
     }
+    m_elapsedTime = elapsedTimeLast - elapsedTimeFirst;
 
     // For trigger rates in time intervals:
     deltaTimeInterval = (elapsedTimeLast - elapsedTimeFirst)/nbrTimeIntervals;
@@ -880,7 +999,16 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   m_nbrEventsDataGramsSiu0 = 0;
   m_nbrEventsDataGramsSiu1 = 0;
 
+  int previousDatagramGapsEPU0 = 0;
+  int previousDatagramGapsEPU1 = 0;
+  int previousDatagramGapsEPU2 = 0;
+  int previousDatagramGapsSIU0 = 0;
+  int previousDatagramGapsSIU1 = 0;
 
+  //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval)
+  m_tkrNoiseOcc->initAnalysis(m_nEvent, 1000);
+  m_tkrNoiseOcc->setDigiEvtPtr(m_digiEvent);
+  
   // Loop over events:
   for(int iEvent = 0; iEvent != m_nEvent; ++iEvent) {
 
@@ -905,6 +1033,53 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       m_digiBranch->GetEntry(iEvent);
 
       analyzeDigiTree();
+      m_tkrNoiseOcc->anaDigiEvt(); // TKR noise analysis
+
+      // Gaps in datagram sequence number?
+      int mycpuNumber      = m_digiEvent->getMetaEvent().datagram().crate(); 
+      int myDatagramSecNbr = m_digiEvent->getMetaEvent().datagram().datagrams();  
+      if (mycpuNumber==enums::Lsf::Epu0) {
+        if ((myDatagramSecNbr != previousDatagramGapsEPU0) && ((myDatagramSecNbr-previousDatagramGapsEPU0)!=1)) {
+          m_datagramGapsEPU0++;
+  	  std::cout << "   " << std::endl; 
+	  std::cout << "Warning! There was a gap in the datagram sequence number for EPU0! " << iEvent << "   " << myDatagramSecNbr << "   " << previousDatagramGapsEPU0 << std::endl;  
+	}
+        previousDatagramGapsEPU0 = myDatagramSecNbr;
+      }
+      if (mycpuNumber==enums::Lsf::Epu1) {
+        if ((myDatagramSecNbr != previousDatagramGapsEPU1) && ((myDatagramSecNbr-previousDatagramGapsEPU1)!=1)) {
+          m_datagramGapsEPU1++;
+  	  std::cout << "   " << std::endl; 
+	  std::cout << "Warning! There was a gap in the datagram sequence number for EPU1! " << iEvent << "   " << myDatagramSecNbr << "   " << previousDatagramGapsEPU1 << std::endl;  
+	}
+        previousDatagramGapsEPU1 = myDatagramSecNbr;
+      }
+      if (mycpuNumber==enums::Lsf::Epu2) {
+        if ((myDatagramSecNbr != previousDatagramGapsEPU2) && ((myDatagramSecNbr-previousDatagramGapsEPU2)!=1)) {
+          m_datagramGapsEPU2++;
+  	  std::cout << "   " << std::endl; 
+	  std::cout << "Warning! There was a gap in the datagram sequence number for EPU2! " << iEvent << "   " << myDatagramSecNbr << "   " << previousDatagramGapsEPU2 << std::endl;  
+	}
+        previousDatagramGapsEPU2 = myDatagramSecNbr;
+      }
+      if (mycpuNumber==enums::Lsf::Siu0) {
+        if ((myDatagramSecNbr != previousDatagramGapsSIU0) && ((myDatagramSecNbr-previousDatagramGapsSIU0)!=1) && myDatagramSecNbr!=0) {
+          m_datagramGapsSIU0++;
+  	  std::cout << "   " << std::endl; 
+	  std::cout << "Warning! There was a gap in the datagram sequence number for SIU0! " << iEvent << "   " << myDatagramSecNbr << "   " << previousDatagramGapsSIU0 << std::endl;  
+	}
+        previousDatagramGapsSIU0 = myDatagramSecNbr;
+      }
+      if (mycpuNumber==enums::Lsf::Siu1) {
+        if ((myDatagramSecNbr != previousDatagramGapsSIU1) && ((myDatagramSecNbr-previousDatagramGapsSIU1)!=1) && myDatagramSecNbr!=0) {
+          m_datagramGapsSIU1++;
+  	  std::cout << "   " << std::endl; 
+	  std::cout << "Warning! There was a gap in the datagram sequence number for SIU1! " << iEvent << "   " << myDatagramSecNbr << "   " << previousDatagramGapsSIU1 << std::endl;  
+ 	}
+        previousDatagramGapsSIU1 = myDatagramSecNbr;
+     }                
+
+
 
 
       // Events per datagram: Only for EPUs and SIUs!      
@@ -1170,11 +1345,12 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
               p++;
               if (diff > 1) {
                 m_counterDataDiagramsEpu0 = m_counterDataDiagramsEpu0 + diff - 1;
+  	        std::cout << "   " << std::endl; 
 	        std::cout << "Warning! We dropped " << (diff - 1) << " datagram(s) before datagram " << (*p) << " for EPU0!" << std::endl;
 	      }
 	    }
  	  } 
-	  //std::cout << "AWB: Datagrams for EPU0 are " << std::endl;
+	  //std::cout << "Datagrams for EPU0 are " << std::endl;
 	  //std::copy(listDataGramsEpu0.begin(),listDataGramsEpu0.end(),std::ostream_iterator<int>(std::cout,"\n"));
         }
 
@@ -1195,11 +1371,12 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
               p++;
               if (diff > 1) {
                 m_counterDataDiagramsEpu1 = m_counterDataDiagramsEpu1 + diff - 1;
+  	        std::cout << "   " << std::endl; 
 	        std::cout << "Warning! We dropped " << (diff - 1) << " datagram(s) before datagram " << (*p) << " for EPU1!" << std::endl;
 	      }
 	    }
  	  } 
-	  //std::cout << "AWB: Datagrams for EPU1 are " << std::endl;
+	  //std::cout << "Datagrams for EPU1 are " << std::endl;
 	  //std::copy(listDataGramsEpu1.begin(),listDataGramsEpu1.end(),std::ostream_iterator<int>(std::cout,"\n"));
         }
 
@@ -1220,11 +1397,12 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
               p++;
               if (diff > 1) {
                 m_counterDataDiagramsEpu2 = m_counterDataDiagramsEpu2 + diff - 1;
+  	        std::cout << "   " << std::endl; 
 	        std::cout << "Warning! We dropped " << (diff - 1) << " datagram(s) before datagram " << (*p) << " for EPU2!" << std::endl;
 	      }
 	    }
  	  } 
-	  //std::cout << "AWB: Datagrams for EPU2 are " << std::endl;
+	  //std::cout << "Datagrams for EPU2 are " << std::endl;
 	  //std::copy(listDataGramsEpu2.begin(),listDataGramsEpu2.end(),std::ostream_iterator<int>(std::cout,"\n"));
         }
 
@@ -1245,11 +1423,12 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
               p++;
               if (diff > 1) {
                 m_counterDataDiagramsSiu0 = m_counterDataDiagramsSiu0 + diff - 1;
+  	        std::cout << "   " << std::endl; 
 	        std::cout << "Warning! We dropped " << (diff - 1) << " datagram(s) before datagram " << (*p) << " for SIU0!" << std::endl;
 	      }
 	    }
  	  } 
-	  //std::cout << "AWB: Datagrams for SIU0 are " << std::endl;
+	  //std::cout << "Datagrams for SIU0 are " << std::endl;
 	  //std::copy(listDataGramsSiu0.begin(),listDataGramsSiu0.end(),std::ostream_iterator<int>(std::cout,"\n"));
         }
 
@@ -1270,11 +1449,12 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
               p++;
               if (diff > 1) {
                 m_counterDataDiagramsSiu1 = m_counterDataDiagramsSiu1 + diff - 1;
+  	        std::cout << "   " << std::endl; 
 	        std::cout << "Warning! We dropped " << (diff - 1) << " datagram(s) before datagram " << (*p) << " for SIU1!" << std::endl;
 	      }
 	    }
  	  } 
-	  //std::cout << "AWB: Datagrams for SIU1 are " << std::endl;
+	  //std::cout << "Datagrams for SIU1 are " << std::endl;
 	  //std::copy(listDataGramsSiu1.begin(),listDataGramsSiu1.end(),std::ostream_iterator<int>(std::cout,"\n"));
         }
       }
@@ -1304,10 +1484,45 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       if (iEvent > 0) {
         if (thisGroundID != m_previousGroundID) {
           m_counterGroundID++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The Ground ID changed from " << m_previousGroundID << " to " << thisGroundID << " when going from event " << (iEvent-1) << " to " << iEvent << std::endl;
 	}
       }
       m_previousGroundID = thisGroundID;
+
+
+      // Time tones ging backwards?
+      UInt_t thisTimeToneCurrentSec  = m_digiEvent->getMetaEvent().time().current().timeSecs();
+      UInt_t thisTimeTonePreviousSec = m_digiEvent->getMetaEvent().time().previous().timeSecs();
+
+      UInt_t thisTimeToneCurrentTicks  = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
+      UInt_t thisTimeTonePreviousTicks = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
+   
+      if ( (thisTimeToneCurrentSec < previousTimeToneCurrentSec) || (thisTimeTonePreviousSec < previousTimeTonePreviousSec)) {
+        m_backwardsTimeTone++;
+	std::cout << "   " << std::endl; 
+	std::cout << "Warning! Time tones seem to go backwards in event " << iEvent << " with GEM ID " << m_digiEvent->getMetaEvent().scalers().sequence() << std::endl;
+	std::cout << "Current and previous time tones seconds are: " << thisTimeToneCurrentSec << "   " << previousTimeToneCurrentSec << "   " 
+                  << thisTimeTonePreviousSec << "   " << previousTimeTonePreviousSec << std::endl;
+	std::cout << "Current and previous time tones ticks are: " << thisTimeToneCurrentTicks << "   " << previousTimeToneCurrentTicks << "   " 
+                  << thisTimeTonePreviousTicks << "   " << previousTimeTonePreviousTicks << std::endl;
+      }
+      previousTimeToneCurrentSec    = thisTimeToneCurrentSec;
+      previousTimeTonePreviousSec   = thisTimeTonePreviousSec;
+      previousTimeToneCurrentTicks  = thisTimeToneCurrentTicks;
+      previousTimeTonePreviousTicks = thisTimeTonePreviousTicks;
+
+
+      // Current and previous time tones identical?
+      if (thisTimeToneCurrentSec==thisTimeTonePreviousSec && thisTimeToneCurrentTicks==thisTimeTonePreviousTicks) {
+        m_identicalTimeTones++;
+	std::cout << "   " << std::endl; 
+	std::cout << "Warning! Current and previous time tones are identical in event " << iEvent << " with GEM ID " << m_digiEvent->getMetaEvent().scalers().sequence() << std::endl;
+
+	std::cout << "Current and previous time tones are both: " << thisTimeToneCurrentSec << "   " << thisTimeToneCurrentTicks << std::endl;
+      }   
+
+ 
 
       // Time tone counters and flags:
       if (m_digiEvent->getMetaEvent().time().current().incomplete() != 0) {
@@ -1325,6 +1540,10 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       if (m_digiEvent->getMetaEvent().time().current().missingTimeTone() != 0) {
         m_nbrMissingTimeTone++;
       }
+      if (m_digiEvent->getMetaEvent().time().current().earlyEvent() != 0) {
+        m_nbrEarlyEvent++;
+      }
+     
 
       // Trigger/deadzone rates per time interval:
       eventCounter++;
@@ -1337,12 +1556,19 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       ULong64_t thisPrescaled = m_digiEvent->getMetaEvent().scalers().prescaled();
       ULong64_t thisSequence  = m_digiEvent->getMetaEvent().scalers().sequence();
 
+      // For livetime calculations:
+      if (livetimeFirst == 0) {
+        livetimeFirst = thisLiveTime;
+      }       
+
+
       if (iEvent > 0) { 
         Long64_t deltaDeadZone = thisDeadZone - previousDeadZone; 
         deadzoneCounter         = deadzoneCounter + deltaDeadZone;        
 
         if (deltaDeadZone < 0) { 
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended DeadZone counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousDeadZone << " to " << thisDeadZone << " i.e. a change of " << deltaDeadZone << " ticks!" << std::endl;
 	}
@@ -1351,6 +1577,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         discardedCounter         = discardedCounter + deltaDiscarded;
         if (deltaDiscarded < 0) { 
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended Discarded counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousDiscarded << " to " << thisDiscarded << " i.e. a change of " << deltaDiscarded << " ticks!" << std::endl;
 	}
@@ -1359,6 +1586,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_timeIntervalElapsed->Fill(0.00005*deltaElapsed);
         if (deltaElapsed < 0) {
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended Elapsed counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousElapsed << " to " << thisElapsed << " i.e. a change of " << deltaElapsed << " ticks!" << std::endl;
 	}
@@ -1366,6 +1594,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 	Long64_t deltaLiveTime = thisLiveTime - previousLiveTime;
         if (deltaLiveTime < 0) {
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended Livetime counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousLiveTime << " to " << thisLiveTime << " i.e. a change of " << deltaLiveTime << " ticks!" << std::endl;
 	}
@@ -1373,6 +1602,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 	Long64_t deltaPrescaled = thisPrescaled - previousPrescaled;
         if (deltaPrescaled < 0) {
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended Prescaled counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousPrescaled << " to " << thisPrescaled << " i.e. a change of " << deltaPrescaled << " ticks!" << std::endl;
 	}
@@ -1380,6 +1610,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
 	Long64_t deltaSequence = thisSequence - previousSequence;
         if (deltaSequence < 0) {
           m_extendedCountersFlag++;
+  	  std::cout << "   " << std::endl; 
 	  std::cout << "Warning! The extended Sequence counter DECREASED from event " << (iEvent-1) << " to event " << iEvent << std::endl;
 	  std::cout << "         It went from " << previousSequence << " to " << thisSequence << " i.e. a change of " << deltaSequence << " ticks!" << std::endl;
 	}
@@ -1400,12 +1631,32 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       // Trigger rates:
       if (deltaTime >= cutTime) {
         float rate;
+        float rateLivetimeCorrected;
+        float liveTimeFraction;
         if (deltaTimeInterval != 0) {
           rate = (float) eventCounter/ (float) (deltaTimeInterval * 50 * std::pow(10.0, -9));
+
+          // Livetime:
+          livetimeLast          = thisLiveTime;
+          liveTimeFraction      = (livetimeLast - livetimeFirst) / (float) (deltaTimeInterval);
+          
+          if (liveTimeFraction <= 0) {
+  	    std::cout << "   " << std::endl; 
+	    std::cout << "Problem! The livetime is coming out as " << liveTimeFraction << "   " << livetimeLast << "   " << livetimeFirst << "   " << deltaTimeInterval << "   " << " in event "  
+                      << iEvent << std::endl;
+            rateLivetimeCorrected = -1.0;
+	  } else { 
+            rateLivetimeCorrected = rate / liveTimeFraction;
+	  }
+          liveTimeFraction = liveTimeFraction * 100.0;
 	} else {
-	  rate = -1.0;
+	  rate                  = -1.0;
+          rateLivetimeCorrected = -1.0;
+	  liveTimeFraction      = -1.0;
 	}
         m_triggerRate->Fill(intervalCounter-1,rate);
+        m_triggerLivetimeRate->Fill(intervalCounter-1,rateLivetimeCorrected);
+        m_livetimeRate->Fill(intervalCounter-1,liveTimeFraction);
 
 	// Deadzone rates:
         if (deltaTimeInterval != 0) {
@@ -1429,6 +1680,9 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         eventCounter     = 0;
         deadzoneCounter  = 0;
         discardedCounter = 0;
+
+        livetimeFirst = 0;
+        livetimeLast  = 0;
       }
 
 
@@ -1468,6 +1722,161 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       previousGemDeadzone  = thisGemDeadzone;
 
 
+      // Only for FSW:
+      if (m_isLATTE != 1) {
+        
+        //
+        // Time from Mission elapsed time to Unix time:
+        //
+        Int_t deltaTimeUgly = 978307200; 
+
+        double myTimeStamp;
+
+        // LAT nominal system clock:
+	double LATSystemClock = 20000000.0;
+
+	// Rollover offset of 25 bit GEM counter:
+        double RollOver = 33554432.0;
+
+	// Number of ticks between current event and the current 1-PPS:
+	double tmpTicks1 = double (m_digiEvent->getMetaEvent().time().timeTicks()) - double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks());
+
+	// Rollover? Should never be more than one! 
+	if (tmpTicks1 < 0) {
+	  tmpTicks1 = tmpTicks1 + RollOver;
+	}
+
+	// Check that the two TimeTones are OK:
+	if (!(m_digiEvent->getMetaEvent().time().current().incomplete()) &&
+            !(m_digiEvent->getMetaEvent().time().current().flywheeling()) &&
+	    !(m_digiEvent->getMetaEvent().time().current().missingCpuPps()) &&
+	    !(m_digiEvent->getMetaEvent().time().current().missingLatPps()) &&
+	    !(m_digiEvent->getMetaEvent().time().current().missingTimeTone()) &&
+	    !(m_digiEvent->getMetaEvent().time().previous().incomplete()) &&
+	    !(m_digiEvent->getMetaEvent().time().previous().flywheeling()) &&
+	    !(m_digiEvent->getMetaEvent().time().previous().missingCpuPps()) &&
+	    !(m_digiEvent->getMetaEvent().time().previous().missingLatPps()) &&
+	    !(m_digiEvent->getMetaEvent().time().previous().missingTimeTone()) &&
+	    // Just in case (to protect from 1/0):
+            ((m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) != (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks())) &&
+            // If more than one second, must use nominal LAT clock value:
+	    ( (m_digiEvent->getMetaEvent().time().current().timeSecs() - m_digiEvent->getMetaEvent().time().previous().timeSecs()) == 1)) {
+
+	  // Then use full formula for correcting system clock drift using last two TimeTones i.e. extrapolation
+	  double tmpTicks2 = double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) - double (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks());
+
+	  // Rollover? Should never be more than one rollover! 
+	  if (tmpTicks2 < 0) {
+	    tmpTicks2 = tmpTicks2 + RollOver;
+	  }
+
+	  // Timestamp:
+	  myTimeStamp = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/tmpTicks2);
+	  myTimeStamp = myTimeStamp + deltaTimeUgly;
+
+	} else {
+
+	  // Cannot use TimeTone(s) - will assume nominal value for the LAT system clock                                                                                              
+   	  myTimeStamp = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/LATSystemClock);
+	  myTimeStamp = myTimeStamp + deltaTimeUgly;
+	}
+        double myTimeDiff = m_digiEvent->getCcsds().getUtc() - myTimeStamp;
+        if (myTimeDiff < 0) {
+	  std::cout.setf(ios::fixed);
+	  std::cout << "Problem! Time difference is negative in event " << iEvent << "  " << myTimeDiff << "   " << std::setprecision(20) << (m_digiEvent->getCcsds().getUtc()) 
+                    << "   " << myTimeStamp << std::setprecision(5) << std::endl;
+	}
+
+	int mycpuNumber=  m_digiEvent->getMetaEvent().datagram().crate();
+	if (mycpuNumber>-1 && mycpuNumber<5) {
+	  if (cpuNumber==enums::Lsf::Epu0) {
+	    m_deltaTimeDGCTEvtEPU0->Fill(myTimeDiff);
+          }
+	  if (mycpuNumber==enums::Lsf::Epu1) {
+	    m_deltaTimeDGCTEvtEPU1->Fill(myTimeDiff);
+          }
+	  if (mycpuNumber==enums::Lsf::Epu2) {
+	    m_deltaTimeDGCTEvtEPU2->Fill(myTimeDiff);
+          }
+	  if (mycpuNumber==enums::Lsf::Siu0) {
+	    m_deltaTimeDGCTEvtSIU0->Fill(myTimeDiff);
+          }
+	  if (mycpuNumber==enums::Lsf::Siu1) {
+	    m_deltaTimeDGCTEvtSIU1->Fill(myTimeDiff);
+          }
+	}
+
+        // Delta Event ID:
+	if (mycpuNumber>-1 && mycpuNumber<5) {
+
+	  if (mycpuNumber==enums::Lsf::Epu0) {
+            currentEventIDEPU0 = m_digiEvent->getMetaEvent().scalers().sequence();
+            if (previousEventIDEPU0 != 0) {	
+              if (currentEventIDEPU0 <= previousEventIDEPU0) {
+  	        std::cout << "   " << std::endl; 
+	        std::cout << "Warning! Problems with the delta Event ID in EPU0! " << iEvent << "   " << currentEventIDEPU0 << "   " << previousEventIDEPU0 << std::endl;
+	      }
+              double DeltaEventID = double (currentEventIDEPU0) - double (previousEventIDEPU0);
+              m_deltaEventIDEPU0->Fill(DeltaEventID);
+	    }
+            previousEventIDEPU0 = currentEventIDEPU0;
+	  }
+
+	  if (mycpuNumber==enums::Lsf::Epu1) {
+            currentEventIDEPU1 = m_digiEvent->getMetaEvent().scalers().sequence();
+            if (previousEventIDEPU1 != 0) {	
+              if (currentEventIDEPU1 <= previousEventIDEPU1) {
+  	        std::cout << "   " << std::endl; 
+	        std::cout << "Warning! Problems with the delta Event ID in EPU1! " << iEvent << "   " << currentEventIDEPU1 << "   " << previousEventIDEPU1 << std::endl;
+	      }
+              double DeltaEventID = double (currentEventIDEPU1) - double (previousEventIDEPU1);
+              m_deltaEventIDEPU1->Fill(DeltaEventID);
+	    }
+            previousEventIDEPU1 = currentEventIDEPU1;
+	  }
+
+	  if (mycpuNumber==enums::Lsf::Epu2) {
+            currentEventIDEPU2 = m_digiEvent->getMetaEvent().scalers().sequence();
+            if (previousEventIDEPU2 != 0) {	
+              if (currentEventIDEPU2 <= previousEventIDEPU2) {
+  	        std::cout << "   " << std::endl; 
+	        std::cout << "Warning! Problems with the delta Event ID in EPU2! " << iEvent << "   " << currentEventIDEPU2 << "   " << previousEventIDEPU2 << std::endl;
+	      } 
+              double DeltaEventID = double (currentEventIDEPU2) - double (previousEventIDEPU2);
+              m_deltaEventIDEPU2->Fill(DeltaEventID);
+	    }
+            previousEventIDEPU2 = currentEventIDEPU2;
+	  }
+
+	  if (mycpuNumber==enums::Lsf::Siu0) {
+            currentEventIDSIU0 = m_digiEvent->getMetaEvent().scalers().sequence();
+            if (previousEventIDSIU0 != 0) {	
+              if (currentEventIDSIU0 <= previousEventIDSIU0) {
+  	        std::cout << "   " << std::endl; 
+	        std::cout << "Warning! Problems with the delta Event ID in SIU0! " << iEvent << "   " << currentEventIDSIU0 << "   " << previousEventIDSIU0 << std::endl;
+	      } 
+              double DeltaEventID = double (currentEventIDSIU0) - double (previousEventIDSIU0);
+              m_deltaEventIDSIU0->Fill(DeltaEventID);
+	    }
+            previousEventIDSIU0 = currentEventIDSIU0;
+	  }
+
+	  if (mycpuNumber==enums::Lsf::Siu1) {
+            currentEventIDSIU1 = m_digiEvent->getMetaEvent().scalers().sequence();
+            if (previousEventIDSIU1 != 0) {	
+              if (currentEventIDSIU1 <= previousEventIDSIU1) {
+  	        std::cout << "   " << std::endl; 
+	        std::cout << "Warning! Problems with the delta Event ID in SIU1! " << iEvent << "   " << currentEventIDSIU1 << "   " << previousEventIDSIU1 << std::endl;
+	      } 
+              double DeltaEventID = double (currentEventIDSIU1) - double (previousEventIDSIU1);
+              m_deltaEventIDSIU1->Fill(DeltaEventID);
+	    }
+            previousEventIDSIU1 = currentEventIDSIU1;
+	  }
+	}
+      }
+
+
       // PPC time:
       UInt_t uPpcT = m_digiEvent->getEbfUpperPpcTimeBase();
       UInt_t lPpcT = m_digiEvent->getEbfLowerPpcTimeBase();
@@ -1475,24 +1884,62 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       static UInt_t prevLPpcT = lPpcT;
 
       //
-      // Time from Mission elapsed time to Unix time and then from PDT to GMT:
+      // Time from Mission elapsed time to Unix time:
       //
-      Int_t deltaTimeUgly = 978307200 + 25200; 
+      Int_t deltaTimeUgly = 978307200;
 
       if(iEvent == 0) {
         if (m_isLATTE == 1) {
 	  m_startTime = m_digiEvent->getEbfTimeSec();
         } else {
-	  UInt_t myTimeStamp1 = m_digiEvent->getMetaEvent().time().current().timeSecs();
-	  UInt_t myTimeStamp2 = m_digiEvent->getMetaEvent().time().timeTicks();
-	  UInt_t myTimeStamp3 = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
-	  UInt_t myTimeStamp4 = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
-          
-          // This is overkill:
-          if (myTimeStamp3 != myTimeStamp4) {
-            m_startTime = myTimeStamp1 + (myTimeStamp2/(myTimeStamp3-myTimeStamp4)) + deltaTimeUgly;
+
+	  // LAT nominal system clock:
+	  double LATSystemClock = 20000000.0;
+
+	  // Rollover offset of 25 bit GEM counter:
+          double RollOver = 33554432.0;
+
+          // Number of ticks between current event and the current 1-PPS:
+	  double tmpTicks1 = double (m_digiEvent->getMetaEvent().time().timeTicks()) - double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks());
+
+	  // Rollover? Should never be more than one! 
+	  if (tmpTicks1 < 0) {
+	    tmpTicks1 = tmpTicks1 + RollOver;
+	  }
+          	  
+	  // Check that the two TimeTones are OK:
+	  if (!(m_digiEvent->getMetaEvent().time().current().incomplete()) &&
+              !(m_digiEvent->getMetaEvent().time().current().flywheeling()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingCpuPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingLatPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingTimeTone()) &&
+              !(m_digiEvent->getMetaEvent().time().previous().incomplete()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().flywheeling()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingCpuPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingLatPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingTimeTone()) &&
+              // Just in case (to protect from 1/0):
+              ((m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) != (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks())) &&
+              // If more than one second, must use nominal value of LAT clock:
+	      ( (m_digiEvent->getMetaEvent().time().current().timeSecs() - m_digiEvent->getMetaEvent().time().previous().timeSecs()) == 1)) { 
+
+ 	    // Then use full formula for correcting system clock drift using last two TimeTones i.e. extrapolation
+	    double tmpTicks2 = double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) - double (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks());
+
+	    // Rollover? Should never be more than one rollover! 
+	    if (tmpTicks2 < 0) {
+ 	      tmpTicks2 = tmpTicks2 + RollOver;
+	    }
+
+	    // Timestamp: 
+	    m_startTime = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/tmpTicks2);
+            m_startTime = m_startTime + deltaTimeUgly;
+
 	  } else {
-            m_startTime = myTimeStamp1 + deltaTimeUgly;
+	  	  
+	    // Cannot use TimeTone(s) - will assume nominal value for the LAT system clock
+            m_startTime = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/LATSystemClock);
+            m_startTime = m_startTime + deltaTimeUgly;
 	  }
 	}
       }
@@ -1527,17 +1974,57 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
       if(iEvent == m_nEvent-1) {
         if (m_isLATTE == 1) { 
 	  m_endTime = m_digiEvent->getEbfTimeSec();
-	} else {
-	  UInt_t myTimeStamp1 = m_digiEvent->getMetaEvent().time().current().timeSecs();
-	  UInt_t myTimeStamp2 = m_digiEvent->getMetaEvent().time().timeTicks();
-	  UInt_t myTimeStamp3 = m_digiEvent->getMetaEvent().time().current().timeHack().ticks();
-	  UInt_t myTimeStamp4 = m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
 
-	  // This is still overkill:
-          if (myTimeStamp3 != myTimeStamp4) {
-            m_endTime = myTimeStamp1 + (myTimeStamp2/(myTimeStamp3-myTimeStamp4)) + deltaTimeUgly;
-          } else {
-            m_endTime = myTimeStamp1 + deltaTimeUgly;
+	} else {
+
+	  // LAT nominal system clock:
+	  double LATSystemClock = 20000000.0;
+
+	  // Rollover offset of 25 bit GEM counter:
+          double RollOver = 33554432.0;
+
+          // Number of ticks between current event and the current 1-PPS:
+	  double tmpTicks1 = double (m_digiEvent->getMetaEvent().time().timeTicks()) - double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks());
+
+	  // Rollover? Should never be more than one! 
+	  if (tmpTicks1 < 0) {
+	    tmpTicks1 = tmpTicks1 + RollOver;
+	  }
+          
+	  // Check that the two TimeTones are OK and different:
+	  if (!(m_digiEvent->getMetaEvent().time().current().incomplete()) &&
+              !(m_digiEvent->getMetaEvent().time().current().flywheeling()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingCpuPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingLatPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().current().missingTimeTone()) &&
+              !(m_digiEvent->getMetaEvent().time().previous().incomplete()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().flywheeling()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingCpuPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingLatPps()) &&
+	      !(m_digiEvent->getMetaEvent().time().previous().missingTimeTone()) &&
+              // Just in case (to protect from 1/0):
+              ((m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) != (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks())) &&
+	      // If more than one second, must use nominal value:
+	      ( (m_digiEvent->getMetaEvent().time().current().timeSecs() - m_digiEvent->getMetaEvent().time().previous().timeSecs()) == 1)) { 
+
+ 	    // Then use full formula for correcting system clock drift using last two TimeTones i.e. extrapolation
+	    double tmpTicks2 = double (m_digiEvent->getMetaEvent().time().current().timeHack().ticks()) - double (m_digiEvent->getMetaEvent().time().previous().timeHack().ticks());
+
+	    // Rollover? Should never be more than one rollover! 
+	    if (tmpTicks2 < 0) {
+	      tmpTicks2 = tmpTicks2 + RollOver;
+	    }
+
+
+	    // Timestamp: 
+	    m_endTime = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/tmpTicks2);
+            m_endTime = m_endTime + deltaTimeUgly;
+
+	  } else {
+
+	    // Cannot use TimeTone(s) - will assume nominal value for the LAT system clock:
+	    m_endTime = double (m_digiEvent->getMetaEvent().time().current().timeSecs()) + (tmpTicks1/LATSystemClock);
+            m_endTime = m_endTime + deltaTimeUgly;
 	  }
 	}
       }
@@ -1556,6 +2043,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   if (lastDatagramEventEpu0 != -1) {
     m_digiBranch->GetEntry(lastDatagramEventEpu0);
     if (m_digiEvent->getMetaEvent().datagram().crate() != enums::Lsf::Epu0) {
+      std::cout << "   " << std::endl; 
       std::cout << "Anders! You fucked up! This should have been been from EPU0, but it's not! It is " << m_digiEvent->getMetaEvent().datagram().crate() << std::endl;
     } else {
       m_endRunDataGramEpu0 = 0;
@@ -1569,6 +2057,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_fullDataGramEpu0 = 1;
       }
       if (m_endRunDataGramEpu0==0 && m_fullDataGramEpu0==0) {
+  	std::cout << "   " << std::endl; 
         std::cout << "Warning! The last datagram for EPU0 was not closed because we reached end of run or because it was full! The datagram closing reason was " << lastReasonDataGram
 	  	  << " and the datagram closing action was " << lastActionDataGram << std::endl;
       }
@@ -1579,6 +2068,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   if (lastDatagramEventEpu1 != -1) {
     m_digiBranch->GetEntry(lastDatagramEventEpu1);
     if (m_digiEvent->getMetaEvent().datagram().crate() != enums::Lsf::Epu1) {
+      std::cout << "   " << std::endl; 
       std::cout << "Anders! You fucked up! This should have been been from EPU1, but it's not! It is " << m_digiEvent->getMetaEvent().datagram().crate() << std::endl;
     } else {
       m_endRunDataGramEpu1 = 0;
@@ -1592,6 +2082,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_fullDataGramEpu1 = 1;
       }
       if (m_endRunDataGramEpu1==0 && m_fullDataGramEpu1==0) {
+  	std::cout << "   " << std::endl; 
         std::cout << "Warning! The last datagram for EPU1 was not closed because we reached end of run or because it was full! The datagram closing reason was " << lastReasonDataGram
 	  	  << " and the datagram closing action was " << lastActionDataGram << std::endl;
       }
@@ -1602,6 +2093,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   if (lastDatagramEventEpu2 != -1) {
     m_digiBranch->GetEntry(lastDatagramEventEpu2);
     if (m_digiEvent->getMetaEvent().datagram().crate() != enums::Lsf::Epu2) {
+      std::cout << "   " << std::endl; 
       std::cout << "Anders! You fucked up! This should have been been from EPU2, but it's not! It is " << m_digiEvent->getMetaEvent().datagram().crate() << std::endl;
     } else {
       m_endRunDataGramEpu2 = 0;
@@ -1615,6 +2107,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_fullDataGramEpu2 = 1;
       }
       if (m_endRunDataGramEpu2==0 && m_fullDataGramEpu2==0) {
+  	std::cout << "   " << std::endl; 
         std::cout << "Warning! The last datagram for EPU2 was not closed because we reached end of run or because it was full! The datagram closing reason was " << lastReasonDataGram
 	  	  << " and the datagram closing action was " << lastActionDataGram << std::endl;
       }
@@ -1626,6 +2119,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   if (lastDatagramEventSiu0 != -1) {
     m_digiBranch->GetEntry(lastDatagramEventSiu0);
     if (m_digiEvent->getMetaEvent().datagram().crate() != enums::Lsf::Siu0) {
+      std::cout << "   " << std::endl; 
       std::cout << "Anders! You fucked up! This should have been been from SIU0, but it's not! It is " << m_digiEvent->getMetaEvent().datagram().crate() << std::endl;
     } else {
       m_endCountDataGramSiu0 = 0;
@@ -1639,6 +2133,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_fullDataGramSiu0 = 1;
       }
       if (m_fullDataGramSiu0==0 && m_endCountDataGramSiu0==0) {
+  	std::cout << "   " << std::endl; 
         std::cout << "Warning! The last datagram for SIU0 was not closed because it was full or because we reached end of count! The datagram closing reason was " 
                   << lastReasonDataGram << " and the datagram closing action was " << lastActionDataGram << std::endl;
       }
@@ -1649,6 +2144,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
   if (lastDatagramEventSiu1 != -1) {
     m_digiBranch->GetEntry(lastDatagramEventSiu1);
     if (m_digiEvent->getMetaEvent().datagram().crate() != enums::Lsf::Siu1) {
+      std::cout << "   " << std::endl; 
       std::cout << "Anders! You fucked up! This should have been been from Siu1, but it's not! It is " << m_digiEvent->getMetaEvent().datagram().crate() << std::endl;
     } else {
       m_endCountDataGramSiu1 = 0;
@@ -1662,6 +2158,7 @@ void TestReport::analyzeTrees(const char* mcFileName="mc.root",
         m_fullDataGramSiu1 = 1;
       }
       if (m_fullDataGramSiu1==0 && m_endCountDataGramSiu1==0) {
+  	std::cout << "   " << std::endl; 
         std::cout << "Warning! The last datagram for SIU1 was not closed because it was full or because we reached end of count! The datagram closing reason was " 
                   << lastReasonDataGram << " and the datagram closing action was " << lastActionDataGram << std::endl;
       }
@@ -1866,6 +2363,26 @@ void TestReport::analyzeDigiTree()
     }
   }
 
+  // Periodic trigger?
+  if ((m_digiEvent->getGem().getConditionSummary()) & 32) {
+    m_eventIsPeriodic = 1;
+  } else {
+    m_eventIsPeriodic = 0;
+    m_nEventNoPeriodic++;
+  }
+
+  // Readout modes:
+  if (m_digiEvent->getEventSummaryData().readout4()==0 && m_digiEvent->getEventSummaryData().zeroSuppress()==1) {
+    m_nbrEventsNormal++;
+  }
+  if (m_digiEvent->getEventSummaryData().readout4()==1 && m_digiEvent->getEventSummaryData().zeroSuppress()==1) {
+    m_nbrEvents4Range++;
+  }
+  if (m_digiEvent->getEventSummaryData().readout4()==1 && m_digiEvent->getEventSummaryData().zeroSuppress()==0) {
+    m_nbrEvents4RangeNonZS++;
+  }
+
+
   // Conditions arrival time: Take out periodic triggers!
   if (!(m_digiEvent->getGem().getConditionSummary() & 32)) {
     if (m_digiEvent->getGem().getConditionSummary() & 2) {
@@ -1931,6 +2448,18 @@ void TestReport::analyzeDigiTree()
     m_deltaWindowOpenTimeZoom->Fill(deltaWindowOpenTime);
   }
 
+  // Ticks between 1-PPS:
+  Int_t deltaTick = m_digiEvent->getMetaEvent().time().current().timeHack().ticks() - m_digiEvent->getMetaEvent().time().previous().timeHack().ticks();
+  int RollOverInt = 33554432;  
+  if (deltaTick < 0) {
+    deltaTick = deltaTick + RollOverInt;
+  }
+  deltaTick       = deltaTick - 20000000;
+  m_tick20MHzDeviation->Fill(deltaTick);
+  if (deltaTick < 200 && deltaTick > -200) {
+    m_tick20MHzDeviationZoom->Fill(deltaTick);
+  }
+
 
   int tkrVector = m_digiEvent->getGem().getTkrVector();
 
@@ -1971,6 +2500,14 @@ void TestReport::analyzeDigiTree()
     int iView = (view == GlastAxis::X) ? 0 : 1;
     int plane = Geo::instance()->getPlane(biLayer, iView);
 
+    // Bay 10, layer split:
+    if (tower==10 && plane==0) {
+      if (tkrDigi->getLastController0Strip() != -1) {
+        m_bay10Layer0SplitDefault = 1;
+      }
+    } 
+
+
     ++nDigi[tower];
 
     ++nPlane[tower];
@@ -2006,8 +2543,8 @@ void TestReport::analyzeDigiTree()
     int tot0 = tkrDigi->getToT(0);
     int tot1 = tkrDigi->getToT(1);
 
-    if((tot0>0 && lowCount==0)|| (tot1>0 && highCount==0)) badTot = true;
-    if((tot0==0 && lowCount>0)|| (tot1==0 && highCount>0)) zeroTot = true;
+    if((tot0>0  && lowCount==0) || (tot1>0  && highCount==0)) badTot  = true;
+    if((tot0==0 && lowCount>0)  || (tot1==0 && highCount>0))  zeroTot = true;
     
     if (tot0<0 || tot0>g_overlapTot || tot1<0 || tot1>g_overlapTot) ++m_nEvtInvalidTot; 
     if (tot0>g_satTot && tot0!=g_overlapTot) ++m_nEvtInvalidTot; 
@@ -2042,22 +2579,27 @@ void TestReport::analyzeDigiTree()
 
   }
 
-  if(badStrip) ++m_nEventBadStrip;
+  if(badStrip)  ++m_nEventBadStrip;
   if(moreStrip) ++m_nEventMoreStrip;
-  if(badTot) ++m_nEventBadTot;
-  if(zeroTot) ++m_nEventZeroTot;
-  if(satTot) ++m_nEventSatTot;
+  if(badTot)    ++m_nEventBadTot;
+  if(zeroTot)   ++m_nEventZeroTot;
+  if(satTot)    ++m_nEventSatTot;
 
   int maxNDigi = 0;
+  int minNDigi = 37;
+
   for(int i = 0; i != g_nTower; ++i) {
     m_nHit[i]->Fill(nHit[i]);
     m_nLayer[i]->Fill(nPlane[i]);
     if(nDigi[i] > maxNDigi) maxNDigi = nDigi[i];
     if( ((tkrVector >> i) & 1) && nDigi[i] < 6) ++m_nTkrBadEvent[i];
+    if ( ((tkrVector >> i) & 1) && nDigi[i] < 6 && nDigi[i]<minNDigi) minNDigi = nDigi[i];
   }
 
   if(tkrTrigger) {
-    (maxNDigi >= 6) ? ++m_nEventDigi[6] : ++m_nEventDigi[maxNDigi];
+    // We really, really, really want the smallest number of digis and still a TKR trigger!
+    //(maxNDigi >= 6) ? ++m_nEventDigi[6] : ++m_nEventDigi[maxNDigi];
+    (minNDigi >= 6) ? ++m_nEventDigi[6] : ++m_nEventDigi[minNDigi];
   }
 
   // condition variables to indicate whether a particular layer has any hits
@@ -2071,8 +2613,10 @@ void TestReport::analyzeDigiTree()
       int tower = p->getPackedId().getTower();
       int layer = p->getPackedId().getLayer();
 
-      ++m_nCalHit[tower][layer];
-      isHit[tower][layer] = 1;
+      if (m_eventIsPeriodic == 0) {
+        ++m_nCalHit[tower][layer];
+        isHit[tower][layer] = 1;
+      }
     }
   }
 
@@ -2190,7 +2734,17 @@ void TestReport::generateReport()
     return;
   } 
 
-  (*m_report) << "In the digi file @em " << m_digiFile->GetName() << endl;
+
+  if (m_digiFile) {
+    (*m_report) << "In the digi file @em " << m_digiFile->GetName() << endl;
+  }
+  if (m_digiFile && m_reconFile) {
+    (*m_report) << " and " << endl;
+  }
+  if (m_reconFile) {
+    (*m_report) << "In the recon file @em " << m_reconFile->GetName() << endl;
+  }
+
 
   if (m_isLATTE == 1) {
     (*m_report) << "@li There are @b " << m_nEvent << " triggers. This run was taken with LATTE so there will be " << m_nEvent+2 << " events recorded in the eLog database since LATTE adds two additional events in the process which are not triggered events." << endl;
@@ -2199,195 +2753,278 @@ void TestReport::generateReport()
   }
   (*m_report) << "   " << endl;
 
-  (*m_report) << "@li Time of the first trigger: <b>" << ctime((time_t*) (&m_startTime)) << " (GMT) </b>";
-  (*m_report) << "@li Time of the last trigger: <b>" << ctime((time_t*) (&m_endTime)) << " (GMT) </b>";
-  (*m_report) << "@li Duration: <b>" << m_endTime - m_startTime << " seconds" << "</b>" << endl;
-  (*m_report) << "@li Trigger rate: <b>" << double(m_nEvent)/(m_endTime - m_startTime) << " hz" << "</b>" << endl;
-  (*m_report) << "   " << endl;
 
-  if (m_counterGroundID == 0) {
-    (*m_report) << "@li The Ground ID is <b>" << m_firstGroundID << "</b>" << endl;
-  } else {
-    (*m_report) << "@li Warning! The ground ID changed @b " << m_counterGroundID << " times during the run! The first event had ground ID @b " << m_firstGroundID << " while the last event had ground ID @b " << m_lastGroundID << ". See the log file for more details. " << endl;
-  }
-  (*m_report) << "   " << endl;
+  if (m_digiFile) {
+    (*m_report) << "@li Time of the first trigger: <b>" << asctime((struct tm*) (gmtime((time_t*) (&m_startTime)))) << " (GMT) </b>";
+    (*m_report) << "@li Time of the last trigger: <b>" << asctime((struct tm*) (gmtime((time_t*) (&m_endTime)))) << " (GMT) </b>";
+    (*m_report) << "@li Duration: <b>" << m_endTime - m_startTime << " seconds" << "</b>" << endl;
 
-  // Needs FSW 08-06-09:
-  //(*m_report) << "@li Livetime: <b> " << (m_liveTime * 100.0) << "% </b>" << endl;  
 
-  (*m_report) << "@li There were @b " << m_nbrPrescaled << " prescaled events and @b " << m_nbrDeadZone  << " dead zone events." << endl;
+    m_report->setf(ios::fixed);
+    (*m_report) << "@li Trigger rate: <b>" <<std::setprecision(1) <<  double(m_nEvent)/ double (m_endTime - m_startTime) << " Hz" << "</b>" << endl;
+    (*m_report) << "@li Livetime corrected trigger rate: <b>" << (double(m_nEvent) / double (m_endTime - m_startTime)) / m_liveTime << " Hz" << "</b>" << endl;
+    (*m_report) << "   " << endl;
 
-  if (m_deltaSequenceNbrEvents != 0) {
-    (*m_report) << "@li The number of events in the digi file does not agree with the extended GEM sequence counter! The difference is @b " << m_deltaSequenceNbrEvents << " events. Is the onboard filter running?" << endl;
-  } else {
-    (*m_report) << "@li There were no gaps in the extended GEM sequence counter." << endl;
-  }
+    if (m_counterGroundID == 0) {
+      (*m_report) << "@li The Ground ID is <b>" << m_firstGroundID << "</b>" << endl;
+    } else {
+      (*m_report) << "@li Warning! The ground ID changed @b " << m_counterGroundID << " times during the run! The first event had ground ID @b " << m_firstGroundID << " while the last event had ground ID @b " << m_lastGroundID << ". See the log file for more details. " << endl;
+    }
+    (*m_report) << "   " << endl;
 
-  (*m_report) << "@li There were @b " << m_nbrMissingTimeTone << " events with a missing Time tone, @b " << m_nbrFlywheeling << " flywheeling events, @b " << m_nbrIncomplete << " events with an incomplete time tone, @b " << m_nbrMissingGps << " events with a missing GPS lock, @b " << m_nbrMissingCpuPps << " events with a missing 1-PPS signal at CPU level and @b " << m_nbrMissingLatPps << " events with a missing 1-PPS signal at LAT level." << endl; 
 
-  if (m_extendedCountersFlag != 0) {
-    (*m_report) << "@li Problem! At least one of the extended counters decreased from one event to the next one  @b " << m_extendedCountersFlag << " times! Check the log file for more details." << endl;
-  } 
+    if (m_bay10Layer0SplitDefault == 1) {
+      (*m_report) << "   " << endl;
+      (*m_report) << "@li Warning: We are reading out hits from the left in TKR Bay 10, layer 0! Is this intentional?" << endl;
+      (*m_report) << "   " << endl;
+    }
 
-  (*m_report) << "   " << endl;
+    // Needs Spectrum Astro FSW!:
+    (*m_report) << "@li Livetime: <b> " << (m_liveTime * 100.0) << "% </b>" << endl;  
+
+    if (m_deltaSequenceNbrEvents == 0) {
+      (*m_report) << "@li Expected livetime from event readout categories: <b> " <<  (1.0 - ((m_nbrEventsNormal*529.0 + m_nbrEvents4Range*1318.0 + m_nbrEvents4RangeNonZS*12500.0)/ double (m_elapsedTime))) * 100.0 << "%</b>. This estimate is only valid if the filter is not running!" << std::endl;
+    }
+
+    if ((m_nbrEventsNormal+m_nbrEvents4Range+m_nbrEvents4RangeNonZS) != m_nEvent) {
+      std::cout << "Problem!!!!! " << (m_nbrEventsNormal+m_nbrEvents4Range+m_nbrEvents4RangeNonZS) << "   " << m_nEvent << "   " << m_nbrEventsNormal << "   " << m_nbrEvents4Range << "   " 
+                << m_nbrEvents4RangeNonZS << std::endl; 
+    }
+
+    (*m_report) << "   " << endl;
+    (*m_report) << "@li There were @b " << m_nbrPrescaled << " prescaled events (<b>" << double (m_nbrPrescaled)/ double ((m_endTime - m_startTime)) <<" Hz</b>), @b " << m_nbrDeadZone  << " dead zone events (<b>" << double (m_nbrDeadZone)/ double ((m_endTime - m_startTime)) <<" Hz</b>) and @b " << m_nbrDiscarded << " discarded events (<b>" << double (m_nbrDiscarded)/ double ((m_endTime - m_startTime))  <<" Hz</b>)." << endl;
+
+
+    if (m_deltaSequenceNbrEvents != 0) {
+      (*m_report) << "@li The number of events in the digi file does not agree with the extended GEM sequence counter! The difference is @b " << m_deltaSequenceNbrEvents << " events. Is the onboard filter running?" << endl;
+    } else {
+      (*m_report) << "@li The number of events in the digi file agrees with the extended GEM sequence counter!" << endl;
+    }
+
+    (*m_report) << "   " << endl;
+    (*m_report) << "@li There were @b " << m_nbrMissingTimeTone << " events with a missing Time tone, @b " << m_nbrFlywheeling << " flywheeling events, @b " << m_nbrIncomplete << " events with an incomplete time tone, @b " << m_nbrEarlyEvent << " early events, @b " << m_nbrMissingGps << " events with a missing GPS lock, @b " << m_nbrMissingCpuPps << " events with a missing 1-PPS signal at CPU level and @b " << m_nbrMissingLatPps << " events with a missing 1-PPS signal at LAT level." << endl; 
+
+    if (m_extendedCountersFlag != 0) {
+      (*m_report) << "@li Problem! At least one of the extended counters decreased from one event to the next one  @b " << m_extendedCountersFlag << " times! Check the log file for more details." << endl;
+    } 
+
+    if (m_backwardsTimeTone != 0) {
+      (*m_report) << "@li Problem! Some of the time tones seem to go backwards from one event to the next one. It happened @b " << m_backwardsTimeTone << " times! Check the log file for more details." << endl;
+    }   
+
+    if (m_identicalTimeTones != 0) {
+      (*m_report) << "@li Problem! Current and previous time tones are identical in some events. It happened @b " << m_identicalTimeTones << " times! Check the log file for more details." << endl;
+    }
+
+
+    (*m_report) << "   " << endl;
 
  
-  if (m_nbrDataGramsEpu0 > 0) {
-    (*m_report) << "@li There were @b " << m_nbrDataGramsEpu0 << " datagrams from EPU0 in this run with in average @b " << ((float) m_nbrEventsDataGramsEpu0 / (float) m_nbrDataGramsEpu0) << " events per datagram." << endl;
-  }
-  if (m_nbrDataGramsEpu1 > 0) {
-    (*m_report) << "@li There were @b " << m_nbrDataGramsEpu1 << " datagrams from EPU1 in this run with in average @b " << ((float) m_nbrEventsDataGramsEpu1 / (float) m_nbrDataGramsEpu1) << " events per datagram." << endl;
-  }
-  if (m_nbrDataGramsEpu2 > 0) {
-    (*m_report) << "@li There were @b " << m_nbrDataGramsEpu2 << " datagrams from EPU2 in this run with in average @b " << ((float) m_nbrEventsDataGramsEpu2 / (float) m_nbrDataGramsEpu2) << " events per datagram." << endl;
-  }
-  if (m_nbrDataGramsSiu0 > 0) {
-    (*m_report) << "@li There were @b " << (m_counterCyclesSiu0+1) << " cycles with a maximum of @b " << m_nbrDataGramsSiu0 << " datagrams per cycle from SIU0 in this run with in average @b " << ((float) m_nbrEventsDataGramsSiu0 / ((float) m_nbrDataGramsSiu0 * (float) (m_counterCyclesSiu0+1.0))) << " events per datagram." << endl;
-  }
-  if (m_nbrDataGramsSiu1 > 0) {
-    (*m_report) << "@li There were @b " << (m_counterCyclesSiu1+1) << " cycles with a maximum of @b " << m_nbrDataGramsSiu1 << " datagrams per cycle from SIU1 in this run with in average @b " << ((float) m_nbrEventsDataGramsSiu1 / ((float) m_nbrDataGramsSiu1 * (float) (m_counterCyclesSiu1+1.0))) << " events per datagram." << endl;
-  }
-
-
-
-  // EPU0:
-  if (m_nbrEventsDataGramsEpu0 > 0) {
-    if (m_counterDataDiagramsEpu0 != 0) {
-      (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu0 << " datagram(s) from EPU0 in this run!" << endl;
+    if (m_nbrDataGramsEpu0 > 0) {
+      (*m_report) << "@li There were @b " << m_nbrDataGramsEpu0 << " datagrams from EPU0 in this run with in average <b> " << ((float) m_nbrEventsDataGramsEpu0 / (float) m_nbrDataGramsEpu0) << " </b> events per datagram." << endl;
+    }
+    if (m_nbrDataGramsEpu1 > 0) {
+      (*m_report) << "@li There were @b " << m_nbrDataGramsEpu1 << " datagrams from EPU1 in this run with in average <b> " << ((float) m_nbrEventsDataGramsEpu1 / (float) m_nbrDataGramsEpu1) << " </b> events per datagram." << endl;
+    }
+    if (m_nbrDataGramsEpu2 > 0) {
+      (*m_report) << "@li There were @b " << m_nbrDataGramsEpu2 << " datagrams from EPU2 in this run with in average <b> " << ((float) m_nbrEventsDataGramsEpu2 / (float) m_nbrDataGramsEpu2) << " </b> events per datagram." << endl;
+    }
+    if (m_nbrDataGramsSiu0 > 0) {
+      (*m_report) << "@li There were @b " << (m_counterCyclesSiu0+1) << " cycles with a maximum of @b " << m_nbrDataGramsSiu0 << " datagrams per cycle from SIU0 in this run with in average <b> " << ((float) m_nbrEventsDataGramsSiu0 / ((float) m_nbrDataGramsSiu0 * (float) (m_counterCyclesSiu0+1.0))) << " </b> events per datagram." << endl;
+    }
+    if (m_nbrDataGramsSiu1 > 0) {
+      (*m_report) << "@li There were @b " << (m_counterCyclesSiu1+1) << " cycles with a maximum of @b " << m_nbrDataGramsSiu1 << " datagrams per cycle from SIU1 in this run with in average <b> " << ((float) m_nbrEventsDataGramsSiu1 / ((float) m_nbrDataGramsSiu1 * (float) (m_counterCyclesSiu1+1.0))) << " </b> events per datagram." << endl;
     }
 
-    if (m_beginRunDataGramEpu0 != 1) {
-      (*m_report) << "@li Problem! The first datagram in EPU0 was not the first datagram after the start of the run!" << endl;
-    }
-    if (m_firstDataGramEpu0 != 0) {
-      (*m_report) << "@li Problem! The first datagram in EPU0 did not have sequence number 0! It was @b " << m_firstDataGramEpu0 << "." << endl;
-    }
-    if (m_endRunDataGramEpu0 == 0 && m_fullDataGramEpu0==1) {
-      (*m_report) << "@li Problem! The last datagram from EPU0 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
-    }
-    if (m_endRunDataGramEpu0 ==0 && m_fullDataGramEpu0==0) {
-      (*m_report) << "@li Problem! The last datagram from EPU0 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
-    }
-  }
-
-  // EPU1:
-  if (m_nbrEventsDataGramsEpu1 > 0) {
-    if (m_counterDataDiagramsEpu1 != 0) {
-      (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu1 << " datagram(s) from EPU1 in this run!" << endl;
-    }
-
-    if (m_beginRunDataGramEpu1 != 1) {
-      (*m_report) << "@li Problem! The first datagram in EPU11 was not the first datagram after the start of the run!" << endl;
-    }
-    if (m_firstDataGramEpu1 != 0) {
-      (*m_report) << "@li Problem! The first datagram in EPU1 did not have sequence number 0! It was @b " << m_firstDataGramEpu1 << "." << endl;
-    }
-    if (m_endRunDataGramEpu1== 0 && m_fullDataGramEpu1==1) {
-      (*m_report) << "@li Problem! The last datagram from EPU1 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
-    }
-    if (m_endRunDataGramEpu1==0 && m_fullDataGramEpu1==0) {
-      (*m_report) << "@li Problem! The last datagram from EPU1 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
-    }
-  }
-
-  // EPU2:
-  if (m_nbrEventsDataGramsEpu2 > 0) {
-    if (m_counterDataDiagramsEpu2 != 0) {
-      (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu2 << " datagram(s) from EPU2 in this run!" << endl;
-    }
-
-    if (m_beginRunDataGramEpu2 != 1) {
-      (*m_report) << "@li Problem! The first datagram in EPU2 was not the first datagram after the start of the run!" << endl;
-    }
-    if (m_firstDataGramEpu2 != 0) {
-      (*m_report) << "@li Problem! The first datagram in EPU2 did not have sequence number 0! It was @b " << m_firstDataGramEpu2 << "." << endl;
-    }
-    if (m_endRunDataGramEpu2== 0 && m_fullDataGramEpu2==1) {
-      (*m_report) << "@li Problem! The last datagram from EPU2 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
-    }
-    if (m_endRunDataGramEpu2==0 && m_fullDataGramEpu2==0) {
-      (*m_report) << "@li Problem! The last datagram from EPU2 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
-    }
-  }
-
-  // SIU0
-  if (m_nbrEventsDataGramsSiu0 > 0) {
-    if (m_counterDataDiagramsSiu0 != 0) {
-      (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsSiu0 << " datagram(s) from SIU0 in this run!" << endl;
-    }
-
-    if (m_beginRunDataGramSiu0 != 1) {
-      (*m_report) << "@li Problem! The first datagram in SIU0 was not the first datagram after the start of the run!" << endl;
-    }
-    if (m_firstDataGramSiu0 != 0) {
-      (*m_report) << "@li Problem! The first datagram in SIU0 did not have sequence number 0! It was @b " << m_firstDataGramSiu0 << "." << endl;
-    }
-    if (m_endCountDataGramSiu0==0 && m_fullDataGramSiu0==1) {
-      (*m_report) << "@li Problem! The last datagram from SIU0 was not closed because of end of count, but because it was full! Are we missing events?" << endl;
-    }
-    if (m_endCountDataGramSiu0==0 && m_fullDataGramSiu0==0) {
-      (*m_report) << "@li Problem! The last datagram from SIU0 was not closed neither because of end of count nor because it was full. See logfile for more details!" << endl;
-    }
-  }
-
-  // SIU1
-  if (m_nbrEventsDataGramsSiu1 > 0) {
-    if (m_counterDataDiagramsSiu1 != 0) {
-      (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsSiu1 << " datagram(s) from SIU1 in this run!" << endl;
-    }
-
-    if (m_beginRunDataGramSiu1 != 1) {
-      (*m_report) << "@li Problem! The first datagram in EPU1 was not the first datagram after the start of the run!" << endl;
-    }
-    if (m_firstDataGramSiu1 != 0) {
-      (*m_report) << "@li Problem! The first datagram in SIU1 did not have sequence number 0! It was @b " << m_firstDataGramSiu1 << "." << endl;
-    }
-    if (m_endCountDataGramSiu1==0 && m_fullDataGramSiu1==1) {
-      (*m_report) << "@li Problem! The last datagram from SIU1 was not closed because of end of count, but because it was full! Are we missing events?" << endl;
-    }
-    if (m_endCountDataGramSiu1==0 && m_fullDataGramSiu1==0) {
-      (*m_report) << "@li Problem! The last datagram from SIU1 was not closed neither because of end of count nor because it was full. See logfile for more details!" << endl;
-    }
-  }
 
 
+    // EPU0:
+    if (m_nbrEventsDataGramsEpu0 > 0) {
+      if (m_counterDataDiagramsEpu0 != 0) {
+         (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu0 << " datagram(s) from EPU0 in this run!" << endl;
+      }
+
+      if (m_beginRunDataGramEpu0 != 1) {
+        (*m_report) << "@li Problem! The first datagram in EPU0 was not the first datagram after the start of the run!" << endl;
+      }
+      if (m_firstDataGramEpu0 != 0) {
+        (*m_report) << "@li Problem! The first datagram in EPU0 did not have sequence number 0! It was @b " << m_firstDataGramEpu0 << "." << endl;
+      }
+      if (m_endRunDataGramEpu0 == 0 && m_fullDataGramEpu0==1) {
+        (*m_report) << "@li Problem! The last datagram from EPU0 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
+      }
+      if (m_endRunDataGramEpu0 ==0 && m_fullDataGramEpu0==0) {
+        (*m_report) << "@li Problem! The last datagram from EPU0 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
+      }
+    }
+
+    // EPU1:
+    if (m_nbrEventsDataGramsEpu1 > 0) {
+      if (m_counterDataDiagramsEpu1 != 0) {
+        (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu1 << " datagram(s) from EPU1 in this run!" << endl;
+      }
+
+      if (m_beginRunDataGramEpu1 != 1) {
+        (*m_report) << "@li Problem! The first datagram in EPU1 was not the first datagram after the start of the run!" << endl;
+      }
+      if (m_firstDataGramEpu1 != 0) {
+        (*m_report) << "@li Problem! The first datagram in EPU1 did not have sequence number 0! It was @b " << m_firstDataGramEpu1 << "." << endl;
+      }
+      if (m_endRunDataGramEpu1== 0 && m_fullDataGramEpu1==1) {
+        (*m_report) << "@li Problem! The last datagram from EPU1 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
+      }
+      if (m_endRunDataGramEpu1==0 && m_fullDataGramEpu1==0) {
+        (*m_report) << "@li Problem! The last datagram from EPU1 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
+      }
+    }
+
+    // EPU2:
+    if (m_nbrEventsDataGramsEpu2 > 0) {
+      if (m_counterDataDiagramsEpu2 != 0) {
+        (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsEpu2 << " datagram(s) from EPU2 in this run!" << endl;
+      }
+
+      if (m_beginRunDataGramEpu2 != 1) {
+        (*m_report) << "@li Problem! The first datagram in EPU2 was not the first datagram after the start of the run!" << endl;
+      }
+      if (m_firstDataGramEpu2 != 0) {
+        (*m_report) << "@li Problem! The first datagram in EPU2 did not have sequence number 0! It was @b " << m_firstDataGramEpu2 << "." << endl;
+      }
+      if (m_endRunDataGramEpu2== 0 && m_fullDataGramEpu2==1) {
+        (*m_report) << "@li Problem! The last datagram from EPU2 was not closed because of end of run, but because it was full! Are we missing events?" << endl;
+      }
+      if (m_endRunDataGramEpu2==0 && m_fullDataGramEpu2==0) {
+        (*m_report) << "@li Problem! The last datagram from EPU2 was not closed neither because of end of run neither because it was full. See logfile for more details!" << endl;
+      }
+    }
+
+    // SIU0
+    if (m_nbrEventsDataGramsSiu0 > 0) {
+      if (m_counterDataDiagramsSiu0 != 0) {
+        (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsSiu0 << " datagram(s) from SIU0 in this run!" << endl;
+      }
+
+      if (m_beginRunDataGramSiu0 != 1) {
+        (*m_report) << "@li Problem! The first datagram in SIU0 was not the first datagram after the start of the run!" << endl;
+      }
+      if (m_firstDataGramSiu0 != 0) {
+        (*m_report) << "@li Problem! The first datagram in SIU0 did not have sequence number 0! It was @b " << m_firstDataGramSiu0 << "." << endl;
+      }
+      if (m_endCountDataGramSiu0==0 && m_fullDataGramSiu0==1) {
+        (*m_report) << "@li Problem! The last datagram from SIU0 was not closed because of end of count, but because it was full! Are we missing events?" << endl;
+      }
+      if (m_endCountDataGramSiu0==0 && m_fullDataGramSiu0==0) {
+        (*m_report) << "@li Problem! The last datagram from SIU0 was not closed neither because of end of count nor because it was full. See logfile for more details!" << endl;
+      }
+    }
+
+    // SIU1
+    if (m_nbrEventsDataGramsSiu1 > 0) {
+      if (m_counterDataDiagramsSiu1 != 0) {
+        (*m_report) << "@li Problem! We dropped  @b " << m_counterDataDiagramsSiu1 << " datagram(s) from SIU1 in this run!" << endl;
+      }
+
+      if (m_beginRunDataGramSiu1 != 1) {
+        (*m_report) << "@li Problem! The first datagram in EPU1 was not the first datagram after the start of the run!" << endl;
+      }
+      if (m_firstDataGramSiu1 != 0) {
+        (*m_report) << "@li Problem! The first datagram in SIU1 did not have sequence number 0! It was @b " << m_firstDataGramSiu1 << "." << endl;
+      }
+      if (m_endCountDataGramSiu1==0 && m_fullDataGramSiu1==1) {
+        (*m_report) << "@li Problem! The last datagram from SIU1 was not closed because of end of count, but because it was full! Are we missing events?" << endl;
+      }
+      if (m_endCountDataGramSiu1==0 && m_fullDataGramSiu1==0) {
+        (*m_report) << "@li Problem! The last datagram from SIU1 was not closed neither because of end of count nor because it was full. See logfile for more details!" << endl;
+      }
+    }
 
 
+    // EPU0 datagram gaps:
+    if (m_nbrEventsDataGramsEpu0 > 0) {
+      if (m_datagramGapsEPU0 != 0) {
+        (*m_report) << "   " << endl;
+        (*m_report) << "@li Problem! There were @b " << m_datagramGapsEPU0 << " datagram sequence number gaps from EPU0 in this run! " ;
+        if (m_counterDataDiagramsEpu0 == 0) {
+          (*m_report) << "Since no datagrams were actually dropped this could be the 4.2s CCSDS time shift!" << endl;
+        }
+      }  
+    }
+    // EPU1 datagram gaps:
+    if (m_nbrEventsDataGramsEpu1 > 0) {
+      if (m_datagramGapsEPU1 != 0) {
+        (*m_report) << "   " << endl;
+        (*m_report) << "@li Problem! There were @b " << m_datagramGapsEPU1 << " datagram sequence number gaps from EPU1 in this run! ";
+        if (m_counterDataDiagramsEpu1 == 0) {
+          (*m_report) << "Since no datagrams were actually dropped this could be the 4.2s CCSDS time shift!" << endl;
+        }
+      }  
+    }
+    // EPU2 datagram gaps:
+    if (m_nbrEventsDataGramsEpu2 > 0) {
+      if (m_datagramGapsEPU2 != 0) {
+        (*m_report) << "   " << endl;
+        (*m_report) << "@li Problem! There were @b " << m_datagramGapsEPU2 << " datagram sequence number gaps from EPU2 in this run! " ;
+        if (m_counterDataDiagramsEpu2 == 0) {
+          (*m_report) << "Since no datagrams were actually dropped this could be the 4.2s CCSDS time shift!" << endl;
+        }
+      }  
+    }
+    // SIU0 datagram gaps:
+    if (m_nbrEventsDataGramsSiu0 > 0) {
+      if (m_datagramGapsSIU0 != 0) {
+        (*m_report) << "   " << endl;
+        (*m_report) << "@li Problem! There were @b " << m_datagramGapsSIU0 << " datagram sequence number gaps from SIU0 in this run! " ;
+        if (m_counterDataDiagramsSiu0 == 0) {
+          (*m_report) << "Since no datagrams were actually dropped this could be the 4.2s CCSDS time shift!" << endl;
+        }
+      }  
+    }
+    // SIU1 datagram gaps:
+    if (m_nbrEventsDataGramsSiu1 > 0) {
+      if (m_datagramGapsSIU1 != 0) {
+        (*m_report) << "   " << endl;
+        (*m_report) << "@li Problem! There were @b " << m_datagramGapsSIU1 << " datagram sequence number gaps from SIU1 in this run! " ;
+        if (m_counterDataDiagramsSiu1 == 0) {
+          (*m_report) << "Since no datagrams were actually dropped this could be the 4.2s CCSDS time shift!" << endl;
+        }
+      }  
+    }
 
 
-  (*m_report) << "   " << endl;
+    (*m_report) << "   " << endl;
 
-  (*m_report) << "@li There are @b " << m_nBadEvts              << " bad events as defined by Offline (catch all flag)." << endl;
+    (*m_report) << "@li There are @b " << m_nBadEvts              << " bad events as defined by Offline (catch all flag)." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventTrgParityError   << " events with Trigger Parity errors. " << endl;
-  (*m_report) << "@li There are @b " << m_eventPacketError      << " events with Packet errors. " << endl;
+    (*m_report) << "@li There are @b " << m_eventTrgParityError   << " events with Trigger Parity errors. " << endl;
+    (*m_report) << "@li There are @b " << m_eventPacketError      << " events with Packet errors. " << endl;
 
-  (*m_report) << "@li There are @b " << m_eventPhaseError       << " events with Phasing errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventTimeoutError     << " events with Timeout errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventPhaseError       << " events with Phasing errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventTimeoutError     << " events with Timeout errors." << endl;
 
-  (*m_report) << "@li There are @b " << m_nAcdOddParityError    << " events with ACD Odd Parity errors. " << endl;
-  (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD 'Header Parity errors' (there should _never_ be any)." << endl;
+    (*m_report) << "@li There are @b " << m_nAcdOddParityError    << " events with ACD Odd Parity errors. " << endl;
+    (*m_report) << "@li There are @b " << m_nAcdHeaderParityError << " events with ACD 'Header Parity errors' (there should _never_ be any)." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventBadLdfStatus     << " events with a bad LDF status flag. " << endl;
+    (*m_report) << "@li There are @b " << m_eventBadLdfStatus     << " events with a bad LDF status flag. " << endl;
 
-  (*m_report) << "@li There are @b " << m_eventBadEventSequence << " events with event sequence issues (not increasing monotonically)." << endl;
+    (*m_report) << "@li There are @b " << m_eventBadEventSequence << " events with event sequence issues (not increasing monotonically)." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventTemError         << " events with TEM errors (includes TKR FIFO full errors)." << endl;
+    (*m_report) << "@li There are @b " << m_eventTemError         << " events with TEM errors (includes TKR FIFO full errors)." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventGtccError        << " events with GTCC errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGtccFifo         << " events with GTCC FIFO errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGtccHdrParity    << " events with GTCC Header Parity errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGtccWcParity     << " events with GTCC Word Count Parity errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGtccDataParity   << " events with GTCC Data Parity errors." << endl; 
-  (*m_report) << "@li There are @b " << m_eventGtccTimeout      << " events with GTCC Timeout errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtccError        << " events with GTCC errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtccFifo         << " events with GTCC FIFO errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtccHdrParity    << " events with GTCC Header Parity errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtccWcParity     << " events with GTCC Word Count Parity errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtccDataParity   << " events with GTCC Data Parity errors." << endl; 
+    (*m_report) << "@li There are @b " << m_eventGtccTimeout      << " events with GTCC Timeout errors." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventGtrcSummary      << " events with GTRC Summary errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGtrcPhase        << " events with GTRC Phase errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtrcSummary      << " events with GTRC Summary errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtrcPhase        << " events with GTRC Phase errors." << endl;
 
-  (*m_report) << "@li There are @b " << m_eventGtfePhase        << " events with GTFE Phase errors." << endl;
-  (*m_report) << "@li There are @b " << m_eventGcccError        << " events with GCCC errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGtfePhase        << " events with GTFE Phase errors." << endl;
+    (*m_report) << "@li There are @b " << m_eventGcccError        << " events with GCCC errors." << endl;
     
-  (*m_report) << "@li There are @b " << m_eventBadTkrRecon      << " events passing the Offline Bad TKR Recon criteria." << endl;
+    (*m_report) << "@li There are @b " << m_eventBadTkrRecon      << " events passing the Offline Bad TKR Recon criteria." << endl;
+  }
 
   if(m_reconFile) {
     (*m_report) << "<p>The Recon file is: @em " << m_reconFile->GetName() << "</p>" << endl;
@@ -2407,6 +3044,7 @@ void TestReport::generateDigiReport()
   string file = m_prefix;
   file += "_condSummary";
   PlotAttribute att(file.c_str(), "GEM condition summary word. The word is deduced by combining bit patterns from the table shown below. For example, an event with both the TKR trigger bit and the CAL low trigger bit set in GEM has the condition summary word of @latex $2^{2} + 2^{1} = 6$ @endlatex @html 2<sup>2</sup> + 2<sup>1</sup> = 6 @endhtml", "condSummary", 1);
+  att.m_statMode = 11;
   producePlot(m_condSummary, att);
   insertPlot(att);
   *(m_report) << "@latexonly \\nopagebreak @endlatexonly" << endl;
@@ -2416,6 +3054,7 @@ void TestReport::generateDigiReport()
   file = m_prefix;
   file += "_trigger";
   att.set(file.c_str(), "Trigger word calculated by triggerAlg. The word is deduced by combining bit patterns from the table shown below. For example, an event with both the TKR trigger bit and the CAL Low trigger bit set has the GLT word of @latex $2^{1} + 2^{2} = 6$ @endlatex @html 2<sup>1</sup> + 2<sup>2</sup> = 6 @endhtml.", "trigger", 1);
+  att.m_statMode = 11;
   producePlot(m_trigger, att);
   insertPlot(att);
   *(m_report) << "@latexonly \\nopagebreak @endlatexonly" << endl;
@@ -2499,7 +3138,7 @@ void TestReport::generateDigiReport()
 
   file = m_prefix;
   file += "_layersPerTower_2";
-  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 8 to tower 15).", "layersPerTower_1", 1, 0, 18, 18, 909, 615, 111);
+  att.set(file.c_str(), "Number of planes that are hit in a tower(for tower 8 to tower 15).", "layersPerTower_2", 1, 0, 18, 18, 909, 615, 111);
   producePlot((TObject**) m_nLayer+8, att, 4, 2);
   insertPlot(att);
 
@@ -3200,21 +3839,22 @@ void TestReport::produceCalNhits2DPlot()
 	}
 	m_nCalHit2D->Fill(j, i, double(m_nCalHit[i][j])/m_nEvtCalHit[i][j]);
       }
-      if(m_nEvent > m_nEvtCalHit[i][j]) {
-	m_nZeroCalHit2D->Fill(j, i, double(m_nEvent-m_nEvtCalHit[i][j])/m_nEvent);
+      if(m_nEventNoPeriodic > m_nEvtCalHit[i][j]) {
+	//m_nZeroCalHit2D->Fill(j, i, double(m_nEvent-m_nEvtCalHit[i][j])/m_nEvent);
+        m_nZeroCalHit2D->Fill(j, i, double(m_nEventNoPeriodic-m_nEvtCalHit[i][j])/m_nEventNoPeriodic);
       }
     }
   }
 
   string file(m_prefix);
   file += "_nCalHits2d";
-  PlotAttribute att(file.c_str(), "Average number of crystal hits in a particular CAL layer. Note 0 hit is not used to calculate the average", "nCalHits2d");
+  PlotAttribute att(file.c_str(), "Average number of crystal hits in a particular CAL layer. Note 0 hit is not used to calculate the average. Periodic triggers have been taken out.", "nCalHits2d");
   producePlot(m_nCalHit2D, att);
   insertPlot(att);
 
   file = m_prefix;
   file += "_nZeroCalHit2d";
-  att.set(file.c_str(), "Fraction of events with zero hits in a particular CAL layer", "nZeroCalHit2d");
+  att.set(file.c_str(), "Fraction of events with zero hits in a particular CAL layer. Periodic triggers have been taken out.", "nZeroCalHit2d");
   producePlot(m_nZeroCalHit2D, att);
   insertPlot(att);
 }
@@ -3387,17 +4027,36 @@ void TestReport::produceTriggerRatePlot()
 {
   string file(m_prefix);
   file += "_triggerRate";
-  PlotAttribute att(file.c_str(), "Trigger rates for 30 time intervals","triggerRate",true);
+  PlotAttribute att(file.c_str(), "Trigger rates for 30 time intervals","triggerRate");
+  att.m_statMode = 11;
   producePlot(m_triggerRate, att);
   insertPlot(att);
 
+  file = m_prefix;
+  file += "_triggerLivetimeRate";
+  att.set(file.c_str(), "Livetime corrected trigger rates for 30 time intervals","triggerLivetimeRate");
+  att.m_statMode = 11;
+  producePlot(m_triggerLivetimeRate, att);
+  insertPlot(att);
+
+  file = m_prefix;
+  file += "_livetimeRate";
+  att.set(file.c_str(), "Livetime in percent for 30 time intervals","livetimeRate");
+  att.m_statMode = 11;
+  producePlot(m_livetimeRate, att);
+  insertPlot(att);
+
+  file = m_prefix;
   file += "_deadzoneRate";
-  att.set(file.c_str(), "Deadzone rates for 30 time intervals","deadzoneRate",true);
+  att.set(file.c_str(), "Deadzone rates for 30 time intervals","deadzoneRate");
+  att.m_statMode = 11;
   producePlot(m_deadzoneRate, att);
   insertPlot(att);
 
+  file = m_prefix;
   file += "_discardedRate";
-  att.set(file.c_str(), "Discarded rates for 30 time intervals","discardedRate",true);
+  att.set(file.c_str(), "Discarded rates for 30 time intervals","discardedRate");
+  att.m_statMode = 11;
   producePlot(m_discardedRate, att);
   insertPlot(att);
 }
@@ -3408,18 +4067,21 @@ void TestReport::produceTriggerPerTowerPlot()
   string file(m_prefix);
   file += "_tkrPerTower";
   PlotAttribute att(file.c_str(), "Number of TKR triggers per tower","tkrPerTower");
+  att.m_statMode = 11;
   producePlot(m_tkrPerTower, att);
   insertPlot(att);
 
   file = m_prefix;
   file += "_calLoPerTower";
   att.set(file.c_str(), "Number of CAL LO triggers per tower","calLoPerTower");
+  att.m_statMode = 11;
   producePlot(m_calLoPerTower, att);
   insertPlot(att);
 
   file = m_prefix;
   file += "_calHiPerTower";
   att.set(file.c_str(), "Number of CAL Hi triggers per tower","calHiPerTower");
+  att.m_statMode = 11;
   producePlot(m_calHiPerTower, att);
   insertPlot(att);
 }
@@ -3466,12 +4128,14 @@ void TestReport::produceAcdTriggerPlots()
   string file(m_prefix);
   file += "_acdGemVeto";
   PlotAttribute att(file.c_str(), "Number of Acd Gem vetos by tile.  Expect to see spikes at 15,31,47,63.  These are the large tiles at the bottom of the sides of the ACD.","AcdVetoPerTile");
+  att.m_statMode = 11;
   producePlot(m_AcdGemVetoMap, att);
   insertPlot(att);
 
   file = m_prefix;
   file += "_acdRoiVeto";
   att.set(file.c_str(), "Number of Acd ROI by tower,  This bit is set if any of the tile in the ROI fired a veto.  This bit is independent of if the Tower bit is set.","AcdRoiPerTower");
+  att.m_statMode = 11;
   m_AcdGemRoiMap->SetMinimum(0.);
   producePlot(m_AcdGemRoiMap, att);
   insertPlot(att);
@@ -3479,6 +4143,7 @@ void TestReport::produceAcdTriggerPlots()
   file = m_prefix;
   file += "_acdCnoVeto";
   att.set(file.c_str(), "Number of Acd Cno by board.  This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal.","AcdCnoPerBoard");
+  att.m_statMode = 11;
   m_AcdGemCnoMap->SetMinimum(0.);
   producePlot(m_AcdGemCnoMap, att);
   insertPlot(att);
@@ -3491,6 +4156,7 @@ void TestReport::produceEpuPlot()
   string file(m_prefix);
   file += "_epu";
   PlotAttribute att(file.c_str(), "Crate number","epu",true);
+  att.m_statMode = 11;
   producePlot(m_epu, att);
   insertPlot(att);
 
@@ -3530,6 +4196,91 @@ void TestReport::produceEpuPlot()
     insertPlot(att);
   }
 
+
+  if (m_isLATTE != 1) {
+    if (m_nbrEventsDataGramsEpu0 > 0 ) {
+      file = m_prefix;
+      file += "_deltaTimeDGCTEvtEPU0";
+      att.set(file.c_str(), "CCSDS Secondary Header Time minus the event time for events from EPU0 [seconds]","deltaTimeDGCTEvtEPU0",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaTimeDGCTEvtEPU0, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsEpu1 > 0 ) {
+      file = m_prefix;
+      file += "_deltaTimeDGCTEvtEPU1";
+      att.set(file.c_str(), "CCSDS Secondary Header Time minus the event time for events from EPU1 [seconds]","deltaTimeDGCTEvtEPU1",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaTimeDGCTEvtEPU1, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsEpu2 > 0 ) {
+      file = m_prefix;
+      file += "_deltaTimeDGCTEvtEPU2";
+      att.set(file.c_str(), "CCSDS Secondary Header Time minus the event time for events from EPU2 [seconds]","deltaTimeDGCTEvtEPU2",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaTimeDGCTEvtEPU2, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsSiu0 > 0 ) {
+      file = m_prefix;
+      file += "_deltaTimeDGCTEvtSIU0";
+      att.set(file.c_str(), "CCSDS Secondary Header Time minus the event time for events from SIU0 [seconds]","deltaTimeDGCTEvtSIU0",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaTimeDGCTEvtSIU0, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsSiu1 > 0 ) {
+      file = m_prefix;
+      file += "_deltaTimeDGCTEvtSIU1";
+      att.set(file.c_str(), "CCSDS Secondary Header Time minus the event time for events from SIU1 [seconds]","deltaTimeDGCTEvtESIU1",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaTimeDGCTEvtSIU1, att);
+      insertPlot(att);
+    }
+
+    if (m_nbrEventsDataGramsEpu0 > 0 ) {
+      file = m_prefix;
+      file += "_deltaEventIDEPU0";
+      att.set(file.c_str(), "Delta Event ID For Successive Events From EPU0","deltaEventIDEPU0",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaEventIDEPU0, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsEpu1 > 0 ) {
+      file = m_prefix;
+      file += "_deltaEventIDEPU1";
+      att.set(file.c_str(), "Delta Event ID For Successive Events From EPU1","deltaEventIDEPU1",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaEventIDEPU1, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsEpu2 > 0 ) {
+      file = m_prefix;
+      file += "_deltaEventIDEPU2";
+      att.set(file.c_str(), "Delta Event ID For Successive Events From EPU2","deltaEventIDEPU2",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaEventIDEPU2, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsSiu0 > 0 ) {
+      file = m_prefix;
+      file += "_deltaEventIDSIU0";
+      att.set(file.c_str(), "Delta Event ID For Successive Events From SIU0","deltaEventIDSIU0",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaEventIDSIU0, att);
+      insertPlot(att);
+    }
+    if (m_nbrEventsDataGramsSiu1 > 0 ) {
+      file = m_prefix;
+      file += "_deltaEventIDSIU1";
+      att.set(file.c_str(), "Delta Event ID For Successive Events From SIU1","deltaEventIDSIU1",true);
+      att.m_statMode = 1111;
+      producePlot(m_deltaEventIDSIU1, att);
+      insertPlot(att);
+    }
+
+  }
 }
 
 void TestReport::produceGemDiscardedPlot()
@@ -3604,6 +4355,18 @@ void TestReport::produceTimeIntervalPlotGEM()
   file += "_deltaWindowOpenTimeZoom";
   att.set(file.c_str(), "Delta window open time as measured by the GEM in system clock ticks with a cut of 1500 ticks. The time is stored in a 16 bit counter, each count is nominally 50 ns.", "deltaWindowOpenTimeZoom", true);
   producePlot(m_deltaWindowOpenTimeZoom, att);
+  insertPlot(att);
+
+  file = m_prefix;
+  file += "_tick20MHzDeviation";
+  att.set(file.c_str(), "Number of ticks between successive 1-PPS - Deviation from 20 MHz.", "tick20MHzDeviation", true);
+  producePlot(m_tick20MHzDeviation, att);
+  insertPlot(att);
+
+  file = m_prefix;
+  file += "_tick20MHzDeviationZoom";
+  att.set(file.c_str(), "Number of ticks between successive 1-PPS - Deviation from 20 MHz - Zoom.", "tick20MHzDeviationZoom", true);
+  producePlot(m_tick20MHzDeviationZoom, att);
   insertPlot(att);
 }
 
@@ -3695,7 +4458,7 @@ void TestReport::produceAcdDigiPlots()
   file = m_prefix;
   file += "_AcdHitMap";
   att.set(file.c_str(), "ACD Gem ID for all Digis.  Expectect to see spikes at 15,31,47,63.  These are the large tiles at the bottom of the sides of the ACD.", "AcdHitMap" );
-  att.m_statMode = 0;
+  att.m_statMode = 11;
   producePlot(m_AcdHitMap, att);
   insertPlot(att);  
 

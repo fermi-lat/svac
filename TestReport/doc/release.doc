@@ -249,3 +249,109 @@ v3r6p13 Added histogram for number of events per datagram.
 
 August 18, 2006: awb
 v3r6p14 Corrected text about missing time tones.
+
+September 6, 2006: awb
+v3r6p15	Fixed bug in TKR layers per tower (first half was repeated twice). Hmmm .... probably benign .... 
+        only a (not used) label problem.
+
+September 12, 2006: awb
+	Added rate of some quantities. Uncommented the livetime calculation.
+
+October 24, 2006: awb
+v3r6p16	- Not plot CAL occupancy for periodic triggers.
+	- Added livetime corrected average trigger rate.
+        - Added time plot of livetime.
+	- Fixed time of first and last event.
+        - Fixed stat opt for some plots.
+
+October 26, 2006: awb
+v3r6p17 - Added plot of datagram creation time minus event time. 
+
+October 26, 2006: awb
+v3r6p18 Added correct stat mode for the new histograms.
+
+October 26, 2006: awb
+v3r6p19 Fixed some things.
+
+October 30,2 006: awb
+v3r6p20	- Added histogram for delta event ID per CPU.
+	- Fixed bug in datagram creation time minus event time plots. 
+        - Fixed bug in calculation of average rates.
+
+October 31,2 006: awb
+v3r6p21	Corrected typo in axis label in one histogram.
+
+November 1, 2006: awb
+v3r6p22	Fixed formating in report.
+
+November 2, 2006: awb
+v3r6p23 Fixed bug in 'Not plot CAL occupancy for periodic triggers.'.
+
+November 3, 2006: awb
+v3r6p24	- Fixed normalization in CAL plots without periodic triggers.
+	- Plot negative delta GEM IDs, not only print a warning in case it happens.
+ 	- Added expected livetime.
+
+November 7, 2006: awb
+v3r6p25	Fixed time calculations when more than one second between current and previous timetone 1-PPS.
+
+November 7, 2006: awb
+v3r6p26	Now use gmtime to avoid Daylight Savings Time bug.
+
+November 7, 2006: awb
+v3r6p27	Another tag, another rollover ....
+
+November 10, 2006: awb
+v3r6p28 Added explicit check to see if we read out hits from the left in TKR Bay 10, layer 0.
+
+November 13, 2006: awb
+v3r6p29	Added check for gaps in datagram sequence number.
+
+November 14, 2006: awb
+v3r6p30	Made rate plots linear scale.
+
+November 15, 2006: awb
+v3r6p31	Trying to deal with cycles and datagram gaps for LCI runs. 
+
+November 19, 2006: awb
+v3r6p32	Fixed event time stamps.
+
+November 20, 2006: awb
+v3r6p33	Typo in previous tag fixes.
+
+November 22, 2006: eac
+v3r6p34 Added MergeHistFiles.cxx and related lines to cmt/requirements
+
+December 5, 2006: awb
+v3r6p35	- Fixed bug in <6 hits in the TKR and still a TKR trigger.
+	- Commented out runStrip from requirements file because of missing files. 
+
+February 1, 2007: awb
+v3r6p36 - Additional protection against time tone 'issues'.
+
+February 28, 2007: awb
+v3r6p37	- Increased precision to get TKR ratios in table correctly.
+
+March 4, 2007: awb
+v3r6p38 - Explicit check on time tones to see if time go backwards or stand still.
+
+March 8, 2007: awb
+v3r6p39	- Made it possible to run only the recon report.
+
+March 8, 2007: awb
+v3r6p40	- Added plots for number of ticks between 1-PPS.
+
+April 2, 2007: awb
+v3r6p41	- Added line break between digi and recon files at the top of the report.
+
+May 17, 2007: mutsumi
+v3r7 - move TkrNoiseOcc module from svac/EngineeringModelRoot
+       add TKR noise analysis in TestReport digi analysis
+       The output root hist file includes the directory "TkrNoiseOcc"
+       It is used to generate TKR noise report
+
+June 29, 2007: awb
+v3r7p1 - Added early event counter.
+
+July 18, 2007: awb
+v3r7p2 - Retagging TRdp20070706 (changes to MergeHistFiles.cxx).
