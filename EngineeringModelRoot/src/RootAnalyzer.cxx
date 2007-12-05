@@ -1405,7 +1405,7 @@ void RootAnalyzer::createBranches()
 
 
   // CAL information:
-  m_tree->Branch("CalEneSum", &(m_ntuple.m_calEnergy), "CalEneSum/F");
+  m_tree->Branch("CalEnergyRaw", &(m_ntuple.m_calEnergy), "CalEnergyRaw/F");
   m_tree->Branch("CalXEcentr", &(m_ntuple.m_calPos[0]), "CalXEcentr/F");
   m_tree->Branch("CalYEcentr", &(m_ntuple.m_calPos[1]), "CalYEcentr/F");
   m_tree->Branch("CalZEcentr", &(m_ntuple.m_calPos[2]), "CalZEcentr/F");

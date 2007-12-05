@@ -305,3 +305,6 @@ awb 	Then also remove AcdMinDocaId.
     
 v3r7p2: December 3, 2007:
 awb	Added Tkr1/2 initial position and direction.
+
+v3r8: December 5, 2007:
+awb	Renamed CalEneSum to CalEnergyRaw (same as in Merit).

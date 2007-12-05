@@ -369,10 +369,10 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> CAL variables </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> CalEneSum  </TD> <TD> Float </TD> <TD> Sum of energies (in MeV) in each crystal. This is the same as the Merit variable CalEnergyRaw. </TD> </TR>
-<TR> <TD> CalXEcentr </TD> <TD> Float </TD> <TD> x coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
-<TR> <TD> CalYEcentr </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
-<TR> <TD> CalZEcentr </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
+<TR> <TD> CalEnergyRaw  </TD> <TD> Float </TD> <TD> Sum of energies (in MeV) in each crystal. This was previously called CalEneSum. </TD> </TR>
+<TR> <TD> CalXEcentr    </TD> <TD> Float </TD> <TD> x coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
+<TR> <TD> CalYEcentr    </TD> <TD> Float </TD> <TD> y coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
+<TR> <TD> CalZEcentr    </TD> <TD> Float </TD> <TD> z coordinate (in mm) of centroid of the CAL cluster </TD> </TR>
 
 <TR> <TD> CalXtalEne[tower][layer][col] </TD> <TD> Float </TD> <TD> Measured energy (in MeV) in a single crystal at each tower, layer and column. To get the log end energies you need to look at the CAL ntuple. Note that prior to October 2007 this array also contained '[end]'. This is no longer the case as it was unnecessary.</TD> </TR>
 
