@@ -1005,11 +1005,11 @@ void RootAnalyzer::parseOptionFile(const char* f)
   Long64_t maxTreeSize = 5000000000000;
   m_tree->SetMaxTreeSize(maxTreeSize);
 
-  // New increased basket size:
-  m_tree->SetBasketSize("*", 1000000);
-
   // create branches for each ntuple variable
   createBranches();
+
+  // Increased basket size:
+  m_tree->SetBasketSize("*", 1000000);
 
   while( getline(optF, line) ) {
     if(!isEmptyOrCommentStr(line)) break;

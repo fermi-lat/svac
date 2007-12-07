@@ -311,3 +311,6 @@ awb	Renamed CalEneSum to CalEnergyRaw (same as in Merit).
 
 v3r8p1:	December 7, 2007
 awb	Increase basket size.
+
+v3r8p2:	December 7, 2007
+awb	Now it even works ....
