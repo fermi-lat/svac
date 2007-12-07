@@ -308,3 +308,6 @@ awb	Added Tkr1/2 initial position and direction.
 
 v3r8: December 5, 2007:
 awb	Renamed CalEneSum to CalEnergyRaw (same as in Merit).
+
+v3r8p1:	December 7, 2007
+awb	Increase basket size.
