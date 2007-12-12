@@ -316,4 +316,7 @@ v3r8p2:	December 7, 2007
 awb	Now it even works ....
 
 v3r9:	December 12, 2007
-awb	Removed (obsolete) EvtTicks.
+awb	Removed (obsolete) EvtTicks. [Later] Doesn't compile. Use the following tag.
+
+v3r9p1:	December 12, 2007
+awb	Added LatC master key. Fixed silly compilation bugs with the previous tag.

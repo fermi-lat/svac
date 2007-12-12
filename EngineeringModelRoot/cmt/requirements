@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v3r9
+version v3r9p1
 
 
 use GlastPolicy v*
@@ -23,7 +23,7 @@ macro_append ROOT_linkopts " -lHist -lTreePlayer -lGraf -lGraf3d"
 
 macro engineeringmodelroot_linkopts "$(ROOT_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts) " 
 
-application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx timestamps.cxx $(calibTkrUtil_srcs)
+application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx $(calibTkrUtil_srcs)
 
 application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 

@@ -12,7 +12,6 @@
 #include "TROOT.h"
 #include "ToString.h"
 #include "enums/TriggerBits.h"
-#include "timestamps.h"
 
 using std::string;
 using std::vector;
@@ -614,6 +613,8 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // Context information:
   //
+  m_ntuple.m_latcKey = m_digiEvent->getMetaEvent().keys()->LATC_master();
+ 
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
   m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
   m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();
@@ -1419,7 +1420,9 @@ void RootAnalyzer::createBranches()
 
   //                                                                                                                                                                                                           
   // Context information:                                                                                                                                                                                      
-  //                                                                                                                                                                                                           
+  //
+  m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
+                                                                                                                                 
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
   m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
   m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/i");

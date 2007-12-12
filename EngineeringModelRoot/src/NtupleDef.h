@@ -9,6 +9,9 @@ struct NtupleDef {
   int m_eventId;
   int m_seqNo;
 
+  // LatC key:
+  unsigned int m_latcKey;  
+
   // Event size in bytes:
   int m_eventSize;
 
