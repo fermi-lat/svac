@@ -268,11 +268,6 @@ struct NtupleDef {
   int m_obfPassedHIP;
   int m_obfPassedDGN; 
 
-
-  // Warren's time stamp:
-  double m_triggerTicks;
-
-
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118
   unsigned int m_tpCal[g_nTower][g_nCalLayer];

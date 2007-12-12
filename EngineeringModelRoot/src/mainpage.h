@@ -57,11 +57,6 @@ For all the variables the default value is -9999.
           this time is from the event builder and is not the trigger time. For Flight Software runs this used to be the time of the creation of the datagram but it's now the real timestamp of the 
           event. </TD> </TR>
 
-<TR> <TD> EvtTicks </TD> <TD> Double </TD> <TD> Uses the data words stored in the GemTriggerTime, GemOnePpsSeconds, GemOnePpsTime, EvtSecond, and EvtNanoSecond to calculate LAT ticks for each event. 
-          This time is used to determine the spacing of real data events - NOT as an absolute time.  The "zero point" is arbitrary.
-          NB! This is the time when the event triggered. The values are integers, but are stored as doubles to portably get more than 32 bits. Do not use with Flight Software Runs!
-          </TD> </TR>
-
 <TR> <TD> EvtMCLiveTime </TD> <TD> Double </TD> <TD> MC livetime. </TD> </TR>
 
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  

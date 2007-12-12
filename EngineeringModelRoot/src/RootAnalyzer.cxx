@@ -706,8 +706,6 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
   unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
 
-  m_ntuple.m_triggerTicks = evtTicks(m_ntuple.m_gemTriggerTime,m_ntuple.m_gemOnePpsSeconds, m_ntuple.m_gemOnePpsTime,tmpEbfSecond, tmpEbfNanoSecond);
-
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
     m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
@@ -1294,7 +1292,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
   m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
-  m_tree->Branch("EvtTicks", &(m_ntuple.m_triggerTicks),"EvtTicks/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
   
