@@ -1110,6 +1110,11 @@ void RootAnalyzer::analyzeData()
   
   for(Long64_t iEvent = 0; iEvent != nEvent; ++iEvent) {
 
+    if ( iEvent % 1000 == 0 ) {
+      std::cout << "Event number " << iEvent << std::endl;
+    }
+
+
     m_ntuple.reset();  
     if(m_mcEvent) m_mcEvent->Clear();
     if(m_digiEvent) m_digiEvent->Clear();

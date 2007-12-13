@@ -320,3 +320,6 @@ awb	Removed (obsolete) EvtTicks. [Later] Doesn't compile. Use the following tag.
 
 v3r9p1:	December 12, 2007
 awb	Added LatC master key. Fixed silly compilation bugs with the previous tag.
+
+v3r9p2: December 13, 2007
+awb     Added printout for every 1000th event.
