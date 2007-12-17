@@ -1,3 +1,4 @@
+#!/afs/slac.stanford.edu/package/python/2.4.3/i386_linux24/bin/python2.4
 #!/usr/bin/env python2.4
 
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
