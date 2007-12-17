@@ -23,7 +23,7 @@ my $joFile = $ENV{'acdAlarmJo'};
 my $dest = $ENV{'acdReportDestination'};
 
 my $cmd = "
-python $exe -c '$joFile' -o '$acdAlarmFile' -l 1 '$acdTimeFile' > $acdLogFile || exit 1
+/nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt/python/2.5.1/bin/python2.5 $exe -c '$joFile' -o '$acdAlarmFile' -l 1 '$acdTimeFile' > $acdLogFile || exit 1
 cp '$acdTimeFile' '$dest'
 cp '$acdLogFile' '$dest'
 ";

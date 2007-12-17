@@ -31,7 +31,11 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
-my $histFile = $inFiles->{'histogram'};
+#my $histFile = $inFiles->{'histogram'};
+# We better have just one infile, 
+# but we don't even want to know what it's called
+my @ifList = values(%$inFiles);
+my $histFile = $ifList[0];
 
 my $exe = $ENV{'tkrCopyScript'};
 

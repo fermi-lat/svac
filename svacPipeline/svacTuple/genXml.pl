@@ -14,7 +14,7 @@ use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'svacTupleTaskDir'}, 
 									   "RunRootAnalyzer"),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "url", "finalCleanup")
+									   "url", "finalCleanup", 'copyTkr')
 					);
 
 my $svacTupleXml = 
@@ -37,6 +37,9 @@ my $svacTupleXml =
     </executable>
     <executable name=\"finalCleanup\" version=\"$ENV{'svacVersion'}\">
         $metaWrappers{'finalCleanup'}
+    </executable>
+    <executable name=\"copyTkr\" version=\"$ENV{'svacVersion'}\">
+        $metaWrappers{'copyTkr'}
     </executable>
 
     <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
@@ -80,6 +83,9 @@ my $svacTupleXml =
     </processing-step>
     <processing-step name=\"finalCleanup\" executable=\"finalCleanup\" batch-job-configuration=\"express-job\">
                     <input-file name=\"recon\"/>
+    </processing-step>
+    <processing-step name=\"copyTkr\" executable=\"copyTkr\" batch-job-configuration=\"express-job\">
+                    <input-file name=\"svac\"/>
     </processing-step>
 </pipeline>
 

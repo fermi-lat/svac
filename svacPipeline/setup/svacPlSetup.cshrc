@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p14
+setenv svacVersion v3r9p15
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -28,7 +28,7 @@ setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv ftpHead ftp://ftp-glast.slac.stanford.edu/glast.
 setenv dataDisk u40
 setenv onlineDisk u40
-setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging
+setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging2
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
@@ -127,7 +127,7 @@ setenv digiReportDataDir ${emTail}/digiReport/${digiReportVersion}
 setenv digiReportDataDirFull ${dataHead}/${digiReportDataDir}
 setenv tkrHistDir ${emiBase}/TKR
 setenv tkrCopyLimit 1800
-setenv tkrCopyScript ${digiReportTaskDir}/copyTkr.pl
+setenv tkrCopyScript ${svacPlLib}/copyTkr.pl
 #-------------------------------- digiReport ----------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
@@ -146,7 +146,7 @@ setenv reconCleanupScript ${reconTaskDir}/cleanup.py
 setenv reconOneScript ${reconTaskDir}/reconOne.csh
 setenv reconDataDir ${emTail}/recon
 setenv reconDataDirFull ${dataHead}/${reconDataDir}
-setenv chunkQueue long
+setenv chunkQueue xlong
 setenv chunkTime 60000
 setenv chunkArch linux32
 setenv pldVersion v0r3

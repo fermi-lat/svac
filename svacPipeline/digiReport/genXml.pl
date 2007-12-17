@@ -12,10 +12,10 @@ my $batchgroup = $ENV{'batchgroup'};
 
 use MakeMeta;
 my %metaWrappers = (MakeMeta::makeMeta($ENV{'digiReportTaskDir'}, 
-									   'genDigiTestReport', 'copyTkr'),
+									   'genDigiTestReport'),
 					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
 									   'LaunchReconstructable', 
-									   'url')
+									   'url', 'copyTkr')
 					);
 
 my $digiReportXml = 

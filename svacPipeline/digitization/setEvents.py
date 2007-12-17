@@ -1,3 +1,4 @@
+#!/nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt/python/2.5.1/bin/python2.5
 #!/usr/local/bin/python
 
 """usage: SetEvents.py run digiFile"""
