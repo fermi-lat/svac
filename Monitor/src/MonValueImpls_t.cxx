@@ -278,7 +278,6 @@ void MonHist1d::latchValue(){}
 
 int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
-
 MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1;
@@ -318,7 +317,8 @@ void MonHist1d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
   //  std::cout << m_name.c_str() << std::endl;
   for (unsigned i=0;i<m_dim;i++){
     //std::cout << "i,val= " << i << ", " << val[i] << std::endl;
-    m_hist->Fill(Double_t(i),(Double_t)val[i]);
+    if(val[i] != 0)
+      m_hist->Fill(Double_t(i),(Double_t)val[i]);
   }
 }  
 void MonHist1d_VecDim::reset(){}
@@ -444,7 +444,8 @@ void MonHist2d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
     for(Int_t j = 0; j < m_vecdim[1];j++){
       // std::cout << "i,j,val= " << i << ", " << j << ", " << val[z] << std::endl; 
       z = i*m_vecdim[1]+j;
-      m_hist->Fill(Double_t(i),Double_t(j),Double_t(val[z]));
+      if(val[z] != 0)
+	m_hist->Fill(Double_t(i),Double_t(j),Double_t(val[z]));
     }
   }  
 }
