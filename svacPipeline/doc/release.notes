@@ -797,3 +797,14 @@ v3r9p15 (2007/09/07)
 Put links to SVAC files in $LATMonRoot (with TKR files from digireport).
 Frob python versions in various scripts. (2007/10/21)
 Use PipelineStaging2 instead of PipelineStaging. (2007/10/30)
+---------------------------------------------------------------------------
+
+
+v4r0p0 (2007/12/20)
+---------------
+GR v13r6p1
+TestReport v4r1
+RunRootAnalyzer v3r9p2
+
+Drop calreport.
+Replace ConfigTables with configData.

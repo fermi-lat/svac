@@ -53,9 +53,9 @@ if urlKey not in goodKeys:
 
 # figure out the path to the target file
 #path = list(os.path.split(targetFile))
-print targetFile
+print >> sys.stderr, targetFile
 path = targetFile.split('/')
-print path
+print >> sys.stderr, path
 runIndex = path.index(runId)
 del path[:runIndex]
 if urlKey in reportPages:
@@ -68,7 +68,7 @@ else:
     defaultRootDir = os.environ['rootFtp']
     pass
 path = os.path.join(*path)
-print path
+print >> sys.stderr, path
 if not rootDataDir:
     rootDataDir = defaultRootDir
     

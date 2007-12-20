@@ -142,10 +142,15 @@ else:
     pass
 
 joHead = \
-"""#include "$LATINTEGRATIONROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
+"""#include "$GLEAMROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
 CalibDataSvc.CalibInstrumentName = "%(instrumentType)s";
 GlastDetSvc.xmlfile = "%(geoFile)s";
-digiRootReaderAlg.digiRootFile = "%(digiRootFile)s";
+digiRootReaderAlg.digiRootFileList = { "%(digiRootFile)s" };
+GlastDetSvc.xmlfile = "$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
+NtupleMaker.Members = {"AnalysisNtupleAlg","ClassifyAlg","FT1Alg","ObfCoordsAlg"};
+AcdCalibSvc.FlavorHighRange     = "ideal";
+AcdCalibSvc.FlavorCoherentNoise = "ideal";
+GcrReconAlg.HFC_Or_TriggerEng4 = "HFC";
 """ % \
 {
     'instrumentType': instrumentType,

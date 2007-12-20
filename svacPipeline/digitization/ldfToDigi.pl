@@ -78,10 +78,11 @@ close(SHELLFILE);
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
-#include "\$LATINTEGRATIONROOT/src/jobOptions/pipeline/ldf2digi.txt"
+#include "\$GLEAMROOT/src/jobOptions/pipeline/ldf2digi.txt"
 EventSelector.StorageType = "$ldfFileType";
 EventSelector.FileName = "$ldfFile";
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
+GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
 EOF
 
 close(JOBOPTIONFILE);

@@ -19,6 +19,7 @@ my %metaWrappers = (MakeMeta::makeMeta($ENV{'digitizationTaskDir'},
 									   "url", "delete")
 					);
 
+
 my $digitizationXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
@@ -26,85 +27,7 @@ my $digitizationXml =
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
     xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
 
-    <name>$ENV{'digitizationTaskLatte'}</name>
-    <type>Digitization</type>
-    <dataset-base-path></dataset-base-path>
-    <run-log-path>/temp/</run-log-path>
-
-    <executable name=\"Convert\" version=\"$ENV{'digitizationTaskVersion'}\">
-        $metaWrappers{'ldfToDigi'}
-    </executable>
-    <executable name=\"launchRecon\" version=\"$ENV{'digitizationTaskVersion'}\">
-        $metaWrappers{'LaunchReconstructable'}
-    </executable>
-    <executable name=\"taskLauncher\" version=\"$ENV{'svacVersion'}\">
-        $metaWrappers{'Launch'}
-    </executable>
-    <executable name=\"urlWrapper\" version=\"$ENV{'svacVersion'}\">
-        $metaWrappers{'url'}
-    </executable>
-
-    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-        <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
-        <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
-    </batch-job-configuration>
-    <batch-job-configuration name=\"glastdataq-job\" queue=\"glastdataq\" group=\"$batchgroup\">
-        <working-directory>$ENV{'digitizationDataDirFull'}</working-directory>
-        <log-file-path>$ENV{'digitizationDataDirFull'}</log-file-path>
-    </batch-job-configuration>
-
-    <file name=\"ldf\"        file-type=\"fits\"   type=\"LDF\">
-        <path>$ENV{'onlineDataDirFull'}</path>
-    </file>
-    <file name=\"digi\"       file-type=\"root\"   type=\"DIGI\">
-        <path>$ENV{'digitizationDataDirFull'}</path>
-    </file>
-    <file name=\"jobOptions\" file-type=\"jobOpt\" type=\"text\">
-        <path>$ENV{'digitizationDataDirFull'}</path>
-    </file>
-    <file name=\"script\"     file-type=\"csh\"    type=\"script\">
-        <path>$ENV{'digitizationDataDirFull'}</path>
-    </file>
-
-    <processing-step name=\"Convert\" executable=\"Convert\" batch-job-configuration=\"glastdataq-job\">
-                    <input-file name=\"ldf\"/>
-                    <output-file name=\"digi\"/>
-                    <output-file name=\"script\"/>
-                    <output-file name=\"jobOptions\"/>
-    </processing-step>
-    <processing-step name=\"$ENV{'reconTask'}\" executable=\"launchRecon\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-    </processing-step>
-    <processing-step name=\"$ENV{'digiReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-    </processing-step>
-    <processing-step name=\"$ENV{'acdReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-    </processing-step>
-    <processing-step name=\"$ENV{'calReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-    </processing-step>
-    <processing-step name=\"digiRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"digi\"/>
-    </processing-step>
-</pipeline>
-
-";
-
-my $digitizationXmlFileName = "$ENV{'digitizationTaskLatte'}.xml";
-open FIELDS, '>', $digitizationXmlFileName;
-print FIELDS $digitizationXml;
-close FIELDS;
-
-
-$digitizationXml = 
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<pipeline
-    xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
-    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
-
-    <name>$ENV{'digitizationTaskLicos'}</name>
+    <name>$ENV{'digitizationTask'}</name>
     <type>Digitization</type>
     <dataset-base-path></dataset-base-path>
     <run-log-path>/temp/</run-log-path>
@@ -172,7 +95,7 @@ $digitizationXml =
     <processing-step name=\"$ENV{'acdReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
-    <processing-step name=\"$ENV{'calReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
+    <processing-step name=\"$ENV{'configReportTask'}\" executable=\"taskLauncher\" batch-job-configuration=\"express-job\">
                     <input-file name=\"digi\"/>
     </processing-step>
     <processing-step name=\"digiRootFile\" executable=\"urlWrapper\" batch-job-configuration=\"express-job\">
@@ -185,7 +108,7 @@ $digitizationXml =
 
 ";
 
-$digitizationXmlFileName = "$ENV{'digitizationTaskLicos'}.xml";
+my $digitizationXmlFileName = "$ENV{'digitizationTask'}.xml";
 open FIELDS, '>', $digitizationXmlFileName;
 print FIELDS $digitizationXml;
 close FIELDS;

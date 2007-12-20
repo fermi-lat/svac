@@ -1,0 +1,27 @@
+1/ Wait until the digi file is done, then run this:
+
+setenv LD_LIBRARY_PATH
+/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/ROOT/v5.16.00-gl1/root/lib:/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/GlastRe
+lease/GlastRelease-v13r5p4/lib ; setenv ROOTSYS $GLAST_EXT/ROOT/v5.16.00-gl1/root ; "$ROOTSYS"/bin/root -b -q -l
+'getConfigKey.C("digi.root","latc.txt")'
+
+(note that the GR release lib is in $LD_LIBRARY_PATH and is necessary with Root v5.16). This reads in the first event,
+extracts the LatC key and writes it to a file. I'm sure it can be done in better and easier ways ....
+
+
+2/ Read in the key from the file and run
+
+ConfigXml2Root.exe <LatC_key_value> -o <output_config_file.root>
+
+ConfigXml2Root is part of the package configData which is included in GR.
+
+        I suggest we dump the output_config_file.root in the current 'configReport' directory (and remove the old
+configReport task). This way we get an link to the html (and idirectly to the Root file) from eLog for free.
+
+
+To dump the GEM configuration check out configData v1r4p1. Usage:
+dumpGemConfiguration.exe -f [for full config] -m [to allow partial config] -o [filename] latc_key or xml_file
+If you omit -o the config will be dumped on the screen. The default is just contrigurator output, -f will dump the entire
+GEM. If -m is specified the program will accept a partial config file (e.g. with ROI missing).
+
+        We need a new GR for this. Will be GR v13r6p1 (tomorrow).

@@ -1,0 +1,49 @@
+        New tag of TestReport: v4r1
+y
+
+        Actually, the geomtry also needs to be added to the digi JO.
+
+anders
+
+On Thu, 13 Dec 2007, Anders Borgland wrote:
+
+> 
+>       For pipeline 1 you will need to add this recon job option permanently (do it after having read in the one from Gleam
+> as it needs to overwrite something in the default one):
+> 
+> NtupleMaker.Members = {"AnalysisNtupleAlg","ClassifyAlg","FT1Alg","ObfCoordsAlg"};
+> 
+>       You also need to specify the warm geometry:
+> 
+> GlastDetSvc.xmlfile = "$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
+> 
+> anders
+> 
+> 
+> On Thu, 13 Dec 2007, Anders Borgland wrote:
+> 
+> > 
+> >     You can start out with GR v13r5p5. There will be a p6 with some JO included in the standard JO. For the moment you
+> > have to put them in by hand (see end).
+> > 
+> >     GR v13r5p5 uses Root v5.16.00-gl1. The Gleam version is v6r33p5.
+> > 
+> >     New TestReport tag: v4r0p1
+> > 
+> >     New SVAC ntuple tag: v3r9p2
+> > 
+> > 
+> >     Use the usual Gleam/src/jobOptions/pipeline JO files with these changes for recon:
+> > 
+> > NtupleMaker.Members  = {"AnalysisNtupleAlg"};
+> > NtupleMaker.Members += {"ClassifyAlg"};
+> > NtupleMaker.Members += {"FT1Alg"};
+> > NtupleMaker.Members += {"ObfCoordsAlg"};
+> > 
+> > // ACD calibs:
+> > AcdCalibSvc.FlavorHighRange     = "ideal";
+> > AcdCalibSvc.FlavorCoherentNoise = "ideal";
+> > 
+> > // GCR:
+> > GcrReconAlg.HFC_Or_TriggerEng4 = "HFC";
+        We need a new GR for this. Will be GR v13r6p1 (tomorrow).

@@ -2,15 +2,15 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v3r9p15
+setenv svacVersion v4r0p0
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
 setenv SVAC_CMTCONFIG rh9_gcc32opt
 setenv SVAC_GLAST_EXT /afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/${SVAC_CMTCONFIG}
-setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume03
-setenv EngineeringModelVersion v8r1109p12
-setenv sasVersion EngineeringModel-$EngineeringModelVersion
+setenv sasLocation /afs/slac.stanford.edu/g/glast/ground/releases/volume14
+setenv EngineeringModelVersion v13r6p1
+setenv sasVersion GlastRelease-$EngineeringModelVersion
 setenv sasCmt ${sasLocation}/${sasVersion}
 
 setenv svacRoot /afs/slac.stanford.edu/g/glast/ground/PipelineConfig/EM-tasks
@@ -28,7 +28,7 @@ setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv ftpHead ftp://ftp-glast.slac.stanford.edu/glast.
 setenv dataDisk u40
 setenv onlineDisk u40
-setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging2
+setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging2/svac
 setenv localDisk /scratch
 setenv phase Integration
 setenv subDir ${dataDisk}/${phase}
@@ -49,11 +49,11 @@ setenv calCalibSerNo -9999
 
 # uncomment to disable temp file deletion and eLog updates 
 # for testing
-# setenv svacTestMode 1 
+#setenv svacTestMode 1 
 
-setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.14.00g/root
+setenv ROOTSYS ${SVAC_GLAST_EXT}/ROOT/v5.16.00-gl1/root
 setenv rootLib ${ROOTSYS}/lib
-setenv haddSys ${SVAC_GLAST_EXT}/ROOT/v5.14.00g/root
+setenv haddSys ${SVAC_GLAST_EXT}/ROOT/v5.16.00-gl1/root
 setenv haddLib ${haddSys}/lib
 
 setenv emiBase ${LATMonRoot}/TestReports/GD/EMC-EMI
@@ -70,8 +70,7 @@ setenv onlineDataDirFull ${onlineHead}/${onlineDataDir}
 
 #++++++++++++++++++++++++++++++++ eLogUpdate ++++++++++++++++++++++++++++++++++
 setenv eLogTaskVersion ${svacVersion}
-setenv eLogTaskLatte updateELogDB-latte-${eLogTaskVersion}
-setenv eLogTaskLicos updateELogDB-licos-${eLogTaskVersion}
+setenv eLogTask updateELogDB-${eLogTaskVersion}
 setenv eLogFeederVersion v2r3p3
 setenv eLogDir ${svacCmt}/eLogFeeder/${eLogFeederVersion}
 setenv eLogTaskDir ${svacPlRoot}/eLogUpdate
@@ -81,27 +80,13 @@ setenv eLogDataDir ${cookedTail}
 setenv eLogDataDirFull ${dataHead}/${eLogDataDir}
 #-------------------------------- eLogUpdate ----------------------------------
 
-#++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
-setenv configReportTaskVersion ${svacVersion}
-setenv configReportTaskLatte configReport-latte-${configReportTaskVersion}
-setenv configReportTaskLicos configReport-licos-${configReportTaskVersion}
-setenv configReportVersion v4r0p3
-setenv configReportUrl ConfigTables.html
-setenv ConfigTablesDir ${svacCmt}/ConfigTables/${configReportVersion}
-setenv configTaskDir ${svacPlRoot}/configReport
-setenv configTablesScript ${ConfigTablesDir}/ConfigTables.py 
-setenv configTablesDataDir ${cookedTail}/configReport/${configReportVersion}
-setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
-#-------------------------------- configReport --------------------------------
-
 #++++++++++++++++++++++++++++++++ digitization ++++++++++++++++++++++++++++++++
 setenv digitizationTaskVersion ${svacVersion}
-setenv digitizationTaskLatte digitization-latte-${digitizationTaskVersion}
-setenv digitizationTaskLicos digitization-licos-${digitizationTaskVersion}
-setenv Em2Version v2r76
-setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
+setenv digitizationTask digitization-${digitizationTaskVersion}
+setenv Em2Version v6r33p7
+setenv Em2Dir ${sasCmt}/Gleam/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
-setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/LatIntegration.exe
+setenv ldfToDigiApp ${Em2Dir}/${SVAC_CMTCONFIG}/Gleam.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -113,7 +98,7 @@ setenv digitizationDataDirFull ${dataHead}/${digitizationDataDir}
 #++++++++++++++++++++++++++++++++ digiReport ++++++++++++++++++++++++++++++++++
 setenv digiReportTaskVersion ${svacVersion}
 setenv digiReportTask digiReport-${digiReportTaskVersion}
-setenv TestReportVersion v3r7p5
+setenv TestReportVersion v4r1
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
 setenv digiReportApp ${TestReportDir}/${SVAC_CMTCONFIG}/TestReport.exe
@@ -129,6 +114,23 @@ setenv tkrHistDir ${emiBase}/TKR
 setenv tkrCopyLimit 1800
 setenv tkrCopyScript ${svacPlLib}/copyTkr.pl
 #-------------------------------- digiReport ----------------------------------
+
+#++++++++++++++++++++++++++++++++ configReport ++++++++++++++++++++++++++++++++
+setenv configReportTaskVersion ${svacVersion}
+setenv configReportTask configReport-${configReportTaskVersion}
+setenv configReportVersion v1r4p1
+#setenv configReportUrl ConfigTables.html
+setenv configReportUrl ''
+setenv configDataDir ${sasCmt}/configData/${configReportVersion}
+setenv configTaskDir ${svacPlRoot}/configReport
+setenv getConfigKey ${configTaskDir}/getConfigKey.C
+setenv configDataCmt ${configDataDir}/cmt
+setenv configDataBinDir ${configDataDir}/${SVAC_CMTCONFIG}
+setenv ConfigXml2Root ${configDataBinDir}/ConfigXml2Root.exe
+setenv dumpGemConfiguration ${configDataBinDir}/dumpGemConfiguration.exe
+setenv configTablesDataDir ${cookedTail}/configReport/${configReportVersion}
+setenv configTablesDataDirFull ${dataHead}/${configTablesDataDir}
+#-------------------------------- configReport --------------------------------
 
 #++++++++++++++++++++++++++++++++ recon +++++++++++++++++++++++++++++++++++++++
 setenv reconTaskVersion ${svacVersion}
@@ -149,7 +151,7 @@ setenv reconDataDirFull ${dataHead}/${reconDataDir}
 setenv chunkQueue xlong
 setenv chunkTime 60000
 setenv chunkArch linux32
-setenv pldVersion v0r3
+setenv pldVersion v0r4
 #setenv pldLib ${svacCmt}/pipelineDatasets/${pldVersion}/${SVAC_CMTCONFIG}
 setenv pldLib ${svacCmt}/lib
 setenv doneUsingRecon zzzDone
@@ -172,7 +174,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v3r1p3
+setenv RunRootAnalyzerVersion v3r9p2
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
@@ -185,7 +187,7 @@ setenv svacTupleDataDirFull ${dataHead}/${svacTupleDataDir}
 #++++++++++++++++++++++++++++++++ tkrReport +++++++++++++++++++++++++++++++++++
 setenv tkrReportTaskVersion ${svacVersion}
 setenv tkrReportTask tkrReport-${tkrReportTaskVersion}
-setenv calibTkrUtilVersion v1r7
+setenv calibTkrUtilVersion v1r7p1
 setenv tkrReportUrl index.html
 setenv calibTkrUtilDir ${sasCmt}/calibTkrUtil/${calibTkrUtilVersion}
 setenv tkrReportCmt ${calibTkrUtilDir}/cmt
@@ -216,25 +218,6 @@ setenv acdReportDataDirFull ${dataHead}/${acdReportDataDir}
 setenv acdReportDestination ${emiBase}/ACD
 #-------------------------------- acdReport -----------------------------------
 
-#++++++++++++++++++++++++++++++++ calReport +++++++++++++++++++++++++++++++++++
-setenv calReportTaskVersion ${svacVersion}
-setenv calReportTask calReport-${calReportTaskVersion}
-setenv calibGenCalVersion v4r4_emi_p2
-setenv calReportDir ${sasCmt}/calibGenCAL/${calibGenCalVersion}
-setenv calReportCmt ${calReportDir}/cmt
-setenv calPedApp ${calReportDir}/${SVAC_CMTCONFIG}/genMuonPed.exe
-setenv calPedConfig ${calReportDir}/cfg/emi_ped.cfg
-setenv calAnalApp ${calReportDir}/${SVAC_CMTCONFIG}/emiAnal.exe
-setenv calReportTaskDir ${svacPlRoot}/calReport
-setenv calPedScript ${calReportTaskDir}/calPed.pl
-setenv calAnalScript ${calReportTaskDir}/calAnal.pl
-setenv calReportDataDir ${emTail}/calReport/${calibGenCalVersion}
-setenv calReportDataDirFull ${dataHead}/${calReportDataDir}
-setenv calReportBinWidth 3.0
-setenv calReportNBins 6000
-setenv calReportDesination ${emiBase}/CAL
-#-------------------------------- calReport -----------------------------------
-
 #++++++++++++++++++++++++++++++++ many ++++++++++++++++++++++++++++++++++++++++
 setenv taskLaunchWrapper ${svacPlLib}/LaunchWrapper.pl
 setenv taskLauncher ${svacPlLib}/TaskLaunch.pl
@@ -252,14 +235,14 @@ setenv finalCleanup ${svacPlLib}/finalCleanup.pl
 setenv decideReconScript ${svacPlLib}/decideRecon.pl
 #-------------------------------- many ----------------------------------------
 
-setenv SVACPYTHON ${ConfigTablesDir}:${eLogDir}:${svacPlLib}:${rootLib}
+setenv SVACPYTHON ${eLogDir}:${svacPlLib}:${rootLib}
 if ( ${?PYTHONPATH} == '1' ) then
     setenv PYTHONPATH ${SVACPYTHON}:${PYTHONPATH}
 else
     setenv PYTHONPATH ${SVACPYTHON}
 endif
 
-setenv PATH ${PATH}:${svacPlLib}
+setenv PATH ${PATH}:${svacPlLib}:${ROOTSYS}/bin
 
 setenv SVAC_LD_LIBRARY_PATH ${rootLib}:${sasCmt}/lib:${pldLib}
 if ( ${?LD_LIBRARY_PATH} == '1' ) then
