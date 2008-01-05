@@ -35,6 +35,13 @@
     <object> DeltaEventTimeManual </object> 
     <object> Tick20MHzDeviation </object>
     <object> CrateNumber </object>
+    <object> Sequence </object>
+    <object> DatagramInfo </object>
+    <object> DeltaEvtID </object>
+    <object> Delta_CCSDSTime_EvtTime </object>
+    <object> NewSecond </object>
+
+
 
     <!-- Acd Variables -->
     
@@ -42,10 +49,12 @@
     <object>AcdGemROI_Tower </object>
     <object>AcdGemCNO_GARC  </object>
     <object>AcdHit_AcdTile  </object>
+    <object>AcdSingleHit </object>
     <object>AcdPmtA_OverThreshold_AcdTile  </object>
     <object>AcdPmtB_OverThreshold_AcdTile  </object>
     <object>AcdVetoA_AcdTile  </object>
     <object>AcdVetoB_AcdTile  </object>
+    <object>AcdVetoA_OR_B_AcdTile </object>
     <object>AcdPha_PmtA_AcdTile  </object>
     <object>AcdPha_PmtB_AcdTile  </object>
 
@@ -348,7 +357,7 @@
       <formula><![CDATA[ DeltaEventTimeManual*1000. ]]></formula>
       <cut><![CDATA[ condsummary&30 && (DeltaEventTimeManual*1000. < 0.4)]]></cut>
       <type> histogram-1d[4100,0.0,0.41] </type>
-      <titledesc> Distribution of Delta Event Time computed manually</titledesc>
+      <titledesc> Distribution of Delta Event Time computed manually  (ZOOM)</titledesc>
       <axisdesc> [Time (ms), N] </axisdesc>
       <description>  Distribution of Delta Event Time computed manually using the event time stamp. Only Delta times smaller than 0.4 ms are displayed. </description>
     </object>
@@ -356,7 +365,7 @@
 	 <object>
       <name> Tick20MHzDeviation_TH1 </name>
       <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
-      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <cut><![CDATA[ (NewSecond&1)]]></cut>
       <type> histogram-1d[200,-10000,10000] </type>
       <titledesc> Number of ticks between successive 1-PPS</titledesc>
       <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
@@ -367,12 +376,14 @@
      <object>
       <name> Tick20MHzDeviation_Zoom_TH1 </name>
       <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
-      <cut><![CDATA[ condsummary&30 && (Tick20MHzDeviation<200) && (Tick20MHzDeviation> -200)]]></cut>
-      <type> histogram-1d[200,-200,200] </type>
-      <titledesc> Number of ticks between successive 1-PPS</titledesc>
+      <cut><![CDATA[ (NewSecond&1) && (Tick20MHzDeviation<200) && (Tick20MHzDeviation> -200)]]></cut>
+      <type> histogram-1d[400,-200,200] </type>
+      <titledesc> Number of ticks between successive 1-PPS (ZOOM)</titledesc>
       <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
       <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz. Only deviations smaller than 200 ticks are being displayed.</description>
     </object>
+
+    
 
      <object>
       <name> CrateNumber_TH1 </name>
@@ -383,6 +394,51 @@
       <axisdesc> [Crate number, N] </axisdesc>
       <description>  Crate number (Epu0 - Epu1 - Epu2 - Siu0 - Siu1 - Aux); source from which this datagram comes from.  </description>
     </object>
+
+
+
+     <object>
+      <name> Delta_CCSDSTime_EvtTime_Epu0_TH1 </name>
+      <formula><![CDATA[ Delta_CCSDSTime_EvtTime ]]></formula>
+      <cut><![CDATA[ DatagramInfo[0] == 0 ]]></cut>
+      <type> histogram-1d[100,-5.0,20.0] </type>
+      <titledesc> CCSDS time minus Evt time for EPU0 </titledesc>
+      <axisdesc> [Time difference [seconds], N] </axisdesc>
+      <description>CCSDS Secondary Header time (digi->getCcsds().getUtc()) MINUS the evt time stamp (digi->getTimeStamp()) for events from EPU0.  </description>
+    </object>
+
+      <object>
+      <name> Delta_CCSDSTime_EvtTime_Epu1_TH1 </name>
+      <formula><![CDATA[ Delta_CCSDSTime_EvtTime ]]></formula>
+      <cut><![CDATA[ DatagramInfo[0] == 1]]></cut>
+      <type> histogram-1d[100,-5.0,20.0] </type>
+      <titledesc> CCSDS time minus Evt time for EPU1 </titledesc>
+      <axisdesc> [Time difference [seconds], N] </axisdesc>
+      <description>CCSDS Secondary Header time (digi->getCcsds().getUtc()) MINUS the evt time stamp (digi->getTimeStamp()) for events from EPU1.  </description>
+    </object>
+
+
+       
+     <object>
+      <name> DeltaEvtID_Epu0_TH1 </name>
+      <formula><![CDATA[ DeltaEvtID ]]></formula>
+      <cut><![CDATA[DatagramInfo[0] == 0]]></cut>
+      <type> histogram-1d[105,-4.5,100.5] </type>
+      <titledesc> Delta Evt ID for EPU0 </titledesc>
+      <axisdesc> [Delta Evt ID, N] </axisdesc>
+      <description> Delta Evt ID (digi->getMetaEvent().scalers().sequence()) between consecutive events for EPU0.</description>
+    </object>
+
+      <object>
+      <name> DeltaEvtID_Epu1_TH1 </name>
+      <formula><![CDATA[ DeltaEvtID ]]></formula>
+      <cut><![CDATA[ DatagramInfo[0] == 1]]></cut>
+      <type> histogram-1d[105,-4.5,100.5] </type>
+      <titledesc> Delta Evt ID for EPU1 </titledesc>
+      <axisdesc> [Delta Evt ID, N]  </axisdesc>
+      <description>Delta Evt ID (digi->getMetaEvent().scalers().sequence()) between consecutive events for EPU1.  </description>
+    </object>
+
 
 
       <!-- ********************  Detector information   *********************** -->
@@ -442,6 +498,76 @@
       <description> Distribution of ACD digis per event. This is just the total number of tiles that have at least one PMT above the zero suppression threshold. </description>
     </object>
 
+
+
+
+
+	<!--   TMP
+	<object>
+      <name> AcdHitMap_TH1 </name>
+      <formula><![CDATA[ AcdHit_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Hit Map</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Hit map: distribution of ACD GEM IDs for all Digis (hits)</description>
+    </object>
+ 
+    <object>
+      <name> AcdSingleHitMap_TH1 </name>
+      <formula><![CDATA[ AcdSingleHit ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Single Hit Map</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD single hit map: distribution of ACD GEM IDs for all single hits </description>
+    </object>
+
+
+	
+
+     <object>
+      <name> AcdVetoMap_TH1 </name>
+      <formula><![CDATA[ AcdVetoA_OR_B_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Veto Map</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Veto Map: distribution of ACD Vetos (produced by one or by the two PMTs). </description>
+    </object>
+
+      <object>
+      <name> AcdSingleVetoMap_TH1 </name>
+      <formula><![CDATA[ AcdSingleVeto ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Single Veto Map</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Single Veto Map: distribution of ACD Vetos (produced by one and only one PMT). </description>
+    </object>
+
+
+        <object>
+      <name> AcdPhaMap_PMTA_TH1 </name>
+      <formula><![CDATA[ AcdPha_PmtA_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Pha Map PMTA </titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Pha Map for PMTA: distribution of pulse height from PMT A. </description>
+    </object>
+	
+	    <object>
+      <name> AcdPhaMap_PMTB_TH1 </name>
+      <formula><![CDATA[ AcdPha_PmtB_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5] </type>
+      <titledesc>  ACD Pha Map PMTB </titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Pha Map for PMTB: distribution of pulse height from PMT B. </description>
+    </object>
+
+	   END OF TMP -->
 
       <!--  ______________  Tracker _______________ -->
 
