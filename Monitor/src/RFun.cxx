@@ -126,6 +126,14 @@ double RFun::getChannelEnergyHighest(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROO
     }
 
 
+  // tmp
+  /*
+  std::cout << " RFun::getChannelEnergyHighest: call with arguments: " << std::endl
+	    << "Level, Energy" << Level << "\t" << Energy << std::endl;
+  */
+  // endtmp
+
+
   typedef std::map<int,float> MapEnergyChannel;
   MapEnergyChannel data;  
   std::list<float> EnergyList;
@@ -150,19 +158,44 @@ double RFun::getChannelEnergyHighest(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROO
     EnergySorted.push_back(*it);
 
   // print info
-  /* 
-  std::cout << "RFun::getChannelEnergyHighest: First = " <<  EnergySorted[0] << std::endl;
-  std::cout << "RFun::getChannelEnergyHighest : second = " <<  EnergySorted[1] << std::endl;
-  std::cout << "RFun::getChannelEnergyHighest : third = " <<  EnergySorted[2] << std::endl;
+  /*
+  if(!Level){
+    std::cout << "RFun::getChannelEnergyHighest: First = " <<  EnergySorted[0] << std::endl;
+    std::cout << "RFun::getChannelEnergyHighest : second = " <<  EnergySorted[1] << std::endl;
+    std::cout << "RFun::getChannelEnergyHighest : third = " <<  EnergySorted[2] << std::endl;
+  }
   */
+
   if(Energy)
     return EnergySorted[Level];
   else{
     // search for the channel with the Energy in LEvel position
+
+    // tmp
+    // Print the entire energy map 
+    /*
+    if(!Level){
+      std::cout << " RFun::getChannelEnergyHighest: Energy Map: " << std::endl
+		<< "Channel number          Energy" << std::endl;
+      for(MapEnergyChannel::const_iterator it=data.begin();it!=data.end();it++)
+	{
+	  if(it->second > 0.01)
+	    std::cout << it->first << "\t" << it->second << std::endl;
+	}
+    }
+    */
+    // end tmp
+
+
     for(MapEnergyChannel::const_iterator it=data.begin();it!=data.end();it++)
       {
 	if(it->second == EnergySorted[Level]){
-	  // std::cout << "PosHighest == " << it->first << std::endl;
+	  /*
+	  if(1){
+	    std::cout << "PosHighest == " << it->first 
+		      << "  Energy Highest = " << it->second << std::endl;
+	  }
+	  */
 	  return it->first;
 	}
       }
@@ -562,6 +595,44 @@ int RFun::testrunonceformulaoutput(std::vector<double> formulavector)
  return 1;
 }
 
+int RFun::UpdateDatagramEvtCounter(Int_t datagraminfo[2], int cpuNumber)
+{
+
+  int numevts = -1;
+  // check that cpuNumber given makes sense
+  if(cpuNumber < 0 || cpuNumber >4)
+    {
+      std::cerr<< "RFun::UpdateDatagramEvtCounter: ERROR" << std::endl
+	       << "cpuNumber given (=" << cpuNumber <<") is out of bounds [0,4]" << std::endl;
+      assert(0);
+    }
+
+  // initialize counters if needed
+  if(makeinitdatagraminfo)
+    RFun::initdatagramevtcounter();
+
+  if(datagraminfo[0] == cpuNumber)
+    {// This event belongs to the cpuNumber we are interested in
+      // check if evt belongs to the previous datagram number for this cpuNumber.
+      // If true, keep adding events
+      // If false, update numbers for this event and return the number of events in the previous datagram, 
+      // in case this number is different from 0
+                            
+      if(datagraminfo[1] == m_previousdatagramnumber[cpuNumber])
+	m_datagramevtcounter[cpuNumber]++;
+      else
+	{
+	  numevts = int(m_datagramevtcounter[cpuNumber]);
+	  m_datagramevtcounter[cpuNumber] = 1; // this event !!
+	  m_previousdatagramnumber[cpuNumber] = datagraminfo[1];
+	}
+    }
+  
+  return numevts;
+}
+
+
+
 // Initialization of static data member
 
 //TrgConfigDB* RFun::m_tcf=new TrgConfigDB(new LatcDBImplOld);
@@ -570,7 +641,19 @@ int RFun::m_boundarytwr[16][8];
 bool RFun::m_boundarytwrdefined = false;
 UInt_t RFun::m_doprintUpToN = 5;
 UInt_t RFun::m_evtcounter = 0;
+int RFun::m_datagramevtcounter[5];
+int RFun::m_previousdatagramnumber[5];
+bool  RFun::makeinitdatagraminfo = true;
 
+
+void RFun::initdatagramevtcounter()
+{
+  for(UInt_t i=0;i<5;i++){
+     m_datagramevtcounter[i] = 0;
+     m_previousdatagramnumber[i] = -1;
+  }
+    makeinitdatagraminfo = false;
+}
 
 void RFun::initboundarytowers()
 {

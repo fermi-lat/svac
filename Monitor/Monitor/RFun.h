@@ -126,6 +126,12 @@ class RFun{
   static unsigned GetOveralIndex_TowerCalLayerCalColumnCalFace(int tower, int layer, int column, int face);
 
 
+  // Update datagram evt counters. If event belongs to a new datagram (for that particular cpuNumber)
+  // the function returns the value of the counter and resets it. Otherwise, the function returns -1.
+
+  static int UpdateDatagramEvtCounter(Int_t datagraminfo[2], int cpuNumber);
+  static void initdatagramevtcounter();
+
   // END of Acd/Tracker/Cal related functions
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
@@ -148,6 +154,10 @@ class RFun{
   static bool m_boundarytwrdefined;
   //static TrgConfigDB* m_tcf;
 
+
+  static int m_datagramevtcounter[5];
+  static int m_previousdatagramnumber[5];
+  static bool makeinitdatagraminfo;
   // test data members
   static UInt_t m_doprintUpToN;
   static UInt_t m_evtcounter;
