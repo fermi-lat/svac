@@ -323,3 +323,6 @@ awb	Added LatC master key. Fixed silly compilation bugs with the previous tag.
 
 v3r9p2: December 13, 2007
 awb     Added printout for every 1000th event.
+
+v3r9p3:	January 7, 2008
+awb	Protect against null-pointer in case of no LATC key.

@@ -167,7 +167,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Context information from Flight Software </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. </TD> </TR>
+<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. A value of 0 means that no key was available. </TD> </TR>
 
 <TR> <TD> ContextRunInfoPlatform   </TD> <TD> Int  </TD> <TD> The platform type this run was taken on (No platform, LAT, Testbead or Host (software simulation)) - See enums/enums/Lsf.h </TD> </TR> 
 <TR> <TD> ContextRunInfoDataOrigin </TD> <TD> Int  </TD> <TD> The type of data from this run (No origin, Orbit, MC, ground) - See enums/enums/Lsf.h  </TD> </TR>

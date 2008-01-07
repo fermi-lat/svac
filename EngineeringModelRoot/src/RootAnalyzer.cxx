@@ -613,7 +613,12 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // Context information:
   //
-  m_ntuple.m_latcKey = m_digiEvent->getMetaEvent().keys()->LATC_master();
+  unsigned int tmpLatcKey = 0;
+
+  if (m_digiEvent->getMetaEvent().keys() != 0) {
+    tmpLatcKey = m_digiEvent->getMetaEvent().keys()->LATC_master();
+  }
+  m_ntuple.m_latcKey = tmpLatcKey;
  
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
   m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
