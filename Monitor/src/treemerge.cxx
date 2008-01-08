@@ -128,7 +128,7 @@ int main(int argn, char** argc) {
       return 2;
     }
   }
-  for (unsigned i=0;i<chunks.size();i++)std::cout<<order[i]<<std::endl;
+  //for (unsigned i=0;i<chunks.size();i++)std::cout<<order[i]<<std::endl;
   // check for overlap
   for (unsigned i=0;i<chunks.size();i++){
     if (i>0){
@@ -140,13 +140,16 @@ int main(int argn, char** argc) {
       }
       else{
 	std::cout<<"Bad overlap between two chunks."<<std::endl;
+	std::cout<<order[i]<<std::endl;
+	std::cout<<" start "<<chunks[order[i-1]]->start<<" end "<<chunks[order[i-1]]->end<<" binwidth"<<chunks[order[i-1]]->binwidth<<std::endl;
+	std::cout<<" start "<<chunks[order[i]]->start<<" end "<<chunks[order[i]]->end<<" binwidth"<<chunks[order[i]]->binwidth<<std::endl;
 	return 2;
       }
     }
     else chunks[order[i]]->overlap=false;
   }
   for (unsigned i=0;i<chunks.size();i++){
-    std::cout<<"Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<<std::endl;
+    std::cout<<"Chunk: "<<order[i]<<" Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<<std::endl;
   }
   //start merging files
   int evtnr=0;
@@ -256,6 +259,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
   // keep track if we actually merged everything
   std::vector<std::string>::iterator it ;
   std::vector<bool> used;
+  Int_t trueint=-1;
   for (unsigned i=0;i<leaves.size();i++)used.push_back(false);
   for (unsigned i=0;i<leaves.size();i++){
     // Merge branches that exist in all Time trees first
@@ -285,6 +289,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
     if (leaves[i]=="TrueTimeInterval"){
       ((Double_t*)addout[i])[0]= ((Double_t*)addin1[i])[0]+((Double_t*)addin2[i])[0];
       used[i]=true;
+      trueint=i;
       continue;
     }
     if (leaves[i]=="TimeStampFirstEvt"){
@@ -527,6 +532,23 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       continue;
     }
   }
+  for (unsigned i=0;i<leaves.size();i++){
+    if (leaves[i].find("DoubleDiffRate_")==0 ){
+      used[i]=true;
+      // The true interval index is set
+      assert (trueint>-1);
+      Double_t iv1=((Double_t*)addin1[trueint])[0];
+      Double_t iv2=((Double_t*)addin2[trueint])[0];
+      for (unsigned j=0;j<dims[i];j++){
+	Double_t val1=((Double_t*)addin1[i])[j];
+	Double_t val2=((Double_t*)addin2[i])[j];
+	// The total time interval is gt 0
+	assert (iv1+iv2>0);
+	((Double_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
+      }
+    }
+  }
+	
   for (unsigned i=0;i<leaves.size();i++){
     if (used[i]==false){
       std::cout<<"Don't know how to merge "<<leaves[i]<<std::endl;

@@ -4,6 +4,7 @@
 #include "AcdPeds.h"
 #include "CalPedProxy.h"
 #include "CalPeds.h"
+#include <map>
 
 const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
