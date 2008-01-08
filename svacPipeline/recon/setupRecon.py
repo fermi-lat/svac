@@ -164,10 +164,14 @@ if particleType == 'Photons':
     pass
 
 testName = eLogDB.query(runId, 'TESTNAME')
+print >> sys.stderr, 'TESTNAME is %s' % testName
 calibFlavors = {'LAT-71x': 'vanilla-muongain'}
 for test, flavor in calibFlavors.items():
     if re.search(test, testName):
-        joHead += 'CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};\nCalCalibSvc.DefaultFlavor = "vanilla";\nCalCalibSvc.DefaultFlavor = "%s";\n' % flavor
+        print >> sys.stderr, 'Using calibration flavor %s' % flavor
+        joHead += '''CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
+        CalCalibSvc.DefaultFlavor = "%s";
+        ''' % flavor
         #joHead += 'TkrCalibSvc.DefaultFlavor = "%s";\n' % flavor
         pass
     pass
@@ -246,6 +250,10 @@ ApplicationMgr.EvtMax = %d;
     calFile = os.path.join(chunkStage, calChunkBase)
     calFiles.append(calFile)
     joData += 'CalTupleAlg.tupleFilename = "%s";\n' % calProcFile
+
+    # half-ashed temporary punt
+    gcrRootFile = '%s_%s_%s_gcr.root' % (task, runId, cTag)
+    joData += 'gcrSelectRootWriterAlg.gcrSelectRootFile = "%s";\n' % gcrRootFile
 
     logFile = '%s_%s_%s.log' % (task, runId, cTag)
     logFiles.append(logFile)

@@ -1,0 +1,21 @@
+
+        It looks like the flavor is correctly set for recon, but not for digi. Can you add this to the digi JO for 71x runs?
+
+CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
+CalCalibSvc.DefaultFlavor     = "vanilla-muongain";
+
+        I noticed that for recon we do:
+
+CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
+CalCalibSvc.DefaultFlavor = "vanilla";
+CalCalibSvc.DefaultFlavor = "vanilla-muongain";
+
+i.e. 'CalCalibSvc.DefaultFlavor' seems to be set twice. The middle line
+
+CalCalibSvc.DefaultFlavor = "vanilla";
+
+is not necessary i.e.:
+
+CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
+CalCalibSvc.DefaultFlavor     = "vanilla-muongain";
+

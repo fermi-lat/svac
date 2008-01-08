@@ -15,6 +15,7 @@ my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
+my $query = $ENV{'eLogQuery'};
 my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
 my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
@@ -84,6 +85,20 @@ EventSelector.FileName = "$ldfFile";
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
 GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
 EOF
+
+## temporary hack to fix runs w/ improper MOOT key
+#print JOBOPTIONFILE 'TrgConfigSvc.configureFrom = "Default";' . "\n";
+
+my $testName = `$query $runName TESTNAME`;
+chomp($testName);
+print STDERR "TESTNAME is $testName\n";
+if ($testName =~ 'LAT-71x') {
+	print STDERR "Using Moun gain\n";
+	print JOBOPTIONFILE <<EOF;
+CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
+CalCalibSvc.DefaultFlavor     = "vanilla-muongain";
+EOF
+}
 
 close(JOBOPTIONFILE);
 
