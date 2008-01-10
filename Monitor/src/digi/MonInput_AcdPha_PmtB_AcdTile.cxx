@@ -12,12 +12,13 @@
 
 #define NAME AcdPha_PmtB_AcdTile
 #define OUTBRANCH "AcdPha_PmtB_AcdTile"
-#define LEAF "AcdPha_PmtB_AcdTile[128]/s"
+#define LEAF "AcdPha_PmtB_AcdTile[128]/I"
 #define INBRANCH "m_acdDigiCol"
 //#define ACCESSOR capullo
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "Vector [acdtile] reporting about the PHA from PMT B"
+#define DESCRIPTION "Vector [acdtile] reporting about the PHA in PMT B. If PMT A from acdtile was not used, the value set in the vector is -1. Only the LOW PMT range is used. If HIGH range was used, the value is set to -1."
+
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -45,7 +46,7 @@ void MonInput_AcdPha_PmtB_AcdTile::setValue(TObject* event) {
 
 const UShort_t nacdtile(128);
   for(UShort_t i=0;i<nacdtile;i++)
-    m_val[i] = 0;
+    m_val[i] = -1;
 
   const TObjArray* acdDigiCol = de->getAcdDigiCol();
   assert(acdDigiCol);
@@ -56,7 +57,7 @@ const UShort_t nacdtile(128);
 
     UShort_t AcdGemID = AcdId::gemIndexFromTile(acdDigi->getId().getId());
 
-    //if(acdDigi->getRange(AcdDigi::B) == 0 ){
+    if(acdDigi->getRange(AcdDigi::B) == 0 ){
       if(AcdGemID<128) m_val[AcdGemID]=acdDigi->getPulseHeight(AcdDigi::B);
       else{
       if(acdDigi->getId().getId() != 899)// NA values are set to 899
@@ -69,7 +70,7 @@ const UShort_t nacdtile(128);
 	}
       }
       
-      //}
+    }
   }
 }
 
