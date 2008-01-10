@@ -321,11 +321,15 @@ Double_t RFun::loopovertowerANDcallayers_float(ROOT::TArrayProxy<ROOT::TArrayTyp
 #endif
 
 {
-  Double_t val(0.0);
+  Double_t val(-1.0);
   for (UShort_t itower = 0; itower < 16; itower++){
     for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
-      if(invector[itower][icallayer] >= 0)
-	val += invector[itower][icallayer];
+      if(invector[itower][icallayer] >= 0){
+	if(val<0)
+	  val = invector[itower][icallayer];
+	else
+	  val += invector[itower][icallayer];
+      }
     }
   }
   return val;
@@ -339,11 +343,15 @@ Double_t RFun::loopovercallayersANDcalcolumns_float(const Float_t invector[8][12
 #endif
 {
 
- Double_t val(0.0);
+ Double_t val(-1.0);
   for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
     for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
-      if(invector[icallayer][icalcolumn] >= 0)
-	val += invector[icallayer][icalcolumn];
+      if(invector[icallayer][icalcolumn] >= 0){
+	if(val<0)
+	  val = invector[icallayer][icalcolumn];
+	else
+	  val += invector[icallayer][icalcolumn];
+      }
     }
   }
   return val;
@@ -352,12 +360,16 @@ Double_t RFun::loopovercallayersANDcalcolumns_float(const Float_t invector[8][12
 
 Double_t RFun::loopovertowerANDcallayersANDcalcolumns_float(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t, 12>, 8> >& invector)
 {
-  Double_t val(0.0);
+  Double_t val(-1.0);
   for (UShort_t itower = 0; itower < 8; itower++){
     for (UShort_t icallayer = 0; icallayer < 8; icallayer++){
       for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
-	if(invector[itower][icallayer][icalcolumn] >= 0)
-	  val += invector[itower][icallayer][icalcolumn];
+	if(invector[itower][icallayer][icalcolumn] >= 0){
+	  if(val<0)
+	    val = invector[itower][icallayer][icalcolumn];
+	  else
+	    val += invector[itower][icallayer][icalcolumn];
+	}
       }
     }
   }
@@ -367,10 +379,14 @@ Double_t RFun::loopovertowerANDcallayersANDcalcolumns_float(ROOT::TArrayProxy<RO
 
 Double_t RFun::loopovercalcolumns_float(const Float_t invector[12])
 {
-  Double_t val(0.0);
+  Double_t val(-1.0);
   for (UShort_t icalcolumn = 0; icalcolumn < 12; icalcolumn++){
-    if(invector[icalcolumn] >= 0)
-      val += invector[icalcolumn];
+    if(invector[icalcolumn] >= 0){
+      if(val<0)
+	val = invector[icalcolumn];
+      else
+	val += invector[icalcolumn];
+    }
   }
   
   return val;
