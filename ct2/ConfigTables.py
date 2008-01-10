@@ -69,19 +69,6 @@ def finish():
     sys.exit(0)
     return
 
-#
-def getLatcFiles(doc):
-    secNodes = {}
-    fileNode = doc.getElementsByTagName('latcFiles')[0]
-    for node in fileNode.childNodes:
-        if node.nodeType == node.ELEMENT_NODE:
-            name = str(node.nodeName)
-            value = str(node.childNodes[0].nodeValue)
-            secNodes[name] = value
-            pass
-        pass
-    return secNodes
-
 # read in the config data
 try:
     print >> sys.stderr, "Reading file %s." % snapFile
@@ -108,9 +95,8 @@ if jobOptions.mode is jobOptions.latteMode:
 elif jobOptions.mode is jobOptions.licosMode:
     docs = {}
     sectionFiles = []
-    sections = getLatcFiles(doc)
-    for section in sections:
-        fileBase = sections[section]
+    for section in jobOptions.latcBcast:
+        fileBase = doc.getElementsByTagName(section)[0].childNodes[0].nodeValue
         fileName = os.path.join(inDir, fileBase)
         sectionFiles.append(fileName)
         print >> sys.stderr, "Reading file %s." % fileName
@@ -163,8 +149,8 @@ if jobOptions.mode is jobOptions.licosMode:
     <br/>
     <br/>
     LICOS support is currently somewhere between rudimentary and broken.<br/>
-    Any registers configured by broadcast are either missing or '%s'.
-    """ % jobOptions.absent)
+    Any registers configured by broadcast are either missing or 'Absent'.
+    """)
     pass
 
 if jobOptions.mode is jobOptions.latteMode:
@@ -178,31 +164,11 @@ if jobOptions.mode is jobOptions.latteMode:
 elif jobOptions.mode is jobOptions.licosMode:
     globalDoc = docs['bcast']
     gemDoc = docs['bcast']
-    try:
-        temDoc = docs['TEM']
-    except KeyError:
-        temDoc = docs['bcast']
-        pass
-    try:
-        arcDoc = docs['ARC']
-    except KeyError:
-        arcDoc = docs['bcast']
-        pass
-    try:
-        afeDoc = docs['AFE']
-    except KeyError:
-        afeDoc = docs['bcast']
-        pass
-    try:
-        cfeDoc = docs['CFE']
-    except KeyError:
-        cfeDoc = docs['bcast']
-        pass
-    try:
-        tfeDoc = docs['TFE']
-    except KeyError:
-        tfeDoc = docs['bcast']
-        pass
+    temDoc = docs['TEM']
+    arcDoc = docs['ARC']
+    afeDoc = docs['AFE']
+    cfeDoc = docs['CFE']
+    tfeDoc = docs['TFE']
 else:
     raise AssertionError, "Can't get here!"
     pass
