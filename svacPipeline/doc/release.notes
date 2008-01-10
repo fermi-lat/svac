@@ -808,3 +808,11 @@ RunRootAnalyzer v3r9p2
 
 Drop calreport.
 Replace ConfigTables with configData.
+---------------------------------------------------------------------------
+
+
+v4r0p0 (2008/01/07)
+---------------
+RunRootAnalyzer v3r9p3
+
+Output data on u52

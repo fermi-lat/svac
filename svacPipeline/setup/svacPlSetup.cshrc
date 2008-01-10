@@ -2,7 +2,7 @@
 
 # setup for SVAC pipeline
 
-setenv svacVersion v4r0p0
+setenv svacVersion v4r0p1
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
@@ -26,8 +26,8 @@ setenv CMTPATH ${svacCmt}:${sasCmt}
 setenv diskHead /nfs/farm/g/glast
 setenv webHead http://www.slac.stanford.edu/exp/glast/ground/LATSoft/nfsLinks
 setenv ftpHead ftp://ftp-glast.slac.stanford.edu/glast.
-setenv dataDisk u40
-setenv onlineDisk u40
+setenv dataDisk u52
+setenv onlineDisk u52
 setenv reconStageDir /afs/slac/g/glast/ground/PipelineStaging2/svac
 setenv localDisk /scratch
 setenv phase Integration
@@ -174,7 +174,7 @@ setenv reconReportDataDirFull ${dataHead}/${reconReportDataDir}
 #++++++++++++++++++++++++++++++++ svacTuple +++++++++++++++++++++++++++++++++++
 setenv svacTupleTaskVersion ${svacVersion}
 setenv svacTupleTask svacTuple-${svacTupleTaskVersion}
-setenv RunRootAnalyzerVersion v3r9p2
+setenv RunRootAnalyzerVersion v3r9p3
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
 setenv svacTupleApp ${RunRootAnalyzerDir}/${SVAC_CMTCONFIG}/RunRootAnalyzer.exe
