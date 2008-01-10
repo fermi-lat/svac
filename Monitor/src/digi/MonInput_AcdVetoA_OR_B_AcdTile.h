@@ -26,7 +26,6 @@ class MonInput_AcdVetoA_OR_B_AcdTile: public MonInputObject{
   void setValue(TObject* event) ;
   std::string getInputSource();
   std::string getDescription();
-  UShort_t getGemId(UInt_t id);
  private:
   VARTYPE m_val[128];
 };
