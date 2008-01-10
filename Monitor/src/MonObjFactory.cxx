@@ -98,16 +98,34 @@
 // Last updated with object CrateNumber by user dpaneque on Wed Oct 31 01:51:55 2007
 // Last updated with object AcdVetoA_OR_B_AcdTile by user dpaneque on Wed Oct 31 19:29:40 2007
 // Last updated with object AcdSingleHit by user dpaneque on Wed Oct 31 22:24:42 2007
-// Last updated with object AcdSingleVeto by user dpaneque on Wed Oct 31 22:39:07 2007
+// Last updated with object AcdSingleVeto_AcdTile by user dpaneque on Wed Oct 31 22:39:07 2007
 // Last updated with object DatagramInfo by user dpaneque on Mon Dec 17 21:08:27 2007
 // Last updated with object DeltaEvtID by user dpaneque on Tue Dec 18 02:30:41 2007
 // Last updated with object Delta_CCSDSTime_EvtTime by user dpaneque on Tue Dec 18 02:35:26 2007
 // Last updated with object NewSecond by user dpaneque on Tue Dec 18 04:51:28 2007
+// Last updated with object AcdSignalInfo_PMTAcdTilePha by user dpaneque on Sat Jan  5 20:52:15 2008
+// Last updated with object AcdHit_PmtGarcGafe by user dpaneque on Sun Jan  6 01:23:23 2008
+// Last updated with object AcdVeto_PmtGarcGafe by user dpaneque on Sun Jan  6 01:24:10 2008
+// Last updated with object AcdVeto_GafeGarc by user dpaneque on Sun Jan  6 02:11:06 2008
+// Last updated with object AcdHit_GafeGarc by user dpaneque on Sun Jan  6 02:11:29 2008
+// Last updated with object AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile by user dpaneque on Sun Jan  6 19:10:52 2008
+// Last updated with object AcdPha_PmtIdPmtRangeAcdTile by user dpaneque on Sun Jan  6 22:42:24 2008
+// Last updated with object AcdGlobalPos_NotMatchedTrack_FacePosXYZ by user dpaneque on Mon Jan  7 17:34:37 2008
+// Last updated with object AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ by user dpaneque on Mon Jan  7 18:35:28 2008
+#include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
+#include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
+#include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
+#include "recon/MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
+#include "digi/MonInput_AcdHit_GafeGarc.h"
+#include "digi/MonInput_AcdVeto_GafeGarc.h"
+#include "digi/MonInput_AcdVeto_PmtGarcGafe.h"
+#include "digi/MonInput_AcdHit_PmtGarcGafe.h"
+#include "digi/MonInput_AcdSignalInfo_PMTAcdTilePha.h"
 #include "digi/MonInput_NewSecond.h"
 #include "digi/MonInput_Delta_CCSDSTime_EvtTime.h"
 #include "digi/MonInput_DeltaEvtID.h"
 #include "digi/MonInput_DatagramInfo.h"
-#include "digi/MonInput_AcdSingleVeto.h"
+#include "digi/MonInput_AcdSingleVeto_AcdTile.h"
 #include "digi/MonInput_AcdSingleHit.h"
 #include "digi/MonInput_AcdVetoA_OR_B_AcdTile.h"
 #include "digi/MonInput_CrateNumber.h"
@@ -394,8 +412,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdVetoA_OR_B_AcdTile;
   if (s=="AcdSingleHit")
     return new MonInput_AcdSingleHit;
-  if (s=="AcdSingleVeto")
-    return new MonInput_AcdSingleVeto;
+  if (s=="AcdSingleVeto_AcdTile")
+    return new MonInput_AcdSingleVeto_AcdTile;
   if (s=="DatagramInfo")
     return new MonInput_DatagramInfo;
   if (s=="DeltaEvtID")
@@ -404,6 +422,24 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Delta_CCSDSTime_EvtTime;
   if (s=="NewSecond")
     return new MonInput_NewSecond;
+  if (s=="AcdSignalInfo_PMTAcdTilePha")
+    return new MonInput_AcdSignalInfo_PMTAcdTilePha;
+  if (s=="AcdHit_PmtGarcGafe")
+    return new MonInput_AcdHit_PmtGarcGafe;
+  if (s=="AcdVeto_PmtGarcGafe")
+    return new MonInput_AcdVeto_PmtGarcGafe;
+  if (s=="AcdVeto_GafeGarc")
+    return new MonInput_AcdVeto_GafeGarc;
+  if (s=="AcdHit_GafeGarc")
+    return new MonInput_AcdHit_GafeGarc;
+  if (s=="AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile")
+    return new MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile;
+  if (s=="AcdPha_PmtIdPmtRangeAcdTile")
+    return new MonInput_AcdPha_PmtIdPmtRangeAcdTile;
+  if (s=="AcdGlobalPos_NotMatchedTrack_FacePosXYZ")
+    return new MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ;
+  if (s=="AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
+    return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -504,11 +540,20 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CrateNumber");
   names.push_back("AcdVetoA_OR_B_AcdTile");
   names.push_back("AcdSingleHit");
-  names.push_back("AcdSingleVeto");
+  names.push_back("AcdSingleVeto_AcdTile");
   names.push_back("DatagramInfo");
   names.push_back("DeltaEvtID");
   names.push_back("Delta_CCSDSTime_EvtTime");
   names.push_back("NewSecond");
+  names.push_back("AcdSignalInfo_PMTAcdTilePha");
+  names.push_back("AcdHit_PmtGarcGafe");
+  names.push_back("AcdVeto_PmtGarcGafe");
+  names.push_back("AcdVeto_GafeGarc");
+  names.push_back("AcdHit_GafeGarc");
+  names.push_back("AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile");
+  names.push_back("AcdPha_PmtIdPmtRangeAcdTile");
+  names.push_back("AcdGlobalPos_NotMatchedTrack_FacePosXYZ");
+  names.push_back("AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
