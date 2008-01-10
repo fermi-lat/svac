@@ -10,7 +10,6 @@
 #include <time.h>
 //
 // ROOT-io
-#include "TROOT.h"
 #include "TFile.h"
 #include "TSystem.h"
 #include "TString.h"
