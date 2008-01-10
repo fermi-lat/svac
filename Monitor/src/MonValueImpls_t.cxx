@@ -237,15 +237,23 @@ void MonRate::latchValue() {
 MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1;
+  m_fillhistoalways = 1;
+  m_nofillvalue = -1000;
   float lbx,ubx;
   int nbx;
   lbx=ubx=0;
   nbx=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==3){
+
+ 
+  if(tt.size()==3 || tt.size()==4 ){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
+    if(tt.size()==4 ){
+      m_nofillvalue=atoi(tt[3].c_str());
+       m_fillhistoalways = 0;
+    }
   }else{
     std::cerr<<"MonHist1d variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
     assert(0);
@@ -260,6 +268,7 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
     if (tt.size()>1)m_hist[i]->GetYaxis()->SetTitle(tt[1].c_str());
     if (strlen(titlelabel)!=0)m_hist[i]->SetTitle(titlelabel);
   }
+
 }
 MonHist1d::~MonHist1d(){
   // for (unsigned int i=0;i<m_dim;i++){
@@ -268,8 +277,12 @@ MonHist1d::~MonHist1d(){
     //delete m_hist;
 }
 void MonHist1d::singleincrement(Double_t* val, Double_t* val2) {
+
+  
   for (unsigned i=0;i<m_dim;i++){
-    m_hist[i]->Fill((Float_t)val[i]);
+    if((val[i] != Double_t(m_nofillvalue)) || m_fillhistoalways ){
+      m_hist[i]->Fill((Float_t)val[i]);
+    }
   }
 }  
 void MonHist1d::reset(){}
@@ -278,18 +291,26 @@ void MonHist1d::latchValue(){}
 
 int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
+
+
 MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels, const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1;
+  m_fillhistoalways = 0; // The default in this type of objects is NOT to fill histos if val=0
+  m_nofillvalue = 0;
   float lbx,ubx;
   int nbx;
   lbx=ubx=0;
   nbx=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==3){
+  if(tt.size()==3 || tt.size()==4){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
+    if(tt.size()==4){
+      m_nofillvalue=atoi(tt[3].c_str());
+      m_fillhistoalways = 0;
+    }
   }else{
     std::cerr<<"MonHist1d_VecDim variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
     assert(0);
@@ -317,7 +338,7 @@ void MonHist1d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
   //  std::cout << m_name.c_str() << std::endl;
   for (unsigned i=0;i<m_dim;i++){
     //std::cout << "i,val= " << i << ", " << val[i] << std::endl;
-    if(val[i] != 0)
+    if((val[i] != Double_t(m_nofillvalue)) || m_fillhistoalways )
       m_hist->Fill(Double_t(i),(Double_t)val[i]);
   }
 }  
@@ -337,18 +358,24 @@ int MonHist1d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1
 MonHist2d::MonHist2d(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=2;
+  m_fillhistoalways = 1; // The default in this type of objects is to fill histos ALWAYS
+  m_nofillvalue = -1;
   float lbx,ubx,lby,uby;
   int nbx,nby;
   lbx=ubx=lby=uby=0;
   nbx=nby=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==6){
+  if(tt.size()==6 || tt.size()==7){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
     lby=atof(tt[4].c_str());
     uby=atof(tt[5].c_str());
     nby=atoi(tt[3].c_str());
+    if(tt.size()==7){
+      m_nofillvalue = atoi(tt[6].c_str());
+      m_fillhistoalways = 0;
+    }
   }else{
     std::cerr<<"MonHist2d variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
     assert(m_histdim);
@@ -374,7 +401,8 @@ MonHist2d::~MonHist2d(){
 }
 void MonHist2d::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
-    m_hist[i]->Fill((Float_t)val[i],(Float_t)val2[i]);
+    if(val[i] != Double_t(m_nofillvalue) || m_fillhistoalways )
+      m_hist[i]->Fill((Float_t)val[i],(Float_t)val2[i]);
     // tmp
     /*
     if(strstr(name().c_str(),"SuspCalHi_Highest") || strstr(name().c_str(),"SuspCalLo_Highest") ){
@@ -399,18 +427,24 @@ int MonHist2d::attach(TTree& t,const std::string& prefix) const {return 1;}
 MonHist2d_VecDim::MonHist2d_VecDim(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1; // effectively, in what concerns to formulae, it is like a 1dim histogram
+  m_fillhistoalways = 0; // The default in this type of objects is NOT to fill histos if val=0
+  m_nofillvalue = 0;
   float lbx,ubx,lby,uby;
   int nbx,nby;
   lbx=ubx=lby=uby=0;
   nbx=nby=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==6){
+  if(tt.size()==6 || tt.size()==7){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
     lby=atof(tt[4].c_str());
     uby=atof(tt[5].c_str());
     nby=atoi(tt[3].c_str());
+    if(tt.size()==7){
+     m_nofillvalue=atoi(tt[6].c_str());
+     m_fillhistoalways = 0;
+    }
   }else{
     std::cerr<<"MonHist2d_VecDim variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
     assert(m_histdim);
@@ -439,12 +473,12 @@ MonHist2d_VecDim::~MonHist2d_VecDim(){
 }
 void MonHist2d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
   Int_t z = 0;
-  // std::cout << m_name.c_str() << std::endl;
+  //std::cout << m_name.c_str() << std::endl;
   for(Int_t i = 0; i < m_vecdim[0];i++){
     for(Int_t j = 0; j < m_vecdim[1];j++){
-      // std::cout << "i,j,val= " << i << ", " << j << ", " << val[z] << std::endl; 
+      //std::cout << "i,j,val= " << i << ", " << j << ", " << val[z] << std::endl; 
       z = i*m_vecdim[1]+j;
-      if(val[z] != 0)
+      if((val[z] != Double_t(m_nofillvalue)) || m_fillhistoalways )
 	m_hist->Fill(Double_t(i),Double_t(j),Double_t(val[z]));
     }
   }  
@@ -465,24 +499,31 @@ int MonHist2d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1
 MonHist2d_Index::MonHist2d_Index(const char* name, const char* formula, const char* cut, const char* type, const char* axislabels,const char* titlelabel) 
     :MonValue(name,formula,cut){
   m_histdim=1; // effectively, in what concerns to formulae, it is like a 1dim histogram
+  m_fillhistoalways = 1; // The default in this type of objects is to fill histos always
+  m_nofillvalue = 0;
+
   float lbx,ubx,lby,uby;
   int nbx,nby;
   lbx=ubx=lby=uby=0;
   nbx=nby=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==6){
+  if(tt.size()==6 || tt.size() == 7){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str()); 
     lby=atof(tt[4].c_str());
     uby=atof(tt[5].c_str());
     nby=atoi(tt[3].c_str());
-    m_maxindex = nbx; // this will be used to loop over vector components, filling nbx times this histo
+    if(tt.size() == 7){
+      m_nofillvalue=atoi(tt[6].c_str());
+      m_fillhistoalways = 0;
+    }
+
   }else{
     std::cerr<<"MonHist2d_Index variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
     assert(m_histdim);
   }
-  
+
   m_maxindex = unsigned(nbx); // this will be used to loop over vector components, filling nbx times this histo
   m_dim = m_maxindex;
 
@@ -509,8 +550,10 @@ void MonHist2d_Index::singleincrement(Double_t* val, Double_t* val2) {
   // std::cout << m_name.c_str() << std::endl;
   for(unsigned index = 0; index < m_maxindex;index++){
       // std::cout << "index,val= " << index << ", " << val[z] << std::endl; 
-    m_hist->Fill(index, (Float_t)val[index]);
-    }
+    if((val[index] != Double_t(m_nofillvalue)) || m_fillhistoalways )
+      m_hist->Fill(index, (Float_t)val[index]);
+    
+  }
 }  
 
 
@@ -1200,7 +1243,10 @@ int MonDoubleDiffRate::attach(TTree& tree, const std::string& prefix) const {
   CheckLeafName(leafTypeVal.c_str());
 
   TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
-  if ( b == 0 ) return -1;
+  if ( b == 0 ) 
+    return -1;
+  else
+    return 1;// 1 branch attached
 
   /*  ERRORS DO NOT APPLY TO THIS OBJECT
   std::string fullNameErr = fullNameVal + "_err";
@@ -1478,6 +1524,15 @@ void MonValueCol::latchValue() {
 void MonValueCol::increment(TTree* tree) {
   for ( std::list<MonValue*>::iterator itr = m_vals.begin();
 	itr != m_vals.end(); itr++ ) {
+
+    //tmp
+    /*
+    std::cout << " MonValueCol::increment: Debug INFO; " << std::endl
+	      << " Working with output parameter name " << (*itr)->name().c_str() 
+	      << std::endl << std::endl;
+    */
+    // endtmp
+
     (*itr)->increment(tree);
   }
 }

@@ -203,7 +203,9 @@ private:
 
 
 // 1-d histogram
-//
+// If m_fillhistoalways ==0 and vector[index] == m_nofillvalue, then the histogram is not filled.
+// If m_fillhistoalways ==1, then histogram is filled with each entry (regardless of the value).
+
 
 class MonHist1d: public MonValue{
  public:
@@ -225,12 +227,16 @@ class MonHist1d: public MonValue{
   virtual void latchValue();
   
  private:
+  Bool_t m_fillhistoalways;
+  Int_t m_nofillvalue;
   TH1F** m_hist;
 };
 
 
 // 1-d histogram, will loop over vector components filling histo n times
-//
+// If m_fillhistoalways ==0 and vector[index] == m_nofillvalue, then the histogram is not filled.
+// If m_fillhistoalways ==1, then histogram is filled with each entry (regardless of the value).
+
 
 class MonHist1d_VecDim: public MonValue{
  public:
@@ -253,12 +259,16 @@ class MonHist1d_VecDim: public MonValue{
   
  private:
   Int_t m_vecdim;
+  Bool_t m_fillhistoalways;
+  Int_t m_nofillvalue;
   TH1F* m_hist;
 };
 
 //
 // 2-d histogram
-//
+// If m_fillhistoalways ==0 and vector[index] == m_nofillvalue, then the histogram is not filled.
+// If m_fillhistoalways ==1, then histogram is filled with each entry (regardless of the value).
+
 
 class MonHist2d: public MonValue{
  public:
@@ -280,13 +290,17 @@ class MonHist2d: public MonValue{
   virtual void latchValue();
   
  private:
+  Bool_t m_fillhistoalways;
+  Int_t m_nofillvalue;
   TH2F** m_hist;
 };
 
 
 //
 // 2-d histogram,  will loop over vector components filling histo n times
-//
+// If m_fillhistoalways ==0 and vector[index] == m_nofillvalue, then the histogram is not filled.
+// If m_fillhistoalways ==1, then histogram is filled with each entry (regardless of the value).
+
 
 class MonHist2d_VecDim: public MonValue{
  public:
@@ -309,6 +323,8 @@ class MonHist2d_VecDim: public MonValue{
   
  private:
   Int_t m_vecdim[2];
+  Bool_t m_fillhistoalways;
+  Int_t m_nofillvalue;
   TH2F* m_hist;
 };
 
@@ -316,8 +332,10 @@ class MonHist2d_VecDim: public MonValue{
 //
 // 2-d histogram,  where indeces are specified in xml file. 
 // the function singleincrement will loop, using these indices [0-maxindex) 
-// over a vector and will fill maxindex times the histogram.
-//
+// over a vector and will fill maxindex times the histogram with 
+// a one dimensional vector (h->Fill(index,vector[index]))
+// If m_fillhistoalways ==0 and vector[index] == m_nofillvalue, then the histogram is not filled.
+// If m_fillhistoalways ==1, then histogram is filled with each entry (regardless of the value).
 
 class MonHist2d_Index: public MonValue{
  public:
@@ -340,6 +358,8 @@ class MonHist2d_Index: public MonValue{
   
  private:
   UInt_t m_maxindex;
+  Bool_t m_fillhistoalways;
+  Int_t m_nofillvalue;
   TH2F* m_hist;
 };
 
