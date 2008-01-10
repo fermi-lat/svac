@@ -153,6 +153,7 @@ void MonValue::makeProxy(TTree* tree){
   execmap["foreachcalcolumn:"]= "for(int calcolumn=0;calcolumn<12;calcolumn++){";
   execmap["foreachcalxface:"]= "for(int calxface=0;calxface<2;calxface++){";
   execmap["foreachcalxrange:"]= "for(int calxrange=0;calxrange<4;calxrange++){";
+  execmap["foreachpos:"]= "for(int pos=0;pos<3;pos++){";
   execmap["foronetime:"]= "{";
 
 
@@ -406,6 +407,9 @@ void MonValue::makeProxy(TTree* tree){
   
 
 void MonValue::increment(TTree* tree){
+
+  // std::cout << "MonValue::increment: Object= " << m_name.c_str() << std::endl;
+
   struct timespec ts1, ts2;
   clock_gettime(CLOCK_REALTIME, &ts1);
   // Have to reserve space for return values from tree
@@ -443,6 +447,7 @@ void MonValue::increment(TTree* tree){
   }    
   unsigned evperit=nev/iterations+1;
   //  std::cout<<"Estimate: "<<tree->GetEstimate()<<std::endl;
+
   for (unsigned it=0;it<iterations;it++){
     if (m_sel==0){
       tree->Draw(m_formula.c_str(),m_cut.c_str(),"goff",evperit,evperit*it);
