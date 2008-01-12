@@ -112,6 +112,12 @@ private:
   
   /// number of events we used
   Long64_t m_nUsed;
+
+
+  // tmp
+  ULong64_t m_evtcounter;
+  // endtmp
+
   
   /// The Output Tree. This is passed in by the sub-class using attachTree()
   TTree* m_tree;

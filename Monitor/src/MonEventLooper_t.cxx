@@ -43,6 +43,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_last(0),
    m_nFilter(0),
    m_nUsed(0),
+   m_evtcounter(0),
    m_tree(0),
    m_intree(0),
    m_sectree(0),
@@ -60,6 +61,9 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->populateTableTree(m_intree);
   }
+
+  
+
   // make proxies for formulas if needed
   colprim->makeProxy(m_intree);
   // create global cut object
@@ -108,6 +112,32 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
   std::string prefix;
   m_stripValCol->attach(*m_sectree,prefix);
   colsec->makeProxy(m_sectree);
+
+  // Set max root file size to 500 GB:
+
+   // tmp
+  // Get infor from tree
+  std::cout << "MonEventLooper::MonEventLooper: DEBUG INFO: BEFORE" << std::endl
+	    << "m_intree->GetMaxVirtualSize() = " << m_intree->GetMaxVirtualSize() << std::endl
+	    << "m_intree->GetMaxTreeSize() = " << m_intree->GetMaxTreeSize() << std::endl;
+	    
+
+  // endtmp
+
+  Long64_t maxTreeSize = 5000000000000;
+  m_intree->SetMaxTreeSize(maxTreeSize);
+  m_intree->SetMaxVirtualSize(3000000000);
+  m_sectree->SetMaxTreeSize(maxTreeSize);
+  m_tree->SetMaxTreeSize(maxTreeSize);
+
+  // tmp
+  // Get infor from tree
+  std::cout << "MonEventLooper::MonEventLooper: DEBUG INFO: AFTER" << std::endl
+	    << "m_intree->GetMaxVirtualSize() = " << m_intree->GetMaxVirtualSize() << std::endl
+	    << "m_intree->GetMaxTreeSize() = " << m_intree->GetMaxTreeSize() << std::endl;
+	    
+
+  // endtmp
 
   // obj to hold the time interval of the specific bin
   // m_timeintervalobj = new TimeInterval();
@@ -161,6 +191,11 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
   // Event loop
   for (Int_t ievent= startEvent; ievent!=m_last; ievent++ ) {
     //if(ievent%1000==0)std::cout<<"Event: "<<ievent<<std::endl;
+
+    m_evtcounter++;
+    std::cout << " MonEventLooper::go: DEBUG INFO" << std::endl
+	      << " Evt number = " <<  m_evtcounter << std::endl;
+
 
     // call sub-class to read the event
     Bool_t ok = readEvent(ievent);
@@ -364,15 +399,26 @@ void MonEventLooper::logEvent(Long64_t /* ievent */, Double_t timeStampdouble ) 
   m_timeStamp = timeStampdouble;
 }
 
-
-
 bool MonEventLooper::readEvent(Long64_t ievent){
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
+    std::cout << " MonEventLooper::readEvent: DEBUG INFO: Reading event" << std::endl;
     (*it)->readEventProf(ievent);
+    std::cout << " MonEventLooper::readEvent: DEBUG INFO: Reading event, DONE" << std::endl;
   }
+
+  std::cout << " MonEventLooper::readEvent: DEBUG INFO: Filling tree" << std::endl;
   m_intree->Fill();
+  std::cout << " MonEventLooper::readEvent: DEBUG INFO: Filling tree, DONE" << std::endl;
+
+  if(m_evtcounter%10000==0){
+    std::cout << "m_intree->GetBranch(CalXAdc_TowerCalLayerCalColumnFaceRange)->GetTotalSize() = " 
+	      << m_intree->GetBranch("CalXAdc_TowerCalLayerCalColumnFaceRange")->GetTotalSize() << std::endl;
+  }
+
+
   return kTRUE;
 }
+
 
 void MonEventLooper::filterEvent(){
   m_globalCut->applyCut(m_intree);
