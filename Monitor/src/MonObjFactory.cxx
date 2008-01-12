@@ -120,7 +120,6 @@
 #include "digi/MonInput_AcdVeto_GafeGarc.h"
 #include "digi/MonInput_AcdVeto_PmtGarcGafe.h"
 #include "digi/MonInput_AcdHit_PmtGarcGafe.h"
-#include "digi/MonInput_AcdSignalInfo_PMTAcdTilePha.h"
 #include "digi/MonInput_NewSecond.h"
 #include "digi/MonInput_Delta_CCSDSTime_EvtTime.h"
 #include "digi/MonInput_DeltaEvtID.h"
@@ -422,8 +421,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Delta_CCSDSTime_EvtTime;
   if (s=="NewSecond")
     return new MonInput_NewSecond;
-  if (s=="AcdSignalInfo_PMTAcdTilePha")
-    return new MonInput_AcdSignalInfo_PMTAcdTilePha;
   if (s=="AcdHit_PmtGarcGafe")
     return new MonInput_AcdHit_PmtGarcGafe;
   if (s=="AcdVeto_PmtGarcGafe")
