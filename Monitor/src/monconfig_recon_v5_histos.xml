@@ -129,50 +129,50 @@
       <name> ReconAcdGlobalPosNotMatchedTracks_TopFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][0][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][0][1] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[400,-1600.,1600.,400,-1600.,1600.,10000] </type>
-      <titledesc> GLOBAL X-Y postions for track extrapolations NOT MATCHED hits: top of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,500,-1000.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Y positions for track extrapolations NOT MATCHED hits: top of ACD.  </titledesc>
       <axisdesc> [X(mm), Y(mm), N] </axisdesc>
-      <description> GLOBAL X-Y postions for track extrapolations NOT MATCHED hits: top of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Y positions for track extrapolations NOT MATCHED hits: top of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
    <object>
       <name> ReconAcdGlobalPosNotMatchedTracks_MinusXFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][1][1]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][1][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL Y-Z postions for track extrapolations NOT MATCHED hits: -X side of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL Y-Z positions for track extrapolations NOT MATCHED hits: -X side of ACD.  </titledesc>
       <axisdesc> [Y(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL Y-Z postions for track extrapolations NOT MATCHED hits: -X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL Y-Z positions for track extrapolations NOT MATCHED hits: -X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
     <object>
       <name> ReconAcdGlobalPosNotMatchedTracks_MinusYFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][2][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][2][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL X-Z postions for track extrapolations NOT MATCHED hits: -Y side of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Z positions for track extrapolations NOT MATCHED hits: -Y side of ACD.  </titledesc>
       <axisdesc> [X(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL X-Z postions for track extrapolations NOT MATCHED hits: -Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Z positions for track extrapolations NOT MATCHED hits: -Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
     <object>
       <name> ReconAcdGlobalPosNotMatchedTracks_PlusXFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][3][1]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][3][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL Y-Z postions for track extrapolations NOT MATCHED hits: +X side of ACD. </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL Y-Z positions for track extrapolations NOT MATCHED hits: +X side of ACD. </titledesc>
       <axisdesc> [Y(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL Y-Z postions for track extrapolations NOT MATCHED hits: +X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL Y-Z positions for track extrapolations NOT MATCHED hits: +X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
       <object>
       <name> ReconAcdGlobalPosNotMatchedTracks_PlusYFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][4][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][4][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL X-Z postions for track extrapolations NOT MATCHED hits: +Y side of ACD. </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Z positions for track extrapolations NOT MATCHED hits: +Y side of ACD. </titledesc>
       <axisdesc> [X(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL X-Z postions for track extrapolations NOT MATCHED hits: +Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Z positions for track extrapolations NOT MATCHED hits: +Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
    
 
@@ -183,7 +183,7 @@
       <name> ReconAcdGlobalPosNotMatchedTracks_RibbonXOriented_TH1_Pos[3] </name>
       <formula><![CDATA[ foreachpos: AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][5][pos] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-1d[200,-800.,800.,10000] </type>
+      <type> histogram-1d[500,-1000.,1000.,10000] </type>
       <titledesc> Distribution of GLOBAL postion for track extrapolations NOT MATCHED hits: X oriented Ribbons. </titledesc>
       <axisdesc> [Position (mm), N] </axisdesc>
       <description> Distribution of GLOBAL postion for track extrapolations NOT MATCHED hits: X oriented Ribbons. The index in the histogram name indicates the dimension which is being displayed: 0 for X, 1 for Y and 2 for Z. </description>
@@ -194,7 +194,7 @@
       <name> ReconAcdGlobalPosNotMatchedTracks_RibbonYOriented_TH1_Pos[3] </name>
       <formula><![CDATA[ foreachpos: AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[0][6][pos] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-1d[200,-800.,800.,10000] </type>
+      <type> histogram-1d[500,-1000.,1000.,10000] </type>
       <titledesc> Distribution of GLOBAL postion for track extrapolations NOT MATCHED hits: Y oriented Ribbons. </titledesc>
       <axisdesc> [Position (mm), N] </axisdesc>
       <description> Distribution of GLOBAL postion for track extrapolations NOT MATCHED hits: Y oriented Ribbons. The index in the histogram name indicates the dimension which is being displayed: 0 for X, 1 for Y and 2 for Z. </description>
@@ -206,58 +206,58 @@
       <name> ReconAcdGlobalPosONLYMatchedTracks_TopFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][0][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][0][1] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,-800.,800.,10000] </type>
-      <titledesc> GLOBAL X-Y postions for track extrapolations WITH MATCHED hits: top of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,500,-1000.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Y positions for track extrapolations WITH MATCHED hits: top of ACD.  </titledesc>
       <axisdesc> [X(mm), Y(mm), N] </axisdesc>
-      <description> GLOBAL X-Y postions for track extrapolations WITH MATCHED hits: top of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Y positions for track extrapolations WITH MATCHED hits: top of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
    <object>
       <name> ReconAcdGlobalPosONLYMatchedTracks_MinusXFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][1][1]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][1][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL Y-Z postions for track extrapolations WITH MATCHED hits: -X side of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL Y-Z positions for track extrapolations WITH MATCHED hits: -X side of ACD.  </titledesc>
       <axisdesc> [Y(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL Y-Z postions for track extrapolations WITH MATCHED hits: -X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL Y-Z positions for track extrapolations WITH MATCHED hits: -X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
     <object>
       <name> ReconAcdGlobalPosONLYMatchedTracks_MinusYFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][2][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][2][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL X-Z postions for track extrapolations WITH MATCHED hits: -Y side of ACD.  </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Z positions for track extrapolations WITH MATCHED hits: -Y side of ACD.  </titledesc>
       <axisdesc> [X(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL X-Z postions for track extrapolations WITH MATCHED hits: -Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Z positions for track extrapolations WITH MATCHED hits: -Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
     <object>
       <name> ReconAcdGlobalPosONLYMatchedTracks_PlusXFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][3][1]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][3][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL Y-Z postions for track extrapolations WITH MATCHED hits: +X side of ACD. </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL Y-Z positions for track extrapolations WITH MATCHED hits: +X side of ACD. </titledesc>
       <axisdesc> [Y(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL Y-Z postions for track extrapolations WITH MATCHED hits: +X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL Y-Z positions for track extrapolations WITH MATCHED hits: +X side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
       <object>
       <name> ReconAcdGlobalPosONLYMatchedTracks_PlusYFace_TH2 </name>
       <formula><![CDATA[ AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][4][0]:AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][4][2] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-2d[200,-800.,800.,200,0.,800.,10000] </type>
-      <titledesc> GLOBAL X-Z postions for track extrapolations WITH MATCHED hits: +Y side of ACD. </titledesc>
+      <type> histogram-2d[500,-1000.,1000.,250,0.,1000.,10000] </type>
+      <titledesc> GLOBAL X-Z positions for track extrapolations WITH MATCHED hits: +Y side of ACD. </titledesc>
       <axisdesc> [X(mm), Z(mm), N] </axisdesc>
-      <description> GLOBAL X-Z postions for track extrapolations WITH MATCHED hits: +Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
+      <description> GLOBAL X-Z positions for track extrapolations WITH MATCHED hits: +Y side of ACD. You should see the outline of the overlap regions, as this is where the association sometimes fails. Depending on the sample you may also see a number of events in the central parts fo the tiles.  </description>
     </object>
 
        <object>
       <name> ReconAcdGlobalPosONLYMatchedTracks_RibbonXOriented_TH1_Pos[3] </name>
       <formula><![CDATA[ foreachpos: AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][5][pos] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-1d[200,-800.,800.,10000] </type>
-      <titledesc> Distribution of GLOBAL postion for track extrapolations WITH MATCHED hits: X oriented Ribbons. </titledesc>
+      <type> histogram-1d[500,-1000.,1000.,10000] </type>
+      <titledesc> Distribution of GLOBAL position for track extrapolations WITH MATCHED hits: X oriented Ribbons. </titledesc>
       <axisdesc> [Position (mm), N] </axisdesc>
       <description> Distribution of GLOBAL postion for track extrapolations WITH MATCHED hits: X oriented Ribbons. The index in the histogram name indicates the dimension which is being displayed: 0 for X, 1 for Y and 2 for Z. </description>
     </object>
@@ -267,8 +267,8 @@
       <name> ReconAcdGlobalPosONLYMatchedTracks_RibbonYOriented_TH1_Pos[3] </name>
       <formula><![CDATA[ foreachpos: AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ[1][6][pos] ]]></formula>
       <cut><![CDATA[condsummary&30]]></cut>
-      <type> histogram-1d[200,-800.,800.,10000] </type>
-      <titledesc> Distribution of GLOBAL postion for track extrapolations WITH MATCHED hits: Y oriented Ribbons. </titledesc>
+      <type> histogram-1d[500,-1000.,1000.,10000] </type>
+      <titledesc> Distribution of GLOBAL position for track extrapolations WITH MATCHED hits: Y oriented Ribbons. </titledesc>
       <axisdesc> [Position (mm), N] </axisdesc>
       <description> Distribution of GLOBAL postion for track extrapolations WITH MATCHED hits: Y oriented Ribbons. The index in the histogram name indicates the dimension which is being displayed: 0 for X, 1 for Y and 2 for Z. </description>
     </object>
