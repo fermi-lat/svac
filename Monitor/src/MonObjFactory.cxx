@@ -112,6 +112,7 @@
 // Last updated with object AcdPha_PmtIdPmtRangeAcdTile by user dpaneque on Sun Jan  6 22:42:24 2008
 // Last updated with object AcdGlobalPos_NotMatchedTrack_FacePosXYZ by user dpaneque on Mon Jan  7 17:34:37 2008
 // Last updated with object AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ by user dpaneque on Mon Jan  7 18:35:28 2008
+// Last updated, REMOVING object "MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace" by user dpaneque on Wed Jan 16 2008 (manual entry)
 #include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
 #include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
 #include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
@@ -151,7 +152,6 @@
 #include "digi/MonInput_Range4.h"
 #include "digi/MonInput_CalXAdc_TowerCalLayerCalColumnFaceRange.h"
 #include "digi/MonInput_Tick20MHzDeviation.h"
-#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace.h"
 #include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
 #include "digi/MonInput_timestampdouble.h"
 #include "digi/MonInput_DeadZoneDelta.h"
@@ -357,8 +357,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_timestampdouble;
   if (s=="ReconEnergy_TowerCalLayerCalColumn")
     return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
-  if (s=="ReconEnergy_TowerCalLayerCalColumnCalXFace")
-    return new MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace;
   if (s=="Tick20MHzDeviation")
     return new MonInput_Tick20MHzDeviation;
   if (s=="CalXAdc_TowerCalLayerCalColumnFaceRange")
@@ -510,7 +508,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("DeadZoneDelta");
   names.push_back("timestampdouble");
   names.push_back("ReconEnergy_TowerCalLayerCalColumn");
-  names.push_back("ReconEnergy_TowerCalLayerCalColumnCalXFace");
   names.push_back("Tick20MHzDeviation");
   names.push_back("CalXAdc_TowerCalLayerCalColumnFaceRange");
   names.push_back("Range4");
