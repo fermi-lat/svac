@@ -65,6 +65,7 @@ public :
   Bool_t checkCal() const;
 
   std::string getDataType(){ return m_datatype;} 
+  Bool_t WriteInTreeToDisk() {return m_WriteintreeToDisk;}
    
 protected:
 
@@ -104,6 +105,7 @@ private:
   TChain* m_meritChain;
   TChain* m_calChain;
   std::string m_datatype;
+  Bool_t m_WriteintreeToDisk;
 };
 
 #endif

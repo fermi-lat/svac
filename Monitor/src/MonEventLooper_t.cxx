@@ -44,6 +44,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_nFilter(0),
    m_nUsed(0),
    m_evtcounter(0),
+   m_intreefile(0),
    m_tree(0),
    m_intree(0),
    m_sectree(0),
@@ -51,16 +52,29 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_secstripValCol(colsec),
    m_incol(incol),
    m_globalCut(eventcut),
-   m_timestampvar(timestampvar) {
+   m_timestampvar(timestampvar),
+   m_intreetfilename("File4IntermediateTree.root"),
+   m_sodir("./")
+{
 
 
    // attach input chains
-  for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
+  // for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
+
+  // tmp
+  for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
+    (*it)->attachChain();
+  }
+    // endtmp
+
+
   //create and populate intermediate tree
   m_intree = new TTree("Internal","Used to create output");
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
     (*it)->populateTableTree(m_intree);
   }
+
+
 
   
 
@@ -115,29 +129,25 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
 
   // Set max root file size to 500 GB:
 
-   // tmp
-  // Get infor from tree
-  std::cout << "MonEventLooper::MonEventLooper: DEBUG INFO: BEFORE" << std::endl
-	    << "m_intree->GetMaxVirtualSize() = " << m_intree->GetMaxVirtualSize() << std::endl
-	    << "m_intree->GetMaxTreeSize() = " << m_intree->GetMaxTreeSize() << std::endl;
-	    
-
-  // endtmp
+ 
 
   Long64_t maxTreeSize = 5000000000000;
   m_intree->SetMaxTreeSize(maxTreeSize);
-  m_intree->SetMaxVirtualSize(3000000000);
+  m_intree->SetMaxVirtualSize(maxTreeSize);
   m_sectree->SetMaxTreeSize(maxTreeSize);
   m_tree->SetMaxTreeSize(maxTreeSize);
 
   // tmp
+  /*
   // Get infor from tree
   std::cout << "MonEventLooper::MonEventLooper: DEBUG INFO: AFTER" << std::endl
 	    << "m_intree->GetMaxVirtualSize() = " << m_intree->GetMaxVirtualSize() << std::endl
 	    << "m_intree->GetMaxTreeSize() = " << m_intree->GetMaxTreeSize() << std::endl;
 	    
-
+  */
   // endtmp
+
+  
 
   // obj to hold the time interval of the specific bin
   // m_timeintervalobj = new TimeInterval();
@@ -150,6 +160,45 @@ MonEventLooper::~MonEventLooper(){
 }
 void MonEventLooper::init() {
 
+  // CREATE TFile where the intermediate tree will reside (info written to disk).
+  // Writing is necessary if info from intermediate tree, for a time bin, is close to 2 GB
+  // which gets into 3 GB (limit on a on a IA32 linux for single process) with another 
+  // root stuff, producing a SEG FAULT. 
+
+  // By default, the intermediate tree will be written. The user can 
+  // however set m_intreeToDisk to zero (from command line) to speed up (25%) the processing speed
+  // of those jobs requiring few memory (say less than 1.5 GB).
+
+  if(m_intreeToDisk){
+    createtfile4intree(m_sodir,m_intreetfilename);
+  }
+  else{
+    std::cout << "MonEventLooper::init(), WARNING" << std::endl
+	      << "Intermediate TTree will NOT be written to disk. Thus it will a memory-resident TTree."
+	      << std::endl
+	      << "This will make the process faster. But note that it will make the process crash if "
+	      << "the overall memory used when filling the TTree is larger than 3GB." << std::endl;
+
+  }
+}
+
+
+void MonEventLooper::createtfile4intree(std::string dir, std::string filename){
+
+  std::string completename = dir;
+  completename+=filename;
+  
+  // tmnp
+  /*
+  std::cout << "MonEventLooper::createtfile4intree: filename= " <<  completename.c_str() 
+	    << std::endl;
+  */
+  /// endtmp
+
+  TDirectory* currentdir = gDirectory;
+  m_intreefile = new TFile (completename.c_str(), "RECREATE");
+  m_intree->SetDirectory(gDirectory);
+  currentdir->cd();
 }
 
 void MonEventLooper::attachTree() {
@@ -193,9 +242,10 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
     //if(ievent%1000==0)std::cout<<"Event: "<<ievent<<std::endl;
 
     m_evtcounter++;
+    /*
     std::cout << " MonEventLooper::go: DEBUG INFO" << std::endl
 	      << " Evt number = " <<  m_evtcounter << std::endl;
-
+    */
 
     // call sub-class to read the event
     Bool_t ok = readEvent(ievent);
@@ -293,8 +343,7 @@ void MonEventLooper::switchBins() {
   */
   // endtmp
 
-
-
+  
   m_currentFlags -= 1;
   filterEvent();
   stripVals()->increment(m_intree);
@@ -339,6 +388,11 @@ void MonEventLooper::switchBins() {
     std::cout << std::endl;
   }
   else { std::cout << '.' << std::flush; }
+
+  if(m_intreeToDisk){
+    // Recreating TFile for intermediate TTree to release unsed memory from disk
+    createtfile4intree(m_sodir,m_intreetfilename);
+  }
 }
 
 
@@ -383,6 +437,20 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
   m_sec_last = timeStampdouble;
   printTime(std::cout,m_timeStamp);
   std::cout << std::endl << std::endl;
+
+  // Delete all contents from Tfile 
+
+  std::string deletefile = "rm -rf ";
+  deletefile +=m_sodir;
+  deletefile +=m_intreetfilename;
+  
+  if(system(deletefile.c_str())){
+    std::cout << "" << std::endl
+	      << "PRoblems deleting file used to store intermediate ttree: " << std::endl
+	      << "Command failed: " << deletefile.c_str() << std::endl;
+
+  }
+    
 }
 
 
@@ -401,20 +469,22 @@ void MonEventLooper::logEvent(Long64_t /* ievent */, Double_t timeStampdouble ) 
 
 bool MonEventLooper::readEvent(Long64_t ievent){
   for(std::vector<MonInputCollection*>::iterator it=m_incol.begin(); it!=m_incol.end();it++){
-    std::cout << " MonEventLooper::readEvent: DEBUG INFO: Reading event" << std::endl;
     (*it)->readEventProf(ievent);
-    std::cout << " MonEventLooper::readEvent: DEBUG INFO: Reading event, DONE" << std::endl;
+    // (*it)->readEvent(ievent);
   }
 
-  std::cout << " MonEventLooper::readEvent: DEBUG INFO: Filling tree" << std::endl;
   m_intree->Fill();
-  std::cout << " MonEventLooper::readEvent: DEBUG INFO: Filling tree, DONE" << std::endl;
-
-  if(m_evtcounter%10000==0){
-    std::cout << "m_intree->GetBranch(CalXAdc_TowerCalLayerCalColumnFaceRange)->GetTotalSize() = " 
+  
+  //tmp
+  /*
+  if(m_evtcounter%1000==0){
+    std::cout << "MonEventLooper::readEvent:DEBUG INFO" <<std::endl
+	      << "Event number " << m_evtcounter <<": " 
+	      << "m_intree->GetBranch(CalXAdc_TowerCalLayerCalColumnFaceRange)->GetTotalSize() = " 
 	      << m_intree->GetBranch("CalXAdc_TowerCalLayerCalColumnFaceRange")->GetTotalSize() << std::endl;
   }
-
+  */
+  // endtmp
 
   return kTRUE;
 }

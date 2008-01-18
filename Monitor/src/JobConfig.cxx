@@ -29,7 +29,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_svacChain(0),
    m_meritChain(0),
    m_calChain(0),
-   m_datatype("Normal")
+   m_datatype("Normal"),
+   m_WriteintreeToDisk(1)
 {
 
 }
@@ -88,6 +89,7 @@ void JobConfig::usage() {
        << "\t   -n <nEvents>      : run over <nEvents>" << endl
        << "\t   -s <startEvent>   : start with event <startEvent>" << endl
        << "\t   -t <datatype>     : Data type. Currently only MC/Data" << endl
+       << "\t   -z                : Do NOT write intermediate tree to disk" << endl
        << endl
        << "\tOPTIONS for specific jobs (will be ignored by other jobs)"  << endl
        << "\t   -b <binSize>         : size of time bins in seconds [10]" << endl   
@@ -103,7 +105,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:j:c:g:n:s:b:w:pq")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:j:c:g:n:s:b:w:pqz")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -113,6 +115,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
       break;
     case 'p':   // don't compile 
       m_dontcompile=true;
+      break;
+    case 'z':
+      m_WriteintreeToDisk = false;
       break;
     case 'o':   //  output
       m_outputPrefix = string(optarg);
@@ -198,6 +203,8 @@ Int_t JobConfig::parse(int argn, char** argc) {
   
   std::cout << "Data type : " << m_datatype.c_str() << std::endl;
   
+
+ 
 
   // timestamp
   std::time_t theTime = std::time(0);

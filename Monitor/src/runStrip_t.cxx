@@ -289,6 +289,10 @@ int main(int argn, char** argc) {
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcolprim,outcolsec,allinpcol, globalCut,timestamp);
+  // Set whether writing or not intermediate tree to disk. That is necessary if memory 
+  // needed when filling one bin of intermediate ttree is larger than 3GB.
+  d.writeintreetodisk(jc.WriteInTreeToDisk(),jc.sodir());
+
   if (!jc.compile()){
     Long64_t numevents=jc.optval_n()  < 1 ? nTotal : TMath::Min(jc.optval_n()+jc.optval_s(),nTotal);
     struct timespec ts1, ts2;

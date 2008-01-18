@@ -9,7 +9,7 @@
 // ROOT IO
 #include "TTree.h"
 #include "TChain.h"
-
+#include "TFile.h"
 
 // 
 // 
@@ -17,6 +17,7 @@
 #include "MonGlobalCut.h"
 #include "MonInputCollection.h"
 #include "Timestamp.h"
+
  
 class MonEventLooper {
 
@@ -42,6 +43,14 @@ public :
 
   //get the strip val col
   inline MonValue* stripVals() { return m_stripValCol; }
+
+  // set whether intermediate tree will be saved to disk,
+  // and give directory name where it will be stored.
+  void writeintreetodisk(Bool_t write, std::string dir){
+    m_intreeToDisk = write; 
+    m_sodir = dir;
+    //std::cout << "m_intreeToDisk=" << m_intreeToDisk << ";m_sodir=" << m_sodir << std::endl;
+  }
 
 protected:
 
@@ -72,7 +81,7 @@ protected:
   // called on the last event
   void lastEvent(Double_t timeStamp);
 
-
+  void createtfile4intree(std::string dir, std::string filename);
   
 private:
 
@@ -113,11 +122,19 @@ private:
   /// number of events we used
   Long64_t m_nUsed;
 
-
-  // tmp
+  // counter for event number currently being processed
   ULong64_t m_evtcounter;
-  // endtmp
 
+  // bool var deciding whether to write (1) or not (0) the intermediate tree to disk.
+  // Writing is necessary if info from intermediate tree, for a time bin, is close to 2 GB
+  // which gets into 3 GB (limit on a on a IA32 linux for single process) with another 
+  // root stuff, producing a SEG FAULT. Therefore, the default for this quantity will be 1. The user can 
+  // however set it to zero (from command line) to speed up (25%) the processing speed
+  // of those jobs requiring few memory (say less than 1.5 GB).
+  Bool_t m_intreeToDisk;
+
+  // TFile to store intermediate tree
+  TFile* m_intreefile;
   
   /// The Output Tree. This is passed in by the sub-class using attachTree()
   TTree* m_tree;
@@ -136,6 +153,11 @@ private:
   std::string m_timestampvar;
   char m_timestamptype;
   Timestamp *m_currentTimestamp;
+
+  // filename for intermediate tree
+  std::string m_intreetfilename;
+  // directory where intermediate tree will be stored
+  std::string m_sodir;
 };
 
 #endif
