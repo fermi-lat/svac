@@ -1,0 +1,5 @@
+       Range4Periodic  Sum
+       Range4AllEvents  Sum
+       CalXAdc_TowerCalLayerCalColumnFR_TowerLoop_CalLayerLoop_CalColumnLoop_FaceLoop_RangeLoop  Sum
+	 CalXAdcPed_TH1_TowerCalLayerCalColumnFR_TowerLoop_CalLayerLoop_CalColumnLoop_FaceLoop_RangeLoop  Sum
+	 CalXAdcPed_TH1_TowerCalLayerCalColumnFR_RMS_TowerLoop_CalLayerLoop_CalColumnLoop_FaceLoop_RangeLoop  Sum
