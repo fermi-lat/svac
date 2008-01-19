@@ -1,5 +1,25 @@
        ReconAcdPhaMips_PMTA_TH1_AcdTile_AcdTileLoop  Sum
        ReconAcdPhaMips_PMTB_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMipsCorrectedAngle_PMTA_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMipsCorrectedAngle_PMTB_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMips_PMTA_TH2  Sum
+       ReconAcdPhaMips_PMTB_TH2  Sum
+       ReconAcdPhaMipsAngleCorrected_PMTA_TH2  Sum
+       ReconAcdPhaMipsAngleCorrected_PMTB_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_TopFace_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_MinusXFace_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_MinusYFace_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_PlusXFace_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_PlusYFace_TH2  Sum
+       ReconAcdGlobalPosNotMatchedTracks_RibbonXOriented_TH1_Pos_PosLoop  Sum
+       ReconAcdGlobalPosNotMatchedTracks_RibbonYOriented_TH1_Pos_PosLoop  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_TopFace_TH2  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_MinusXFace_TH2  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_MinusYFace_TH2  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_PlusXFace_TH2  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_PlusYFace_TH2  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_RibbonXOriented_TH1_Pos_PosLoop  Sum
+       ReconAcdGlobalPosONLYMatchedTracks_RibbonYOriented_TH1_Pos_PosLoop  Sum
        ReconNumTracks_TH1  Sum
        ReconVertex_YXDir_TH2  Sum
        ReconVertex_ZDir_TH1  Sum
@@ -10,6 +30,7 @@
        ReconVertex_XPos_TH1  Sum
        ReconVertex_YPos_TH1  Sum
        ReconEnergy_TH1_TowerCalLayer_TowerLoop_CalLayerLoop  Sum
+       ReconEnergy_VeryLowEnergy_TH1_TowerCalLayer_TowerLoop_CalLayerLoop  Sum
        ReconEnergy_TowerCalLayer_TH2  Sum
        ZeroReconEnergy_TowerCalLayer_TH2  Sum
        ReconEnergyFailed_TowerCalLayer_TH2  Sum

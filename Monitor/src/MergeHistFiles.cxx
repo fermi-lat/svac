@@ -120,6 +120,12 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
   vLoopDim.push_back(12);
   vLoopFlags.push_back("AcdTileLoop");
   vLoopDim.push_back(128);
+  vLoopFlags.push_back("PosLoop");
+  vLoopDim.push_back(3);
+  vLoopFlags.push_back("FaceLoop");
+  vLoopDim.push_back(2);
+  vLoopFlags.push_back("RangeLoop");
+  vLoopDim.push_back(4);
 
   // special tower loop (not for monitoring)
   vLoopFlags.push_back("XX");
