@@ -54,7 +54,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_globalCut(eventcut),
    m_timestampvar(timestampvar),
    m_intreetfilename("File4IntermediateTree.root"),
-   m_sodir("./")
+   m_tmpdir("./")
 {
 
 
@@ -170,10 +170,19 @@ void MonEventLooper::init() {
   // of those jobs requiring few memory (say less than 1.5 GB).
 
   if(m_intreeToDisk){
-    createtfile4intree(m_sodir,m_intreetfilename);
+    Bool_t FileCreated = createtfile4intree(m_tmpdir,m_intreetfilename);
+    if(!FileCreated){
+      std::string filename(m_tmpdir);
+      filename += m_intreetfilename;
+      std::cout << "MonEventLooper::init(): ERROR" << std::endl
+		<< "Problems opening file " << filename.c_str() << std::endl
+		<< "Exiting... " << std::endl;
+      assert(0);
+    }
+      
   }
   else{
-    std::cout << "MonEventLooper::init(), WARNING" << std::endl
+    std::cout << "MonEventLooper::init(): WARNING" << std::endl
 	      << "Intermediate TTree will NOT be written to disk. Thus it will a memory-resident TTree."
 	      << std::endl
 	      << "This will make the process faster. But note that it will make the process crash if "
@@ -183,7 +192,7 @@ void MonEventLooper::init() {
 }
 
 
-void MonEventLooper::createtfile4intree(std::string dir, std::string filename){
+Bool_t MonEventLooper::createtfile4intree(std::string dir, std::string filename){
 
   std::string completename = dir;
   completename+=filename;
@@ -199,6 +208,8 @@ void MonEventLooper::createtfile4intree(std::string dir, std::string filename){
   m_intreefile = new TFile (completename.c_str(), "RECREATE");
   m_intree->SetDirectory(gDirectory);
   currentdir->cd();
+
+  return m_intreefile->IsOpen();
 }
 
 void MonEventLooper::attachTree() {
@@ -391,7 +402,16 @@ void MonEventLooper::switchBins() {
 
   if(m_intreeToDisk){
     // Recreating TFile for intermediate TTree to release unsed memory from disk
-    createtfile4intree(m_sodir,m_intreetfilename);
+    Bool_t FileCreated = createtfile4intree(m_tmpdir,m_intreetfilename);
+    if(!FileCreated){
+      std::string filename(m_tmpdir);
+      filename += m_intreetfilename;
+      std::cout << "MonEventLooper::switchBins(): ERROR" << std::endl
+		<< "Problems opening file " << filename.c_str() << std::endl
+		<< "Exiting... " << std::endl;
+      assert(0);
+    }
+
   }
 }
 
@@ -440,17 +460,19 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
 
   // Delete all contents from Tfile 
 
-  std::string deletefile = "rm -rf ";
-  deletefile +=m_sodir;
-  deletefile +=m_intreetfilename;
-  
-  if(system(deletefile.c_str())){
-    std::cout << "" << std::endl
-	      << "PRoblems deleting file used to store intermediate ttree: " << std::endl
-	      << "Command failed: " << deletefile.c_str() << std::endl;
-
+  if(m_intreeToDisk){
+    std::string deletefile = "rm -rf ";
+    deletefile +=m_tmpdir;
+    deletefile +=m_intreetfilename;
+    int filedeletion = system(deletefile.c_str());
+      if(filedeletion){
+	std::cout << "" << std::endl
+	<< "Problems deleting file used to store intermediate ttree: " << std::endl
+	<< "Command failed: " << deletefile.c_str() << std::endl;
+	
+      }
   }
-    
+  
 }
 
 

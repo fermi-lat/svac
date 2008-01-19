@@ -66,6 +66,7 @@ public :
 
   std::string getDataType(){ return m_datatype;} 
   Bool_t WriteInTreeToDisk() {return m_WriteintreeToDisk;}
+  std::string gettmpdir() { return m_tmpdir;}
    
 protected:
 
@@ -106,6 +107,7 @@ private:
   TChain* m_calChain;
   std::string m_datatype;
   Bool_t m_WriteintreeToDisk;
+  std::string m_tmpdir;
 };
 
 #endif

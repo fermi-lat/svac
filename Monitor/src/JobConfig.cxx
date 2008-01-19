@@ -30,7 +30,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_meritChain(0),
    m_calChain(0),
    m_datatype("Normal"),
-   m_WriteintreeToDisk(1)
+   m_WriteintreeToDisk(1),
+   m_tmpdir("./")
 {
 
 }
@@ -89,6 +90,8 @@ void JobConfig::usage() {
        << "\t   -n <nEvents>      : run over <nEvents>" << endl
        << "\t   -s <startEvent>   : start with event <startEvent>" << endl
        << "\t   -t <datatype>     : Data type. Currently only MC/Data" << endl
+       << "\t   -u <dir>          : Directory where to store the intermediate tree. Default is ./ . "
+       << endl
        << "\t   -z                : Do NOT write intermediate tree to disk" << endl
        << endl
        << "\tOPTIONS for specific jobs (will be ignored by other jobs)"  << endl
@@ -105,7 +108,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:j:c:g:n:s:b:w:pqz")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:j:c:g:n:s:b:w:u:pqz")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -170,6 +173,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 't':
       m_datatype = string(optarg);
       break;
+    case 'u':
+      m_tmpdir = string(optarg);
+      break;
     case '?':
       usage();
       return 2;
@@ -204,7 +210,8 @@ Int_t JobConfig::parse(int argn, char** argc) {
   std::cout << "Data type : " << m_datatype.c_str() << std::endl;
   
 
- 
+  // tmp dir to store intermediate tree
+  if (m_tmpdir!=""&& m_tmpdir[m_tmpdir.length()-1]!='/')m_tmpdir+="/";
 
   // timestamp
   std::time_t theTime = std::time(0);

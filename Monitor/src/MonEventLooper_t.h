@@ -48,8 +48,8 @@ public :
   // and give directory name where it will be stored.
   void writeintreetodisk(Bool_t write, std::string dir){
     m_intreeToDisk = write; 
-    m_sodir = dir;
-    //std::cout << "m_intreeToDisk=" << m_intreeToDisk << ";m_sodir=" << m_sodir << std::endl;
+    m_tmpdir = dir;
+    //std::cout << "m_intreeToDisk=" << m_intreeToDisk << ";m_tmpdir=" << m_tmpdir << std::endl;
   }
 
 protected:
@@ -81,7 +81,7 @@ protected:
   // called on the last event
   void lastEvent(Double_t timeStamp);
 
-  void createtfile4intree(std::string dir, std::string filename);
+  Bool_t createtfile4intree(std::string dir, std::string filename);
   
 private:
 
@@ -157,7 +157,7 @@ private:
   // filename for intermediate tree
   std::string m_intreetfilename;
   // directory where intermediate tree will be stored
-  std::string m_sodir;
+  std::string m_tmpdir;
 };
 
 #endif
