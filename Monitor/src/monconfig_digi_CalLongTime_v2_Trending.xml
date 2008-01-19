@@ -2,65 +2,27 @@
 
   <inputList name="top"> 
 
-    <!-- TEST variables -->
-    <object> nACD </object>
-    <object> Gem_elapsed </object>
-    
+  
     <!-- Time stamp -->
     <object> timestampdouble </object>
     <object> timestamp </object> <!-- some functions need time stamp as int -->
 
     <!-- Event classification information -->
     <object> condsummary </object>
-    <object> condarrcallo  </object>
-    <object> condarrcalhi </object>
-    <object> condarrtkr </object>
-    <object> condarrcno </object>
-    <object> condarrroi </object>
-    <object> LivetimeLast</object>
-    <object> ElapsedLast</object>
-    <object> DeadZoneLast</object>
-    <object> DiscardedLast</object>
-    <object> PrescaledLast</object>
-    <object> DeadZoneDelta </object>
-    <object> DiscardedDelta </object>
-    <object> TkrTriggerTower </object>
-    <object> CalHiTriggerTower </object> 
-    <object> CalLoTriggerTower </object>
-    <object> CalReadoutRange </object>
     <object> Range4 </object>
 
     <!-- Acd Variables -->
     
-    <object>AcdGemVeto_AcdTile</object>
-    <object>AcdGemROI_Tower </object>
-    <object>AcdGemCNO_GARC  </object>
-    <object>AcdHit_AcdTile  </object>
-    <object>AcdPmtA_OverThreshold_AcdTile  </object>
-    <object>AcdPmtB_OverThreshold_AcdTile  </object>
-    <object>AcdVetoA_AcdTile  </object>
-    <object>AcdVetoB_AcdTile  </object>
-    <object>AcdPha_PmtA_AcdTile  </object>
-    <object>AcdPha_PmtB_AcdTile  </object>
-
     <!-- Tkr Variables -->
-       
-    <object> TkrHitsTowerPlane </object>
-    <object> IsTkrDigi_TowerPlane </object>
-    <object> ToT_con0_TowerPlane  </object>
-    <object> ToT_con1_TowerPlane  </object>
 
      <!-- Cal Variables -->
-    <object> CalXHit_TowerCalLayerCalColumn </object>
-    <object> CalXHit_TowerCalLayer </object>
+ 
     <object> CalXAdc_TowerCalLayerCalColumnFaceRange </object>
 
   </inputList>
 
-
   <outputList name="top">
   
-    
      <object>
       <name> CalXAdc_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[CalXAdc_TowerCalLayerCalColumnFaceRange]]></formula>
@@ -81,7 +43,7 @@
       <object>
       <name> RPM_TowerCalLayerCalColumn[16][8][12] </name>
       <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][0],RFun::calped(timestamp,tower,callayer,calcolumn,0,0), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][0], RFun::calped(timestamp,tower,callayer,calcolumn,1,0), 50)]]></formula>
-      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <cut><![CDATA[!(condsummary&32) && Range4]]></cut>
       <type> truncatedmeanboundandfrac[0,70000,0.8] </type>
       <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(plus face) / LEX1(minus face) = P/M. This ratio is expected to be close to 1. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values. Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
     </object>
@@ -90,7 +52,7 @@
       <object>
       <name> RPp_TowerCalLayerCalColumn[16][8][12] </name>
       <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][1],RFun::calped(timestamp,tower,callayer,calcolumn,0,1), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][2], RFun::calped(timestamp,tower,callayer,calcolumn,0,2), 50)]]></formula>
-      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <cut><![CDATA[!(condsummary&32) && Range4]]></cut>
       <type> truncatedmeanboundandfrac[0,70000,0.8] </type>
       <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(plus face) / HEX8 (plus face) = P/p. This ratio is expected to be close to 6. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values.  Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
     </object>
@@ -98,7 +60,7 @@
        <object>
       <name> RMm_TowerCalLayerCalColumn[16][8][12] </name>
       <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][1],RFun::calped(timestamp,tower,callayer,calcolumn,1,1), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][2], RFun::calped(timestamp,tower,callayer,calcolumn,1,2), 50)]]></formula>
-      <cut><![CDATA[!condsummary&32 && Range4]]></cut>
+      <cut><![CDATA[!(condsummary&32) && Range4]]></cut>
       <type>  truncatedmeanboundandfrac[0,70000,0.8] </type>
       <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(minus face) / HEX8(minus face) = M/m. This ratio is expected to be close to 6. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values.  Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
     </object>

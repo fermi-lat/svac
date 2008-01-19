@@ -105,7 +105,7 @@
       <object>
       <name> CondArrTKRTrigger_TH1 </name>
       <formula><![CDATA[ condarrtkr ]]></formula>
-      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <cut><![CDATA[ condsummary&2 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival TKR triggers </titledesc>
       <axisdesc> [Condition arrival times for TKR triggers (nomially 50 ns ticks), N] </axisdesc>
@@ -115,7 +115,7 @@
       <object>
       <name> CondArrCalLowTrigger_TH1 </name>
       <formula><![CDATA[ condarrcallo ]]></formula>
-      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <cut><![CDATA[ condsummary&4 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival Cal-Low triggers </titledesc>
       <axisdesc> [Condition arrival times for Cal-Low triggers (nomially 50 ns ticks), N] </axisdesc>
@@ -125,7 +125,7 @@
       <object>
       <name> CondArrCalHiTrigger_TH1 </name>
       <formula><![CDATA[ condarrcalhi ]]></formula>
-      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <cut><![CDATA[ condsummary&8 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival Cal-Hi triggers </titledesc>
       <axisdesc> [Condition arrival times for Cal-Hi triggers (nomially 50 ns ticks), N] </axisdesc>
@@ -135,7 +135,7 @@
       <object>
       <name> CondArrCNOTrigger_TH1 </name>
       <formula><![CDATA[ condarrcno ]]></formula>
-      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <cut><![CDATA[ condsummary&16 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival CNO triggers </titledesc>
       <axisdesc> [Condition arrival times for CNO triggers (nomially 50 ns ticks), N] </axisdesc>
@@ -145,7 +145,7 @@
        <object>
       <name> CondArrROITrigger_TH1 </name>
       <formula><![CDATA[ condarrroi ]]></formula>
-      <cut><![CDATA[ !(condsummary&32) ]]></cut>
+      <cut><![CDATA[ condsummary&1 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival ROI triggers </titledesc>
       <axisdesc> [Condition arrival times for ROI triggers (nomially 50 ns ticks), N] </axisdesc>

@@ -2,57 +2,21 @@
 
   <inputList name="top"> 
 
-    <!-- TEST variables -->
-    <object> nACD </object>
-    <object> Gem_elapsed </object>
-    
+  
     <!-- Time stamp -->
     <object> timestampdouble </object>
     <object> timestamp </object> <!-- some functions need time stamp as int -->
 
     <!-- Event classification information -->
     <object> condsummary </object>
-    <object> condarrcallo  </object>
-    <object> condarrcalhi </object>
-    <object> condarrtkr </object>
-    <object> condarrcno </object>
-    <object> condarrroi </object>
-    <object> LivetimeLast</object>
-    <object> ElapsedLast</object>
-    <object> DeadZoneLast</object>
-    <object> DiscardedLast</object>
-    <object> PrescaledLast</object>
-    <object> DeadZoneDelta </object>
-    <object> DiscardedDelta </object>
-    <object> TkrTriggerTower </object>
-    <object> CalHiTriggerTower </object> 
-    <object> CalLoTriggerTower </object>
-    <object> CalReadoutRange </object>
     <object> Range4 </object>
 
     <!-- Acd Variables -->
-    
-    <object>AcdGemVeto_AcdTile</object>
-    <object>AcdGemROI_Tower </object>
-    <object>AcdGemCNO_GARC  </object>
-    <object>AcdHit_AcdTile  </object>
-    <object>AcdPmtA_OverThreshold_AcdTile  </object>
-    <object>AcdPmtB_OverThreshold_AcdTile  </object>
-    <object>AcdVetoA_AcdTile  </object>
-    <object>AcdVetoB_AcdTile  </object>
-    <object>AcdPha_PmtA_AcdTile  </object>
-    <object>AcdPha_PmtB_AcdTile  </object>
 
     <!-- Tkr Variables -->
-       
-    <object> TkrHitsTowerPlane </object>
-    <object> IsTkrDigi_TowerPlane </object>
-    <object> ToT_con0_TowerPlane  </object>
-    <object> ToT_con1_TowerPlane  </object>
-
+ 
      <!-- Cal Variables -->
-    <object> CalXHit_TowerCalLayerCalColumn </object>
-    <object> CalXHit_TowerCalLayer </object>
+   
     <object> CalXAdc_TowerCalLayerCalColumnFaceRange </object>
 
   </inputList>
@@ -60,18 +24,38 @@
 
   <outputList name="top">
   
-    
      <object>
+      <name> Range4Periodic </name>
+     <formula><![CDATA[  Range4 ]]></formula>
+      <cut><![CDATA[condsummary&32]]></cut>
+      <type> histogram-1d[2,-0.5,1.5] </type>
+      <titledesc> Readout range for periodic triggers</titledesc>
+	<axisdesc> [Range4, N] </axisdesc>
+      <description> Readout range for periodic triggers. ZERO means autorange, ONE means 4-range readout. </description>
+    </object>
+
+      <object>
+      <name> Range4AllEvents </name>
+     <formula><![CDATA[  Range4 ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> histogram-1d[2,-0.5,1.5] </type>
+      <titledesc> Readout range</titledesc>
+	<axisdesc> [Range4, N] </axisdesc>
+      <description> Readout range. ZERO means autorange, ONE means 4-range readout. </description>
+    </object>
+
+
+      <object>
       <name> CalXAdc_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[CalXAdc_TowerCalLayerCalColumnFaceRange]]></formula>
       <cut><![CDATA[condsummary&32 && Range4]]></cut>
-      <type> truncatedmeanfrac[0.8] </type>
+      <type> truncatedmeanfrac[0.8] </type>     
       <description> Vector[tower][callayer][calcolumn][face][range] reporting the mean (and rms by means of the the CalXAdc_TowerCalLayerCalColumnFaceRange_err quantity) pedestal. The mean (and rms) is computed removing (truncating) 10 percent of the events located at each of the sides (beginning+end) of the distribution of values; that is with the 80 percent central values. This is done to remove outliers. Only periodic triggers with 4 range readout events are being used. </description>
     </object>
 
       
       <object>
-	<name> CalXAdcPed_Histo1_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
+	<name> CalXAdcPed_TH1_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
 	<formula><![CDATA[Mean_CalXAdc_TowerCalLayerCalColumnFR]]></formula>
 	<cut><![CDATA[]]></cut>
 	<source>output</source>
@@ -83,7 +67,7 @@
 
 
        <object>
-	<name> CalXAdcPed_Histo1_TowerCalLayerCalColumnFR_RMS[16][8][12][2][4] </name>
+	<name> CalXAdcPed_TH1_TowerCalLayerCalColumnFR_RMS[16][8][12][2][4] </name>
 	<formula><![CDATA[foreachtower: foreachcallayer: foreachcalcolumn: foreachcalxface: foreachcalxrange: Mean_CalXAdc_TowerCalLayerCalColumnFR_err[tower][callayer][calcolumn][calxface][calxrange]*TMath::Sqrt(Mean_CalXAdc_TowerCalLayerCalColumnFR_n[tower][callayer][calcolumn][calxface][calxrange])]]></formula>
 	<cut><![CDATA[]]></cut>
 	<source>output</source>
