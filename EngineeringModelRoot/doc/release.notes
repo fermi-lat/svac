@@ -326,3 +326,6 @@ awb     Added printout for every 1000th event.
 
 v3r9p3:	January 7, 2008
 awb	Protect against null-pointer in case of no LATC key.
+
+v3r10:	January 22, 2008
+awb     New way to access the OBF status bits.

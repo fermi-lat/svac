@@ -590,25 +590,35 @@ void RootAnalyzer::analyzeDigiTree()
 
   
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {
-    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit()) == 0) {
+    UChar_t m_gammaStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getFiltersb();
+    int m_gammaStatusInt = m_gammaStatus>>4;
+    if (m_gammaStatusInt==0 || m_gammaStatusInt==6) {
       m_ntuple.m_obfPassedGAMMA = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
-    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit()) == 0) {
+    UChar_t m_mipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
+    int m_mipStatusInt = m_mipStatus>>4;
+    if (m_mipStatusInt==0 || m_mipStatusInt==6) {
       m_ntuple.m_obfPassedMIP = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
-    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit()) == 0) {
+    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getFiltersb();
+    int m_hipStatusInt = m_hipStatus>>4;
+    if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       m_ntuple.m_obfPassedHIP = 1;
     }
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
-    if ((m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit()) == 0) {
+    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getFiltersb();
+    int m_dgnStatusInt = m_dgnStatus>>4;
+    if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       m_ntuple.m_obfPassedDGN = 1;
     }
   }
+  
+
 
   //
   // Context information:
