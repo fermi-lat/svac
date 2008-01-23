@@ -583,10 +583,10 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // OBF:
   //
-  m_ntuple.m_obfPassedGAMMA = 0;
-  m_ntuple.m_obfPassedMIP   = 0;
-  m_ntuple.m_obfPassedHIP   = 0;
-  m_ntuple.m_obfPassedDGN   = 0;
+  m_ntuple.m_obfPassedGAMMA = -1;
+  m_ntuple.m_obfPassedMIP   = -1;
+  m_ntuple.m_obfPassedHIP   = -1;
+  m_ntuple.m_obfPassedDGN   = -1;
 
   
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {

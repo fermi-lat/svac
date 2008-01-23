@@ -329,3 +329,6 @@ awb	Protect against null-pointer in case of no LATC key.
 
 v3r10:	January 22, 2008
 awb     New way to access the OBF status bits.
+
+v3r10p1	January 23, 2008
+awb	Changed default values of ObfPassedXXX variables to be consistent with Merit.

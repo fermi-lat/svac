@@ -231,10 +231,10 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Onboard Filter (Offline version)  </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> ObfPassedGAMMA   </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the GAMMA-filter and 0 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedMIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the MIP-filter and 0 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedHIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the HIP (Heavy ion filter) and 0 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedDGN     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the DGN (Diagnostic filter) and 0 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedGAMMA   </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the GAMMA-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedMIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the MIP-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedHIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedDGN     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
 </TABLE>
 
 
