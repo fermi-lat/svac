@@ -2,6 +2,10 @@
        ReconAcdPhaMips_PMTB_TH1_AcdTile_AcdTileLoop  Sum
        ReconAcdPhaMipsCorrectedAngle_PMTA_TH1_AcdTile_AcdTileLoop  Sum
        ReconAcdPhaMipsCorrectedAngle_PMTB_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMips_PMTA_Zoom_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMips_PMTB_Zoom_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMipsCorrectedAngle_PMTA_Zoom_TH1_AcdTile_AcdTileLoop  Sum
+       ReconAcdPhaMipsCorrectedAngle_PMTB_Zoom_TH1_AcdTile_AcdTileLoop  Sum
        ReconAcdPhaMips_PMTA_TH2  Sum
        ReconAcdPhaMips_PMTB_TH2  Sum
        ReconAcdPhaMipsAngleCorrected_PMTA_TH2  Sum

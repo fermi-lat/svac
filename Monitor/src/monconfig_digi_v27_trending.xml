@@ -1081,22 +1081,22 @@
      
 
      
-
-     <object>
+<!--  TEST quantity
+      <object>
       <name> CalXHit_ZEROHit_TowerCalLayer[16][8] </name>
       <formula><![CDATA[ foreachtower: foreachcallayer: (CalXHit_TowerCalLayer[tower][callayer]<0.5)]]></formula>
       <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
       <type> counter </type>
       <description> Vector[tower][callayer] reporting the number of ZERO hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. </description>
     </object>
-
+-->
 
       <object>
-      <name> CalXHit_ZEROHit_TowerCalLayer_v2[16][8] </name>
+      <name> CalXHit_ZEROHit_TowerCalLayer[16][8] </name>
       <formula><![CDATA[ foreachtower: foreachcallayer: (RFun::loopovercalcolumns(CalXHit_TowerCalLayerCalColumn[tower][callayer])<0.5)]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
       <type> counter </type>
-      <description> Vector[tower][callayer] reporting the number of ZERO hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. The difference with CalXHit_ZEROHit_TowerCalLayer is the way the parm is computed. </description>
+      <description> Vector[tower][callayer] reporting the number of ZERO hits in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account.  </description>
     </object>
 
 
@@ -1127,19 +1127,10 @@
 
      <object>
       <name> CalXHit_MHit_TowerCalLayer[16][8] </name>
-      <formula><![CDATA[ foreachtower: foreachcallayer: CalXHit_TowerCalLayer[tower][callayer]]]></formula>
-      <cut><![CDATA[condsummary&30 && !(condsummary&32)]]></cut>
-      <type> mean </type>
-      <description> Vector[tower][callayer] reporting the MEAN number of hits (per event) in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. </description>
-    </object>
-
-
-     <object>
-      <name> CalXHit_MHit_TowerCalLayer_v2[16][8] </name>
       <formula><![CDATA[ foreachtower: foreachcallayer: RFun::loopovercalcolumns(CalXHit_TowerCalLayerCalColumn[tower][callayer])]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
       <type> mean </type>
-      <description> Vector[tower][callayer] reporting the MEAN number of hits (per event) in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. V2 .... </description>
+      <description> Vector[tower][callayer] reporting the MEAN number of hits (per event) in a calorimeter layer defined by the coordinates tower,callayer. Periodic triggers are NOT taken into account. </description>
     </object>
 
 

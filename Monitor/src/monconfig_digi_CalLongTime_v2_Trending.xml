@@ -10,6 +10,7 @@
     <!-- Event classification information -->
     <object> condsummary </object>
     <object> Range4 </object>
+    <object> ZeroSuppress </object>
 
     <!-- Acd Variables -->
     
@@ -26,7 +27,7 @@
      <object>
       <name> CalXAdc_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[CalXAdc_TowerCalLayerCalColumnFaceRange]]></formula>
-      <cut><![CDATA[condsummary&32 && Range4]]></cut>
+      <cut><![CDATA[condsummary&32 && Range4 && (!ZeroSuppress)]]></cut>
       <type> truncatedmeanfrac[0.8] </type>
       <description> Vector[tower][callayer][calcolumn][face][range] reporting the mean (and rms by means of the the CalXAdc_TowerCalLayerCalColumnFaceRange_err quantity) pedestal. The mean (and rms) is computed removing (truncating) 10 percent of the events located at each of the sides (beginning+end) of the distribution of values; that is with the 80 percent central values. This is done to remove outliers. Only periodic triggers with 4 range readout events are being used. </description>
     </object>
@@ -35,14 +36,14 @@
       <object>
       <name> CalXPedDev_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn:foreachcalxface: foreachcalxrange: CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][calxface][calxrange] - RFun::calped(timestamp,tower,callayer,calcolumn,calxface,calxrange)]]></formula>
-      <cut><![CDATA[condsummary&32 && Range4]]></cut>
+      <cut><![CDATA[condsummary&32 && Range4 (!ZeroSuppress)]]></cut>
       <type> truncatedmeanfrac[0.8] </type>
       <description> Vector[tower][callayer][calcolumn][face][range] reporting the mean deviations between the measured pedestals and the ones retrieved from the data base (and rms by means of the the CalXPedDev_TowerCalLayerCalColumnFR_err quantity). The mean (and rms) is computed removing (truncating) 10 percent of the events located at each of the sides (beginning+end) of the distribution of values; that is with the 80 percent central values. Only periodic triggers with 4 range readout events are being used. </description>
     </object>
       
       <object>
       <name> RPM_TowerCalLayerCalColumn[16][8][12] </name>
-      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][0],RFun::calped(timestamp,tower,callayer,calcolumn,0,0), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][0], RFun::calped(timestamp,tower,callayer,calcolumn,1,0), 50)]]></formula>
+      <formula><![CDATA[foreachtower:foreachcallayer:foreachcalcolumn: RFun::computeratio(CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][0][1],RFun::calped(timestamp,tower,callayer,calcolumn,0,1), CalXAdc_TowerCalLayerCalColumnFaceRange[tower][callayer][calcolumn][1][1], RFun::calped(timestamp,tower,callayer,calcolumn,1,1), 50)]]></formula>
       <cut><![CDATA[!(condsummary&32) && Range4]]></cut>
       <type> truncatedmeanboundandfrac[0,70000,0.8] </type>
       <description> Vector[tower][callayer][calcolumn] reporting the mean ratio LEX1(plus face) / LEX1(minus face) = P/M. This ratio is expected to be close to 1. Pedestals (extracted from data base) are subtracted before computing the ratio. The mean is computed excluding the tails up to a fraction of 0.1 on each side in order to remove outliers; that is with the 80 percent of central values. Only 4 range readout events which are NOT periodic triggers are being used. A minimum signal (after pedestal subtraction) of 50 ADC counts is required. </description>
