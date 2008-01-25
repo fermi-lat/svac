@@ -298,28 +298,35 @@ int main(int argn, char** argc) {
     struct timespec ts1, ts2;
     clock_gettime(CLOCK_REALTIME, &ts1);
     d.go(numevents,jc.optval_s());    
+
     clock_gettime(CLOCK_REALTIME, &ts2);
     unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;
     unsigned long endtime=ts2.tv_sec*1000000+ts2.tv_nsec/1000;
     
     // Ok, write the output and clean up
     gROOT->cd();
+
     TList* list=(TList*)gDirectory->GetList();
+
     std::string outputFile = jc.outputPrefix() + "_time.root";
     TFile* fout = TFile::Open(outputFile.c_str(),"RECREATE");
     if ( fout == 0 || fout->IsZombie() ) {
       std::cerr << "Failed to open output File " << outputFile << std::endl;
       return -1;
     }
+
     d.tree()->Write();
     TIter iter(list);
     while(TObject* obj=iter.Next()){
       if((strstr(obj->ClassName(),"TH2")||strstr(obj->ClassName(),"TH1")) && !strstr(obj->GetName(),"htemp"))obj->Write();
     }
     fout->Close();
+
     // Write an html report
     std::string html=jc.htmlFile();
     if(html=="")html="Monitoring.html";
+
+
     TestReport r(html.c_str());
     r.newheadline("General information");
     char name[128];
@@ -345,10 +352,13 @@ int main(int argn, char** argc) {
     if (meritinpcol)r.additem("Merit file(s)",jc.inputDigiFileStr().c_str());
     if (calinpcol)r.additem("Cal file(s)",jc.inputDigiFileStr().c_str());
     r.newheadline("<b><center>Input variables</b></center>");
+
+
     char* inptable[]={"Name","Source","Description"};
     char* line[5];
-    for (int j=0;j<5;j++)line[j]=new char[512];
+    for (int j=0;j<5;j++)line[j]=new char[1024];
     r.starttable(inptable,3);
+   
     for (std::vector<std::map<std::string,std::string> >::iterator itr=digidesc.begin();
 	 itr != digidesc.end();itr++){
       strcpy(line[0],((*itr)["name"]).c_str()); 
@@ -356,6 +366,7 @@ int main(int argn, char** argc) {
       strcpy(line[2],((*itr)["description"]).c_str());
       r.addtableline(line,3);
     }
+    
     for (std::vector<std::map<std::string,std::string> >::iterator itr=recondesc.begin();
 	 itr != recondesc.end();itr++){
       strcpy(line[0],((*itr)["name"]).c_str());
@@ -401,10 +412,7 @@ int main(int argn, char** argc) {
       // name of the variable 
       std::string thistype = (*itr)["type"];
       std::string thisname = GiveMeMyType(thistype);
-
-      
-
-      
+            
       thisname += ((*itr)["name"]).c_str();
       
       strcpy(line[0],thisname.c_str());
@@ -417,6 +425,8 @@ int main(int argn, char** argc) {
     r.endtable();
     
     r.writereport();
+
+
     // Time profiling of the input variables
     for(unsigned int i=0;i<allinpcol.size();i++){
       allinpcol[i]->timeProfile();
@@ -452,7 +462,7 @@ int main(int argn, char** argc) {
     r2.newheadline("<center><b>Input variables</b></center>");
     char* inptableparams[]={"Name","Source","Description"};
     char* lineparams[3];
-    for (int j=0;j<3;j++)lineparams[j]=new char[512];
+    for (int j=0;j<3;j++)lineparams[j]=new char[1024];
     r2.starttable(inptableparams,3);
     for (std::vector<std::map<std::string,std::string> >::iterator itr=digidesc.begin();
 	 itr != digidesc.end();itr++){
@@ -518,6 +528,8 @@ int main(int argn, char** argc) {
     r2.writereport();
     
   }
+
+
   //std::cout << std::endl << "Del digi" << std::endl <<std::endl;
   if (digiinpcol)delete digiinpcol;
   //std::cout << std::endl << "Del recon" << std::endl <<std::endl;
@@ -531,9 +543,12 @@ int main(int argn, char** argc) {
   //std::cout << std::endl << "Del cal" << std::endl <<std::endl;
   if (calinpcol)delete calinpcol;
 
-  //std::cout << std::endl << "Del prim" << std::endl <<std::endl;
+ 
+  //  std::cout << std::endl << "Del prim" << std::endl <<std::endl;
   delete outcolprim;
-  //std::cout << std::endl << "Del second" << std::endl <<std::endl;
+
+
+  // std::cout << std::endl << "Del second" << std::endl <<std::endl;
   delete outcolsec;
   return 0;
 }
