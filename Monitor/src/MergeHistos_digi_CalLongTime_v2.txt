@@ -1,14 +1,14 @@
        Range4Periodic_TH1  Average
        Range4AllEvents_TH1  Average
        ZeroSuppressForPeriodicAndRange4_TH1  Average
-	 CalXAdcPedMean_LEX8_TH1 Average
-	 CalXAdcPedRMS_LEX8_TH1 Average
-	 CalXAdcPedMean_LEX1_TH1 Average
-	 CalXAdcPedRMS_LEX1_TH1 Average
-	 CalXAdcPedMean_HEX8_TH1 Average
-	 CalXAdcPedRMS_HEX8_TH1 Average
-	 CalXAdcPedMean_HEX1_TH1 Average
-	 CalXAdcPedRMS_HEX1_TH1 Average
-	 CalXPedDev_Mean_TH1 Average
-	 CalXPedDev_RMS_TH1 Average
+       CalXAdcPedMean_LEX8_TH1 Average
+       CalXAdcPedRMS_LEX8_TH1 Average
+       CalXAdcPedMean_LEX1_TH1 Average
+       CalXAdcPedRMS_LEX1_TH1 Average
+       CalXAdcPedMean_HEX8_TH1 Average
+CalXAdcPedRMS_HEX8_TH1 Average
+       CalXAdcPedMean_HEX1_TH1 Average
+       CalXAdcPedRMS_HEX1_TH1 Average
+    CalXPedDev_Mean_TH1 Average
+  CalXPedDev_RMS_TH1 Average
 
