@@ -195,7 +195,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
     // tokenize the line, make sure that there are 2 tokens
     std::string inputLine(buffer);
     std::vector <std::string> tokens;
-    facilities::Util::stringTokenize(inputLine, ": ", tokens);
+    facilities::Util::stringTokenize(inputLine, ":\t ", tokens);
 
     // ignore blank lines
     if ( tokens.size() == 0 ) {
@@ -344,7 +344,7 @@ getInputFilesFromTxtFile(const char* fileName, std::list<std::string>& fileNames
     // tokenize and make sure it looks ok
     std::string inputLine(buffer);
     std::vector <std::string> tokens;
-    facilities::Util::stringTokenize(inputLine, ": ", tokens);
+    facilities::Util::stringTokenize(inputLine, ":\t ", tokens);
     if ( tokens.size() == 0 ) {
       inputFile.getline(buffer,bufSize);
       continue;
