@@ -113,6 +113,8 @@
 // Last updated with object AcdGlobalPos_NotMatchedTrack_FacePosXYZ by user dpaneque on Mon Jan  7 17:34:37 2008
 // Last updated with object AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ by user dpaneque on Mon Jan  7 18:35:28 2008
 // Last updated, REMOVING object "MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace" by user dpaneque on Wed Jan 16 2008 (manual entry)
+// Last updated with object ZeroSuppress by user dpaneque on Thu Jan 24 19:13:42 2008
+#include "digi/MonInput_ZeroSuppress.h"
 #include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
 #include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
 #include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
@@ -164,8 +166,6 @@
 #include "recon/MonInput_ReconDirXYZ.h"
 #include "recon/MonInput_ReconNumTracks.h"
 #include "digi/MonInput_CalXHit_TowerCalLayer.h"
-
-
 #include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
 #include "digi/MonInput_AcdPha_PmtA_AcdTile.h"
 #include "digi/MonInput_AcdVetoB_AcdTile.h"
@@ -435,6 +435,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ;
   if (s=="AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
     return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
+  if (s=="ZeroSuppress")
+    return new MonInput_ZeroSuppress;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -548,6 +550,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdPha_PmtIdPmtRangeAcdTile");
   names.push_back("AcdGlobalPos_NotMatchedTrack_FacePosXYZ");
   names.push_back("AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ");
+  names.push_back("ZeroSuppress");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
