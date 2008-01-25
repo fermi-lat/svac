@@ -35,6 +35,9 @@
 #include "TMath.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TFile.h"
+#include "TDirectory.h"
+#include "TVector.h"
 
 //  TimeInterval  Keeps track of the time interval for the specific time bin.  
 
@@ -442,6 +445,30 @@ class MonTruncatedMeanBoundsAndFrac:public MonMean{
   std::list<double> *m_list;
 };
 
+class MonTruncatedMeanBoundsAndFracBigData:public MonMean{
+ public:
+  MonTruncatedMeanBoundsAndFracBigData(const char* name, const char* formula, const char* cut, const char* type) ;
+  virtual ~MonTruncatedMeanBoundsAndFracBigData();
+  void singleincrement(Double_t* val, Double_t* val2) ;
+  void reset();
+  virtual void latchValue() ;
+ private:
+
+  Bool_t createfile4tmptree(std::string dir, std::string filename);
+
+  Float_t m_lowerbound;
+  Float_t m_upperbound;
+  std::string m_lowerbound_str;
+  std::string m_upperbound_str;
+  Float_t m_fraction;
+  Double_t* m_datavector;
+  std::string m_tmpdir;
+  std::string m_tmpfilename;
+  TFile* m_tmpfile;
+  TTree* m_tmptree;
+  std::string m_tmptreename;
+  std::string m_leafname;
+};
 
 
 //
