@@ -472,12 +472,30 @@
 
 
       <object>
-      <name> TriggerEngine[16] </name>
+      <name> TriggerEngine_Tower[16] </name>
       <formula><![CDATA[ TriggerEngine ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> rate </type>
       <description> Rate of Trigger Engines (DigiEvent->getL1T().getGemEngine()) </description>
     </object>
+
+       <object>
+      <name> CalHiTrigger_Tower[16] </name>
+      <formula><![CDATA[ CalHiTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> rate </type>
+      <description> Rate of CAL HI Triggers per tower. Periodic triggers are not taken into account. </description>
+    </object>
+
+         <object>
+      <name> CalLoTrigger_Tower[16] </name>
+      <formula><![CDATA[ CalLoTriggerTower ]]></formula>
+      <cut><![CDATA[ condsummary&30]]></cut>
+      <type> rate </type>
+      <description> Rate of CAL Lo Triggers per tower. Periodic triggers are not taken into account. </description>
+    </object>
+
+     
 
 
       <!-- ********************  Detector information   *********************** -->
@@ -639,7 +657,8 @@
 	<description> Vector [AcdTile] reporting the mean pulse height from PMT B during the specified time bin. Only the LOW PMT range is being considered.   </description>
       </object>
 
-
+   
+      
 
 
       <!--  ______________  Tracker _______________ -->
