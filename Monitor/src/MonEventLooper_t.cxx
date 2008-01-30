@@ -274,9 +274,9 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
 	// This latches and store all the values
       switchBins();
       m_timestamp_firstevt_inbin = currentTimeStamp;
-    } else {
-      m_timestamp_lastevt_inbin = currentTimeStamp;
     }
+    m_timestamp_lastevt_inbin = currentTimeStamp;
+
     if(m_intree->GetTotBytes()/1000000>500){  //flush data in intermediate tree if we reach 500 MB
       flushData();
     }
