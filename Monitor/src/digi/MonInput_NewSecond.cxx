@@ -12,7 +12,7 @@
 #define NAME NewSecond
 #define OUTBRANCH "NewSecond"
 #define LEAF "NewSecond/O"
-#define INBRANCH "m_metaevent"
+#define INBRANCH "m_metaEvent"
 // #define ACCESSOR getMetaEvent().time().current().timeSecs()
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
