@@ -66,6 +66,9 @@ protected:
 
   // go to the next bin, called when the timeStamp is outside the current bin
   void switchBins();
+
+  // flush data if tree size reaches 500 MB
+  void flushData();
     
   // set the tree
   void attachTree();

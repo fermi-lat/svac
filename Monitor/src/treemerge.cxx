@@ -1,6 +1,7 @@
 // Program to merge trending tuples
 // C 2007 Martin Kocian, SLAC
 #include <unistd.h>
+#include <math.h>
 #include <string>
 #include <vector>
 #include <iostream>

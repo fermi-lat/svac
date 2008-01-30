@@ -841,7 +841,7 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
   m_tmptree = new TTree(m_tmptreename.c_str(),"Used to store data temporaly");
   Long64_t maxTreeSize = 5000000000000;
   m_tmptree->SetMaxTreeSize(maxTreeSize);
-  m_tmptree->SetMaxVirtualSize(maxTreeSize);
+  //  m_tmptree->SetMaxVirtualSize(maxTreeSize);
   m_tmptree->Branch(m_leafname.c_str(),m_datavector,leafnamedim.c_str());
 
   // CREATE TFile where the tmp tree will reside (info written to disk).

@@ -131,9 +131,9 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
 
  
 
-  Long64_t maxTreeSize = 5000000000000;
+  Long64_t maxTreeSize = 5000000000000LL;
   m_intree->SetMaxTreeSize(maxTreeSize);
-  m_intree->SetMaxVirtualSize(maxTreeSize);
+  //m_intree->SetMaxVirtualSize(maxTreeSize);
   m_sectree->SetMaxTreeSize(maxTreeSize);
   m_tree->SetMaxTreeSize(maxTreeSize);
 
@@ -179,15 +179,11 @@ void MonEventLooper::init() {
 		<< "Exiting... " << std::endl;
       assert(0);
     }
-      
-  }
-  else{
     std::cout << "MonEventLooper::init(): WARNING" << std::endl
-	      << "Intermediate TTree will NOT be written to disk. Thus it will a memory-resident TTree."
-	      << std::endl
-	      << "This will make the process faster. But note that it will make the process crash if "
-	      << "the overall memory used when filling the TTree is larger than 3GB." << std::endl;
+	      << "Intermediate TTree will be written to disk. Thus it will a file-resident TTree."
+	      << std::endl;
 
+      
   }
 }
 
@@ -245,7 +241,6 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
   // 
   init();
 
-  UInt_t unsaved(0);
   Double_t currentTimeStamp(0.0);
 
   // Event loop
@@ -269,47 +264,31 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
     // initialize stuff on first event
     if ( ievent == startEvent ) {
       firstEvent(currentTimeStamp);
+      m_timestamp_firstevt_inbin = currentTimeStamp;
+      m_timestamp_lastevt_inbin = currentTimeStamp;
     } 
 
-    if(!unsaved){
-      // first event of this bin
-      m_timestamp_firstevt_inbin = currentTimeStamp;
-    }
-     
     // check for time-bin edge
     if ( currentTimeStamp >= m_currentEnd ) {
 	// time-stamp outside of bin, jump to next bin
 	// This latches and store all the values
       switchBins();
-      unsaved = 0;
+      m_timestamp_firstevt_inbin = currentTimeStamp;
     } else {
       m_timestamp_lastevt_inbin = currentTimeStamp;
-      unsaved++;
+    }
+    if(m_intree->GetTotBytes()/1000000>500){  //flush data in intermediate tree if we reach 500 MB
+      flushData();
     }
     
     // switch the timestamp
     logEvent(ievent,currentTimeStamp);
 
-    // increment trigger count, filter count
-    // this is only done after the bin-switch
-    // since useEvent() hasn't been called
-    // the last bin doesn't include data from this event
-    // so that stats shouldn't either
     m_nTrigger++;
-    //filterEvent(filtered);
-    //if ( !filtered ) {
-    //  m_nFilter++;
-
-      // ok, this is the call that actually fills the event data
-      //useEvent(used);
-      //if ( used ) {
-	//m_nUsed++;
-      //}
-    //  }
   }
   
   // flush out any remaining events
-  if ( unsaved > 0 ) lastEvent(currentTimeStamp);
+  lastEvent(currentTimeStamp);
 
 }
 
@@ -338,7 +317,12 @@ void MonEventLooper::firstEvent(Double_t timeStampdouble)  {
   std::cout << std::endl;
 }
 
-
+void MonEventLooper::flushData(){
+  m_intree->Fill();
+  filterEvent();
+  stripVals()->increment(m_intree);
+  m_intree->Reset();
+}
 
 void MonEventLooper::switchBins() {
 
@@ -377,7 +361,8 @@ void MonEventLooper::switchBins() {
   m_currentStart += m_binSize;
   m_currentEnd += m_binSize;
   m_currentFlags = 1;
-
+  m_nUsed=0;
+  m_nFilter=0;
   TimeInterval::m_interval=m_binSize;
  
   while(m_currentTimestamp->value()>=m_currentEnd){
@@ -514,7 +499,7 @@ bool MonEventLooper::readEvent(Long64_t ievent){
 
 void MonEventLooper::filterEvent(){
   m_globalCut->applyCut(m_intree);
-  m_nFilter=m_globalCut->nFilter();
-  m_nUsed=m_globalCut->nUsed();
+  m_nFilter+=m_globalCut->nFilter();
+  m_nUsed+=m_globalCut->nUsed();
 }
 

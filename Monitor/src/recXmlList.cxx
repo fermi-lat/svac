@@ -133,7 +133,7 @@ std::list<std::map<std::string,std::string> > recXmlList::readOutputList(const c
   std::list<std::string>::iterator itr;
   std::string oldval;
   for (itr=namelist.begin();itr!=namelist.end();itr++){
-    if (it==namelist.begin()){
+    if (itr==namelist.begin()){
       oldval=(*itr);
       continue;
     }else{
