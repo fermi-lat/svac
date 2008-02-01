@@ -28,9 +28,7 @@
 #include "MonInputCollection_Digi.h"
 #include "MonInputCollection_Recon.h"
 #include "MonInputCollection_Mc.h"
-#include "MonInputCollection_Merit.h"
-#include "MonInputCollection_Svac.h"
-#include "MonInputCollection_Cal.h"
+#include "MonInputCollection_Tuple.h"
 #include "MonGlobalCut.h"
 #include "MonValueImpls_t.h"
 #include "MonConfigParser.h"
@@ -139,7 +137,7 @@ int main(int argn, char** argc) {
     }
   }
   if (jc.meritChain()){
-    meritinpcol=new MonInputCollection_Merit(jc.meritChain(),"MeritEvent");
+    meritinpcol=new MonInputCollection_Tuple(jc.meritChain(),"MeritEvent");
     if (nTotal==0)nTotal=jc.meritChain()->GetEntries();
     else if (nTotal!=jc.meritChain()->GetEntries()){
       std::cerr<<"Different number of events in Merit chain. Exiting"<<std::endl;
@@ -147,7 +145,7 @@ int main(int argn, char** argc) {
     }
   }
   if (jc.svacChain()){
-    svacinpcol=new MonInputCollection_Svac(jc.svacChain(),"SvacEvent");
+    svacinpcol=new MonInputCollection_Tuple(jc.svacChain(),"SvacEvent");
     if (nTotal==0)nTotal=jc.svacChain()->GetEntries();
     else if (nTotal!=jc.svacChain()->GetEntries()){
       std::cerr<<"Different number of events in Svac chain. Exiting"<<std::endl;
@@ -155,7 +153,7 @@ int main(int argn, char** argc) {
     }
   }
   if (jc.calChain()){
-    calinpcol=new MonInputCollection_Cal(jc.calChain(),"CalEvent");
+    calinpcol=new MonInputCollection_Tuple(jc.calChain(),"CalEvent");
     if (nTotal==0)nTotal=jc.calChain()->GetEntries();
     else if (nTotal!=jc.calChain()->GetEntries()){
       std::cerr<<"Different number of events in cal Chain. Exiting"<<std::endl;
