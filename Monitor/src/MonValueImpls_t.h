@@ -466,8 +466,11 @@ class MonTruncatedMeanBoundsAndFracBigData:public MonMean{
   std::string m_tmpfilename;
   TFile* m_tmpfile;
   TTree* m_tmptree;
+  //  TDirectory* m_filedir;
+  //  TDirectory* m_memorydir;
   std::string m_tmptreename;
   std::string m_leafname;
+  ULong64_t m_evtcounter;
 };
 
 

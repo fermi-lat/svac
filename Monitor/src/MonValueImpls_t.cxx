@@ -614,6 +614,9 @@ void MonMean::reset() {
 
 // Attach a MonMean node to a TTree (mean and err as float)
 int MonMean::attach(TTree& tree, const std::string& prefix) const {
+
+  // std::cout << " MonMean::attach : name = " << m_name << std::endl; 
+
   std::string fullNameVal = prefix + "Mean_" + name();
   std::string leafTypeVal = fullNameVal + m_dimstring + "/F";
 
@@ -807,7 +810,7 @@ void MonTruncatedMeanBoundsAndFrac::latchValue(){
 MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const char* name, 
 							     const char* formula, 
 							     const char* cut, const char* type) 
-    :MonMean(name,formula,cut){
+    :MonMean(name,formula,cut),m_evtcounter(0){
   std::vector<std::string> tt=parse(type,"[",",","]");
   if(tt.size()!=3){
     std::cerr<<"MonTruncatedMeanBoundsAndFracBigData variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
@@ -820,30 +823,37 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
   m_upperbound=atof(tt[1].c_str());
   m_fraction=atof(tt[2].c_str());
 
-
-  std::cout <<  "m_lowerbound, m_upperbound, m_fraction, m_dim " << std::endl
-	    << m_lowerbound_str.c_str() << ", " << m_upperbound_str.c_str() << ", " << m_fraction 
-	    << ", " << m_dim << std::endl;
-
   m_datavector = new Double_t[m_dim];
 
+ 
   // initialize ttree to store info
  
  
   m_tmptreename = m_name+"_tree";
-  m_leafname = m_name+"_leaf";
-  std::string leafnamedim = m_leafname+"[";
-  char dimstring[5];
-  sprintf(dimstring,"%d",m_dim);
-  leafnamedim  += dimstring;
-  leafnamedim  += "]/D";
+  m_leafname = m_name;
+
+ 
+
+
 
   m_tmptree = new TTree(m_tmptreename.c_str(),"Used to store data temporaly");
+  m_tmptree->SetDirectory(gDirectory);
   Long64_t maxTreeSize = 5000000000000;
   m_tmptree->SetMaxTreeSize(maxTreeSize);
-  //  m_tmptree->SetMaxVirtualSize(maxTreeSize);
-  m_tmptree->Branch(m_leafname.c_str(),m_datavector,leafnamedim.c_str());
-
+  
+  for(unsigned int i = 0; i < m_dim; i++)
+    {
+      std::string leafnamedim = m_leafname+"_";
+      char dimstring[5];
+      sprintf(dimstring,"%d",i);
+      leafnamedim  += dimstring;
+      
+      std::string leafnamedimAndType(leafnamedim);
+      leafnamedimAndType  += "/D";
+      m_tmptree->Branch(leafnamedim.c_str(),&m_datavector[i],leafnamedimAndType.c_str());
+    }
+  
+  
   // CREATE TFile where the tmp tree will reside (info written to disk).
   // Writing is necessary if info from tmp tree, for a time bin, is close to 2 GB
   // which gets into 3 GB (limit on a on a IA32 linux for single process) with another 
@@ -855,6 +865,7 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
   m_tmpfilename= m_name+"_tmp.root";
   m_tmpdir = "./"; // TO BE CHANGED, user should be able to define this.  HELPME !!
 
+ 
   Bool_t FileCreated = createfile4tmptree(m_tmpdir,m_tmpfilename);
   if(!FileCreated){
     std::string filename(m_tmpdir);
@@ -864,7 +875,7 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
 	      << "Exiting... " << std::endl;
     assert(0);
   }
-  
+ 
 
 
 
@@ -888,6 +899,7 @@ Bool_t MonTruncatedMeanBoundsAndFracBigData::createfile4tmptree(std::string dir,
   m_tmpfile = new TFile (completename.c_str(), "RECREATE");
   m_tmptree->SetDirectory(gDirectory);
   currentdir->cd();
+  //std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
 
   return m_tmpfile->IsOpen();
 }
@@ -896,12 +908,8 @@ Bool_t MonTruncatedMeanBoundsAndFracBigData::createfile4tmptree(std::string dir,
 
 MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(){
 
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(): Closing file"
-	    << std::endl;
   m_tmpfile->Close();
 
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(): delete vectors"
-	    << std::endl;
   delete [] m_datavector;
 
 
@@ -911,7 +919,7 @@ MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(){
    deletefile +=m_tmpdir;
    deletefile +=m_tmpfilename;
 
-   std::cout << deletefile.c_str() << std::endl;
+   // std::cout << deletefile.c_str() << std::endl;
 
    int filedeletion = system(deletefile.c_str());
    if(filedeletion){
@@ -920,28 +928,21 @@ MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(){
 	       << "Command failed: " << deletefile.c_str() << std::endl;
 	
       }
-
-      std::cout << "Done" << std::endl;
-
-
-
 }
+
 void MonTruncatedMeanBoundsAndFracBigData::reset(){
   for (unsigned i=0;i<m_dim;i++){
     m_datavector[i]=0.0;
   }
-  
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::reset(), m_tmptree->SetEventList(0);" << std::endl;
+
+
   m_tmptree->SetEventList(0);
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::reset(), m_tmptree->Reset()" << std::endl;
   m_tmptree->Reset();
 
   // recreate tfile
 
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::reset(), MonMean::reset();" << std::endl;
   MonMean::reset();
 
-  std::cout << "MonTruncatedMeanBoundsAndFracBigData::reset(), Recreate tmp file; " << std::endl;
   Bool_t FileCreated = createfile4tmptree(m_tmpdir,m_tmpfilename);
   if(!FileCreated){
     std::string filename(m_tmpdir);
@@ -965,6 +966,9 @@ void MonTruncatedMeanBoundsAndFracBigData::singleincrement(Double_t* val, Double
 	      << "val[" << i<< "] = " << m_datavector[i] << std::endl;
     */
   }
+  
+  //  std::cout << "MonTruncatedMeanBoundsAndFracBigData::singleincrement:Evt number " << m_evtcounter << std::endl; 
+  m_evtcounter++;
   m_tmptree->Fill();
 }
 
@@ -976,52 +980,41 @@ void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
   std::cout << "MonTruncatedMeanBoundsAndFracBigData::latchValue(); name " 
 	    << m_name.c_str() << std::endl; 
   
+  std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
+
   // create std::list in heap 
   // the SAME list will be used for all dimensions
   std::list<double> currentlist;
   ULong64_t treeentries = m_tmptree->GetEntries();
-  std::cout << "m_tmptree->GetEntries() = " << m_tmptree->GetEntries() << std::endl;
   if(treeentries!=0){
     for (unsigned i =0;i<m_dim;i++){
+      
+      // Read info for dimension i from m_tmptree and fill list 
+      // and sort events in ascending order
+      
+      std::string leafnamedim = m_leafname+"_";
+      char dimstring[5];
+      sprintf(dimstring,"%d",i);
+      leafnamedim  += dimstring;
+      
+      m_tmptree->SetBranchStatus("*",0);
+      m_tmptree->SetBranchStatus(leafnamedim.c_str(),1);
+      
+      std::string cutstr = leafnamedim + ">=" +m_lowerbound_str + " && " 
+	+ leafnamedim + "<=" + m_upperbound_str;
+
+      m_tmptree->Draw(leafnamedim.c_str(),cutstr.c_str(),"goff",treeentries,0);
+      
+      Double_t* thisvector = m_tmptree->GetV1();
     
-    // Read info for dimension i from m_tmptree and fill list 
-    // and sort events in ascending order
-
-    std::string leafnamedim = m_leafname+"[";
-    char dimstring[5];
-    sprintf(dimstring,"%d",i);
-    leafnamedim += dimstring;
-    leafnamedim += "]";
-
-    std::string cutstr = leafnamedim + ">=" +m_lowerbound_str + " && " 
-      + leafnamedim + "<=" + m_upperbound_str;
-
-    if(i%100==0){
-      std::cout << "Evt number " << i << std::endl;
-      std::cout << "formula tmptree: " <<  leafnamedim.c_str() << std::endl;
-      std::cout << "cut in tmptree : " << cutstr.c_str() << std::endl;
-    }
-
-    m_tmptree->Draw(leafnamedim.c_str(),cutstr.c_str(),"goff",treeentries,0);
-
-    if(i%100==0){std::cout << "Tree drawb " << std::endl;}
-
-    Double_t* thisvector = m_tmptree->GetV1();
-    
-     if(i%100==0){
-       std::cout << "m_tmptree->GetSelectedRows()  " << m_tmptree->GetSelectedRows() << std::endl;}
-    
-    for(Long64_t evt = 0; evt< m_tmptree->GetSelectedRows();evt++)
-      {
-	if(thisvector[evt] >=m_lowerbound && thisvector[evt]<=m_upperbound){ 
-	  currentlist.push_back(thisvector[evt]);
+      for(Long64_t evt = 0; evt< m_tmptree->GetSelectedRows();evt++)
+	{
+	  if(thisvector[evt] >=m_lowerbound && thisvector[evt]<=m_upperbound){ 
+	    currentlist.push_back(thisvector[evt]);
+	  }
 	}
-      }
-    if(i%100==0){
-      std::cout << "i=" << i <<"; currentlist.size() = " << currentlist.size() << std::endl;}
-    
-    if (currentlist.size()==0)
-      continue;
+      if (currentlist.size()==0)
+	continue;
     
     currentlist.sort();
     
@@ -1035,11 +1028,10 @@ void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
     }
     if (currentlist.size()==0){
       currentlist.clear();
-      
-      std::cout << "currentlist.size() after clearing " << currentlist.size() << std::endl;
       continue;
     }
-
+  
+    
     if (currentlist.size()== 1){
       m_nVals[i] = 1;
       m_err[i] = 0.0;
@@ -1047,14 +1039,12 @@ void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
       m_val[i] = Double_t(*it);
 
       // std::cout <<  "List with one event: m_val[i], m_err[i]:" <<  m_val[i] << ", " << m_err[i] << std::endl; 
-
+      
       currentlist.clear();
-    
-      //std::cout << "currentlist.size() after clearing " << currentlist.size() << std::endl;
       continue;
     }
-
-
+    
+    
     // list has more than 2 events
     double sum,sum2;
     sum=sum2=0;
@@ -1073,13 +1063,9 @@ void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
     err2 /= (Double_t)nvals;
     m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
     
-    // std::cout <<  "m_val[i], m_err[i]:" <<  m_val[i] << ", " << m_err[i] << std::endl; 
-    
     // release memory allocated by the list
     currentlist.clear();
-    
-    //std::cout << "currentlist.size() after clearing " << currentlist.size() << std::endl;
-    
+    std::cout << "m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
     }
   }
 }
