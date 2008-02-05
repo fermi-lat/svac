@@ -976,12 +976,12 @@ void MonTruncatedMeanBoundsAndFracBigData::singleincrement(Double_t* val, Double
 void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
 
 
-  
+  /*
   std::cout << "MonTruncatedMeanBoundsAndFracBigData::latchValue(); name " 
 	    << m_name.c_str() << std::endl; 
   
   std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
-
+  */
   // create std::list in heap 
   // the SAME list will be used for all dimensions
   std::list<double> currentlist;
@@ -1065,7 +1065,7 @@ void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
     
     // release memory allocated by the list
     currentlist.clear();
-    std::cout << "m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
+    // std::cout << "m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
     }
   }
 }
