@@ -283,6 +283,11 @@ struct NtupleDef {
   int m_trgEngineGlt;
   int m_trgEngineGem;
 
+  // Addition trigger info:
+  int m_gemPrescale;
+  int m_gltPrescale;
+  int m_gltPrescaleExpired;
+
   // GEM information:
   int m_gemConditionsWord;
 

@@ -110,6 +110,11 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> TrgEngineGlt </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GltWord. </TD> </TR>
 <TR> <TD> TrgEngineGem </TD> <TD> Int </TD> <TD> Trigger engine calculated based on the GemConditionsWord. </TD> </TR>
 
+<TR> <TD> GemPrescale </TD> <TD> Int </TD> <TD> Prescale factor derived from the GemConditionsWord. </TD> </TR> 
+<TR> <TD> GltPrescale </TD> <TD> Int </TD> <TD> Prescale factor derived from the GltWord. </TD> </TR> 
+<TR> <TD> GltPrescaleExpired </TD> <TD> Int </TD> <TD> For unprescaled runs this variable indicates if the event would have made it through the prescaling. A value of 1 means the event would have passed. </TD> </TR>
+
+
 <TR> <TD> GemTkrVector[16]   </TD> <TD> Int </TD> <TD> GEM TKR vector: 16 bits, one bit per tower. The bit is set if the TKR trigger was asserted at least once in the trigger window. 
           </TD> </TR>
 <TR> <TD> GemRoiVector[16]   </TD> <TD> Int </TD> <TD> GEM ROI vector: 16 bits - the meaning depends on whether the ROI was used as a trigger or a veto. The bit is set if a ROI was 

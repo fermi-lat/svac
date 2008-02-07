@@ -332,3 +332,6 @@ awb     New way to access the OBF status bits.
 
 v3r10p1	January 23, 2008
 awb	Changed default values of ObfPassedXXX variables to be consistent with Merit.
+
+v3r11	February 6, 2008
+awb	Added Martin's GemPrescale, GltPrescale and GltPrescaleExpired variables. Needs GR v13r11.

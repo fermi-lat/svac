@@ -579,6 +579,10 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_trgEngineGlt = m_digiEvent->getL1T().getGltEngine();
   m_ntuple.m_trgEngineGem = m_digiEvent->getL1T().getGemEngine();
 
+  m_ntuple.m_gemPrescale        = m_digiEvent->getL1T().getGemPrescale();
+  m_ntuple.m_gltPrescale        = m_digiEvent->getL1T().getGltPrescale();
+  m_ntuple.m_gltPrescaleExpired = m_digiEvent->getL1T().getPrescaleExpired();
+
 
   //
   // OBF:
@@ -1318,6 +1322,11 @@ void RootAnalyzer::createBranches()
   
   m_tree->Branch("TrgEngineGlt", &(m_ntuple.m_trgEngineGlt), "TrgEngineGlt/I");
   m_tree->Branch("TrgEngineGem", &(m_ntuple.m_trgEngineGem), "TrgEngineGem/I");
+
+  m_tree->Branch("GemPrescale",&(m_ntuple.m_gemPrescale),"GemPrescale/I");
+  m_tree->Branch("GltPrescale",&(m_ntuple.m_gltPrescale),"GltPrescale/I");
+  m_tree->Branch("GltPrescaleExpired",&(m_ntuple.m_gltPrescaleExpired),"GltPrescaleExpired/I");
+
 
 
   // Error flags:
