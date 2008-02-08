@@ -326,6 +326,8 @@ void MonEventLooper::flushData(){
 
 void MonEventLooper::switchBins() {
 
+
+  // std::cout << "MonEventLooper::switchBins()" << std::endl;
   m_timeinterval = TimeInterval::m_interval;
   
   // tmp
@@ -408,6 +410,7 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
 
   // kludge: double the last event because the last event does not get used.
 
+  // std::cout << "MonEventLooper::lastEvent " << std::endl;
   
   m_timestamp_lastevt_inbin = timeStampdouble;
   if (m_currentBin>0) TimeInterval::m_interval=timeStampdouble-m_currentStart;
@@ -480,8 +483,16 @@ bool MonEventLooper::readEvent(Long64_t ievent){
     // (*it)->readEvent(ievent);
   }
 
-  m_intree->Fill();
-  
+  Int_t result = m_intree->Fill();
+
+
+  if(result<0){
+    std::cout<<"MonEventLooper::readEvent::singleincrement:ERROR" <<std::endl
+	     << "Error when writing into tree " <<  m_intree->GetName() << std::endl;
+    assert(0);
+  }
+
+    
   //tmp
   /*
   if(m_evtcounter%1000==0){

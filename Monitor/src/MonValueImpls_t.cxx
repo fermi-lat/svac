@@ -832,8 +832,26 @@ void MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement(Double_t*
   //std::cout << "MonTruncatedMeanBoundsAndFracBigData::Name " <<m_name.c_str() << std::endl;
   //std::cout << "MonTruncatedMeanBoundsAndFracBigData::singleincrement:Evt number " << m_evtcounter << std::endl; 
   m_evtcounter++;
-  m_tmptree->Fill();
+  
+  Int_t result = m_tmptree->Fill();
+
+
+  if(result<0){
+    std::cout<<"MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement:ERROR" <<std::endl
+	     << "Error when writing into tree " << m_tmptree->GetName() << std::endl;
+    assert(0);
+  }
+  
+  /*
+  else{
+  if(result ==0){
+  std::cout<<"MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement:WARNING" <<std::endl
+  << "No data was written into branch " << m_leafname[i].c_str() << std::endl;
+  //assert(0);
+  }
+  */
 }
+
 
 
 
