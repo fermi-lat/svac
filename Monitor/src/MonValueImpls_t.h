@@ -452,7 +452,7 @@ class MonTruncatedMeanBoundsAndFracBigData:public MonMean{
   void singleincrement(Double_t* val, Double_t* val2) ;
   void reset();
   virtual void latchValue() ;
- private:
+  // private:
 
   Bool_t createfile4tmptree(std::string dir, std::string filename);
 
@@ -469,10 +469,18 @@ class MonTruncatedMeanBoundsAndFracBigData:public MonMean{
   //  TDirectory* m_filedir;
   //  TDirectory* m_memorydir;
   std::string m_tmptreename;
-  std::string m_leafname;
+  std::vector<std::string> m_leafname;
   ULong64_t m_evtcounter;
 };
 
+
+class MonTruncatedMeanBoundsAndFracBigDataEqualNEvents:public MonTruncatedMeanBoundsAndFracBigData{
+ public:
+  MonTruncatedMeanBoundsAndFracBigDataEqualNEvents(const char* name, const char* formula, const char* cut, const char* type);
+  //virtual ~MonTruncatedMeanBoundsAndFracBigDataEqualNEvents();
+  void singleincrement(Double_t* val, Double_t* val2) ;
+  // virtual void latchValue() ;
+};
 
 //
 // 

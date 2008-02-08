@@ -802,8 +802,40 @@ void MonTruncatedMeanBoundsAndFrac::latchValue(){
     err2 -= m_val[i]*m_val[i];    
     err2 /= (Double_t)nvals;
     m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
+
+    // std::cout << "dim " << i << "; m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
   }
 }
+
+// HERE the one for equal number of events
+
+MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::MonTruncatedMeanBoundsAndFracBigDataEqualNEvents(const char* name, 
+												   const char* formula, 
+												   const char* cut, const char* type) 
+  :MonTruncatedMeanBoundsAndFracBigData(name,formula,cut,type){
+
+  // nothing to be done here
+}
+
+
+void MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement(Double_t* val, Double_t* val2) {
+
+  for (unsigned i =0;i<m_dim;i++){
+    m_datavector[i] =m_lowerbound-2.0;
+    m_datavector[i] = val[i];
+    /*
+    std::cout << " MonTruncatedMeanBoundsAndFracBigData::singleincrement:" << std::endl
+	      << "val[" << i<< "] = " << m_datavector[i] << std::endl;
+    */
+  }
+  
+  //std::cout << "MonTruncatedMeanBoundsAndFracBigData::Name " <<m_name.c_str() << std::endl;
+  //std::cout << "MonTruncatedMeanBoundsAndFracBigData::singleincrement:Evt number " << m_evtcounter << std::endl; 
+  m_evtcounter++;
+  m_tmptree->Fill();
+}
+
+
 
 // HERE 
 
@@ -830,27 +862,22 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
  
  
   m_tmptreename = m_name+"_tree";
-  m_leafname = m_name;
-
- 
-
-
 
   m_tmptree = new TTree(m_tmptreename.c_str(),"Used to store data temporaly");
-  m_tmptree->SetDirectory(gDirectory);
   Long64_t maxTreeSize = 5000000000000;
   m_tmptree->SetMaxTreeSize(maxTreeSize);
   
   for(unsigned int i = 0; i < m_dim; i++)
     {
-      std::string leafnamedim = m_leafname+"_";
+      std::string leafnamedim = m_name+"_";
       char dimstring[5];
       sprintf(dimstring,"%d",i);
       leafnamedim  += dimstring;
+      m_leafname.push_back(leafnamedim);
       
-      std::string leafnamedimAndType(leafnamedim);
+      std::string leafnamedimAndType(m_leafname[i]);
       leafnamedimAndType  += "/D";
-      m_tmptree->Branch(leafnamedim.c_str(),&m_datavector[i],leafnamedimAndType.c_str());
+      m_tmptree->Branch(m_leafname[i].c_str(),&m_datavector[i],leafnamedimAndType.c_str());
     }
   
   
@@ -908,10 +935,14 @@ Bool_t MonTruncatedMeanBoundsAndFracBigData::createfile4tmptree(std::string dir,
 
 MonTruncatedMeanBoundsAndFracBigData::~MonTruncatedMeanBoundsAndFracBigData(){
 
+  //std::cout << "Closing file" << std::endl;
+  m_tmpfile->Write();
   m_tmpfile->Close();
 
-  delete [] m_datavector;
 
+  //std::cout << "Releasing memory" << std::endl;
+  delete [] m_datavector;
+  //delete m_tmptree; // already done in reset
 
   // delete files
 
@@ -935,13 +966,36 @@ void MonTruncatedMeanBoundsAndFracBigData::reset(){
     m_datavector[i]=0.0;
   }
 
+  /*
+  std::cout << "MonTruncatedMeanBoundsAndFracBigData::reset()" << std::endl;
+  
+  */
 
-  m_tmptree->SetEventList(0);
   m_tmptree->Reset();
 
+  // std::cout << "Deleting tree... " << std::endl;
+
+  delete m_tmptree;
+
+ 
   // recreate tfile
 
   MonMean::reset();
+
+  // std::cout << "Recreating tree... " << std::endl;
+  m_tmptree = new TTree(m_tmptreename.c_str(),"Used to store data temporaly");
+  Long64_t maxTreeSize = 5000000000000;
+  m_tmptree->SetMaxTreeSize(maxTreeSize);
+  
+  for(unsigned int i = 0; i < m_dim; i++)
+    {
+      std::string leafnamedimAndType(m_leafname[i].c_str());
+      leafnamedimAndType  += "/D";
+      m_tmptree->Branch(m_leafname[i].c_str(),&m_datavector[i],leafnamedimAndType.c_str());
+    }
+
+
+ 
 
   Bool_t FileCreated = createfile4tmptree(m_tmpdir,m_tmpfilename);
   if(!FileCreated){
@@ -953,13 +1007,18 @@ void MonTruncatedMeanBoundsAndFracBigData::reset(){
     assert(0);
   }
 
+  /*
+   std::cout << "m_tmptree->Print() after reset" << std::endl;
+   m_tmptree->Print();
+   std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
+  */
 }
 
 
 void MonTruncatedMeanBoundsAndFracBigData::singleincrement(Double_t* val, Double_t* val2) {
 
   for (unsigned i =0;i<m_dim;i++){
-    m_datavector[i] =m_lowerbound-1.0;
+    m_datavector[i] =m_lowerbound-2.0;
     m_datavector[i] = val[i];
     /*
     std::cout << " MonTruncatedMeanBoundsAndFracBigData::singleincrement:" << std::endl
@@ -967,106 +1026,143 @@ void MonTruncatedMeanBoundsAndFracBigData::singleincrement(Double_t* val, Double
     */
   }
   
-  //  std::cout << "MonTruncatedMeanBoundsAndFracBigData::singleincrement:Evt number " << m_evtcounter << std::endl; 
+  // std::cout << "MonTruncatedMeanBoundsAndFracBigData::singleincrement:Evt number " << m_evtcounter << std::endl; 
+
   m_evtcounter++;
-  m_tmptree->Fill();
+
+  // Fill only the branch which contains data in the specified range
+
+  for (unsigned int i =0;i<m_dim;i++){
+    if(val[i] >=m_lowerbound && val[i]<=m_upperbound){ 
+      Int_t result = m_tmptree->GetBranch(m_leafname[i].c_str())->Fill();
+      if(result<0){
+	std::cout<<"MonTruncatedMeanBoundsAndFracBigData::singleincrement:ERROR" <<std::endl
+		 << "Error when writing into branch " << m_leafname[i].c_str() << std::endl;
+	assert(0);
+      }
+      else{
+	if(result ==0){
+	  std::cout<<"MonTruncatedMeanBoundsAndFracBigData::singleincrement:ERROR" <<std::endl
+		   << "No data was written into branch " << m_leafname[i].c_str() << std::endl;
+	  assert(0);
+	}
+      }
+    }
+  }
 }
 
 
 void MonTruncatedMeanBoundsAndFracBigData::latchValue(){
 
-
   /*
   std::cout << "MonTruncatedMeanBoundsAndFracBigData::latchValue(); name " 
-	    << m_name.c_str() << std::endl; 
-  
-  std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
+	    << m_name.c_str() << std::endl;
   */
+ 
   // create std::list in heap 
   // the SAME list will be used for all dimensions
   std::list<double> currentlist;
-  ULong64_t treeentries = m_tmptree->GetEntries();
-  if(treeentries!=0){
-    for (unsigned i =0;i<m_dim;i++){
-      
+  for (unsigned i =0;i<m_dim;i++){
       // Read info for dimension i from m_tmptree and fill list 
       // and sort events in ascending order
       
-      std::string leafnamedim = m_leafname+"_";
-      char dimstring[5];
-      sprintf(dimstring,"%d",i);
-      leafnamedim  += dimstring;
+      //m_tmptree->SetBranchStatus("*",0);
+      //m_tmptree->SetBranchStatus(m_leafname[i].c_str(),1);
       
-      m_tmptree->SetBranchStatus("*",0);
-      m_tmptree->SetBranchStatus(leafnamedim.c_str(),1);
+      TBranch* thisbranch = m_tmptree->GetBranch(m_leafname[i].c_str());
       
-      std::string cutstr = leafnamedim + ">=" +m_lowerbound_str + " && " 
-	+ leafnamedim + "<=" + m_upperbound_str;
-
-      m_tmptree->Draw(leafnamedim.c_str(),cutstr.c_str(),"goff",treeentries,0);
-      
-      Double_t* thisvector = m_tmptree->GetV1();
-    
-      for(Long64_t evt = 0; evt< m_tmptree->GetSelectedRows();evt++)
+      if(thisbranch==0)
 	{
-	  if(thisvector[evt] >=m_lowerbound && thisvector[evt]<=m_upperbound){ 
-	    currentlist.push_back(thisvector[evt]);
-	  }
+	  std::cout << "MonTruncatedMeanBoundsAndFracBigData::latchValue():ERROR" << std::endl
+		    << "Problem retrieving branch " << m_leafname[i].c_str()<< std::endl;
+	  assert(0);
 	}
-      if (currentlist.size()==0)
-	continue;
-    
-    currentlist.sort();
-    
-    unsigned int numentries=currentlist.size();
-    unsigned int remove=(unsigned int)((1.-m_fraction)*numentries);
-    if (remove>0){
-      unsigned int frm=remove/2;
-      unsigned int erm=remove-frm;
-      for (unsigned int j=0;j<frm;j++)currentlist.pop_front();
-      for (unsigned int j=0;j<erm;j++)currentlist.pop_back();
-    }
-    if (currentlist.size()==0){
-      currentlist.clear();
-      continue;
-    }
-  
-    
-    if (currentlist.size()== 1){
-      m_nVals[i] = 1;
-      m_err[i] = 0.0;
-      std::list<double>::iterator it=currentlist.begin();
-      m_val[i] = Double_t(*it);
-
-      // std::cout <<  "List with one event: m_val[i], m_err[i]:" <<  m_val[i] << ", " << m_err[i] << std::endl; 
+      Double_t thisval(0.0);
+      thisbranch->SetAddress(&thisval);
       
-      currentlist.clear();
-      continue;
-    }
-    
-    
-    // list has more than 2 events
-    double sum,sum2;
-    sum=sum2=0;
-    for (std::list<double>::iterator it=currentlist.begin();it!=currentlist.end();it++){
-      sum+=(*it);
-      sum2+=(*it)*(*it);
-    }
-    
-    //std::cout << "i=" << i <<"; currentlist.size() BEFORE CALC= " << currentlist.size() << std::endl;
-    unsigned int nvals=currentlist.size();
-    m_nVals[i]=nvals;
-    m_val[i]=sum/(double)nvals;
-    Double_t err2 = sum2;
-    err2 /= (Double_t)nvals;
-    err2 -= m_val[i]*m_val[i];    
-    err2 /= (Double_t)nvals;
-    m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
-    
-    // release memory allocated by the list
-    currentlist.clear();
-    // std::cout << "m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
-    }
+      ULong64_t treeentries = thisbranch->GetEntries();
+      /*
+      std::cout << "Entries in branch " << m_leafname[i].c_str() << ": " 
+		<< treeentries << std::endl;
+      */
+      if(treeentries!=0){
+	for(ULong64_t evt = 0; evt< treeentries;evt++)
+	  {
+	    Int_t berr = thisbranch->GetEntry(evt);
+	    if(berr<0){
+	      std::cout<<"MonTruncatedMeanBoundsAndFracBigData::latchValue():ERROR" <<std::endl
+		       << "Entry " << evt << ";Error reading branch " << m_leafname[i].c_str() << std::endl;
+	      assert(0);
+	    }
+	    else{
+	      if(berr ==0){
+		std::cout<<"MonTruncatedMeanBoundsAndFracBigData::latchValue():ERROR" <<std::endl
+			 << "Entry " << evt << "; Nothing was read from branch " 
+			 << m_leafname[i].c_str() << std::endl;
+		assert(0);
+	      }
+	    }
+
+	    if(thisval >=m_lowerbound && thisval<=m_upperbound){ 
+	      currentlist.push_back(thisval);
+	    }
+	  }
+	
+	if (currentlist.size()==0)
+	  continue;
+	
+	// std::cout << "i=" << i <<"; currentlist.size() = " << currentlist.size() << std::endl;
+	currentlist.sort();
+	
+	unsigned int numentries=currentlist.size();
+	unsigned int remove=(unsigned int)((1.-m_fraction)*numentries);
+	if (remove>0){
+	  unsigned int frm=remove/2;
+	  unsigned int erm=remove-frm;
+	  for (unsigned int j=0;j<frm;j++)currentlist.pop_front();
+	  for (unsigned int j=0;j<erm;j++)currentlist.pop_back();
+	}
+	if (currentlist.size()==0){
+	  currentlist.clear();
+	  continue;
+	}
+	
+	
+	if (currentlist.size()== 1){
+	  m_nVals[i] = 1;
+	  m_err[i] = 0.0;
+	  std::list<double>::iterator it=currentlist.begin();
+	  m_val[i] = Double_t(*it);
+	  
+	  // std::cout <<  "List with one event: m_val[i], m_err[i]:" <<  m_val[i] << ", " << m_err[i] << std::endl; 
+	  
+	  currentlist.clear();
+	  continue;
+	}
+	
+	
+	// list has more than 2 events
+	double sum,sum2;
+	sum=sum2=0;
+	for (std::list<double>::iterator it=currentlist.begin();it!=currentlist.end();it++){
+	  sum+=(*it);
+	  sum2+=(*it)*(*it);
+	}
+	
+	//std::cout << "i=" << i <<"; currentlist.size() BEFORE CALC= " << currentlist.size() << std::endl;
+	unsigned int nvals=currentlist.size();
+	m_nVals[i]=nvals;
+	m_val[i]=sum/(double)nvals;
+	Double_t err2 = sum2;
+	err2 /= (Double_t)nvals;
+	err2 -= m_val[i]*m_val[i];    
+	err2 /= (Double_t)nvals;
+	m_err[i] = err2 > 0 ? TMath::Sqrt(err2) : 0.;
+	
+	// release memory allocated by the list
+	currentlist.clear();
+	//std::cout << "dim " << i << "; m_val, m_err = " << m_val[i] << ", " << m_err[i] << std::endl;
+      }
   }
 }
 
@@ -1866,6 +1962,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
 
   if (type=="mean"){
     return new MonMean(name.c_str(),formula.c_str(),cut.c_str());
+  }else if (strstr(type.c_str(),"truncatedmeanboundandfracbigdataequaln")){
+    return new MonTruncatedMeanBoundsAndFracBigDataEqualNEvents(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanboundandfracbigdata")){
     return new MonTruncatedMeanBoundsAndFracBigData(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"truncatedmeanboundandfrac")){
