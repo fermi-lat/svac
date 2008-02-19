@@ -108,7 +108,7 @@
       <cut><![CDATA[ condsummary&2 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival TKR triggers </titledesc>
-      <axisdesc> [Condition arrival times for TKR triggers (nomially 50 ns ticks), N] </axisdesc>
+      <axisdesc> [Condition arrival times for TKR triggers (nominally 50 ns ticks), N] </axisdesc>
       <description> Distribution of Condition arrival times for TKR triggers. Periodic triggers have been taken out. </description>
     </object>
 
@@ -118,7 +118,7 @@
       <cut><![CDATA[ condsummary&4 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival Cal-Low triggers </titledesc>
-      <axisdesc> [Condition arrival times for Cal-Low triggers (nomially 50 ns ticks), N] </axisdesc>
+      <axisdesc> [Condition arrival times for Cal-Low triggers (nominally 50 ns ticks), N] </axisdesc>
       <description> Distribution of Condition arrival times for Cal-Low triggers. Periodic triggers have been taken out. </description>
     </object>
 
@@ -128,7 +128,7 @@
       <cut><![CDATA[ condsummary&8 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival Cal-Hi triggers </titledesc>
-      <axisdesc> [Condition arrival times for Cal-Hi triggers (nomially 50 ns ticks), N] </axisdesc>
+      <axisdesc> [Condition arrival times for Cal-Hi triggers (nominally 50 ns ticks), N] </axisdesc>
       <description> Distribution of Condition arrival times for Cal-Hi triggers. Periodic triggers have been taken out. </description>
     </object>
 
@@ -138,7 +138,7 @@
       <cut><![CDATA[ condsummary&16 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival CNO triggers </titledesc>
-      <axisdesc> [Condition arrival times for CNO triggers (nomially 50 ns ticks), N] </axisdesc>
+      <axisdesc> [Condition arrival times for CNO triggers (nominally 50 ns ticks), N] </axisdesc>
       <description> Distribution of Condition arrival times for CNO triggers. Periodic triggers have been taken out. </description>
     </object>
 
@@ -148,7 +148,7 @@
       <cut><![CDATA[ condsummary&1 ]]></cut>
       <type> histogram-1d[41,-0.5,40.5] </type>
       <titledesc> Distribution of Condition arrival ROI triggers </titledesc>
-      <axisdesc> [Condition arrival times for ROI triggers (nomially 50 ns ticks), N] </axisdesc>
+      <axisdesc> [Condition arrival times for ROI triggers (nominally 50 ns ticks), N] </axisdesc>
       <description> Distribution of Condition arrival times for ROI triggers. Periodic triggers have been taken out. </description>
     </object>
 
@@ -455,7 +455,7 @@
       <cut><![CDATA[ condsummary&30 ]]></cut>
       <type> histogram-vecdim-1d[128,-0.5,127.5,0] </type>
       <titledesc> Number of Acd Gem vetos by tile. Expect to see spikes at 15,31,47,63. These are the large tiles at the bottom of the sides of the ACD. </titledesc>
-      <axisdesc> [Tower number, N] </axisdesc>
+      <axisdesc> [Tile number, N] </axisdesc>
       <description> Number of Acd Gem vetos by tile. Expect to see spikes at 15,31,47,63. These are the large tiles at the bottom of the sides of the ACD. </description>
     </object>
 
@@ -483,7 +483,7 @@
       <cut><![CDATA[ condsummary&30 ]]></cut>
       <type> histogram-vecdim-1d[12,-0.5,11.5,0] </type>
       <titledesc>  Number of Acd CNO by board. This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal. </titledesc>
-      <axisdesc> [Tower number, N] </axisdesc>
+      <axisdesc> [Electronic Board number, N] </axisdesc>
       <description> Number of Acd Cno by board. This bit is the OR of all the CNO signals on a single board. Because of the tile to board mapping, a factor two variation between boards is normal. </description>
     </object>
 
