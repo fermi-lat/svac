@@ -114,6 +114,16 @@
 // Last updated with object AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ by user dpaneque on Mon Jan  7 18:35:28 2008
 // Last updated, REMOVING object "MonInput_ReconEnergy_TowerCalLayerCalColumnCalXFace" by user dpaneque on Wed Jan 16 2008 (manual entry)
 // Last updated with object ZeroSuppress by user dpaneque on Thu Jan 24 19:13:42 2008
+// Last updated with object FastMon_TkrHits by user dpaneque on Tue Feb 26 05:10:44 2008
+// Last updated with object fastmontimestampdouble by user dpaneque on Tue Feb 26 05:19:54 2008
+// Last updated with object FastMon_TkrHits_TowerPlane by user dpaneque on Tue Feb 26 05:59:16 2008
+// Last updated with object FastMon_condsummary by user dpaneque on Tue Feb 26 06:01:21 2008
+// Last updated with object FastMon_geomagnetic_InvariantLatitude by user dpaneque on Tue Feb 26 20:48:29 2008
+#include "fastmon/MonInput_FastMon_geomagnetic_InvariantLatitude.h"
+#include "fastmon/MonInput_FastMon_condsummary.h"
+#include "fastmon/MonInput_FastMon_TkrHits_TowerPlane.h"
+#include "fastmon/MonInput_fastmontimestampdouble.h"
+#include "fastmon/MonInput_FastMon_TkrHits.h"
 #include "digi/MonInput_ZeroSuppress.h"
 #include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
 #include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
@@ -437,6 +447,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
   if (s=="ZeroSuppress")
     return new MonInput_ZeroSuppress;
+  if (s=="FastMon_TkrHits")
+    return new MonInput_FastMon_TkrHits;
+  if (s=="fastmontimestampdouble")
+    return new MonInput_fastmontimestampdouble;
+  if (s=="FastMon_TkrHits_TowerPlane")
+    return new MonInput_FastMon_TkrHits_TowerPlane;
+  if (s=="FastMon_condsummary")
+    return new MonInput_FastMon_condsummary;
+  if (s=="FastMon_geomagnetic_InvariantLatitude")
+    return new MonInput_FastMon_geomagnetic_InvariantLatitude;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -551,6 +571,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdGlobalPos_NotMatchedTrack_FacePosXYZ");
   names.push_back("AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ");
   names.push_back("ZeroSuppress");
+  names.push_back("FastMon_TkrHits");
+  names.push_back("fastmontimestampdouble");
+  names.push_back("FastMon_TkrHits_TowerPlane");
+  names.push_back("FastMon_condsummary");
+  names.push_back("FastMon_geomagnetic_InvariantLatitude");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
