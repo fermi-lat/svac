@@ -87,9 +87,10 @@ print "2 for McEvent\n";
 print "3 for MeritEvent\n";
 print "4 for SvacEvent\n";
 print "5 for CalEvent\n";
+print "6 for FastMonEvent\n";
 $source=<>;
 chomp($source);
-while ($source =~ /\D/ || $source<0 || $source>5){
+while ($source =~ /\D/ || $source<0 || $source>6){
     print "Invalid entry. Try again.\n";
     print "0 for DigiEvent\n";
     print "1 for ReconEvent\n";
@@ -97,6 +98,7 @@ while ($source =~ /\D/ || $source<0 || $source>5){
     print "3 for MeritEvent\n";
     print "4 for SvacEvent\n";
     print "5 for CalEvent\n";
+    print "6 for FastMonEvent\n";
     $source=<>;
     chomp($source);
 }
@@ -120,10 +122,15 @@ if ($source==0){
     $monsource="SvacEvent";
     $monsourcefile="";
     $subdir="svac";
-}else{
+}elsif($source==5){
     $monsource="CalEvent";
     $monsourcefile="";
     $subdir="cal";
+
+}else{
+    $monsource="FastMonEvent";
+    $monsourcefile="";
+    $subdir="fastmon";
 }
 	
 print "What branch of the tree has to be activated?\n";
@@ -217,7 +224,7 @@ int MonInput_${name}::setOutputBranch(TTree* tree) {
 void MonInput_${name}::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 ";
-if($monsource eq "SvacEvent" || $monsource eq "MeritEvent" || $monsource eq "CalEvent"){
+if($monsource eq "SvacEvent" || $monsource eq "MeritEvent" || $monsource eq "CalEvent" || $monsource eq "FastMonEvent"){
     print CFILE "  tree.SetBranchAddress(INBRANCH,&m_val);\n";
 }
 print CFILE "}

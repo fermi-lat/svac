@@ -111,6 +111,7 @@ int main(int argn, char** argc) {
   MonInputCollection* meritinpcol=0;
   MonInputCollection* svacinpcol=0;
   MonInputCollection* calinpcol=0;
+  MonInputCollection* fastmoninpcol=0;
   Int_t nTotal=0;
   if (jc.digiChain()){
     digiinpcol=new MonInputCollection_Digi(jc.digiChain(),"DigiEvent");
@@ -160,12 +161,21 @@ int main(int argn, char** argc) {
       assert(0);
     }
   }
+  if (jc.fastmonChain()){
+    fastmoninpcol=new MonInputCollection_Tuple(jc.fastmonChain(),"FastMonEvent");
+    if (nTotal==0)nTotal=jc.fastmonChain()->GetEntries();
+    else if (nTotal!=jc.fastmonChain()->GetEntries()){
+      std::cerr<<"Different number of events in FastMon chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
   std::vector<std::map<std::string,std::string> > digidesc;
   std::vector<std::map<std::string,std::string> > recondesc;
   std::vector<std::map<std::string,std::string> > mcdesc;
   std::vector<std::map<std::string,std::string> > svacdesc;
   std::vector<std::map<std::string,std::string> > meritdesc;
   std::vector<std::map<std::string,std::string> > caldesc;
+  std::vector<std::map<std::string,std::string> > fastmondesc;
   MonObjFactory fact;
   bool tsfound=false;
   for (std::list<string>::const_iterator itr=inputlist.begin();
@@ -207,6 +217,11 @@ int main(int argn, char** argc) {
       calinpcol->addInputObject(obj);
       caldesc.push_back(mmap);
       added=true;
+    }                                          
+    if(fastmoninpcol && obj->getInputSource()=="FastMonEvent"){
+      fastmoninpcol->addInputObject(obj);
+      fastmondesc.push_back(mmap);
+      added=true;
     }
     if ((*itr)==timestamp){
       tsfound=true;
@@ -230,6 +245,7 @@ int main(int argn, char** argc) {
   int nmeritobjects=0;
   int nsvacobjects=0;
   int ncalobjects=0;
+  int nfastmonobjects=0;
   if(digiinpcol)ndigiobjects= digiinpcol->nObjects();
   if (ndigiobjects>0)allinpcol.push_back(digiinpcol);
   if(reconinpcol)nreconobjects= reconinpcol->nObjects();
@@ -242,7 +258,9 @@ int main(int argn, char** argc) {
   if(nsvacobjects>0)allinpcol.push_back(svacinpcol);
   if(calinpcol )ncalobjects= calinpcol->nObjects();
   if(ncalobjects>0)allinpcol.push_back(calinpcol);
-  if (ndigiobjects+nreconobjects+nmcobjects+nmeritobjects+nsvacobjects+ncalobjects==0){
+  if(fastmoninpcol )nfastmonobjects= fastmoninpcol->nObjects();
+  if(nfastmonobjects>0)allinpcol.push_back(fastmoninpcol);
+  if (ndigiobjects+nreconobjects+nmcobjects+nmeritobjects+nsvacobjects+ncalobjects+nfastmonobjects==0){
     std::cerr<<"No input objects defined. Exiting..."<<std::cerr;
     assert(0);
   }
@@ -343,12 +361,14 @@ int main(int argn, char** argc) {
     r.additem("Time interval",name);
     if(eventcut!="")r.additem("Global event cut",eventcut.c_str());
     r.newheadline("Event input files");
+    // HELP ME !!!! correct list of files for NON-Digi objects
     if (digiinpcol)r.additem("Digi file(s)",jc.inputDigiFileStr().c_str());
     if (reconinpcol)r.additem("Recon file(s)",jc.inputDigiFileStr().c_str());
     if (mcinpcol)r.additem("Mc file(s)",jc.inputDigiFileStr().c_str());
     if (svacinpcol)r.additem("Svac file(s)",jc.inputDigiFileStr().c_str());
     if (meritinpcol)r.additem("Merit file(s)",jc.inputDigiFileStr().c_str());
     if (calinpcol)r.additem("Cal file(s)",jc.inputDigiFileStr().c_str());
+    if (fastmoninpcol)r.additem("FastMon file(s)",jc.inputDigiFileStr().c_str());
     r.newheadline("<b><center>Input variables</b></center>");
 
 
@@ -395,6 +415,13 @@ int main(int argn, char** argc) {
     }
     for (std::vector<std::map<std::string,std::string> >::iterator itr=caldesc.begin();
 	 itr != caldesc.end();itr++){
+      strcpy(line[0],((*itr)["name"]).c_str());
+      strcpy(line[1],((*itr)["source"]).c_str());
+      strcpy(line[2],((*itr)["description"]).c_str());
+      r.addtableline(line,3);
+    }
+    for (std::vector<std::map<std::string,std::string> >::iterator itr=fastmondesc.begin();
+	 itr != fastmondesc.end();itr++){
       strcpy(line[0],((*itr)["name"]).c_str());
       strcpy(line[1],((*itr)["source"]).c_str());
       strcpy(line[2],((*itr)["description"]).c_str());
@@ -504,6 +531,13 @@ int main(int argn, char** argc) {
       strcpy(lineparams[2],((*itr)["description"]).c_str());
       r2.addtableline(lineparams,3);
     }
+    for (std::vector<std::map<std::string,std::string> >::iterator itr=fastmondesc.begin();
+	 itr != fastmondesc.end();itr++){
+      strcpy(lineparams[0],((*itr)["name"]).c_str());
+      strcpy(lineparams[1],((*itr)["source"]).c_str());
+      strcpy(lineparams[2],((*itr)["description"]).c_str());
+      r2.addtableline(lineparams,3);
+    }
     r2.endtable();
     r2.newheadline("<b><center>Output variables</b></center>");
     char* outtableparams[]={"Name","Type","Description"};
@@ -540,6 +574,8 @@ int main(int argn, char** argc) {
   if (meritinpcol)delete meritinpcol;
   //std::cout << std::endl << "Del cal" << std::endl <<std::endl;
   if (calinpcol)delete calinpcol;
+  //std::cout << std::endl << "Del fastmon" << std::endl <<std::endl;
+  if (fastmoninpcol)delete fastmoninpcol;
 
  
   //  std::cout << std::endl << "Del prim" << std::endl <<std::endl;
