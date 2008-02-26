@@ -294,6 +294,11 @@ unsigned RFun::loopovertowerANDtkrplanes(ROOT::TArrayProxy<ROOT::TArrayType<USho
 
 }
 
+
+
+
+
+
 //unsigned RFun::loopovertowerANDtkrplanes(const UShort_t invector[16][36])
 #ifdef oldROOT
 unsigned RFun::loopovertowerANDcallayers(ROOT::TArray2Proxy<UShort_t, 8>& invector)
@@ -839,3 +844,26 @@ unsigned RFun::GetOveralIndex_TowerCalLayerCalColumnCalFace(int tower, int layer
 
 
 
+// FAST Mon functions
+
+
+
+unsigned RFun::loopovertowerANDtkrplanes_int(ROOT::TArrayProxy<ROOT::TArrayType<Int_t, 36> >& invector)
+{
+  unsigned n_counter(0);
+  for (UShort_t itower = 0; itower < 16; itower++){
+    for (UShort_t iplane = 0; iplane < 36; iplane++)
+      n_counter += invector[itower][iplane];
+  }
+  return n_counter;
+}
+
+
+unsigned RFun::loopovertkrplanes_int(const Int_t invector[])
+{
+  unsigned n_counter(0);
+  for (UShort_t iplane = 0; iplane < 36; iplane++)
+      n_counter += invector[iplane];
+  
+  return n_counter;
+}

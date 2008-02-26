@@ -82,6 +82,7 @@ class RFun{
   static unsigned loopovertowersANDcallayersANDcalcolumns(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TArrayType<UShort_t, 12>, 8> >& invector);
 #endif
 
+
   static unsigned loopovergarc(const UShort_t invector[]);
   
   static unsigned loopoveracdtiles(const UShort_t invector[]);
@@ -135,6 +136,26 @@ class RFun{
   // END of Acd/Tracker/Cal related functions
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
+
+  // Fast mon functions
+
+  /* This does not work !! 
+  static unsigned loopovertowerANDtkrplanes_int(const Int_t[16][36]);
+  static unsigned loopovertkrplanes_int(const Int_t[36]);
+
+  */ 
+
+  // This works !!
+
+  static unsigned loopovertowerANDtkrplanes_int(ROOT::TArrayProxy<ROOT::TArrayType<Int_t, 36> >&);
+  static unsigned loopovertkrplanes_int(const Int_t invector[]);
+
+    //(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
+       
+  // end of fastmon functions
+
+  
+
   // Test functions
   static std::vector<double> testfun();
   static std::vector<double> vecfun(ROOT::TArrayUShortProxy vec);
@@ -147,6 +168,8 @@ class RFun{
   // Functions to be deleted (obsolete)
   
   // end of functions to be deleted
+
+
 
 
  private:
