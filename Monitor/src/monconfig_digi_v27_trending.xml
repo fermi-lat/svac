@@ -1175,12 +1175,20 @@
     </object>
 
 
-      <object>
+     <object>
       <name> Cal_NHit </name>
       <formula><![CDATA[ RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer)]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
       <type> mean </type>
       <description> MEAN number of calorimeter crystal hits per event (integrated over all towers, layers and columns). Periodic triggers are NOT taken into account. </description>
+    </object>
+
+      <object>
+      <name> Cal_NHit_ZeroNotCounted </name>
+      <formula><![CDATA[ RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer)]]></formula>
+      <cut><![CDATA[ condsummary&30 && !(condsummary&32) && RFun::loopovertowerANDcallayers(CalXHit_TowerCalLayer) >0]]></cut>
+      <type> mean </type>
+      <description> MEAN number of calorimeter crystal hits per event (integrated over all towers, layers and columns). Periodic triggers are NOT taken into account. Only events with more than one CalXHit are taken into account. </description>
     </object>
 
 
