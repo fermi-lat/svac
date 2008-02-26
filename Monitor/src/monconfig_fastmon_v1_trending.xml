@@ -1,0 +1,95 @@
+<monitoring>
+
+  <inputList name="top"> 
+
+
+    <!-- Time stamp -->
+    <object> fastmontimestampdouble </object>
+    
+   <!-- Evt type -->
+   <object>FastMon_condsummary</object> 
+
+    <!-- Environment quantities -->
+   <object> FastMon_geomagnetic_InvariantLatitude</object>
+
+    <!-- Tkr Variables -->
+        
+    <object>FastMon_TkrHits</object>		
+    <object>FastMon_TkrHits_TowerPlane</object> 
+
+   
+  </inputList>
+
+
+  <outputList name="top">
+  
+     <!-- Environment quantities -->
+
+     <object>
+      <name> FastMon_GeoMag_InvariantLatitude </name>
+      <formula><![CDATA[ FastMon_geomagnetic_InvariantLatitude ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> mean </type>
+      <description> Mean value of the geomagnetic invariant latitude </description>
+    </object>
+
+     <!-- Tkr Variables -->
+
+    <object>
+      <name> FastMon_TkrHits </name>
+      <formula><![CDATA[ FastMon_TkrHits ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description> Mean number of Tkr Hits</description>
+    </object>
+
+    <object>
+      <name> FastMon_TkrHits_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: FastMon_TkrHits_TowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description> Vector reporting the mean number of Tkr Hits for tower,plane </description>
+    </object>
+
+
+     <object>
+      <name> FastMon_NTkrHits_TowerPlane[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: FastMon_TkrHits_TowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> counter </type>
+      <description> Vector reporting the accumulated (in the time bin)  number of Tkr Hits for tower,plane </description>
+    </object>
+ 
+    <object>
+      <name> SillyVariable[16][36] </name>
+      <formula><![CDATA[ foreachtower: foreachtkrplane: FastMon_condsummary*FastMon_TkrHits_TowerPlane[tower][tkrplane] ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description> Mean reporting silly variable to show how to make silly operations </description>
+    </object>
+  
+
+     <object>
+      <name> FastMon_TkrHits_TestRFun </name>
+      <formula><![CDATA[ RFun::loopovertowerANDtkrplanes_int(FastMon_TkrHits_TowerPlane) ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description> Simple example of using a function defined in class RFun</description>
+    </object>
+  
+     <object>
+      <name> FastMon_TkrHits_TestRFun_InLoop[16] </name>
+      <formula><![CDATA[ foreachtower: RFun::loopovertkrplanes_int(FastMon_TkrHits_TowerPlane[tower]) ]]></formula>
+      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <type> mean </type>
+      <description>  Simple example of using,within a loop, a function defined in class RFun </description>
+    </object>
+  
+ 
+
+  </outputList>
+
+
+  <eventCut><![CDATA[ ]]></eventCut>
+  <timestamp> fastmontimestampdouble </timestamp>
+</monitoring>
