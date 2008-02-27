@@ -64,8 +64,8 @@ int main(int argn, char** argc) {
   unsigned long long end;
   double timestamp;
   for (unsigned int i=0;i<inputfiles.size();i++){
-    TFile f(inputfiles[i].c_str());
-    assert (!f.IsZombie());
+    TFile *f=TFile::Open(inputfiles[i].c_str());
+    assert (!f->IsZombie());
     TTree* t=(TTree*)gDirectory->Get(treename.c_str());
     assert (t);
     if(i==0){
@@ -106,7 +106,7 @@ int main(int argn, char** argc) {
       newchunk->end=end;
     }
     chunks.push_back(newchunk);
-    f.Close();
+    f->Close();
   }
   std::vector<unsigned int> order;
   for (unsigned i=0;i<chunks.size();i++){
@@ -154,7 +154,7 @@ int main(int argn, char** argc) {
   }
   //start merging files
   int evtnr=0;
-  TFile f(inputfiles[order[0]].c_str());
+  TFile *f=TFile::Open(inputfiles[order[0]].c_str());
   TTree* t=(TTree*)gDirectory->Get(treename.c_str());
   TFile newf(outputfile.c_str(),"recreate");
   int nentries=t->GetEntries()-1;
@@ -164,7 +164,7 @@ int main(int argn, char** argc) {
   std::vector<void*> newadd=createadd(types,dims);
   std::vector<void*> firstadd=createadd(types,dims);
   std::vector<void*> secondadd=createadd(types,dims);
-  f.Close();
+  f->Close();
   attachadd(leaves,newadd,newtree);
   if (find(leaves.begin(),leaves.end(),"Bin_Index")==leaves.end() ){
     std::cout<<"Tree is missing Bin_Index field"<<std::endl;
@@ -173,9 +173,9 @@ int main(int argn, char** argc) {
   unsigned binindex=find(leaves.begin(),leaves.end(),"Bin_Index")-leaves.begin();
   bool binclosed=true;
   for (unsigned i=1;i<chunks.size();i++){
-    TFile f(inputfiles[order[i-1]].c_str());
+    TFile *f=TFile::Open(inputfiles[order[i-1]].c_str());
     TTree* t1=(TTree*)gDirectory->Get(treename.c_str());
-    TFile g(inputfiles[order[i]].c_str());
+    TFile *g=TFile::Open(inputfiles[order[i]].c_str());
     TTree* t2=(TTree*)gDirectory->Get(treename.c_str());
     // no overlap case
     if(chunks[order[i]]->overlap==false){
@@ -223,8 +223,8 @@ int main(int argn, char** argc) {
       ((UInt_t*)newadd[binindex])[0]= evtnr++;
       newtree->Fill();
     }
-    f.Close();
-    g.Close();
+    f->Close();
+    g->Close();
   }
   newf.cd();
   newtree->Write();
