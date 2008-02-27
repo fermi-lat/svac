@@ -472,7 +472,7 @@
 
 
       <object>
-      <name> TriggerEngine_Tower[16] </name>
+      <name> TriggerEngine[16] </name>
       <formula><![CDATA[ TriggerEngine ]]></formula>
       <cut><![CDATA[ ]]></cut>
       <type> rate </type>
