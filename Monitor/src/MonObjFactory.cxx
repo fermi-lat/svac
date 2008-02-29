@@ -130,6 +130,8 @@
 // Last updated with object FastMon_Acd_Tile_Count by user bregeon on Thu Feb 28 14:08:11 2008
 // Last updated with object FastMon_Cal_Tower_Count by user bregeon on Thu Feb 28 14:18:58 2008
 // Last updated with object FastMon_TkrHits_TowerPlaneGTFE by user bregeon on Thu Feb 28 14:49:55 2008
+// Last updated with object FastMon_CalLogEndRangeHit by user bregeon on Fri Feb 29 14:20:59 2008
+#include "fastmon/MonInput_FastMon_CalLogEndRangeHit.h"
 #include "fastmon/MonInput_FastMon_TkrHits_TowerPlaneGTFE.h"
 #include "fastmon/MonInput_FastMon_Cal_Tower_Count.h"
 #include "fastmon/MonInput_FastMon_Acd_Tile_Count.h"
@@ -501,6 +503,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_Cal_Tower_Count;
   if (s=="FastMon_TkrHits_TowerPlaneGTFE")
     return new MonInput_FastMon_TkrHits_TowerPlaneGTFE;
+  if (s=="FastMon_CalLogEndRangeHit")
+    return new MonInput_FastMon_CalLogEndRangeHit;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -631,6 +635,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_Acd_Tile_Count");
   names.push_back("FastMon_Cal_Tower_Count");
   names.push_back("FastMon_TkrHits_TowerPlaneGTFE");
+  names.push_back("FastMon_CalLogEndRangeHit");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
