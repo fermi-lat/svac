@@ -150,20 +150,14 @@
     </object>
 
     <object>
-      <name> FastMon_CalLogEndRangeHit[16][8][12][2][4] </name>
+      <name> FastMon_CalLogEndRangeHit_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[ FastMon_CalLogEndRangeHit ]]></formula>
       <cut><![CDATA[ (FastMon_condsummary&30)>0 && (FastMon_condsummary&32)==0]]></cut>	    
       <type> mean </type>
       <description> Mean number of of hits in each Cal log end for each range</description>
     </object>
 
-     <!--object>
-      <name> FastMon_CalLogEndRangeHit[16][8][12][2] </name>
-      <formula><![CDATA[ foreachtower: foreachcallayer: foreachcalcolumn: foreachcalxface FastMon_CalLogEndRangeHitp[tower][callayer][calcolumn][calxface][0]/FastMon_CalLogEndRangeHitp[tower][callayer][calcolumn][calxface][1] ]]></formula>
-      <cut><![CDATA[ (FastMon_condsummary&30)>0 && (FastMon_condsummary&32)==0]]></cut>	    
-      <type> mean </type>
-      <description> Mean number of of hits in each Cal log end for each range</description>
-    </object-->
+   
 
      <!-- Acd Variables -->
 
