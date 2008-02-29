@@ -77,7 +77,7 @@
   
 
      <!-- ************* livetime ********************** -->
-    
+    <!--
      <object>
       <name> LiveTimeFraction </name>
       <formula><![CDATA[ LivetimeLast*0.00000005*100 ]]></formula>
@@ -104,7 +104,7 @@
       <type> outputfloat </type>
       <description> Error in Rate of any non-artificially created trigger (i.e. bits [1-4]) in condsummary word, corrected for the livetime.   </description>
     </object>
-
+-->
 
     <!-- ********************  Event classification information   *********************** -->
           
