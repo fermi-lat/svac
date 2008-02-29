@@ -82,7 +82,7 @@
       <name> ReconEnergy </name>
       <formula><![CDATA[RFun::loopovertowerANDcallayersANDcalcolumns_float(ReconEnergy_TowerCalLayerCalColumn)]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> truncatedmean[0.0,10000000] </type>
+      <type> truncatedmean[1.0,10000000] </type>
       <description> Mean measured energy (MeV) in the calorimeter per event. All towers and layers taken into account. Periodic triggers are NOT taken into account. </description>
     </object>
 
@@ -90,7 +90,7 @@
       <name> ReconEnergy_Tower[16] </name>
       <formula><![CDATA[foreachtower: RFun::loopovercallayersANDcalcolumns_float(ReconEnergy_TowerCalLayerCalColumn[tower])]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> truncatedmean[0.0,10000000] </type>
+      <type> truncatedmean[1.0,10000000] </type>
       <description> Vector [tower] reporting the mean measured energy (MeV) per event in the calorimeter of tower.  Periodic triggers are NOT taken into account. If the calorimeter of this tower was totally empty (for that event), the value is not taken into account in the average procedure.</description>
     </object>
 
@@ -98,7 +98,7 @@
       <name> ReconEnergy_TowerCalLayer[16][8] </name>
       <formula><![CDATA[foreachtower: foreachcallayer:  RFun::loopovercalcolumns_float(ReconEnergy_TowerCalLayerCalColumn[tower][callayer])]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> truncatedmean[0.0,10000000] </type>
+      <type> truncatedmean[1.0,10000000] </type>
       <description> Vector [tower][callayer] reporting the mean energy (MeV) in the calorimeter layer defined by tower,callayer. Periodic triggers are NOT taken into account. If the layer was totally empty, the value is not taken into account in the average procedure.</description>
     </object>
 
@@ -106,7 +106,7 @@
       <name> ReconEnergy_TowerCalLayerCalColumn[16][8][12] </name>
       <formula><![CDATA[foreachtower: foreachcallayer: foreachcalcolumn: ReconEnergy_TowerCalLayerCalColumn[tower][callayer][calcolumn] ]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> truncatedmean[0.0,10000000]  </type>
+      <type> truncatedmean[1.0,10000000]  </type>
       <description> Vector [tower][callayer][calcolumn] containing the Mean energy (MeV) in the calorimeter crystal log defined by tower,callayer,calcolumn. Periodic triggers are NOT taken into account. If the crystal was totally empty (not used), the value is not taken into account in the average procedure.</description>
     </object>
 
@@ -115,7 +115,7 @@
       <name> RecEnergy_TowerCalLayerCalColumnCalXFace[16][8][12][2] </name>
       <formula><![CDATA[foreachtower: foreachcallayer: foreachcalcolumn: foreachcalxface: CalXtalFaceSignal[tower][callayer][calcolumn][calxface]]]></formula>
       <cut><![CDATA[ condsummary&30 && !(condsummary&32)]]></cut>
-      <type> truncatedmean[0.0,10000000]  </type>
+      <type> truncatedmean[1.0,10000000]  </type>
       <description> Vector [tower][callayer][calcolumn][calxface] containing the Mean energy (MeV) in the calorimeter crystal diode defined by tower,callayer,calcolumn, calxface. Periodic triggers are NOT taken into account. If the diode was not used, the value is not taken into account in the average procedure.</description>
     </object>
 
