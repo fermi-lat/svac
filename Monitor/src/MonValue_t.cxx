@@ -142,6 +142,7 @@ void MonValue::makeProxy(TTree* tree){
   execmap["foreachengine:"]= "for(int engine=0;engine<16;engine++){";
   execmap["foreachtkrlayer:"]= "for(int tkrlayer=0;tkrlayer<19;tkrlayer++){";
   execmap["foreachtkrplane:"]= "for(int tkrplane=0;tkrplane<36;tkrplane++){";
+  execmap["foreachtkrgtfe:"]= "for(int tkrgtfe=0;tkrgtfe<24;tkrgtfe++){";
   execmap["foreachacdface:"]= "for(int acdface=0;acdface<5;acdface++){";
   execmap["foreachacdrow:"]= "for(int acdrow=0;acdrow<5;acdrow++){";
   execmap["foreachacdcolumn:"]= "for(int acdcolumn=0;acdcolumn<5;acdcolumn++){";

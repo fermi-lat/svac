@@ -119,6 +119,28 @@
 // Last updated with object FastMon_TkrHits_TowerPlane by user dpaneque on Tue Feb 26 05:59:16 2008
 // Last updated with object FastMon_condsummary by user dpaneque on Tue Feb 26 06:01:21 2008
 // Last updated with object FastMon_geomagnetic_InvariantLatitude by user dpaneque on Tue Feb 26 20:48:29 2008
+// Last updated with object FastMon_geomagnetic_InvariantLambda by user bregeon on Thu Feb 28 11:08:45 2008
+// Last updated with object FastMon_geomagnetic_InvariantRadius by user bregeon on Thu Feb 28 11:19:50 2008
+// Last updated with object FastMon_spacecraft_latitude by user bregeon on Thu Feb 28 11:28:10 2008
+// Last updated with object FastMon_spacecraft_longitude by user bregeon on Thu Feb 28 11:31:56 2008
+// Last updated with object FastMon_spacecraft_altitude by user bregeon on Thu Feb 28 11:34:52 2008
+// Last updated with object FastMon_geomagnetic_cutoff by user bregeon on Thu Feb 28 11:38:31 2008
+// Last updated with object FastMon_geomagnetic_bb0 by user bregeon on Thu Feb 28 11:40:11 2008
+// Last updated with object FastMon_geomagnetic_McIlwainL by user bregeon on Thu Feb 28 11:41:53 2008
+// Last updated with object FastMon_Acd_Tile_Count by user bregeon on Thu Feb 28 14:08:11 2008
+// Last updated with object FastMon_Cal_Tower_Count by user bregeon on Thu Feb 28 14:18:58 2008
+// Last updated with object FastMon_TkrHits_TowerPlaneGTFE by user bregeon on Thu Feb 28 14:49:55 2008
+#include "fastmon/MonInput_FastMon_TkrHits_TowerPlaneGTFE.h"
+#include "fastmon/MonInput_FastMon_Cal_Tower_Count.h"
+#include "fastmon/MonInput_FastMon_Acd_Tile_Count.h"
+#include "fastmon/MonInput_FastMon_geomagnetic_McIlwainL.h"
+#include "fastmon/MonInput_FastMon_geomagnetic_bb0.h"
+#include "fastmon/MonInput_FastMon_geomagnetic_cutoff.h"
+#include "fastmon/MonInput_FastMon_spacecraft_altitude.h"
+#include "fastmon/MonInput_FastMon_spacecraft_longitude.h"
+#include "fastmon/MonInput_FastMon_spacecraft_latitude.h"
+#include "fastmon/MonInput_FastMon_geomagnetic_InvariantRadius.h"
+#include "fastmon/MonInput_FastMon_geomagnetic_InvariantLambda.h"
 #include "fastmon/MonInput_FastMon_geomagnetic_InvariantLatitude.h"
 #include "fastmon/MonInput_FastMon_condsummary.h"
 #include "fastmon/MonInput_FastMon_TkrHits_TowerPlane.h"
@@ -457,6 +479,28 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_condsummary;
   if (s=="FastMon_geomagnetic_InvariantLatitude")
     return new MonInput_FastMon_geomagnetic_InvariantLatitude;
+  if (s=="FastMon_geomagnetic_InvariantLambda")
+    return new MonInput_FastMon_geomagnetic_InvariantLambda;
+  if (s=="FastMon_geomagnetic_InvariantRadius")
+    return new MonInput_FastMon_geomagnetic_InvariantRadius;
+  if (s=="FastMon_spacecraft_latitude")
+    return new MonInput_FastMon_spacecraft_latitude;
+  if (s=="FastMon_spacecraft_longitude")
+    return new MonInput_FastMon_spacecraft_longitude;
+  if (s=="FastMon_spacecraft_altitude")
+    return new MonInput_FastMon_spacecraft_altitude;
+  if (s=="FastMon_geomagnetic_cutoff")
+    return new MonInput_FastMon_geomagnetic_cutoff;
+  if (s=="FastMon_geomagnetic_bb0")
+    return new MonInput_FastMon_geomagnetic_bb0;
+  if (s=="FastMon_geomagnetic_McIlwainL")
+    return new MonInput_FastMon_geomagnetic_McIlwainL;
+  if (s=="FastMon_Acd_Tile_Count")
+    return new MonInput_FastMon_Acd_Tile_Count;
+  if (s=="FastMon_Cal_Tower_Count")
+    return new MonInput_FastMon_Cal_Tower_Count;
+  if (s=="FastMon_TkrHits_TowerPlaneGTFE")
+    return new MonInput_FastMon_TkrHits_TowerPlaneGTFE;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -576,6 +620,17 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_TkrHits_TowerPlane");
   names.push_back("FastMon_condsummary");
   names.push_back("FastMon_geomagnetic_InvariantLatitude");
+  names.push_back("FastMon_geomagnetic_InvariantLambda");
+  names.push_back("FastMon_geomagnetic_InvariantRadius");
+  names.push_back("FastMon_spacecraft_latitude");
+  names.push_back("FastMon_spacecraft_longitude");
+  names.push_back("FastMon_spacecraft_altitude");
+  names.push_back("FastMon_geomagnetic_cutoff");
+  names.push_back("FastMon_geomagnetic_bb0");
+  names.push_back("FastMon_geomagnetic_McIlwainL");
+  names.push_back("FastMon_Acd_Tile_Count");
+  names.push_back("FastMon_Cal_Tower_Count");
+  names.push_back("FastMon_TkrHits_TowerPlaneGTFE");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
