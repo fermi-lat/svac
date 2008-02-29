@@ -32,6 +32,7 @@
 
      <!-- Cal Variables -->	 
    <object>FastMon_Cal_Tower_Count</object>	       
+   <object>FastMon_CalLogEndRangeHit</object>	       
    
   </inputList>
 
@@ -132,10 +133,10 @@
 
      <object>
       <name> FastMon_NTkrHits_TowerPlane[16][36] </name>
-      <formula><![CDATA[ foreachtower: foreachtkrplane: FastMon_TkrHits_TowerPlane[tower][tkrplane] ]]></formula>
-      <cut><![CDATA[FastMon_condsummary&30 ]]></cut>
+      <formula><![CDATA[ FastMon_TkrHits_TowerPlane ]]></formula>
+      <cut><![CDATA[(FastMon_condsummary&32)>0 ]]></cut>
       <type> counter </type>
-      <description> Vector reporting the accumulated (in the time bin)  number of Tkr Hits for tower,plane </description>
+      <description> Accumulated number of Tkr Hits in the time bin for each tower and  plane, only for periodic triggers (Noise Hits).  </description>
     </object>
 
      <!-- Cal Variables -->
@@ -147,7 +148,22 @@
       <type> mean </type>
       <description> Mean number of Cal module with at least one CDE hit</description>
     </object>
- 
+
+    <object>
+      <name> FastMon_CalLogEndRangeHit[16][8][12][2][4] </name>
+      <formula><![CDATA[ FastMon_CalLogEndRangeHit ]]></formula>
+      <cut><![CDATA[ (FastMon_condsummary&30)>0 && (FastMon_condsummary&32)==0]]></cut>	    
+      <type> mean </type>
+      <description> Mean number of of hits in each Cal log end for each range</description>
+    </object>
+
+     <!--object>
+      <name> FastMon_CalLogEndRangeHit[16][8][12][2] </name>
+      <formula><![CDATA[ foreachtower: foreachcallayer: foreachcalcolumn: foreachcalxface FastMon_CalLogEndRangeHitp[tower][callayer][calcolumn][calxface][0]/FastMon_CalLogEndRangeHitp[tower][callayer][calcolumn][calxface][1] ]]></formula>
+      <cut><![CDATA[ (FastMon_condsummary&30)>0 && (FastMon_condsummary&32)==0]]></cut>	    
+      <type> mean </type>
+      <description> Mean number of of hits in each Cal log end for each range</description>
+    </object-->
 
      <!-- Acd Variables -->
 
