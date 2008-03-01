@@ -734,7 +734,7 @@
       <cut><![CDATA[ ]]></cut>
       <source>output</source>
       <type> outputfloat </type>
-      <description> Vector [tower] reporting the normalized number of events in which there was a tracker trigger and the number of consecutive tracker planes hit is less than 6. The used normalization factor is the Tkr Triggers in the specific [tower]. This is a meanigful parameter reporting about the HIT EFFICIENCY in that [tower]. </description>
+      <description> Vector [tower] reporting the normalized number of events in which there was a tracker trigger and the number of consecutive tracker planes hit is less than 6. The used normalization factor is the Tkr Triggers in the specific [tower]. This is a meanigful parameter reporting about the HIT INEFFICIENCY in that [tower]. </description>
     </object>
 
 
@@ -751,9 +751,9 @@
 
      <object>
       <name> ConsecutivePlanesHit_Tower[16] </name>
-      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]>0 ? (RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) : 0.0 ]]></formula>
+      <formula><![CDATA[ foreachtower: TkrTriggerTower[tower]>0 ? (RFun::getconsecutiveplaneshit(TkrHitsTowerPlane[tower])) : -1.0 ]]></formula>
       <cut><![CDATA[ condsummary&30]]></cut>
-      <type> mean </type>
+      <type> truncatedmean[1,36] </type>
       <description> Mean number of consecutive tracker planes hit in [tower] per event triggereing that [tower] </description>
     </object>
 
