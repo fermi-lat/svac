@@ -150,7 +150,7 @@
     </object>
 
     <object>
-      <name> FastMon_CalLogEndRangeHit_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
+      <name> FM_CalLogRHit_TowerCalLayerCalColumnFR[16][8][12][2][4] </name>
       <formula><![CDATA[ FastMon_CalLogEndRangeHit ]]></formula>
       <cut><![CDATA[ (FastMon_condsummary&30)>0 && (FastMon_condsummary&32)==0]]></cut>	    
       <type> mean </type>
