@@ -200,7 +200,7 @@ print CFILE "//
 
 #define NAME $name
 #define OUTBRANCH \"$name\"
-#define LEAF \"$inbranch/$ntype\"
+#define LEAF \"$name/$ntype\"
 #define INBRANCH \"$inbranch\"
 #define ACCESSOR $access
 #define MONSOURCE $monsource
