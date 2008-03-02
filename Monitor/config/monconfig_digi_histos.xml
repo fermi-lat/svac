@@ -54,6 +54,8 @@
     <object>AcdPmtB_OverThreshold_AcdTile  </object>
     <object>AcdVetoA_AcdTile  </object>
     <object>AcdVetoB_AcdTile  </object>
+    <object>AcdVetoA_AcdTileDigiId </object>
+    <object>AcdVetoB_AcdTileDigiId </object>
     <object>AcdVetoA_OR_B_AcdTile </object>
     <object>AcdSingleVeto_AcdTile </object>
     <object>AcdPha_PmtIdPmtRangeAcdTile</object>
@@ -534,7 +536,89 @@
       <description> ACD Veto Map: distribution of ACD Vetos (produced by one or by the two PMTs). </description>
     </object>
 
-     
+     <object>
+      <name> AcdVetoAMap_TH1 </name>
+      <formula><![CDATA[ AcdVetoA_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5,0] </type>
+      <titledesc>  ACD Veto Map from PMTA</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Veto Map from PMTA: distribution of ACD Vetos produced by PMT A. </description>
+    </object>
+
+     <object>
+      <name> AcdVetoBMap_TH1 </name>
+      <formula><![CDATA[ AcdVetoB_AcdTile ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[128,-0.5,127.5,0] </type>
+      <titledesc>  ACD Veto Map from PMTB</titledesc>
+      <axisdesc> [ACD GEM ID, N] </axisdesc>
+      <description> ACD Veto Map from PMTB: distribution of ACD Vetos produced by PMT B. </description>
+    </object>
+   
+     <object>
+      <name> AcdVetoA_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ AcdVetoA_AcdTileDigiId ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map from PMTA (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> ACD Veto Map from PMTA using Digi ID: distribution of ACD Vetos produced by PMT A using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
+     <object>
+      <name> AcdVetoB_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ AcdVetoB_AcdTileDigiId ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map from PMTB (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> ACD Veto Map from PMTB using Digi ID: distribution of ACD Vetos produced by PMT B using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
+
+     <object>
+      <name> AcdVetoA_And_B_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ foreachacdtiledigiid: ((AcdVetoA_AcdTileDigiId[acdtiledigiid] >0) && (AcdVetoB_AcdTileDigiId[acdtiledigiid] >0)) ? 1.0 : 0.0  ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map for PMTA AND PMTB (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> Distribution of ACD Vetos produced by PMT A And PMT B, using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
+
+    <object>
+      <name> AcdVetoA_Or_B_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ foreachacdtiledigiid: ((AcdVetoA_AcdTileDigiId[acdtiledigiid] >0) || (AcdVetoB_AcdTileDigiId[acdtiledigiid] >0)) ? 1.0 : 0.0  ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map for PMTA OR PMTB (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> Distribution of ACD Vetos produced by PMT A OR PMT B, using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
+
+       <object>
+      <name> AcdVetoA_And_NotB_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ foreachacdtiledigiid: ((AcdVetoA_AcdTileDigiId[acdtiledigiid] >0) && (AcdVetoB_AcdTileDigiId[acdtiledigiid] ==0)) ? 1.0 : 0.0  ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map for PMTA AND NOT PMTB (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> Distribution of ACD Vetos produced by PMT A And NOT PMT B, using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
+       <object>
+      <name> AcdVetoB_And_NotA_DigiIdMap_TH1 </name>
+      <formula><![CDATA[ foreachacdtiledigiid: ((AcdVetoA_AcdTileDigiId[acdtiledigiid] ==0) && (AcdVetoB_AcdTileDigiId[acdtiledigiid] >0)) ? 1.0 : 0.0  ]]></formula>
+      <cut><![CDATA[ condsummary&30 ]]></cut>
+      <type> histogram-vecdim-1d[604,-0.5,603.5,0] </type>
+      <titledesc>  ACD Veto Map for PMTB AND NOT PMTB (Digi ID)</titledesc>
+      <axisdesc> [ACD DIGI ID, N] </axisdesc>
+      <description> Distribution of ACD Vetos produced by PMT B And NOT PMT A, using the tile number provided by acdDigi->getId().getId(). </description>
+    </object>
+
 
       <object>
       <name> AcdSingleVetoMap_TH1 </name>
