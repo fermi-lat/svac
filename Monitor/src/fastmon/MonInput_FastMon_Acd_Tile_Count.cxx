@@ -11,7 +11,7 @@
 
 #define NAME FastMon_Acd_Tile_Count
 #define OUTBRANCH "FastMon_Acd_Tile_Count"
-#define LEAF "acd_tile_count/I"
+#define LEAF "FastMon_Acd_Tile_Count/I"
 #define INBRANCH "acd_tile_count"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

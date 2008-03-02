@@ -11,7 +11,7 @@
 
 #define NAME FastMon_spacecraft_altitude
 #define OUTBRANCH "FastMon_spacecraft_altitude"
-#define LEAF "spacecraft_altitude/D"
+#define LEAF "FastMon_spacecraft_altitude/D"
 #define INBRANCH "spacecraft_altitude"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

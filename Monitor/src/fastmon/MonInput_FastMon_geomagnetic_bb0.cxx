@@ -11,7 +11,7 @@
 
 #define NAME FastMon_geomagnetic_bb0
 #define OUTBRANCH "FastMon_geomagnetic_bb0"
-#define LEAF "geomagnetic_bb0/D"
+#define LEAF "FastMon_geomagnetic_bb0/D"
 #define INBRANCH "geomagnetic_bb0"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

@@ -11,7 +11,7 @@
 
 #define NAME FastMon_CalLogEndRangeHit
 #define OUTBRANCH "FastMon_CalLogEndRangeHit"
-#define LEAF "CalLogEndRangeHit[16][8][12][2][4]/O"
+#define LEAF "FastMon_CalLogEndRangeHit[16][8][12][2][4]/O"
 #define INBRANCH "CalLogEndRangeHit"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

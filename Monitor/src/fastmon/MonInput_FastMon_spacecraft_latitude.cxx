@@ -11,7 +11,7 @@
 
 #define NAME FastMon_spacecraft_latitude
 #define OUTBRANCH "FastMon_spacecraft_latitude"
-#define LEAF "spacecraft_latitude/D"
+#define LEAF "FastMon_spacecraft_latitude/D"
 #define INBRANCH "spacecraft_latitude"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

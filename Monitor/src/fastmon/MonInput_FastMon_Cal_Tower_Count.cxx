@@ -11,7 +11,7 @@
 
 #define NAME FastMon_Cal_Tower_Count
 #define OUTBRANCH "FastMon_Cal_Tower_Count"
-#define LEAF "CalTowerCount/I"
+#define LEAF "FastMon_Cal_Tower_Count/I"
 #define INBRANCH "CalTowerCount"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

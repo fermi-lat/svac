@@ -11,7 +11,7 @@
 
 #define NAME FastMon_geomagnetic_InvariantLambda
 #define OUTBRANCH "FastMon_geomagnetic_InvariantLambda"
-#define LEAF "geomagnetic_InvariantLambda/D"
+#define LEAF "FastMon_geomagnetic_InvariantLambda/D"
 #define INBRANCH "geomagnetic_InvariantLambda"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

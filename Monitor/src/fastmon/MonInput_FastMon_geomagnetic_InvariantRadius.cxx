@@ -11,7 +11,7 @@
 
 #define NAME FastMon_geomagnetic_InvariantRadius
 #define OUTBRANCH "FastMon_geomagnetic_InvariantRadius"
-#define LEAF "geomagnetic_InvariantRadius/D"
+#define LEAF "FastMon_geomagnetic_InvariantRadius/D"
 #define INBRANCH "geomagnetic_InvariantRadius"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent

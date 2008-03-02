@@ -11,7 +11,7 @@
 
 #define NAME FastMon_TkrHits_TowerPlaneGTFE
 #define OUTBRANCH "FastMon_TkrHits_TowerPlaneGTFE"
-#define LEAF "TkrHitsGTFE[16][36][24]/I"
+#define LEAF "FastMon_TkrHits_TowerPlaneGTFE[16][36][24]/I"
 #define INBRANCH "TkrHitsGTFE"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent
