@@ -37,6 +37,14 @@
        AcdHitMap_TH1  Sum
        AcdSingleHitMap_TH1  Sum
        AcdVetoMap_TH1  Sum
+       AcdVetoAMap_TH1  Sum
+       AcdVetoBMap_TH1  Sum
+       AcdVetoA_DigiIdMap_TH1  Sum
+       AcdVetoB_DigiIdMap_TH1  Sum
+       AcdVetoA_And_B_DigiIdMap_TH1  Sum
+       AcdVetoA_Or_B_DigiIdMap_TH1  Sum
+       AcdVetoA_And_NotB_DigiIdMap_TH1  Sum
+       AcdVetoB_And_NotA_DigiIdMap_TH1  Sum
        AcdSingleVetoMap_TH1  Sum
        AcdPhaMap_PMTA_LowPMTRange_TH2  Sum
        AcdPhaMap_PMTB_LowPMTRange_TH2  Sum
