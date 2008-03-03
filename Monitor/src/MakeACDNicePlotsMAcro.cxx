@@ -48,9 +48,14 @@ int MakeACDNicePlotsMAcro()
 {
 
   // INPUT to be set by user:
+
+  // input file
   std::string infile = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/Digi_Histos_rootTEST_time.root";
+  // output directory where plots (ps,gif,root) will be stored
   std::string outplotpath = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/ADCPlots";
-  std::string plotflag = "SillyTest"; // it could be the run number
+
+  // flag append to plot names. it could be the run number
+  std::string plotflag = "TestWithMacro"; // 
   
   // END of input to be set by user
 
@@ -500,6 +505,9 @@ int MakeACDNicePlotsMAcro()
 	  canv[iplot]->SaveAs(plotname.c_str());
 	  plotname= vplotname[iplot];
 	  plotname+=".root";
+	  canv[iplot]->SaveAs(plotname.c_str());
+	  plotname= vplotname[iplot];
+	  plotname+=".ps";
 	  canv[iplot]->SaveAs(plotname.c_str());
 	}
     }
