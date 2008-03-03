@@ -52,7 +52,7 @@ int usage()
        << endl;
   
   std::cout << "Usage:" << endl
-       << "\t" << "MakeACDNicePlots -i <inputFile> -o <outputDir> -f <flag>" << endl 
+       << "\t" << "MakeACDNicePlots.exe -i <inputFile> -o <outputDir> -f <flag>" << endl 
        << std::endl;
 
   std::cout << "\t inputFile is the root file produced by the monitoring job. It contains the histograms with the ACD hit information " << std::endl
