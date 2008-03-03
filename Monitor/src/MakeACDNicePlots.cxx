@@ -56,7 +56,7 @@ int usage()
        << std::endl;
 
   std::cout << "\t inputFile is the root file produced by the monitoring job. It contains the histograms with the ACD hit information " << std::endl
-	    << "\t outputDir is the directory where the plots (.gif and .root) will be saved" << std::endl
+	    << "\t outputDir is the directory where the plots (.gif, .ps and .root) will be saved" << std::endl
 	    << "\t flag is a suffix appended to the names of the output plots which is supposed to identify the input root file. A practical possibility for the flag is the run number. " <<std::endl;
 
 
