@@ -61,4 +61,6 @@ application treemerge treemerge.cxx
 
 application MergeHistFiles MergeHistFiles.cxx
 
+application MakeACDNicePlots MakeACDNicePlots.cxx
+
 application inputObjects inputObjects.cxx MonObjFactory.cxx merit/MonInput_*.cxx cal/MonInput_*.cxx fastmon/MonInput_*.cxx svac/MonInput_*.cxx mc/MonInput_*.cxx recon/MonInput_*.cxx digi/MonInput_*.cxx  Geo.cxx TestReport.cxx
