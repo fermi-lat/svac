@@ -55,7 +55,7 @@ int MakeACDNicePlotsMAcro()
   std::string outplotpath = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/ADCPlots";
 
   // flag append to plot names. it could be the run number
-  std::string plotflag = "TestWithMacro"; // 
+  std::string plotflag = "TestWithMacro_11"; // 
   
   // END of input to be set by user
 
@@ -84,7 +84,7 @@ int MakeACDNicePlotsMAcro()
       vplotname.push_back(tmp);
     }
     
-  Int_t CleanAndReleaseMemory = 1; // 1 for YES and 0 for NO.
+  Int_t CleanAndReleaseMemory = 0; // 1 for YES and 0 for NO.
 
 
   TH1F* vhisto[NHistos];
@@ -200,7 +200,7 @@ int MakeACDNicePlotsMAcro()
     ctitle += "]";
     
     canv[k] = new TCanvas(ctitle, ctitle1,0,0,1100,900);
-    canv[k]->SetFillStyle(4000);
+    //canv[k]->SetFillStyle(4000);
     canv[k]->SetFillColor(0);
     canv[k]->SetBorderSize(3); 
     canv[k]->SetFrameBorderMode(0);
@@ -246,7 +246,10 @@ int MakeACDNicePlotsMAcro()
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001); // HERE
+	box->SetLineStyle(1); 
+	box->SetLineWidth(5); 
+	box->SetLineColor(1); 
 	box->SetFillColor(icol); 
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CTop[i][j]);
@@ -268,8 +271,12 @@ int MakeACDNicePlotsMAcro()
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(icol);
+    box->SetLineStyle(1); 
+    box->SetLineWidth(5); 
+    box->SetLineColor(1);
+    
     box->Draw("l");
     TText *tt = new TText((x0+x1)/2, (y0+y1)/2, "130");
     tt->SetTextSize(0.03);
@@ -292,7 +299,7 @@ int MakeACDNicePlotsMAcro()
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(icol);
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide1[i][j]);
@@ -316,7 +323,7 @@ int MakeACDNicePlotsMAcro()
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(icol);
     box->Draw("l");
     TText *tt = new TText((x0+x1)/2, (y0+y1)/2, "330");
@@ -340,7 +347,7 @@ int MakeACDNicePlotsMAcro()
 	} else {
        icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(icol);
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide3[i][j]);
@@ -363,7 +370,7 @@ int MakeACDNicePlotsMAcro()
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(icol);
     box->Draw("l");
     TText *tt = new TText((x0+x1)/2, (y0+y1)/2, "230");
@@ -387,7 +394,7 @@ int MakeACDNicePlotsMAcro()
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(icol);
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide2[i][j]);
@@ -412,7 +419,7 @@ int MakeACDNicePlotsMAcro()
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(icol);
     box->Draw("l");
     TText *tt = new TText((x0+x1)/2, (y0+y1)/2, "430");
@@ -437,8 +444,9 @@ int MakeACDNicePlotsMAcro()
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(icol);
+	//box->SetLineWidth(10);
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide4[i][j]);
 	tt->SetTextSize(0.03);
@@ -448,69 +456,69 @@ int MakeACDNicePlotsMAcro()
       }
     }
   
- int nn0 = TMath::Log10(MaxCount[k]);
+    int nn0 = TMath::Log10(MaxCount[k]);
 
- int ScaleMax = (TMath::Ceil(MaxCount[k]/TMath::Power(10,nn0-1))*TMath::Power(10,nn0-1));
+    int ScaleMax = (TMath::Ceil(MaxCount[k]/TMath::Power(10,nn0-1))*TMath::Power(10,nn0-1));
+    
+    int scaletext[22];
+    scaletext[0]=1;
+    scaletext[21]=ScaleMax;
+    for (int l=1; l<21; l++){
+      int temp = (TMath::Ceil(ScaleMax/21))*l;
+      scaletext[l]= temp;
+    }
+    
+    TString scale[22];
+    for (int l=0; l<22; l++){
+      scale[l]= " ";
+      scale[l] += scaletext[l];
+      //cout << scale[l] << endl;
+    }
+    
+    float x0nbox, x1nbox;
+    x0nbox=100;
+    x1nbox=105;
+    float y0nbox, y1nbox, boxcol;
+    for (i=0; i<22; i++){
+      y0nbox = 2+4.5*i;
+      y1nbox = 6.5+4.5*i;
+      TBox *box = new TBox(x0nbox, y0nbox, x1nbox, y1nbox);
+      //     box->Draw("l");
+      if (i == 0) {
+	boxcol=0;
+      } else {
+	boxcol =28 + i;
+      }
+      box->SetFillColor(boxcol);       
+      box->Draw("l");
+      
+      TText *ttsc = new TText((x1nbox), y1nbox, scale[i]);
+      ttsc->SetTextSize(0.02);
+      ttsc->SetTextAngle(0);
+      ttsc->Draw();
+    }
+    
+    canv[k]->Modified();
+    canv[k]->Update();
 
- int scaletext[22];
- scaletext[0]=1;
- scaletext[21]=ScaleMax;
- for (int l=1; l<21; l++){
-   int temp = (TMath::Ceil(ScaleMax/21))*l;
-   scaletext[l]= temp;
- }
-
- TString scale[22];
- for (int l=0; l<22; l++){
-   scale[l]= " ";
-   scale[l] += scaletext[l];
-   //cout << scale[l] << endl;
- }
-
- float x0nbox, x1nbox;
- x0nbox=100;
- x1nbox=105;
- float y0nbox, y1nbox, boxcol;
-   for (i=0; i<22; i++){
-     y0nbox = 2+4.5*i;
-     y1nbox = 6.5+4.5*i;
-        TBox *box = new TBox(x0nbox, y0nbox, x1nbox, y1nbox);
-	//     box->Draw("l");
-	if (i == 0) {
-	  boxcol=0;
-	} else {
-	  boxcol =28 + i;
-	}
-	box->SetFillColor(boxcol);       
-	box->Draw("l");
+    if(SavePlots)
+      {
+	std::string plotname;
+	plotname= vplotname[k];
+	plotname+=".gif";
+	canv[k]->SaveAs(plotname.c_str());
+	plotname= vplotname[k];
+	plotname+=".root";
+	canv[k]->SaveAs(plotname.c_str());
+	plotname= vplotname[k];
+	plotname+=".ps";
+	canv[k]->SaveAs(plotname.c_str());
    
-	TText *ttsc = new TText((x1nbox), y1nbox, scale[i]);
-	ttsc->SetTextSize(0.02);
-	ttsc->SetTextAngle(0);
-	ttsc->Draw();
-   }
-   
-   canv[k]->Modified();
-   canv[k]->Update();
+      }
   } // end for su k
 
 
-  if(SavePlots)
-    {
-      std::string plotname;
-      for(Int_t iplot=0; iplot <NHistos;iplot++)
-	{
-	  plotname= vplotname[iplot];
-	  plotname+=".gif";
-	  canv[iplot]->SaveAs(plotname.c_str());
-	  plotname= vplotname[iplot];
-	  plotname+=".root";
-	  canv[iplot]->SaveAs(plotname.c_str());
-	  plotname= vplotname[iplot];
-	  plotname+=".ps";
-	  canv[iplot]->SaveAs(plotname.c_str());
-	}
-    }
+  
 
 
   if(CleanAndReleaseMemory)

@@ -296,8 +296,9 @@ int main(int argn, char** argc)
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
-	box->SetFillColor(Short_t(icol)); 
+	box->SetFillStyle(1001);
+	box->SetFillColor(Short_t(icol));
+	//	box->SetLineWidth(2);
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CTop[i][j]);
 	tt->SetTextSize(0.03);
@@ -318,7 +319,7 @@ int main(int argn, char** argc)
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(Short_t(icol));
     box->Draw("l");
     TText *tt = new TText((x0+x1)/2, (y0+y1)/2, "130");
@@ -342,7 +343,7 @@ int main(int argn, char** argc)
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(Short_t(icol));
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide1[i][j]);
@@ -366,7 +367,7 @@ int main(int argn, char** argc)
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(Short_t(icol));
     box->Draw("l");
     tt = new TText((x0+x1)/2, (y0+y1)/2, "330");
@@ -390,7 +391,7 @@ int main(int argn, char** argc)
 	} else {
        icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(Short_t(icol));
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide3[i][j]);
@@ -413,7 +414,7 @@ int main(int argn, char** argc)
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(Short_t(icol));
     box->Draw("l");
     tt = new TText((x0+x1)/2, (y0+y1)/2, "230");
@@ -437,7 +438,7 @@ int main(int argn, char** argc)
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(Short_t(icol));
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide2[i][j]);
@@ -462,7 +463,7 @@ int main(int argn, char** argc)
     } else {
       icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
     }
-    box->SetFillStyle(1);
+    box->SetFillStyle(1001);
     box->SetFillColor(Short_t(icol));
     box->Draw("l");
     tt = new TText((x0+x1)/2, (y0+y1)/2, "430");
@@ -487,7 +488,7 @@ int main(int argn, char** argc)
 	} else {
 	  icol =29 + 20*hitcount[tileID][k]/MaxCount[k];
 	}
-	box->SetFillStyle(1);
+	box->SetFillStyle(1001);
 	box->SetFillColor(Short_t(icol));
 	box->Draw("l");
 	TText *tt = new TText((x0+x1)/2, (y0+y1)/2, CSide4[i][j]);
