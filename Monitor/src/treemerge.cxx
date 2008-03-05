@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <fstream>
 #include "TFile.h"
 #include "TTree.h"
 #include "TLeaf.h"
@@ -27,28 +26,14 @@ int main(int argn, char** argc) {
   std::vector<std::string> inputfiles;
   std::string outputfile;
   std::string treename;
-  std::ifstream fl;
   int opt;
-  while ( (opt = getopt(argn, argc, "hi:o:t:f:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "hi:o:t:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       std::cout<<"treemerge -i inputfile1 -i inputfile2 ... -o outputfile -t treename"<<std::endl; 
-      std::cout<<" or "<<std::endl;
-      std::cout<<"treemerge -f input_file_list -o outputfile -t treename"<<std::endl;
       return 0;
     case 'i':
       inputfiles.push_back(std::string(optarg));
-      break;
-    case 'f':
-      fl.open(optarg);
-      char name[512];
-      while (!fl.eof()){
-	name[0]='\0';
-	fl>>name;
-	if (strlen(name)>0){
-	  inputfiles.push_back(std::string(name));
-	}
-      }
       break;
     case 'o':
       outputfile=std::string(optarg);
