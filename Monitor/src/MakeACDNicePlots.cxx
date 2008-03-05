@@ -52,12 +52,15 @@ int usage()
        << endl;
   
   std::cout << "Usage:" << endl
-       << "\t" << "MakeACDNicePlots.exe -i <inputFile> -o <outputDir> -f <flag>" << endl 
-       << std::endl;
+	    << "\t" << "MakeACDNicePlots.exe -i <inputFile> -o <outputDir> -f <flag>" << endl 
+	    << std::endl
+	    << "OR" << std::endl
+	    << "\t" << "MakeACDNicePlots.exe -i <inputFile> -t <tarfilename>" << std::endl; 
 
   std::cout << "\t inputFile is the root file produced by the monitoring job. It contains the histograms with the ACD hit information " << std::endl
 	    << "\t outputDir is the directory where the plots (.gif, .ps and .root) will be saved" << std::endl
-	    << "\t flag is a suffix appended to the names of the output plots which is supposed to identify the input root file. A practical possibility for the flag is the run number. " <<std::endl;
+	    << "\t flag is a suffix appended to the names of the output plots which is supposed to identify the input root file. A practical possibility for the flag is the run number. " <<std::endl
+	    << "\t tarfilename (including .tar !!) is the name of the file containing the ACD plots" << std::endl;
 
 
   return -1;
@@ -71,11 +74,12 @@ int main(int argn, char** argc)
   std::string infile;
   std::string outplotpath;
   std::string plotflag;
+  std::string tarfilename;
 
 // parse options
 
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:i:f:")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:i:f:t:")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -89,6 +93,9 @@ int main(int argn, char** argc)
     case 'f':   // flag
       plotflag = std::string(optarg);
       break; 
+    case 't':   // tarfilename
+      tarfilename = std::string(optarg);
+      break; 
     case '?':
       usage();
       return 2;
@@ -99,10 +106,42 @@ int main(int argn, char** argc)
     }
   }
   
-  if (infile.size()==0 || outplotpath.size()==0 || plotflag.size()==0){
-    std::cout<<"Missing input parameters. Run  MakeACDNicePlots.exe -h for help."<<std::endl;
-    return 2;
+  Int_t WeCanContinue = 0;
+  Int_t DeleteDirAtTheEnd = 0;
+  if(outplotpath.size()!=0)
+    {
+      if ((infile.size()==0 || plotflag.size()==0))
+	WeCanContinue = 0;
+      else{
+	WeCanContinue = 1;
+	DeleteDirAtTheEnd = 0;
+      }
+    }
+  if(!WeCanContinue){
+    if(tarfilename.size()!=0)
+      {
+	if (infile.size()==0)
+	  WeCanContinue = 0;
+	else
+	  {
+	    if(tarfilename.find(".tar")>= tarfilename.size())
+	      {
+		std::cout<<"Missing .tar in tar filename. Run  MakeACDNicePlots.exe -h for help."<<std::endl;
+		return 2;
+	      }
+	    
+	    WeCanContinue = 1;
+	    outplotpath = "./acdplots";
+	    DeleteDirAtTheEnd = 1;
+	  }
+      }
   }
+  
+  if(!WeCanContinue)
+    {
+      std::cout<<"Missing input parameters. Run  MakeACDNicePlots.exe -h for help."<<std::endl;
+      return 2;
+    }
   
 
   // std::string infile = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/Digi_Histos_rootTEST_time.root";
@@ -121,6 +160,24 @@ int main(int argn, char** argc)
   //std::string outplotpath = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/ADCPlots";
   //std::string plotflag = "SillyTest"; // it could be the run number
 
+  // MAke tar file with the directory containing the plots
+  Int_t MakeTarFile = 1;// 1 for YES, 0 for NO
+
+  // Create outputdir, just in case it does not exist
+
+  
+  std::string commandstr = "mkdir -p ";
+  commandstr +=outplotpath;
+  
+  // std::cout << commandstr.c_str() << std::endl;
+
+   int dircreation = system(commandstr.c_str());
+   if(dircreation){
+     std::cout << "MakeACDNicePlots: WARNING" << std::endl
+	       << "Problems creating dir to store ACD plots: " << std::endl
+	       << "Command failed: " << commandstr.c_str() << std::endl;
+	
+   }
 
   std::vector <std::string> vplotname;
   for(Int_t i=0;i<NHistos;i++)
@@ -128,8 +185,13 @@ int main(int argn, char** argc)
       std::string tmp(outplotpath);
       tmp+="/";
       tmp+=vhistoname[i];
-      tmp.resize(tmp.size()-3); // remove the TH1 ending
-      tmp+=plotflag;
+      if(plotflag.size()!=0){
+	tmp.resize(tmp.size()-3); // remove the TH1 ending
+      	tmp+=plotflag;
+      }
+      else
+	tmp.resize(tmp.size()-4); // remove the _TH1 ending
+
       // The plotnames will be completed with the suffix .gif and .root before saving.
       vplotname.push_back(tmp);
     }
@@ -560,6 +622,39 @@ int main(int argn, char** argc)
 	  plotname= vplotname[iplot];
 	  plotname+=".ps";
 	  canv[iplot]->SaveAs(plotname.c_str());
+	}
+
+      if(tarfilename.size()!=0)
+	{// save into tar file and delete created dir
+	  
+	  std::string commandstr = "tar -cf ";
+	  commandstr += tarfilename;
+	  commandstr += " ";
+	  commandstr += outplotpath;
+	  
+	  // std::cout << commandstr.c_str() << std::endl;
+
+	  int bb = system(commandstr.c_str());
+	  if(bb){
+	    std::cout << "MakeACDNicePlots: WARNING" << std::endl
+		      << "Problems creating tar file to store ACD plots: " << std::endl
+		      << "Command failed: " << commandstr.c_str() << std::endl;
+	  }
+
+	  if(DeleteDirAtTheEnd){
+	    commandstr = "rm -rf ";
+	    commandstr +=outplotpath;
+	    
+	    // std::cout << commandstr.c_str() << std::endl;
+
+	    int bbb = system(commandstr.c_str());
+	    if(bbb){
+	      std::cout << "MakeACDNicePlots: WARNING" << std::endl
+			<< "Problems removing tmp dir to store ACD plots: " << std::endl
+			<< "Command failed: " << commandstr.c_str() << std::endl;
+	    }
+	  }
+
 	}
     }
 
