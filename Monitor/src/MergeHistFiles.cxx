@@ -417,12 +417,31 @@ int mergeBySumming(TH1* hist, TList& sourcelist, TFile *first_source, const TStr
 
 //
 //
+
+/*  OLD VERSION; does not take into account the number of entries in the histogram
+This number of entries is the same for all histograms, otherwise the average would not make 
+any sense.
 int mergeByAveraging(TH1* hist, TList& sourcelist, TFile *first_source, const TString& path) {
 
   int nMerged = mergeBySumming(hist,sourcelist,first_source,path);
   
   Double_t scaleFactor = 1./ ((Double_t)nMerged);
   hist->Scale(scaleFactor);
+  return nMerged;
+}
+*/
+
+//This number of entries is the same for all histograms, otherwise the average would not make 
+//any sense. The cases we are going to deal with is the average of the signals 
+// of different channels. The number of entries will be fixed (3072 for the calorimeter).
+int mergeByAveraging(TH1* hist, TList& sourcelist, TFile *first_source, const TString& path) {
+
+  int nentries = hist->GetEntries();
+  int nMerged = mergeBySumming(hist,sourcelist,first_source,path);
+  
+  Double_t scaleFactor = 1./ ((Double_t)nMerged);
+  hist->Scale(scaleFactor);
+  hist->SetEntries(nentries);
   return nMerged;
 }
 
