@@ -5,7 +5,7 @@ void getConfigKey (char *digiFileName, char* latcKeyFineName) {
 
   // Output file with LATC key:
   ofstream latcKeyFile;
-  latcKeyFile.open(latcKeyFineName,std::ios::app);
+  latcKeyFile.open(latcKeyFineName,std::ios::trunc);
   
   // Get the digi:
   DigiEvent *evt = 0;

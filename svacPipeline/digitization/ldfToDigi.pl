@@ -84,10 +84,11 @@ EventSelector.StorageType = "$ldfFileType";
 EventSelector.FileName = "$ldfFile";
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
 GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
+digiRootWriterAlg.bufferSize = 100000;
 EOF
 
 ## temporary hack to fix runs w/ improper MOOT key
-#print JOBOPTIONFILE 'TrgConfigSvc.configureFrom = "Default";' . "\n";
+print JOBOPTIONFILE 'TrgConfigSvc.configureFrom = "Default";' . "\n";
 
 my $testName = `$query $runName TESTNAME`;
 chomp($testName);

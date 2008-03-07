@@ -811,8 +811,17 @@ Replace ConfigTables with configData.
 ---------------------------------------------------------------------------
 
 
-v4r0p0 (2008/01/07)
+v4r0p1 (2008/01/07)
 ---------------
 RunRootAnalyzer v3r9p3
 
 Output data on u52
+---------------------------------------------------------------------------
+
+
+v4r0p2 (2008/01/10)
+---------------
+Fix an error with online disk.
+When getting LATC key from evt file, open output file in truncate mode.
+Use "Default" trigger config when digitizing.
+Tweak host list for recon cleanup script.
