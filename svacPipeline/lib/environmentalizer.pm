@@ -1,10 +1,9 @@
-package environmentalizer;
 
 use strict;
 
-sub sourceCsh {
+sub environmentalize {
     my $evFile = shift;
-    foreach(`tcsh -f -c 'source $evFile ; setenv'`) {
+    foreach(`tcsh -c 'source $evFile ; setenv'`) {
 	$ENV{$1} = $2 if /^(\S+)=(\S*)$/;
     }
 }

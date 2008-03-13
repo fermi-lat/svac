@@ -1,25 +1,18 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 
-use File::Copy;
+my $ldfFile = $ENV{'ldfFile'};
 
-if ($#ARGV != 4) {
-    die "Usage: $0 runName ldfFile shellFile jobOptionFile digiRootFile";
-}
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
+my $shellFile = $ENV{'shellFile'};
+my $jobOptionFile = $ENV{'jobOptionFile'};
+my $digiRootFile = $ENV{'digiRootFile'};
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
-my $query = $ENV{'eLogQuery'};
-my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
-my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
 
-print STDERR <<EOT;
+print <<EOT;
 $0 running with options:
   ldfFile:       $ldfFile
   shellFile:     $shellFile
@@ -30,38 +23,13 @@ $0 running with options:
   exe :          $exe
 EOT
 
-# put .htaccess file in working directory to prevent HTTP downloads of 
-# ROOT files
-my $workDir = `dirname $digiRootFile`;
-chomp $workDir;
-copy($ENV{htAccess}, "$workDir/.htaccess");
+my $glastRoot = "/afs/slac.stanford.edu/g/glast";
+my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
-# put ldfFITS file in eLog
-my $eLogCmd = "$ENV{'svacPlLib'}/updateElogReportTable.pl '$runName' FitsFile '$ldfFile'";
-print "NOT Running command [$eLogCmd]\n";
-#system($eLogCmd);
-
-if (-z $ldfFile) {
-    print STDERR "LDF file [$ldfFile] has zero size.\n";
-    exit 0;
-}
-
-my %extensions = ('evt'  => 'CCSDSFILE',
-                  'fits' => 'LDFFITS',
-                  'ldf'  => 'LDFFILE',
-                  'xml'  => 'CCSDSFILE');
-
-# determine type of input file
-my @fields = split(/\./, $ldfFile);
-my $ldfFileType = $extensions{$fields[-1]};
-
-# create csh script to do digitization
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
-#print SHELLFILE "source $glastScript \n";
-print SHELLFILE "setenv CMTCONFIG $svacCmtConfig \n";
-print SHELLFILE "setenv GLAST_EXT $svacGlastExt \n";
+print SHELLFILE "source $glastScript \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
@@ -72,35 +40,37 @@ print SHELLFILE "popd \n";
 
 # convert ldf file to digi file
 print SHELLFILE "setenv JOBOPTIONS $jobOptionFile \n";
-print SHELLFILE "$exe || exit 1 \n";
+print SHELLFILE "$exe \n";
 
 close(SHELLFILE);
 
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
-print JOBOPTIONFILE <<EOF;
-#include "\$GLEAMROOT/src/jobOptions/pipeline/ldf2digi.txt"
-EventSelector.StorageType = "$ldfFileType";
-EventSelector.FileName = "$ldfFile";
-digiRootWriterAlg.digiRootFile = "$digiRootFile";
-GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
-digiRootWriterAlg.bufferSize = 100000;
-EOF
-
-## temporary hack to fix runs w/ improper MOOT key
-print JOBOPTIONFILE 'TrgConfigSvc.configureFrom = "Default";' . "\n";
-
-my $testName = `$query $runName TESTNAME`;
-chomp($testName);
-print STDERR "TESTNAME is $testName\n";
-if ($testName =~ 'LAT-71x') {
-	print STDERR "Using Moun gain\n";
-	print JOBOPTIONFILE <<EOF;
-CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
-CalCalibSvc.DefaultFlavor     = "vanilla-muongain";
-EOF
-}
-
+print JOBOPTIONFILE qq{ApplicationMgr.DLLs+= {"GaudiAlg", "GaudiAud"};\n};
+print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += {"ChronoStatSvc"}; \n};
+print JOBOPTIONFILE qq{AuditorSvc.Auditors = {"ChronoAuditor"}; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.DLLs += {"LdfConverter"}; \n};
+print JOBOPTIONFILE qq{EventSelector.Instrument = "EM"; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += {"LdfEventSelector/EventSelector" , "LdfCnvSvc/EventCnvSvc"}; \n};
+print JOBOPTIONFILE qq{EventPersistencySvc.CnvServices = {"EventCnvSvc"};\n};
+print JOBOPTIONFILE qq{ApplicationMgr.TopAlg = {"Sequencer/Top" }; \n};
+print JOBOPTIONFILE qq{Generator.Members = {};\n};
+print JOBOPTIONFILE qq{Digitization.Members = {};\n};
+print JOBOPTIONFILE qq{Top.Members={"Sequencer/Output"}; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.DLLs += {"GlastSvc"}; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += { "GlastDetSvc"}; \n};
+print JOBOPTIONFILE qq{GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml"; \n};
+print JOBOPTIONFILE qq{GlastDetSvc.visitorMode="recon";\n };
+print JOBOPTIONFILE qq{ApplicationMgr.DLLs +={"Trigger", "RootIo"}; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.ExtSvc += { "RootIoSvc" }; \n};
+print JOBOPTIONFILE qq{digiRootWriterAlg.OutputLevel=3; \n};
+print JOBOPTIONFILE qq{Output.Members = {"digiRootWriterAlg"}; \n};
+print JOBOPTIONFILE qq{digiRootWriterAlg.digiRootFile = "$digiRootFile"; \n};
+print JOBOPTIONFILE qq{EventSelector.StorageType = "LDFFITS"; \n};
+print JOBOPTIONFILE qq{EventSelector.InputList = {"$ldfFile"}; \n};
+print JOBOPTIONFILE qq{EventSelector.OutputLevel = 4; \n};
+print JOBOPTIONFILE qq{MessageSvc.OutputLevel = 3; \n};
+print JOBOPTIONFILE qq{ApplicationMgr.EvtMax  = 1000000000; \n};
 close(JOBOPTIONFILE);
 
 system("chmod +rwx $shellFile");

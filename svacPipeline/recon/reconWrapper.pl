@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 
@@ -15,8 +15,6 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $runId = $proc->{'run_name'};
-my $taskName = $proc->{'task_name'};
 
 #####################################################
 ##
@@ -24,42 +22,31 @@ my $taskName = $proc->{'task_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-use lib "$ENV{'svacPlRoot'}/lib";
-use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $digiRootFile = $inFiles->{'digi'};
+my $shellFile = $outFiles->{'script'};
+my $jobOptionFile = $outFiles->{'jobOptions'};
 my $reconRootFile = $outFiles->{'recon'};
 my $meritRootFile = $outFiles->{'merit'};
-my $calRootFile = $outFiles->{'cal'};
-my $tarFile = $outFiles->{'tarFile'};
 
-my $exe = $ENV{'reconScript'};
+my $setup = $ENV{'SVACPLCONFIG'};
+my $exe = './recon.pl';
 
-my $command = "$exe '$digiRootFile' '$reconRootFile' '$meritRootFile' '$calRootFile' '$tarFile' '$taskName' '$runId'";
+my $command = "source $setup ; $exe '$digiRootFile' '$shellFile' '$jobOptionFile' '$reconRootFile' '$meritRootFile'";
 print "Running command: [$command]\n";
-
-#environmentalizer::sourceCsh("$ENV{'reconCmt'}/setup.csh");
 
 my $ex = new Exec("$command");
 
 my $rc = $ex->execute();
 
-if ( defined($rc) ) {
-    if ( $rc == 0 ) {
-        #terminated successfully
-        exit(0);
-    } else {
-        #your app failed, interpret return code
-        #and then exit non-zero
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
     
-        #(do some stuff here if you want)
-        exit($rc);         
-    }
+    #(do some stuff here if you want)
+    exit($rc);
 } else {
     if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
         # Your app is not present!!!
@@ -69,7 +56,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

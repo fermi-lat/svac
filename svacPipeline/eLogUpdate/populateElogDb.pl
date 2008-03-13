@@ -1,15 +1,6 @@
-#!/usr/local/bin/perl -w
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+#!/usr/local/bin/perl
 
 use strict;
-use lib "$ENV{'svacPlRoot'}/lib";
-use environmentalizer;
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-# Use Oracle 8 libs because the script we are launching is Python.
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup8.cshrc");
 
 if ($#ARGV != 1) {
     die "Usage: $0 shellFile rcReport";
@@ -28,7 +19,6 @@ chomp $eLogFeederDir;
 
 #change to ftp protocol
 my $rootUrl = $ENV{'rootUrl'};
-my $rawUrl = $ENV{'rawUrl'};
 
 # check for eLogFeeder dir, quit if it does not exist 
 if(! (-d $eLogFeederDir) ) {
@@ -39,15 +29,11 @@ my $scriptDir = $ENV{'eLogDir'};
 
 #create a csh script to run update.py
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
-print SHELLFILE <<EOF;
-#!/bin/csh 
-unsetenv LD_LIBRARY_PATH 
-pushd $eLogFeederDir
-setenv TWO_TASK $ENV{'TWO_TASK'}
-setenv ORACLE_HOME $ENV{'ORACLE_HOME'}
-setenv LD_LIBRARY_PATH 
-$scriptDir/update.py $rcReport $rootUrl $rawUrl 
-EOF
+print SHELLFILE qq{#!/bin/csh \n \n};
+print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
+print SHELLFILE qq{pushd $eLogFeederDir \n};
+print SHELLFILE qq{source $scriptDir/setup.csh \n};
+print SHELLFILE qq{$scriptDir/update.py $rcReport $rootUrl \n};
 close(SHELLFILE);
 
 system("chmod +rwx $shellFile");

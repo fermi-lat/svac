@@ -20,7 +20,7 @@ import joboptions
 
 
 if len(sys.argv) == 5:
-    runNumber, schemaFile, snapFile, tarBall = sys.argv[1:]
+    runNumber, schemaFile, inFile, tarBall = sys.argv[1:]
 else:
     print __doc__
     sys.exit(1)
@@ -32,65 +32,15 @@ tarFile = os.path.basename(tarBall)
 schemaTag = "schema"
 
 #inDir = os.path.join(joboptions.runDir, runNumber)
-#snapFile = util.findSnapshot(inDir)
+#inFile = util.findSnapshot(inDir)
 #schemaFile = util.findSchema(inDir)
 
-
-def finish():
-    # put out the output
-    # nasty globals
-    try:
-        os.stat(destDir)
-    except OSError:
-        try:
-            os.makedirs(destDir)
-        except:
-            print "Couldn't create directory [%s]." % destDir
-            sys.exit(2)
-
-    outputFileName = os.path.join(destDir, joboptions.outFile)
-
-    try:
-        outputFile = file(outputFileName, "w")
-    except:
-        print "Couldn't create file [%s]." % outputFileName
-        sys.exit(3)
-
-    outStr = str(output)
-    outputFile.write(outStr)
-    outputFile.close()
-
-    # tar up the output directory
-    os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
-              (destDir, tarFile, tarFile))
-
-    sys.exit(0)
-    return
-
-
-output = html.Page("Configuration for run %s" % runNumber)
-
-output.addChild("\n")
-output.addChild(html.Element("HR"))
-output.addChild("\n")
-
-output.addChild(r"""Created by ConfigTables version %s from files:<br/>
-snapshot: %s<br/>
-schema: %s<br/>
-""" % (joboptions.version, snapFile, schemaFile))
-
 # parse the schema
-try:
-    schema = md.parse(schemaFile)
-except:
-    output.addChild("Schema file %s is missing, unreadable, or invalid.\n" %
-                    schemaFile)
-    finish()
+schema = md.parse(schemaFile)
 schemas = schema.getElementsByTagName(joboptions.schemaTag)
 if len(schemas) != 1:
-    output.addChild("Schema file %s does not contain exactly 1 schema.\n" %
-                    schemaFile)
-    finish()
+    print "Schema file %s does not have exactly 1 schema." % schemaFile
+    sys.exit(42)
 schema = schemas[0]
 
 shapes = {}
@@ -119,13 +69,19 @@ for tag in joboptions.shapeTags:
     pass
 
 # parse the config data
-try:
-    doc = md.parse(snapFile)
-except:
-    output.addChild("Snapshot file %s is missing, unreadable, or invalid.\n" %
-                    snapFile)
-    finish()
-    
+doc = md.parse(inFile)
+
+output = html.Page("Configuration for run %s" % runNumber)
+
+output.addChild("\n")
+output.addChild(html.Element("HR"))
+output.addChild("\n")
+
+output.addChild(r"""Created by ConfigTables version %s from files:<br/>
+snapshot: %s<br/>
+schema: %s<br/>
+""" % (joboptions.version, inFile, schemaFile))
+
 # get stuff from CAL front ends
 # and make tables of it
 for registerTag in joboptions.calTags:
@@ -233,4 +189,28 @@ output.addChild(hTable)
 output.addChild("\n")
 
 
-finish()
+# put out the output
+#destDir = os.path.join(joboptions.outDir, runNumber, joboptions.reportDir)
+try:
+    os.stat(destDir)
+except OSError:
+    try:
+        os.makedirs(destDir)
+    except:
+        print "Couldn't create directory [%s]." % destDir
+        sys.exit(2)
+outputFileName = os.path.join(destDir, joboptions.outFile)
+
+try:
+    outputFile = file(outputFileName, "w")
+except:
+    print "Couldn't create file [%s]." % outputFileName
+    sys.exit(3)
+
+output = str(output)
+outputFile.write(output)
+outputFile.close()
+
+# tar up the output directory
+os.system("cd %s ; tar -c -f - --exclude %s . | gzip -c > %s" %
+          (destDir, tarFile, tarFile))

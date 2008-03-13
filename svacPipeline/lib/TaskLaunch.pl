@@ -2,10 +2,6 @@
 
 use strict;
 
-use File::Basename;
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $oldFile;
 my ($oldTask, $newTask, $runName, @files) = @ARGV;
 
@@ -17,10 +13,7 @@ my $status = 0;
 foreach $oldFile (@files) {
     my $newFile = $oldFile;
     $newFile =~ s/$oldTask/$newTask/;
-    # make a relative symlink, not absolute
-    my ($target, $path) = fileparse($oldFile);
-    #
-    $status |= system("test -e $newFile || $linker $target $newFile");
+    $status |= system("test -e $newFile || $linker $oldFile $newFile");
 }
 
 my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
