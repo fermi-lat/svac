@@ -370,7 +370,7 @@
       <name> Tick20MHzDeviation_TH1 </name>
       <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
       <cut><![CDATA[ (NewSecond&1)]]></cut>
-      <type> histogram-1d[200,-10000,10000] </type>
+      <type> histogram-1d[200,-1000,1000] </type>
       <titledesc> Number of ticks between successive 1-PPS</titledesc>
       <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
       <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz.</description>
@@ -382,6 +382,16 @@
       <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
       <cut><![CDATA[ (NewSecond&1) && (Tick20MHzDeviation<200) && (Tick20MHzDeviation> -200)]]></cut>
       <type> histogram-1d[400,-200,200] </type>
+      <titledesc> Number of ticks between successive 1-PPS (ZOOM)</titledesc>
+      <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
+      <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz. Only deviations smaller than 200 ticks are being displayed.</description>
+    </object>
+
+      <object>
+      <name> Tick20MHzDeviation_SuperZoom_TH1 </name>
+      <formula><![CDATA[ Tick20MHzDeviation ]]></formula>
+      <cut><![CDATA[ (NewSecond&1) && (Tick20MHzDeviation<200) && (Tick20MHzDeviation> -200)]]></cut>
+      <type> histogram-1d[40,-20,20] </type>
       <titledesc> Number of ticks between successive 1-PPS (ZOOM)</titledesc>
       <axisdesc> [Clock ticks (nominal 50 ns), N] </axisdesc>
       <description>  Number of ticks between successive 1-PPS - Deviation from 20 MHz. Only deviations smaller than 200 ticks are being displayed.</description>
