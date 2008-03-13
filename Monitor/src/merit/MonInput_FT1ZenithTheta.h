@@ -1,7 +1,7 @@
 // 
 // Class for input of quantity FT1ZenithTheta for monitoring 
 // 
-// Created by dpaneque on Sat Sep 29 01:08:22 2007 
+// Created by dpaneque on Thu Mar 13 01:11:09 2008 
 // Object created automatically by script makeNewMonObject.pl
 //
 #ifndef MonInput_FT1ZenithTheta_h

@@ -1,7 +1,7 @@
 // 
 // Class for input of quantity CalEnergyRaw for monitoring 
 // 
-// Created by dpaneque on Wed Apr 18 18:28:31 2007 
+// Created by dpaneque on Thu Mar 13 00:37:58 2008 
 // Object created automatically by script makeNewMonObject.pl
 //
 #ifndef MonInput_CalEnergyRaw_h

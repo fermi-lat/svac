@@ -1,7 +1,7 @@
 // 
 // Class for input of quantity FT1ZenithTheta for monitoring 
 // 
-// Created by dpaneque on Sat Sep 29 01:08:22 2007 
+// Created by dpaneque on Thu Mar 13 01:11:09 2008 
 // Object created automatically by script makeNewMonObject.pl
 //
 #include "MonInput_FT1ZenithTheta.h"
@@ -13,10 +13,10 @@
 #define OUTBRANCH "FT1ZenithTheta"
 #define LEAF "FT1ZenithTheta/F"
 #define INBRANCH "FT1ZenithTheta"
-#define ACCESSOR 
+#define ACCESSOR cc
 #define MONSOURCE MeritEvent
 #define INPUTSOURCE "MeritEvent"
-#define DESCRIPTION "reconstucted direction with respect to local zenith system, in degrees."
+#define DESCRIPTION "Reconstructed theta angle (in deg) with respect to the local zenith system"
 
 
 // End user defined part 

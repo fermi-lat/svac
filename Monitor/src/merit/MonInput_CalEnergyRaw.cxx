@@ -1,7 +1,7 @@
 // 
 // Class for input of quantity CalEnergyRaw for monitoring 
 // 
-// Created by dpaneque on Wed Apr 18 18:28:31 2007 
+// Created by dpaneque on Thu Mar 13 00:37:58 2008 
 // Object created automatically by script makeNewMonObject.pl
 //
 #include "MonInput_CalEnergyRaw.h"
@@ -13,14 +13,16 @@
 #define OUTBRANCH "CalEnergyRaw"
 #define LEAF "CalEnergyRaw/F"
 #define INBRANCH "CalEnergyRaw"
-#define ACCESSOR CalEnergyRaw
+#define ACCESSOR cc
 #define MONSOURCE MeritEvent
 #define INPUTSOURCE "MeritEvent"
-#define DESCRIPTION "Measured energy in calorimeter (Merit)"
+#define DESCRIPTION "Measured energy in the calorimeter. No corrections applied."
+
 
 // End user defined part 
 
 MonInput_CalEnergyRaw::MonInput_CalEnergyRaw(){
+  m_name=OUTBRANCH;
 }
 MonInput_CalEnergyRaw::~MonInput_CalEnergyRaw(){
 }
