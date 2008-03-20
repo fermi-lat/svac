@@ -161,6 +161,10 @@
 // Last updated with object FT1ZenithTheta by user dpaneque on Thu Mar 13 01:11:09 2008
 // Last updated with object FT1EarthAzimuth by user dpaneque on Thu Mar 13 01:11:46 2008
 // Last updated with object FilterStatus_HI by user dpaneque on Thu Mar 13 05:02:53 2008
+// Last updated with object Tkr1KalEne by user dpaneque on Wed Mar 19 03:21:57 2008
+// Last updated with object Tkr1KalThetaMS by user dpaneque on Wed Mar 19 03:23:17 2008
+#include "merit/MonInput_Tkr1KalThetaMS.h"
+#include "merit/MonInput_Tkr1KalEne.h"
 #include "merit/MonInput_FilterStatus_HI.h"
 #include "merit/MonInput_FT1EarthAzimuth.h"
 #include "merit/MonInput_FT1ZenithTheta.h"
@@ -625,6 +629,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1EarthAzimuth;
   if (s=="FilterStatus_HI")
     return new MonInput_FilterStatus_HI;
+  if (s=="Tkr1KalEne")
+    return new MonInput_Tkr1KalEne;
+  if (s=="Tkr1KalThetaMS")
+    return new MonInput_Tkr1KalThetaMS;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -786,6 +794,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FT1ZenithTheta");
   names.push_back("FT1EarthAzimuth");
   names.push_back("FilterStatus_HI");
+  names.push_back("Tkr1KalEne");
+  names.push_back("Tkr1KalThetaMS");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
