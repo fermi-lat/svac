@@ -114,13 +114,15 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
   std::vector<std::string> vLoopFlags;
   vLoopFlags.push_back("TowerLoop");
   vLoopDim.push_back(16);
+  vLoopFlags.push_back("TrackerLoop");
+  vLoopDim.push_back(36);
   vLoopFlags.push_back("CalLayerLoop");
   vLoopDim.push_back(8);
   vLoopFlags.push_back("CalColumnLoop");
   vLoopDim.push_back(12);
   vLoopFlags.push_back("AcdTileLoop");
   vLoopDim.push_back(128);
-  vLoopFlags.push_back("PosLoop");
+  vLoopFlags.push_back("XYZLoop");
   vLoopDim.push_back(3);
   vLoopFlags.push_back("FaceLoop");
   vLoopDim.push_back(2);
