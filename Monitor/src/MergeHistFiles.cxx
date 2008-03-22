@@ -114,7 +114,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
   std::vector<std::string> vLoopFlags;
   vLoopFlags.push_back("TowerLoop");
   vLoopDim.push_back(16);
-  vLoopFlags.push_back("TrackerLoop");
+  vLoopFlags.push_back("PlaneLoop");
   vLoopDim.push_back(36);
   vLoopFlags.push_back("CalLayerLoop");
   vLoopDim.push_back(8);
@@ -256,6 +256,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
     if(LoopsInHistoName.size() <1){
       // std::cout << "No loops" << std::endl;
       theMap[ tokens[0] ] = itrFind->second; // no loops to be done
+      //std::cout << "Histogram without loop, TH : " << tokens[0].c_str() << std::endl;
     } 
     else{
       std::vector<std::string> vhistoname;
@@ -284,7 +285,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
 	  for(unsigned int index = 0; index < itr->second.size();index++){
 	    std::string tmpstring = vhistonametmp[iname];
 	    tmpstring.replace(spos,itr->first.size(),itr->second[index].c_str());
-	    // std::cout << "String after replacement: " << tmpstring.c_str() << std::endl;
+	    //std::cout << "String after replacement: " << tmpstring.c_str() << std::endl;
 	    vhistoname.push_back(tmpstring);
 	  }
 	}
@@ -296,7 +297,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
 		<< std::endl
 		<< std::endl;
       for(unsigned int i = 0; i < vhistoname.size();i++)
-	std::cout << vhistoname[i].c_str() << std::endl;
+	std::cout << "TH: " << vhistoname[i].c_str() << std::endl;
       */
       // endtmp
       
