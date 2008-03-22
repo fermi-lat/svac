@@ -1,0 +1,39 @@
+v1r0p4 2008/03/21 (DEV)
+-------------------------
+
+Added 
+doc/release.notes  (this file !!)
+
+
+v1r0p3 2008/03/21 (DEV)
+-------------------------
+Corrected bug when merging ToT distributions. 
+File changed:
+
+MergeHistFiles.cxx
+
+
+v1r0p2 2008/03/20 (DEV)
+-------------------------
+Changes in config files to address issues descrived in Jira:
+GDQMQ-38
+
+The files changed were the following ones:
+
+in  svac/Monitor/src/merit/
+ MonInput_Tkr1KalEne.h MonInput_Tkr1KalEne.cxx MonInput_Tkr1KalThetaMS.h MonInput_Tkr1KalThetaMS.cxx
+
+in svac/Monitor/src/
+MonObjFactory.cxx 
+
+v1r0p1  2008/03/20 (DEV)
+-------------------------
+Changes in config files to address issues descrived in Jiras:
+GDQMQ-21 GDQMQ-22 GDQMQ-35 GDQMQ-36 GDQMQ-39 GDQMQ-40
+
+The files changed were the following ones:
+MergeHistFiles.cxx
+
+
+v1r0p0  2008/03/12 (PROD)
+-------------------------
