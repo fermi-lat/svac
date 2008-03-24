@@ -335,3 +335,6 @@ awb	Changed default values of ObfPassedXXX variables to be consistent with Merit
 
 v3r11	February 6, 2008
 awb	Added Martin's GemPrescale, GltPrescale and GltPrescaleExpired variables. Needs GR v13r11.
+
+v3r12	March 24, 2008
+awb	Using new DFI for sourceGps instead of missingGps. Needs GR v13r11p4.
