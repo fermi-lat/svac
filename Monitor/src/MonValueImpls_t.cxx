@@ -850,6 +850,19 @@ void MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement(Double_t*
   //assert(0);
   }
   */
+
+  // check size of tree
+  /*
+  if(m_evtcounter%1000 == 0){
+    std::cout <<"MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement: INFO"
+	      << std::endl
+	      << "m_evtcounter= " << m_evtcounter << std::endl
+	      << "Check size of m_tmptree for parameter with name " << m_name.c_str() << std::endl
+	      << "Size (MBytes) = " << m_tmptree->GetTotBytes()/1000000 << std::endl
+	      << "Size FILE (MBytes) = " << m_tmpfile->GetSize()/1000000 << std::endl;
+  }
+  */
+
 }
 
 
@@ -882,9 +895,10 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
   m_tmptreename = m_name+"_tree";
 
   m_tmptree = new TTree(m_tmptreename.c_str(),"Used to store data temporaly");
-  Long64_t maxTreeSize = 5000000000000;
+  Long64_t maxTreeSize = 500000000000;
   m_tmptree->SetMaxTreeSize(maxTreeSize);
-  
+  m_tmptree->SetMaxVirtualSize(0);
+
   for(unsigned int i = 0; i < m_dim; i++)
     {
       std::string leafnamedim = m_name+"_";
@@ -895,9 +909,20 @@ MonTruncatedMeanBoundsAndFracBigData::MonTruncatedMeanBoundsAndFracBigData(const
       
       std::string leafnamedimAndType(m_leafname[i]);
       leafnamedimAndType  += "/D";
-      m_tmptree->Branch(m_leafname[i].c_str(),&m_datavector[i],leafnamedimAndType.c_str());
+      // Small buffer size (the root default is 32000, and here I use 2000) is used 
+      // so that the info is quickly saved. 
+      // Keep in mind the m_dim can be 12000, and thus many objects collectively occupying lots of
+      // memory would be floating in the dynamic memory !!!
+      m_tmptree->Branch(m_leafname[i].c_str(),&m_datavector[i],leafnamedimAndType.c_str(),2000);
     }
   
+
+  // silly test (tmp)
+  
+
+  // endtmp
+
+
   
   // CREATE TFile where the tmp tree will reside (info written to disk).
   // Writing is necessary if info from tmp tree, for a time bin, is close to 2 GB
@@ -944,6 +969,7 @@ Bool_t MonTruncatedMeanBoundsAndFracBigData::createfile4tmptree(std::string dir,
   m_tmpfile = new TFile (completename.c_str(), "RECREATE");
   m_tmptree->SetDirectory(gDirectory);
   currentdir->cd();
+  //std::cout << "Tree name = " << m_tmptree -> GetName() << std::endl;
   //std::cout << "Tree directory = " << m_tmptree->GetDirectory()->GetPath() << std::endl;
 
   return m_tmpfile->IsOpen();
