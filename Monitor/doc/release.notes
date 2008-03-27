@@ -1,3 +1,13 @@
+
+v1r0p5 2008/03/26 (DEV)
+-------------------------
+
+Change in MonValueImpls_t.cxx to reduce the amount 
+of dynamic memory used when dealing with objects of 
+the type MonTruncatedMeanBoundsAndFracBigData.
+
+
+
 v1r0p4 2008/03/21 (DEV)
 -------------------------
 
