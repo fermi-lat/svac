@@ -378,46 +378,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       }
       continue;
     }
-    if ((leaves[i].find("Rate_")==0 || leaves[i].find("CounterDiffRate_")==0 )&& leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
-      used[i]=true;
-      unsigned errindex=0;
-      it=find(leaves.begin(),leaves.end(),leaves[i]+"_err");
-      if(it==leaves.end()){
-	std::cout<<leaves[i]<<"_err"<<" not found. Exiting."<<std::endl;
-	assert(0);
-      }else errindex=it-leaves.begin();
-      used[errindex]=true;
-      for (unsigned j=0;j<dims[i];j++){
-	float val1=((Float_t*)addin1[i])[j];
-	float val2=((Float_t*)addin2[i])[j];
-	float sig1=((Float_t*)addin1[errindex])[j];
-	float sig2=((Float_t*)addin2[errindex])[j];
-	float n1,n2,t1,t2;
-	if (sig1>0){
-	  n1=val1/sig1*val1/sig1;
-	  t1=val1/sig1/sig1;
-	}
-	else {
-	  n1=0;
-	  t1=0;
-	}
-	if (sig2>0){
-	  n2=val2/sig2*val2/sig2;
-	  t2=val2/sig2/sig2;
-	}
-	else {
-	  n2=0;
-	  t2=0;
-	}
-	float nadd=n1+n2;
-	float tadd=t1+t2;
-	if (nadd>0 && tadd>0)((Float_t*)addout[i])[j]=nadd/tadd;
-	else((Float_t*)addout[i])[j]=0;
-	if (nadd>0 && tadd>0)((Float_t*)addout[errindex])[j]=sqrt(nadd)/tadd;
-	else ((Float_t*)addout[errindex])[j]=0;
-      }
-      continue;
-    }
     if (leaves[i].find("OutF_")==0 && leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
       used[i]=true;
       unsigned errindex=0;
@@ -562,6 +522,46 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	assert (iv1+iv2>0);
 	((Double_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
       }
+    }
+    if ((leaves[i].find("Rate_")==0 || leaves[i].find("CounterDiffRate_")==0 )&& leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
+      used[i]=true;
+      assert (trueint>-1);
+      unsigned errindex=0;
+      it=find(leaves.begin(),leaves.end(),leaves[i]+"_err");
+      if(it==leaves.end()){
+	std::cout<<leaves[i]<<"_err"<<" not found. Exiting."<<std::endl;
+	assert(0);
+      }else errindex=it-leaves.begin();
+      used[errindex]=true;
+      for (unsigned j=0;j<dims[i];j++){
+	float val1=((Float_t*)addin1[i])[j];
+	float val2=((Float_t*)addin2[i])[j];
+	float sig1=((Float_t*)addin1[errindex])[j];
+	float sig2=((Float_t*)addin2[errindex])[j];
+	float n1,n2;
+	Double_t t1,t2;
+	if (sig1>0){
+	  n1=val1/sig1*val1/sig1;
+	}
+	else {
+	  n1=0;
+	}
+	t1=((Double_t*)addin1[trueint])[0];
+	if (sig2>0){
+	  n2=val2/sig2*val2/sig2;
+	}
+	else {
+	  n2=0;
+	}
+	t2=((Double_t*)addin2[trueint])[0];
+	float nadd=n1+n2;
+	float tadd=(float)t1+t2;
+	if (nadd>0 && tadd>0)((Float_t*)addout[i])[j]=nadd/tadd;
+	else((Float_t*)addout[i])[j]=0;
+	if (nadd>0 && tadd>0)((Float_t*)addout[errindex])[j]=sqrt(nadd)/tadd;
+	else ((Float_t*)addout[errindex])[j]=0;
+      }
+      continue;
     }
   }
 	
