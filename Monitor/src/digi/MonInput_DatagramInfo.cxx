@@ -57,7 +57,7 @@ void MonInput_DatagramInfo::setValue(TObject* event) {
      if(CpuNumber ==  enums::Lsf::Siu0)
        m_val[0] = 3;
      if(CpuNumber ==  enums::Lsf::Siu1)
-       m_val[0] = 3;
+       m_val[0] = 4;
 
      m_val[1] = de->getMetaEvent().datagram().datagrams();
    }
