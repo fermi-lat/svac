@@ -47,8 +47,14 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
     assert(de);
   }
 
+   //
+  // Time from Mission elapsed time to Unix time:
+  //
+  int deltaTimeUgly = 978307200; // this is the variable deltaTimeUgly in TestReport.cxx
  
-  m_val= (de->getCcsds().getUtc()-de->getTimeStamp());
+  m_val= (de->getCcsds().getUtc()-(de->getTimeStamp()+deltaTimeUgly));
+
+  // std::cout << de->getCcsds().getUtc() << "\t" << de->getTimeStamp() << "\t diff(off) =" << m_val << std::endl;
   if(m_val <0)
     {
       std::cout << "MonInput_Delta_CCSDSTime_EvtTime::setValue : WARNING" << std::endl
