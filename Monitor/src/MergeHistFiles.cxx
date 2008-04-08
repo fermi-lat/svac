@@ -184,7 +184,6 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
   }
   */
 
-
   // loop until EOF
   while ( ! inputFile.eof() ) {
 
@@ -196,6 +195,7 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
 
     // tokenize the line, make sure that there are 2 tokens
     std::string inputLine(buffer);
+
     std::vector <std::string> tokens;
     facilities::Util::stringTokenize(inputLine, ":\t ", tokens);
 
@@ -216,7 +216,6 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
       return -4;
     }  
 
-   
     // Checking (and making) loops using object latloops (defined above)
     /*
     two steps process
@@ -262,30 +261,33 @@ int fillHistMap(const char* fileName, strToIntMap& theMap, const strToIntMap& me
       std::vector<std::string> vhistoname;
       std::vector<std::string> vhistonametmp;
       vhistoname.push_back(tokens[0]);
-      
+      int counter = 0;
       for(LoopMap::const_iterator itr = LoopsInHistoName.begin();
 	  itr != LoopsInHistoName.end(); itr++){
-	spos = tokens[0].find(itr->first.c_str());
-	
-	if(spos > tokens[0].size()){
-	  std::cout << "MergeHistFiles::fillHistMap(): ERROR" << std::endl
-		    << "Loop with flag "<<  itr->first.c_str() << " is NOT present in " 
-		    << "histo name " << tokens[0].c_str() << std::endl
-		    << "This should not happen at this point... aborting."<< std::endl;
-	  assert(0);
-	}
-      
+
 	// drop components from vhistoname to vhistonametmp
 	vhistonametmp.clear();
+
 	for(unsigned int iname = 0; iname < vhistoname.size();iname++)
 	  vhistonametmp.push_back(vhistoname[iname]);
-	vhistoname.clear();
-	
+	vhistoname.clear();	
+
 	for(unsigned int iname = 0; iname < vhistonametmp.size();iname++){
 	  for(unsigned int index = 0; index < itr->second.size();index++){
+	    
 	    std::string tmpstring = vhistonametmp[iname];
+
+	    spos = tmpstring.find(itr->first.c_str());
+	    
+	    if(spos >= tmpstring.size()){
+	      std::cout << "MergeHistFiles::fillHistMap(): ERROR" << std::endl
+			<< "Loop with flag "<<  itr->first.c_str() << " is NOT present in " 
+			<< "histo name " << tmpstring.c_str() << std::endl
+			<< "This should not happen at this point... aborting."<< std::endl;
+	      assert(0);
+	    }
 	    tmpstring.replace(spos,itr->first.size(),itr->second[index].c_str());
-	    //std::cout << "String after replacement: " << tmpstring.c_str() << std::endl;
+	    //	    std::cout << "String after replacement: " << tmpstring.c_str() << std::endl;
 	    vhistoname.push_back(tmpstring);
 	  }
 	}
