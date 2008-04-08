@@ -1,4 +1,15 @@
 
+v1r0p7 2008/04/07 (DEV)
+--------------------------
+
+Corrected bugs in MonInput_DatagramInfo.cxx, 
+and MonInput_Delta_CCSDSTime_EvtTime.cxx
+
+
+*********************************************
+V1r0p6 Requested to BECOME PROD: 2008/04/04 
+*********************************************
+
 v1r0p6 2008/04/01 (DEV)
 ------------------------
 
