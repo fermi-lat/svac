@@ -1,3 +1,9 @@
+v1r0p8 2008/04/07 (DEV)
+----------------------------------------------
+
+Corrected bug in MergeHistFiles.cxx that showed up when merging the histograms 
+CalXAdcPed_TH1_TowerCalLayerCalColumnFR[16][8][12][2][4]
+
 
 v1r0p7 2008/04/07 (DEV)
 --------------------------
