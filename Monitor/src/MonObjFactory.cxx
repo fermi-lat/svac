@@ -163,6 +163,8 @@
 // Last updated with object FilterStatus_HI by user dpaneque on Thu Mar 13 05:02:53 2008
 // Last updated with object Tkr1KalEne by user dpaneque on Wed Mar 19 03:21:57 2008
 // Last updated with object Tkr1KalThetaMS by user dpaneque on Wed Mar 19 03:23:17 2008
+// Last updated with object FastMon_meta_context_open_mode by user bregeon on Wed Apr  9 10:04:23 2008
+#include "fastmon/MonInput_FastMon_meta_context_open_mode.h"
 #include "merit/MonInput_Tkr1KalThetaMS.h"
 #include "merit/MonInput_Tkr1KalEne.h"
 #include "merit/MonInput_FilterStatus_HI.h"
@@ -633,6 +635,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Tkr1KalEne;
   if (s=="Tkr1KalThetaMS")
     return new MonInput_Tkr1KalThetaMS;
+  if (s=="FastMon_meta_context_open_mode")
+    return new MonInput_FastMon_meta_context_open_mode;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -796,6 +800,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FilterStatus_HI");
   names.push_back("Tkr1KalEne");
   names.push_back("Tkr1KalThetaMS");
+  names.push_back("FastMon_meta_context_open_mode");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
