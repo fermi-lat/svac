@@ -1,3 +1,9 @@
+v1r0p10 2008/04/09 (DEV)
+-----------------------------
+Changes to address issue reported in Jira GDQMQ-74
+
+
+
 v1r0p9 2008/04/09 (DEV)
 ----------------------------------------------
 Add FastMon trending quantity meta_context_open_mode to trend the LAT mode as
