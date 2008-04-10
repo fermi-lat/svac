@@ -1,3 +1,10 @@
+v1r0p11 2008/04/09 (DEV)
+-----------------------------
+Add FastMon trending quantity meta_context_open_modechanges
+to trend the LAT mode changes as requested by GDQMQ-13.
+Fix meta_context_open_modechanges and meta_context_open_mode variable types
+according to GDQMQ-80.
+
 v1r0p10 2008/04/09 (DEV)
 -----------------------------
 Changes to address issue reported in Jira GDQMQ-74
