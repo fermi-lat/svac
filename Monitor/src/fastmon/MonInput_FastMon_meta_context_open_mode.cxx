@@ -11,7 +11,7 @@
 
 #define NAME FastMon_meta_context_open_mode
 #define OUTBRANCH "FastMon_meta_context_open_mode"
-#define LEAF "FastMon_meta_context_open_mode/l"
+#define LEAF "FastMon_meta_context_open_mode/s"
 #define INBRANCH "meta_context_open_mode"
 #define ACCESSOR NotNeeded
 #define MONSOURCE FastMonEvent
