@@ -833,6 +833,9 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
       m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
 
+      m_ntuple.m_acdCnoMap[AcdID][0] = acdDigi->getCno(AcdDigi::A);
+      m_ntuple.m_acdCnoMap[AcdID][1] = acdDigi->getCno(AcdDigi::B);
+
       m_ntuple.m_acdHitMap[AcdID][0] = acdDigi->getHitMapBit(AcdDigi::A);
       m_ntuple.m_acdHitMap[AcdID][1] = acdDigi->getHitMapBit(AcdDigi::B);
 
@@ -1565,6 +1568,7 @@ void RootAnalyzer::createBranches()
   // ACD digi:
   m_tree->Branch("AcdNumDigis", &(m_ntuple.m_acdNumDigis), "AcdNumDigis/I");
   m_tree->Branch("AcdPha", &(m_ntuple.m_acdPha), "AcdPha[604][2]/I");
+  m_tree->Branch("AcdCnoMap", &(m_ntuple.m_acdCnoMap), "AcdCnoMap[604][2]/I");
   m_tree->Branch("AcdHitMap", &(m_ntuple.m_acdHitMap), "AcdHitMap[604][2]/I");
   m_tree->Branch("AcdRange", &(m_ntuple.m_acdRange), "AcdRange[604][2]/I");
   m_tree->Branch("AcdOddParityError", &(m_ntuple.m_acdOddParityError), "AcdOddParityError[604][2]/I");

@@ -80,6 +80,7 @@ struct NtupleDef {
   // ACD Digi information:
   float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];
+  int m_acdCnoMap[g_nAcdTile][2];
   int m_acdHitMap[g_nAcdTile][2];
   int m_acdRange[g_nAcdTile][2];
   int m_acdOddParityError[g_nAcdTile][2];

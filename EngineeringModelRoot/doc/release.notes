@@ -338,3 +338,6 @@ awb	Added Martin's GemPrescale, GltPrescale and GltPrescaleExpired variables. Ne
 
 v3r12	March 24, 2008
 awb	Using new DFI for sourceGps instead of missingGps. Needs GR v13r11p4.
+
+v3r13	April 11, 2008
+awb	Added AcdCnoMap. JIRA SVAC-110.
