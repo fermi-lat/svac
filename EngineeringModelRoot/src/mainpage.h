@@ -222,7 +222,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ContextLsfTimeTimeTonePreviousGemTimeTicks    </TD> <TD> UInt </TD> <TD> Previous timetone: The value of the GemTime registers at the time tone: Value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>
 
 
-<TR> <TD> ContextLsfTimeTimeTicks </TD> <TD> UInt </TD> <TD> The number of system clock ticks (nominally 50ns) since last the last time hack.  </TD> </TR>
+<TR> <TD> ContextLsfTimeTimeTicks </TD> <TD> UInt </TD> <TD> The number of system clock ticks (nominally 50ns) at the time of the event.  </TD> </TR>
 
 <TR> <TD>  ContextLsfTimeHackHacks </TD> <TD> UInt </TD> <TD> The number of 1-PPS time hacks.  This counter wraps around at 127. </TD> </TR>  
 <TR> <TD>  ContextLsfTimeHackTicks </TD> <TD> UInt </TD> <TD> The value of the LAT system clock at the last 1-PPS time hack. </TD> </TR>  

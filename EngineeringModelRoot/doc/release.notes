@@ -341,3 +341,6 @@ awb	Using new DFI for sourceGps instead of missingGps. Needs GR v13r11p4.
 
 v3r13	April 11, 2008
 awb	Added AcdCnoMap. JIRA SVAC-110.
+
+v3r13p1	April 14, 2008
+awb	Updated description of time ticks of event.
