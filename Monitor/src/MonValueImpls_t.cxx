@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <cstdio>
 #include <string.h>
+#include <math.h> // needed to use functions isnan and isinf
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
 const Double_t MonDoubleDiffRate::s_BigValDouble(1.e35);
@@ -57,6 +58,15 @@ int MonCounter::attach(TTree& tree, const std::string& prefix) const {
   // += addition operator
 void MonCounter::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonCounter::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_current[i] += (ULong64_t)val[i];
   }
 }
@@ -97,6 +107,15 @@ int MonSecondListDouble::attach(TTree& tree, const std::string& prefix) const {
   // value of m_val object is set
 void MonSecondListDouble::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonSecondListDouble::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_val[i] = (Double_t)val[i];
   }
 }
@@ -137,6 +156,15 @@ int MonSecondListFloat::attach(TTree& tree, const std::string& prefix) const {
   // value of m_val object is set
 void MonSecondListFloat::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonSecondListFloat::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_val[i] = (Float_t)val[i];
   }
 }
@@ -172,6 +200,15 @@ void MonRate::reset() {
 // += addition operator
 void MonRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonRate::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_current[i] += (ULong64_t)val[i];
   }
 }
@@ -280,6 +317,15 @@ void MonHist1d::singleincrement(Double_t* val, Double_t* val2) {
 
   
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonHist1d::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if((val[i] != Double_t(m_nofillvalue)) || m_fillhistoalways ){
       m_hist[i]->Fill((Float_t)val[i]);
     }
@@ -338,6 +384,15 @@ void MonHist1d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
   //  std::cout << m_name.c_str() << std::endl;
   for (unsigned i=0;i<m_dim;i++){
     //std::cout << "i,val= " << i << ", " << val[i] << std::endl;
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonHist1d_VecDim::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if((val[i] != Double_t(m_nofillvalue)) || m_fillhistoalways )
       m_hist->Fill(Double_t(i),(Double_t)val[i]);
   }
@@ -401,6 +456,15 @@ MonHist2d::~MonHist2d(){
 }
 void MonHist2d::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]) || isnan(val2[i]) || isinf(val2[i]))
+    {
+      std::cout << std::endl << "MonHist2d::singleincrement: WARNING" << std::endl
+		<< "Parameter " << m_name.c_str() << " has a nan or inf value"
+		<< std::endl << "This should not happen at this point of the chain... "
+		<< std::endl << "This value will not be used in the calculations" 
+		<< std::endl;
+      continue;
+    }
     if(val[i] != Double_t(m_nofillvalue) || m_fillhistoalways )
       m_hist[i]->Fill((Float_t)val[i],(Float_t)val2[i]);
     // tmp
@@ -478,6 +542,16 @@ void MonHist2d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
     for(Int_t j = 0; j < m_vecdim[1];j++){
       //std::cout << "i,j,val= " << i << ", " << j << ", " << val[z] << std::endl; 
       z = i*m_vecdim[1]+j;
+      if(isnan(val[z]) || isinf(val[z]))
+	{
+	  std::cout << std::endl << "MonHist2d_VecDim::singleincrement: WARNING" << std::endl
+		    << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		    << std::endl << "This should not happen at this point of the chain... "
+		    << std::endl << "This value will not be used in the calculations" 
+		    << std::endl;
+	  continue;
+	}
+      
       if((val[z] != Double_t(m_nofillvalue)) || m_fillhistoalways )
 	m_hist->Fill(Double_t(i),Double_t(j),Double_t(val[z]));
     }
@@ -550,6 +624,15 @@ void MonHist2d_Index::singleincrement(Double_t* val, Double_t* val2) {
   // std::cout << m_name.c_str() << std::endl;
   for(unsigned index = 0; index < m_maxindex;index++){
       // std::cout << "index,val= " << index << ", " << val[z] << std::endl; 
+    if(isnan(val[index]) || isinf(val[index]))
+      {
+	std::cout << std::endl << "MonHist2d_Index::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if((val[index] != Double_t(m_nofillvalue)) || m_fillhistoalways )
       m_hist->Fill(index, (Float_t)val[index]);
     
@@ -647,6 +730,16 @@ int MonMean::attach(TTree& tree, const std::string& prefix) const {
   // add a value input the mean, so add to running sums
 void MonMean::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
+    // check for nan/inf values. If found, issue warning and skip event
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonMean::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_nVals[i]++;
     m_sum[i] += val[i];
     m_sum2[i] += (val[i]*val[i]);    
@@ -670,6 +763,15 @@ MonTruncatedMean::MonTruncatedMean(const char* name, const char* formula, const 
   
 void MonTruncatedMean::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonTruncatedMean::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if (val[i]>=m_lowerbound && val[i]<=m_upperbound){
       m_nVals[i]++;
       m_sum[i] += val[i];
@@ -702,7 +804,16 @@ void MonTruncatedMeanFrac::reset(){
 
 void MonTruncatedMeanFrac::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
-       m_list[i].push_back(val[i]);
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonTruncatedMeanFrac::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
+    m_list[i].push_back(val[i]);
   }
 }
 
@@ -769,6 +880,15 @@ void MonTruncatedMeanBoundsAndFrac::reset(){
 
 void MonTruncatedMeanBoundsAndFrac::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i =0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonTruncatedMeanBoundsAndFrac::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if(val[i] >=m_lowerbound && val[i]<=m_upperbound) 
       m_list[i].push_back(val[i]);
   }
@@ -821,6 +941,16 @@ MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::MonTruncatedMeanBoundsAndFracB
 void MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement(Double_t* val, Double_t* val2) {
 
   for (unsigned i =0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonTruncatedMeanBoundsAndFracBigDataEqualNEvents::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_datavector[i] =m_lowerbound-2.0;
     m_datavector[i] = val[i];
     /*
@@ -1062,6 +1192,16 @@ void MonTruncatedMeanBoundsAndFracBigData::reset(){
 void MonTruncatedMeanBoundsAndFracBigData::singleincrement(Double_t* val, Double_t* val2) {
 
   for (unsigned i =0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonTruncatedMeanBoundsAndFracBigData::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_datavector[i] =m_lowerbound-2.0;
     m_datavector[i] = val[i];
     /*
@@ -1261,6 +1401,16 @@ int MonCounterDiff::attach(TTree& tree, const std::string& prefix) const {
   // Update the value, check to make sure that things make sense
 void MonCounterDiff::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonCounterDiff::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if ( m_lo[i] == s_maxVal64 ) {
       m_lo[i] = (ULong64_t)val[i];
     }
@@ -1436,6 +1586,16 @@ int MonCounterDiffRate::attach(TTree& tree, const std::string& prefix) const {
   // Update the value, check to make sure that things make sense
 void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonCounterDiffRate::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) { // First event
       if(getDataType()== "MCOktTest" && getDataType() == m_dataparamtype){
 	m_offset[i] = (ULong64_t)val[i];
@@ -1676,6 +1836,16 @@ int MonDoubleDiffRate::attach(TTree& tree, const std::string& prefix) const {
   // Update the value, check to make sure that things make sense
 void MonDoubleDiffRate::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonDoubleDiffRate::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     if ( m_lo[i] == MonDoubleDiffRate::s_BigValDouble ) { // First event
       m_lo[i] = (Double_t)val[i];
     }
@@ -1745,6 +1915,16 @@ void MonMinMax::reset() {
   // Update the value, check to make sure that things make sense
 void MonMinMax::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonMinMax::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
     m_min[i] = m_min[i] < (Float_t)val[i] ? m_min[i] : (Float_t)val[i];
     m_max[i] = m_max[i] > (Float_t)val[i] ? m_max[i] : (Float_t)val[i];
   }
@@ -1849,6 +2029,17 @@ void MonValueChange::reset() {
   // Update the value, check to make sure that things make sense
 void MonValueChange::singleincrement(Double_t* val, Double_t* val2) {
   for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonValueChange::singleincrement: WARNING" 
+		  << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
+
     if (val[i]!=m_lastval[i]&&m_startrun[i]==false){
       if(m_nvalues[i]<m_numval){
 	m_values[m_nvalues[i]][i]=(Double_t)val[i];
