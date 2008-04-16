@@ -1,3 +1,8 @@
+v1r0p13 2008/04/16 (DEV)
+--------------------------
+Bug fix : 2 files needed for meta_context_open_modechanges were missing
+from the previous tag. GDQMQ-13.
+
 
 v1r0p12 2008/04/15 (DEV)
 --------------------------
