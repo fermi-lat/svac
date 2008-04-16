@@ -1,3 +1,8 @@
+
+v1r0p12 2008/04/15 (DEV)
+--------------------------
+Corrected issue addressed by Jira GDQMQ-84
+
 v1r0p11 2008/04/09 (DEV)
 -----------------------------
 Add FastMon trending quantity meta_context_open_modechanges
