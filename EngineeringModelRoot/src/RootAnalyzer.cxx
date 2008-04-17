@@ -38,7 +38,7 @@ RootAnalyzer::RootAnalyzer() : m_outputFile(0), m_tree(0), m_branch(0),
   m_digiChain = new TChain("Digi");
   m_reconChain = new TChain("Recon");
 
-  m_tkrCalib = new TkrHits( true );
+  //m_tkrCalib = new TkrHits( true );
 
   //m_tkrNoiseOcc = new TkrNoiseOcc();
 
@@ -51,7 +51,7 @@ RootAnalyzer::~RootAnalyzer()
 {
   // since root will do the garbage collection automatically for objects such
   // as TTree and TH1, we don't want to deallocate them once more
-  delete m_tkrCalib;
+  //delete m_tkrCalib;
   //delete m_tkrNoiseOcc;
 }
 
@@ -60,8 +60,8 @@ void RootAnalyzer::produceOutputFile()
   //  TDirectory* saveDir = gDirectory;
 
   if(m_outputFile) {
-    m_outputFile->cd("TkrCalib");
-    m_tkrCalib->saveAllHist();
+    //m_outputFile->cd("TkrCalib");
+    //m_tkrCalib->saveAllHist();
     //m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
     m_outputFile->Write(0, TObject::kOverwrite);
@@ -1018,7 +1018,8 @@ void RootAnalyzer::parseOptionFile(const char* f)
   parseLine(line, svacF);
   cout << "Output SVAC ntuple file: " << svacF << endl;
   m_outputFile = new TFile(svacF.c_str(), "RECREATE");
-  m_outputFile->mkdir("TkrCalib");
+
+  //m_outputFile->mkdir("TkrCalib");
   //m_tkrNoiseOcc_dir = m_outputFile->mkdir("TkrNoiseOcc");
   m_tree = new TTree("Output", "Root Analyzer");
 
@@ -1121,10 +1122,10 @@ void RootAnalyzer::analyzeData()
   // awb
   //nEvent = 1000;
 
-  m_tkrCalib->setNevents(nEvent);
-  m_tkrCalib->setOutputFile(m_outputFile);
+  //m_tkrCalib->setNevents(nEvent);
+  //m_tkrCalib->setOutputFile(m_outputFile);
   //Load current event pointers in TkrCalibManager
-  m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
+  //m_tkrCalib->setEventPtrs(m_digiEvent, m_reconEvent);
   
   //TkrNoiseOcc::initAnalysis(int nEvent, int evt_interval)
   //m_tkrNoiseOcc->initAnalysis(nEvent, 1000);
@@ -1160,7 +1161,7 @@ void RootAnalyzer::analyzeData()
     analyzeTot();
     
     //Tracker Calibration Analysis
-    m_tkrCalib->analyzeEvent();
+    //m_tkrCalib->analyzeEvent();
     //m_tkrNoiseOcc->anaDigiEvt();
 
     fillOutputTree();

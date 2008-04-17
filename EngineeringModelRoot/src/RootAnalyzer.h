@@ -12,7 +12,7 @@
 #include "digiRootData/DigiEvent.h"
 #include "idents/CalXtalId.h"
 #include "NtupleDef.h"
-#include "calibTkrUtil/TkrHits.h"
+//#include "calibTkrUtil/TkrHits.h"
 //#include "calibTkrUtil/TkrNoiseOcc.h"
 
 class RootAnalyzer {
@@ -101,21 +101,21 @@ class RootAnalyzer {
   TH2F* m_stripMap[g_nTower][g_nTkrLayer][g_nView];
 
   // tot correction constants created by Hiro, only valid for EM
-  float m_totGain[g_nTkrLayer][g_nView][g_nStripsPerLayer];
-  float m_totOffset[g_nTkrLayer][g_nView][g_nStripsPerLayer];
-  float m_totP0[g_nTkrLayer][g_nView][g_nStripsPerLayer];
-  float m_totP1[g_nTkrLayer][g_nView][g_nStripsPerLayer];
-  float m_totP2[g_nTkrLayer][g_nView][g_nStripsPerLayer];
-  float m_aveTotGain[g_nTkrLayer][g_nView];
-  float m_aveTotOffset[g_nTkrLayer][g_nView];
+  //float m_totGain[g_nTkrLayer][g_nView][g_nStripsPerLayer];
+  //float m_totOffset[g_nTkrLayer][g_nView][g_nStripsPerLayer];
+  //float m_totP0[g_nTkrLayer][g_nView][g_nStripsPerLayer];
+  //float m_totP1[g_nTkrLayer][g_nView][g_nStripsPerLayer];
+  //float m_totP2[g_nTkrLayer][g_nView][g_nStripsPerLayer];
+  //float m_aveTotGain[g_nTkrLayer][g_nView];
+  //float m_aveTotOffset[g_nTkrLayer][g_nView];
 
   // number of events with no root when doing tot correction using quadratic formula
-  int m_nTotNoRoot;
+  //int m_nTotNoRoot;
 
   // number of events with negative root when doing tot correction using quadratic formula
-  int m_nTotNegRoot;
+  //int m_nTotNegRoot;
 
-  TkrHits* m_tkrCalib;
+  //TkrHits* m_tkrCalib;
 
   //TkrNoiseOcc* m_tkrNoiseOcc;
   //TDirectory* m_tkrNoiseOcc_dir;
