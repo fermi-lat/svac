@@ -587,7 +587,7 @@ class MonDoubleDiffRate  : public MonValue {
 
 public:
   // Standard c'tor
-  MonDoubleDiffRate(const char* name, const char* formula, const char* cut) ;
+  MonDoubleDiffRate(const char* name, const char* formula, const char* cut, const char* type) ;
 
   // D'tor, no-op
   virtual ~MonDoubleDiffRate();
@@ -604,16 +604,17 @@ public:
   // Take the difference hi-lo and move it to the output value
   virtual void latchValue() ;
 
-  static const Double_t s_BigValDouble;
-
 private:
 
  // cached values, lo and hi values from current time slice
-  Double_t *m_lo;
-  Double_t *m_hi;
+  ULong64_t *m_lo;
+  ULong64_t *m_hi;
+  Float_t m_convertTicksToTime;
+  Float_t m_convertToPercent;
+  std::string m_dataparamtype; // string identifying the data parameter type.
 
   // the output value
-  Float_t *m_val;
+  Double_t *m_val;
   //Float_t *m_err;
   Double_t m_timebin;
 };

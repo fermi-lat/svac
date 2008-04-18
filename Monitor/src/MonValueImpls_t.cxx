@@ -13,8 +13,7 @@
 #include <math.h> // needed to use functions isnan and isinf
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
-const Double_t MonDoubleDiffRate::s_BigValDouble(1.e35);
-const Float_t MonMinMax::s_huge(1.e35);
+const Float_t MonMinMax::s_huge(1.e20);
 
 // Standard c'tor
 MonCounter::MonCounter(const char* name, const char* formula, const char* cut) 
@@ -1714,24 +1713,41 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 }
 
 
-MonDoubleDiffRate::MonDoubleDiffRate(const char* name, const char* formula, const char* cut) 
+MonDoubleDiffRate::MonDoubleDiffRate(const char* name, const char* formula, const char* cut, const char* type) 
     :MonValue(name,formula, cut){
-  m_lo=new Double_t[m_dim];
-  m_hi=new Double_t[m_dim];
+  m_lo=new ULong64_t[m_dim];
+  m_hi=new ULong64_t[m_dim];
   //m_hi_previous=new ULong64_t[m_dim];
   //m_offset=new ULong64_t[m_dim];
-  m_val=new Float_t[m_dim];
+  m_val=new Double_t[m_dim];
   //m_err = new Float_t[m_dim];
 
   // initialize values for this object
   for (unsigned i=0;i<m_dim;i++){
     //m_offset[i] = 0;
-    m_lo[i] = 0.;
-    m_hi[i] = 0.;
+    m_lo[i] = 0;
+    m_hi[i] = 0;
     //m_hi_previous[i] = 0;
     m_val[i] = 0.;
     //m_err[i] = 0.;
   }
+
+  m_convertTicksToTime = 0.00000005;
+  m_convertToPercent = 100.0;
+
+
+   std::vector<std::string> tt=parse(type,"[",",","]");
+  
+ 
+  if(tt.size()!=1){
+    std::cerr<<" MonDoubleDiffRate variable "<<name<<" bounds declaration error. Aborting."<<std::endl;
+    assert(0);
+  }
+
+
+  m_dataparamtype = tt[0]; 
+
+
 
   reset();
 }
@@ -1756,7 +1772,7 @@ void MonDoubleDiffRate::reset() {
 
   m_timebin = 100000000.0;
   for (unsigned i=0;i<m_dim;i++){
-    m_lo[i] = m_lo[i] >= m_hi[i] ? MonDoubleDiffRate::s_BigValDouble : m_hi[i];
+    m_lo[i] = m_lo[i] >= m_hi[i] ? MonCounterDiff::s_maxVal64 : m_hi[i];
     m_hi[i] = m_lo[i] >= m_hi[i] ? 0 : m_hi[i];
     //m_hi_previous[i] = m_lo[i] >= m_hi[i] ? m_lo[i] : m_hi[i];
     
@@ -1776,10 +1792,12 @@ void MonDoubleDiffRate::latchValue() {
   //std::cout << "Time interval = " << m_timebin << std::endl;
 
   for (unsigned i=0;i<m_dim;i++){
-    m_val[i] = m_lo[i] < m_hi[i] ? Float_t(m_hi[i] - m_lo[i]) : 0.0;
+    m_val[i] = m_lo[i] < m_hi[i] ? Double_t(m_hi[i] - m_lo[i]) : 0.0;
+    m_val[i] *= Double_t(m_convertTicksToTime*m_convertToPercent);
+
     // m_err[i] = sqrt(m_val[i]);
     if(m_timebin>0.0){
-      m_val[i] /= Float_t(m_timebin);
+      m_val[i] /= m_timebin;
       //m_err[i] /= Float_t(m_timebin);
       
       /*
@@ -1807,9 +1825,9 @@ void MonDoubleDiffRate::latchValue() {
 // Attach a MonCounterDif node to a TTree (unsigned int)
 int MonDoubleDiffRate::attach(TTree& tree, const std::string& prefix) const {
   std::string fullNameVal = prefix + "DoubleDiffRate_" + name();
-  std::string leafTypeVal = fullNameVal + m_dimstring+"/F";
+  std::string leafTypeVal = fullNameVal + m_dimstring+"/D";
 
-  Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "D");
   CheckLeafName(leafTypeVal.c_str());
 
   TBranch* b = tree.Branch(fullNameVal.c_str(),m_val,leafTypeVal.c_str(),BufSize);
@@ -1820,9 +1838,9 @@ int MonDoubleDiffRate::attach(TTree& tree, const std::string& prefix) const {
 
   /*  ERRORS DO NOT APPLY TO THIS OBJECT
   std::string fullNameErr = fullNameVal + "_err";
-  std::string leafTypeErr = fullNameErr + m_dimstring + "/F";
+  std::string leafTypeErr = fullNameErr + m_dimstring + "/D";
 
-  BufSize = GetBufSize(Int_t(m_dim), "F");
+  BufSize = GetBufSize(Int_t(m_dim), "D");
   CheckLeafName(leafTypeErr.c_str());
 
 
@@ -1846,12 +1864,21 @@ void MonDoubleDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 		  << std::endl;
 	continue;
       }
-    if ( m_lo[i] == MonDoubleDiffRate::s_BigValDouble ) { // First event
-      m_lo[i] = (Double_t)val[i];
+
+    // If data type is MC and this quantity has flag MC in config file, 
+    // then a different computation is required. 
+    /// For the time being, nothing will be done, which measn that the 
+    // final value will be zero. 
+
+    if(getDataType()== "MC" && getDataType() == m_dataparamtype)
+      continue;
+    
+    if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) { // First event
+      m_lo[i] = (ULong64_t)val[i];
     }
 
     if ( val[i] > m_hi[i] ) {
-      m_hi[i] = (Double_t)val[i];
+      m_hi[i] = (ULong64_t)val[i];
     }
     /*
     std::cout << "MonDoubleDiffRate::singleincrement; Dimension " << i << std::endl
@@ -2215,8 +2242,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonMinMax(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="counterdiff"){
     return new MonCounterDiff(name.c_str(),formula.c_str(),cut.c_str());
-  } else if (type=="doublediffrate"){
-    return new MonDoubleDiffRate(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (strstr(type.c_str(),"doublediffrate")){
+    return new MonDoubleDiffRate(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"counterdiffrate")){
     return new MonCounterDiffRate(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (type=="outputdouble"){
