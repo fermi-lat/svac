@@ -1,3 +1,10 @@
+
+v1r0p14 2008/04/16 (DEV)
+--------------------------
+
+Bug fix addressed by Jira GDQMQ-98.
+
+
 v1r0p13 2008/04/16 (DEV)
 --------------------------
 Bug fix : 2 files needed for meta_context_open_modechanges were missing
