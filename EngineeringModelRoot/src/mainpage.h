@@ -174,6 +174,8 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. A value of 0 means that no key was available. </TD> </TR>
 
+<TR> <TD> ContextRunInfoDataTransferID </TD> <TD>  UInt </TD> <TD> ID of the data transfer from the MOC. This corresponds to either a real TDRSS downlink or a retransfer from the MOC. Note that 
+                                                                   a run can be split between multiple data transfers. </TD> </TR>  
 <TR> <TD> ContextRunInfoPlatform   </TD> <TD> Int  </TD> <TD> The platform type this run was taken on (No platform, LAT, Testbead or Host (software simulation)) - See enums/enums/Lsf.h </TD> </TR> 
 <TR> <TD> ContextRunInfoDataOrigin </TD> <TD> Int  </TD> <TD> The type of data from this run (No origin, Orbit, MC, ground) - See enums/enums/Lsf.h  </TD> </TR>
 <TR> <TD> ContextRunInfoID         </TD> <TD> UInt </TD> <TD> The ground based ID of this run. This is usually defined on the ground, but if the LAT DAQ reboots on-orbit, the Ground ID can be reset. </TD> </TR>

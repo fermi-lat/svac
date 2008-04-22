@@ -1,3 +1,6 @@
+v3r14p1 April 22, 2008
+awb     Added data transfer ID.
+
 v3r14 	April 17, 2008
 awb     Commented out TKR histogram code which we don't use anyway.
         Not building extra applications by default anymore.

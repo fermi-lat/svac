@@ -80,8 +80,11 @@ void RootAnalyzer::produceOutputFile()
 
 void RootAnalyzer::analyzeMcTree()
 {
+    
+    // Run ID:
     m_ntuple.m_runId = (int) m_mcEvent->getRunId();
 
+    // MC sequence number:
     m_ntuple.m_seqNo = (int) m_mcEvent->getSequence();
 
     // get info about primary particle
@@ -634,6 +637,8 @@ void RootAnalyzer::analyzeDigiTree()
   }
   m_ntuple.m_latcKey = tmpLatcKey;
  
+
+  m_ntuple.m_contextRunInfoDataTransferID = m_digiEvent->getMetaEvent().run().dataTransferId();
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
   m_ntuple.m_contextRunInfoDataOrigin = m_digiEvent->getMetaEvent().run().dataOrigin();
   m_ntuple.m_contextRunInfoID = m_digiEvent->getMetaEvent().run().id();
@@ -1456,6 +1461,7 @@ void RootAnalyzer::createBranches()
   //
   m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
                                                                                                                                  
+  m_tree->Branch("ContextRunInfoDataTransferID", &(m_ntuple.m_contextRunInfoDataTransferID), "ContextRunInfoDataTransferID/i");
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
   m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
   m_tree->Branch("ContextRunInfoID", &(m_ntuple.m_contextRunInfoID), "ContextRunInfoID/i");

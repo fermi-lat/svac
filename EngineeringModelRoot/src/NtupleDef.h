@@ -212,6 +212,7 @@ struct NtupleDef {
   //                                                                                                                                                                                                           
   // Context information:                                                                                                                                                                                      
   //                                                                                                                                                                                                           
+  unsigned int m_contextRunInfoDataTransferID;
   int m_contextRunInfoPlatform;
   int m_contextRunInfoDataOrigin;
   unsigned int m_contextRunInfoID;
