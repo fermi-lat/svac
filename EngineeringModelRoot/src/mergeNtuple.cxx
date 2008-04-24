@@ -24,7 +24,7 @@ string mergedMeritFile = "merge_merit.root";
 
 string jobDataFile = "../src/job.dat";
 
-string svacDir = "/nfs/farm/g/glast/u01/mc/em_v3r0404p2/fullLat/";
+string svacDir = "/nfs/farm/g/glast/u01/svac_workshop/em_v3r0402p9/mc/TwoTowers/cr/batch/";
 string meritDir = svacDir;
 
 int main() 
@@ -38,13 +38,7 @@ int main()
 
   chainedTree1.SetAutoSave(2000000000);
 
-  // Set max file size to 25 GB:
-  Long64_t maxTreeSize = 25000000000;
-  chainedTree1.SetMaxTreeSize(maxTreeSize);
-
   TChain chainedTree2("MeritTuple");
-  chainedTree2.SetMaxTreeSize(maxTreeSize);
-
 
   while(inputFile >> fileName) {
     string svacFileName = svacDir + fileName + "_svac.root";
