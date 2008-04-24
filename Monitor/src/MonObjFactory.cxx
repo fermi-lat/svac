@@ -173,6 +173,16 @@
 // Last updated with object AcdTkr1ActiveDist by user dpaneque on Wed Apr  9 03:34:14 2008
 // Last updated with object FastMon_meta_context_open_mode by user bregeon on Wed Apr  9 10:04:23 2008
 // Last updated with object FastMon_meta_context_open_modechanges by user bregeon on Thu Apr 10 14:16:26 2008
+// Last updated with object FastMon_spacecraft_zra by user bregeon on Thu Apr 24 15:00:35 2008
+// Last updated with object FastMon_spacecraft_zdec by user bregeon on Thu Apr 24 15:01:17 2008
+// Last updated with object FastMon_spacecraft_pitch by user bregeon on Thu Apr 24 15:20:28 2008
+// Last updated with object FastMon_spacecraft_roll by user bregeon on Thu Apr 24 15:21:31 2008
+// Last updated with object FastMon_spacecraft_yaw by user bregeon on Thu Apr 24 15:21:55 2008
+#include "fastmon/MonInput_FastMon_spacecraft_yaw.h"
+#include "fastmon/MonInput_FastMon_spacecraft_roll.h"
+#include "fastmon/MonInput_FastMon_spacecraft_pitch.h"
+#include "fastmon/MonInput_FastMon_spacecraft_zdec.h"
+#include "fastmon/MonInput_FastMon_spacecraft_zra.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_modechanges.h"
 #include "merit/MonInput_AcdTkr1ActiveDist.h"
 #include "merit/MonInput_AcdTkr1ActDistTileEnergy.h"
@@ -670,6 +680,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_meta_context_open_mode;
   if (s=="FastMon_meta_context_open_modechanges")
     return new MonInput_FastMon_meta_context_open_modechanges;
+  if (s=="FastMon_spacecraft_zra")
+    return new MonInput_FastMon_spacecraft_zra;
+  if (s=="FastMon_spacecraft_zdec")
+    return new MonInput_FastMon_spacecraft_zdec;
+  if (s=="FastMon_spacecraft_pitch")
+    return new MonInput_FastMon_spacecraft_pitch;
+  if (s=="FastMon_spacecraft_roll")
+    return new MonInput_FastMon_spacecraft_roll;
+  if (s=="FastMon_spacecraft_yaw")
+    return new MonInput_FastMon_spacecraft_yaw;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -842,6 +862,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdTkr1ActiveDist");
   names.push_back("FastMon_meta_context_open_mode");
   names.push_back("FastMon_meta_context_open_modechanges");
+  names.push_back("FastMon_spacecraft_zra");
+  names.push_back("FastMon_spacecraft_zdec");
+  names.push_back("FastMon_spacecraft_pitch");
+  names.push_back("FastMon_spacecraft_roll");
+  names.push_back("FastMon_spacecraft_yaw");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
