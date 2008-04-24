@@ -173,16 +173,31 @@
 // Last updated with object AcdTkr1ActiveDist by user dpaneque on Wed Apr  9 03:34:14 2008
 // Last updated with object FastMon_meta_context_open_mode by user bregeon on Wed Apr  9 10:04:23 2008
 // Last updated with object FastMon_meta_context_open_modechanges by user bregeon on Thu Apr 10 14:16:26 2008
+// Last updated with object PtMcIlwainB by user dpaneque on Fri Apr 18 02:44:04 2008
+// Last updated with object PtMcIlwainL by user dpaneque on Fri Apr 18 02:44:28 2008
+// Last updated with object PtLat by user dpaneque on Fri Apr 18 02:44:51 2008
+// Last updated with object PtLon by user dpaneque on Fri Apr 18 02:45:24 2008
+// Last updated with object PtMagLat by user dpaneque on Fri Apr 18 02:45:47 2008
+// Last updated with object EvtEventId by user dpaneque on Tue Apr 22 03:56:45 2008
+// Last updated with object CurrentORPreviousTimeToneMissing by user dpaneque on Thu Apr 24 16:33:12 2008
 // Last updated with object FastMon_spacecraft_zra by user bregeon on Thu Apr 24 15:00:35 2008
 // Last updated with object FastMon_spacecraft_zdec by user bregeon on Thu Apr 24 15:01:17 2008
 // Last updated with object FastMon_spacecraft_pitch by user bregeon on Thu Apr 24 15:20:28 2008
 // Last updated with object FastMon_spacecraft_roll by user bregeon on Thu Apr 24 15:21:31 2008
 // Last updated with object FastMon_spacecraft_yaw by user bregeon on Thu Apr 24 15:21:55 2008
+
+#include "digi/MonInput_CurrentORPreviousTimeToneMissing.h"
 #include "fastmon/MonInput_FastMon_spacecraft_yaw.h"
 #include "fastmon/MonInput_FastMon_spacecraft_roll.h"
 #include "fastmon/MonInput_FastMon_spacecraft_pitch.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zdec.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zra.h"
+#include "merit/MonInput_EvtEventId.h"
+#include "merit/MonInput_PtMagLat.h"
+#include "merit/MonInput_PtLon.h"
+#include "merit/MonInput_PtLat.h"
+#include "merit/MonInput_PtMcIlwainL.h"
+#include "merit/MonInput_PtMcIlwainB.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_modechanges.h"
 #include "merit/MonInput_AcdTkr1ActiveDist.h"
 #include "merit/MonInput_AcdTkr1ActDistTileEnergy.h"
@@ -680,6 +695,20 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_meta_context_open_mode;
   if (s=="FastMon_meta_context_open_modechanges")
     return new MonInput_FastMon_meta_context_open_modechanges;
+  if (s=="PtMcIlwainB")
+    return new MonInput_PtMcIlwainB;
+  if (s=="PtMcIlwainL")
+    return new MonInput_PtMcIlwainL;
+  if (s=="PtLat")
+    return new MonInput_PtLat;
+  if (s=="PtLon")
+    return new MonInput_PtLon;
+  if (s=="PtMagLat")
+    return new MonInput_PtMagLat;
+  if (s=="EvtEventId")
+    return new MonInput_EvtEventId;
+  if (s=="CurrentORPreviousTimeToneMissing")
+    return new MonInput_CurrentORPreviousTimeToneMissing;
   if (s=="FastMon_spacecraft_zra")
     return new MonInput_FastMon_spacecraft_zra;
   if (s=="FastMon_spacecraft_zdec")
@@ -690,6 +719,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_roll;
   if (s=="FastMon_spacecraft_yaw")
     return new MonInput_FastMon_spacecraft_yaw;
+>>>>>>> 1.42
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -862,6 +892,13 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdTkr1ActiveDist");
   names.push_back("FastMon_meta_context_open_mode");
   names.push_back("FastMon_meta_context_open_modechanges");
+  names.push_back("PtMcIlwainB");
+  names.push_back("PtMcIlwainL");
+  names.push_back("PtLat");
+  names.push_back("PtLon");
+  names.push_back("PtMagLat");
+  names.push_back("EvtEventId");
+  names.push_back("CurrentORPreviousTimeToneMissing");
   names.push_back("FastMon_spacecraft_zra");
   names.push_back("FastMon_spacecraft_zdec");
   names.push_back("FastMon_spacecraft_pitch");
