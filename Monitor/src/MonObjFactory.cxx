@@ -185,6 +185,8 @@
 // Last updated with object FastMon_spacecraft_pitch by user bregeon on Thu Apr 24 15:20:28 2008
 // Last updated with object FastMon_spacecraft_roll by user bregeon on Thu Apr 24 15:21:31 2008
 // Last updated with object FastMon_spacecraft_yaw by user bregeon on Thu Apr 24 15:21:55 2008
+// Last updated with object sourceGps by user dpaneque on Thu Apr 24 23:26:12 2008
+#include "digi/MonInput_sourceGps.h"
 
 #include "digi/MonInput_CurrentORPreviousTimeToneMissing.h"
 #include "fastmon/MonInput_FastMon_spacecraft_yaw.h"
@@ -719,7 +721,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_roll;
   if (s=="FastMon_spacecraft_yaw")
     return new MonInput_FastMon_spacecraft_yaw;
->>>>>>> 1.42
+  if (s=="sourceGps")
+    return new MonInput_sourceGps;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -904,6 +907,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_spacecraft_pitch");
   names.push_back("FastMon_spacecraft_roll");
   names.push_back("FastMon_spacecraft_yaw");
+  names.push_back("sourceGps");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
