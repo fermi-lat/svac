@@ -1,3 +1,12 @@
+
+v1r1p3 2008/04/28 (DEV)
+----------------------------
+Added merit objects taht were already present in the MonObjFactory.cxx committed in v1r1p2. 
+The code in v1r1p2 did not compile because those objects were missing... 
+Those objects are needed for the normalization of the merit rates. The overall normalization 
+is still not ready. It will have to wait to a later version.
+
+
 v1r1p2 2008/04/24 (DEV)
 ----------------------------------
 Added sourceGPS. This addresses jira GDQMQ-103.
