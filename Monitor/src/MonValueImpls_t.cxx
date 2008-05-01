@@ -1596,7 +1596,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
 	continue;
       }
     if ( m_lo[i] == MonCounterDiff::s_maxVal64 ) { // First event
-      if(getDataType()== "MCOktTest" && getDataType() == m_dataparamtype){
+      if(getDataType()== "MC" && getDataType() == m_dataparamtype){
 	m_offset[i] = (ULong64_t)val[i];
 	if(m_offset[i]/(pow(2,m_jumpmagbit)-1.0))
 	  m_jumpcounter = Int_t(m_offset[i]/(pow(2,m_jumpmagbit)-1.0) + 0.5);
@@ -1615,7 +1615,7 @@ void MonCounterDiffRate::singleincrement(Double_t* val, Double_t* val2) {
     }
 
 
-    if(getDataType()== "MCOktTest" && getDataType() == m_dataparamtype){
+    if(getDataType()== "MC" && getDataType() == m_dataparamtype){
       // is mc data from oktober tests and we are dealing with m_sequence
       //expect pow(2,17) jumps in m_sequence values
       // the vector m_hi_previous is being used to catch these jumps
