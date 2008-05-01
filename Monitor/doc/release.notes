@@ -1,4 +1,9 @@
 
+v1r1p4  2008/04/30  (DEV)
+-----------------------------
+Change MCOktTest by MC in MonValueImpls_t.cxx. 
+This addresses Jira GDQMQ-111.
+
 v1r1p3 2008/04/28 (DEV)
 ----------------------------
 Added merit objects taht were already present in the MonObjFactory.cxx committed in v1r1p2. 
