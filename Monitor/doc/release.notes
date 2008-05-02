@@ -1,3 +1,9 @@
+v1r1p5  2008/05/02  (DEV)
+-----------------------------
+Added quantities source_gps and new_second in FastMon trending to calculate
+the rate of GPS out of lock.
+This addresses Jira GDQMQ-103.
+
 
 v1r1p4  2008/04/30  (DEV)
 -----------------------------
