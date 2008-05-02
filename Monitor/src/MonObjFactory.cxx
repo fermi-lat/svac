@@ -186,6 +186,10 @@
 // Last updated with object FastMon_spacecraft_roll by user bregeon on Thu Apr 24 15:21:31 2008
 // Last updated with object FastMon_spacecraft_yaw by user bregeon on Thu Apr 24 15:21:55 2008
 // Last updated with object sourceGps by user dpaneque on Thu Apr 24 23:26:12 2008
+// Last updated with object FastMon_new_second by user bregeon on Fri May  2 09:24:08 2008
+// Last updated with object FastMon_meta_context_current_source_gps by user bregeon on Fri May  2 09:26:32 2008
+#include "fastmon/MonInput_FastMon_meta_context_current_source_gps.h"
+#include "fastmon/MonInput_FastMon_new_second.h"
 #include "digi/MonInput_sourceGps.h"
 
 #include "digi/MonInput_CurrentORPreviousTimeToneMissing.h"
@@ -723,6 +727,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_yaw;
   if (s=="sourceGps")
     return new MonInput_sourceGps;
+  if (s=="FastMon_new_second")
+    return new MonInput_FastMon_new_second;
+  if (s=="FastMon_meta_context_current_source_gps")
+    return new MonInput_FastMon_meta_context_current_source_gps;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -908,6 +916,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_spacecraft_roll");
   names.push_back("FastMon_spacecraft_yaw");
   names.push_back("sourceGps");
+  names.push_back("FastMon_new_second");
+  names.push_back("FastMon_meta_context_current_source_gps");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
