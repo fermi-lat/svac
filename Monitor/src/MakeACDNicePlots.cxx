@@ -311,7 +311,7 @@ int main(int argn, char** argc)
     ctitle += k;
     ctitle += "]";
     
-    canv[k] = new TCanvas(ctitle, ctitle1,0,0,1100,900);
+    canv[k] = new TCanvas(ctitle, ctitle1,0,0,600,600);
     canv[k]->SetFillStyle(4000);
     canv[k]->SetFillColor(0);
     canv[k]->SetBorderSize(3); 
