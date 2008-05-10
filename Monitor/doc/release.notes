@@ -1,3 +1,11 @@
+
+v1r1p6  2008/05/09 (DEV)
+--------------------------
+Added possibility of trending and histograming normalized rates (from merit). 
+This addresses the Jira GDQMQ-83.
+Decrease resolution of ACD nice plots (gif); from 1100x900 to 600x600.
+
+
 v1r1p5  2008/05/02  (DEV)
 -----------------------------
 Added quantities source_gps and new_second in FastMon trending to calculate
