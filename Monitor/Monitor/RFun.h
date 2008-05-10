@@ -3,6 +3,7 @@
 
 //#include "configData/db/TrgConfigDB.h"
 #include <vector>
+#include <map>
 #include "TBranchProxy.h"
 #include "TBranchProxyDirector.h"
 #include "TBranchProxyTemplate.h"
@@ -137,6 +138,25 @@ class RFun{
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
 
+  // Normalization of Rates
+  
+  static void SetAsciiFileNameWithNormFactors(char* asciifile){m_normfactascii = asciifile;}
+
+  // function that reads the norm factors from ascii file and fills the map RFun::NormFactors
+  static int LoadNormFactors();
+  
+
+    // function that returns the Normalized the rates or error in the normalized rate 
+// for the rate_type and magnetic info
+  // It uses info from RFun::NormFactors. If this object is empty, it will fill it from ascii file
+
+  static Float_t NormalizeRate(char* RateType, Float_t MagneticInfo, 
+			       Float_t Rate,  Float_t RateErr, char* RetType);
+
+ 
+  // 
+  static void PrintNormFactorsMap();
+
   // Fast mon functions
 
   /* This does not work !! 
@@ -170,6 +190,9 @@ class RFun{
   // end of functions to be deleted
 
 
+  // public memeber data
+  static std::map<std::string,std::list<std::vector<float> > > m_NormFactors;
+  static std::string m_normfactascii;
 
 
  private:
@@ -177,6 +200,7 @@ class RFun{
   static bool m_boundarytwrdefined;
   //static TrgConfigDB* m_tcf;
 
+  
 
   static int m_datagramevtcounter[5];
   static int m_previousdatagramnumber[5];

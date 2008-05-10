@@ -113,6 +113,7 @@ private:
   std::string m_datatype;
   Bool_t m_WriteintreeToDisk;
   std::string m_tmpdir;
+  std::string m_normfactascii;
 };
 
 #endif

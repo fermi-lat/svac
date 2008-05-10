@@ -15,6 +15,9 @@
 #include "xmlBase/IFile.h"
 #include "facilities/Util.h"
 
+// others
+#include "Monitor/RFun.h"
+
 JobConfig::JobConfig(const char* appName, const char* desc)
   :m_theApp(appName),
    m_description(desc),
@@ -32,7 +35,8 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_fastmonChain(0),
    m_datatype("Normal"),
    m_WriteintreeToDisk(false),
-   m_tmpdir("./")
+   m_tmpdir("./"),
+   m_normfactascii("")
 {
 
 }
@@ -72,8 +76,6 @@ void JobConfig::usage() {
        << endl
        << "\t   -w <directory>    : location of the directory for the proxies"<<endl
        << endl
-       << "\t   -w <directory>    : location of the directory for the proxies"<<endl
-       << endl
        << "\tINPUT" << endl
        << "\t   -r <reconFiles>   : comma seperated list of recon ROOT files" << endl
        << "\t   -d <digiFiles>    : comma seperated list of digi ROOT files" << endl
@@ -96,6 +98,7 @@ void JobConfig::usage() {
        << "\t   -u <dir>          : Directory where to store the intermediate tree. Default is ./ . "
        << endl
        << "\t   -z                : Write intermediate tree to disk" << endl
+       << "\t   -e                : Filename with normalization factors" << endl
        << endl
        << "\tOPTIONS for specific jobs (will be ignored by other jobs)"  << endl
        << "\t   -b <binSize>         : size of time bins in seconds [10]" << endl   
@@ -111,7 +114,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:f:j:c:g:n:s:b:w:u:pqz")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:f:j:c:e:g:n:s:b:w:u:pqz")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -165,6 +168,9 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 'g':   // html configuration file
       m_htmlFile = string(optarg);
       break;
+    case 'e': // file with Normfactors
+      m_normfactascii = string(optarg);
+      break;
     case 'w':   // shared object directory
       m_sodir = string(optarg);
       break;
@@ -211,11 +217,20 @@ Int_t JobConfig::parse(int argn, char** argc) {
     }
   }
     
-
-  // data type
+   // data type
   
   std::cout << "Data type : " << m_datatype.c_str() << std::endl;
   
+
+  // Set ascii file that will be used to normalize rates
+  if(m_normfactascii.size() >2)
+    {
+      std::cout << "Ascii file used to normalize rates: " << m_normfactascii.c_str() << std::endl;
+      RFun::SetAsciiFileNameWithNormFactors(m_normfactascii.c_str());
+      //RFun::LoadNormFactors();
+      //RFun::PrintNormFactorsMap();
+    }
+
 
   // tmp dir to store intermediate tree
   if (m_tmpdir!=""&& m_tmpdir[m_tmpdir.length()-1]!='/')m_tmpdir+="/";

@@ -5,6 +5,13 @@
 #include "CalPedProxy.h"
 #include "CalPeds.h"
 #include <map>
+#include <vector>
+#include <list>
+#include <string>
+
+
+// for the tokenizer
+#include "facilities/Util.h"
 
 const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
@@ -667,6 +674,9 @@ int RFun::m_datagramevtcounter[5];
 int RFun::m_previousdatagramnumber[5];
 bool  RFun::makeinitdatagraminfo = true;
 
+std::map<std::string,std::list<std::vector<float> > > RFun::m_NormFactors;
+std::string RFun::m_normfactascii;
+
 
 void RFun::initdatagramevtcounter()
 {
@@ -867,3 +877,278 @@ unsigned RFun::loopovertkrplanes_int(const Int_t invector[])
   
   return n_counter;
 }
+
+
+ // function that reads the norm factors from ascii file and fills the map RFun::NormFactors
+int RFun::LoadNormFactors()
+{
+   // open file
+
+  if(m_normfactascii.size()<2)
+    {
+      std::cerr << "RFun::LoadNormFactors:ERROR" << std::endl
+		<< "m_normfactascii.size()<2 " << std::endl
+		<< "Exiting function returning 1" << std::endl;
+      return 1;
+    }
+
+  // std::cout << "Opening Norm file " << m_normfactascii.c_str() << std::endl;
+  
+  std::ifstream inputFile(m_normfactascii.c_str());
+  if ( ! inputFile.good() ) {
+    std::cerr << "RFun::LoadNormFactors:ERROR" << std::endl 
+	      << "Problems opening file " <<  m_normfactascii.c_str() << std::endl
+	      << "Exiting function returning 2" << std::endl;
+    return 2;
+  }
+
+  // ok, we can start filling object static std::map<std::string,std::vector> m_NormFactors;
+  
+  std::string ratename;
+  float refrate[2]; //value and error (will be put as last components of vector ratelineinfo)
+  std::vector<float> ratelineinfo;
+  std::list<std::vector<float> > listofnormfactors;
+  int newrate = 0; //1 for yes
+  int ingestdata = 0; //1 for yes
+  float tmpval = 0.0;
+
+
+  // initialize
+  refrate[0] = -1;
+  refrate[1] = -1;
+   
+  // grab one line
+  const int bufSize(1000); char buffer[bufSize];
+  inputFile.getline(buffer,bufSize);
+  while ( ! inputFile.eof() ) {
+    // ignore comment lines (start with '#')
+    if ( buffer[0] == '#' ) {
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+     // tokenize the line, make sure that there are 5 tokens
+    std::string inputLine(buffer);
+
+    std::vector <std::string> tokens;
+    facilities::Util::stringTokenize(inputLine, "\t :", tokens);
+
+    // ignore blank lines
+    if ( tokens.size() == 0 ) {
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+    // get rate name
+    if(tokens[0] == "RateName"){
+      newrate = 1;
+      ratename =tokens[1];
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+
+    // get rate overall ref value (last components of vector ratelineinfo)
+    if(newrate && tokens[0] == "RefRateVal"){
+      // get ref value and error (separated by +/-)
+      std::string val;
+      std::string val_err;
+      std::string::size_type pos = tokens[1].find("+/-");
+      float fval;
+      float fval_err;
+      if(pos < tokens[1].size()){ // There is value  related error
+	val = tokens[1].substr(0,pos);
+	val_err = tokens[1].substr(pos+3,tokens[1].size());
+	fval = atof(val.c_str());
+	fval_err = atof(val_err.c_str());
+	refrate[0] = fval;
+	refrate[1] = fval_err;
+	inputFile.getline(buffer,bufSize);
+	continue;
+      }
+      else
+	{
+	  std::cerr << "RFun::LoadNormFactors:ERROR" << std::endl 
+		    << "The sign +/- was not found in " << tokens[3].c_str() << std::endl
+		    << "Ref value and error for rate could not be properly retrieved" << std::endl
+		    << "Exiting function returning 3" << std::endl;
+	  return 3;
+	}
+    }
+    
+    if(ingestdata == 0 && newrate && refrate[0] >=0.0 && tokens[0] == "Start"){
+      ingestdata = 1;
+      listofnormfactors.clear(); // prepare for new data ingestion
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+    if(ingestdata && tokens[0] == "End"){
+      // End of info for this rate. 
+      
+      // Fill map 
+      m_NormFactors[ratename] = listofnormfactors;
+      
+      // initialize stuff for the next event
+      newrate = 0;
+      ingestdata = 0;
+      listofnormfactors.clear();
+      ratename = "";
+      refrate[0] = -1;
+      refrate[1] = -1;
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+
+    if(ingestdata)
+      {
+	if(tokens.size() != 4){
+	  std::cerr << "RFun::LoadNormFactors:ERROR" << std::endl 
+		    << "tokens.size() != 4 when ingesting data " << std::endl
+		    << "Normfactor map could not be filled" << std::endl;
+
+	  std::cout << "Line with poblems is the following one: " << std::endl;
+	  for(int unsigned it = 0; it<tokens.size();it++){
+	    std::cout << tokens[it].c_str() << "\t";
+	  }
+	  std::cout  << std::endl;
+	  std::cout << "Exiting function returning 4" << std::endl;
+	  return 4;	  
+	}
+	
+	for(int unsigned it = 0; it<4;it++){
+	  tmpval = atof(tokens[it].c_str());
+	  ratelineinfo.push_back(tmpval);
+	}
+	// last components are teh ref rate and error
+	ratelineinfo.push_back(refrate[0]);
+	ratelineinfo.push_back(refrate[1]);
+	
+	// fill one event in the list of norm factors
+	listofnormfactors.push_back(ratelineinfo);
+	
+	// clean vector for next event
+	ratelineinfo.clear();
+      }
+
+
+
+    // ok, on to the next line
+    inputFile.getline(buffer,bufSize);
+  }
+
+  return 0;
+}
+
+void RFun::PrintNormFactorsMap()
+{
+  if(m_NormFactors.size()<1)
+    return;
+  
+  std::cout << std::endl << "RFun::PrintNormFactorsMap" << std::endl;
+  std::cout << "Size of map is " << m_NormFactors.size() << std::endl;
+
+  for(std::map<std::string,std::list<std::vector<float> > >::const_iterator itr=m_NormFactors.begin();
+      itr != m_NormFactors.end();itr++){
+    
+    std::cout << "RateName: " << itr->first.c_str() <<std::endl;
+    for(std::list<std::vector<float> > ::const_iterator itr2=itr->second.begin();
+      itr2 != itr->second.end();itr2++){
+      for(unsigned int icomp = 0; icomp < (*itr2).size();icomp++)
+	{
+	  std::cout << (*itr2)[icomp] << "\t\t";
+	}
+      std::cout << std::endl;
+    }
+    // Done with this rate
+    std::cout << std::endl << std::endl;
+  }
+}
+ 
+
+  
+  // function that returns the Normalized the rates or error in the normalized rate 
+// for the rate_type and magnetic info
+  // It uses info from RFun::NormFactors. If this object is empty, it will fill it from ascii file
+
+Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, 
+			    Float_t Rate,  Float_t RateErr, char* RetType)
+{
+
+  
+  if(m_NormFactors.size() <1) // Norm factors have not been loaded yet 
+    {
+      // tmp
+      std::cout << "Loading Norm factors from file " << std::endl
+		<< m_normfactascii << std::endl;  
+      int b = LoadNormFactors();
+      if(b)
+	{
+	  std::cerr << "RFun::NormalizeRate:ERROR" << std::endl 
+		    << "Norm factors could not be loaded " << std::endl
+		    << "Therefore, Rates cannot be normalized. ABORTING..." << std::endl;
+	  assert(0);
+	}
+    }
+
+
+  // Check that rate is in map
+  //std::cout << "Checking rate name " << std::endl;  
+  std::map<std::string,std::list<std::vector<float> > >::const_iterator itr=m_NormFactors.find(RateType);
+  if(itr==m_NormFactors.end())
+    {
+      std::cerr << "RFun::NormalizeRate:ERROR" << std::endl 
+		<< "Normalization factors for rate type " << RateType 
+		<< " do not exist in file " << m_normfactascii << std::endl
+		<< "Therefore, Rates cannot be normalized. ABORTING..." << std::endl;
+      assert(0);
+    }
+
+  // check that MagInfoVal (RigCutoff or McIlwainL param) is in map
+  std::list<std::vector<float> > ::const_iterator itr2=itr->second.begin();
+  while(!(MagneticInfo>=(*itr2)[0] && MagneticInfo<= (*itr2)[1]) && itr2 != itr->second.end())
+    itr2++;
+
+  if(itr2==itr->second.end()){
+    std::cout << "RFun::NormalizeRate:WARNING" << std::endl 
+	      << "Normalization factors for rate type " << RateType 
+	      << " do not exist in file " << m_normfactascii << std::endl
+	      << "for the magnetic quantity with value " << MagneticInfo<< std::endl
+	      << "Returning -1" << std::endl;
+    return -1;
+  }
+
+  // Normalize
+  
+  std::string returntype = RetType;
+
+  //NormRate = Rate/NormFactor/RefValue
+   /* NormRateErr = Rate*sqrt(pow(norm_err/norm,2)
+	 +pow(RateErr/Rate,2)
+	 +pow(RefRateErr/RefRate,2));
+   */
+  Float_t NormRate =  Rate/(*itr2)[2]/(*itr2)[4]; 
+  Float_t NormRateErr = NormRate*sqrt(pow((*itr2)[3]/(*itr2)[2],2)
+				      +pow(RateErr/Rate,2)
+				      +pow((*itr2)[5]/(*itr2)[4],2));
+
+  Float_t returnval = 0.0;
+
+  if(returntype=="NormRate")
+    returnval= NormRate;
+  else if(returntype=="NormRateErr")
+    returnval= NormRateErr;
+  else
+    {
+      std::cerr << "RFun::NormalizeRate:ERROR" << std::endl
+		<< "Return type " << RetType << " is none of the 2 possible values: " << std::endl
+		<< "1) NormRate;  2) NormRateErr" << std::endl
+		<< "ABORTING..." << std::endl;
+      assert(0);      
+    }
+
+
+  return returnval;
+}
+
