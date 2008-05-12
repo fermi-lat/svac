@@ -812,6 +812,10 @@ void RootAnalyzer::analyzeDigiTree()
   // For the first 10 digis:
   int i10Count = 0;
 
+  // Observed Mips:
+  float tmpAcdObservedMips        = 0.0;
+  float tmpAcdObservedMipsTopHalf = 0.0;
+
   // Loop over all digis:
   for(int iDigi = 0; iDigi != nAcdDigi; ++iDigi) {
 
@@ -834,6 +838,18 @@ void RootAnalyzer::analyzeDigiTree()
         m_ntuple.m_acd10Ids[i10Count] = AcdID;
         i10Count++;
       }
+
+      // Observed MIPs:
+      Float_t thisPmt = 0.0;
+      if ( acdDigi->getPulseHeight(AcdDigi::A) > 0 ) thisPmt += 0.1;
+      if ( acdDigi->getPulseHeight(AcdDigi::B) > 0 ) thisPmt += 0.1;
+      if ( acdDigi->getHitMapBit(AcdDigi::A)   > 0 ) thisPmt += 0.4;
+      if ( acdDigi->getHitMapBit(AcdDigi::B)   > 0 ) thisPmt += 0.4;
+      tmpAcdObservedMips += thisPmt;
+      if ( AcdID < 100 || ( (AcdID % 100) < 20 ) ) {
+	tmpAcdObservedMips += thisPmt;
+      }
+
 
       m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
       m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
@@ -910,6 +926,11 @@ void RootAnalyzer::analyzeDigiTree()
       }
     }
   }
+
+  m_ntuple.m_acdObservedMips        = tmpAcdObservedMips;
+  m_ntuple.m_acdObservedMipsTopHalf = tmpAcdObservedMipsTopHalf;
+
+
 
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
@@ -1630,7 +1651,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdMipsMaxPmt", &(m_ntuple.m_acdMipsMaxPmt),"AcdMipsMaxPmt/I");
   m_tree->Branch("AcdMipsSum", &(m_ntuple.m_acdMipsSum),"AcdMipsSum/F");
 
-  
+  m_tree->Branch("AcdObservedMips", &(m_ntuple.m_acdObservedMips),"AcdObservedMips/F");
+  m_tree->Branch("AcdObservedMipsTopHalf", &(m_ntuple.m_acdObservedMipsTopHalf),"AcdObservedMipsTopHalf/F");
 
   // ACD POCA:
   m_tree->Branch("AcdPocaDoca", &(m_ntuple.m_acdPocaDoca),"AcdPocaDoca[2][2]/F");

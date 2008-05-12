@@ -418,6 +418,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated signal in MIPs. </TD> </TR>
 <TR> <TD> AcdMipsSum                            </TD> <TD> Float </TD> <TD> Sum of calibrated PHA in MIPs (average of the two PMTs, or a single PMT if the other PMT is missing).</TD> </TR> 
 
+<TR> <TD> AcdObservedMips                       </TD> <TD> Float </TD> <TD> Sum over all PMTs (PHA and Veto), assigning 0.1 Mips per PHa and 0.4 MIPs per Veto. </TD> </TR>  
+<TR> <TD> AcdObservedMipsTopHalf                </TD> <TD> Float </TD> <TD> Sum over all PMTs (PHA and Veto), assigning 0.1 Mips per PHa and 0.4 MIPs per Veto. For the top half only. </TD> </TR>  
+
 <TR> <TD> AcdCnoMap[tileID:0-603][2]            </TD> <TD> Int   </TD> <TD> CNO discriminator set or not for the specified attached tile/ribbon and PMT (A or B). For real data all PMTs attached to a 
                                                                             FREE board with the CNO bit (from the GEM CNO vector) will have this bit set. This is because the CNO board bit is an OR  
                                                                             of all the PMTs. It does not mean that all the PMTs were above the CNO threshold!</TD> </TR>

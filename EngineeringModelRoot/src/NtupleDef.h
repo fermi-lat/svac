@@ -111,6 +111,8 @@ struct NtupleDef {
   int m_acdRibbonActiveDistId;
   float m_acdCornerDoca;
 
+  float m_acdObservedMips;
+  float m_acdObservedMipsTopHalf;
 
   // ACD-TKR intersection information:
   int m_acdNumTkrIntersection;
