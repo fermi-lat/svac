@@ -1,5 +1,8 @@
+v3r14p3 May 12, 2008
+awb     And actually fill the second one. 
+
 v3r14p2 May 12, 2008
-awb     Added two Acd 'onboard energy' calculation variables.
+awb     Added two Acd 'onboard energy' calculation variables. BUG! AcdObservedMipsTopHalf is not filled!
 
 v3r14p1 April 22, 2008
 awb     Added data transfer ID.

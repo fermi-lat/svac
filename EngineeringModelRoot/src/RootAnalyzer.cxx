@@ -847,7 +847,7 @@ void RootAnalyzer::analyzeDigiTree()
       if ( acdDigi->getHitMapBit(AcdDigi::B)   > 0 ) thisPmt += 0.4;
       tmpAcdObservedMips += thisPmt;
       if ( AcdID < 100 || ( (AcdID % 100) < 20 ) ) {
-	tmpAcdObservedMips += thisPmt;
+	tmpAcdObservedMipsTopHalf += thisPmt;
       }
 
 
