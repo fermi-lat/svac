@@ -1,6 +1,0 @@
-v0
-
-This is a simple wrapper around algorithms in Numerical Recipe in C.
-Go to lib directory, do a make, a shared library file will be built
-
-
