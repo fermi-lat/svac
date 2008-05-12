@@ -1,4 +1,11 @@
 
+v1r1p7  2008/05/12  (DEV)
+--------------------------
+Added possibility of normalize rates stored in multidimensional variables.
+This is useful for Trigger Engines, for instance. 
+This addresses the Jira GDQMQ-83.
+
+
 v1r1p6  2008/05/09 (DEV)
 --------------------------
 Added possibility of trending and histograming normalized rates (from merit). 
