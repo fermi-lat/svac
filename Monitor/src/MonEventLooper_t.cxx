@@ -245,7 +245,7 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
 
   // Event loop
   for (Int_t ievent= startEvent; ievent!=m_last; ievent++ ) {
-    //if(ievent%1000==0)std::cout<<"Event: "<<ievent<<std::endl;
+    if(ievent%500000==0)std::cout<<"Event number: "<<ievent<<std::endl;
 
     m_evtcounter++;
     /*
