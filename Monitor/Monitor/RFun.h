@@ -153,6 +153,9 @@ class RFun{
   static Float_t NormalizeRate(char* RateType, Float_t MagneticInfo, 
 			       Float_t Rate,  Float_t RateErr, char* RetType);
 
+  static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo, 
+				     Float_t Rate,  Float_t RateErr, char* RetType,int dim);
+
  
   // 
   static void PrintNormFactorsMap();

@@ -914,8 +914,8 @@ int RFun::LoadNormFactors()
 
 
   // initialize
-  refrate[0] = -1;
-  refrate[1] = -1;
+  refrate[0] = -2;
+  refrate[1] = -2;
    
   // grab one line
   const int bufSize(1000); char buffer[bufSize];
@@ -976,7 +976,7 @@ int RFun::LoadNormFactors()
 	}
     }
     
-    if(ingestdata == 0 && newrate && refrate[0] >=0.0 && tokens[0] == "Start"){
+    if(ingestdata == 0 && newrate && refrate[0] > -2 && tokens[0] == "Start"){
       ingestdata = 1;
       listofnormfactors.clear(); // prepare for new data ingestion
       inputFile.getline(buffer,bufSize);
@@ -994,8 +994,8 @@ int RFun::LoadNormFactors()
       ingestdata = 0;
       listofnormfactors.clear();
       ratename = "";
-      refrate[0] = -1;
-      refrate[1] = -1;
+      refrate[0] = -2;
+      refrate[1] = -2;
       inputFile.getline(buffer,bufSize);
       continue;
     }
@@ -1072,6 +1072,7 @@ void RFun::PrintNormFactorsMap()
 // for the rate_type and magnetic info
   // It uses info from RFun::NormFactors. If this object is empty, it will fill it from ascii file
 
+
 Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, 
 			    Float_t Rate,  Float_t RateErr, char* RetType)
 {
@@ -1101,7 +1102,11 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
       std::cerr << "RFun::NormalizeRate:ERROR" << std::endl 
 		<< "Normalization factors for rate type " << RateType 
 		<< " do not exist in file " << m_normfactascii << std::endl
-		<< "Therefore, Rates cannot be normalized. ABORTING..." << std::endl;
+		<< "Therefore, Rates cannot be normalized for this type. " << std::endl
+		<< "Aborting..." << std::endl;
+
+      //PrintNormFactorsMap();
+      //return -1;
       assert(0);
     }
 
@@ -1128,10 +1133,15 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
 	 +pow(RateErr/Rate,2)
 	 +pow(RefRateErr/RefRate,2));
    */
-  Float_t NormRate =  Rate/(*itr2)[2]/(*itr2)[4]; 
-  Float_t NormRateErr = NormRate*sqrt(pow((*itr2)[3]/(*itr2)[2],2)
-				      +pow(RateErr/Rate,2)
-				      +pow((*itr2)[5]/(*itr2)[4],2));
+
+  Float_t NormRate = -1;
+  Float_t NormRateErr = 0;
+  if((*itr2)[2]>0 && (*itr2)[4]>0 && Rate>0){ // calculation is possible
+    NormRate =  Rate/(*itr2)[2]/(*itr2)[4]; 
+    NormRateErr = NormRate*sqrt(pow((*itr2)[3]/(*itr2)[2],2)
+				+pow(RateErr/Rate,2)
+				+pow((*itr2)[5]/(*itr2)[4],2));
+  }
 
   Float_t returnval = 0.0;
 
@@ -1152,3 +1162,13 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
   return returnval;
 }
 
+
+Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo, 
+				  Float_t Rate,  Float_t RateErr, char* RetType,int dim)
+{
+
+  char RateTypeWithDim[100];
+  sprintf(RateTypeWithDim,"%s[%d]",RateType,dim);
+
+  return NormalizeRate(RateTypeWithDim,MagneticInfo,Rate,RateErr,RetType);
+}
