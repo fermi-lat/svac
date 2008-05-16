@@ -1,4 +1,28 @@
 
+v1r1p8  2008/05/16  (DEV)
+--------------------------
+Changes in code to handle high level tracker monitoring information 
+produced by Hiro Tajima etal. This addresses Jira GDQMQ-119.
+Several of the base/classes needed to be changed:
+
+cmt/requirements
+JobConfig.[h,cxx]
+runStrip_t.cxx
+makeNewMonObject.pl
+
+MonValue_t.h,cxx
+MonValueImpl_t.h,cxx
+MonEventLooper_t.h,cxx
+RFun.h,cxx
+
+MonObjFactory.cxx
+
+Besides, a new directory had to be made with the all the trackermon 
+quantities:
+
+src/trackermon/
+
+
 v1r1p7  2008/05/12  (DEV)
 --------------------------
 Added possibility of normalize rates stored in multidimensional variables.
