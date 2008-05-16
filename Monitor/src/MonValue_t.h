@@ -65,6 +65,8 @@ public :
 
   void setDataType(std::string type);
   std::string getDataType(){return m_datatype;}
+
+  static Bool_t IsTrackerMonJob;
   
 
  protected:

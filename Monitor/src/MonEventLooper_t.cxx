@@ -54,11 +54,13 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
    m_globalCut(eventcut),
    m_timestampvar(timestampvar),
    m_intreetfilename("File4IntermediateTree.root"),
-   m_tmpdir("./")
+   m_tmpdir("./"),
+   m_IsTrackerMonJob(0)
 {
 
+  m_IsTrackerMonJob = MonValue::IsTrackerMonJob;
 
-   // attach input chains
+  // attach input chains
   // for_each(m_incol.begin(), m_incol.end(), mem_fun(&MonInputCollection::attachChain));
 
   // tmp
@@ -117,6 +119,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
     assert(0);
   }
 
+
   //create output tree
   m_tree = new TTree("Time","Time binned data");
   //create output tree
@@ -131,7 +134,7 @@ MonEventLooper::MonEventLooper(UInt_t binSize, MonValue* colprim, MonValue* cols
 
  
 
-  Long64_t maxTreeSize = 5000000000000LL;
+  Long64_t maxTreeSize = 500000000000;
   m_intree->SetMaxTreeSize(maxTreeSize);
   //m_intree->SetMaxVirtualSize(maxTreeSize);
   m_sectree->SetMaxTreeSize(maxTreeSize);
@@ -158,6 +161,12 @@ MonEventLooper::~MonEventLooper(){
   //delete m_timeintervalobj;
   
 }
+
+void MonEventLooper::setIsTrackerMonJob(Bool_t b)
+{
+  m_IsTrackerMonJob = b;
+}
+
 void MonEventLooper::init() {
 
   // CREATE TFile where the intermediate tree will reside (info written to disk).
@@ -210,17 +219,30 @@ Bool_t MonEventLooper::createtfile4intree(std::string dir, std::string filename)
 
 void MonEventLooper::attachTree() {
 
-  m_tree->Branch("Bin_Index",(void*)(&m_currentBin),"Bin_Index/i");
-  m_tree->Branch("Bin_Start",(void*)(&m_currentStart),"Bin_Start/l");
-  m_tree->Branch("Bin_End",(void*)(&m_currentEnd),"Bin_End/l");
-  m_tree->Branch("Bin_Flags",(void*)(&m_currentFlags),"Bin_Flags/i");
-  m_tree->Branch("nEvents",(void*)(&m_nUsed),"nEvents/i");
-  m_tree->Branch("nPassed",(void*)(&m_nFilter),"nPassed/i");
+  if(!m_IsTrackerMonJob)
+    {
+      m_tree->Branch("Bin_Index",(void*)(&m_currentBin),"Bin_Index/i");
+      m_tree->Branch("Bin_Start",(void*)(&m_currentStart),"Bin_Start/l");
+      m_tree->Branch("Bin_End",(void*)(&m_currentEnd),"Bin_End/l");
+      m_tree->Branch("Bin_Flags",(void*)(&m_currentFlags),"Bin_Flags/i");
+      m_tree->Branch("nEvents",(void*)(&m_nUsed),"nEvents/i");
+      m_tree->Branch("nPassed",(void*)(&m_nFilter),"nPassed/i");
+      
+      m_tree->Branch("TrueTimeInterval",(void*)(&m_timeinterval),"TrueTimeInterval/D");
+      m_tree->Branch("TimeStampFirstEvt",(void*)(&m_timestamp_firstevt_inbin),"TimeStampFirstEvt/D");
+      m_tree->Branch("TimeStampLastEvt",(void*)(&m_timestamp_lastevt_inbin),"TimeStampLastEvt/D");
+    }
+  else
+    {
+      m_tree->Branch("Bin_Index",(void*)(&m_currentBin),"Bin_Index/i");
+      m_tree->Branch("Bin_Flags",(void*)(&m_currentFlags),"Bin_Flags/i");
+      m_tree->Branch("nEvents",(void*)(&m_nUsed),"nEvents/i");
+      m_tree->Branch("nPassed",(void*)(&m_nFilter),"nPassed/i");
 
-  m_tree->Branch("TrueTimeInterval",(void*)(&m_timeinterval),"TrueTimeInterval/D");
-  m_tree->Branch("TimeStampFirstEvt",(void*)(&m_timestamp_firstevt_inbin),"TimeStampFirstEvt/D");
-  m_tree->Branch("TimeStampLastEvt",(void*)(&m_timestamp_lastevt_inbin),"TimeStampLastEvt/D");
+      // The config file must fill the quantities 
+      // Bin_Start; Bin_End, TrueTimeInterval, TimeStampFirstEvt, TimeStampLastEvt
 
+    }
 
   std::string prefix;
   m_stripValCol->attach(*m_tree,prefix);
@@ -259,60 +281,75 @@ void MonEventLooper::go(Long64_t numEvents, Long64_t startEvent) {
       std::cerr << "Failed to read event " << ievent << " aborting" << std::endl;
       break;
     }    
-    currentTimeStamp=m_currentTimestamp->value();
 
+    currentTimeStamp=m_currentTimestamp->value();
+    // std::cout << "currentTimeStamp = "  << currentTimeStamp << std::endl;
+
+    if(m_IsTrackerMonJob)// TrackerMon stuff; only one event
+      {
+	if(m_last-startEvent>1)
+	  {
+	    std::cerr << "MonEventLooper::go: ERROR" << std::endl
+		      << "m_IsTrackerMonJob==1 && m_last-startEvent>1: This should not happen" 
+		      << std::endl
+		      << "Aborting... " << std::endl;
+	    assert(0);
+	  }
+
+	TimeInterval::m_interval = 1000.;
+	m_binSize = 1000;
+	break;
+      }
+
+    
+
+
+	      
+ 
     // initialize stuff on first event
     if ( ievent == startEvent ) {
       firstEvent(currentTimeStamp);
       m_timestamp_firstevt_inbin = currentTimeStamp;
       m_timestamp_lastevt_inbin = currentTimeStamp;
-    } 
-
+    }
     // check for time-bin edge
     if ( currentTimeStamp >= m_currentEnd ) {
-	// time-stamp outside of bin, jump to next bin
-	// This latches and store all the values
+      // time-stamp outside of bin, jump to next bin
+      // This latches and store all the values
       switchBins();
-      m_timestamp_firstevt_inbin = currentTimeStamp;
     }
-    m_timestamp_lastevt_inbin = currentTimeStamp;
-
+    
     if(m_intree->GetTotBytes()/1000000>500){  //flush data in intermediate tree if we reach 500 MB
       flushData();
     }
     
     // switch the timestamp
     logEvent(ievent,currentTimeStamp);
-
+    
     m_nTrigger++;
   }
   
   // flush out any remaining events
   lastEvent(currentTimeStamp);
-
+  
 }
 
 
 // First event with timestamp with double precision
 void MonEventLooper::firstEvent(Double_t timeStampdouble)  {
+  
   ULong64_t timeStamp = ULong64_t(timeStampdouble);
-  ULong64_t rem = timeStamp % m_binSize;
   m_currentBin = 0;
-  m_currentStart = timeStamp - rem;
-
-  m_currentEnd = m_currentStart + m_binSize;
   m_currentFlags = 3;
+ 
+  ULong64_t rem = timeStamp % m_binSize;
+  m_currentStart = timeStamp - rem;
+  m_currentEnd = m_currentStart + m_binSize;
   m_sec_first = timeStampdouble;
   TimeInterval::m_interval=m_currentEnd-m_sec_first;
+   
   
-  /*
-  std::cout << "Time interval; first event, " << std::endl
-	    << "m_currentEnd, m_sec_first, m_interval, " <<std::endl
-	    << setprecision(20) 
-	    << m_currentEnd << ", " <<  m_sec_first << ", " << TimeInterval::m_interval << std::endl;
-  */
-
-
+  
   printTime(std::cout,timeStampdouble);
   std::cout << std::endl;
 }
@@ -326,6 +363,14 @@ void MonEventLooper::flushData(){
 
 void MonEventLooper::switchBins() {
 
+
+  if(m_IsTrackerMonJob)
+    {
+      std::cerr<<"MonEventLooper::switchBins(): ERROR" << std::endl
+	       << "Function switchBins should not be executed when m_IsTrackerMonJob=kTrue" << std::endl
+	       << "Something is wrong... Aborting..." << std::endl;
+      assert(0);
+    }
 
   // std::cout << "MonEventLooper::switchBins()" << std::endl;
   m_timeinterval = TimeInterval::m_interval;
@@ -412,9 +457,17 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
 
   // std::cout << "MonEventLooper::lastEvent " << std::endl;
   
-  m_timestamp_lastevt_inbin = timeStampdouble;
-  if (m_currentBin>0) TimeInterval::m_interval=timeStampdouble-m_currentStart;
-  else TimeInterval::m_interval=timeStampdouble-m_timestamp_firstevt_inbin;
+  if(!m_IsTrackerMonJob)
+    {
+      m_timestamp_lastevt_inbin = timeStampdouble;
+      if (m_currentBin>0) TimeInterval::m_interval=timeStampdouble-m_currentStart;
+      else TimeInterval::m_interval=timeStampdouble-m_timestamp_firstevt_inbin;
+    }
+  else
+    {
+      // do nothing: TrueTimeIntervalm, TimeStampFirstEvt, TimeStampLastEvt, Bin_Start, Bin_End are set in conf file
+    }
+
   m_timeinterval =  TimeInterval::m_interval;
 
 

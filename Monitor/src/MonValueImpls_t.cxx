@@ -94,7 +94,12 @@ void MonSecondListDouble::latchValue() {}
 
 // Attach a MonSecondListDouble node to a TTree (unsigned int)
 int MonSecondListDouble::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + "OutD_"+ name();
+  std::string fullName;
+   if(!IsTrackerMonJob)
+    fullName = prefix + "OutD_" + name();
+  else
+    fullName = prefix + name();
+
   std::string leafType = fullName + m_dimstring + "/D";
 
   Int_t BufSize = GetBufSize(Int_t(m_dim), "D");
@@ -143,7 +148,11 @@ void MonSecondListFloat::latchValue() {}
 
 // Attach a MonSecondListFloat node to a TTree (unsigned int)
 int MonSecondListFloat::attach(TTree& tree, const std::string& prefix) const {
-  std::string fullName = prefix + "OutF_" + name();
+  std::string fullName;
+  if(!IsTrackerMonJob)
+    fullName = prefix + "OutF_" + name();
+  else
+    fullName = prefix + name();
   std::string leafType = fullName + m_dimstring + "/F";
   
   Int_t BufSize = GetBufSize(Int_t(m_dim), "F");
@@ -165,6 +174,114 @@ void MonSecondListFloat::singleincrement(Double_t* val, Double_t* val2) {
 	continue;
       }
     m_val[i] = (Float_t)val[i];
+  }
+}
+
+// Standard c'tor
+MonSecondListULong64::MonSecondListULong64(const char* name, const char* formula, const char* cut) 
+  :MonValue(name,formula,cut){
+  m_val = new ULong64_t[m_dim];
+  reset();
+}
+
+  // D'tor, no-op
+MonSecondListULong64::~MonSecondListULong64(){
+  delete [] m_val;
+}
+  
+  // Reset just nulls the values
+void MonSecondListULong64::reset() {
+    for (unsigned i=0;i<m_dim;i++)
+      m_val[i] = 0;
+}
+
+void MonSecondListULong64::latchValue() {}
+
+// Attach a MonSecondListULong64 node to a TTree (unsigned int)
+int MonSecondListULong64::attach(TTree& tree, const std::string& prefix) const {
+
+  std::string fullName;
+
+  if(!IsTrackerMonJob)
+    fullName = prefix + "OutLI_" + name();
+  else
+    fullName = prefix + name();
+
+  std::string leafType = fullName + m_dimstring + "/l";
+  
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "l");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
+  return b != 0 ? 1 : -1;
+}
+  // value of m_val object is set
+void MonSecondListULong64::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonSecondListULong64::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
+    m_val[i] = (ULong64_t)val[i];
+  }
+}
+
+
+
+// Standard c'tor
+MonSecondListUInt::MonSecondListUInt(const char* name, const char* formula, const char* cut) 
+  :MonValue(name,formula,cut){
+  m_val = new UInt_t[m_dim];
+  reset();
+}
+
+  // D'tor, no-op
+MonSecondListUInt::~MonSecondListUInt(){
+  delete [] m_val;
+}
+  
+  // Reset just nulls the values
+void MonSecondListUInt::reset() {
+    for (unsigned i=0;i<m_dim;i++)
+      m_val[i] = 0;
+}
+
+void MonSecondListUInt::latchValue() {}
+
+// Attach a MonSecondListUInt node to a TTree (unsigned int)
+int MonSecondListUInt::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullName;
+   if(!IsTrackerMonJob)
+    fullName = prefix + "OutUI_" + name();
+  else
+    fullName = prefix + name();
+
+  std::string leafType = fullName + m_dimstring + "/i";
+  
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "i");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
+  return b != 0 ? 1 : -1;
+}
+  // value of m_val object is set
+void MonSecondListUInt::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonSecondListUInt::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
+    m_val[i] = (UInt_t)val[i];
   }
 }
 
@@ -2250,6 +2367,10 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonSecondListDouble(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputfloat"){
     return new MonSecondListFloat(name.c_str(),formula.c_str(),cut.c_str());
+  } else if (type=="outputuint"){
+    return new MonSecondListUInt(name.c_str(),formula.c_str(),cut.c_str()); 
+  } else if (type=="outputlint"){
+    return new MonSecondListULong64(name.c_str(),formula.c_str(),cut.c_str()); 
   } else if (strstr(type.c_str(),"valuechange")){
     return new MonValueChange(name.c_str(),formula.c_str(),cut.c_str(),type.c_str());
   } else if (strstr(type.c_str(),"histogram-1d")){

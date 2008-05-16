@@ -62,6 +62,10 @@ std::string GiveMeMyType(std::string type)
     mytype = "OutD_";
   } else if (type=="outputfloat"){
     mytype = "OutF_";
+  } else if (type=="outputuint"){
+    mytype = "OutUI_";
+  } else if (type=="outputlint"){
+    mytype = "OutLI_";
   } else if (strstr(type.c_str(),"valuechange")){
     mytype = "";
   } else if (strstr(type.c_str(),"histogram")){
@@ -112,6 +116,7 @@ int main(int argn, char** argc) {
   MonInputCollection* svacinpcol=0;
   MonInputCollection* calinpcol=0;
   MonInputCollection* fastmoninpcol=0;
+  MonInputCollection* trackermoninpcol=0;
   Int_t nTotal=0;
   if (jc.digiChain()){
     digiinpcol=new MonInputCollection_Digi(jc.digiChain(),"DigiEvent");
@@ -169,6 +174,15 @@ int main(int argn, char** argc) {
       assert(0);
     }
   }
+  if (jc.trackermonChain()){
+    trackermoninpcol=new MonInputCollection_Tuple(jc.trackermonChain(),"TrackerMonEvent");
+    if (nTotal==0)nTotal=jc.trackermonChain()->GetEntries();
+    else if (nTotal!=jc.trackermonChain()->GetEntries()){
+      std::cerr<<"Different number of events in TrackerMon chain. Exiting"<<std::endl;
+      assert(0);
+    }
+  }
+
   std::vector<std::map<std::string,std::string> > digidesc;
   std::vector<std::map<std::string,std::string> > recondesc;
   std::vector<std::map<std::string,std::string> > mcdesc;
@@ -176,6 +190,8 @@ int main(int argn, char** argc) {
   std::vector<std::map<std::string,std::string> > meritdesc;
   std::vector<std::map<std::string,std::string> > caldesc;
   std::vector<std::map<std::string,std::string> > fastmondesc;
+  std::vector<std::map<std::string,std::string> > trackermondesc;
+
   MonObjFactory fact;
   bool tsfound=false;
   for (std::list<string>::const_iterator itr=inputlist.begin();
@@ -223,6 +239,12 @@ int main(int argn, char** argc) {
       fastmondesc.push_back(mmap);
       added=true;
     }
+     if(trackermoninpcol && obj->getInputSource()=="TrackerMonEvent"){
+      trackermoninpcol->addInputObject(obj);
+      trackermondesc.push_back(mmap);
+      added=true;
+    }
+
     if ((*itr)==timestamp){
       tsfound=true;
       if (added==false){
@@ -246,6 +268,7 @@ int main(int argn, char** argc) {
   int nsvacobjects=0;
   int ncalobjects=0;
   int nfastmonobjects=0;
+  int ntrackermonobjects=0;
   if(digiinpcol)ndigiobjects= digiinpcol->nObjects();
   if (ndigiobjects>0)allinpcol.push_back(digiinpcol);
   if(reconinpcol)nreconobjects= reconinpcol->nObjects();
@@ -260,7 +283,9 @@ int main(int argn, char** argc) {
   if(ncalobjects>0)allinpcol.push_back(calinpcol);
   if(fastmoninpcol )nfastmonobjects= fastmoninpcol->nObjects();
   if(nfastmonobjects>0)allinpcol.push_back(fastmoninpcol);
-  if (ndigiobjects+nreconobjects+nmcobjects+nmeritobjects+nsvacobjects+ncalobjects+nfastmonobjects==0){
+  if(trackermoninpcol )ntrackermonobjects= trackermoninpcol->nObjects();
+  if(ntrackermonobjects>0)allinpcol.push_back(trackermoninpcol);
+  if (ndigiobjects+nreconobjects+nmcobjects+nmeritobjects+nsvacobjects+ncalobjects+nfastmonobjects+ntrackermonobjects==0){
     std::cerr<<"No input objects defined. Exiting..."<<std::cerr;
     assert(0);
   }
@@ -302,12 +327,22 @@ int main(int argn, char** argc) {
 #endif
   cmd.ReplaceAll("$LinkedLibs",gSystem->GetLibraries("","SDL"));
   gSystem->SetMakeSharedLib(cmd);
+
+
+  // Set flag that identifies whether we are dealing with a TrackerMon job (Hiro's stuff)
+  Bool_t IsTrackerMonJob = ntrackermonobjects>0? 1:0;
+  if(IsTrackerMonJob)
+    MonValue::IsTrackerMonJob = 1; 
+  
   // Attach digi tree to input object
   // build filler & run over events
   MonEventLooper d(jc.optval_b(), outcolprim,outcolsec,allinpcol, globalCut,timestamp);
   // Set whether writing or not intermediate tree to disk. That is necessary if memory 
   // needed when filling one bin of intermediate ttree is larger than 3GB.
   d.writeintreetodisk(jc.WriteInTreeToDisk(),jc.gettmpdir());
+  // d.setIsTrackerMonJob(IsTrackerMonJob); Not needed; done with MonValue::IsTrackerMonJob
+  
+  
 
   if (!jc.compile()){
     Long64_t numevents=jc.optval_n()  < 1 ? nTotal : TMath::Min(jc.optval_n()+jc.optval_s(),nTotal);
@@ -369,6 +404,7 @@ int main(int argn, char** argc) {
     if (meritinpcol)r.additem("Merit file(s)",jc.inputDigiFileStr().c_str());
     if (calinpcol)r.additem("Cal file(s)",jc.inputDigiFileStr().c_str());
     if (fastmoninpcol)r.additem("FastMon file(s)",jc.inputDigiFileStr().c_str());
+    if (trackermoninpcol)r.additem("TrackerMon file(s)",jc.inputDigiFileStr().c_str());
     r.newheadline("<b><center>Input variables</b></center>");
 
 
@@ -422,6 +458,13 @@ int main(int argn, char** argc) {
     }
     for (std::vector<std::map<std::string,std::string> >::iterator itr=fastmondesc.begin();
 	 itr != fastmondesc.end();itr++){
+      strcpy(line[0],((*itr)["name"]).c_str());
+      strcpy(line[1],((*itr)["source"]).c_str());
+      strcpy(line[2],((*itr)["description"]).c_str());
+      r.addtableline(line,3);
+    }
+    for (std::vector<std::map<std::string,std::string> >::iterator itr=trackermondesc.begin();
+	 itr != trackermondesc.end();itr++){
       strcpy(line[0],((*itr)["name"]).c_str());
       strcpy(line[1],((*itr)["source"]).c_str());
       strcpy(line[2],((*itr)["description"]).c_str());
@@ -538,6 +581,13 @@ int main(int argn, char** argc) {
       strcpy(lineparams[2],((*itr)["description"]).c_str());
       r2.addtableline(lineparams,3);
     }
+    for (std::vector<std::map<std::string,std::string> >::iterator itr=trackermondesc.begin();
+	 itr != trackermondesc.end();itr++){
+      strcpy(lineparams[0],((*itr)["name"]).c_str());
+      strcpy(lineparams[1],((*itr)["source"]).c_str());
+      strcpy(lineparams[2],((*itr)["description"]).c_str());
+      r2.addtableline(lineparams,3);
+    }
     r2.endtable();
     r2.newheadline("<b><center>Output variables</b></center>");
     char* outtableparams[]={"Name","Type","Description"};
@@ -576,6 +626,8 @@ int main(int argn, char** argc) {
   if (calinpcol)delete calinpcol;
   //std::cout << std::endl << "Del fastmon" << std::endl <<std::endl;
   if (fastmoninpcol)delete fastmoninpcol;
+  //std::cout << std::endl << "Del trackermon" << std::endl <<std::endl;
+  if (trackermoninpcol)delete trackermoninpcol;
 
  
   //  std::cout << std::endl << "Del prim" << std::endl <<std::endl;

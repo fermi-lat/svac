@@ -43,6 +43,7 @@ public :
   inline const std::string& inputMeritFileStr() const { return m_inputMeritFileStr; }
   inline const std::string& inputCalFileStr() const { return m_inputCalFileStr; }
   inline const std::string& inputFastMonFileStr() const { return m_inputFastMonFileStr; }
+  inline const std::string& inputTrackerMonFileStr() const { return m_inputTrackerMonFileStr; }
 
   inline const std::string& outputPrefix() const { return m_outputPrefix; }
   inline const std::string& timeStamp() const { return m_timeStamp; }
@@ -58,6 +59,7 @@ public :
   inline TChain* svacChain() const { return m_svacChain;}
   inline TChain* meritChain() const { return m_meritChain;}
   inline TChain* fastmonChain() const { return m_fastmonChain;}
+  inline TChain* trackermonChain() const { return m_trackermonChain;}
 
   Bool_t checkDigi() const;
   Bool_t checkRecon() const;
@@ -66,6 +68,8 @@ public :
   Bool_t checkMerit() const;
   Bool_t checkCal() const;
   Bool_t checkFastMon() const;
+  Bool_t checkTrackerMon() const;
+
 
   std::string getDataType(){ return m_datatype;} 
   Bool_t WriteInTreeToDisk() {return m_WriteintreeToDisk;}
@@ -93,6 +97,7 @@ private:
   std::string m_inputMeritFileStr;
   std::string m_inputCalFileStr;
   std::string m_inputFastMonFileStr;
+  std::string m_inputTrackerMonFileStr;
 
   std::string m_outputPrefix;
   std::string m_timeStamp;
@@ -110,6 +115,8 @@ private:
   TChain* m_meritChain;
   TChain* m_calChain;
   TChain* m_fastmonChain;
+  TChain* m_trackermonChain;
+
   std::string m_datatype;
   Bool_t m_WriteintreeToDisk;
   std::string m_tmpdir;

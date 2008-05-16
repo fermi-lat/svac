@@ -556,4 +556,6 @@ const std::string MonValue::indexString(int index){
 }
     
     
-    
+// Initialization of static members
+
+Bool_t MonValue::IsTrackerMonJob=0;

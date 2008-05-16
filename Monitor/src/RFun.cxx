@@ -879,6 +879,26 @@ unsigned RFun::loopovertkrplanes_int(const Int_t invector[])
 }
 
 
+Double_t RFun::loopovertkrplanes_double(const Double_t invector[])
+{
+  Double_t n_counter(0);
+  for (UShort_t iplane = 0; iplane < 36; iplane++)
+      n_counter += invector[iplane];
+  
+  return n_counter;
+
+}
+
+Double_t RFun::loopovertowerANDtkrplanes_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >& invector)
+{
+  Double_t n_counter(0.0);
+  for (UShort_t itower = 0; itower < 16; itower++){
+    for (UShort_t iplane = 0; iplane < 36; iplane++)
+      n_counter += invector[itower][iplane];
+  }
+  return n_counter;
+}
+
  // function that reads the norm factors from ascii file and fills the map RFun::NormFactors
 int RFun::LoadNormFactors()
 {

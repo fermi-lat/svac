@@ -140,7 +140,7 @@ class RFun{
 
   // Normalization of Rates
   
-  static void SetAsciiFileNameWithNormFactors(char* asciifile){m_normfactascii = asciifile;}
+  static void SetAsciiFileNameWithNormFactors(const char* asciifile){m_normfactascii = asciifile;}
 
   // function that reads the norm factors from ascii file and fills the map RFun::NormFactors
   static int LoadNormFactors();
@@ -172,6 +172,8 @@ class RFun{
 
   static unsigned loopovertowerANDtkrplanes_int(ROOT::TArrayProxy<ROOT::TArrayType<Int_t, 36> >&);
   static unsigned loopovertkrplanes_int(const Int_t invector[]);
+  static Double_t loopovertkrplanes_double(const Double_t invector[]);
+  static Double_t loopovertowerANDtkrplanes_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >&);
 
     //(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
        

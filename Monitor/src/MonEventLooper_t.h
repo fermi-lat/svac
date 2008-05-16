@@ -52,24 +52,28 @@ public :
     //std::cout << "m_intreeToDisk=" << m_intreeToDisk << ";m_tmpdir=" << m_tmpdir << std::endl;
   }
 
+  // m_IsTrackerMonJob getter/setter functions
+  Bool_t getIsTrackerMonJob(){return m_IsTrackerMonJob;}
+  void setIsTrackerMonJob(Bool_t b);
+
 protected:
 
   // initialize at start of event loop
   virtual void init(); 
-
+  
   // read in 1 event
   virtual Bool_t readEvent(Long64_t ievent) ;
-
+  
   // filter event through a global cut
   virtual void filterEvent();
-
-
+  
+  
   // go to the next bin, called when the timeStamp is outside the current bin
   void switchBins();
-
+  
   // flush data if tree size reaches 500 MB
   void flushData();
-    
+  
   // set the tree
   void attachTree();
 
@@ -85,6 +89,8 @@ protected:
   void lastEvent(Double_t timeStamp);
 
   Bool_t createtfile4intree(std::string dir, std::string filename);
+
+  
   
 private:
 
@@ -161,6 +167,9 @@ private:
   std::string m_intreetfilename;
   // directory where intermediate tree will be stored
   std::string m_tmpdir;
+  // flat indicating that we are dealing with a trackermon file (Bin_Start/Bin_End and others computed differently)
+  Bool_t m_IsTrackerMonJob;
+  
 };
 
 #endif

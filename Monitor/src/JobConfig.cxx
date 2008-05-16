@@ -33,6 +33,7 @@ JobConfig::JobConfig(const char* appName, const char* desc)
    m_meritChain(0),
    m_calChain(0),
    m_fastmonChain(0),
+   m_trackermonChain(0),
    m_datatype("Normal"),
    m_WriteintreeToDisk(false),
    m_tmpdir("./"),
@@ -50,6 +51,7 @@ JobConfig::~JobConfig()
   if (m_meritChain) delete m_meritChain;
   if (m_calChain) delete m_calChain;
   if (m_fastmonChain) delete m_fastmonChain;
+  if (m_trackermonChain) delete m_trackermonChain;
 }
 
 void JobConfig::usage() {
@@ -84,6 +86,7 @@ void JobConfig::usage() {
        << "\t   -m <meritFiles>   : comma seperated list of merit ROOT files" << endl 
        << "\t   -a <calFiles>     : comma seperated list of cal ROOT files" << endl 
        << "\t   -f <fastmonFiles> : comma seperated list of fastmon ROOT files" << endl 
+       << "\t   -k <trackermonFiles> : comma seperated list of trackermon ROOT files" << endl 
        << "\tNOTE:  Different calibrations jobs take diffenent types of input files" << endl
        << endl
        << "\t   -o <output>       : prefix (path or filename) to add to output files" << endl
@@ -114,7 +117,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 
   char* endPtr;  
   int opt;
-  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:f:j:c:e:g:n:s:b:w:u:pqz")) != EOF ) {
+  while ( (opt = getopt(argn, argc, "ho:t:d:r:y:S:m:a:f:k:j:c:e:g:n:s:b:w:u:pqz")) != EOF ) {
     switch (opt) {
     case 'h':   // help      
       usage();
@@ -158,6 +161,10 @@ Int_t JobConfig::parse(int argn, char** argc) {
     case 'f':   // Merit files
       m_inputFastMonFileStr += string(optarg);
       m_inputFastMonFileStr += ',';
+      break;
+    case 'k':   // Merit files
+      m_inputTrackerMonFileStr += string(optarg);
+      m_inputTrackerMonFileStr += ',';
       break;
     case 'j':   // job option file
       m_jobOptionXmlFile = string(optarg);
@@ -315,6 +322,17 @@ Int_t JobConfig::parse(int argn, char** argc) {
   }  
 
 
+    // trackermon files
+  if (myFile && myFile->contains("parameters","trackermonFileList")) {
+    m_inputTrackerMonFileStr += myFile->getString("parameters", "trackermonFileList");
+  }
+  
+  if ( m_inputTrackerMonFileStr != "" ) {
+    cout << "Input trackermon files:" << endl;
+    m_trackermonChain = makeChain("tkrMonitor",m_inputTrackerMonFileStr);
+  }  
+
+
   // html configuration file
   if (myFile && myFile->contains ("parameters","htmlFile")){
     if (m_htmlFile !=""){
@@ -417,6 +435,17 @@ Bool_t JobConfig::checkFastMon() const {
   if ( m_fastmonChain == 0 ) {
     std::cerr << "This job requires fastmon ROOT files as input." << std::endl
 	      << "\tuse -f <file> option to specify them." << std::endl
+	      << std::endl;
+    return kFALSE;
+  }
+  return kTRUE;
+}
+
+
+Bool_t JobConfig::checkTrackerMon() const {
+  if ( m_trackermonChain == 0 ) {
+    std::cerr << "This job requires trackermon ROOT files as input." << std::endl
+	      << "\tuse -k <file> option to specify them." << std::endl
 	      << std::endl;
     return kFALSE;
   }

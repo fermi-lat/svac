@@ -188,10 +188,59 @@
 // Last updated with object sourceGps by user dpaneque on Thu Apr 24 23:26:12 2008
 // Last updated with object FastMon_new_second by user bregeon on Fri May  2 09:24:08 2008
 // Last updated with object FastMon_meta_context_current_source_gps by user bregeon on Fri May  2 09:26:32 2008
+// Last updated with object trackermontimestamp by user dpaneque on Wed May 14 23:59:23 2008
+// Last updated with object firstRunId by user dpaneque on Thu May 15 00:06:09 2008
+// Last updated with object lastRunId by user dpaneque on Thu May 15 00:06:53 2008
+// Last updated with object endTime by user dpaneque on Thu May 15 05:07:35 2008
+// Last updated with object DataTransferId by user dpaneque on Fri May 16 01:13:45 2008
+// Last updated with object TOT_Peak_TowerPlane by user dpaneque on Fri May 16 01:24:02 2008
+// Last updated with object TOT_LWidth by user dpaneque on Fri May 16 04:51:31 2008
+// Last updated with object TOT_GSigma by user dpaneque on Fri May 16 04:52:01 2008
+// Last updated with object TOT_Entries by user dpaneque on Fri May 16 04:52:24 2008
+// Last updated with object TOT_PeakError by user dpaneque on Fri May 16 04:52:48 2008
+// Last updated with object TOT_LWidthError by user dpaneque on Fri May 16 04:53:08 2008
+// Last updated with object TOT_GSigmaError by user dpaneque on Fri May 16 04:53:25 2008
+// Last updated with object TOT_FitProb by user dpaneque on Fri May 16 04:53:41 2008
+// Last updated with object TOT_FracLowTOT by user dpaneque on Fri May 16 04:54:00 2008
+// Last updated with object layerEff by user dpaneque on Fri May 16 04:54:21 2008
+// Last updated with object layerEff_err by user dpaneque on Fri May 16 04:54:48 2008
+// Last updated with object towerEff by user dpaneque on Fri May 16 04:55:16 2008
+// Last updated with object towerEff_err by user dpaneque on Fri May 16 04:55:34 2008
+// Last updated with object trigEff by user dpaneque on Fri May 16 04:55:52 2008
+// Last updated with object trigEff_err by user dpaneque on Fri May 16 04:56:20 2008
+// Last updated with object layerdXY by user dpaneque on Fri May 16 04:56:39 2008
+// Last updated with object layerdXY_err by user dpaneque on Fri May 16 04:56:58 2008
+// Last updated with object layerOcc by user dpaneque on Fri May 16 04:57:23 2008
+// Last updated with object stripOcc by user dpaneque on Fri May 16 04:57:38 2008
+// Last updated with object fracSat by user dpaneque on Fri May 16 04:57:57 2008
+#include "trackermon/MonInput_fracSat.h"
+#include "trackermon/MonInput_stripOcc.h"
+#include "trackermon/MonInput_layerOcc.h"
+#include "trackermon/MonInput_layerdXY_err.h"
+#include "trackermon/MonInput_layerdXY.h"
+#include "trackermon/MonInput_trigEff_err.h"
+#include "trackermon/MonInput_trigEff.h"
+#include "trackermon/MonInput_towerEff_err.h"
+#include "trackermon/MonInput_towerEff.h"
+#include "trackermon/MonInput_layerEff_err.h"
+#include "trackermon/MonInput_layerEff.h"
+#include "trackermon/MonInput_TOT_FracLowTOT.h"
+#include "trackermon/MonInput_TOT_FitProb.h"
+#include "trackermon/MonInput_TOT_GSigmaError.h"
+#include "trackermon/MonInput_TOT_LWidthError.h"
+#include "trackermon/MonInput_TOT_PeakError.h"
+#include "trackermon/MonInput_TOT_Entries.h"
+#include "trackermon/MonInput_TOT_GSigma.h"
+#include "trackermon/MonInput_TOT_LWidth.h"
+#include "trackermon/MonInput_TOT_Peak_TowerPlane.h"
+#include "digi/MonInput_DataTransferId.h"
+#include "trackermon/MonInput_endTime.h"
+#include "trackermon/MonInput_lastRunId.h"
+#include "trackermon/MonInput_firstRunId.h"
+#include "trackermon/MonInput_trackermontimestamp.h"
 #include "fastmon/MonInput_FastMon_meta_context_current_source_gps.h"
 #include "fastmon/MonInput_FastMon_new_second.h"
 #include "digi/MonInput_sourceGps.h"
-
 #include "digi/MonInput_CurrentORPreviousTimeToneMissing.h"
 #include "fastmon/MonInput_FastMon_spacecraft_yaw.h"
 #include "fastmon/MonInput_FastMon_spacecraft_roll.h"
@@ -731,6 +780,56 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_new_second;
   if (s=="FastMon_meta_context_current_source_gps")
     return new MonInput_FastMon_meta_context_current_source_gps;
+  if (s=="trackermontimestamp")
+    return new MonInput_trackermontimestamp;
+  if (s=="firstRunId")
+    return new MonInput_firstRunId;
+  if (s=="lastRunId")
+    return new MonInput_lastRunId;
+  if (s=="endTime")
+    return new MonInput_endTime;
+  if (s=="DataTransferId")
+    return new MonInput_DataTransferId;
+  if (s=="TOT_Peak_TowerPlane")
+    return new MonInput_TOT_Peak_TowerPlane;
+  if (s=="TOT_LWidth_TowerPlane")
+    return new MonInput_TOT_LWidth;
+  if (s=="TOT_GSigma_TowerPlane")
+    return new MonInput_TOT_GSigma;
+  if (s=="TOT_Entries_TowerPlane")
+    return new MonInput_TOT_Entries;
+  if (s=="TOT_PeakError_TowerPlane")
+    return new MonInput_TOT_PeakError;
+  if (s=="TOT_LWidthError_TowerPlane")
+    return new MonInput_TOT_LWidthError;
+  if (s=="TOT_GSigmaError_TowerPlane")
+    return new MonInput_TOT_GSigmaError;
+  if (s=="TOT_FitProb_TowerPlane")
+    return new MonInput_TOT_FitProb;
+  if (s=="TOT_FracLowTOT_TowerPlane")
+    return new MonInput_TOT_FracLowTOT;
+  if (s=="layerEff_TowerPlane")
+    return new MonInput_layerEff;
+  if (s=="layerEff_err_TowerPlane")
+    return new MonInput_layerEff_err;
+  if (s=="towerEff_Tower")
+    return new MonInput_towerEff;
+  if (s=="towerEff_err_Tower")
+    return new MonInput_towerEff_err;
+  if (s=="trigEff_Tower")
+    return new MonInput_trigEff;
+  if (s=="trigEff_err_Tower")
+    return new MonInput_trigEff_err;
+  if (s=="layerdXY_TowerPlane")
+    return new MonInput_layerdXY;
+  if (s=="layerdXY_err_TowerPlane")
+    return new MonInput_layerdXY_err;
+  if (s=="layerOcc_TowerPlane")
+    return new MonInput_layerOcc;
+  if (s=="stripOcc_TowerPlane")
+    return new MonInput_stripOcc;
+  if (s=="fracSat_TowerPlane")
+    return new MonInput_fracSat;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -918,6 +1017,31 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("sourceGps");
   names.push_back("FastMon_new_second");
   names.push_back("FastMon_meta_context_current_source_gps");
+  names.push_back("trackermontimestamp");
+  names.push_back("firstRunId");
+  names.push_back("lastRunId");
+  names.push_back("endTime");
+  names.push_back("DataTransferId");
+  names.push_back("TOT_Peak_TowerPlane");
+  names.push_back("TOT_LWidth");
+  names.push_back("TOT_GSigma");
+  names.push_back("TOT_Entries");
+  names.push_back("TOT_PeakError");
+  names.push_back("TOT_LWidthError");
+  names.push_back("TOT_GSigmaError");
+  names.push_back("TOT_FitProb");
+  names.push_back("TOT_FracLowTOT");
+  names.push_back("layerEff");
+  names.push_back("layerEff_err");
+  names.push_back("towerEff");
+  names.push_back("towerEff_err");
+  names.push_back("trigEff");
+  names.push_back("trigEff_err");
+  names.push_back("layerdXY");
+  names.push_back("layerdXY_err");
+  names.push_back("layerOcc");
+  names.push_back("stripOcc");
+  names.push_back("fracSat");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
