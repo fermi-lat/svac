@@ -213,6 +213,10 @@
 // Last updated with object layerOcc by user dpaneque on Fri May 16 04:57:23 2008
 // Last updated with object stripOcc by user dpaneque on Fri May 16 04:57:38 2008
 // Last updated with object fracSat by user dpaneque on Fri May 16 04:57:57 2008
+// Last updated with object FastMon_meta_LATC_master by user bregeon on Sat May 17 12:23:23 2008
+// Last updated with object FastMon_evt_data_transfer_id by user bregeon on Sat May 17 12:29:02 2008
+#include "fastmon/MonInput_FastMon_evt_data_transfer_id.h"
+#include "fastmon/MonInput_FastMon_meta_LATC_master.h"
 #include "trackermon/MonInput_fracSat.h"
 #include "trackermon/MonInput_stripOcc.h"
 #include "trackermon/MonInput_layerOcc.h"
@@ -830,6 +834,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_stripOcc;
   if (s=="fracSat_TowerPlane")
     return new MonInput_fracSat;
+  if (s=="FastMon_meta_LATC_master")
+    return new MonInput_FastMon_meta_LATC_master;
+  if (s=="FastMon_evt_data_transfer_id")
+    return new MonInput_FastMon_evt_data_transfer_id;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1042,6 +1050,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("layerOcc");
   names.push_back("stripOcc");
   names.push_back("fracSat");
+  names.push_back("FastMon_meta_LATC_master");
+  names.push_back("FastMon_evt_data_transfer_id");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
