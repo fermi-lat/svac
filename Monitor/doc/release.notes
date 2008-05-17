@@ -1,4 +1,14 @@
 
+v1r1p9  2008/05/16  (DEV)
+--------------------------
+Change variable type object for quantity DataTransferId. 
+Prefix will be Number_ instead of OutF_. 
+New object was defined for that MonSecondListNumber. 
+It is identical to MonSecondListUInt, the the prefix used is Number_
+instead of OutUI_. 
+
+That addresses Jira GDQMQ-115.
+
 v1r1p8  2008/05/16  (DEV)
 --------------------------
 Changes in code to handle high level tracker monitoring information 
