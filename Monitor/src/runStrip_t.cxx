@@ -62,8 +62,10 @@ std::string GiveMeMyType(std::string type)
     mytype = "OutD_";
   } else if (type=="outputfloat"){
     mytype = "OutF_";
-  } else if (type=="outputuint"){
+  } else if (type=="outputuint"){  
     mytype = "OutUI_";
+  } else if (type=="outputnumber"){  
+    mytype = "Number_";
   } else if (type=="outputlint"){
     mytype = "OutLI_";
   } else if (strstr(type.c_str(),"valuechange")){

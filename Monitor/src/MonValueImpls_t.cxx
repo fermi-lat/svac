@@ -282,9 +282,61 @@ void MonSecondListUInt::singleincrement(Double_t* val, Double_t* val2) {
 	continue;
       }
     m_val[i] = (UInt_t)val[i];
+
   }
 }
 
+// Standard c'tor
+MonSecondListNumber::MonSecondListNumber(const char* name, const char* formula, const char* cut) 
+  :MonValue(name,formula,cut){
+  m_val = new UInt_t[m_dim];
+  reset();
+}
+
+  // D'tor, no-op
+MonSecondListNumber::~MonSecondListNumber(){
+  delete [] m_val;
+}
+  
+  // Reset just nulls the values
+void MonSecondListNumber::reset() {
+    for (unsigned i=0;i<m_dim;i++)
+      m_val[i] = 0;
+}
+
+void MonSecondListNumber::latchValue() {}
+
+// Attach a MonSecondListNumber node to a TTree (unsigned int)
+int MonSecondListNumber::attach(TTree& tree, const std::string& prefix) const {
+  std::string fullName;
+   if(!IsTrackerMonJob)
+    fullName = prefix + "Number_" + name();
+  else
+    fullName = prefix + name();
+
+  std::string leafType = fullName + m_dimstring + "/i";
+  
+  Int_t BufSize = GetBufSize(Int_t(m_dim), "i");
+  CheckLeafName(leafType.c_str());
+
+  TBranch* b = tree.Branch(fullName.c_str(),m_val,leafType.c_str(),BufSize);
+  return b != 0 ? 1 : -1;
+}
+  // value of m_val object is set
+void MonSecondListNumber::singleincrement(Double_t* val, Double_t* val2) {
+  for (unsigned i=0;i<m_dim;i++){
+    if(isnan(val[i]) || isinf(val[i]))
+      {
+	std::cout << std::endl << "MonSecondListNumber::singleincrement: WARNING" << std::endl
+		  << "Parameter " << m_name.c_str() << " has a nan or inf value"
+		  << std::endl << "This should not happen at this point of the chain... "
+		  << std::endl << "This value will not be used in the calculations" 
+		  << std::endl;
+	continue;
+      }
+    m_val[i] = (UInt_t)val[i];
+  }
+}
 
 
 MonRate::MonRate(const char* name, const char* formula, const char* cut)
@@ -2369,6 +2421,8 @@ MonValue* MonValFactory::makeMonValue(std::map<std::string,std::string> obj){
     return new MonSecondListFloat(name.c_str(),formula.c_str(),cut.c_str());
   } else if (type=="outputuint"){
     return new MonSecondListUInt(name.c_str(),formula.c_str(),cut.c_str()); 
+  } else if (type=="outputnumber"){
+    return new MonSecondListNumber(name.c_str(),formula.c_str(),cut.c_str()); 
   } else if (type=="outputlint"){
     return new MonSecondListULong64(name.c_str(),formula.c_str(),cut.c_str()); 
   } else if (strstr(type.c_str(),"valuechange")){
