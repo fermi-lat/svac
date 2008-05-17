@@ -1,3 +1,7 @@
+v1r1p10  2008/05/17  (DEV)
+--------------------------
+Added new FastMon trending quantities FastMon_Evt_DataTransferId and FastMon_MetaContext_LATC_Master that are of type outputnumber.
+JIRAs GDQMQ-115 and GDQMQ-107
 
 v1r1p9  2008/05/16  (DEV)
 --------------------------
