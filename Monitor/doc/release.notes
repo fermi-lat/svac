@@ -1,4 +1,9 @@
 
+v1r1p12  2008/05/21  (DEV)
+----------------------------
+Modfied treemerge.cxx so that the merged quantity is not the largest value, 
+but the last value. This is done in case the DataTransferId has decreasing numbers. 
+
 v1r1p11  2008/05/21  (DEV)
 ----------------------------
 Added merging of quantity outputnumber (prefix Number_) which is an UInt_t. 
