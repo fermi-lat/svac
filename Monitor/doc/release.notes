@@ -1,3 +1,13 @@
+
+v1r1p11  2008/05/21  (DEV)
+----------------------------
+Added merging of quantity outputnumber (prefix Number_) which is an UInt_t. 
+The merging consists in using the largest value. 
+This is a temporal solution to deal with quantity Number_LastDataTransferId. 
+The proper way to go is to define thsi quantiy as ValChange update the data 
+base to deal with ValChange quantities. 
+  
+
 v1r1p10  2008/05/17  (DEV)
 --------------------------
 Added new FastMon trending quantities FastMon_Evt_DataTransferId and FastMon_MetaContext_LATC_Master that are of type outputnumber.
