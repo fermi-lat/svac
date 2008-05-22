@@ -523,6 +523,26 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	((Double_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
       }
     }
+
+    // temporal solution to merge outputnumber objects (D.P. 2008/05/19)
+    if (leaves[i].find("Number_")==0 ){
+      used[i]=true;
+      // The true interval index is set
+      assert (trueint>-1);
+      UInt_t iv1=((UInt_t*)addin1[trueint])[0];
+      UInt_t iv2=((UInt_t*)addin2[trueint])[0];
+      for (unsigned j=0;j<dims[i];j++){
+	UInt_t val1=((UInt_t*)addin1[i])[j];
+	UInt_t val2=((UInt_t*)addin2[i])[j];
+	// The total time interval is gt 0
+	assert (iv1+iv2>0);
+	((UInt_t*)addout[i])[j]= val2>=val1 ? val2 :val1;
+      }
+    }
+
+    // end tmp
+
+
     if ((leaves[i].find("Rate_")==0 || leaves[i].find("CounterDiffRate_")==0 )&& leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
       used[i]=true;
       assert (trueint>-1);
