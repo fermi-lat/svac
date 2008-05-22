@@ -1,4 +1,10 @@
 
+v1r1p13  2008/05/22  (DEV)
+-----------------------------
+Corrected bug in treemerge.cxx merrging of Number_.
+The time intervals were stored in UInt instead of Double. 
+
+
 v1r1p12  2008/05/21  (DEV)
 ----------------------------
 Modfied treemerge.cxx so that the merged quantity is not the largest value, 
