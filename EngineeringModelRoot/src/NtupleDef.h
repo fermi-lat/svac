@@ -274,6 +274,7 @@ struct NtupleDef {
   int m_obfPassedMIP;
   int m_obfPassedHIP;
   int m_obfPassedDGN; 
+  unsigned int m_obfFilterStatusBits;
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118

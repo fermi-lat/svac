@@ -602,6 +602,7 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_gammaStatusInt==0 || m_gammaStatusInt==6) {
       m_ntuple.m_obfPassedGAMMA = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_gammaStatus>>4); 
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
     UChar_t m_mipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
@@ -609,6 +610,7 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_mipStatusInt==0 || m_mipStatusInt==6) {
       m_ntuple.m_obfPassedMIP = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_mipStatus>>4) << 4; 
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
     UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getFiltersb();
@@ -616,6 +618,7 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       m_ntuple.m_obfPassedHIP = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_hipStatus>>4) << 8; 
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
     UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getFiltersb();
@@ -623,6 +626,7 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       m_ntuple.m_obfPassedDGN = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_dgnStatusInt>>4) << 12; 
   }
   
 
@@ -633,7 +637,7 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned int tmpLatcKey = 0;
 
   if (m_digiEvent->getMetaEvent().keys() != 0) {
-    tmpLatcKey = m_digiEvent->getMetaEvent().keys()->LATC_master();
+    tmpLatcKey    = m_digiEvent->getMetaEvent().keys()->LATC_master();
   }
   m_ntuple.m_latcKey = tmpLatcKey;
  
@@ -1541,6 +1545,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedMIP", &(m_ntuple.m_obfPassedMIP), "ObfPassedMIP/I");
   m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
+  m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
 
 
   // GEM information:
