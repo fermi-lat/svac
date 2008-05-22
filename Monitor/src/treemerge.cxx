@@ -536,7 +536,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	UInt_t val2=((UInt_t*)addin2[i])[j];
 	// The total time interval is gt 0
 	assert (iv1+iv2>0);
-	((UInt_t*)addout[i])[j]= val2>=val1 ? val2 :val1;
+	((UInt_t*)addout[i])[j]= val2;
       }
     }
 
