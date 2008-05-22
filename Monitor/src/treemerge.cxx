@@ -529,14 +529,17 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       used[i]=true;
       // The true interval index is set
       assert (trueint>-1);
-      UInt_t iv1=((UInt_t*)addin1[trueint])[0];
-      UInt_t iv2=((UInt_t*)addin2[trueint])[0];
+      Double_t iv1=((Double_t*)addin1[trueint])[0];
+      Double_t iv2=((Double_t*)addin2[trueint])[0];
       for (unsigned j=0;j<dims[i];j++){
 	UInt_t val1=((UInt_t*)addin1[i])[j];
 	UInt_t val2=((UInt_t*)addin2[i])[j];
 	// The total time interval is gt 0
 	assert (iv1+iv2>0);
-	((UInt_t*)addout[i])[j]= val2;
+	if(iv2>0)
+	  ((UInt_t*)addout[i])[j]= val2;
+	else
+	  ((UInt_t*)addout[i])[j]= val1;
       }
     }
 
