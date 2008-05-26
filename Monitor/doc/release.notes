@@ -1,4 +1,9 @@
 
+v1r1p14  2008/05/25  (DEV)
+---------------------------
+Added new quantities to retrieve the real flight software filter bits. 
+This addresses Jira GDQMQ-132
+
 v1r1p13  2008/05/22  (DEV)
 -----------------------------
 Corrected bug in treemerge.cxx merrging of Number_.
