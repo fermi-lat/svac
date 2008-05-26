@@ -215,6 +215,14 @@
 // Last updated with object fracSat by user dpaneque on Fri May 16 04:57:57 2008
 // Last updated with object FastMon_meta_LATC_master by user bregeon on Sat May 17 12:23:23 2008
 // Last updated with object FastMon_evt_data_transfer_id by user bregeon on Sat May 17 12:29:02 2008
+// Last updated with object FswFilters by user dpaneque on Sat May 24 21:39:00 2008
+// Last updated with object GemPrescale by user dpaneque on Sat May 24 21:46:05 2008
+// Last updated with object DGNGemPrescale by user dpaneque on Sat May 24 21:47:37 2008
+// Last updated with object FswFilters_GammaBits by user dpaneque on Sun May 25 23:31:55 2008
+#include "digi/MonInput_FswFilters_GammaBits.h"
+#include "digi/MonInput_DGNGemPrescale.h"
+#include "digi/MonInput_GemPrescale.h"
+#include "digi/MonInput_FswFilters.h"
 #include "fastmon/MonInput_FastMon_evt_data_transfer_id.h"
 #include "fastmon/MonInput_FastMon_meta_LATC_master.h"
 #include "trackermon/MonInput_fracSat.h"
@@ -838,6 +846,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_meta_LATC_master;
   if (s=="FastMon_evt_data_transfer_id")
     return new MonInput_FastMon_evt_data_transfer_id;
+  if (s=="FswFilters")
+    return new MonInput_FswFilters;
+  if (s=="GemPrescale")
+    return new MonInput_GemPrescale;
+  if (s=="DGNGemPrescale")
+    return new MonInput_DGNGemPrescale;
+  if (s=="FswFilters_GammaBits")
+    return new MonInput_FswFilters_GammaBits;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1052,6 +1068,10 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("fracSat");
   names.push_back("FastMon_meta_LATC_master");
   names.push_back("FastMon_evt_data_transfer_id");
+  names.push_back("FswFilters");
+  names.push_back("GemPrescale");
+  names.push_back("DGNGemPrescale");
+  names.push_back("FswFilters_GammaBits");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
