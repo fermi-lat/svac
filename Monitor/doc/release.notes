@@ -2,7 +2,11 @@
 v1r1p14  2008/05/25  (DEV)
 ---------------------------
 Added new quantities to retrieve the real flight software filter bits. 
-This addresses Jira GDQMQ-132
+This addresses Jira GDQMQ-132. 
+This tag DOES NOT compile. The new glast release (which has the real 
+flight software bits) is not yet available. The branch name that needs to be 
+activated to access that info is still unknown. A new tag needs to be done 
+once the new glast release is available. 
 
 v1r1p13  2008/05/22  (DEV)
 -----------------------------
