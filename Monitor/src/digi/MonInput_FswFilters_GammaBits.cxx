@@ -12,7 +12,7 @@
 #define NAME FswFilters_GammaBits
 #define OUTBRANCH "FswFilters_GammaBits"
 #define LEAF "FswFilters_GammaBits[32]/I"
-#define INBRANCH "XXXX" Replace with real name
+#define INBRANCH "m_metaEvent" 
 #define ACCESSOR NotAplicable
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"

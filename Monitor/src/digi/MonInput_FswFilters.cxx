@@ -12,7 +12,7 @@
 #define NAME FswFilters
 #define OUTBRANCH "FswFilters"
 #define LEAF "FswFilters[5]/I"
-#define INBRANCH "XXXXX"  Replace with Branch Name
+#define INBRANCH "m_metaEvent"
 #define ACCESSOR NotAplicable
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
@@ -53,7 +53,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
  
   const LpaGammaFilter *gam = de->getGammaFilter();
   if(gam){
-    if(gam->Passed())
+    if(gam->passed())
       m_val[0] = 1;
     else
       m_val[0] = 0; // It did NOT passed
@@ -62,7 +62,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // Mip filter
   const LpaMipFilter *mip = de->getMipFilter(); 
   if(mip){
-    if(mip->Passed())
+    if(mip->passed())
       m_val[1] = 1;
     else
       m_val[1] = 0; // It did NOT passed
@@ -71,7 +71,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // HIp filter
   const LpaHipFilter *hip = de->getHipFilter();
   if(hip){
-    if(hip->Passed())
+    if(hip->passed())
       m_val[2] = 1;
     else
       m_val[2] = 0; // It did NOT passed
@@ -80,7 +80,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // DGN filter
   const LpaDgnFilter *dgn = de->getDgnFilter();
   if(dgn){
-    if(dgn->Passed())
+    if(dgn->passed())
       m_val[3] = 1;
     else
       m_val[3] = 0; // It did NOT passed
@@ -88,7 +88,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
  
   const LpaPassthruFilter *pass = de->getPassthruFilter();
   if(pass){
-    if(pass->Passed())
+    if(pass->passed())
       m_val[4] = 1;
     else
       m_val[4] = 0;
