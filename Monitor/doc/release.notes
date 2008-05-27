@@ -1,4 +1,13 @@
 
+v1r1p15  2008/05/25  (DEV)
+---------------------------
+Define Branch name for filter bits info retrieval. 
+Changed Passed() by passed(). 
+This address Jira GDQMQ-132. 
+The code should compile now with the new glast version. 
+But since the version is not yet available i cannot check taht. 
+
+
 v1r1p14  2008/05/25  (DEV)
 ---------------------------
 Added new quantities to retrieve the real flight software filter bits. 
