@@ -1,3 +1,11 @@
+v1r1p16  2008/05/28  (DEV)
+---------------------------
+Changes in code to compile with the new glast release
+(GlastRelease-HEAD1.1096).
+
+Add merit parameters. 
+Those issues address the jiras GDQMQ-137 and GDQMQ-132.
+
 
 v1r1p15  2008/05/25  (DEV)
 ---------------------------
