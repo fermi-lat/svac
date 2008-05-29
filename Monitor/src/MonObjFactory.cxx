@@ -219,6 +219,10 @@
 // Last updated with object GemPrescale by user dpaneque on Sat May 24 21:46:05 2008
 // Last updated with object DGNGemPrescale by user dpaneque on Sat May 24 21:47:37 2008
 // Last updated with object FswFilters_GammaBits by user dpaneque on Sun May 25 23:31:55 2008
+// Last updated with object MeritObfGamStatus by user dpaneque on Thu May 29 04:12:59 2008
+// Last updated with object CTBParticleType by user dpaneque on Thu May 29 04:19:18 2008
+#include "merit/MonInput_CTBParticleType.h"
+#include "merit/MonInput_MeritObfGamStatus.h"
 #include "digi/MonInput_FswFilters_GammaBits.h"
 #include "digi/MonInput_DGNGemPrescale.h"
 #include "digi/MonInput_GemPrescale.h"
@@ -854,6 +858,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DGNGemPrescale;
   if (s=="FswFilters_GammaBits")
     return new MonInput_FswFilters_GammaBits;
+  if (s=="MeritObfGamStatus")
+    return new MonInput_MeritObfGamStatus;
+  if (s=="CTBParticleType")
+    return new MonInput_CTBParticleType;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1072,6 +1080,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("GemPrescale");
   names.push_back("DGNGemPrescale");
   names.push_back("FswFilters_GammaBits");
+  names.push_back("MeritObfGamStatus");
+  names.push_back("CTBParticleType");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
