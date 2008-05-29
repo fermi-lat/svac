@@ -85,15 +85,17 @@ void MonInput_FswFilters::setValue(TObject* event) {
     else
       m_val[3] = 0; // It did NOT passed
   }
- 
-  const LpaPassthruFilter *pass = de->getPassthruFilter();
+
+  const LpaHandler& thislpahandler=de->getLpaHandler();
+  const LpaPassthruFilter* pass = thislpahandler.getPassthruFilter();
+
   if(pass){
-    if(pass->passed())
+    if(1)//pass->passed())
       m_val[4] = 1;
     else
       m_val[4] = 0;
   }
-
+  
  
 
 }

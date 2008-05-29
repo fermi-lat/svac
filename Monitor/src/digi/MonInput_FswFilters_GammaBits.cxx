@@ -51,9 +51,11 @@ void MonInput_FswFilters_GammaBits::setValue(TObject* event) {
 
   // Real filter status bits:
  
-  const LpaGammaFilter* gamma = (LpaGammaFilter*)de->getLpaHandler()->getHandler(enums::Lsf::GAMMA);
+  //const LpaGammaFilter* gamma = (LpaGammaFilter*)(de->getLpaHandler()->getHandler(enums::Lsf::GAMMA));
+  const LpaGammaFilter* gamma = (LpaGammaFilter*)de->getGammaFilter();
+
   if (gamma) {
-    UInt_t filterbit = = gamma->getStatus();
+    UInt_t filterbit = gamma->getStatusWord();
     // gamma_statusword is your 32-bit word
     for (int iBit = 0; iBit < 32; iBit++) {
       if ((filterbit >> iBit) & 1) 
