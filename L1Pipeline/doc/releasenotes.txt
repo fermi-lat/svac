@@ -2,8 +2,10 @@
 -----------------
 Don't set confusing & wrong status metadata when registering datasets.
 Put data in /Data/Flight, not /Data/IandT.
-Put LPA and LCI data in separate folders.
+Put nfs data in .../L1 instead of .../L1/rootData.
+Put LPA, LCI, MC data in separate folders.
 Do alarms on TKR trending.
+Send messages to log watcher if things get weird.
 -------------------------------------------
 
 

@@ -31,7 +31,7 @@ if not os.path.exists(token):
     # This should not happen on prod.  We should fail.
     #
     # Or at least send a message to the log watcher.
-    msg = "Chunk token %s does not exist.  This is odd, but not necessarily fatal.  We'll continue." % token
+    msg = "Chunk token %s does not exist." % token
     print >> sys.stderr, msg
     l1Logger.warn(msg)
     sys.exit(0)

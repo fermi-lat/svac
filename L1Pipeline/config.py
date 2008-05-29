@@ -88,7 +88,7 @@ xrootBase = xrootGlast + xrootSubDir
 
 if testMode: L1Dir = os.path.join(L1Dir, 'test')
 
-stageDisks = [ # staging buffers with integer weights
+stageDisks = [ # staging buffers with smallish integer weights
     ("/afs/slac/g/glast/ground/PipelineStaging", 1),
     ("/afs/slac/g/glast/ground/PipelineStaging2", 1),
     ("/afs/slac/g/glast/ground/PipelineStaging3", 1),

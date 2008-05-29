@@ -19,7 +19,10 @@ print >> sys.stderr, 'Using logging flavor %s' % flavor
 logger = PipelineNetlogger.PNetlogger.getLogger(flavor)
 
 
-eventType = '.'.join([pipeline.getTask(), pipeline.getProcess()])
+eventType = '.'.join([
+    os.environ['PIPELINE_TASKPATH'].split('.')[0],
+    pipeline.getProcess(),
+    ])
 
 dlNumber = os.environ['DOWNLINK_ID']
 runNumber = os.environ['runNumber']
@@ -32,6 +35,7 @@ tags = {
 def error(message, *args, **kwargs):
     kwargs.update(tags)
     print >> sys.stderr, 'Logging:'
+    print >> sys.stderr, 'Level: ERROR'
     print >> sys.stderr, 'eventType:', eventType
     print >> sys.stderr, 'message:', message
     print >> sys.stderr, 'args:', args
@@ -39,22 +43,24 @@ def error(message, *args, **kwargs):
     logger.error(eventType, message, *args, **kwargs)
     return
 
-def warn(message, *args, **kwargs):
-    kwargs.update(tags)
-    print >> sys.stderr, 'Logging:'
-    print >> sys.stderr, 'eventType:', eventType
-    print >> sys.stderr, 'message:', message
-    print >> sys.stderr, 'args:', args
-    print >> sys.stderr, 'kwargs:', kwargs
-    logger.warn(eventType, message, *args, **kwargs)
-    return
-
 def info(message, *args, **kwargs):
     kwargs.update(tags)
     print >> sys.stderr, 'Logging:'
+    print >> sys.stderr, 'Level: INFO'
     print >> sys.stderr, 'eventType:', eventType
     print >> sys.stderr, 'message:', message
     print >> sys.stderr, 'args:', args
     print >> sys.stderr, 'kwargs:', kwargs
     logger.info(eventType, message, *args, **kwargs)
+    return
+
+def warn(message, *args, **kwargs):
+    kwargs.update(tags)
+    print >> sys.stderr, 'Logging:'
+    print >> sys.stderr, 'Level: WARN'
+    print >> sys.stderr, 'eventType:', eventType
+    print >> sys.stderr, 'message:', message
+    print >> sys.stderr, 'args:', args
+    print >> sys.stderr, 'kwargs:', kwargs
+    logger.warn(eventType, message, *args, **kwargs)
     return
