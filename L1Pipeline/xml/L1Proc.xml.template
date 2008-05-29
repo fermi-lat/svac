@@ -1358,7 +1358,55 @@
         <after process="registerTkrTrend" status="SUCCESS"/>
       </depends>
     </process>
+ 
+    <process name="tkrTrendAlarm">
+      <variables>
+        <var name="fileType">tkrTrend</var>
+        <var name="%(tkrTrend_versionName)s">%(tkrTrend_version)s</var>
+        <var name="%(tkrTrendAlarm_versionName)s">%(tkrTrendAlarm_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/alarmHandler.py" batchOptions=" -q %(expressQ)s "/>
+      <depends>
+        <after process="registerTkrTrend" status="SUCCESS"/>
+      </depends>
+    </process>
 
+    <process name="registerTkrTrendAlarm">
+      <variables>
+        <var name="parentProcess">tkrTrendAlarm</var>
+        <var name="fileType">tkrTrendAlarm</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="tkrTrendAlarm" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="ingestTkrTrendRun">
+      <variables>
+        <var name="reportType">tkrTrendAlarm</var>
+        <var name="%(tkrTrendAlarm_versionName)s">%(tkrTrendAlarm_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/ingestRun.py" batchOptions=" -q %(longQ)s -R &quot;select[scratch&gt;1 &amp;&amp; linux64]&quot; "/>
+      <depends>
+        <after process="registerTkrTrendAlarm" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="tkrTrendLogger">
+      <variables>
+        <var name="fileType">tkrTrendAlarm</var>
+        <var name="%(tkrTrendAlarm_versionName)s">%(tkrTrendAlarm_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/alarmLogger.py" batchOptions=" -q %(expressQ)s "/>
+      <depends>
+        <after process="registerTkrTrendAlarm" status="SUCCESS"/>
+      </depends>
+    </process>
+ 
     <process name="mergeReconChunks">
       <variables>
         <var name="fileType">recon</var>
@@ -1434,6 +1482,7 @@
         <after process="ingestReconTrendRun" status="SUCCESS"/>
         <after process="ingestReconHistRun" status="SUCCESS"/>
         <after process="ingestTkrTrend" status="SUCCESS"/>
+        <after process="ingestTkrTrendRun" status="SUCCESS"/>
         <after process="reconHistLogger" status="SUCCESS"/>
         <after process="reconTrendLogger" status="SUCCESS"/>
         <after process="registerAcdPlots" status="SUCCESS"/>
@@ -1451,6 +1500,7 @@
         <after process="registerSvacTuple" status="SUCCESS"/>
 <!-- We don't have TKR alarms yet        <after process="registerTkrAlarm" status="SUCCESS"/>     -->
         <after process="registerTkrReport" status="SUCCESS"/>
+        <after process="tkrTrendLogger" status="SUCCESS"/>
       </depends>
       <createsSubtasks>
         <subtask>cleanupCompleteRun</subtask>

@@ -29,7 +29,6 @@ attributes.put('nMetStop', tStop)
 attributes.put('sDataSource', DATASOURCE)
 attributes.put('nRun', runNumber)
 attributes.put('nDownlink', DOWNLINK_ID)
-attributes.put('sRunStatus', RUNSTATUS)
 attributes.put('sCreator', creator)
 
 dsNew = NewDataset(dsName, "root", fileType, dcPath, dcGroup, site, fileName)

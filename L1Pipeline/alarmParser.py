@@ -9,7 +9,7 @@ import l1Logger
 import pipeline
 
 logger = l1Logger.logger
-eventType = l1Logger.eventType
+#eventType = l1Logger.eventType
 
 loggableTypes = ['clean', 'error', 'undefined', 'warning']
 
@@ -28,11 +28,11 @@ def parser(inFile):
 
 def alarmSeverity(number):
     if number['error'] or number['undefined']:
-        severity = logger.error
+        severity = l1Logger.error
     elif number['warning']:
-        severity = logger.warn
+        severity = l1Logger.warn
     else:
-        severity = logger.info
+        severity = l1Logger.info
         pass
     return severity
 
@@ -55,11 +55,7 @@ def doAlarms(inFile, fileType, runId):
         )
     link = target
 
-    tags = {
-        "tag_downlinkId": int(dlNumber),
-        "tag_runId": int(runNumber),
-        }
-
+    tags = {}
     for alarmType, value in number.items():
         varName = 'L1_Alarm_' + alarmType
         pipeline.setVariable(varName, value)
@@ -69,8 +65,6 @@ def doAlarms(inFile, fileType, runId):
 
     print >> sys.stderr, tags
     
-    severity(eventType, message,
-             link=link, tgt=target,
-             **tags)
+    severity(message, link=link, tgt=target, **tags)
 
     return

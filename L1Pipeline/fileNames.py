@@ -60,6 +60,7 @@ fileTypes = {
     'tkrMonitor': 'root',
     'tkrReport': 'tar',
     'tkrTrend': 'root',
+    'tkrTrendAlarm': 'xml',
     'verifyLog': 'xml',
     'verifyHisto': 'root',
     }

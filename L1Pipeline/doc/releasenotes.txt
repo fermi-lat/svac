@@ -1,5 +1,16 @@
+1.53
+-----------------
+Don't set confusing & wrong status metadata when registering datasets.
+Put data in /Data/Flight, not /Data/IandT.
+Put LPA and LCI data in separate folders.
+Do alarms on TKR trending.
+-------------------------------------------
+
+
 1.52
 -----------------
+Keep & register ft2Txt files.
+Keep (but don't register) fakeFT2 files.
 Support dataset versions in data catalog. LONE-58
 Update run quality table. LONE-60
 

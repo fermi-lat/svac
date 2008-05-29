@@ -9,7 +9,7 @@ import os
 import sys
 
 L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
-L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "1.52"
+L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "1.53"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
 
@@ -68,9 +68,19 @@ calibFlavors = { # not using this now, have separate JO files for LPA & MC
 
 
 L1Disk = '/nfs/farm/g/glast/u52/L1'
-L1Dir = os.path.join(L1Disk, 'rootData')
+# L1Dir = os.path.join(L1Disk, 'rootData')
+L1Dir = L1Disk
 
-dataCatDir = '/Data/IandT/Level1'
+dataCatBase = '/Data/Flight/Level1'
+# dataCatDirs = {
+#     'LCI': os.path.join(dataCatBase, 'LCI'),
+#     'LPA': os.path.join(dataCatBase, 'LPA'),
+#     'MC': os.path.join(dataCatBase, 'LPA'),
+#     None: os.path.join(dataCatBase, 'TheWrongPlace'), # Shouldn't happen.
+#     }
+# dataCatDir = dataCatDirs[os.environ.get('DATASOURCE')]
+dataSource = os.environ.get('DATASOURCE', 'TheWrongPlace')
+dataCatDir = '/'.join([dataCatBase, dataSource])
 
 xrootGlast = 'root://glast-rdr.slac.stanford.edu//glast'
 xrootSubDir = '%s/%s/%s' % (dataCatDir, mode, L1Version)
@@ -235,7 +245,7 @@ cmtPackages = {
 cvsPackages = {
     'AlarmsCfg': {
         'repository': 'dataMonitoring',
-        'version': 'v1r1p0',
+        'version': 'v1r1p1',
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
@@ -414,6 +424,8 @@ alarmConfigs = {
         packages['AlarmsCfg']['xml'], 'recon_eor_alarms.xml'),
     'reconTrend': os.path.join(
         packages['AlarmsCfg']['xml'], 'recon_trend_alarms.xml'),
+    'tkrTrend': os.path.join(
+        packages['AlarmsCfg']['xml'], 'trackermon_trend_alarms.xml'),
     }
 
 alarmExceptions = {
@@ -435,6 +447,9 @@ alarmExceptions = {
     'reconTrend': os.path.join(
         packages['AlarmsCfg']['xml'],
         'recon_trend_alarms_exceptions.xml'),
+    'tkrTrend': os.path.join(
+        packages['AlarmsCfg']['xml'],
+        'trackermon_trend_alarms_exceptions.xml'),
     }
 alarmPostProcessorConfigs = {
     'reconHistAlarm': os.path.join(

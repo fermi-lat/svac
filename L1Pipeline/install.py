@@ -37,14 +37,15 @@ for taskName in taskNames:
     configuration['registerBody'] = open(registerScript).read()
 
     for fileType in fileNames.fileTypes:
-        vTag = fileType + '_version'
-        nTag = vTag + 'Name'
+        nTag = fileType + '_versionName'
         varName = variables.mangleName(fileType, 'ver')
-        path = config.dataCatDir
-        group = fileNames.dataCatGroup(fileType)
-        value = '${datacatalog.getDatasetLatestVersion(RUNID, "%(path)s", "%(group)s")}' % locals()
-        configuration[vTag] = value
         configuration[nTag] = varName
+        group = fileNames.dataCatGroup(fileType)
+        path = config.dataCatBase
+        vTag = fileType + '_version'
+        value = '${datacatalog.getDatasetLatestVersion(RUNID, "%(path)s/"+DATASOURCE, "%(group)s")}' % locals()
+        configuration[vTag] = value
+        # print vTag, value
         continue
 
     expandTemplate.expand(template, taskFile, configuration)

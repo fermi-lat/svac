@@ -13,6 +13,7 @@ import cx_Oracle
 
 import config
 import fileNames
+import l1Logger
 import lockFile
 import pipeline
 
@@ -51,7 +52,9 @@ def checkTokens(head, runId):
         # Probably should not cleanup here if we're in prod mode.
         #
         # Or at least send a message to the log watcher.
-        print >> sys.stderr, 'Token directory %s is nonexistent or unreadable.' % tokenDir
+        msg = 'Token directory %s is nonexistent or unreadable.' % tokenDir
+        print >> sys.stderr, msg
+        l1Logger.warn(msg)
         tokenFiles = []
         pass
     if tokenFiles:
