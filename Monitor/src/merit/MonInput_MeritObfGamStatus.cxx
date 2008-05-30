@@ -11,7 +11,7 @@
 
 #define NAME MeritObfGamStatus
 #define OUTBRANCH "MeritObfGamStatus"
-#define LEAF "MeritObfGamStatus/D"
+#define LEAF "MeritObfGamStatus/I"
 #define INBRANCH "ObfGamStatus"
 #define ACCESSOR NotAplicable
 #define MONSOURCE MeritEvent
