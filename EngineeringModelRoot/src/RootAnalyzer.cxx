@@ -1695,6 +1695,12 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("FswDGNState", &(m_ntuple.m_fswDGNState), "FswDGNState/I");
   m_tree->Branch("FswPassthruState", &(m_ntuple.m_fswPassthruState), "FswPassthruState/I");
 
+  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGammaHasRSD), "FswGAMMAHasRSD/I");
+  m_tree->Branch("FswMIPHasRSD", &(m_ntuple.m_fswMIPHasRSD), "FswMIPHasRSD/I");
+  m_tree->Branch("FswHIPHasRSD", &(m_ntuple.m_fswHIPHasRSD), "FswHIPHasRSD/I");
+  m_tree->Branch("FswDGNHasRSD", &(m_ntuple.m_fswDGNHasRSD), "FswDGNHasRSD/I");
+  m_tree->Branch("FswPassthruHasRSD", &(m_ntuple.m_fswPassthruHasRSD), "FswPassthruHasRSD/I");
+
   m_tree->Branch("FswGAMMAStatusWord", &(m_ntuple.m_fswGAMMAStatusWord), "FswGAMMAStatusWord/i");
   m_tree->Branch("FswMIPStatusWord", &(m_ntuple.m_fswMIPStatusWord), "FswMIPStatusWord/i");
   m_tree->Branch("FswHIPStatusWord", &(m_ntuple.m_fswHIPStatusWord), "FswHIPStatusWord/i");
