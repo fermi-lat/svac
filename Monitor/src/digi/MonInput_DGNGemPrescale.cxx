@@ -45,12 +45,12 @@ void MonInput_DGNGemPrescale::setValue(TObject* event) {
   m_val = 0;
   Int_t engine = de->getL1T().getGemEngine();
   
-  if(engine <=3 || engine ==5 || engine >=11)
+  if(engine <=3)
     m_val = 1;
-  if(engine ==4 || engine >=6 && engine <=9)
+  if(engine >=4 && engine <=10)
     m_val = 250;
-  if(engine ==10)
-    m_val = 5;
+  if(engine >=11)
+    m_val = 1;
 }
 
 std::string MonInput_DGNGemPrescale::getInputSource(){
