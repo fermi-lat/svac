@@ -765,7 +765,6 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_fswDGNHasRSD = 1;
  
       m_ntuple.m_fswPassthruStatusWord  = passthru->getStatusWord();
-      m_ntuple.m_fswPassthruAllVetoBits = passthru->getAllVetoBits();
     }
   }
 
@@ -1706,7 +1705,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("FswMIPAllVetoBits", &(m_ntuple.m_fswMIPAllVetoBits), "FswMIPAllVetoBits/i");
   m_tree->Branch("FswHIPAllVetoBits", &(m_ntuple.m_fswHIPAllVetoBits), "FswHIPAllVetoBits/i");
   m_tree->Branch("FswDGNAllVetoBits", &(m_ntuple.m_fswDGNAllVetoBits), "FswDGNAllVetoBits/i");
-  m_tree->Branch("FswPassthruAllVetoBits", &(m_ntuple.m_fswPassthruAllVetoBits), "FswPassthruAllVetoBits/i");
 
   m_tree->Branch("FswGAMMAStage", &(m_ntuple.m_fswGAMMAStage), "FswGAMMAStage/i");
   m_tree->Branch("FswGAMMAEnergyValid", &(m_ntuple.m_fswGAMMAEnergyValid), "FswGAMMAEnergyValid/i");

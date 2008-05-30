@@ -270,7 +270,6 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> FswMIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the MIP filter (if there is an RSD). </TD> </TR>
 <TR> <TD> FswHIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the HIP filter (if there is an RSD). </TD> </TR>
 <TR> <TD> FswDGNAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the DGN filter (if there is an RSD). </TD> </TR>
-<TR> <TD> FswPassthruAllVetoBits </TD> <TD> UInt </TD> <TD> Veto bits for the Passthru filter (if there is an RSD). </TD> </TR>
 
 <TR> <TD> FswGAMMAStage        </TD> <TD> UInt </TD> <TD> Bit mask indicating which stages of the GAMMA filter have been processed (if there is an RSD). </TD> </TR> 
 <TR> <TD> FswGAMMAEnergyValid  </TD> <TD> UInt </TD> <TD> Flag indicating the energy of the event was evaluated by the GAMMA filter (if there is an RSD). </TD> </TR> 

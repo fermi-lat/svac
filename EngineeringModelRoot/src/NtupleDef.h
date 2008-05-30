@@ -299,7 +299,6 @@ struct NtupleDef {
   unsigned int m_fswMIPAllVetoBits;
   unsigned int m_fswHIPAllVetoBits;
   unsigned int m_fswDGNAllVetoBits;
-  unsigned int m_fswPassthruAllVetoBits;
  
   unsigned int m_fswGAMMAStage;
   unsigned int m_fswGAMMAEnergyValid;
