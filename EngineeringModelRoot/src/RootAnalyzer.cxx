@@ -630,6 +630,148 @@ void RootAnalyzer::analyzeDigiTree()
   }
   
 
+  // FSW filter bits:
+  const LpaGammaFilter *gamma = m_digiEvent->getGammaFilter();
+  if (gamma) {
+    if (gamma->passed()) {
+      m_ntuple.m_fswGAMMAState = 0;
+    }
+    if (gamma->vetoed()) {
+      m_ntuple.m_fswGAMMAState = 2;
+    }
+    if (gamma->leaked()) {
+      m_ntuple.m_fswGAMMAState = 3;
+    }
+    if (gamma->suppressed()) {
+      m_ntuple.m_fswGAMMAState = 1;
+    }
+    if (gamma->ignored()) {
+      m_ntuple.m_fswGAMMAState = 4;
+    }  
+
+    if (gamma->has()) {
+      m_ntuple.m_fswGammaHasRSD = 1;
+
+      m_ntuple.m_fswGAMMAStatusWord  = gamma->getStatusWord();
+      m_ntuple.m_fswGAMMAAllVetoBits = gamma->getAllVetoBits();
+
+      m_ntuple.m_fswGAMMAStage        = gamma->getStage();
+      m_ntuple.m_fswGAMMAEnergyValid  = gamma->getEnergyValid();
+      m_ntuple.m_fswGAMMAEnergyInLeus = gamma->getEnergyInLeus();
+    }
+  }
+
+
+  const LpaMipFilter *mip = m_digiEvent->getMipFilter();
+  if (mip) {
+    if (mip->passed()) {
+      m_ntuple.m_fswMIPState = 0;
+    }
+    if (mip->vetoed()) {
+      m_ntuple.m_fswMIPState = 2;
+    }
+    if (mip->leaked()) {
+      m_ntuple.m_fswMIPState = 3;
+    }
+    if (mip->suppressed()) {
+      m_ntuple.m_fswMIPState = 1;
+    }
+    if (mip->ignored()) {
+      m_ntuple.m_fswMIPState = 4;
+    }  
+
+    if (mip->has()) {
+      m_ntuple.m_fswMIPHasRSD = 1;
+
+      m_ntuple.m_fswMIPStatusWord  = mip->getStatusWord();
+      m_ntuple.m_fswMIPAllVetoBits = mip->getAllVetoBits();
+    }
+  }
+
+
+  const LpaHipFilter *hip = m_digiEvent->getHipFilter();
+  if (hip) {
+    if (hip->passed()) {
+      m_ntuple.m_fswHIPState = 0;
+    }
+    if (hip->vetoed()) {
+      m_ntuple.m_fswHIPState = 2;
+    }
+    if (hip->leaked()) {
+      m_ntuple.m_fswHIPState = 3;
+    }
+    if (hip->suppressed()) {
+      m_ntuple.m_fswHIPState = 1;
+    }
+    if (hip->ignored()) {
+      m_ntuple.m_fswHIPState = 4;
+    }  
+
+    if (hip->has()) {
+      m_ntuple.m_fswHIPHasRSD = 1;
+
+      m_ntuple.m_fswHIPStatusWord  = hip->getStatusWord();
+      m_ntuple.m_fswHIPAllVetoBits = hip->getAllVetoBits();
+    }
+  }
+
+
+  const LpaDgnFilter *dgn = m_digiEvent->getDgnFilter();
+  if (dgn) {
+    if (dgn->passed()) {
+      m_ntuple.m_fswDGNState = 0;
+    }
+    if (dgn->vetoed()) {
+      m_ntuple.m_fswDGNState = 2;
+    }
+    if (dgn->leaked()) {
+      m_ntuple.m_fswDGNState = 3;
+    }
+    if (dgn->suppressed()) {
+      m_ntuple.m_fswDGNState = 1;
+    }
+    if (dgn->ignored()) {
+      m_ntuple.m_fswDGNState = 4;
+    }  
+
+    if (dgn->has()) {
+      m_ntuple.m_fswDGNHasRSD = 1;
+
+      m_ntuple.m_fswDGNStatusWord  = dgn->getStatusWord();
+      m_ntuple.m_fswDGNAllVetoBits = dgn->getAllVetoBits();
+    }
+  }
+
+  
+  const LpaPassthruFilter *passthru = m_digiEvent->getPassthruFilter();
+  if (passthru) {
+    if (passthru->passed()) {
+      m_ntuple.m_fswPassthruState = 0;
+    }
+    if (passthru->vetoed()) {
+      m_ntuple.m_fswPassthruState = 2;
+    }
+    if (passthru->leaked()) {
+      m_ntuple.m_fswPassthruState = 3;
+    }
+    if (passthru->suppressed()) {
+      m_ntuple.m_fswPassthruState = 1;
+    }
+    if (passthru->ignored()) {
+      m_ntuple.m_fswPassthruState = 4;
+    }  
+
+    if (passthru->has()) {
+      m_ntuple.m_fswDGNHasRSD = 1;
+ 
+      m_ntuple.m_fswPassthruStatusWord  = passthru->getStatusWord();
+      m_ntuple.m_fswPassthruAllVetoBits = passthru->getAllVetoBits();
+    }
+  }
+
+ 
+
+
 
   //
   // Context information:
@@ -1546,6 +1688,33 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
   m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
+
+  // FSW filter bits:
+  m_tree->Branch("FswGAMMAState", &(m_ntuple.m_fswGAMMAState), "FswGAMMAState/I");
+  m_tree->Branch("FswMIPState", &(m_ntuple.m_fswMIPState), "FswMIPState/I");
+  m_tree->Branch("FswHIPState", &(m_ntuple.m_fswHIPState), "FswHIPState/I");
+  m_tree->Branch("FswDGNState", &(m_ntuple.m_fswDGNState), "FswDGNState/I");
+  m_tree->Branch("FswPassthruState", &(m_ntuple.m_fswPassthruState), "FswPassthruState/I");
+
+  m_tree->Branch("FswGAMMAStatusWord", &(m_ntuple.m_fswGAMMAStatusWord), "FswGAMMAStatusWord/i");
+  m_tree->Branch("FswMIPStatusWord", &(m_ntuple.m_fswMIPStatusWord), "FswMIPStatusWord/i");
+  m_tree->Branch("FswHIPStatusWord", &(m_ntuple.m_fswHIPStatusWord), "FswHIPStatusWord/i");
+  m_tree->Branch("FswDGNStatusWord", &(m_ntuple.m_fswDGNStatusWord), "FswDGNStatusWord/i");
+  m_tree->Branch("FswPassthruStatusWord", &(m_ntuple.m_fswPassthruStatusWord), "FswPassthruStatusWord/i");
+
+  m_tree->Branch("FswGAMMAAllVetoBits", &(m_ntuple.m_fswGAMMAAllVetoBits), "FswGAMMAAllVetoBits/i");
+  m_tree->Branch("FswMIPAllVetoBits", &(m_ntuple.m_fswMIPAllVetoBits), "FswMIPAllVetoBits/i");
+  m_tree->Branch("FswHIPAllVetoBits", &(m_ntuple.m_fswHIPAllVetoBits), "FswHIPAllVetoBits/i");
+  m_tree->Branch("FswDGNAllVetoBits", &(m_ntuple.m_fswDGNAllVetoBits), "FswDGNAllVetoBits/i");
+  m_tree->Branch("FswPassthruAllVetoBits", &(m_ntuple.m_fswPassthruAllVetoBits), "FswPassthruAllVetoBits/i");
+
+  m_tree->Branch("FswGAMMAStage", &(m_ntuple.m_fswGAMMAStage), "FswGAMMAStage/i");
+  m_tree->Branch("FswGAMMAEnergyValid", &(m_ntuple.m_fswGAMMAEnergyValid), "FswGAMMAEnergyValid/i");
+  m_tree->Branch("FswGAMMAEnergyInLeus", &(m_ntuple.m_fswGAMMAEnergyInLeus), "FswGAMMAEnergyInLeus/I");
+
+
+
+
 
 
   // GEM information:

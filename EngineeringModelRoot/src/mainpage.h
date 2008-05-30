@@ -235,7 +235,54 @@ This means that this time will be later than the time of any event time. </TD> <
 
 
 <TABLE>
-<CAPTION ALIGN="TOP"> Onboard Filter (Offline version)  </CAPTION>
+<CAPTION ALIGN="TOP"> Real Onboard Filter </CAPTION>
+<TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
+
+<TR> <TD> FswGAMMAState   </TD> <TD> Int  </TD> <TD> State of the GAMMA filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+<TR> <TD> FswMIPState     </TD> <TD> Int  </TD> <TD> State of the MIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+<TR> <TD> FswHIPState     </TD> <TD> Int  </TD> <TD> State of the HIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+<TR> <TD> FswDGNState     </TD> <TD> Int  </TD> <TD> State of the DGN filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+<TR> <TD> FswPassthuState </TD> <TD> Int  </TD> <TD> State of the Passthru filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+
+<TR> <TD> FswGammaHasRSD    </TD> <TD> Int </TD> <TD> Set to 1 if the GAMMA-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswMIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the MIP-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswHIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the HIP-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswDGNHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the DGN-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswPassthruHasRSD </TD> <TD> Int </TD> <TD> Set to 1 if the Passthru-filter has a RSD (Result Summary Data block). </TD> </TR>
+
+<TR> <TD> FswGAMMAStatusWord    </TD> <TD> UInt </TD> <TD> 32 bit statusword for the GAMMA filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswMIPStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the MIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswHIPStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the HIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswDGNStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the DGN filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswPassthruStatusWord </TD> <TD> UInt </TD> <TD> 32 bit statusword for the Passthru filter (if there is an RSD). </TD> </TR>
+
+<TR> <TD> FswGAMMAAllVetoBits    </TD> <TD> UInt </TD> <TD> Veto bits for the GAMMA filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswMIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the MIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswHIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the HIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswDGNAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the DGN filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswPassthruAllVetoBits </TD> <TD> UInt </TD> <TD> Veto bits for the Passthru filter (if there is an RSD). </TD> </TR>
+
+<TR> <TD> FswGAMMAStage        </TD> <TD> UInt </TD> <TD> Bit mask indicating which stages of the GAMMA filter have been processed (if there is an RSD). </TD> </TR> 
+<TR> <TD> FswGAMMAEnergyValid  </TD> <TD> UInt </TD> <TD> Flag indicating the energy of the event was evaluated by the GAMMA filter (if there is an RSD). </TD> </TR> 
+<TR> <TD> FswGAMMAEnergyInLeus </TD> <TD>  Int </TD> <TD> Energy in units of LEUS (1/4 Mev) (if there is an RSD). </TD> </TR>
+
+
+</TABLE>
+
+
+
+<TABLE>
+<CAPTION ALIGN="TOP"> Gleam Onboard Filter </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
 <TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the GAMMA-filter and -1 if it didn't. </TD> </TR> 

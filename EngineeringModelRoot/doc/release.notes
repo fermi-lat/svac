@@ -1,3 +1,6 @@
+v4r0p0	May 30, 2008
+awb	Added real FSW filter status information. Needs the new DFI!
+
 v3r14p4 May 22, 2008
 awb     Added ObfFilterStatusBits.
 

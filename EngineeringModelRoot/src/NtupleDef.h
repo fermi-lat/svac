@@ -276,6 +276,39 @@ struct NtupleDef {
   int m_obfPassedDGN; 
   unsigned int m_obfFilterStatusBits;
 
+  // Real filter bits:
+  int m_fswGAMMAState;
+  int m_fswDGNState;
+  int m_fswHIPState;
+  int m_fswMIPState;
+  int m_fswPassthruState;
+
+  int m_fswGammaHasRSD;
+  int m_fswMIPHasRSD;
+  int m_fswHIPHasRSD;
+  int m_fswDGNHasRSD;
+  int m_fswPassthruHasRSD;
+
+  unsigned int m_fswGAMMAStatusWord;
+  unsigned int m_fswMIPStatusWord;
+  unsigned int m_fswHIPStatusWord;
+  unsigned int m_fswDGNStatusWord;
+  unsigned int m_fswPassthruStatusWord;
+
+  unsigned int m_fswGAMMAAllVetoBits;
+  unsigned int m_fswMIPAllVetoBits;
+  unsigned int m_fswHIPAllVetoBits;
+  unsigned int m_fswDGNAllVetoBits;
+  unsigned int m_fswPassthruAllVetoBits;
+ 
+  unsigned int m_fswGAMMAStage;
+  unsigned int m_fswGAMMAEnergyValid;
+  int m_fswGAMMAEnergyInLeus;
+
+
+  
+
+
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118
   unsigned int m_tpCal[g_nTower][g_nCalLayer];
