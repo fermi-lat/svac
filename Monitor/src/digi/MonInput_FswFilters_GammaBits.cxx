@@ -55,16 +55,17 @@ void MonInput_FswFilters_GammaBits::setValue(TObject* event) {
   const LpaGammaFilter* gamma = (LpaGammaFilter*)de->getGammaFilter();
 
   if (gamma) {
-    UInt_t filterbit = gamma->getStatusWord();
-    // gamma_statusword is your 32-bit word
-    for (int iBit = 0; iBit < 32; iBit++) {
-      if ((filterbit >> iBit) & 1) 
-	m_val[iBit] = 1;
-      else
-	m_val[iBit] = 0;
+    if (gamma->has()) {
+      UInt_t filterbit = gamma->getStatusWord();
+      // gamma_statusword is your 32-bit word
+      for (int iBit = 0; iBit < 32; iBit++) {
+	if ((filterbit >> iBit) & 1) 
+	  m_val[iBit] = 1;
+	else
+	  m_val[iBit] = 0;
+      }
     }
   }
-  
 }
 
 std::string MonInput_FswFilters_GammaBits::getInputSource(){
