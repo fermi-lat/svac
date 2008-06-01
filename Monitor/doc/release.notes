@@ -1,3 +1,6 @@
+v1r1p19  2008/05/29  (DEV)                                                                                                          ---------------------------
+"Add gamma->has()" MonInput_FswFilters_GammaBits.cxx
+
 v1r1p18  2008/05/29  (DEV)
 ---------------------------
 Change definition of prescales in class MonInput_DGNGemPrescale.cxx.
