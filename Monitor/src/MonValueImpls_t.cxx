@@ -2135,7 +2135,7 @@ int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
   std::string branchName;
   std::string leafName;
   std::string fullName = prefix + "ValChange_" +name();
-  branchName= fullName+"_nchanges";
+  branchName= fullName+"~nchanges";
   leafName= branchName+m_dimstring + "/i";
 
   Int_t BufSize = GetBufSize(Int_t(m_dim), "i");
@@ -2144,26 +2144,26 @@ int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
 
   TBranch* b = tree.Branch(branchName.c_str(),m_nvalues,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
-  branchName= fullName+"_firstval";
+  branchName= fullName+"~firstval";
   leafName= branchName+m_dimstring + "/D";
   BufSize = GetBufSize(Int_t(m_dim), "D");
   CheckLeafName(leafName.c_str());
   b = tree.Branch(branchName.c_str(),m_firstval,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
-  branchName= fullName+"_lastval";
+  branchName= fullName+"~lastval";
   leafName= branchName+m_dimstring + "/D";
   CheckLeafName(leafName.c_str());
   b = tree.Branch(branchName.c_str(),m_lastval,leafName.c_str(),BufSize);
   if ( b == 0 ) return -1;
   char valname[128];
   for (unsigned int i=0;i<m_numval;i++){
-    sprintf(valname,"_newval_%d",i);
+    sprintf(valname,"~newval~%d",i);
     branchName= fullName+valname;
     leafName= branchName+m_dimstring + "/D";
     CheckLeafName(leafName.c_str());
     b = tree.Branch(branchName.c_str(),m_values[i],leafName.c_str(),BufSize);
     if ( b == 0 ) return -1;
-    sprintf(valname,"_newtime_%d",i);
+    sprintf(valname,"~newtime~%d",i);
     branchName= fullName+valname;
     leafName= branchName+m_dimstring + "/D";
     CheckLeafName(leafName.c_str());

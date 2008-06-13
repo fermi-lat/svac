@@ -442,20 +442,20 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       }
       continue;
     }
-    if (leaves[i].find("ValChange_")==0 &&leaves[i].find("_nchanges")==leaves[i].length()-strlen("_nchanges") ){
+    if (leaves[i].find("ValChange_")==0 &&leaves[i].find("~nchanges")==leaves[i].length()-strlen("~nchanges") ){
       used[i]=true;
-      std::string name=leaves[i].substr(0,leaves[i].length()-strlen("_nchanges"));
+      std::string name=leaves[i].substr(0,leaves[i].length()-strlen("~nchanges"));
       unsigned fvalindex,lastvalindex;
       fvalindex=lastvalindex=0;
-      it=find(leaves.begin(),leaves.end(),name+"_firstval");
+      it=find(leaves.begin(),leaves.end(),name+"~firstval");
       if(it==leaves.end()){
-	std::cout<<name<<"_firstval"<<" not found. Exiting."<<std::endl;
+	std::cout<<name<<"~firstval"<<" not found. Exiting."<<std::endl;
 	assert(0);
       }else fvalindex=it-leaves.begin();
       used[fvalindex]=true;
-      it=find(leaves.begin(),leaves.end(),name+"_lastval");
+      it=find(leaves.begin(),leaves.end(),name+"~lastval");
       if(it==leaves.end()){
-	std::cout<<name<<"_lastval"<<" not found. Exiting."<<std::endl;
+	std::cout<<name<<"~lastval"<<" not found. Exiting."<<std::endl;
 	assert(0);
       }else lastvalindex=it-leaves.begin();
       used[lastvalindex]=true;
@@ -466,46 +466,57 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       std::vector<unsigned> newtimind;
       while (1){
 	sprintf(numstring,"%d",numval);
-	if (find(leaves.begin(),leaves.end(),name+"_newval_"+numstring)==leaves.end())break;
-	newvalind.push_back(find(leaves.begin(),leaves.end(),name+"_newval_"+numstring)-leaves.begin());
+	if (find(leaves.begin(),leaves.end(),name+"~newval~"+numstring)==leaves.end())break;
+	newvalind.push_back(find(leaves.begin(),leaves.end(),name+"~newval~"+numstring)-leaves.begin());
 	used[newvalind[numval]]=true;
 	numval++;
       }
+      /* // The code should run also when, from the config file, it is requested NOT to store new values
       if (numval==0){
 	std::cout<<"No values found for ValueChange variable "<<name<<std::endl;
 	assert(0);
       }
+      */
+
      while (1){
 	sprintf(numstring,"%d",numtim);
-	if (find(leaves.begin(),leaves.end(),name+"_newtime_"+numstring)==leaves.end())break;
-	newtimind.push_back(find(leaves.begin(),leaves.end(),name+"_newtime_"+numstring)-leaves.begin());
+	if (find(leaves.begin(),leaves.end(),name+"~newtime~"+numstring)==leaves.end())break;
+	newtimind.push_back(find(leaves.begin(),leaves.end(),name+"~newtime~"+numstring)-leaves.begin());
 	used[newtimind[numtim]]=true;
 	numtim++;
-      }
+     }
+     /* // The code should run also when, from the config file, it is requested NOT to store new values
       if (numtim==0){
 	std::cout<<"No values found for ValueChange variable "<<name<<std::endl;
 	assert(0);
-      }else if (numtim!=numval){
-	std::cout<<"Different number of new time and new value fields for "<<name<<". Exiting."<<std::endl;
       }
-      for (unsigned j=0;j<dims[i];j++){
-	unsigned int n1=((UInt_t*)addin1[i])[j];
-	unsigned int n2=((UInt_t*)addin2[i])[j];
-	((UInt_t*)addout[i])[j]=n1+n2;
-	((Double_t*)addout[lastvalindex])[j]=((Double_t*)addin2[lastvalindex])[j];
-	((Double_t*)addout[fvalindex])[j]=((Double_t*)addin1[fvalindex])[j];
-	unsigned int numind1=n1<numval ? n1 : numval;
-	unsigned int numind2=n2<numval-numind1? n2 : numval-numind1;
-	for (unsigned k=0;k<numind1;k++){
-	  ((Double_t*)addout[newvalind[k]])[j]=((Double_t*)addin1[newvalind[k]])[j];
-	  ((Double_t*)addout[newtimind[k]])[j]=((Double_t*)addin1[newtimind[k]])[j];
-	} 
-	for (unsigned k=0;k<numind2;k++){
-	  ((Double_t*)addout[newvalind[k+numind1]])[j]=((Double_t*)addin2[newvalind[k]])[j];
-	  ((Double_t*)addout[newtimind[k+numind1]])[j]=((Double_t*)addin2[newtimind[k]])[j];
-	} 
-      }
-      continue;
+     */
+     if (numtim!=numval){
+       std::cout<<"Different number of new time and new value fields for "<<name<<". Exiting."<<std::endl;
+     }
+
+
+     for (unsigned j=0;j<dims[i];j++){
+       unsigned int n1=((UInt_t*)addin1[i])[j];
+       unsigned int n2=((UInt_t*)addin2[i])[j];
+       ((UInt_t*)addout[i])[j]=n1+n2;
+       ((Double_t*)addout[lastvalindex])[j]=((Double_t*)addin2[lastvalindex])[j];
+       ((Double_t*)addout[fvalindex])[j]=((Double_t*)addin1[fvalindex])[j];
+      
+       if(numval >0){
+	 unsigned int numind1=n1<numval ? n1 : numval;
+	 unsigned int numind2=n2<numval-numind1? n2 : numval-numind1;
+	 for (unsigned k=0;k<numind1;k++){
+	   ((Double_t*)addout[newvalind[k]])[j]=((Double_t*)addin1[newvalind[k]])[j];
+	   ((Double_t*)addout[newtimind[k]])[j]=((Double_t*)addin1[newtimind[k]])[j];
+	 } 
+	 for (unsigned k=0;k<numind2;k++){
+	   ((Double_t*)addout[newvalind[k+numind1]])[j]=((Double_t*)addin2[newvalind[k]])[j];
+	   ((Double_t*)addout[newtimind[k+numind1]])[j]=((Double_t*)addin2[newtimind[k]])[j];
+	 } 
+       }
+     }
+     continue;
     }
   }
   for (unsigned i=0;i<leaves.size();i++){
