@@ -1,4 +1,10 @@
-v1r1p19  2008/05/29  (DEV)                                                                                                          ---------------------------
+v1r1p20  2008/05/29  (DEV)
+---------------------------
+Changes to accomodate quantity type ValChange_ into database. 
+That addresses jira GDQMQ-146.
+
+v1r1p19  2008/05/29  (DEV) 
+---------------------------
 "Add gamma->has()" MonInput_FswFilters_GammaBits.cxx
 
 v1r1p18  2008/05/29  (DEV)
