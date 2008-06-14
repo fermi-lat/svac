@@ -442,20 +442,20 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       }
       continue;
     }
-    if (leaves[i].find("ValChange_")==0 &&leaves[i].find("~nchanges")==leaves[i].length()-strlen("~nchanges") ){
+    if (leaves[i].find("ValChange_")==0 &&leaves[i].find("xxxnchanges")==leaves[i].length()-strlen("xxxnchanges") ){
       used[i]=true;
-      std::string name=leaves[i].substr(0,leaves[i].length()-strlen("~nchanges"));
+      std::string name=leaves[i].substr(0,leaves[i].length()-strlen("xxxnchanges"));
       unsigned fvalindex,lastvalindex;
       fvalindex=lastvalindex=0;
-      it=find(leaves.begin(),leaves.end(),name+"~firstval");
+      it=find(leaves.begin(),leaves.end(),name+"xxxfirstval");
       if(it==leaves.end()){
-	std::cout<<name<<"~firstval"<<" not found. Exiting."<<std::endl;
+	std::cout<<name<<"xxxfirstval"<<" not found. Exiting."<<std::endl;
 	assert(0);
       }else fvalindex=it-leaves.begin();
       used[fvalindex]=true;
-      it=find(leaves.begin(),leaves.end(),name+"~lastval");
+      it=find(leaves.begin(),leaves.end(),name+"xxxlastval");
       if(it==leaves.end()){
-	std::cout<<name<<"~lastval"<<" not found. Exiting."<<std::endl;
+	std::cout<<name<<"xxxlastval"<<" not found. Exiting."<<std::endl;
 	assert(0);
       }else lastvalindex=it-leaves.begin();
       used[lastvalindex]=true;
@@ -466,8 +466,8 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       std::vector<unsigned> newtimind;
       while (1){
 	sprintf(numstring,"%d",numval);
-	if (find(leaves.begin(),leaves.end(),name+"~newval~"+numstring)==leaves.end())break;
-	newvalind.push_back(find(leaves.begin(),leaves.end(),name+"~newval~"+numstring)-leaves.begin());
+	if (find(leaves.begin(),leaves.end(),name+"xxxnewvalxxx"+numstring)==leaves.end())break;
+	newvalind.push_back(find(leaves.begin(),leaves.end(),name+"xxxnewvalxxx"+numstring)-leaves.begin());
 	used[newvalind[numval]]=true;
 	numval++;
       }
@@ -480,8 +480,8 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 
      while (1){
 	sprintf(numstring,"%d",numtim);
-	if (find(leaves.begin(),leaves.end(),name+"~newtime~"+numstring)==leaves.end())break;
-	newtimind.push_back(find(leaves.begin(),leaves.end(),name+"~newtime~"+numstring)-leaves.begin());
+	if (find(leaves.begin(),leaves.end(),name+"xxxnewtimexxx"+numstring)==leaves.end())break;
+	newtimind.push_back(find(leaves.begin(),leaves.end(),name+"xxxnewtimexxx"+numstring)-leaves.begin());
 	used[newtimind[numtim]]=true;
 	numtim++;
      }
