@@ -1,3 +1,9 @@
+v1r1p21  2008/06/13  (DEV)
+----------------------------
+In variable type ValChange_, the delimiter "~" for suffixes (firstval, lastval...) was changed to "xxx". 
+The sign gave problems when compiling dynamic libraries. 
+This addresses Jira GDQMQ-146.
+
 v1r1p20  2008/05/29  (DEV)
 ---------------------------
 Changes to accomodate quantity type ValChange_ into database. 
