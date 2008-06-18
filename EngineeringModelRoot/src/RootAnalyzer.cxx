@@ -633,24 +633,12 @@ void RootAnalyzer::analyzeDigiTree()
   // FSW filter bits:
   const LpaGammaFilter *gamma = m_digiEvent->getGammaFilter();
   if (gamma) {
-    if (gamma->passed()) {
-      m_ntuple.m_fswGAMMAState = 0;
-    }
-    if (gamma->vetoed()) {
-      m_ntuple.m_fswGAMMAState = 2;
-    }
-    if (gamma->leaked()) {
-      m_ntuple.m_fswGAMMAState = 3;
-    }
-    if (gamma->suppressed()) {
-      m_ntuple.m_fswGAMMAState = 1;
-    }
-    if (gamma->ignored()) {
-      m_ntuple.m_fswGAMMAState = 4;
-    }  
+    m_ntuple.m_fswGAMMAState          = gamma->getState();
+    m_ntuple.m_fswGAMMAPrescaleFactor = gamma->getPrescaleFactor();
+    m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->getPrescaleIndex();
 
     if (gamma->has()) {
-      m_ntuple.m_fswGammaHasRSD = 1;
+      m_ntuple.m_fswGAMMAHasRSD = 1;
 
       m_ntuple.m_fswGAMMAStatusWord  = gamma->getStatusWord();
       m_ntuple.m_fswGAMMAAllVetoBits = gamma->getAllVetoBits();
@@ -664,21 +652,9 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaMipFilter *mip = m_digiEvent->getMipFilter();
   if (mip) {
-    if (mip->passed()) {
-      m_ntuple.m_fswMIPState = 0;
-    }
-    if (mip->vetoed()) {
-      m_ntuple.m_fswMIPState = 2;
-    }
-    if (mip->leaked()) {
-      m_ntuple.m_fswMIPState = 3;
-    }
-    if (mip->suppressed()) {
-      m_ntuple.m_fswMIPState = 1;
-    }
-    if (mip->ignored()) {
-      m_ntuple.m_fswMIPState = 4;
-    }  
+    m_ntuple.m_fswMIPState          = mip->getState();
+    m_ntuple.m_fswMIPPrescaleFactor = mip->getPrescaleFactor();
+    m_ntuple.m_fswMIPPrescaleIndex  = mip->getPrescaleIndex();
 
     if (mip->has()) {
       m_ntuple.m_fswMIPHasRSD = 1;
@@ -691,21 +667,9 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaHipFilter *hip = m_digiEvent->getHipFilter();
   if (hip) {
-    if (hip->passed()) {
-      m_ntuple.m_fswHIPState = 0;
-    }
-    if (hip->vetoed()) {
-      m_ntuple.m_fswHIPState = 2;
-    }
-    if (hip->leaked()) {
-      m_ntuple.m_fswHIPState = 3;
-    }
-    if (hip->suppressed()) {
-      m_ntuple.m_fswHIPState = 1;
-    }
-    if (hip->ignored()) {
-      m_ntuple.m_fswHIPState = 4;
-    }  
+    m_ntuple.m_fswHIPState          = hip->getState();
+    m_ntuple.m_fswHIPPrescaleFactor = hip->getPrescaleFactor();
+    m_ntuple.m_fswHIPPrescaleIndex  = hip->getPrescaleIndex();
 
     if (hip->has()) {
       m_ntuple.m_fswHIPHasRSD = 1;
@@ -718,21 +682,9 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaDgnFilter *dgn = m_digiEvent->getDgnFilter();
   if (dgn) {
-    if (dgn->passed()) {
-      m_ntuple.m_fswDGNState = 0;
-    }
-    if (dgn->vetoed()) {
-      m_ntuple.m_fswDGNState = 2;
-    }
-    if (dgn->leaked()) {
-      m_ntuple.m_fswDGNState = 3;
-    }
-    if (dgn->suppressed()) {
-      m_ntuple.m_fswDGNState = 1;
-    }
-    if (dgn->ignored()) {
-      m_ntuple.m_fswDGNState = 4;
-    }  
+    m_ntuple.m_fswDGNState          = dgn->getState();
+    m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleFactor();
+    m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleIndex();
 
     if (dgn->has()) {
       m_ntuple.m_fswDGNHasRSD = 1;
@@ -745,25 +697,12 @@ void RootAnalyzer::analyzeDigiTree()
   
   const LpaPassthruFilter *passthru = m_digiEvent->getPassthruFilter();
   if (passthru) {
-    if (passthru->passed()) {
-      m_ntuple.m_fswPassthruState = 0;
-    }
-    if (passthru->vetoed()) {
-      m_ntuple.m_fswPassthruState = 2;
-    }
-    if (passthru->leaked()) {
-      m_ntuple.m_fswPassthruState = 3;
-    }
-    if (passthru->suppressed()) {
-      m_ntuple.m_fswPassthruState = 1;
-    }
-    if (passthru->ignored()) {
-      m_ntuple.m_fswPassthruState = 4;
-    }  
+    m_ntuple.m_fswPassthruState          = passthru->getState()
+    m_ntuple.m_fswPassthruPrescaleFactor = passthru->getPrescaleFactor();
+    m_ntuple.m_fswPassthruPrescaleIndex  = passthru->getPrescaleIndex();
 
     if (passthru->has()) {
-      m_ntuple.m_fswDGNHasRSD = 1;
- 
+      m_ntuple.m_fswDGNHasRSD = 1; 
       m_ntuple.m_fswPassthruStatusWord  = passthru->getStatusWord();
     }
   }
@@ -1695,7 +1634,19 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("FswDGNState", &(m_ntuple.m_fswDGNState), "FswDGNState/I");
   m_tree->Branch("FswPassthruState", &(m_ntuple.m_fswPassthruState), "FswPassthruState/I");
 
-  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGammaHasRSD), "FswGAMMAHasRSD/I");
+  m_tree->Branch("FswGAMMAPrescaleFactor", &(m_ntuple.m_fswGAMMAPrescaleFactor), "FswGAMMAPrescaleFactor/i");
+  m_tree->Branch("FswDGNPrescaleFactor", &(m_ntuple.m_fswDGNPrescaleFactor), "FswDGNPrescaleFactor/i");
+  m_tree->Branch("FswMIPPrescaleFactor", &(m_ntuple.m_fswMIPPrescaleFactor), "FswMIPPrescaleFactor/i");
+  m_tree->Branch("FswHIPPrescaleFactor", &(m_ntuple.m_fswHIPPrescaleFactor), "FswHIPPrescaleFactor/i");
+  m_tree->Branch("FswPassthruPrescaleFactor", &(m_ntuple.m_fswPassthruPrescaleFactor), "FswPassthruPrescaleFactor/i");
+
+  m_tree->Branch("FswGAMMAPrescaleIndex", &(m_ntuple.m_fswGAMMAPrescaleIndex), "FswGAMMAPrescaleIndex/I");
+  m_tree->Branch("FswDGNPrescaleIndex", &(m_ntuple.m_fswDGNPrescaleIndex), "FswDGNPrescaleIndex/I");
+  m_tree->Branch("FswMIPPrescaleIndex", &(m_ntuple.m_fswMIPPrescaleIndex), "FswMIPPrescaleIndex/I");
+  m_tree->Branch("FswHIPPrescaleIndex", &(m_ntuple.m_fswHIPPrescaleIndex), "FswHIPPrescaleIndex/I");
+  m_tree->Branch("FswPassthruPrescaleIndex", &(m_ntuple.m_fswPassthruPrescaleIndex), "FswPassthruPrescaleIndex/I");
+
+  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGAMMAHasRSD), "FswGAMMAHasRSD/I");
   m_tree->Branch("FswMIPHasRSD", &(m_ntuple.m_fswMIPHasRSD), "FswMIPHasRSD/I");
   m_tree->Branch("FswHIPHasRSD", &(m_ntuple.m_fswHIPHasRSD), "FswHIPHasRSD/I");
   m_tree->Branch("FswDGNHasRSD", &(m_ntuple.m_fswDGNHasRSD), "FswDGNHasRSD/I");

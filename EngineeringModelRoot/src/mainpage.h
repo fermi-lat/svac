@@ -240,21 +240,33 @@ This means that this time will be later than the time of any event time. </TD> <
 
 <TR> <TD> FswGAMMAState   </TD> <TD> Int  </TD> <TD> State of the GAMMA filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
                                                      VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
-                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
 <TR> <TD> FswMIPState     </TD> <TD> Int  </TD> <TD> State of the MIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
                                                      VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
-                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
 <TR> <TD> FswHIPState     </TD> <TD> Int  </TD> <TD> State of the HIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
                                                      VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
-                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
 <TR> <TD> FswDGNState     </TD> <TD> Int  </TD> <TD> State of the DGN filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
                                                      VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
-                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
 <TR> <TD> FswPassthuState </TD> <TD> Int  </TD> <TD> State of the Passthru filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
                                                      VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
-                                                     IGNORED (Event ignored due to input prescaler) = 4. </TD> </TR> 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
 
-<TR> <TD> FswGammaHasRSD    </TD> <TD> Int </TD> <TD> Set to 1 if the GAMMA-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswGAMMAPrescaleFactor      </TD> <TD> UInt </TD> <TD> Prescale factor for the GAMMA-filter. </TD> </TR>
+<TR> <TD> FswMIPPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the MIP-filter. </TD> </TR>
+<TR> <TD> FswHIPPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the HIP-filter. </TD> </TR>
+<TR> <TD> FswDGNPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the DGN-filter. </TD> </TR>
+<TR> <TD> FswPassthruPrescaleFactor   </TD> <TD> UInt </TD> <TD> Prescale factor for the Passthru-filter. </TD> </TR>
+
+<TR> <TD> FswGAMMAPrescaleIndex      </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the GAMMA-filter. </TD> </TR>
+<TR> <TD> FswMIPPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the MIP-filter. </TD> </TR>
+<TR> <TD> FswHIPPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the HIP-filter. </TD> </TR>
+<TR> <TD> FswDGNPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the DGN-filter. </TD> </TR>
+<TR> <TD> FswPassthruPrescaleIndex   </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the Passthru-filter. </TD> </TR>
+
+y<TR> <TD> FswGAMMAHasRSD    </TD> <TD> Int </TD> <TD> Set to 1 if the GAMMA-filter has a RSD (Result Summary Data block). </TD> </TR>
 <TR> <TD> FswMIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the MIP-filter has a RSD (Result Summary Data block). </TD> </TR>
 <TR> <TD> FswHIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the HIP-filter has a RSD (Result Summary Data block). </TD> </TR>
 <TR> <TD> FswDGNHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the DGN-filter has a RSD (Result Summary Data block). </TD> </TR>

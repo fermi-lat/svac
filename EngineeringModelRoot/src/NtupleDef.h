@@ -283,7 +283,19 @@ struct NtupleDef {
   int m_fswMIPState;
   int m_fswPassthruState;
 
-  int m_fswGammaHasRSD;
+  unsigned int m_fswGAMMAPrescaleFactor;
+  unsigned int m_fswDGNPrescaleFactor;
+  unsigned int m_fswHIPPrescaleFactor;
+  unsigned int m_fswMIPPrescaleFactor;
+  unsigned int m_fswPassthruPrescaleFactor;
+
+  int m_fswGAMMAPrescaleIndex;
+  int m_fswDGNPrescaleIndex;
+  int m_fswHIPPrescaleIndex;
+  int m_fswMIPPrescaleIndex;
+  int m_fswPassthruPrescaleIndex;
+
+  int m_fswGAMMAHasRSD;
   int m_fswMIPHasRSD;
   int m_fswHIPHasRSD;
   int m_fswDGNHasRSD;

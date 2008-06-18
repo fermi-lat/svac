@@ -1,3 +1,6 @@
+v4r1p0	June 18, 2008
+awb	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
+
 v4r0p0	May 30, 2008
 awb	Added real FSW filter status information. Needs the new DFI!
 
