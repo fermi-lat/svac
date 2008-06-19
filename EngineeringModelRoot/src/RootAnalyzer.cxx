@@ -603,6 +603,16 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedGAMMA = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_gammaStatus>>4); 
+
+    m_ntuple.m_obfGAMMAStatusWord    = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord(); 
+    m_ntuple.m_obfGAMMAVetoMask      = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoMask();
+    m_ntuple.m_obfGAMMAVetoBit       = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit();
+    m_ntuple.m_obfGAMMAPrescalerWord = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getPrescalerWord(); 
+
+    const IObfStatus* gammaStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter);
+    m_ntuple.m_obfGAMMAEnergy = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getEnergy(); 
+    m_ntuple.m_obfGAMMAStage  = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getStage();
+
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
     UChar_t m_mipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
@@ -612,16 +622,16 @@ void RootAnalyzer::analyzeDigiTree()
     }
     m_ntuple.m_obfFilterStatusBits |= (m_mipStatus>>4) << 4; 
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
-    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0) { 
+    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getFiltersb();
     int m_hipStatusInt = m_hipStatus>>4;
     if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       m_ntuple.m_obfPassedHIP = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_hipStatus>>4) << 8; 
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
-    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0) {
+    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getFiltersb();
     int m_dgnStatusInt = m_dgnStatus>>4;
     if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       m_ntuple.m_obfPassedDGN = 1;
@@ -635,7 +645,7 @@ void RootAnalyzer::analyzeDigiTree()
   if (gamma) {
     m_ntuple.m_fswGAMMAState          = gamma->getState();
     m_ntuple.m_fswGAMMAPrescaleFactor = gamma->getPrescaleFactor();
-    m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->getPrescaleIndex();
+    m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->prescalerIndex();
 
     if (gamma->has()) {
       m_ntuple.m_fswGAMMAHasRSD = 1;
@@ -654,7 +664,7 @@ void RootAnalyzer::analyzeDigiTree()
   if (mip) {
     m_ntuple.m_fswMIPState          = mip->getState();
     m_ntuple.m_fswMIPPrescaleFactor = mip->getPrescaleFactor();
-    m_ntuple.m_fswMIPPrescaleIndex  = mip->getPrescaleIndex();
+    m_ntuple.m_fswMIPPrescaleIndex  = mip->prescalerIndex();
 
     if (mip->has()) {
       m_ntuple.m_fswMIPHasRSD = 1;
@@ -669,7 +679,7 @@ void RootAnalyzer::analyzeDigiTree()
   if (hip) {
     m_ntuple.m_fswHIPState          = hip->getState();
     m_ntuple.m_fswHIPPrescaleFactor = hip->getPrescaleFactor();
-    m_ntuple.m_fswHIPPrescaleIndex  = hip->getPrescaleIndex();
+    m_ntuple.m_fswHIPPrescaleIndex  = hip->prescalerIndex();
 
     if (hip->has()) {
       m_ntuple.m_fswHIPHasRSD = 1;
@@ -684,7 +694,7 @@ void RootAnalyzer::analyzeDigiTree()
   if (dgn) {
     m_ntuple.m_fswDGNState          = dgn->getState();
     m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleFactor();
-    m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleIndex();
+    m_ntuple.m_fswDGNPrescaleFactor = dgn->prescalerIndex();
 
     if (dgn->has()) {
       m_ntuple.m_fswDGNHasRSD = 1;
@@ -697,9 +707,9 @@ void RootAnalyzer::analyzeDigiTree()
   
   const LpaPassthruFilter *passthru = m_digiEvent->getPassthruFilter();
   if (passthru) {
-    m_ntuple.m_fswPassthruState          = passthru->getState()
+    m_ntuple.m_fswPassthruState          = passthru->getState();
     m_ntuple.m_fswPassthruPrescaleFactor = passthru->getPrescaleFactor();
-    m_ntuple.m_fswPassthruPrescaleIndex  = passthru->getPrescaleIndex();
+    m_ntuple.m_fswPassthruPrescaleIndex  = passthru->prescalerIndex();
 
     if (passthru->has()) {
       m_ntuple.m_fswDGNHasRSD = 1; 
@@ -811,10 +821,6 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-
-  unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
-  unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
-
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
     m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
@@ -1626,6 +1632,14 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
   m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
+
+  m_tree->Branch("OGAMMAStatusWord", &(m_ntuple.m_obfGAMMAStatusWord), "ObfGAMMAStatusWord/i");
+  m_tree->Branch("OGAMMAVetoMask", &(m_ntuple.m_obfGAMMAVetoMask), "ObfGAMMAVetoMask/i");
+  m_tree->Branch("OGAMMAVetoBit", &(m_ntuple.m_obfGAMMAVetoBit), "ObfGAMMAVetoBit/i");
+  m_tree->Branch("OGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
+  m_tree->Branch("OGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
+  m_tree->Branch("OGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
+
 
   // FSW filter bits:
   m_tree->Branch("FswGAMMAState", &(m_ntuple.m_fswGAMMAState), "FswGAMMAState/I");
