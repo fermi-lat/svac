@@ -51,7 +51,7 @@ void MonInput_FilterBits::setValue(TObject* event) {
 
   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) 
     {// filter was successfully applied
-      UInt_t filterbit = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32();
+      UInt_t filterbit = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord();
 
       for (int iBit = 0; iBit < 32; iBit++) {
 	if ((filterbit >> iBit) & 1) 
