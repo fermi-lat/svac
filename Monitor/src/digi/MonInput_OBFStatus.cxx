@@ -13,10 +13,9 @@
 #define OUTBRANCH "OBFStatus"
 #define LEAF "OBFStatus[4]/I"
 #define INBRANCH "m_obfFilterStatus"
-//#define ACCESSOR Capullo
-#define MONSOURCE DigiEvent
+//#define ACCESSOR Capullo#define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "Vector [4] containing the status of the following Onboard Filters: Gamma, Mip, HFC, DFC; which correspond to the vector indices 0,1,2,3, respectively. The status are the following ones: 0=Evt did not pass filter; 1=Evt did pass the filter; -1=Filter could not be computed for this event."
+#define DESCRIPTION "Vector [4] containing the status of the following Onboard Filters: Gamma, Mip, Hip, Dgn; which correspond to the vector indices 0,1,2,3, respectively. The status are the following ones: 0=Evt did not pass filter; 1=Evt did pass the filter; -1=Filter could not be computed for this event."
 #include "digiRootData/DigiEvent.h"
 
 // End user defined part 
@@ -96,18 +95,18 @@ void MonInput_OBFStatus::setValue(TObject* event) {
   }
 
 
-  // HFC filter
-  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getVetoBit())== 0) {
+  // Hip filter
+  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0){
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getVetoBit())== 0) {
       m_val[2] = 1; // It passed
     }
     else
       m_val[2] = 0; // It did NOT passed
   }
 
-
-  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getVetoBit())== 0) {
+  // Dgn filter
+  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0){
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getVetoBit())== 0) {
       m_val[3] = 1; // It passed
     }
     else
