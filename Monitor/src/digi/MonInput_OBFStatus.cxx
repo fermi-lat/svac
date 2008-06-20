@@ -62,7 +62,7 @@ void MonInput_OBFStatus::setValue(TObject* event) {
   // Gamma filter
   if(de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) { 
 
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit())== 0) {
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit())== 0) {
       m_val[0] = 1; // It passed
       // mtp
       /*
@@ -77,7 +77,7 @@ void MonInput_OBFStatus::setValue(TObject* event) {
 
   // Mip filter 
   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit())== 0) {
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit())== 0) {
       m_val[1] = 1; // It passed
       // tmp
       /*
@@ -98,7 +98,7 @@ void MonInput_OBFStatus::setValue(TObject* event) {
 
   // Hip filter
   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getVetoBit())== 0) {
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getVetoBit())== 0) {
       m_val[2] = 1; // It passed
     }
     else
@@ -107,7 +107,7 @@ void MonInput_OBFStatus::setValue(TObject* event) {
 
   // Dgn filter
   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getStatus32() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getVetoBit())== 0) {
+    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getVetoBit())== 0) {
       m_val[3] = 1; // It passed
     }
     else
