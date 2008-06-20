@@ -724,13 +724,19 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // Context information:
   //
-  unsigned int tmpLatcKey = 0;
+  unsigned int tmpLatcKey    = 0;
+  unsigned int tmpLatcIgnore = 0;
+
 
   if (m_digiEvent->getMetaEvent().keys() != 0) {
     tmpLatcKey    = m_digiEvent->getMetaEvent().keys()->LATC_master();
+    tmpLatcIgnore = m_digiEvent->getMetaEvent().keys()->LATC_ignore();
   }
-  m_ntuple.m_latcKey = tmpLatcKey;
+  m_ntuple.m_latcKey    = tmpLatcKey;
+  m_ntuple.m_latcIgnore = tmpLatcIgnore;
  
+  m_ntuple.m_mootKey = m_digiEvent->getMetaEvent().mootKey();
+
 
   m_ntuple.m_contextRunInfoDataTransferID = m_digiEvent->getMetaEvent().run().dataTransferId();
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
@@ -1571,6 +1577,8 @@ void RootAnalyzer::createBranches()
   // Context information:                                                                                                                                                                                      
   //
   m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
+  m_tree->Branch("LatCIgnore", &(m_ntuple.m_latcIgnore), "LatCIgnore/i");
+  m_tree->Branch("MootKey", &(m_ntuple.m_mootKey), "MootKey/i");
                                                                                                                                  
   m_tree->Branch("ContextRunInfoDataTransferID", &(m_ntuple.m_contextRunInfoDataTransferID), "ContextRunInfoDataTransferID/i");
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");

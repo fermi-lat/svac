@@ -1,7 +1,9 @@
+v4r1p2 June 20, 2008
+awb	Added Moot key.
+
 v4r1p1	June 19, 2008
 awb	Updated documentation.
-
-awb	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
+	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
         Added some Gleam gamma-filter quantities.
 
 v4r0p0	May 30, 2008

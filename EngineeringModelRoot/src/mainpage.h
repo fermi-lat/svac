@@ -172,7 +172,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Context information from Flight Software </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. A value of 0 means that no key was available. </TD> </TR>
+<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. A value of 0 means that no key was available. Please use the MOOT key to retrieve any configuration information from MOOT!</TD> </TR>
+<TR> <TD> LatCIgnore               </TD> <TD> UInt </TD> <TD> LatC Ignore. </TD> </TR> 
+<TR> <TD> MootKey                  </TD> <TD> UInt </TD> <TD> Moot key. Use this key to retrieve any configuration information from Moot! </TD> </TR> 
 
 <TR> <TD> ContextRunInfoDataTransferID </TD> <TD>  UInt </TD> <TD> ID of the data transfer from the MOC. This corresponds to either a real TDRSS downlink or a retransfer from the MOC. Note that 
                                                                    a run can be split between multiple data transfers. </TD> </TR>  
