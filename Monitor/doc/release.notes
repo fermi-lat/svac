@@ -1,3 +1,9 @@
+
+v1r2p0   2008/06/19  (DEV)
+---------------------------
+Change HFC for Hip and DFC for Dgn in MonInput_OBFStatus.cxx. 
+This addresses Jira XXXX (To be done)
+
 v1r1p21  2008/06/13  (DEV)
 ----------------------------
 In variable type ValChange_, the delimiter "~" for suffixes (firstval, lastval...) was changed to "xxx". 
