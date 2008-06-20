@@ -694,7 +694,7 @@ void RootAnalyzer::analyzeDigiTree()
   if (dgn) {
     m_ntuple.m_fswDGNState          = dgn->getState();
     m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleFactor();
-    m_ntuple.m_fswDGNPrescaleFactor = dgn->prescalerIndex();
+    m_ntuple.m_fswDGNPrescaleIndex  = dgn->prescalerIndex();
 
     if (dgn->has()) {
       m_ntuple.m_fswDGNHasRSD = 1;
