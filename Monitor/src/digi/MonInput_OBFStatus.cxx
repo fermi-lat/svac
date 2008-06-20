@@ -13,7 +13,8 @@
 #define OUTBRANCH "OBFStatus"
 #define LEAF "OBFStatus[4]/I"
 #define INBRANCH "m_obfFilterStatus"
-//#define ACCESSOR Capullo#define MONSOURCE DigiEvent
+//#define ACCESSOR Capullo
+#define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
 #define DESCRIPTION "Vector [4] containing the status of the following Onboard Filters: Gamma, Mip, Hip, Dgn; which correspond to the vector indices 0,1,2,3, respectively. The status are the following ones: 0=Evt did not pass filter; 1=Evt did pass the filter; -1=Filter could not be computed for this event."
 #include "digiRootData/DigiEvent.h"
