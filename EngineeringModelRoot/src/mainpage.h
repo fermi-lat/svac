@@ -306,7 +306,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> OGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
 <TR> <TD> OGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
 <TR> <TD> OGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> OGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter in units of LEUS (1/4 Mev). </TD> </TR> 
 <TR> <TD> OGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
 
 </TABLE>
