@@ -1,4 +1,9 @@
 
+v1r2p1   2008/06/20  (DEV)
+-----------------------------
+Change getStatus32() by getStatusWord() to match with the new GLAST release (v15r8).
+
+
 v1r2p0   2008/06/19  (DEV)
 ---------------------------
 Change HFC for Hip and DFC for Dgn in MonInput_OBFStatus.cxx. 
