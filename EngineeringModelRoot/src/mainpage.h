@@ -304,12 +304,12 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
 <TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. </TD> </TR>
 
-<TR> <TD> OGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> OGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> OGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> OGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> OGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter in units of LEUS (1/4 Mev). </TD> </TR> 
-<TR> <TD> OGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter in units of LEUS (1/4 Mev). </TD> </TR> 
+<TR> <TD> ObfGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
 
 </TABLE>
 

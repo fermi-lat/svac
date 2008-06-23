@@ -1641,12 +1641,12 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
   m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
 
-  m_tree->Branch("OGAMMAStatusWord", &(m_ntuple.m_obfGAMMAStatusWord), "ObfGAMMAStatusWord/i");
-  m_tree->Branch("OGAMMAVetoMask", &(m_ntuple.m_obfGAMMAVetoMask), "ObfGAMMAVetoMask/i");
-  m_tree->Branch("OGAMMAVetoBit", &(m_ntuple.m_obfGAMMAVetoBit), "ObfGAMMAVetoBit/i");
-  m_tree->Branch("OGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
-  m_tree->Branch("OGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
-  m_tree->Branch("OGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
+  m_tree->Branch("ObfGAMMAStatusWord", &(m_ntuple.m_obfGAMMAStatusWord), "ObfGAMMAStatusWord/i");
+  m_tree->Branch("ObfGAMMAVetoMask", &(m_ntuple.m_obfGAMMAVetoMask), "ObfGAMMAVetoMask/i");
+  m_tree->Branch("ObfGAMMAVetoBit", &(m_ntuple.m_obfGAMMAVetoBit), "ObfGAMMAVetoBit/i");
+  m_tree->Branch("ObfGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
+  m_tree->Branch("ObfGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
+  m_tree->Branch("ObfGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
 
 
   // FSW filter bits:
