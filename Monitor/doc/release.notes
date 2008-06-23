@@ -1,4 +1,12 @@
 
+v1r2p2   2008/06/23  (DEV)
+----------------------------
+Check value of MagneticInfo before using it in function NormalizeRate (class RFun.cxx). 
+This prevents the crash of the program when the magnetic field quantity (PtMcIlwainL) is not present in merit file... 
+yes... this can happen...
+The normalized quantities will be set to -1 if that occurs; i.e. it will not have any meaningful value.
+
+
 v1r2p1   2008/06/20  (DEV)
 -----------------------------
 Change getStatus32() by getStatusWord() to match with the new GLAST release (v15r8).
