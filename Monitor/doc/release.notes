@@ -1,4 +1,9 @@
 
+v1r2p3   2008/06/23  (DEV)
+------------------------------
+Change function NormalizeRate (in RFun.cxx) so that, when magnetic info is meaningless, the return value is 0 
+if the requested value is Normalized error (and not the normalized value).
+
 v1r2p2   2008/06/23  (DEV)
 ----------------------------
 Check value of MagneticInfo before using it in function NormalizeRate (class RFun.cxx). 
