@@ -1,9 +1,4 @@
 
-v1r2p2   2008/06/22  (DEV)
--------------------------------
-Digi_TimeToneMissingCurrentORPrevious_TH1 filled only once for each time tone. 
-This addresses Jira GDQMQ-164.
-
 v1r2p1   2008/06/20  (DEV)
 -----------------------------
 Change getStatus32() by getStatusWord() to match with the new GLAST release (v15r8).
