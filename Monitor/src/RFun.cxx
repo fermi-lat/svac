@@ -1130,6 +1130,17 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
       assert(0);
     }
 
+  // check that the magnetic quantity has a reasonable value (0.5-3 for McIlwainL or 0.5-30 for RigCutoff
+  
+  if(MagneticInfo<0.5 || MagneticInfo >30)
+    {
+      std::cout << "RFun::NormalizeRate:WARNING" << std::endl 
+		<< "MagneticInfo="<<MagneticInfo << " is out of allowed bounds [0.5-30]"
+		<< std::endl 
+		<< "Returning -1" << std::endl;
+      return -1;
+    }
+
   // check that MagInfoVal (RigCutoff or McIlwainL param) is in map
   std::list<std::vector<float> > ::const_iterator itr2=itr->second.begin();
   while(!(MagneticInfo>=(*itr2)[0] && MagneticInfo<= (*itr2)[1]) && itr2 != itr->second.end())
@@ -1143,6 +1154,7 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
 	      << "Returning -1" << std::endl;
     return -1;
   }
+
 
   // Normalize
   
