@@ -1097,6 +1097,8 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
 			    Float_t Rate,  Float_t RateErr, char* RetType)
 {
 
+
+  std::string returntype = RetType;
   
   if(m_NormFactors.size() <1) // Norm factors have not been loaded yet 
     {
@@ -1137,7 +1139,9 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
       std::cout << "RFun::NormalizeRate:WARNING" << std::endl 
 		<< "MagneticInfo="<<MagneticInfo << " is out of allowed bounds [0.5-30]"
 		<< std::endl 
-		<< "Returning -1" << std::endl;
+		<< "Returning -1 (or 0 if return type returntype==NormRateErr" << std::endl;
+      if(returntype=="NormRateErr")
+	return 0;
       return -1;
     }
 
@@ -1151,14 +1155,16 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
 	      << "Normalization factors for rate type " << RateType 
 	      << " do not exist in file " << m_normfactascii << std::endl
 	      << "for the magnetic quantity with value " << MagneticInfo<< std::endl
-	      << "Returning -1" << std::endl;
+	      << "Returning -1 (or 0 if return type returntype==NormRateErr" << std::endl;
+    if(returntype=="NormRateErr")
+      return 0;
     return -1;
   }
 
 
   // Normalize
   
-  std::string returntype = RetType;
+
 
   //NormRate = Rate/NormFactor/RefValue
    /* NormRateErr = Rate*sqrt(pow(norm_err/norm,2)
