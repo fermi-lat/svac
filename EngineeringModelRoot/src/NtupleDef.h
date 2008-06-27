@@ -15,7 +15,7 @@ struct NtupleDef {
   unsigned int m_mootKey;
 
   // Event size in bytes:
-  int m_eventSize;
+  unsigned long m_eventSize;
 
   // PDG encoding of the primary particle
   int m_parId;

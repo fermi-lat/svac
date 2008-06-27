@@ -124,7 +124,7 @@ void NtupleDef::reset()
   m_runId          = 0; 
   m_eventId        = 0; 
   m_seqNo          = 0;
-  m_eventSize      = -9999;
+  m_eventSize      = 0;
   m_parId          = -9999;
   m_mcEnergy       = 0.;
   m_nTkrDigis      = 0;
