@@ -1,3 +1,32 @@
+v4r1p5 	June 26, 2008
+awb 	Fixed type error of event size.
+
+v4r1p4 June 23, 2008
+awb	Fixed typos in Obf variable names.
+
+v4r1p3 June 20, 2008
+awb	Fixed typo in DGN prescale factor.
+
+v4r1p2 June 20, 2008
+awb	Added Moot key.
+
+v4r1p1	June 19, 2008
+awb	Updated documentation.
+	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
+        Added some Gleam gamma-filter quantities.
+
+v4r0p0	May 30, 2008
+awb	Added real FSW filter status information. Needs the new DFI!
+
+v3r14p4 May 22, 2008
+awb     Added ObfFilterStatusBits.
+
+v3r14p3 May 12, 2008
+awb     And actually fill the second one. 
+
+v3r14p2 May 12, 2008
+awb     Added two Acd 'onboard energy' calculation variables. BUG! AcdObservedMipsTopHalf is not filled!
+
 v3r14p1 April 22, 2008
 awb     Added data transfer ID.
 

@@ -9,11 +9,13 @@ struct NtupleDef {
   int m_eventId;
   int m_seqNo;
 
-  // LatC key:
+  // Keys:
   unsigned int m_latcKey;  
+  unsigned int m_latcIgnore;  
+  unsigned int m_mootKey;
 
   // Event size in bytes:
-  int m_eventSize;
+  unsigned long m_eventSize;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -111,6 +113,8 @@ struct NtupleDef {
   int m_acdRibbonActiveDistId;
   float m_acdCornerDoca;
 
+  float m_acdObservedMips;
+  float m_acdObservedMipsTopHalf;
 
   // ACD-TKR intersection information:
   int m_acdNumTkrIntersection;
@@ -272,6 +276,58 @@ struct NtupleDef {
   int m_obfPassedMIP;
   int m_obfPassedHIP;
   int m_obfPassedDGN; 
+  unsigned int m_obfFilterStatusBits;
+
+  unsigned int m_obfGAMMAStatusWord;
+  unsigned int m_obfGAMMAVetoMask;
+  unsigned int m_obfGAMMAVetoBit;
+  unsigned int m_obfGAMMAPrescalerWord;
+  unsigned int m_obfGAMMAEnergy;
+  unsigned int m_obfGAMMAStage;
+
+  // Real filter bits:
+  int m_fswGAMMAState;
+  int m_fswDGNState;
+  int m_fswHIPState;
+  int m_fswMIPState;
+  int m_fswPassthruState;
+
+  unsigned int m_fswGAMMAPrescaleFactor;
+  unsigned int m_fswDGNPrescaleFactor;
+  unsigned int m_fswHIPPrescaleFactor;
+  unsigned int m_fswMIPPrescaleFactor;
+  unsigned int m_fswPassthruPrescaleFactor;
+
+  int m_fswGAMMAPrescaleIndex;
+  int m_fswDGNPrescaleIndex;
+  int m_fswHIPPrescaleIndex;
+  int m_fswMIPPrescaleIndex;
+  int m_fswPassthruPrescaleIndex;
+
+  int m_fswGAMMAHasRSD;
+  int m_fswMIPHasRSD;
+  int m_fswHIPHasRSD;
+  int m_fswDGNHasRSD;
+  int m_fswPassthruHasRSD;
+
+  unsigned int m_fswGAMMAStatusWord;
+  unsigned int m_fswMIPStatusWord;
+  unsigned int m_fswHIPStatusWord;
+  unsigned int m_fswDGNStatusWord;
+  unsigned int m_fswPassthruStatusWord;
+
+  unsigned int m_fswGAMMAAllVetoBits;
+  unsigned int m_fswMIPAllVetoBits;
+  unsigned int m_fswHIPAllVetoBits;
+  unsigned int m_fswDGNAllVetoBits;
+ 
+  unsigned int m_fswGAMMAStage;
+  unsigned int m_fswGAMMAEnergyValid;
+  int m_fswGAMMAEnergyInLeus;
+
+
+  
+
 
   //diagnostic info
   //For array info, look at online doc: http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/TEM.pdf, page 104, figure 118

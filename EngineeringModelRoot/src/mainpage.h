@@ -172,7 +172,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Context information from Flight Software </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. A value of 0 means that no key was available. </TD> </TR>
+<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. A value of 0 means that no key was available. Please use the MOOT key to retrieve any configuration information from MOOT!</TD> </TR>
+<TR> <TD> LatCIgnore               </TD> <TD> UInt </TD> <TD> LatC Ignore. </TD> </TR> 
+<TR> <TD> MootKey                  </TD> <TD> UInt </TD> <TD> Moot key. Use this key to retrieve any configuration information from Moot! </TD> </TR> 
 
 <TR> <TD> ContextRunInfoDataTransferID </TD> <TD>  UInt </TD> <TD> ID of the data transfer from the MOC. This corresponds to either a real TDRSS downlink or a retransfer from the MOC. Note that 
                                                                    a run can be split between multiple data transfers. </TD> </TR>  
@@ -235,13 +237,80 @@ This means that this time will be later than the time of any event time. </TD> <
 
 
 <TABLE>
-<CAPTION ALIGN="TOP"> Onboard Filter (Offline version)  </CAPTION>
+<CAPTION ALIGN="TOP"> Real Onboard Filter </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> ObfPassedGAMMA   </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the GAMMA-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedMIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the MIP-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedHIP     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedDGN     </TD> <TD> Int  </TD> <TD> Variable equal to 1 if the event passed the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> FswGAMMAState   </TD> <TD> Int  </TD> <TD> State of the GAMMA filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
+<TR> <TD> FswMIPState     </TD> <TD> Int  </TD> <TD> State of the MIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
+<TR> <TD> FswHIPState     </TD> <TD> Int  </TD> <TD> State of the HIP filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
+<TR> <TD> FswDGNState     </TD> <TD> Int  </TD> <TD> State of the DGN filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
+<TR> <TD> FswPassthuState </TD> <TD> Int  </TD> <TD> State of the Passthru filter: PASSED (Event passed the filter) = 0, SUPPRESSED (Event passed but was suppressed by an output prescaler) = 1, 
+                                                     VETOED (Event vetoed by the filter) = 2, LEAKED (Event vetoed but leaked by an output prescaler) = 3 and 
+                                                     IGNORED (Event ignored due to input prescaler) = 4. See enums/Lsf.h </TD> </TR> 
+
+<TR> <TD> FswGAMMAPrescaleFactor      </TD> <TD> UInt </TD> <TD> Prescale factor for the GAMMA-filter. </TD> </TR>
+<TR> <TD> FswMIPPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the MIP-filter. </TD> </TR>
+<TR> <TD> FswHIPPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the HIP-filter. </TD> </TR>
+<TR> <TD> FswDGNPrescaleFactor        </TD> <TD> UInt </TD> <TD> Prescale factor for the DGN-filter. </TD> </TR>
+<TR> <TD> FswPassthruPrescaleFactor   </TD> <TD> UInt </TD> <TD> Prescale factor for the Passthru-filter. </TD> </TR>
+
+<TR> <TD> FswGAMMAPrescaleIndex      </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the GAMMA-filter. </TD> </TR>
+<TR> <TD> FswMIPPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the MIP-filter. </TD> </TR>
+<TR> <TD> FswHIPPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the HIP-filter. </TD> </TR>
+<TR> <TD> FswDGNPrescaleIndex        </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the DGN-filter. </TD> </TR>
+<TR> <TD> FswPassthruPrescaleIndex   </TD> <TD> UInt </TD> <TD> Remapped enums::Lsf::LeakedPrescaler for the Passthru-filter. </TD> </TR>
+
+<TR> <TD> FswGAMMAHasRSD    </TD> <TD> Int </TD> <TD> Set to 1 if the GAMMA-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswMIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the MIP-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswHIPHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the HIP-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswDGNHasRSD      </TD> <TD> Int </TD> <TD> Set to 1 if the DGN-filter has a RSD (Result Summary Data block). </TD> </TR>
+<TR> <TD> FswPassthruHasRSD </TD> <TD> Int </TD> <TD> Set to 1 if the Passthru-filter has a RSD (Result Summary Data block). </TD> </TR>
+
+<TR> <TD> FswGAMMAStatusWord    </TD> <TD> UInt </TD> <TD> 32 bit statusword for the GAMMA filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswMIPStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the MIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswHIPStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the HIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswDGNStatusWord      </TD> <TD> UInt </TD> <TD> 32 bit statusword for the DGN filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswPassthruStatusWord </TD> <TD> UInt </TD> <TD> 32 bit statusword for the Passthru filter (if there is an RSD). </TD> </TR>
+
+<TR> <TD> FswGAMMAAllVetoBits    </TD> <TD> UInt </TD> <TD> Veto bits for the GAMMA filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswMIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the MIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswHIPAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the HIP filter (if there is an RSD). </TD> </TR>
+<TR> <TD> FswDGNAllVetoBits      </TD> <TD> UInt </TD> <TD> Veto bits for the DGN filter (if there is an RSD). </TD> </TR>
+
+<TR> <TD> FswGAMMAStage        </TD> <TD> UInt </TD> <TD> Bit mask indicating which stages of the GAMMA filter have been processed (if there is an RSD). </TD> </TR> 
+<TR> <TD> FswGAMMAEnergyValid  </TD> <TD> UInt </TD> <TD> Flag indicating the energy of the event was evaluated by the GAMMA filter (if there is an RSD). </TD> </TR> 
+<TR> <TD> FswGAMMAEnergyInLeus </TD> <TD>  Int </TD> <TD> Energy in units of LEUS (1/4 Mev) (if there is an RSD). </TD> </TR>
+
+
+</TABLE>
+
+
+
+<TABLE>
+<CAPTION ALIGN="TOP"> Gleam Onboard Filter </CAPTION>
+<TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
+
+<TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the GAMMA-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedMIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the MIP-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedHIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. </TD> </TR>
+
+<TR> <TD> ObfGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> ObfGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter in units of LEUS (1/4 Mev). </TD> </TR> 
+<TR> <TD> ObfGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
+
 </TABLE>
 
 
@@ -417,6 +486,9 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> AcdMipsMaxTileID                      </TD> <TD> Int   </TD> <TD> Tile ID of tile with the maximum calibrated signal in MIPs. </TD> </TR> 
 <TR> <TD> AcdMipsMaxPmt                         </TD> <TD> Int   </TD> <TD> PMT of tile with the maximum calibrated signal in MIPs. </TD> </TR>
 <TR> <TD> AcdMipsSum                            </TD> <TD> Float </TD> <TD> Sum of calibrated PHA in MIPs (average of the two PMTs, or a single PMT if the other PMT is missing).</TD> </TR> 
+
+<TR> <TD> AcdObservedMips                       </TD> <TD> Float </TD> <TD> Sum over all PMTs (PHA and Veto), assigning 0.1 Mips per PHA and 0.4 MIPs per Veto. </TD> </TR>  
+<TR> <TD> AcdObservedMipsTopHalf                </TD> <TD> Float </TD> <TD> Sum over all PMTs (PHA and Veto), assigning 0.1 Mips per PHA and 0.4 MIPs per Veto. For the top half only. </TD> </TR>  
 
 <TR> <TD> AcdCnoMap[tileID:0-603][2]            </TD> <TD> Int   </TD> <TD> CNO discriminator set or not for the specified attached tile/ribbon and PMT (A or B). For real data all PMTs attached to a 
                                                                             FREE board with the CNO bit (from the GEM CNO vector) will have this bit set. This is because the CNO board bit is an OR  

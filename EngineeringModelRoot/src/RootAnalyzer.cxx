@@ -602,6 +602,17 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_gammaStatusInt==0 || m_gammaStatusInt==6) {
       m_ntuple.m_obfPassedGAMMA = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_gammaStatus>>4); 
+
+    m_ntuple.m_obfGAMMAStatusWord    = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord(); 
+    m_ntuple.m_obfGAMMAVetoMask      = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoMask();
+    m_ntuple.m_obfGAMMAVetoBit       = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit();
+    m_ntuple.m_obfGAMMAPrescalerWord = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getPrescalerWord(); 
+
+    const IObfStatus* gammaStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter);
+    m_ntuple.m_obfGAMMAEnergy = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getEnergy(); 
+    m_ntuple.m_obfGAMMAStage  = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getStage();
+
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
     UChar_t m_mipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
@@ -609,34 +620,123 @@ void RootAnalyzer::analyzeDigiTree()
     if (m_mipStatusInt==0 || m_mipStatusInt==6) {
       m_ntuple.m_obfPassedMIP = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_mipStatus>>4) << 4; 
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
-    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0) { 
+    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getFiltersb();
     int m_hipStatusInt = m_hipStatus>>4;
     if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       m_ntuple.m_obfPassedHIP = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_hipStatus>>4) << 8; 
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
-    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0) {
+    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getFiltersb();
     int m_dgnStatusInt = m_dgnStatus>>4;
     if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       m_ntuple.m_obfPassedDGN = 1;
     }
+    m_ntuple.m_obfFilterStatusBits |= (m_dgnStatusInt>>4) << 12; 
   }
   
+
+  // FSW filter bits:
+  const LpaGammaFilter *gamma = m_digiEvent->getGammaFilter();
+  if (gamma) {
+    m_ntuple.m_fswGAMMAState          = gamma->getState();
+    m_ntuple.m_fswGAMMAPrescaleFactor = gamma->getPrescaleFactor();
+    m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->prescalerIndex();
+
+    if (gamma->has()) {
+      m_ntuple.m_fswGAMMAHasRSD = 1;
+
+      m_ntuple.m_fswGAMMAStatusWord  = gamma->getStatusWord();
+      m_ntuple.m_fswGAMMAAllVetoBits = gamma->getAllVetoBits();
+
+      m_ntuple.m_fswGAMMAStage        = gamma->getStage();
+      m_ntuple.m_fswGAMMAEnergyValid  = gamma->getEnergyValid();
+      m_ntuple.m_fswGAMMAEnergyInLeus = gamma->getEnergyInLeus();
+    }
+  }
+
+
+  const LpaMipFilter *mip = m_digiEvent->getMipFilter();
+  if (mip) {
+    m_ntuple.m_fswMIPState          = mip->getState();
+    m_ntuple.m_fswMIPPrescaleFactor = mip->getPrescaleFactor();
+    m_ntuple.m_fswMIPPrescaleIndex  = mip->prescalerIndex();
+
+    if (mip->has()) {
+      m_ntuple.m_fswMIPHasRSD = 1;
+
+      m_ntuple.m_fswMIPStatusWord  = mip->getStatusWord();
+      m_ntuple.m_fswMIPAllVetoBits = mip->getAllVetoBits();
+    }
+  }
+
+
+  const LpaHipFilter *hip = m_digiEvent->getHipFilter();
+  if (hip) {
+    m_ntuple.m_fswHIPState          = hip->getState();
+    m_ntuple.m_fswHIPPrescaleFactor = hip->getPrescaleFactor();
+    m_ntuple.m_fswHIPPrescaleIndex  = hip->prescalerIndex();
+
+    if (hip->has()) {
+      m_ntuple.m_fswHIPHasRSD = 1;
+
+      m_ntuple.m_fswHIPStatusWord  = hip->getStatusWord();
+      m_ntuple.m_fswHIPAllVetoBits = hip->getAllVetoBits();
+    }
+  }
+
+
+  const LpaDgnFilter *dgn = m_digiEvent->getDgnFilter();
+  if (dgn) {
+    m_ntuple.m_fswDGNState          = dgn->getState();
+    m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleFactor();
+    m_ntuple.m_fswDGNPrescaleIndex  = dgn->prescalerIndex();
+
+    if (dgn->has()) {
+      m_ntuple.m_fswDGNHasRSD = 1;
+
+      m_ntuple.m_fswDGNStatusWord  = dgn->getStatusWord();
+      m_ntuple.m_fswDGNAllVetoBits = dgn->getAllVetoBits();
+    }
+  }
+
+  
+  const LpaPassthruFilter *passthru = m_digiEvent->getPassthruFilter();
+  if (passthru) {
+    m_ntuple.m_fswPassthruState          = passthru->getState();
+    m_ntuple.m_fswPassthruPrescaleFactor = passthru->getPrescaleFactor();
+    m_ntuple.m_fswPassthruPrescaleIndex  = passthru->prescalerIndex();
+
+    if (passthru->has()) {
+      m_ntuple.m_fswDGNHasRSD = 1; 
+      m_ntuple.m_fswPassthruStatusWord  = passthru->getStatusWord();
+    }
+  }
+
+ 
+
 
 
   //
   // Context information:
   //
-  unsigned int tmpLatcKey = 0;
+  unsigned int tmpLatcKey    = 0;
+  unsigned int tmpLatcIgnore = 0;
+
 
   if (m_digiEvent->getMetaEvent().keys() != 0) {
-    tmpLatcKey = m_digiEvent->getMetaEvent().keys()->LATC_master();
+    tmpLatcKey    = m_digiEvent->getMetaEvent().keys()->LATC_master();
+    tmpLatcIgnore = m_digiEvent->getMetaEvent().keys()->LATC_ignore();
   }
-  m_ntuple.m_latcKey = tmpLatcKey;
+  m_ntuple.m_latcKey    = tmpLatcKey;
+  m_ntuple.m_latcIgnore = tmpLatcIgnore;
  
+  m_ntuple.m_mootKey = m_digiEvent->getMetaEvent().mootKey();
+
 
   m_ntuple.m_contextRunInfoDataTransferID = m_digiEvent->getMetaEvent().run().dataTransferId();
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
@@ -727,10 +827,6 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
-
-  unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
-  unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
-
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
     m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
@@ -812,6 +908,10 @@ void RootAnalyzer::analyzeDigiTree()
   // For the first 10 digis:
   int i10Count = 0;
 
+  // Observed Mips:
+  float tmpAcdObservedMips        = 0.0;
+  float tmpAcdObservedMipsTopHalf = 0.0;
+
   // Loop over all digis:
   for(int iDigi = 0; iDigi != nAcdDigi; ++iDigi) {
 
@@ -834,6 +934,18 @@ void RootAnalyzer::analyzeDigiTree()
         m_ntuple.m_acd10Ids[i10Count] = AcdID;
         i10Count++;
       }
+
+      // Observed MIPs:
+      Float_t thisPmt = 0.0;
+      if ( acdDigi->getPulseHeight(AcdDigi::A) > 0 ) thisPmt += 0.1;
+      if ( acdDigi->getPulseHeight(AcdDigi::B) > 0 ) thisPmt += 0.1;
+      if ( acdDigi->getHitMapBit(AcdDigi::A)   > 0 ) thisPmt += 0.4;
+      if ( acdDigi->getHitMapBit(AcdDigi::B)   > 0 ) thisPmt += 0.4;
+      tmpAcdObservedMips += thisPmt;
+      if ( AcdID < 100 || ( (AcdID % 100) < 20 ) ) {
+	tmpAcdObservedMipsTopHalf += thisPmt;
+      }
+
 
       m_ntuple.m_acdPha[AcdID][0] = acdDigi->getPulseHeight(AcdDigi::A);
       m_ntuple.m_acdPha[AcdID][1] = acdDigi->getPulseHeight(AcdDigi::B);
@@ -910,6 +1022,11 @@ void RootAnalyzer::analyzeDigiTree()
       }
     }
   }
+
+  m_ntuple.m_acdObservedMips        = tmpAcdObservedMips;
+  m_ntuple.m_acdObservedMipsTopHalf = tmpAcdObservedMipsTopHalf;
+
+
 
   // fill in no of Tkr digis and TOTs
   m_ntuple.m_nTkrDigis = m_digiEvent->getTkrDigiCol()->GetLast()+1;
@@ -1460,6 +1577,8 @@ void RootAnalyzer::createBranches()
   // Context information:                                                                                                                                                                                      
   //
   m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
+  m_tree->Branch("LatCIgnore", &(m_ntuple.m_latcIgnore), "LatCIgnore/i");
+  m_tree->Branch("MootKey", &(m_ntuple.m_mootKey), "MootKey/i");
                                                                                                                                  
   m_tree->Branch("ContextRunInfoDataTransferID", &(m_ntuple.m_contextRunInfoDataTransferID), "ContextRunInfoDataTransferID/i");
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
@@ -1520,6 +1639,59 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedMIP", &(m_ntuple.m_obfPassedMIP), "ObfPassedMIP/I");
   m_tree->Branch("ObfPassedHIP", &(m_ntuple.m_obfPassedHIP), "ObfPassedHIP/I");
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
+  m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
+
+  m_tree->Branch("ObfGAMMAStatusWord", &(m_ntuple.m_obfGAMMAStatusWord), "ObfGAMMAStatusWord/i");
+  m_tree->Branch("ObfGAMMAVetoMask", &(m_ntuple.m_obfGAMMAVetoMask), "ObfGAMMAVetoMask/i");
+  m_tree->Branch("ObfGAMMAVetoBit", &(m_ntuple.m_obfGAMMAVetoBit), "ObfGAMMAVetoBit/i");
+  m_tree->Branch("ObfGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
+  m_tree->Branch("ObfGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
+  m_tree->Branch("ObfGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
+
+
+  // FSW filter bits:
+  m_tree->Branch("FswGAMMAState", &(m_ntuple.m_fswGAMMAState), "FswGAMMAState/I");
+  m_tree->Branch("FswMIPState", &(m_ntuple.m_fswMIPState), "FswMIPState/I");
+  m_tree->Branch("FswHIPState", &(m_ntuple.m_fswHIPState), "FswHIPState/I");
+  m_tree->Branch("FswDGNState", &(m_ntuple.m_fswDGNState), "FswDGNState/I");
+  m_tree->Branch("FswPassthruState", &(m_ntuple.m_fswPassthruState), "FswPassthruState/I");
+
+  m_tree->Branch("FswGAMMAPrescaleFactor", &(m_ntuple.m_fswGAMMAPrescaleFactor), "FswGAMMAPrescaleFactor/i");
+  m_tree->Branch("FswDGNPrescaleFactor", &(m_ntuple.m_fswDGNPrescaleFactor), "FswDGNPrescaleFactor/i");
+  m_tree->Branch("FswMIPPrescaleFactor", &(m_ntuple.m_fswMIPPrescaleFactor), "FswMIPPrescaleFactor/i");
+  m_tree->Branch("FswHIPPrescaleFactor", &(m_ntuple.m_fswHIPPrescaleFactor), "FswHIPPrescaleFactor/i");
+  m_tree->Branch("FswPassthruPrescaleFactor", &(m_ntuple.m_fswPassthruPrescaleFactor), "FswPassthruPrescaleFactor/i");
+
+  m_tree->Branch("FswGAMMAPrescaleIndex", &(m_ntuple.m_fswGAMMAPrescaleIndex), "FswGAMMAPrescaleIndex/I");
+  m_tree->Branch("FswDGNPrescaleIndex", &(m_ntuple.m_fswDGNPrescaleIndex), "FswDGNPrescaleIndex/I");
+  m_tree->Branch("FswMIPPrescaleIndex", &(m_ntuple.m_fswMIPPrescaleIndex), "FswMIPPrescaleIndex/I");
+  m_tree->Branch("FswHIPPrescaleIndex", &(m_ntuple.m_fswHIPPrescaleIndex), "FswHIPPrescaleIndex/I");
+  m_tree->Branch("FswPassthruPrescaleIndex", &(m_ntuple.m_fswPassthruPrescaleIndex), "FswPassthruPrescaleIndex/I");
+
+  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGAMMAHasRSD), "FswGAMMAHasRSD/I");
+  m_tree->Branch("FswMIPHasRSD", &(m_ntuple.m_fswMIPHasRSD), "FswMIPHasRSD/I");
+  m_tree->Branch("FswHIPHasRSD", &(m_ntuple.m_fswHIPHasRSD), "FswHIPHasRSD/I");
+  m_tree->Branch("FswDGNHasRSD", &(m_ntuple.m_fswDGNHasRSD), "FswDGNHasRSD/I");
+  m_tree->Branch("FswPassthruHasRSD", &(m_ntuple.m_fswPassthruHasRSD), "FswPassthruHasRSD/I");
+
+  m_tree->Branch("FswGAMMAStatusWord", &(m_ntuple.m_fswGAMMAStatusWord), "FswGAMMAStatusWord/i");
+  m_tree->Branch("FswMIPStatusWord", &(m_ntuple.m_fswMIPStatusWord), "FswMIPStatusWord/i");
+  m_tree->Branch("FswHIPStatusWord", &(m_ntuple.m_fswHIPStatusWord), "FswHIPStatusWord/i");
+  m_tree->Branch("FswDGNStatusWord", &(m_ntuple.m_fswDGNStatusWord), "FswDGNStatusWord/i");
+  m_tree->Branch("FswPassthruStatusWord", &(m_ntuple.m_fswPassthruStatusWord), "FswPassthruStatusWord/i");
+
+  m_tree->Branch("FswGAMMAAllVetoBits", &(m_ntuple.m_fswGAMMAAllVetoBits), "FswGAMMAAllVetoBits/i");
+  m_tree->Branch("FswMIPAllVetoBits", &(m_ntuple.m_fswMIPAllVetoBits), "FswMIPAllVetoBits/i");
+  m_tree->Branch("FswHIPAllVetoBits", &(m_ntuple.m_fswHIPAllVetoBits), "FswHIPAllVetoBits/i");
+  m_tree->Branch("FswDGNAllVetoBits", &(m_ntuple.m_fswDGNAllVetoBits), "FswDGNAllVetoBits/i");
+
+  m_tree->Branch("FswGAMMAStage", &(m_ntuple.m_fswGAMMAStage), "FswGAMMAStage/i");
+  m_tree->Branch("FswGAMMAEnergyValid", &(m_ntuple.m_fswGAMMAEnergyValid), "FswGAMMAEnergyValid/i");
+  m_tree->Branch("FswGAMMAEnergyInLeus", &(m_ntuple.m_fswGAMMAEnergyInLeus), "FswGAMMAEnergyInLeus/I");
+
+
+
+
 
 
   // GEM information:
@@ -1630,7 +1802,8 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("AcdMipsMaxPmt", &(m_ntuple.m_acdMipsMaxPmt),"AcdMipsMaxPmt/I");
   m_tree->Branch("AcdMipsSum", &(m_ntuple.m_acdMipsSum),"AcdMipsSum/F");
 
-  
+  m_tree->Branch("AcdObservedMips", &(m_ntuple.m_acdObservedMips),"AcdObservedMips/F");
+  m_tree->Branch("AcdObservedMipsTopHalf", &(m_ntuple.m_acdObservedMipsTopHalf),"AcdObservedMipsTopHalf/F");
 
   // ACD POCA:
   m_tree->Branch("AcdPocaDoca", &(m_ntuple.m_acdPocaDoca),"AcdPocaDoca[2][2]/F");
