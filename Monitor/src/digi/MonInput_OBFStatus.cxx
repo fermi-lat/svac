@@ -60,59 +60,71 @@ void MonInput_OBFStatus::setValue(TObject* event) {
   // the component is set to zero. If the filters could not run properly, then the default value (=-1) is left.
 
   // Gamma filter
-  if(de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) { 
 
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit())== 0) {
-      m_val[0] = 1; // It passed
-      // mtp
-      /*
-      gfcounter++;
-      std::cout << "So far, evts passing gamma filter are: " << gfcounter << std::endl; 
-      */
-      // endtmp
+   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter) != 0) {
+     
+    UChar_t m_gammaStatus = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getFiltersb();
+    int m_gammaStatusInt = m_gammaStatus>>4;
+    if (m_gammaStatusInt==0 || m_gammaStatusInt==6) {
+      //it means it passed or was leaked by the gamma-filter
+      m_val[0] = 1;
     }
     else
-      m_val[0] = 0; // It did NOT passed
-  }
+      m_val[0] = 0;
+   }
+
+
+ 
 
   // Mip filter 
-  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getVetoBit())== 0) {
-      m_val[1] = 1; // It passed
-      // tmp
-      /*
-      mipfcounter++;
-      std::cout << "So far, evts passing mip filter are: " << mipfcounter << std::endl; 
-      if(m_val[0] == 1){
-	mipgfcounter++;
-	std::cout << "WARNING: This event passed the gamma filter too "<< std::endl
-		  << "Num Evts passing both filters = " << mipgfcounter << std::endl;
-      }
-      */
-      // endtmp
+  
+   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
+    UChar_t m_mipStatus = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
+    int m_mipStatusInt = m_mipStatus>>4;
+    if (m_mipStatusInt==0 || m_mipStatusInt==6) {
+      //it means it passed or was leaked by the MIP-filter
+      m_val[0] = 1;
     }
     else
-      m_val[1] = 0; // It did NOT passed
+       m_val[0] = 0;
   }
-
 
   // Hip filter
-  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getVetoBit())== 0) {
-      m_val[2] = 1; // It passed
+  
+   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0) {
+    UChar_t m_hipStatus = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getFiltersb();
+    int m_hipStatusInt = m_hipStatus>>4;
+    if (m_hipStatusInt==0 || m_hipStatusInt==6) {
+      //it means it passed or was leaked by the HIP-filter
+      m_val[0] = 1;
     }
     else
-      m_val[2] = 0; // It did NOT passed
+      m_val[0] = 0;
   }
 
+
   // Dgn filter
-  if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0){
-    if ((de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getStatusWord() & de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getVetoBit())== 0) {
-      m_val[3] = 1; // It passed
+  
+   if (de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0) {
+    UChar_t m_dgnStatus = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getFiltersb();
+    int m_dgnStatusInt = m_dgnStatus>>4;
+    if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
+      //it means it passed or was leaked by the DGN-filter
+       m_val[0] = 1;
     }
     else
-      m_val[3] = 0; // It did NOT passed
+      m_val[0] = 0;
   }
+
+
+
+ 
+
+
+
+
+
+
 
 }
 std::string MonInput_OBFStatus::getInputSource(){
