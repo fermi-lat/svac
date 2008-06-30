@@ -47,7 +47,8 @@ void MonInput_Tick20MHzDeviation::setValue(TObject* event) {
   if (m_val < 0) {
     m_val += RollOverInt;
   }
-  m_val -= 20000000; // we only want the deviations with respect to the 20MHz ticks
+  m_val = 20000000-m_val; // we only want the deviations with respect to the 20MHz ticks
+
 }
 std::string MonInput_Tick20MHzDeviation::getInputSource(){
   return INPUTSOURCE;
