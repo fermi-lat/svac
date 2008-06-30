@@ -1,3 +1,8 @@
+v1r2p6   2008/06/30  (DEV)
+----------------------------
+Change retrieval of OB (offline) filters to account for leaked events.
+ 
+
 v1r2p5   2008/06/23  (DEV)
 ------------------------------
 Changed sign of quntity Tick20MHzDeviation. This addresses Jira GDQMQ-180.
