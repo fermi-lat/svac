@@ -42,7 +42,7 @@ For all the variables the default value is -9999.
 
 <TR> <TD> RunID </TD> <TD> UInt </TD>  <TD> Run number </TD> </TR> 
 
-<TR> <TD> EventID </TD> <TD> UInt </TD>  <TD> Event number: For Flight Software Runs this is really UInt64_t, but is currently stored as an UInt. The full event ID is stored in ContextGemScalersSequence 
+<TR> <TD> EventID </TD> <TD> UInt64_t  </TD>  <TD> Event number: For Flight Software Runs this is really UInt64_t, but is currently stored as an UInt. The full event ID is stored in ContextGemScalersSequence 
           variable. For LATTE the event number comes from a 
           32 bit online counter. The event numbers are always contigous, i.e. no gaps, except for runs taken with software prescaling. For runs taken before the middle of April 2005 
           it came from a 17 bits online counter and wrapped around at 128k events i.e. you could have multiple events with the same event sequence number. </TD> </TR>

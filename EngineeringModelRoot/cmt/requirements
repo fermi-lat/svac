@@ -1,5 +1,5 @@
 package EngineeringModelRoot
-version v4r1p5
+version v4r1p6
 
 use GlastPolicy v*
 use mcRootData v*

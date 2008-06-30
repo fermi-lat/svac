@@ -6,7 +6,7 @@
 struct NtupleDef {
 
   int m_runId;
-  int m_eventId;
+  unsigned long long m_eventId;
   int m_seqNo;
 
   // Keys:
