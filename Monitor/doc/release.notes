@@ -1,3 +1,11 @@
+v1r2p5   2008/06/23  (DEV)
+------------------------------
+Changed sign of quntity Tick20MHzDeviation. This addresses Jira GDQMQ-180.
+
+
+v1r2p4   2008/06/23  (DEV)
+------------------------------
+Added quantity CurrentTimeToneMissing. This addresses Jira GDQMQ-164.
 
 v1r2p3   2008/06/23  (DEV)
 ------------------------------
