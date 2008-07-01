@@ -222,6 +222,8 @@
 // Last updated with object MeritObfGamStatus by user dpaneque on Thu May 29 04:12:59 2008
 // Last updated with object CTBParticleType by user dpaneque on Thu May 29 04:19:18 2008
 // Last updated with object CurrentTimeToneMissing by user dpaneque on Tue Jun 24 01:15:42 2008
+// Last updated with object PtSCzenith by user dpaneque on Tue Jul  1 01:21:11 2008
+#include "merit/MonInput_PtSCzenith.h"
 #include "digi/MonInput_CurrentTimeToneMissing.h"
 #include "merit/MonInput_CTBParticleType.h"
 #include "merit/MonInput_MeritObfGamStatus.h"
@@ -866,6 +868,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CTBParticleType;
   if (s=="CurrentTimeToneMissing")
     return new MonInput_CurrentTimeToneMissing;
+  if (s=="PtSCzenith")
+    return new MonInput_PtSCzenith;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1087,6 +1091,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("MeritObfGamStatus");
   names.push_back("CTBParticleType");
   names.push_back("CurrentTimeToneMissing");
+  names.push_back("PtSCzenith");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
