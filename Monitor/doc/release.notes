@@ -1,3 +1,8 @@
+v1r2p7   2008/06/30  (DEV)
+----------------------------
+New quantity. Addresses Jira GDQMQ-186.
+
+
 v1r2p6   2008/06/30  (DEV)
 ----------------------------
 Change retrieval of OB (offline) filters to account for leaked events.
