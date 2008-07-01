@@ -83,10 +83,10 @@ void MonInput_OBFStatus::setValue(TObject* event) {
     int m_mipStatusInt = m_mipStatus>>4;
     if (m_mipStatusInt==0 || m_mipStatusInt==6) {
       //it means it passed or was leaked by the MIP-filter
-      m_val[0] = 1;
+      m_val[1] = 1;
     }
     else
-       m_val[0] = 0;
+       m_val[1] = 0;
   }
 
   // Hip filter
@@ -96,10 +96,10 @@ void MonInput_OBFStatus::setValue(TObject* event) {
     int m_hipStatusInt = m_hipStatus>>4;
     if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       //it means it passed or was leaked by the HIP-filter
-      m_val[0] = 1;
+      m_val[2] = 1;
     }
     else
-      m_val[0] = 0;
+      m_val[2] = 0;
   }
 
 
@@ -110,10 +110,10 @@ void MonInput_OBFStatus::setValue(TObject* event) {
     int m_dgnStatusInt = m_dgnStatus>>4;
     if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       //it means it passed or was leaked by the DGN-filter
-       m_val[0] = 1;
+       m_val[3] = 1;
     }
     else
-      m_val[0] = 0;
+      m_val[3] = 0;
   }
 
 
