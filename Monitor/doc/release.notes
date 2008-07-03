@@ -1,12 +1,16 @@
+v1r2p10   2008/07/03  (DEV)
+----------------------------
+New quantities.
+ Addresses Jira GDQMQ-184.
+
+
 v1r2p8   2008/06/30  (DEV)
 ----------------------------
 New quantities. Addresses Jira GDQMQ-184.
-
-
 v1r2p7   2008/06/30  (DEV)
 ----------------------------
-New quantity. Addresses Jira GDQMQ-186.
-
+Added FastMon quantities xaxis pointing, rock angle and earth limb
+Addresses Jira GDQMQ-187
 
 v1r2p6   2008/06/30  (DEV)
 ----------------------------
