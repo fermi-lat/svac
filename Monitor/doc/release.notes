@@ -1,3 +1,9 @@
+v1r2p11   2008/07/03  (DEV)
+----------------------------
+New FastMon trending quantities
+X axis Ra and Dec, Rock angle and Earth Limb
+ Addresses Jira GDQMQ-187.
+
 v1r2p10   2008/07/03  (DEV)
 ----------------------------
 New quantities.
