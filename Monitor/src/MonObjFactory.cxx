@@ -224,6 +224,16 @@
 // Last updated with object CurrentTimeToneMissing by user dpaneque on Tue Jun 24 01:15:42 2008
 // Last updated with object PtSCzenith by user dpaneque on Tue Jul  1 01:21:11 2008
 // Last updated with object EventSizeInBytes by user dpaneque on Tue Jul  1 02:33:38 2008
+// Last updated with object FastMon_spacecraft_rock by user bregeon on Fri Jul  4 00:56:59 2008
+// Last updated with object FastMon_spacecraft_xra by user bregeon on Fri Jul  4 00:57:25 2008
+// Last updated with object FastMon_spacecraft_xdec by user bregeon on Fri Jul  4 00:57:53 2008
+// Last updated with object FastMon_spacecraft_earthlimb by user bregeon on Fri Jul  4 00:58:27 2008
+// Last updated with object FastMon_spacecraft_earthlimb_fov by user bregeon on Fri Jul  4 00:58:47 2008
+#include "fastmon/MonInput_FastMon_spacecraft_earthlimb_fov.h"
+#include "fastmon/MonInput_FastMon_spacecraft_earthlimb.h"
+#include "fastmon/MonInput_FastMon_spacecraft_xdec.h"
+#include "fastmon/MonInput_FastMon_spacecraft_xra.h"
+#include "fastmon/MonInput_FastMon_spacecraft_rock.h"
 
 #include "digi/MonInput_EventSizeInBytes.h"
 #include "merit/MonInput_PtSCzenith.h"
@@ -875,7 +885,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_PtSCzenith;
   if (s=="EventSizeInBytes")
     return new MonInput_EventSizeInBytes;
-  if (s=="FastMon_SpaceCraft_RockAngle")
+  if (s=="FastMon_spacecraft_rock")
+    return new MonInput_FastMon_spacecraft_rock;
+  if (s=="FastMon_spacecraft_xra")
+    return new MonInput_FastMon_spacecraft_xra;
+  if (s=="FastMon_spacecraft_xdec")
+    return new MonInput_FastMon_spacecraft_xdec;
+  if (s=="FastMon_spacecraft_earthlimb")
+    return new MonInput_FastMon_spacecraft_earthlimb;
+  if (s=="FastMon_spacecraft_earthlimb_fov")
+    return new MonInput_FastMon_spacecraft_earthlimb_fov;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1099,6 +1118,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CurrentTimeToneMissing");
   names.push_back("PtSCzenith");
   names.push_back("EventSizeInBytes");
+  names.push_back("FastMon_spacecraft_rock");
+  names.push_back("FastMon_spacecraft_xra");
+  names.push_back("FastMon_spacecraft_xdec");
+  names.push_back("FastMon_spacecraft_earthlimb");
+  names.push_back("FastMon_spacecraft_earthlimb_fov");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
