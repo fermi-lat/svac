@@ -502,6 +502,12 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
        ((UInt_t*)addout[i])[j]=n1+n2;
        ((Double_t*)addout[lastvalindex])[j]=((Double_t*)addin2[lastvalindex])[j];
        ((Double_t*)addout[fvalindex])[j]=((Double_t*)addin1[fvalindex])[j];
+       // If there was a single change in value in between the chunks, then nchanges would still be zero 
+       // (nchanges_out = nchanges_in_1 + nchanges_in_2); however, it is clear than in the merged chunk 
+       // we should have nchanges =1. The following line is a patch for that:
+       if((((Double_t*)addout[lastvalindex])[j] != ((Double_t*)addout[fvalindex])[j])
+	  && ((UInt_t*)addout[i])[j] == 0)
+	 ((UInt_t*)addout[i])[j]= 1;
       
        if(numval >0){
 	 unsigned int numind1=n1<numval ? n1 : numval;
