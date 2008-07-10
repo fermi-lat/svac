@@ -1,3 +1,8 @@
+v1r2p12   2008/07/10  (DEV)
+----------------------------
+Change in treemerge.cxx to address Jira GDQMQ-191.
+
+
 v1r2p11   2008/07/03  (DEV)
 ----------------------------
 New FastMon trending quantities
