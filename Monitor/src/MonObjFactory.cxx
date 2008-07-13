@@ -229,6 +229,10 @@
 // Last updated with object FastMon_spacecraft_xdec by user bregeon on Fri Jul  4 00:57:53 2008
 // Last updated with object FastMon_spacecraft_earthlimb by user bregeon on Fri Jul  4 00:58:27 2008
 // Last updated with object FastMon_spacecraft_earthlimb_fov by user bregeon on Fri Jul  4 00:58:47 2008
+// Last updated with object FastMon_spacecraft_zgalL by user bregeon on Sun Jul 13 03:20:52 2008
+// Last updated with object FastMon_spacecraft_zgalB by user bregeon on Sun Jul 13 03:21:35 2008
+#include "fastmon/MonInput_FastMon_spacecraft_zgalB.h"
+#include "fastmon/MonInput_FastMon_spacecraft_zgalL.h"
 #include "fastmon/MonInput_FastMon_spacecraft_earthlimb_fov.h"
 #include "fastmon/MonInput_FastMon_spacecraft_earthlimb.h"
 #include "fastmon/MonInput_FastMon_spacecraft_xdec.h"
@@ -895,6 +899,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_earthlimb;
   if (s=="FastMon_spacecraft_earthlimb_fov")
     return new MonInput_FastMon_spacecraft_earthlimb_fov;
+  if (s=="FastMon_spacecraft_zgalL")
+    return new MonInput_FastMon_spacecraft_zgalL;
+  if (s=="FastMon_spacecraft_zgalB")
+    return new MonInput_FastMon_spacecraft_zgalB;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1123,6 +1131,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_spacecraft_xdec");
   names.push_back("FastMon_spacecraft_earthlimb");
   names.push_back("FastMon_spacecraft_earthlimb_fov");
+  names.push_back("FastMon_spacecraft_zgalL");
+  names.push_back("FastMon_spacecraft_zgalB");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
