@@ -236,10 +236,6 @@
 // Last updated with object GrbZDir by user dpaneque on Thu Jul 17 21:29:13 2008
 // Last updated with object FswGamState by user dpaneque on Thu Jul 17 22:24:13 2008
 // Last updated with object MootKey by user dpaneque on Thu Jul 17 22:33:04 2008
-// Last updated with object CondSummary5bits by user dpaneque on Fri Jul 18 19:14:49 2008
-// Last updated with object L1TTriggerWord5bits by user dpaneque on Fri Jul 18 19:17:08 2008
-#include "digi/MonInput_L1TTriggerWord5bits.h"
-#include "digi/MonInput_CondSummary5bits.h"
 #include "digi/MonInput_MootKey.h"
 #include "merit/MonInput_FswGamState.h"
 #include "merit/MonInput_GrbZDir.h"
@@ -927,10 +923,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FswGamState;
   if (s=="MootKey")
     return new MonInput_MootKey;
-  if (s=="CondSummary5bits")
-    return new MonInput_CondSummary5bits;
-  if (s=="L1TTriggerWord5bits")
-    return new MonInput_L1TTriggerWord5bits;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1166,8 +1158,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("GrbZDir");
   names.push_back("FswGamState");
   names.push_back("MootKey");
-  names.push_back("CondSummary5bits");
-  names.push_back("L1TTriggerWord5bits");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
