@@ -231,6 +231,16 @@
 // Last updated with object FastMon_spacecraft_earthlimb_fov by user bregeon on Fri Jul  4 00:58:47 2008
 // Last updated with object FastMon_spacecraft_zgalL by user bregeon on Sun Jul 13 03:20:52 2008
 // Last updated with object FastMon_spacecraft_zgalB by user bregeon on Sun Jul 13 03:21:35 2008
+// Last updated with object GrbXDir by user dpaneque on Thu Jul 17 21:27:49 2008
+// Last updated with object GrbYDir by user dpaneque on Thu Jul 17 21:28:31 2008
+// Last updated with object GrbZDir by user dpaneque on Thu Jul 17 21:29:13 2008
+// Last updated with object FswGamState by user dpaneque on Thu Jul 17 22:24:13 2008
+// Last updated with object MootKey by user dpaneque on Thu Jul 17 22:33:04 2008
+#include "digi/MonInput_MootKey.h"
+#include "merit/MonInput_FswGamState.h"
+#include "merit/MonInput_GrbZDir.h"
+#include "merit/MonInput_GrbYDir.h"
+#include "merit/MonInput_GrbXDir.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zgalB.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zgalL.h"
 #include "fastmon/MonInput_FastMon_spacecraft_earthlimb_fov.h"
@@ -903,6 +913,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_zgalL;
   if (s=="FastMon_spacecraft_zgalB")
     return new MonInput_FastMon_spacecraft_zgalB;
+  if (s=="GrbXDir")
+    return new MonInput_GrbXDir;
+  if (s=="GrbYDir")
+    return new MonInput_GrbYDir;
+  if (s=="GrbZDir")
+    return new MonInput_GrbZDir;
+  if (s=="FswGamState")
+    return new MonInput_FswGamState;
+  if (s=="MootKey")
+    return new MonInput_MootKey;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1133,6 +1153,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_spacecraft_earthlimb_fov");
   names.push_back("FastMon_spacecraft_zgalL");
   names.push_back("FastMon_spacecraft_zgalB");
+  names.push_back("GrbXDir");
+  names.push_back("GrbYDir");
+  names.push_back("GrbZDir");
+  names.push_back("FswGamState");
+  names.push_back("MootKey");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
