@@ -1,3 +1,8 @@
+v1r2p16   2008/07/20  (DEV)
+----------------------------
+Modified function RFun::computeratio to check for channel saturation before usage. This addresses (partly) Jira GDQMQ-215.
+
+
 v1r2p15   2008/07/18  (DEV)
 ----------------------------
 New quantities added to address issue from jiras GDQMQ-214
