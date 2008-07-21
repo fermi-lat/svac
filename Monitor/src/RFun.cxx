@@ -113,10 +113,12 @@ double RFun::computeratio(Short_t signal1, float ped1,
   // compute a sensible ratio. 
 
   // Check minimum signla required
-  if(sig1 < MinSignal || sig2 < MinSignal)
+  if(sig1 < MinSignal || sig2 < MinSignal || signal1 >= 4095 || signal2 >= 4095)
     return ratio;
   else
     ratio = sig1/sig2;
+
+ 
 
   return ratio;
 }
