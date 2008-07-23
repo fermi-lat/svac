@@ -298,11 +298,17 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Gleam Onboard Filter </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the GAMMA-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedMIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the MIP-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedHIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. Use this to distinguish between PASSED and LEAKED for example. </TD> </TR>
+<TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the GAMMA-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedMIP        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the MIP-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedHIP        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
+
+<TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. Use this to distinguish between PASSED and LEAKED for example. NB! The convention is NOT that same as the State convention. Use the State variables!</TD> </TR>
+
+<TR> <TD> ObfGAMMAState </TD> <TD> UInt </TD> <TD> State of the GAMMA-filter. It follows the same convention as the FSW GAMMA filter state! </TD> </TR>
+<TR> <TD> ObfMIPState </TD> <TD> UInt </TD> <TD> State of the MIP-filter. It follows the same convention as the FSW MIP filter state! </TD> </TR>
+<TR> <TD> ObfHIPState </TD> <TD> UInt </TD> <TD> State of the HIP-filter. It follows the same convention as the FSW HIP filter state! </TD> </TR>
+<TR> <TD> ObfDGNState </TD> <TD> UInt </TD> <TD> State of the DGN-filter. It follows the same convention as the FSW DGN filter state! </TD> </TR>
 
 <TR> <TD> ObfGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
 <TR> <TD> ObfGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 

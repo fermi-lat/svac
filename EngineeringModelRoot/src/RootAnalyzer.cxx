@@ -604,6 +604,9 @@ void RootAnalyzer::analyzeDigiTree()
     }
     m_ntuple.m_obfFilterStatusBits |= (m_gammaStatus>>4); 
 
+    UInt_t gammaState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getState();
+    m_ntuple.m_obfGAMMAState = gammaState;
+
     m_ntuple.m_obfGAMMAStatusWord    = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord(); 
     m_ntuple.m_obfGAMMAVetoMask      = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoMask();
     m_ntuple.m_obfGAMMAVetoBit       = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit();
@@ -621,6 +624,9 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedMIP = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_mipStatus>>4) << 4; 
+
+    UInt_t mipState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getState();
+    m_ntuple.m_obfMIPState = mipState;
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0) { 
     UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getFiltersb();
@@ -629,6 +635,9 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedHIP = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_hipStatus>>4) << 8; 
+
+    UInt_t hipState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getState();
+    m_ntuple.m_obfHIPState = hipState;
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0) {
     UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getFiltersb();
@@ -637,6 +646,8 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedDGN = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_dgnStatusInt>>4) << 12; 
+    UInt_t dgnState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getState();
+    m_ntuple.m_obfDGNState = dgnState;
   }
   
 
@@ -1647,6 +1658,11 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
   m_tree->Branch("ObfGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
   m_tree->Branch("ObfGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
+
+  m_tree->Branch("ObfGAMMAState", &(m_ntuple.m_obfGAMMAState),"ObfGAMMAState/i");
+  m_tree->Branch("ObfMIPState", &(m_ntuple.m_obfMIPState),"ObfMIPState/i");
+  m_tree->Branch("ObfHIPState", &(m_ntuple.m_obfHIPState),"ObfHIPState/i");
+  m_tree->Branch("ObfDGNState", &(m_ntuple.m_obfDGNState),"ObfDGNState/i");
 
 
   // FSW filter bits:

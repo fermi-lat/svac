@@ -276,6 +276,7 @@ struct NtupleDef {
   int m_obfPassedMIP;
   int m_obfPassedHIP;
   int m_obfPassedDGN; 
+
   unsigned int m_obfFilterStatusBits;
 
   unsigned int m_obfGAMMAStatusWord;
@@ -284,6 +285,12 @@ struct NtupleDef {
   unsigned int m_obfGAMMAPrescalerWord;
   unsigned int m_obfGAMMAEnergy;
   unsigned int m_obfGAMMAStage;
+  unsigned int m_obfGAMMAState;
+
+  unsigned int m_obfMIPState;
+  unsigned int m_obfHIPState;
+  unsigned int m_obfDGNState;
+
 
   // Real filter bits:
   int m_fswGAMMAState;
