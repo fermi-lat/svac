@@ -1,3 +1,6 @@
+v4r1p8  July 28, 2008
+awb     Added version of the gamma-filter to the ntuple.
+
 v4r1p7	July 23, 2008
 awb	Added "state" variables for all filters.
 

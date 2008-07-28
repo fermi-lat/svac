@@ -288,7 +288,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> FswGAMMAStage        </TD> <TD> UInt </TD> <TD> Bit mask indicating which stages of the GAMMA filter have been processed (if there is an RSD). </TD> </TR> 
 <TR> <TD> FswGAMMAEnergyValid  </TD> <TD> UInt </TD> <TD> Flag indicating the energy of the event was evaluated by the GAMMA filter (if there is an RSD). </TD> </TR> 
 <TR> <TD> FswGAMMAEnergyInLeus </TD> <TD>  Int </TD> <TD> Energy in units of LEUS (1/4 Mev) (if there is an RSD). </TD> </TR>
-
+<TR> <TD> FswGAMMAVersion      </TD> <TD> UInt </TD> <TD> Version of the FSW GAMMA-filter.  </TD> </TR> 
 
 </TABLE>
 

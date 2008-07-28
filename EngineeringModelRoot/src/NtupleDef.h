@@ -330,8 +330,10 @@ struct NtupleDef {
  
   unsigned int m_fswGAMMAStage;
   unsigned int m_fswGAMMAEnergyValid;
+  unsigned int m_fswGAMMAVersion;
   int m_fswGAMMAEnergyInLeus;
 
+  
 
   
 

@@ -657,7 +657,8 @@ void RootAnalyzer::analyzeDigiTree()
     m_ntuple.m_fswGAMMAState          = gamma->getState();
     m_ntuple.m_fswGAMMAPrescaleFactor = gamma->getPrescaleFactor();
     m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->prescalerIndex();
-
+    m_ntuple.m_fswGAMMAVersion        = gamma->getVersion(); 
+    
     if (gamma->has()) {
       m_ntuple.m_fswGAMMAHasRSD = 1;
 
@@ -1703,6 +1704,7 @@ void RootAnalyzer::createBranches()
 
   m_tree->Branch("FswGAMMAStage", &(m_ntuple.m_fswGAMMAStage), "FswGAMMAStage/i");
   m_tree->Branch("FswGAMMAEnergyValid", &(m_ntuple.m_fswGAMMAEnergyValid), "FswGAMMAEnergyValid/i");
+  m_tree->Branch("FswGAMMAVersion", &(m_ntuple.m_fswGAMMAVersion), "FswGAMMAVersion/i");
   m_tree->Branch("FswGAMMAEnergyInLeus", &(m_ntuple.m_fswGAMMAEnergyInLeus), "FswGAMMAEnergyInLeus/I");
 
 
