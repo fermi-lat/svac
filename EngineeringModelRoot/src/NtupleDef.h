@@ -14,6 +14,10 @@ struct NtupleDef {
   unsigned int m_latcIgnore;  
   unsigned int m_mootKey;
 
+  // Compressed event size:
+  int m_compressedEventSize;
+  int m_compressionLevel;
+
   // Event size in bytes:
   unsigned long m_eventSize;
 

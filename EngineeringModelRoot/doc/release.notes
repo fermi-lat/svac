@@ -1,3 +1,7 @@
+v4r2	August 6, 2008
+awb	Added compressed event size and compression level. Needs GR v15r35 or greater.
+        Added 'exit(1)' in case of problems writing the svac.root file.
+
 v4r1p8  July 28, 2008
 awb     Added version of the gamma-filter to the ntuple.
 

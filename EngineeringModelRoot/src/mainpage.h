@@ -47,8 +47,11 @@ For all the variables the default value is -9999.
           32 bit online counter. The event numbers are always contigous, i.e. no gaps, except for runs taken with software prescaling. For runs taken before the middle of April 2005 
           it came from a 17 bits online counter and wrapped around at 128k events i.e. you could have multiple events with the same event sequence number. </TD> </TR>
 
-<TR> <TD> EventSize </TD> <TD> Int </TD>  <TD> Event size in bytes taken from the Fits file. It seems to be an 8 bytes offset with respect to the LDF event size (the FITS event size  
-          being larger). </TD> </TR>
+<TR> <TD> EventSize </TD> <TD> Int </TD>  <TD> Uncompressed event size in bytes. </TD> </TR>
+
+<TR> <TD> CompressedEventSize </TD> <TD> Int </TD>  <TD> Compressed event size in bytes. </TD> </TR>
+<TR> <TD> CompressionLevel    </TD> <TD> Int </TD>  <TD> Compression level. </TD> </TR>
+
 
 <TR> <TD> GltWord </TD> <TD> Int </TD> <TD> Trigger word made from digis: The definition of the bits can be found in enums/enums/TriggerBits.h and follows the definition of the 
           bits from the GltConditionsWord. The GltWord is the only trigger word available in the simulation as there is no GEM simulation.</TD> </TR>

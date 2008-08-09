@@ -59,12 +59,22 @@ void RootAnalyzer::produceOutputFile()
 {
   //  TDirectory* saveDir = gDirectory;
 
+
   if(m_outputFile) {
     //m_outputFile->cd("TkrCalib");
     //m_tkrCalib->saveAllHist();
     //m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
-    m_outputFile->Write(0, TObject::kOverwrite);
+    //m_outputFile->Write(0, TObject::kOverwrite);
+    
+    // awb
+    int returnCode;
+    returnCode = m_outputFile->Write(0, TObject::kOverwrite);
+    
+    if (returnCode == 0) {
+      std::cout << "ERROR! Problem writing the output SVAC root file!" << std::endl;
+      exit(1);
+    }
     m_outputFile->Close();
   }
 
@@ -73,7 +83,6 @@ void RootAnalyzer::produceOutputFile()
     m_histFile->Write(0, TObject::kOverwrite);
     m_histFile->Close();
   }
-
   //  saveDir->cd();
 }
 
@@ -749,6 +758,8 @@ void RootAnalyzer::analyzeDigiTree()
  
   m_ntuple.m_mootKey = m_digiEvent->getMetaEvent().mootKey();
 
+  m_ntuple.m_compressedEventSize = m_digiEvent->getMetaEvent().compressedSize();
+  m_ntuple.m_compressionLevel    = m_digiEvent->getMetaEvent().compressionLevel();
 
   m_ntuple.m_contextRunInfoDataTransferID = m_digiEvent->getMetaEvent().run().dataTransferId();
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
@@ -1086,7 +1097,13 @@ void RootAnalyzer::fillOutputTree()
   if(m_outputFile) {
     TDirectory* saveDir = gDirectory;
     m_outputFile->cd();
-    m_tree->Fill();
+    int returnCode;
+    //m_tree->Fill();
+    returnCode = m_tree->Fill();
+    if (returnCode == -1) {
+      std::cout << "ERROR! Problem filling the tree!" << std::endl;
+      exit(1);
+    }
     saveDir->cd();
   }
 }
@@ -1254,7 +1271,7 @@ void RootAnalyzer::analyzeData()
 
 
   // awb
-  //nEvent = 1000;
+  //nEvent = 10000;
 
   //m_tkrCalib->setNevents(nEvent);
   //m_tkrCalib->setOutputFile(m_outputFile);
@@ -1591,7 +1608,10 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
   m_tree->Branch("LatCIgnore", &(m_ntuple.m_latcIgnore), "LatCIgnore/i");
   m_tree->Branch("MootKey", &(m_ntuple.m_mootKey), "MootKey/i");
-                                                                                                                                 
+                         
+  m_tree->Branch("CompressedEventSize", &(m_ntuple.m_compressedEventSize), "CompressedEventSize/I");
+  m_tree->Branch("CompressionLevel", &(m_ntuple.m_compressionLevel), "CompressionLevel/I");
+                                                                                                        
   m_tree->Branch("ContextRunInfoDataTransferID", &(m_ntuple.m_contextRunInfoDataTransferID), "ContextRunInfoDataTransferID/i");
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
   m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
