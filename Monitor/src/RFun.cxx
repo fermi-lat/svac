@@ -123,6 +123,28 @@ double RFun::computeratio(Short_t signal1, float ped1,
   return ratio;
 }
 
+double RFun::computeratio_v2(Short_t signal1, float ped1, float MinSignal1,
+			     Short_t signal2, float ped2,
+			     Short_t MinSignal2)
+{
+  double sig1 = double(signal1)-double(ped1);
+  double sig2 = double(signal2)-double(ped2);
+  
+  double ratio = -1; // silly value returned in case signals are not large enough to 
+  // compute a sensible ratio. 
+
+  // Check minimum signla required
+  if(sig1 < MinSignal1 || sig2 < MinSignal2 || signal1 >= 4095 || signal2 >= 4095)
+    return ratio;
+  else
+    ratio = sig1/sig2;
+
+ 
+
+  return ratio;
+}
+
+
 
 double RFun::getChannelEnergyHighest(ROOT::TArrayProxy<ROOT::TMultiArrayType<ROOT::TMultiArrayType<ROOT::TArrayType<Float_t,2>, 12>, 8> >& invector, int Level, int Energy)
 {
