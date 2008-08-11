@@ -1,48 +1,49 @@
 // 
-// Class for input of quantity FswFilters for monitoring 
+// Class for input of quantity FswFiltersLeaked for monitoring 
 // 
-// Created by dpaneque on Sat May 24 21:39:00 2008 
+// Created by dpaneque on Mon Aug 11 16:24:57 2008 
 // Object created automatically by script makeNewMonObject.pl
 //
-#include "MonInput_FswFilters.h"
+#include "MonInput_FswFiltersLeaked.h"
 #include <iostream>
 
 // User defined part 
 
-#define NAME FswFilters
-#define OUTBRANCH "FswFilters"
-#define LEAF "FswFilters[5]/I"
+#define NAME FswFiltersLeaked
+#define OUTBRANCH "FswFiltersLeaked"
+#define LEAF "FswFiltersLeaked[5]/I"
 #define INBRANCH "m_metaEvent"
-#define ACCESSOR NotAplicable
+#define ACCESSOR bbb
 #define MONSOURCE DigiEvent
 #define INPUTSOURCE "DigiEvent"
-#define DESCRIPTION "Vector [5] containing the status of the following Flight Sowftware Onboard Filters: Gamma, Mip, Hip, DGN, PassThru; which correspond to the vector indices 0,1,2,3,4 respectively. The status are the following ones: 0=Evt did not pass filter; 1=Evt did pass the filter; -1=Filter could not be computed for this event."
+#define DESCRIPTION "Vector [5] containing the status of the following Flight Sowftware Onboard Filters that were LEAKED: Gamma, Mip, Hip, DGN, PassThru; which correspond to the vector indices 0,1,2,3,4 respectively. The status are the following ones: 0=Evt was not leaked; 1=Evt leaked this filter; -1=Filter could not be computed for this event."
 #include "digiRootData/DigiEvent.h"
+
 
 // End user defined part 
 
-MonInput_FswFilters::MonInput_FswFilters(){
+MonInput_FswFiltersLeaked::MonInput_FswFiltersLeaked(){
   m_name=OUTBRANCH;
 }
-MonInput_FswFilters::~MonInput_FswFilters(){
+MonInput_FswFiltersLeaked::~MonInput_FswFiltersLeaked(){
 }
 
 
-int MonInput_FswFilters::setOutputBranch(TTree* tree) {
+int MonInput_FswFiltersLeaked::setOutputBranch(TTree* tree) {
  TBranch* bErr= tree->Branch(OUTBRANCH,&m_val,LEAF);
  return bErr != 0 ? 0 : 1;
 }
-void MonInput_FswFilters::enableInputBranch(TTree& tree){
+void MonInput_FswFiltersLeaked::enableInputBranch(TTree& tree){
   tree.SetBranchStatus(INBRANCH,1);
 }
-void MonInput_FswFilters::setValue(TObject* event) {
+void MonInput_FswFiltersLeaked::setValue(TObject* event) {
   MONSOURCE* de=dynamic_cast<MONSOURCE*>(event);
   if (de==0){
     std::cerr<<"Using object "<<OUTBRANCH<<" with wrong kind of data tree (like digi, reco, etc.)"<<std::endl;
     assert(de);
   }
 
-  // initialize to -1 (= filter could not be computed for this event)
+ // initialize to -1 (= filter could not be computed for this event)
   for(UShort_t i = 0; i < 5; i++)
     m_val[i]=-1; 
 
@@ -53,7 +54,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
  
   const LpaGammaFilter *gam = de->getGammaFilter();
   if(gam){
-    if(gam->passed())// || gam->leaked())
+    if(gam->leaked())
       m_val[0] = 1;
     else
       m_val[0] = 0; // It did NOT passed
@@ -62,7 +63,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // Mip filter
   const LpaMipFilter *mip = de->getMipFilter(); 
   if(mip){
-    if(mip->passed() || mip->leaked())
+    if(mip->leaked())
       m_val[1] = 1;
     else
       m_val[1] = 0; // It did NOT passed
@@ -71,7 +72,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // HIp filter
   const LpaHipFilter *hip = de->getHipFilter();
   if(hip){
-    if(hip->passed() || hip->leaked())
+    if(hip->leaked())
       m_val[2] = 1;
     else
       m_val[2] = 0; // It did NOT passed
@@ -80,7 +81,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
    // DGN filter
   const LpaDgnFilter *dgn = de->getDgnFilter();
   if(dgn){
-    if(dgn->passed() || dgn->leaked())
+    if(dgn->leaked())
       m_val[3] = 1;
     else
       m_val[3] = 0; // It did NOT passed
@@ -95,15 +96,13 @@ void MonInput_FswFilters::setValue(TObject* event) {
     else
       m_val[4] = 0;
   }
-  
- 
+
 
 }
-
-std::string MonInput_FswFilters::getInputSource(){
+std::string MonInput_FswFiltersLeaked::getInputSource(){
   return INPUTSOURCE;
 }
-std::string MonInput_FswFilters::getDescription(){
+std::string MonInput_FswFiltersLeaked::getDescription(){
   return DESCRIPTION;
 }
 

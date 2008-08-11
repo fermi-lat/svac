@@ -240,6 +240,10 @@
 // Last updated with object L1TTriggerWord5bits by user dpaneque on Fri Jul 18 19:17:08 2008
 // Last updated with object CalXtalAdcPed by user dpaneque on Mon Aug 11 04:39:31 2008
 // Last updated with object CalXtalAdcRng by user dpaneque on Mon Aug 11 04:41:33 2008
+// Last updated with object FswFiltersLeaked by user dpaneque on Mon Aug 11 16:24:57 2008
+// Last updated with object FswGAMMAEnergyInLeus by user dpaneque on Mon Aug 11 16:37:56 2008
+#include "digi/MonInput_FswGAMMAEnergyInLeus.h"
+#include "digi/MonInput_FswFiltersLeaked.h"
 #include "cal/MonInput_CalXtalAdcRng.h"
 #include "cal/MonInput_CalXtalAdcPed.h"
 #include "digi/MonInput_L1TTriggerWord5bits.h"
@@ -939,6 +943,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalXtalAdcPed;
   if (s=="CalXtalAdcRng")
     return new MonInput_CalXtalAdcRng;
+  if (s=="FswFiltersLeaked")
+    return new MonInput_FswFiltersLeaked;
+  if (s=="FswGAMMAEnergyInLeus")
+    return new MonInput_FswGAMMAEnergyInLeus;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1178,6 +1186,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("L1TTriggerWord5bits");
   names.push_back("CalXtalAdcPed");
   names.push_back("CalXtalAdcRng");
+  names.push_back("FswFiltersLeaked");
+  names.push_back("FswGAMMAEnergyInLeus");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
