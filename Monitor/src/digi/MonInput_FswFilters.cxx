@@ -53,7 +53,7 @@ void MonInput_FswFilters::setValue(TObject* event) {
  
   const LpaGammaFilter *gam = de->getGammaFilter();
   if(gam){
-    if(gam->passed())// || gam->leaked())
+    if(gam->passed() || gam->leaked())
       m_val[0] = 1;
     else
       m_val[0] = 0; // It did NOT passed

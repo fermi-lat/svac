@@ -116,10 +116,6 @@ class RFun{
 			     Short_t MinSignal);
 
 
-  static double computeratio_v2(Short_t signal1, float ped1, float MinSignal1,
-				Short_t signal2, float ped2,
-				Short_t MinSignal2);
-
   // function scans invector (CalXtalFaceSignal[16][8][12][2]) and returns 
   // Either the Energy (Energy =1) or Channel (Energy =0) of the channel with 
   // the highest energy (level =0), or the second highest (level = 1) or the third highest (level = 2) 

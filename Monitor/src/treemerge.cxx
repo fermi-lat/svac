@@ -17,7 +17,6 @@ struct chunk{
   double timestamp;
   unsigned int binwidth;
   bool overlap;
-  bool goodchunk;
 };
 
 std::vector<void*> createadd(std::vector<std::string> types,std::vector<unsigned> dims);
@@ -121,7 +120,6 @@ int main(int argn, char** argc) {
       t->GetEntry(t->GetEntries()-1);
       newchunk->end=end;
     }
-    newchunk->goodchunk = true;// default is to use the chunk
     chunks.push_back(newchunk);
     f->Close();
   }
@@ -151,21 +149,7 @@ int main(int argn, char** argc) {
   for (unsigned i=0;i<chunks.size();i++){
     if (i>0){
       if(chunks[order[i]]->start==chunks[order[i-1]]->end)chunks[order[i]]->overlap=false;
-      else if (chunks[order[i]]->start+chunks[order[i]]->binwidth==chunks[order[i-1]]->end){
-	chunks[order[i]]->overlap=true;
-	if(i<chunks.size()-1) {
-	  if (chunks[order[i+1]]->start == chunks[order[i]]->start){
-	    std::cout<< "WARNING" << std::endl
-		     <<"Chunk " << order[i] << " is entirely contained in between two chunks."<<std::endl;
-	    std::cout<<"Chunk start: "<<chunks[order[i]]->start<<" Chunk end: "<<chunks[order[i]]->end<<" Chunk duration: "
-		     << chunks[order[i]]->end - chunks[order[i]]->start <<std::endl;
-	    std::cout<<"This chunk (corresponding to file " << inputfiles[order[i]].c_str() 
-		     << ") will NOT be used" << std::endl << std::endl;
-	    chunks[order[i]]->goodchunk = false;
-	  }
-	}
-	
-      }
+      else if (chunks[order[i]]->start+chunks[order[i]]->binwidth==chunks[order[i-1]]->end)chunks[order[i]]->overlap=true;
       else if(chunks[order[i]]->start>chunks[order[i-1]]->end){
 	chunks[order[i]]->overlap=false;
 	std::cout<<"Missing interval(s)..."<<std::endl;
@@ -180,9 +164,8 @@ int main(int argn, char** argc) {
     }
     else chunks[order[i]]->overlap=false;
   }
-  std::cout<<"Chunk info" << std::endl;
   for (unsigned i=0;i<chunks.size();i++){
-    std::cout<< "Chunk: "<<order[i]<< " Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<< " GoodChunk: " << chunks[order[i]]->goodchunk << std::endl;
+    std::cout<<"Chunk: "<<order[i]<<" Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<<std::endl;
   }
   //start merging files
   int evtnr=0;
@@ -205,26 +188,7 @@ int main(int argn, char** argc) {
   unsigned binindex=find(leaves.begin(),leaves.end(),"Bin_Index")-leaves.begin();
   bool binclosed=true;
   for (unsigned i=1;i<chunks.size();i++){
-
-    // Piece of code that avoids using  the bad chunks
-    if(chunks[order[i]]->goodchunk==false)
-      continue;
-    
-    TFile *f;
-    if(chunks[order[i-1]]->goodchunk==true)
-      f=TFile::Open(inputfiles[order[i-1]].c_str());
-    else{
-      if(i<2){
-	std::cout << "ERROR: Chunk index cannot be smaller than 2 for a bad chunk" << std::endl
-		  << "Aborting... " << std::endl;
-	assert(0);
-      }
-      f=TFile::Open(inputfiles[order[i-2]].c_str());
-      std::cout << "NOTE: For merging chunk "<< order[i] << ", as previous chunk, the chunk number " 
-		<< order[i-2] << " was used. That corresponds to file " 
-		<<   inputfiles[order[i-2]].c_str() << std::endl;
-    }
-
+    TFile *f=TFile::Open(inputfiles[order[i-1]].c_str());
     TTree* t1=(TTree*)gDirectory->Get(treename.c_str());
     TFile *g=TFile::Open(inputfiles[order[i]].c_str());
     TTree* t2=(TTree*)gDirectory->Get(treename.c_str());
@@ -245,18 +209,9 @@ int main(int argn, char** argc) {
       newtree->Fill();
     //overlap case
     }else{
-
-      if(chunks[order[i-1]]->goodchunk==false && i>2){
-	if (binclosed==false && chunks[order[i]]->start>chunks[order[i-2]]->start){
-	  //should not happen
-	  assert(0);
-	}
-      }
-      else{
-	if (binclosed==false && chunks[order[i]]->start>chunks[order[i-1]]->start){
-	  //should not happen
-	  assert(0);
-	}
+      if (binclosed==false && chunks[order[i]]->start>chunks[order[i-1]]->start){
+	//should not happen
+	assert(0);
       }
       attachadd(leaves,firstadd,t1);
       t1->GetEntry(t1->GetEntries()-1);
