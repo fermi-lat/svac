@@ -242,6 +242,10 @@
 // Last updated with object CalXtalAdcRng by user dpaneque on Mon Aug 11 04:41:33 2008
 // Last updated with object FswFiltersLeaked by user dpaneque on Mon Aug 11 16:24:57 2008
 // Last updated with object FswGAMMAEnergyInLeus by user dpaneque on Mon Aug 11 16:37:56 2008
+// Last updated with object CompressedEventSizeInBytes by user dpaneque on Mon Aug 11 18:04:30 2008
+// Last updated with object CompressionLevel by user dpaneque on Mon Aug 11 18:05:27 2008
+#include "digi/MonInput_CompressionLevel.h"
+#include "digi/MonInput_CompressedEventSizeInBytes.h"
 #include "digi/MonInput_FswGAMMAEnergyInLeus.h"
 #include "digi/MonInput_FswFiltersLeaked.h"
 #include "cal/MonInput_CalXtalAdcRng.h"
@@ -947,6 +951,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FswFiltersLeaked;
   if (s=="FswGAMMAEnergyInLeus")
     return new MonInput_FswGAMMAEnergyInLeus;
+  if (s=="CompressedEventSizeInBytes")
+    return new MonInput_CompressedEventSizeInBytes;
+  if (s=="CompressionLevel")
+    return new MonInput_CompressionLevel;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1188,6 +1196,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CalXtalAdcRng");
   names.push_back("FswFiltersLeaked");
   names.push_back("FswGAMMAEnergyInLeus");
+  names.push_back("CompressedEventSizeInBytes");
+  names.push_back("CompressionLevel");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
