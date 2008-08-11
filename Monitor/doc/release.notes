@@ -1,4 +1,9 @@
 
+v1r2p21  2008/08/11  (DEV)
+---------------------------
+Implemented merging of two quantities OutF  with zero error. The weighted average (using time interval) is done for the value. The error of the merged quantity is set to zero.
+
+
 v1r2p20   2008/08/11  (DEV)
 ----------------------------
 Add quantities to address Jira GDQMQ-232.
