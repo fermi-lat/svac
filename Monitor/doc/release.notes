@@ -1,4 +1,10 @@
 
+v1r2p22  2008/08/11  (DEV)
+---------------------------
+Add possibiliity of seeting histogram errors to zero. 
+This addresses Jira GDQMQ-242.
+
+
 v1r2p21  2008/08/11  (DEV)
 ---------------------------
 Implemented merging of two quantities OutF  with zero error. The weighted average (using time interval) is done for the value. The error of the merged quantity is set to zero.
