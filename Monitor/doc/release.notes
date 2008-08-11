@@ -1,3 +1,7 @@
+v1r2p18   2008/07/20  (DEV)
+----------------------------
+Add function computeratio_v2 and add new quantities. This addresses Jira GDQMQ-241.
+
 v1r2p17   2008/07/20  (DEV)
 ----------------------------
 Upgrade of treemerge.cxx. It now Discard chunks contained in between two chunks. This addresses Jira GDQMQ-223
