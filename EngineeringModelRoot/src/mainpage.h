@@ -65,8 +65,11 @@ For all the variables the default value is -9999.
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf Chapter 3.5</TD> </TR>
 
-<TR> <TD> EventFlags </TD> <TD> Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
+<TR> <TD> EventFlags </TD> <TD> Unsigned Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
+
+<TR> <TD> EventGleamFlags </TD> <TD> Unsigned Int </TD> <TD> Gleam reconstruction event flags: A bit is set if there are problems with the reconstruction i.e. with TkrRecon (bit 0), CalRecon (bit 1) 
+                                     and AcdRecon (bit 2). A value fo 0 means no problems. See Gleam in enums/EventFlags.h for additional details. </TD> </TR>
 
 <TR> <TD> EventBadEventSequence </TD> <TD> Int </TD> <TD> Set if the event sequence is not monotonically increasing. </TD> </TR>
 <TR> <TD> EventBadTkrRecon      </TD> <TD> Int </TD> <TD> Set if there are too many TKR hits in the event. If so, TKR recon will not run on the event. </TD> </TR>

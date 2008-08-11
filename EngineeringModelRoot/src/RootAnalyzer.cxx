@@ -298,6 +298,9 @@ void RootAnalyzer::analyzeReconTree()
     }
   }
 
+  // Gleam flags:
+  m_ntuple.m_eventGleamFlags = m_reconEvent->getGleamEventFlags();
+
   // calculate energy measured in calorimeter
   CalRecon* calRecon = m_reconEvent->getCalRecon();
   if(calRecon) {
@@ -1471,6 +1474,9 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventID", &(m_ntuple.m_eventId), "EventID/i");
   m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
+
+  m_tree->Branch("EventGleamFlags", &(m_ntuple.m_eventGleamFlags), "EventGleamFlags/i");
+
   m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");

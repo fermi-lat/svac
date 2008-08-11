@@ -1,3 +1,6 @@
+v4r3 	August 11, 2008
+awb	Added EventGleamFlags.
+
 v4r2	August 6, 2008
 awb	Added compressed event size and compression level. Needs GR v15r35 or greater.
         Added 'exit(1)' in case of problems writing the svac.root file.

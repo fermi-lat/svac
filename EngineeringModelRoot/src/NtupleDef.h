@@ -409,6 +409,10 @@ struct NtupleDef {
   // Event quality:
   unsigned int m_eventFlags;
 
+  // Gleam flag:  
+  unsigned int m_eventGleamFlags;
+
+
   // Error flags:
   int m_eventBadEventSequence;
   int m_eventBadTkrRecon;
