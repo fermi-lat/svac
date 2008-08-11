@@ -1,4 +1,9 @@
-v1r2p18   2008/07/20  (DEV)
+
+v1r2p19   2008/08/11  (DEV)
+----------------------------
+Add quantities to address jiras GDQMQ-224 and GDQMQ-239.
+
+v1r2p18   2008/08/10  (DEV)
 ----------------------------
 Add function computeratio_v2 and add new quantities. This addresses Jira GDQMQ-241.
 
