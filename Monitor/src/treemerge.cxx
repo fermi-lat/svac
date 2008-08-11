@@ -432,6 +432,11 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	assert(0);
       }else errindex=it-leaves.begin();
       used[errindex]=true;
+      // The true interval index is set
+      assert (trueint>-1);
+      Double_t iv1=((Double_t*)addin1[trueint])[0];
+      Double_t iv2=((Double_t*)addin2[trueint])[0];
+
       for (unsigned j=0;j<dims[i];j++){
 	float val1=((Float_t*)addin1[i])[j];
 	float val2=((Float_t*)addin2[i])[j];
@@ -440,6 +445,9 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	if (sig1>0&&sig2>0){
 	  ((Float_t*)addout[i])[j]=(val1/(sig1*sig1)+val2/(sig2*sig2))/(1/(sig1*sig1)+1/(sig2*sig2));
 	  ((Float_t*)addout[errindex])[j]=sqrt(1/(1/(sig1*sig1)+1/(sig2*sig2)));
+	}else if(sig1==0 && sig2 ==0){
+	  ((Float_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
+	  ((Float_t*)addout[errindex])[j]=0.0;
 	}else if (sig1==0){
 	  ((Float_t*)addout[i])[j]=val2;
 	  ((Float_t*)addout[errindex])[j]=sig2;
@@ -464,6 +472,10 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	assert(0);
       }else errindex=it-leaves.begin();
       used[errindex]=true;
+      // The true interval index is set
+      assert (trueint>-1);
+      Double_t iv1=((Double_t*)addin1[trueint])[0];
+      Double_t iv2=((Double_t*)addin2[trueint])[0];
       for (unsigned j=0;j<dims[i];j++){
 	double val1=((Double_t*)addin1[i])[j];
 	double val2=((Double_t*)addin2[i])[j];
@@ -472,6 +484,9 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	if (sig1>0&&sig2>0){
 	  ((Double_t*)addout[i])[j]=(val1/(sig1*sig1)+val2/(sig2*sig2))/(1/(sig1*sig1)+1/(sig2*sig2));
 	  ((Double_t*)addout[errindex])[j]=sqrt(1/(1/(sig1*sig1)+1/(sig2*sig2)));
+	}else if(sig1==0 && sig2 ==0){
+	  ((Double_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
+	  ((Double_t*)addout[errindex])[j]=0.0;
 	}else if (sig1==0){
 	  ((Double_t*)addout[i])[j]=val2;
 	  ((Double_t*)addout[errindex])[j]=sig2;
