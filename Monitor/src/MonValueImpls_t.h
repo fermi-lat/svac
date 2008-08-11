@@ -359,6 +359,7 @@ class MonHist1d: public MonValue{
  private:
   Bool_t m_fillhistoalways;
   Int_t m_nofillvalue;
+  Bool_t m_seterrorstozero;
   TH1F** m_hist;
 };
 
@@ -391,6 +392,7 @@ class MonHist1d_VecDim: public MonValue{
   Int_t m_vecdim;
   Bool_t m_fillhistoalways;
   Int_t m_nofillvalue;
+  Bool_t m_seterrorstozero;
   TH1F* m_hist;
 };
 

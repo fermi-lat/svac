@@ -443,6 +443,7 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
     :MonValue(name,formula,cut){
   m_histdim=1;
   m_fillhistoalways = 1;
+  m_seterrorstozero = 0; // default is to have errors (sqrt(BinContent)) for the histogram bins
   m_nofillvalue = -1000;
   float lbx,ubx;
   int nbx;
@@ -451,13 +452,16 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
   std::vector<std::string> tt=parse(type,"[",",","]");
 
  
-  if(tt.size()==3 || tt.size()==4 ){
+  if(tt.size()==3 || tt.size()==4 || tt.size() == 5){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
     if(tt.size()==4 ){
       m_nofillvalue=atoi(tt[3].c_str());
        m_fillhistoalways = 0;
+    }
+    if(tt.size()==5 ){
+      m_seterrorstozero=Bool_t(atoi(tt[4].c_str()));
     }
   }else{
     std::cerr<<"MonHist1d variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
@@ -501,7 +505,14 @@ void MonHist1d::singleincrement(Double_t* val, Double_t* val2) {
 }  
 void MonHist1d::reset(){}
 
-void MonHist1d::latchValue(){}
+void MonHist1d::latchValue(){
+  for (unsigned int i=0;i<m_dim;i++){
+    if(m_seterrorstozero){
+      for(UInt_t ibin=1;ibin<=m_hist[i]->GetNbinsX();ibin++)
+	m_hist[i]->SetBinError(ibin,0.0);
+    }
+  }
+}
 
 int MonHist1d::attach(TTree& t,const std::string& prefix) const {return 1;}
 
@@ -512,18 +523,22 @@ MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const 
   m_histdim=1;
   m_fillhistoalways = 0; // The default in this type of objects is NOT to fill histos if val=0
   m_nofillvalue = 0;
+  m_seterrorstozero = 0; // default is to have errors (sqrt(BinContent)) for the histogram bins
   float lbx,ubx;
   int nbx;
   lbx=ubx=0;
   nbx=0;
   std::vector<std::string> tt=parse(type,"[",",","]");
-  if(tt.size()==3 || tt.size()==4){
+  if(tt.size()==3 || tt.size()==4 || tt.size() ==5){
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
     if(tt.size()==4){
       m_nofillvalue=atoi(tt[3].c_str());
       m_fillhistoalways = 0;
+    }
+    if(tt.size()==5 ){
+      m_seterrorstozero=Bool_t(atoi(tt[4].c_str()));
     }
   }else{
     std::cerr<<"MonHist1d_VecDim variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
@@ -567,7 +582,13 @@ void MonHist1d_VecDim::singleincrement(Double_t* val, Double_t* val2) {
 }  
 void MonHist1d_VecDim::reset(){}
 
-void MonHist1d_VecDim::latchValue(){}
+void MonHist1d_VecDim::latchValue(){
+  if(m_seterrorstozero){
+    for(UInt_t ibin=1;ibin<=m_hist->GetNbinsX();ibin++)
+      m_hist->SetBinError(ibin,0.0);
+  }
+  
+}
 
 
 int MonHist1d_VecDim::attach(TTree& t,const std::string& prefix) const {return 1;}
