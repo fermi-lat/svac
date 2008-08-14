@@ -1,4 +1,8 @@
 
+v1r2p23  2008/08/14  (DEV)                                                                                                        ---------------------------
+Corrected bug addressed by jira GDQMQ-244.
+
+
 v1r2p22  2008/08/11  (DEV)
 ---------------------------
 Add possibiliity of seeting histogram errors to zero. 
