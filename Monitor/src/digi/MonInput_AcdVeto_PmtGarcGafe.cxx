@@ -71,9 +71,13 @@ void MonInput_AcdVeto_PmtGarcGafe::setValue(TObject* event) {
     unsigned garcA(0); unsigned gafeA(0);
     unsigned garcB(0); unsigned gafeB(0);
 
+    /*
     AcdId::convertToGarcGafe( AcdGemID, AcdDigi::A, garcA, gafeA );
     AcdId::convertToGarcGafe( AcdGemID, AcdDigi::B, garcB, gafeB );
+    */
 
+    AcdId::convertToGarcGafe( acdDigi->getId().getId(), AcdDigi::A, garcA, gafeA );
+    AcdId::convertToGarcGafe( acdDigi->getId().getId(), AcdDigi::B, garcB, gafeB );
 
     if ( Veto_pmt[0] && garcA < 12 && gafeA <18) m_val[0][garcA][gafeA]++;
     if ( Veto_pmt[1] && garcB < 12 && gafeB <18) m_val[1][garcB][gafeB]++;

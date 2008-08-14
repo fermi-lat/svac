@@ -67,10 +67,13 @@ void MonInput_AcdHit_GafeGarc::setValue(TObject* event) {
 
 
 
-
+    /*
     AcdId::convertToGarcGafe( AcdGemID, AcdDigi::A, garcA, gafeA );
     AcdId::convertToGarcGafe( AcdGemID, AcdDigi::B, garcB, gafeB );
+    */
 
+    AcdId::convertToGarcGafe( acdDigi->getId().getId(), AcdDigi::A, garcA, gafeA );
+    AcdId::convertToGarcGafe( acdDigi->getId().getId(), AcdDigi::B, garcB, gafeB );
 
     if ( Hit_pmt[0] && garcA < 12 && gafeA <18) m_val[gafeA][garcA]++;
     if ( Hit_pmt[1] && garcB < 12 && gafeB <18) m_val[gafeB][garcB]++;
