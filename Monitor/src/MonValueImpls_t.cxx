@@ -2196,7 +2196,7 @@ int MonValueChange::attach(TTree& tree, const std::string& prefix) const {
 
 MonValueChange::MonValueChange(const char* name, const char* formula, const char* cut,const char* type) 
     :MonValue(name,formula,cut){
-  m_histdim=2;
+  //m_histdim=2;
   std::vector<std::string> tt=parse(type,"[","","]"); 
   if(tt.size()!=1){
     std::cerr<<"MonValueChange variable "<<name<<" parameter declaration error. Aborting."<<std::endl;
