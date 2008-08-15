@@ -1,5 +1,8 @@
 
-v1r2p23  2008/08/14  (DEV)                                                                                                        ---------------------------
+v1r2p24  2008/08/14  (DEV)                                                                                                  --------------------------- 
+Bug corrected in definition of ValChange. This bug prevented using proxies with ValChange values.
+
+v1r2p23  2008/08/14  (DEV)                                                                                                  ---------------------------
 Corrected bug addressed by jira GDQMQ-244.
 
 
