@@ -244,6 +244,10 @@
 // Last updated with object FswGAMMAEnergyInLeus by user dpaneque on Mon Aug 11 16:37:56 2008
 // Last updated with object CompressedEventSizeInBytes by user dpaneque on Mon Aug 11 18:04:30 2008
 // Last updated with object CompressionLevel by user dpaneque on Mon Aug 11 18:05:27 2008
+// Last updated with object FastMon_spacecraft_orbit_mode by user bregeon on Mon Aug 25 10:01:09 2008
+// Last updated with object FastMon_spacecraft_orbit_inSAA by user bregeon on Mon Aug 25 10:01:56 2008
+#include "fastmon/MonInput_FastMon_spacecraft_orbit_inSAA.h"
+#include "fastmon/MonInput_FastMon_spacecraft_orbit_mode.h"
 #include "digi/MonInput_CompressionLevel.h"
 #include "digi/MonInput_CompressedEventSizeInBytes.h"
 #include "digi/MonInput_FswGAMMAEnergyInLeus.h"
@@ -955,6 +959,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CompressedEventSizeInBytes;
   if (s=="CompressionLevel")
     return new MonInput_CompressionLevel;
+  if (s=="FastMon_spacecraft_orbit_mode")
+    return new MonInput_FastMon_spacecraft_orbit_mode;
+  if (s=="FastMon_spacecraft_orbit_inSAA")
+    return new MonInput_FastMon_spacecraft_orbit_inSAA;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1198,6 +1206,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FswGAMMAEnergyInLeus");
   names.push_back("CompressedEventSizeInBytes");
   names.push_back("CompressionLevel");
+  names.push_back("FastMon_spacecraft_orbit_mode");
+  names.push_back("FastMon_spacecraft_orbit_inSAA");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
