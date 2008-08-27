@@ -1,3 +1,8 @@
+v1r2p26  2008/08/27  (DEV)                                                                                                  ---------------------------
+Add object FastMon_error_summary to be able to trend the number
+of TEM bugs
+Changes to address GDQMQ-254
+
 v1r2p25  2008/08/25  (DEV)                                                                                                  --------------------------- 
 Add FastMon trending quantities FastMon_spacecraft_orbit_mode
 and FastMon_spacecraft_orbit_inSAA as ValueChange.
