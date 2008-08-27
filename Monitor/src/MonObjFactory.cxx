@@ -246,6 +246,8 @@
 // Last updated with object CompressionLevel by user dpaneque on Mon Aug 11 18:05:27 2008
 // Last updated with object FastMon_spacecraft_orbit_mode by user bregeon on Mon Aug 25 10:01:09 2008
 // Last updated with object FastMon_spacecraft_orbit_inSAA by user bregeon on Mon Aug 25 10:01:56 2008
+// Last updated with object FastMon_error_summary by user bregeon on Mon Aug 25 14:46:04 2008
+#include "fastmon/MonInput_FastMon_error_summary.h"
 #include "fastmon/MonInput_FastMon_spacecraft_orbit_inSAA.h"
 #include "fastmon/MonInput_FastMon_spacecraft_orbit_mode.h"
 #include "digi/MonInput_CompressionLevel.h"
@@ -963,6 +965,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_orbit_mode;
   if (s=="FastMon_spacecraft_orbit_inSAA")
     return new MonInput_FastMon_spacecraft_orbit_inSAA;
+  if (s=="FastMon_error_summary")
+    return new MonInput_FastMon_error_summary;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1208,6 +1212,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CompressionLevel");
   names.push_back("FastMon_spacecraft_orbit_mode");
   names.push_back("FastMon_spacecraft_orbit_inSAA");
+  names.push_back("FastMon_error_summary");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
