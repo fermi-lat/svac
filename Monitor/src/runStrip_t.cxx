@@ -16,6 +16,9 @@
 #include "TString.h"
 #include "TList.h"
 
+// Stuff needed for MySQL for GlastRelease-v15r40
+#include "facilities/commonUtilities.h"
+
 //
 // Job configuration and options parser
 #include "JobConfig.h"
@@ -85,6 +88,10 @@ std::string GiveMeMyType(std::string type)
 
 //
 int main(int argn, char** argc) {
+
+  // Stuff needed for MySQL for GlastRelease-v15r40
+  facilities::commonUtilities::setupEnvironment();
+
 
   // configure
   JobConfig jc("runStrip.exe","This utility time series strip chart code");
