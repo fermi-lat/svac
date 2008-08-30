@@ -17,7 +17,6 @@ struct chunk{
   double timestamp;
   unsigned int binwidth;
   bool overlap;
-  bool goodchunk;
 };
 
 std::vector<void*> createadd(std::vector<std::string> types,std::vector<unsigned> dims);
@@ -84,7 +83,7 @@ int main(int argn, char** argc) {
     assert (!f->IsZombie());
     TTree* t=(TTree*)gDirectory->Get(treename.c_str());
     assert (t);
-    if(i==0){
+    if(i==0){ //Use first input file as a reference to check that all the chunks have the same branches.
       nbranches=t->GetListOfBranches()->GetEntries();
       TObjArray* ar=t->GetListOfBranches();
       for (unsigned j=0;j<nbranches;j++){
@@ -96,11 +95,11 @@ int main(int argn, char** argc) {
 	types.push_back(t->FindLeaf(ar->At(j)->GetName())->GetTypeName());
       }
     }else{
-      if(t->GetListOfBranches()->GetEntries()!=(int)nbranches){
+      if(t->GetListOfBranches()->GetEntries()!=(int)nbranches){// Is the number of branches the same as in file 1?
 	std::cout<<inputfiles[i]<<" has a different number of branches than "<<inputfiles[0]<<std::endl;
 	return 2;
       }
-      TObjArray* ar=t->GetListOfBranches();
+      TObjArray* ar=t->GetListOfBranches(); //Was there some new unexpected branch in this file?
       for (unsigned j=0;j<nbranches;j++){
 	if( find(branches.begin(),branches.end(),std::string(ar->At(j)->GetTitle()))==branches.end()){
 	  std::cout<<ar->At(j)->GetTitle()<<" not found in original input file"<<std::endl;
@@ -108,6 +107,7 @@ int main(int argn, char** argc) {
 	}
       }
     }
+    //Collect information about each chunk for time ordering
     t->SetBranchAddress("Bin_Start",&start);
     t->SetBranchAddress("TimeStampFirstEvt",&timestamp);
     t->SetBranchAddress("Bin_End",&end);
@@ -121,19 +121,22 @@ int main(int argn, char** argc) {
       t->GetEntry(t->GetEntries()-1);
       newchunk->end=end;
     }
-    newchunk->goodchunk = true;// default is to use the chunk
     chunks.push_back(newchunk);
     f->Close();
   }
+  // Now create a map of the chunks that contains their time order
+  // The time of the first event in the chunk is used as its time stamp.
   std::vector<unsigned int> order;
   for (unsigned i=0;i<chunks.size();i++){
     double st=1e100;
     unsigned index =0xffff;
     for (unsigned j=0;j<chunks.size();j++){
+      // Timestamp of the first event in 2 chunks cannot be the same, check for that.
       if (chunks[j]->timestamp==st && find(order.begin(),order.end(),j)==order.end()){
 	std::cout<<"Two chunks start with the same event. Exiting"<<std::endl;
 	return 2;
       }
+      // find chunk with lowest first event timestamp among unused chunks looping over j.
       if (chunks[j]->timestamp<=st && find(order.begin(),order.end(),j)==order.end()){
 	st=chunks[j]->timestamp;
 	index=j;
@@ -141,35 +144,38 @@ int main(int argn, char** argc) {
     }
     if(index!=0xffff) {
       order.push_back(index);
-    } else{
+    } else{// I don't think this can happen, really.
       std::cout<<"Could not order chunks."<<std::endl;
       return 2;
     }
   }
   //for (unsigned i=0;i<chunks.size();i++)std::cout<<order[i]<<std::endl;
-  // check for overlap
+  // Check for overlap. Overlap means that the last time bin of a chunk and the first time bin of the next chunk are the same.
+  // If there is no overlap then no merging is needed. 
+  // Example for overlap:
+  // Bin boundaries:   |             |              |
+  // Events chunk n:  x  x   xxx  
+  // Events chunk n+1:           xx     x  xx x
+  // Example for no overlap:
+  // Bin boundaries:   |             |              |
+  // Events chunk n:  x  x   xxx
+  // Events chunk n+1:                  x x x
   for (unsigned i=0;i<chunks.size();i++){
     if (i>0){
+      // bin end time for chunk i-1 is bin start time for chunk i -> no overlap
       if(chunks[order[i]]->start==chunks[order[i-1]]->end)chunks[order[i]]->overlap=false;
+      // overlap by 1 bin
       else if (chunks[order[i]]->start+chunks[order[i]]->binwidth==chunks[order[i-1]]->end){
 	chunks[order[i]]->overlap=true;
-	if(i<chunks.size()-1) {
-	  if (chunks[order[i+1]]->start == chunks[order[i]]->start){
-	    std::cout<< "WARNING" << std::endl
-		     <<"Chunk " << order[i] << " is entirely contained in between two chunks."<<std::endl;
-	    std::cout<<"Chunk start: "<<chunks[order[i]]->start<<" Chunk end: "<<chunks[order[i]]->end<<" Chunk duration: "
-		     << chunks[order[i]]->end - chunks[order[i]]->start <<std::endl;
-	    std::cout<<"This chunk (corresponding to file " << inputfiles[order[i]].c_str() 
-		     << ") will NOT be used" << std::endl << std::endl;
-	    chunks[order[i]]->goodchunk = false;
-	  }
-	}
 	
       }
+      // gap
       else if(chunks[order[i]]->start>chunks[order[i-1]]->end){
 	chunks[order[i]]->overlap=false;
 	std::cout<<"Missing interval(s)..."<<std::endl;
       }
+      // Overlap by more than 1 bin. This means that the events are not time ordered inside the chunks which means there is
+      // something wrong with the chunks. Pathological data like this cannot be merged.
       else{
 	std::cout<<"Bad overlap between two chunks."<<std::endl;
 	std::cout<<order[i]<<std::endl;
@@ -178,11 +184,12 @@ int main(int argn, char** argc) {
 	return 2;
       }
     }
+    // just one chunk exists
     else chunks[order[i]]->overlap=false;
   }
   std::cout<<"Chunk info" << std::endl;
   for (unsigned i=0;i<chunks.size();i++){
-    std::cout<< "Chunk: "<<order[i]<< " Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<< " GoodChunk: " << chunks[order[i]]->goodchunk << std::endl;
+    std::cout<< "Chunk: "<<order[i]<< " Start: "<<chunks[order[i]]->start<<" End: "<<chunks[order[i]]->end<<" Binwidth: "<<chunks[order[i]]->binwidth<<" Overlap: "<<chunks[order[i]]->overlap<< std::endl;
   }
   //start merging files
   int evtnr=0;
@@ -191,12 +198,15 @@ int main(int argn, char** argc) {
   TFile newf(outputfile.c_str(),"recreate");
   int nentries=t->GetEntries()-1;
   if(chunks.size()==1)nentries++;
+  // Create the merged tree and copy over events from the first chunk (except for the bin to be merged)
   TTree *newtree = t->CloneTree(nentries);
   evtnr=nentries;
+  // structure to hold data for the tree contents
   std::vector<void*> newadd=createadd(types,dims);
   std::vector<void*> firstadd=createadd(types,dims);
   std::vector<void*> secondadd=createadd(types,dims);
   f->Close();
+  // Attach merged tree to its data structure
   attachadd(leaves,newadd,newtree);
   if (find(leaves.begin(),leaves.end(),"Bin_Index")==leaves.end() ){
     std::cout<<"Tree is missing Bin_Index field"<<std::endl;
@@ -205,83 +215,59 @@ int main(int argn, char** argc) {
   unsigned binindex=find(leaves.begin(),leaves.end(),"Bin_Index")-leaves.begin();
   bool binclosed=true;
   for (unsigned i=1;i<chunks.size();i++){
-
-    // Piece of code that avoids using  the bad chunks
-    if(chunks[order[i]]->goodchunk==false)
-      continue;
-    
-    TFile *f;
-    if(chunks[order[i-1]]->goodchunk==true)
-      f=TFile::Open(inputfiles[order[i-1]].c_str());
-    else{
-      if(i<2){
-	std::cout << "ERROR: Chunk index cannot be smaller than 2 for a bad chunk" << std::endl
-		  << "Aborting... " << std::endl;
-	assert(0);
-      }
-      f=TFile::Open(inputfiles[order[i-2]].c_str());
-      std::cout << "NOTE: For merging chunk "<< order[i] << ", as previous chunk, the chunk number " 
-		<< order[i-2] << " was used. That corresponds to file " 
-		<<   inputfiles[order[i-2]].c_str() << std::endl;
-    }
-
+    TFile *f=TFile::Open(inputfiles[order[i-1]].c_str());
     TTree* t1=(TTree*)gDirectory->Get(treename.c_str());
     TFile *g=TFile::Open(inputfiles[order[i]].c_str());
     TTree* t2=(TTree*)gDirectory->Get(treename.c_str());
     // no overlap case
     if(chunks[order[i]]->overlap==false){
-      if(binclosed==false){
+      if(binclosed==false){ // Close the bin
 	((UInt_t*)newadd[binindex])[0]= evtnr++;
 	newtree->Fill();
 	binclosed=true;
+      }else{ // Copy last bin of previous chunk
+	attachadd(leaves,newadd,t1);
+	t1->GetEntry(t1->GetEntries()-1);
+	((UInt_t*)newadd[binindex])[0]= evtnr++;
+	newtree->Fill();
       }
-      attachadd(leaves,newadd,t1);
-      t1->GetEntry(t1->GetEntries()-1);
-      ((UInt_t*)newadd[binindex])[0]= evtnr++;
-      newtree->Fill();
-      attachadd(leaves,newadd,t2);
-      t2->GetEntry(0);
-      ((UInt_t*)newadd[binindex])[0]= evtnr++;
-      newtree->Fill();
+      // Copy first bin of new chunk if there is more than 1 bin in the chunk (so the first bin does not have to be merged)
+      if(t2->GetEntries()>1){
+	attachadd(leaves,newadd,t2);
+	t2->GetEntry(0);
+	((UInt_t*)newadd[binindex])[0]= evtnr++;
+	newtree->Fill();
+      }
     //overlap case
     }else{
-
-      if(chunks[order[i-1]]->goodchunk==false && i>2){
-	if (binclosed==false && chunks[order[i]]->start>chunks[order[i-2]]->start){
-	  //should not happen
-	  assert(0);
-	}
-      }
-      else{
-	if (binclosed==false && chunks[order[i]]->start>chunks[order[i-1]]->start){
-	  //should not happen
-	  assert(0);
-	}
+      if (binclosed==false && chunks[order[i]]->start>chunks[order[i-1]]->start){
+	//should not happen
+	assert(0);
       }
       attachadd(leaves,firstadd,t1);
       t1->GetEntry(t1->GetEntries()-1);
       attachadd(leaves,secondadd,t2);
       t2->GetEntry(0);
-      if(binclosed==true){
+      if(binclosed==true){ // merge last bin of previous chunk with first bin of new chunk
 	mergebins(newadd,firstadd,secondadd,leaves,dims);
-      }else{
+      }else{ // merge the previously merged bin with the first bin of the new chunk
 	mergebins(newadd,newadd,secondadd,leaves,dims);
       }
       binclosed=false;
     }
     //now copy the rest of the second tree except perhaps for the last event
-    attachadd(leaves,newadd,t2);
     int nentries=t2->GetEntries()-1;
     if(i==chunks.size()-1)nentries++;
     if (nentries>0 ||i==chunks.size()-1 ){
       binclosed=true;
       ((UInt_t*)newadd[binindex])[0]= evtnr++;
-	newtree->Fill();
-    }
-    for (int j=1;j<nentries;j++){
-      t2->GetEntry(j);
-      ((UInt_t*)newadd[binindex])[0]= evtnr++;
       newtree->Fill();
+      attachadd(leaves,newadd,t2);
+      for (int j=1;j<nentries;j++){
+	t2->GetEntry(j);
+	((UInt_t*)newadd[binindex])[0]= evtnr++;
+	newtree->Fill();
+      }
     }
     f->Close();
     g->Close();
@@ -320,7 +306,8 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
   // keep track if we actually merged everything
   std::vector<std::string>::iterator it ;
   std::vector<bool> used;
-  Int_t trueint=-1;
+  Double_t iv1,iv2;
+  iv1=iv2=0;
   for (unsigned i=0;i<leaves.size();i++)used.push_back(false);
   for (unsigned i=0;i<leaves.size();i++){
     // Merge branches that exist in all Time trees first
@@ -348,9 +335,10 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
       continue;
     }
     if (leaves[i]=="TrueTimeInterval"){
+      iv1=((Double_t*)addin1[i])[0];
+      iv2=((Double_t*)addin2[i])[0];
       ((Double_t*)addout[i])[0]= ((Double_t*)addin1[i])[0]+((Double_t*)addin2[i])[0];
       used[i]=true;
-      trueint=i;
       continue;
     }
     if (leaves[i]=="TimeStampFirstEvt"){
@@ -432,10 +420,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	assert(0);
       }else errindex=it-leaves.begin();
       used[errindex]=true;
-      // The true interval index is set
-      assert (trueint>-1);
-      Double_t iv1=((Double_t*)addin1[trueint])[0];
-      Double_t iv2=((Double_t*)addin2[trueint])[0];
 
       for (unsigned j=0;j<dims[i];j++){
 	float val1=((Float_t*)addin1[i])[j];
@@ -446,6 +430,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	  ((Float_t*)addout[i])[j]=(val1/(sig1*sig1)+val2/(sig2*sig2))/(1/(sig1*sig1)+1/(sig2*sig2));
 	  ((Float_t*)addout[errindex])[j]=sqrt(1/(1/(sig1*sig1)+1/(sig2*sig2)));
 	}else if(sig1==0 && sig2 ==0){
+	  assert(iv1+iv2>0);
 	  ((Float_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
 	  ((Float_t*)addout[errindex])[j]=0.0;
 	}else if (sig1==0){
@@ -472,10 +457,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	assert(0);
       }else errindex=it-leaves.begin();
       used[errindex]=true;
-      // The true interval index is set
-      assert (trueint>-1);
-      Double_t iv1=((Double_t*)addin1[trueint])[0];
-      Double_t iv2=((Double_t*)addin2[trueint])[0];
       for (unsigned j=0;j<dims[i];j++){
 	double val1=((Double_t*)addin1[i])[j];
 	double val2=((Double_t*)addin2[i])[j];
@@ -485,6 +466,7 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	  ((Double_t*)addout[i])[j]=(val1/(sig1*sig1)+val2/(sig2*sig2))/(1/(sig1*sig1)+1/(sig2*sig2));
 	  ((Double_t*)addout[errindex])[j]=sqrt(1/(1/(sig1*sig1)+1/(sig2*sig2)));
 	}else if(sig1==0 && sig2 ==0){
+	  assert(iv1+iv2>0);
 	  ((Double_t*)addout[i])[j]=(val1*iv1+val2*iv2)/(iv1+iv2);
 	  ((Double_t*)addout[errindex])[j]=0.0;
 	}else if (sig1==0){
@@ -588,10 +570,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
   for (unsigned i=0;i<leaves.size();i++){
     if (leaves[i].find("DoubleDiffRate_")==0 ){
       used[i]=true;
-      // The true interval index is set
-      assert (trueint>-1);
-      Double_t iv1=((Double_t*)addin1[trueint])[0];
-      Double_t iv2=((Double_t*)addin2[trueint])[0];
       for (unsigned j=0;j<dims[i];j++){
 	Double_t val1=((Double_t*)addin1[i])[j];
 	Double_t val2=((Double_t*)addin2[i])[j];
@@ -604,10 +582,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
     // temporal solution to merge outputnumber objects (D.P. 2008/05/19)
     if (leaves[i].find("Number_")==0 ){
       used[i]=true;
-      // The true interval index is set
-      assert (trueint>-1);
-      Double_t iv1=((Double_t*)addin1[trueint])[0];
-      Double_t iv2=((Double_t*)addin2[trueint])[0];
       for (unsigned j=0;j<dims[i];j++){
 	UInt_t val1=((UInt_t*)addin1[i])[j];
 	UInt_t val2=((UInt_t*)addin2[i])[j];
@@ -625,7 +599,6 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 
     if ((leaves[i].find("Rate_")==0 || leaves[i].find("CounterDiffRate_")==0 )&& leaves[i].find("_err")!=leaves[i].length()-strlen("_err")){
       used[i]=true;
-      assert (trueint>-1);
       unsigned errindex=0;
       it=find(leaves.begin(),leaves.end(),leaves[i]+"_err");
       if(it==leaves.end()){
@@ -639,23 +612,20 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	float sig1=((Float_t*)addin1[errindex])[j];
 	float sig2=((Float_t*)addin2[errindex])[j];
 	float n1,n2;
-	Double_t t1,t2;
 	if (sig1>0){
 	  n1=val1/sig1*val1/sig1;
 	}
 	else {
 	  n1=0;
 	}
-	t1=((Double_t*)addin1[trueint])[0];
 	if (sig2>0){
 	  n2=val2/sig2*val2/sig2;
 	}
 	else {
 	  n2=0;
 	}
-	t2=((Double_t*)addin2[trueint])[0];
 	float nadd=n1+n2;
-	float tadd=(float)t1+t2;
+	float tadd=(float)iv1+iv2;
 	if (nadd>0 && tadd>0)((Float_t*)addout[i])[j]=nadd/tadd;
 	else((Float_t*)addout[i])[j]=0;
 	if (nadd>0 && tadd>0)((Float_t*)addout[errindex])[j]=sqrt(nadd)/tadd;
