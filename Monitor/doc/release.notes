@@ -1,3 +1,8 @@
+v1r2p28 2008/09/12  DEV
+---------------------
+Added new quantities to address Jira GDQMQ-254.
+
+
 
 v1r2p27  2008/08/27  (DEV)                                                                        ---------------------------
 Added call to function facilities::commonUtilities::setupEnvironment() 
