@@ -4,6 +4,9 @@
 #include "AcdPeds.h"
 #include "CalPedProxy.h"
 #include "CalPeds.h"
+#include "commonRootData/idents/AcdId.h"
+#include "digiRootData/DigiEvent.h"
+
 #include <map>
 #include <vector>
 #include <list>
@@ -17,6 +20,32 @@ const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
   return peds->mean(garc,gafe);
 }
+
+const float RFun::acdpedGemId(unsigned int timestamp, unsigned int gemid, int pmt){
+  unsigned int pmt_type(pmt);
+  unsigned int garc = 10000000;
+  unsigned int gafe = 10000000;
+
+  if(gemid>103 || gemid>88 && gemid<96)
+    return -1;
+
+  // get tile id
+                          
+  unsigned int tileindex= AcdId::tileFromGemIndex(gemid);
+  
+  if(pmt_type==0){
+    AcdId::convertToGarcGafe( tileindex, AcdDigi::A, garc, gafe );
+  }else if(pmt_type==1){
+    AcdId::convertToGarcGafe( tileindex, AcdDigi::B, garc, gafe );
+  }else{
+    std::cout << "Pmt type " << pmt_type  << "  is not a valid one 0,1." << std::endl
+	      << "Aborting... " << std::endl;
+    assert(0);
+  }
+   
+  return acdped(timestamp, garc, gafe);
+}
+
 /*
 int RFun::engine(int i,unsigned key){
   m_tcf->updateKey(key);

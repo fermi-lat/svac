@@ -19,6 +19,7 @@ class RFun{
   static const float calpedwidth(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange);
 #endif
   static const float acdped(unsigned int timestamp,int garc, int gafe);
+  static const float acdpedGemId(unsigned int timestamp, unsigned int gemid, int pmttype);
   static int engine(int i,unsigned key);
   static int enginecounter(int i,unsigned key, int engine);
   static int iden(int i);
