@@ -456,11 +456,11 @@ MonHist1d::MonHist1d(const char* name, const char* formula, const char* cut, con
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
-    if(tt.size()==4 ){
+    if(tt.size()>3 ){
       m_nofillvalue=atoi(tt[3].c_str());
        m_fillhistoalways = 0;
     }
-    if(tt.size()==5 ){
+    if(tt.size()>4 ){
       m_seterrorstozero=Bool_t(atoi(tt[4].c_str()));
     }
   }else{
@@ -533,11 +533,11 @@ MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const 
     lbx=atof(tt[1].c_str());
     ubx=atof(tt[2].c_str());
     nbx=atoi(tt[0].c_str());
-    if(tt.size()==4){
+    if(tt.size()>3){
       m_nofillvalue=atoi(tt[3].c_str());
       m_fillhistoalways = 0;
     }
-    if(tt.size()==5 ){
+    if(tt.size()>4 ){
       m_seterrorstozero=Bool_t(atoi(tt[4].c_str()));
     }
   }else{
@@ -555,7 +555,8 @@ MonHist1d_VecDim::MonHist1d_VecDim(const char* name, const char* formula, const 
   if (tt.size()>0)m_hist->GetXaxis()->SetTitle(tt[0].c_str());
   if (tt.size()>1)m_hist->GetYaxis()->SetTitle(tt[1].c_str());
   if (strlen(titlelabel)!=0)m_hist->SetTitle(titlelabel);
-  
+
+
 }
 MonHist1d_VecDim::~MonHist1d_VecDim(){
   // for (unsigned int i=0;i<m_dim;i++){
