@@ -1,5 +1,11 @@
 
-v1r2p30 2008/09/12  (DEV)
+
+v1r2p31 2008/09/13  (DEV)
+---------------------------
+Added functionalities required to address jira GDQMQ-263.
+
+
+v1r2p30 2008/09/13  (DEV)
 ---------------------
 Bug fix reported in jira GDQMQ-264. 
 
