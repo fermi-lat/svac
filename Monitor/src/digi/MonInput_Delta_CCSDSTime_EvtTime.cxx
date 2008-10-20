@@ -50,7 +50,9 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
    //
   // Time from Mission elapsed time to Unix time:
   //
-  int deltaTimeUgly = 978307200; // this is the variable deltaTimeUgly in TestReport.cxx
+  // 2008/10/20
+  // DeltaTimeUgly decresed by 1 second to correctly handle leap seconds
+  int deltaTimeUgly = 978307200-1; // this is the variable deltaTimeUgly in TestReport.cxx
  
   m_val= (de->getCcsds().getUtc()-(de->getTimeStamp()+deltaTimeUgly));
 
