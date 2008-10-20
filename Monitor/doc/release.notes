@@ -1,4 +1,7 @@
-
+v1r2p32 2008/10/20  (DEV)
+---------------------------
+Subtracted 1 second to deltaTimeUgly in MonInput_Delta_CCSDSTime_EvtTime.cxx to handle correctly 
+the recent change that affects leap seconds. 
 
 v1r2p31 2008/09/13  (DEV)
 ---------------------------
