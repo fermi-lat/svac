@@ -1,3 +1,8 @@
+v1r2p33 2008/10/20  (DEV)
+---------------------------
+Change to address jira GDQMQ-275
+
+
 v1r2p32 2008/10/20  (DEV)
 ---------------------------
 Subtracted 1 second to deltaTimeUgly in MonInput_Delta_CCSDSTime_EvtTime.cxx to handle correctly 
