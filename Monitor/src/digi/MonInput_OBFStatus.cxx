@@ -65,8 +65,10 @@ void MonInput_OBFStatus::setValue(TObject* event) {
      
     UChar_t m_gammaStatus = de->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getFiltersb();
     int m_gammaStatusInt = m_gammaStatus>>4;
-    if (m_gammaStatusInt==0 || m_gammaStatusInt==6) {
-      //it means it passed or was leaked by the gamma-filter
+    if (m_gammaStatusInt==0){
+      //it means it is passed by the gamma-filter.
+      // || m_gammaStatusInt==6) { 
+      // was leaked by the gamma-filter
       m_val[0] = 1;
     }
     else
