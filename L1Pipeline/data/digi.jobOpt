@@ -1,6 +1,0 @@
-#include "$GLEAMROOT/src/jobOptions/pipeline/ldf2digi.txt"
-EventSelector.StorageType = "CCSDSFILE";
-EventSelector.FileName = "$EVTFILE";
-digiRootWriterAlg.digiRootFile = "$digiChunkFile";
-ToolSvc.FSWAuxLibsTool.FileNamePeds="cal_db_pedestals";
-ToolSvc.FSWAuxLibsTool.FileNameGains="cal_db_gains";
