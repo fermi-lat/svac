@@ -47,14 +47,17 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
     assert(de);
   }
 
-   //
+  
   // Time from Mission elapsed time to Unix time:
-  //
-  // 2008/10/20
-  // DeltaTimeUgly decresed by 1 second to correctly handle leap seconds
-  int deltaTimeUgly = 978307200-1; // this is the variable deltaTimeUgly in TestReport.cxx
- 
-  m_val= (de->getCcsds().getUtc()-(de->getTimeStamp()+deltaTimeUgly));
+    int deltaTimeUgly = 978307200;
+    double timeStamp = de->getTimeStamp();
+    // Leap second from Dec 31st, 2005
+    if (timeStamp > 157766400) deltaTimeUgly--;
+    // Leap second from Dec 31st, 2008
+    if (timeStamp > 252460800) deltaTimeUgly--;
+    
+
+  m_val= (de->getCcsds().getUtc()-(timeStamp+deltaTimeUgly));
 
   // std::cout << de->getCcsds().getUtc() << "\t" << de->getTimeStamp() << "\t diff(off) =" << m_val << std::endl;
   if(m_val <0)
