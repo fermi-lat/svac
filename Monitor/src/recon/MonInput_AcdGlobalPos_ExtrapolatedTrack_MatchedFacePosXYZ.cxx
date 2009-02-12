@@ -43,7 +43,7 @@ void MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue(TObject
   }
   
   for(UShort_t k=0;k<2;k++){
-    for(UShort_t j=0;j<5;j++){
+    for(UShort_t j=0;j<7;j++){
       for(UShort_t i=0;i<3;i++)
 	m_val[k][j][i] = 10000;
     }}

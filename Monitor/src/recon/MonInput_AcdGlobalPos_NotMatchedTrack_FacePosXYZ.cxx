@@ -43,7 +43,7 @@ void MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ::setValue(TObject* event) 
   }
 
 
-  for(UShort_t j=0;j<5;j++){
+  for(UShort_t j=0;j<7;j++){
     for(UShort_t i=0;i<3;i++)
       m_val[j][i] = 10000;
   }
