@@ -908,7 +908,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventPhaseError       = m_digiEvent->getEventSummaryData().phaseError();
   m_ntuple.m_eventTimeoutError     = m_digiEvent->getEventSummaryData().timeoutError();
 
-  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4( );
+  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4();
   m_ntuple.m_eventZeroSuppress = m_digiEvent->getEventSummaryData().zeroSuppress();
   m_ntuple.m_eventMarker       = m_digiEvent->getEventSummaryData().marker();
   m_ntuple.m_eventCalStrobe    = m_digiEvent->getEventSummaryData().calStrobe();
