@@ -420,6 +420,7 @@ struct NtupleDef {
   int m_eventTemError;
   int m_eventTrgParityError;
   int m_eventBadLdfStatus;
+  int m_eventTemBug;
   int m_eventGtrcPhase;
   int m_eventGtfePhase;
   int m_eventGtccFifo;

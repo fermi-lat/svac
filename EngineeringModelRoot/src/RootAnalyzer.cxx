@@ -895,6 +895,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventTemError         = m_digiEvent->getEventSummaryData().temError();
   m_ntuple.m_eventTrgParityError   = m_digiEvent->getEventSummaryData().trgParityError();
   m_ntuple.m_eventBadLdfStatus     = m_digiEvent->getEventSummaryData().badLdfStatus();
+  m_ntuple.m_eventTemBug           = m_digiEvent->getEventSummaryData().temBug();
   m_ntuple.m_eventGtrcPhase        = m_digiEvent->getEventSummaryData().gtrcPhase();
   m_ntuple.m_eventGtfePhase        = m_digiEvent->getEventSummaryData().gtfePhase();
   m_ntuple.m_eventGtccFifo         = m_digiEvent->getEventSummaryData().gtccFifo();
@@ -1497,6 +1498,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventTemError", &(m_ntuple.m_eventTemError), "EventTemError/I");
   m_tree->Branch("EventTrgParityError", &(m_ntuple.m_eventTrgParityError), "EventTrgParityError/I");
   m_tree->Branch("EventBadLdfStatus", &(m_ntuple.m_eventBadLdfStatus), "EventBadLdfStatus/I");
+  m_tree->Branch("EventTemBug", &(m_ntuple.m_eventTemBug), "EventTemBug/I");
   m_tree->Branch("EventGtrcPhase", &(m_ntuple.m_eventGtrcPhase), "EventGtrcPhase/I");
   m_tree->Branch("EventGtfePhase", &(m_ntuple.m_eventGtfePhase), "EventGtfePhase/I");
   m_tree->Branch("EventGtccFifo", &(m_ntuple.m_eventGtccFifo), "EventGtccFifo/I");

@@ -88,6 +88,7 @@ For all the variables the default value is -9999.
 <TR> <TD> EventGtccError        </TD> <TD> Int </TD> <TD> Set if there is a GTCC error in the event. </TD> </TR>
 <TR> <TD> EventGcccError        </TD> <TD> Int </TD> <TD> Set if there is a GCCC error in the event. </TD> </TR>
 <TR> <TD> EventPhaseError       </TD> <TD> Int </TD> <TD> Set if there is an event phase error in the event. </TD> </TR>
+<TR> <TD> EventTemBug           </TD> <TD> Int </TD> <TD> Set if there is a TEM bug in the event. Only works for the new LDF i.e. GR v15r47p7 and later ones.</A> 
 <TR> <TD> EventTimeoutError     </TD> <TD> Int </TD> <TD> Set if there is an event timeout error in the event. </TD> </TR> 
 
 <TR> <TD> EventReadout4      </TD> <TD> Int </TD> <TD> 4-range readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>    
