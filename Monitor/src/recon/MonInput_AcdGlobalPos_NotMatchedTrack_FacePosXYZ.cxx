@@ -69,7 +69,7 @@ void MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ::setValue(TObject* event) 
 	  {
 	     std::cout << "MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ::setValue: ERROR" 
 		       << std::endl
-		       << "face (="<<face<<") is out of bound [0,5). Aborting..." << std::endl;
+		       << "face (="<<face<<") is out of bound [0,7). Aborting..." << std::endl;
 	     assert(0);
 	  }
 	
