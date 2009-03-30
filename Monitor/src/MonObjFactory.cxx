@@ -249,6 +249,8 @@
 // Last updated with object FastMon_error_summary by user bregeon on Mon Aug 25 14:46:04 2008
 // Last updated with object TkrNumTracks by user dpaneque on Fri Sep 12 00:06:29 2008
 // Last updated with object CalMIPRatio by user dpaneque on Fri Sep 12 00:39:02 2008
+// Last updated with object TemBug by user dpaneque on Fri Mar 27 19:50:54 2009
+#include "digi/MonInput_TemBug.h"
 #include "merit/MonInput_CalMIPRatio.h"
 #include "merit/MonInput_TkrNumTracks.h"
 #include "fastmon/MonInput_FastMon_error_summary.h"
@@ -975,6 +977,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_TkrNumTracks;
   if (s=="CalMIPRatio")
     return new MonInput_CalMIPRatio;
+  if (s=="TemBug")
+    return new MonInput_TemBug;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1223,6 +1227,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_error_summary");
   names.push_back("TkrNumTracks");
   names.push_back("CalMIPRatio");
+  names.push_back("TemBug");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
