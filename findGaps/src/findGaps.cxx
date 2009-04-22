@@ -101,7 +101,7 @@ void findGaps::analyzeDigi(const char* digiFileName="digi.root", const char* gap
       } else {
         firstEventAfter = min(previousGemId[thisCpu],firstEventAfter);
       }
-      //cout << "r0" << runId << " " << lastEventBefore << " " << firstEventAfter << endl;
+      cout << "Gap found between event " << lastEventBefore << " and " << firstEventAfter << endl;
       gapsFile << "r0" << runId << " " << lastEventBefore << " " << firstEventAfter << endl;
       gapIsOpen[otherCpu] = false;
     }   
