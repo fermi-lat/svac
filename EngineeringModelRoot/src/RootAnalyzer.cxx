@@ -424,12 +424,10 @@ void RootAnalyzer::analyzeDigiTree()
     }
 
       // fill in corrected tot
-    /*
       if(m_mcFile == 0) {
 	correctTotDataLinear(tkrDigi);
 	correctTotDataQuad(tkrDigi);
       }
-    */
   }
 
   /*
@@ -505,7 +503,6 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     nEvent = nDigi;
   }
 
-  /*
   if(m_mcFile == 0) { 
     // read in tot correction constants for Hiro's linear formula
     readTotCorrLinear(1, 0, "/nfs/farm/g/glast/u03/EM2003/rootFiles/em_v1r030302p5/tot//chargeInjection_x1.txt");
@@ -523,7 +520,7 @@ void RootAnalyzer::analyzeTrees(const char* mcFileName="mc.root",
     readTotCorrQuad(3, 0, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerX3_101003530.tnt");
     readTotCorrQuad(3, 1, "/nfs/farm/g/glast/u03/EM2003/htajima/forEduardo/TkrTotGainNt_LayerY3_101003530.tnt");
   }
-  */
+
   //    nEvent = 100;
   //   nEvent = nRecon;
 
@@ -627,7 +624,7 @@ void RootAnalyzer::readTotCorrLinear(int layer, int view, const char* file)
     std::string temp;
     std::getline(corrFile, temp);
   }
- 
+
   int stripId;
   float gain, offset;
 
