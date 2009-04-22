@@ -82,7 +82,6 @@ void findGaps::analyzeDigi(const char* digiFileName="digi.root", const char* gap
     unsigned int otherCpu = abs(int(thisCpu) - 1);
     unsigned int DatagramSeqNbr = m_digiEvent->getMetaEvent().datagram().datagrams();
     unsigned int tmpGemId = m_digiEvent->getEventId();
-    //cout << "Event Id: " << tmpGemId << ", datagram: " << DatagramSeqNbr << ", Epu" << cpuNbr << endl; 
 
     // Here I do the whole check: if there is no 'current' gap, I look for a gap
     if ( !gapIsOpen[otherCpu] && DatagramSeqNbr != previousDatagram[thisCpu] &&
@@ -97,12 +96,12 @@ void findGaps::analyzeDigi(const char* digiFileName="digi.root", const char* gap
     }
     // If there is already a 'current' gap from the other cpu, I close it
     if (gapIsOpen[otherCpu]){
-      if (abs(int(tmpGemId-firstEventAfter)) < abs(int(previousGemId[thisCpu]-firstEventAfter))){
+      if (abs(int(previousGemId[thisCpu]-lastEventBefore)) < abs(int(previousGemId[thisCpu]-firstEventAfter))){
         firstEventAfter = min(tmpGemId,firstEventAfter);
       } else {
         firstEventAfter = min(previousGemId[thisCpu],firstEventAfter);
       }
-      cout << "r0" << runId << " " << lastEventBefore << " " << firstEventAfter << endl;
+      //cout << "r0" << runId << " " << lastEventBefore << " " << firstEventAfter << endl;
       gapsFile << "r0" << runId << " " << lastEventBefore << " " << firstEventAfter << endl;
       gapIsOpen[otherCpu] = false;
     }   
