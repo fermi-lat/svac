@@ -46,34 +46,27 @@ int main(int argc, char** argv)
   
   int nEvent = (int) m_digiTree->GetEntries();
 
-  nEvent = 100;
+  //  nEvent = 1000;
 
+  id = 0;
+  unsigned prevUPpcT = 0;
   for(int iEvent = 0; iEvent != nEvent; ++iEvent) { 
 
     if(m_digiEvent) m_digiEvent->Clear();
 
-    m_digiTree->GetEvent(iEvent);
+    m_digiBranch->GetEntry(iEvent);
+    uPpcT = m_digiEvent->getEbfUpperPpcTimeBase();
+    lPpcT = m_digiEvent->getEbfLowerPpcTimeBase();
 
-    const TObjArray* tkrDigiCol = m_digiEvent->getTkrDigiCol();
+    assert(uPpcT >= prevUPpcT);
 
-    if (!tkrDigiCol) continue;
+    //    cout << "id = " << id << " uPpcT = " << uPpcT << " lPpcT = " << lPpcT 
+    //	 << endl;
 
-    int nTkrDigis = tkrDigiCol->GetLast()+1;
+    prevUPpcT = uPpcT;
 
-    for(int i = 0; i != nTkrDigis; ++i) {
-
-      const TkrDigi* tkrDigi = m_digiEvent->getTkrDigi(i);
-      assert(tkrDigi != 0);
-
-      int nHits = tkrDigi->getNumHits();
-
-      for(int j = 0; j != nHits; ++j) {
-	int strip = tkrDigi->getHit(j);
-	printf("strip id = %i \n", strip);
-      }
-
-    }
-
+    tuple.Fill(id, uPpcT, lPpcT);
+    ++id;
   }
   f.cd();
   //  rawAdcHist->Write();

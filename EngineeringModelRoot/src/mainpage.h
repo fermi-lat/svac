@@ -138,6 +138,7 @@ see http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/GEM.pdf, Chap
 <TR> <TH> Variable name </TH> <TH>Meaning  </TH> </TR>
 <TR> <TD> CalEneSum </TD> <TD> Sum of energies in each crystal </TD> </TR>
 <TR> <TD> CalXEcentr </TD> <TD> x coordinate of centroid of CAL cluster </TD> </TR>
+<TR> <TD> CalXEcentr </TD> <TD> x coordinate of centroid of CAL cluster </TD> </TR>
 <TR> <TD> CalYEcentr </TD> <TD> y coordinate of centroid of CAL cluster </TD> </TR>
 <TR> <TD> CalZEcentr </TD> <TD> z coordinate of centroid of CAL cluster </TD> </TR>
 <TR> <TD> CalXtalEne[tower][layer][col][end] </TD> <TD> Measured energy in a single crystal at each tower, layer, column and end</TD> </TR>

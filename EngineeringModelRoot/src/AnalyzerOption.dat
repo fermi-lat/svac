@@ -4,13 +4,13 @@
 // will be ignored if it does not exist or is not a root file.
 
 // a set of input mc root files separated by blank space(s)
-/nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_0_mc.root /nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_1_mc.root
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_mc.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_mc.root 
 
 // a set of input digi root files separated by blank space(s)
-/nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_0_digi.root /nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_1_digi.root
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_digi.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_digi.root 
 
 // a set of input recon root files separated by blank space(s)
-/nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_0_recon.root /nfs/slac/g/svac/mc/em_v3r0404p2/1Tower/surface_muons_200000_1_recon.root
+/nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_0_recon.root /nfs/slac/g/svac/mc/em_v3r0404p2/fullLat/surface_muons_50000_1_recon.root 
 
 // output SVAC ntuple file
 svac.root

@@ -4,7 +4,9 @@
 
 setenv GLASTROOT /afs/slac.stanford.edu/g/glast
 source ${GLASTROOT}/ground/scripts/user.cshrc
-setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32/EngineeringModel
+setenv CMTCONFIG rh9_gcc32opt
+setenv GLAST_EXT /nfs/farm/g/glast/u05/GLAST_EXT/rh9_gcc32opt
+setenv sasLocation /nfs/farm/g/glast/u09/builds/rh9_gcc32opt/EngineeringModel
 setenv sasVersion EngineeringModel-v3r0407p3
 setenv EngineeringModelVersion v3r0407p3
 setenv sasCmt ${sasLocation}/${sasVersion}
@@ -58,7 +60,7 @@ setenv digitizationTask digitization-EM2-${digitizationTaskVersion}
 setenv Em2Version v2r8
 setenv Em2Dir ${sasCmt}/LatIntegration/${Em2Version}
 setenv ldfToDigiCmt ${Em2Dir}/cmt
-setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
+setenv ldfToDigiApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv ldfFileType LDFFITS
 setenv digitizationTaskDir ${svacPlRoot}/digitization/${digitizationTaskVersion}
 setenv digitizationScript ${digitizationTaskDir}/ldfToDigi.pl
@@ -71,7 +73,7 @@ setenv digiReportTask digiReport-EM2-${digiReportTaskVersion}
 setenv TestReportVersion v3r1p0
 setenv TestReportDir ${svacCmt}/TestReport/${TestReportVersion}
 setenv digiReportCmt ${TestReportDir}/cmt
-setenv digiReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
+setenv digiReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv digiRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv latexHeaderFile ${TestReportDir}/src/latexHeader.tex
 setenv digiReportVersion v1r0p0
@@ -84,7 +86,7 @@ setenv digiReportScript ${digiReportTaskDir}/genDigiTestReport.pl
 setenv reconTaskVersion v1r0
 setenv reconTask recon-EM2-${reconTaskVersion}
 setenv reconCmt ${Em2Dir}/cmt
-setenv reconApp ${Em2Dir}/rh9_gcc32/LatIntegration.exe
+setenv reconApp ${Em2Dir}/rh9_gcc32opt/LatIntegration.exe
 setenv reconTaskDir ${svacPlRoot}/recon/${reconTaskVersion}
 setenv reconScript ${reconTaskDir}/recon.pl
 #-------------------------------- recon ---------------------------------------
@@ -93,7 +95,7 @@ setenv reconScript ${reconTaskDir}/recon.pl
 setenv reconReportTaskVersion v1r0
 setenv reconReportTask reconReport-EM2-${reconReportTaskVersion}
 setenv reconReportCmt ${TestReportDir}/cmt
-setenv reconReportApp ${TestReportDir}/rh9_gcc32/TestReport.exe
+setenv reconReportApp ${TestReportDir}/rh9_gcc32opt/TestReport.exe
 setenv reconRepDoxyFile ${TestReportDir}/src/ReportDoxyfile
 setenv reconReportVersion v1r0p0
 setenv reconReportUrl html/index.html
@@ -107,7 +109,7 @@ setenv svacTupleTask svacTuple-EM2-${svacTupleTaskVersion}
 setenv RunRootAnalyzerVersion v1r3p0
 setenv RunRootAnalyzerDir ${svacCmt}/EngineeringModelRoot/${RunRootAnalyzerVersion}
 setenv svacTupleCmt ${RunRootAnalyzerDir}/cmt
-setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32/RunRootAnalyzer.exe
+setenv svacTupleApp ${RunRootAnalyzerDir}/rh9_gcc32opt/RunRootAnalyzer.exe
 setenv svacTupleVersion emRootv0r0
 setenv svacTupleTaskDir ${svacPlRoot}/svacTuple/${svacTupleTaskVersion}
 setenv svacTupleScript ${svacTupleTaskDir}/RunRootAnalyzer.pl

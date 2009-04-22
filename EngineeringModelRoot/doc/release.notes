@@ -54,7 +54,3 @@ v1r2
 
 add codes to process more than one mc, digi or recon root files.
 modify codes to get diagnostic data from more than one tower
-
-v1r3
-
-add examples of rootMacros to process SVAC ntuple file
