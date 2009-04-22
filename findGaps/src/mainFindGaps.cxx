@@ -35,7 +35,6 @@ int main(int argn, char** argv)
   if (gapsFileName == "") gapsFileName = gapsFileName_def;
 
   findGaps g;
-  g.analyzeDigi(digiRootFile.c_str());
-  g.writeGapsFile(gapsFileName.c_str());
+  g.analyzeDigi(digiRootFile.c_str(),gapsFileName.c_str());
 }
 
