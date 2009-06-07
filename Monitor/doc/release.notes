@@ -1,3 +1,9 @@
+v1r3p1 2009/06/06  (DEV) 
+-------------------------------
+Added new object to retrieve quantity FT1EventClass. 
+This addressses jira GDQMQ-308
+
+
 v1r2p37 2009/03/30  (DEV) 
 -------------------------------
 Added new object to retrieve TemBug info. 
