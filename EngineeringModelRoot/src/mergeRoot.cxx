@@ -35,10 +35,6 @@ int main()
 
   chainedTreeDigi.SetAutoSave(2000000000);
 
-  // Set max file size to 25 GB:
-  Long64_t maxTreeSize = 25000000000;
-  chainedTreeDigi.SetMaxTreeSize(maxTreeSize);
-
   while(inputFile >> fileName) {
     string digiFileName = digiDir + fileName + "_digi.root";
 

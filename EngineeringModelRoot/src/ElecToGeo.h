@@ -40,11 +40,11 @@ class ElecToGeo {
   // layer 0 is at the bottom
   void decodeTkrTp(unsigned tp[g_nTower][g_nGTCC], unsigned req[g_nTower][g_nTkrLayer][g_nView][g_nEnd]) const;
 
-  // input an array tp (layout in ebf) which contains trigger primitive for the calorimeter, output two arrays in detector space.
+  // input an array tp (layout in ebf) which contains trigger primitive for the calorimeter, output a two dimension array in detector space.
   // e.g.: req[0][3][0] contains 16 bit diagnostic data for tower 0, layer 3, negative end 
   // e.g.: req[0][3][1] contains 16 bit diagnostic data for tower 0, layer 3, positive end 
   // layer 0 is at the top (different to the tracker)
-  void decodeCalTp(unsigned tp[g_nTower][g_nCalLayer], unsigned req[g_nTower][g_nCalLayer][g_nFace], unsigned accept[g_nTower][g_nCalLayer][g_nFace]) const;
+  void decodeCalTp(unsigned tp[g_nTower][g_nCalLayer], unsigned req[g_nTower][g_nCalLayer][g_nFace]) const;
 
 
  private:
@@ -67,7 +67,5 @@ inline int ElecToGeo::end(int gtcc) const
   if(gtcc== 0 || gtcc==3 || gtcc==5 || gtcc==6) return 0;
   else return 1;
 }
-
-bool operator<(const ElecToGeo::gtcc_gtrc& x, const ElecToGeo::gtcc_gtrc& y);
 
 #endif

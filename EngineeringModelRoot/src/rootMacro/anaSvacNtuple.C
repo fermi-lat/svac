@@ -4,47 +4,45 @@ void anaSvacNtuple(const char* ra, TNtuple* tuple, TH1F** h) {
 
   TTree* t1 = (TTree*) f.Get("Output");
 
-  // declare variables to hold data read from the tree
-  // note some variables in the svac ntuple are arrays, so it is neccessary
-  // to have an array to hold the data loaded from the svac ntuple file.
-  // check the description of the svac ntuple on the web to determine size and
-  // dimension of the array
-  int nStrips[16][18][2];
-  int nClusters[16][18][2];
+  int m_nStrips[16][18][2];
+  int m_nTkrNumDigis;
+  float m_dir[3];
 
-  // load an branch. The branch name is the same as the variable name in the
-  // svac ntuple
   TBranch* brTkrNumStrips = t1->GetBranch("TkrNumStrips");
-  brTkrNumStrips->SetAddress(&nStrips);
-  TBranch* brTkrNumClusters = t1->GetBranch("TkrNumClusters");
-  brTkrNumClusters->SetAddress(&nClusters);
-
+  brTkrNumStrips->SetAddress(&m_nStrips);
+  TBranch* brTkrNumTracks = t1->GetBranch("TkrNumDigis");
+  brTkrNumTracks->SetAddress(&m_nTkrNumDigis);
+  TBranch* brVtxXDir = t1->GetBranch("VtxXDir");
+  brVtxXDir->SetAddress(&m_dir[0]);
+  TBranch* brVtxYDir = t1->GetBranch("VtxYDir");
+  brVtxYDir->SetAddress(&m_dir[1]);
+  TBranch* brVtxZDir = t1->GetBranch("VtxZDir");
+  brVtxZDir->SetAddress(&m_dir[2]);
   int nEvt = (int) t1->GetEntries();
+
   cout << "nEvent = " << nEvt << endl;
 
   for(int i = 0; i != nEvt; ++i) {
     
     t1->GetEntry(i);
 
-    int totalHits = 0;
-    int totalClusters = 0;
+    tuple->Fill(m_nTkrNumDigis, m_dir[0], m_dir[1], m_dir[2]);
+  
+    if(m_nTkrNumDigis >= 6) continue;
 
-    for(int layer = 0; layer != 18; ++layer) {
+    for(int biLayer = 0; biLayer != 18; ++biLayer) {
       for(int view = 0; view != 2; ++view) {
-	totalHits += nStrips[0][layer][view];
-	totalClusters += nClusters[0][layer][view];
+	if(m_nStrips[0][biLayer][view] > 0) {
+	  h[0]->Fill(getPlane(biLayer, view));
+	}
       }
-    }
-
-    tuple->Fill(totalHits, totalClusters);
+    } 
 
   }
 
 }
 
 
-// given the biLayer number and the view, return the corresponding plane number
-// plane 0 is at the bottom.
 int getPlane(int biLayer, int view)
 {
   static int map[18][2];
