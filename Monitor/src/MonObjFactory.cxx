@@ -250,6 +250,8 @@
 // Last updated with object TkrNumTracks by user dpaneque on Fri Sep 12 00:06:29 2008
 // Last updated with object CalMIPRatio by user dpaneque on Fri Sep 12 00:39:02 2008
 // Last updated with object TemBug by user dpaneque on Fri Mar 27 19:50:54 2009
+// Last updated with object FT1EventClass by user dpaneque on Thu Jun  4 23:44:24 2009
+#include "merit/MonInput_FT1EventClass.h"
 #include "digi/MonInput_TemBug.h"
 #include "merit/MonInput_CalMIPRatio.h"
 #include "merit/MonInput_TkrNumTracks.h"
@@ -979,6 +981,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalMIPRatio;
   if (s=="TemBug")
     return new MonInput_TemBug;
+  if (s=="FT1EventClass")
+    return new MonInput_FT1EventClass;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1228,6 +1232,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("TkrNumTracks");
   names.push_back("CalMIPRatio");
   names.push_back("TemBug");
+  names.push_back("FT1EventClass");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
