@@ -26,6 +26,18 @@ chunkId = os.environ.get('CHUNK_ID')
 crumbId = os.environ.get('CRUMB_ID')
 idArgs = (dlId, runId, chunkId, crumbId)
 
+idPath = '.'.join((arg for arg in idArgs if arg is not None))
+
+if runId is None:
+    level = 'downlink'
+elif chunkId is None:
+    level = 'run'
+elif crumbId is None:
+    level = 'chunk'
+else:
+    level = 'crumb'
+    pass
+
 staged = stageFiles.StageSet(excludeIn=config.excludeIn)
 finishOption = config.finishOption
 
@@ -47,7 +59,7 @@ for fileType in outFileTypes:
 moduleTable = {
     # 'processName': ('moduleName', 'functionName'),
     # no entry required if all 3 are the same
-    'filterMerit': ('filterMerit', 'filterMerit'),
+    'electronMerit': ('filterMerit', 'electronMerit'),
     }
 
 procName = pipeline.getProcess()
@@ -55,7 +67,14 @@ modName, funcName = moduleTable.get(procName) or (procName, procName)
 module = __import__(modName)
 function = getattr(module, funcName)
 
-status |= function(idArgs, files)
+args = {
+    'files': files,
+    'idArgs': idArgs,
+    'idPath': idPath,
+    'level': level,
+    }
+
+status |= function(**args)
 
 if status: finishOption = 'wipe'
 status |= staged.finish(finishOption)

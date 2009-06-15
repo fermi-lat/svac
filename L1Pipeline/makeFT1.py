@@ -43,7 +43,7 @@ evtClassDefsPython = config.packages['evtClassDefs']['python']
 
 stSetup = config.stSetup
 #stSetup = config.packages['fitsGen']['setup']
-app = os.path.join('$FITSGENROOT', '$CMTCONFIG', 'makeFT1_kluge.exe')
+app = os.path.join('$FITSGENROOT', '$CMTCONFIG', 'makeFT1.exe')
 
 realMeritFile = fileNames.fileName('merit', *idArgs)
 stagedMeritFile = staged.stageIn(realMeritFile)
@@ -53,21 +53,20 @@ stagedFt1File = staged.stageOut(realFt1File)
 
 workDir = os.path.dirname(stagedFt1File)
 
-tCuts = config.ft1Cuts
+#tCuts = config.ft1Cuts
+tCuts = config.cutFiles[fileType]
 classifier = config.ft1Classifier
 
 runNumber = int(os.environ['runNumber'])
 
 # run start and stop from ACQSUMMARY
 tStart, tStop = acqQuery.runTimes(runNumber)
-print 'ACQSUMMARY:', tStart, tStop
+print >> sys.stderr, 'ACQSUMMARY:', tStart, tStop
 
 # run start and stop from merit file
 mStart, mStop = meritFiles.startAndStop(stagedMeritFile)
-print 'merit:', mStart, mStop
+print >> sys.stderr, 'merit:', mStart, mStop
 
-#cutStart = mStart - config.ft1Pad
-#cutStop = mStop + config.ft1Pad
 cutStart = rounding.roundDown(mStart, config.ft1Digits)
 cutStop = rounding.roundUp(mStop, config.ft1Digits)
 
@@ -86,7 +85,7 @@ cd %(workDir)s
 export CMTPATH=%(cmtPath)s
 source %(stSetup)s
 PYTHONPATH=%(evtClassDefsPython)s:$PYTHONPATH ; export PYTHONPATH
-%(app)s rootFile=%(stagedMeritFile)s fitsFile=%(stagedFt1File)s TCuts=%(tCuts)s event_classifier="%(classifier)s" tstart=%(tStart).17g tstop=%(tStop).17g dict_file=%(dictionary)s file_version=%(version)s
+%(app)s rootFile=%(stagedMeritFile)s fitsFile=%(stagedFt1File)s TCuts=%(tCuts)s event_classifier="%(classifier)s" tstart=%(cutStart).17g tstop=%(cutStop).17g dict_file=%(dictionary)s file_version=%(version)s
 ''' % locals()
 
 status = runner.run(cmd)

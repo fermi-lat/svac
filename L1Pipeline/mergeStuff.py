@@ -56,9 +56,9 @@ else:
 # Which requires putting the per-type merge code into functions.
 # Which has some scope issues.
 mergeTypes = {
-    'report': ['calHist', 'digiHist', 'fastMonHist', 'reconHist', 'meritHist'],
+    'report': ['calHist', 'digiHist', 'fastMonHist', 'meritHist', 'reconHist'],
     'trend': ['calTrend', 'digiTrend', 'fastMonTrend', 'meritTrend', 'reconTrend'],
-    'tree': ['digi', 'recon', 'gcr', 'cal', 'svac'],
+    'tree': ['cal', 'digi', 'gcr', 'merit', 'recon', 'svac'],
     'error': ['fastMonError'],
     'tkr': ['tkrAnalysis'],
     }
@@ -190,6 +190,7 @@ treeNames = {
     'cal': 'CalTuple',
     'digi': 'Digi',
     'gcr': 'GcrSelect',
+    'merit': 'MeritTuple',
     'recon': 'Recon',
     'svac': 'Output',
     }
@@ -261,6 +262,7 @@ else:
     inFileString = ' %s' * len(inFiles) % tuple(inFiles)
     cmd = '''
     cd %(workDir)s
+    echo $LD_LIBRARY_PATH
     %(app)s %(outFile)s %(inFileString)s
     ''' % locals()
     status = runner.run(cmd)

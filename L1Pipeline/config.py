@@ -251,7 +251,7 @@ hpTaskBase = '/afs/slac/g/glast/isoc/flightOps/offline/halfPipe/prod'
 l0Archive = '/nfs/farm/g/glast/u23/ISOC-flight/Archive/level0'
 
 #stVersion = 'v9r8p2'
-stVersion = 'v9r13'
+stVersion = 'v9r14'
 ST="/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-%s" % stVersion
 #ST = os.path.join(L1Cmt, "ScienceTools", "ScienceTools-%s" % stVersion)
 stSetup = os.path.join(ST, 'ScienceTools', stVersion, 'cmt', 'setup.sh')
@@ -315,7 +315,7 @@ cmtPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'v1r2p37',
+        'version': 'v1r3p1',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -330,7 +330,7 @@ cmtPackages = {
 cvsPackages = {
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'v1r3p5',
+        'version': 'v1r5p1',
         },
     'FastMonCfg': {
         'repository': 'dataMonitoring',
@@ -570,17 +570,32 @@ tdBin = {
 
 
 #ft1Cuts = 'DEFAULT'
-ft1Cuts = os.path.join(packages['evtClassDefs']['data'], 'pass7_FSW_cuts')
-electronCuts = os.path.join(packages['evtClassDefs']['data'], 'pass7_Electrons_FSW_cuts')
+evclData = packages['evtClassDefs']['data']
+ft1Cuts = os.path.join(evclData, 'pass7_FSW_cuts')
+electronCuts = os.path.join(evclData, 'pass7_Electrons_FSW_cuts')
+cutFiles = {
+    'electronBadGti': electronCuts,
+    'electronMerit': electronCuts,
+    'filteredMerit': ft1Cuts,
+    'ft1': ft1Cuts,
+    'ft1NoDiffRsp': ft1Cuts,
+    'ls1': ft1Cuts,
+    'ls1BadGti': ft1Cuts,
+    }
 ft1Classifier = 'Pass7_Classifier'
+ft1Vars = os.path.join(evclData, 'FT1variables')
+ls1Vars = os.path.join(evclData, 'LS1variables')
 ft1Dicts = {
-    'ft1': os.path.join(packages['evtClassDefs']['data'], 'FT1variables'),
-    'ls1': os.path.join(packages['evtClassDefs']['data'], 'LS1variables'),
+    'ele': ft1Vars, # fragile
+    'ft1': ft1Vars,
+    'ls1': ls1Vars,
     }
 
 #diffRspModel = os.path.join(L1Volume, 'diffRsp', 'v0r0p0', 'data', 'source_model_v01.xml')
-diffRspModel = os.path.join(L1ProcROOT, 'data', 'diffuseModel.xml')
-diffRspIrf = 'P6_V1_DIFFUSE'
+#diffRspModel = os.path.join(L1ProcROOT, 'data', 'diffuseModel.xml')
+diffRspModel = '/afs/slac.stanford.edu/g/glast/ground/releases/analysisFiles/diffuse/v1/source_model_v01.xml'
+diffRspIrf = 'P7_V1_DIFFUSE'
+diffRspMinClass = 8
 
 verifyOptions = {
     'InProgress': '',

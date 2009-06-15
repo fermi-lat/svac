@@ -1138,6 +1138,7 @@
       <variables>
         <var name="fileType">merit</var>
         <var name="%(merit_versionName)s">%(merit_version)s</var>
+        <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
       </variables>
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/mergeStuff.py" batchOptions=" -q %(mediumQ)s -sp %(highPriority)d -R &quot;rusage[scratch=2]&quot; " />
       <depends>
@@ -1186,6 +1187,35 @@
       </script>
       <depends>
         <after process="filterMerit" status="SUCCESS"/>
+      </depends>
+    </process>
+ 
+    <process name="electronMerit" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="inFileTypes">merit</var>
+        <var name="%(merit_versionName)s">%(merit_version)s</var>
+        <var name="outFileTypes">electronMerit</var>
+        <var name="%(electronMerit_versionName)s">%(electronMerit_version)s</var>
+        <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -R &quot;rusage[scratch=2]&quot; " />
+      <depends>
+        <after process="registerMerit" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerElectronMerit" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">electronMerit</var>
+        <var name="fileType">electronMerit</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="electronMerit" status="SUCCESS"/>
       </depends>
     </process>
  
@@ -1448,6 +1478,62 @@
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/exportStuff.py" batchOptions=" -q %(expressQ)s -sp %(highPriority)d -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerFT1" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="electronBadGti" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="fileType">electronBadGti</var>
+        <var name="%(merit_versionName)s">%(merit_version)s</var>
+        <var name="%(electronBadGti_versionName)s">%(electronBadGti_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp %(highPriority)d -R &quot;rusage[scratch=1]&quot; " />
+      <depends>
+        <after process="registerMerit" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerElectronBadGti" autoRetryMaxAttempts="1">
+      <variables>
+        <var name="parentProcess">electronBadGti</var>
+        <var name="fileType">electronBadGti</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="electronBadGti" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="gtiElectronFt1" autoRetryMaxAttempts="1">
+      <variables>
+        <var name="fileType">electronFt1</var>
+        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(electronBadGti_versionName)s">%(electronBadGti_version)s</var>
+        <var name="%(electronFt1_versionName)s">%(electronFt1_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp %(highPriority)d -R &quot;rusage[scratch=1]&quot; " />
+      <depends>
+        <after process="registerElectronBadGti" status="SUCCESS"/>
+        <after process="registerFt2Seconds" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerElectronFt1" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">gtiElectronFt1</var>
+        <var name="fileType">electronFt1</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="gtiElectronFt1" status="SUCCESS"/>
       </depends>
     </process>
 
@@ -2195,6 +2281,8 @@
         <after process="registerAcdPlots" status="SUCCESS"/>
         <after process="registerCal" status="SUCCESS"/>
         <after process="registerCmpDFm" status="SUCCESS"/>
+        <after process="registerElectronFt1" status="SUCCESS"/>
+        <after process="registerElectronMerit" status="SUCCESS"/>
         <after process="registerFastMonTuple" status="SUCCESS"/>
         <after process="registerFilteredMerit" status="SUCCESS"/>
         <after process="registerGcr" status="SUCCESS"/>
@@ -2506,6 +2594,7 @@
         <variables>
           <var name="fileType">merit</var>
           <var name="goodPis">${pipeline.processInstance("scanRecon").getVariable("goodPis")}</var>  
+          <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/mergeStuff.py" batchOptions=" -q %(shortQ)s -sp %(highPriority)d -m &quot;${HOSTLIST}&quot; -R &quot;rusage[scratch=1]&quot; " />
         <depends>
