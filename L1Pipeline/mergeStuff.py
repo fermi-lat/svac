@@ -17,6 +17,7 @@ import config
 import GPLinit
 
 import fileNames
+import fileOps
 import fitsFiles
 import l1Logger
 import lockFile
@@ -56,11 +57,12 @@ else:
 # Which requires putting the per-type merge code into functions.
 # Which has some scope issues.
 mergeTypes = {
-    'report': ['calHist', 'digiHist', 'fastMonHist', 'meritHist', 'reconHist'],
-    'trend': ['calTrend', 'digiTrend', 'fastMonTrend', 'meritTrend', 'reconTrend'],
-    'tree': ['cal', 'digi', 'gcr', 'merit', 'recon', 'svac'],
     'error': ['fastMonError'],
+    'fits': ['ft1', 'ft2', 'ft1BadGti', 'ft1NoDiffRsp', 'ls1', 'ls3'],
+    'report': ['calHist', 'digiHist', 'fastMonHist', 'meritHist', 'reconHist'],
     'tkr': ['tkrAnalysis'],
+    'tree': ['cal', 'digi', 'gcr', 'merit', 'recon', 'svac'],
+    'trend': ['calTrend', 'digiTrend', 'fastMonTrend', 'meritTrend', 'reconTrend'],
     }
 # Check whether any types occur in multiple lists.
 # This would not be necessary if the comments above were implemented.
@@ -80,7 +82,7 @@ expectedInFiles = fileNames.findPieces(fileType, dlId, runId, chunkId)
 realInFiles = []
 missingInFiles = []
 for inFile in expectedInFiles:
-    if stageFiles.checkFile(inFile):
+    if fileOps.exists(inFile):
         realInFiles.append(inFile)
     else:
         print >> sys.stderr, "Couldn't find input file %s" % inFile
@@ -172,7 +174,7 @@ if numInFiles == 1:
     print >> sys.stderr, 'Single input file, copying %s to %s' % \
           (inFiles[0], realOutFile)
     #shutil.copyfile(inFiles[0], realOutFile) # Dude, we've got an INTERFACE for that!
-    stageFiles.copy(inFiles[0], realOutFile) # Much better.
+    fileOps.copy(inFiles[0], realOutFile) # Much better.
     if  fileType in ['merit'] and mergeLevel == 'run':
         print >> sys.stderr, \
             "Attempting to remove throttling lock for [%s,%s] at [%s]" % (dlId,runId,time.ctime())
@@ -253,7 +255,8 @@ elif fileType in mergeTypes['tkr']:
     status = runner.run(cmd)
 
 
-elif realOutFile.endswith('.fit'):
+#elif realOutFile.endswith('.fit'):
+elif fileType in mergeTypes['fits']:
     status |= fitsFiles.mergeFiles(outFile, inFiles)
 
 

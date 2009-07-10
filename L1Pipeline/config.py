@@ -9,7 +9,7 @@ import os
 import sys
 
 L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
-L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "1.74"
+L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "1.75"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
 
@@ -89,7 +89,11 @@ dataCatDir = os.environ.get('dataCatDir', dataCatDir)
 #dataCatDir = '/Data/Flight/Reprocess/P100'
 #dataCatBase = dataCatDir
 
-xrootGlast = 'root://glast-rdr.slac.stanford.edu//glast'
+if testMode:
+    xrootGlast = 'root://glast-test-rdr.slac.stanford.edu//glast'
+else:
+    xrootGlast = 'root://glast-rdr.slac.stanford.edu//glast'
+    pass
 xrootSubDir = '%s/%s/%s' % (dataCatDir, mode, L1Version)
 xrootBase = xrootGlast + xrootSubDir
 
@@ -102,32 +106,36 @@ if testMode: L1Dir = os.path.join(L1Dir, 'test')
 
 #throttle parameters
 throttleDir =  os.path.join(L1Dir, 'throttle')
-throttleLimit = 3
+throttleLimit = 30
 
 # staging buffers with smallish integer weights
-# These are actually links so they can be swapped out easily.
-## No, they're not.
+# stageDisks = {
+#     'crumb': [ 
+#         (os.path.join(xrootGlast, 'Scratch'), 1),
+#     ],
+#     'chunk': [ 
+#         # ("root://sysdev4500//glast", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging2", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging3", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging4", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging5", 1),
+#         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging7", 1),
+#     ],
+#     }
 stageDisks = [ 
-     # ("root://sysdev4500//glast", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging2", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging3", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging4", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging5", 1),
-     ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging7", 1),
+    (os.path.join(xrootGlast, 'scratch'), 1),
     ]
 if testMode:
     stageBase = 'l1Test'
 else:
     stageBase = 'l1Stage'
     pass
-#stageDirs = [os.path.join(disk, stageBase) for disk in stageDisks]
 
 #maxCrumbSize = 48000 # SVAC pipeline uses this
 #maxCrumbSize = 250   # tiny
 #maxCrumbSize = 6353   # ~.5Hr on tori (muons).  Also about half of (old) medium q limit
 #maxCrumbSize = 17000   # ~.5Hr on cob (skymodel).
-minCrumbCpuf = 7
 # maxCrumbs = 7 # Maximum number of crumbs/chunk. Not used by current algorithm.
 maxCrumbs = 20 # Maximum number of crumbs/chunk.
 # crumbSize = 10000 # typical crumb size
@@ -193,8 +201,10 @@ installBin = os.path.join(installArea, 'bin')
 #
 glastExt = os.path.join(groundRoot, 'GLAST_EXT', cmtConfig)
 #
-releaseDir = os.path.join(groundRoot, 'releases', 'volume11')
-glastVersion = 'v17r31'
+#releaseDir = os.path.join(groundRoot, 'releases', 'volume11')
+#glastVersion = 'v17r31'
+releaseDir = os.path.join(groundRoot, 'releases', 'volume14')
+glastVersion = 'v15r47p7'
 releaseName = 'GlastRelease'
 gleamPackage = 'Gleam'
 #
@@ -220,7 +230,8 @@ reconOptions = {
 }
 
 #rootSys = os.path.join(glastExt, 'ROOT/v5.20.00-gl1/root')
-rootSys = os.path.join(glastExt, 'ROOT/v5.20.00-gl1/gcc32')
+#rootSys = os.path.join(glastExt, 'ROOT/v5.20.00-gl1/gcc32')
+rootSys = os.path.join(glastExt, 'ROOT/v5.18.00c-gl1/root')
 haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
@@ -275,7 +286,7 @@ ft2CmtPath = ':'.join([L1Cmt, glastLocation, ST, glastExt])
 cmtPackages = {
     'calibGenTKR': {
         'repository': '',
-        'version': 'v4r8',
+        'version': 'v4r5',
         },
     'calibTkrUtil': {
         'repository': '',
@@ -283,7 +294,7 @@ cmtPackages = {
         },
     'Common': {
         'repository': 'dataMonitoring',
-        'version': 'v5r7p0',
+        'version': 'v6r0p0',
         },
     'EngineeringModelRoot': {
         'repository': 'svac',
@@ -291,11 +302,11 @@ cmtPackages = {
         },
     'evtClassDefs': {
         'repository': '',
-        'version': 'v0r7',
+        'version': 'v0r6',
         },
     'FastMon': {
         'repository': 'dataMonitoring',
-        'version': 'v4r5p1',
+        'version': 'v5r0p0',
         },
 #     'fitsGen': {
 #         'repository': '',
@@ -311,7 +322,7 @@ cmtPackages = {
         },
     'GPLtools': {
         'repository': '',
-        'version': 'fileOps1',
+        'version': 'fileOps2',
         },
     'Monitor': {
         'repository': 'svac',
@@ -334,7 +345,7 @@ cvsPackages = {
         },
     'FastMonCfg': {
         'repository': 'dataMonitoring',
-        'version': 'v1r6p1',
+        'version': 'v2r0p0',
         },
     'IGRF': {
         'repository': 'dataMonitoring',
@@ -574,7 +585,7 @@ evclData = packages['evtClassDefs']['data']
 ft1Cuts = os.path.join(evclData, 'pass7_FSW_cuts')
 electronCuts = os.path.join(evclData, 'pass7_Electrons_FSW_cuts')
 cutFiles = {
-    'electronBadGti': electronCuts,
+    'electronFt1BadGti': electronCuts,
     'electronMerit': electronCuts,
     'filteredMerit': ft1Cuts,
     'ft1': ft1Cuts,
@@ -605,11 +616,14 @@ verifyOptions = {
     }
 
 ft2Pad = 1.0 # pad time range with this on either end whan making fakeFT2
+ft2Template = os.path.join(L1ProcROOT, 'data', 'ft2.tpl')
+ft2liveTimeTolerance = '1e-12'
+
 m7Pad = 10 # pad time range with this on either end whan making m7
+
 # not used # ft1Pad = 1.0 # pad time range with this on either end whan making ft1 and ls1
 ft1Digits = 1 # round times given to makeFT1 OUT (round start down, end up) to this many digits past the decimal point - i.e. 1 makes numbers like 254760591.0
 
-ft2Template = os.path.join(L1ProcROOT, 'data', 'ft2.tpl')
 
 if testMode:
     trendMode = 'dev'
@@ -671,6 +685,14 @@ ppComponents = [
 pythonPath = ':'.join(ppComponents)
 sys.path.extend(ppComponents)
 
+# make directories world-writeable when testing
+if testMode:
+    try:
+        import fileOps
+        fileOps.dirMode = 0777
+    except ImportError:
+        pass    
+
 # LSF stuff
 # allocationGroup = 'glastdata' # don't use this anymore, policies have changed
 # allocationGroup="%(allocationGroup)s" # ripped from XML template
@@ -685,7 +707,11 @@ mediumQ = theQ
 shortQ = theQ
 longQ = theQ
 #
-highPriority = 75
+highPriority = 75     # for exports and their dependencies
+midPriority = 60      # monitoring & dependencies
+standardPriority = 50 # everything else (which isn't much, really)
+#
+minCrumbCpuf = 9
 #
 reconMergeScratch = " -R &quot;select[scratch&gt;70]&quot; "
 reconCrumbCpuf = " -R &quot;select[cpuf&gt;%s]&quot; " % minCrumbCpuf

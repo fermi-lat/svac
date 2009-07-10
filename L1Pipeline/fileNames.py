@@ -16,6 +16,7 @@ import time
 
 import config
 
+import fileOps
 import finders
 import variables
 
@@ -40,8 +41,8 @@ fileTypes = {
     'digiHistAlarm': 'xml',
     'digiTrend': 'root',
     'digiTrendAlarm': 'xml',
-    'electronBadGti': 'fit',
     'electronFt1': 'fit',
+    'electronFt1BadGti': 'fit',
     'electronMerit': 'root',
     'fastMonError': 'xml',
     'fastMonErrorAlarm': 'xml',
@@ -435,7 +436,7 @@ def preMakeDirs(dirs, dlId, runId=None, chunkId=None, crumbId=None):
     allDirs = [os.path.join(buf, mid, sub) for buf in buffers for sub in dirs]
     print >> sys.stderr, 'Creating directories %s ... ' % allDirs,
     start = time.time()
-    for dir in allDirs: stageFiles.makedirs(dir)
+    for dir in allDirs: fileOps.makedirs(dir)
     stop = time.time()
     print >> sys.stderr, '%g s.' % (stop - start)
     return

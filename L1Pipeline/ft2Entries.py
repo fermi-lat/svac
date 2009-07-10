@@ -69,9 +69,13 @@ stLibDir = config.stLibDir
 
 # run start and stop from merit file
 mStart, mStop = meritFiles.startAndStop(stagedMeritFile)
-print 'merit:', mStart, mStop
+print >> sys.stderr, 'merit:', mStart, mStop
 tStart = mStart - config.ft2Pad
 tStop = mStop + config.ft2Pad
+
+liveTimeTolerance = config.ft2liveTimeTolerance
+#lTTolOpt = '-LiveTimeTolerance %s' % liveTimeTolerance
+lTTolOpt = ''
 
 template = config.ft2Template
 templOpt = '-new_tpl %s' % template
@@ -90,7 +94,7 @@ cmd = '''
 cd %(workDir)s
 export CMTPATH=%(cmtPath)s
 source %(setupScript)s
-%(app)s -DigiFile %(stagedDigiFile)s -MeritFile %(stagedMeritFile)s -M7File %(stagedM7File)s -FT2_fits_File %(stagedFt2FitsFile)s %(gapOpts)s %(mcOpt)s -DigiTstart %(tStart).17g -DigiTstop %(tStop).17g %(templOpt)s %(qualOpt)s %(configOpt)s
+%(app)s -DigiFile %(stagedDigiFile)s -MeritFile %(stagedMeritFile)s -M7File %(stagedM7File)s -FT2_fits_File %(stagedFt2FitsFile)s %(gapOpts)s %(mcOpt)s -DigiTstart %(tStart).17g -DigiTstop %(tStop).17g %(templOpt)s %(qualOpt)s %(configOpt)s %(lTTolOpt)s
 ''' % locals()
 
 status = runner.run(cmd)
