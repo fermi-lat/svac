@@ -106,9 +106,11 @@ if testMode: L1Dir = os.path.join(L1Dir, 'test')
 
 #throttle parameters
 throttleDir =  os.path.join(L1Dir, 'throttle')
-throttleLimit = 30
+throttleLimit = 2
 
 # staging buffers with smallish integer weights
+#
+# Dev version for crumbs only on xroot
 # stageDisks = {
 #     'crumb': [ 
 #         (os.path.join(xrootGlast, 'Scratch'), 1),
@@ -123,9 +125,23 @@ throttleLimit = 30
 #         ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging7", 1),
 #     ],
 #     }
+#
+# Dev version for everything on xroot
+# stageDisks = [ 
+#     (os.path.join(xrootGlast, 'scratch'), 1),
+#     ]
+#
+# AFS
 stageDisks = [ 
-    (os.path.join(xrootGlast, 'scratch'), 1),
+    # ("root://sysdev4500//glast", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging2", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging3", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging4", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging5", 1),
+    ("/afs/slac.stanford.edu/g/glast/ground/PipelineStaging7", 1),
     ]
+
 if testMode:
     stageBase = 'l1Test'
 else:
@@ -261,10 +277,9 @@ hpTaskBase = '/afs/slac/g/glast/isoc/flightOps/offline/halfPipe/prod'
 
 l0Archive = '/nfs/farm/g/glast/u23/ISOC-flight/Archive/level0'
 
-#stVersion = 'v9r8p2'
 stVersion = 'v9r14'
 ST="/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/ScienceTools/ScienceTools-%s" % stVersion
-#ST = os.path.join(L1Cmt, "ScienceTools", "ScienceTools-%s" % stVersion)
+# ST = os.path.join(L1Cmt, "ScienceTools", "ScienceTools-%s" % stVersion) # We should really have our own copy of ScienceTools, but it gave trouble.
 stSetup = os.path.join(ST, 'ScienceTools', stVersion, 'cmt', 'setup.sh')
 PFILES = ".;/dev/null"
 stBinDir = os.path.join(ST, 'bin')
@@ -302,7 +317,7 @@ cmtPackages = {
         },
     'evtClassDefs': {
         'repository': '',
-        'version': 'v0r6',
+        'version': 'v0r9',
         },
     'FastMon': {
         'repository': 'dataMonitoring',
@@ -322,7 +337,7 @@ cmtPackages = {
         },
     'GPLtools': {
         'repository': '',
-        'version': 'fileOps2',
+        'version': 'fileOps3',
         },
     'Monitor': {
         'repository': 'svac',
@@ -593,7 +608,7 @@ cutFiles = {
     'ls1': ft1Cuts,
     'ls1BadGti': ft1Cuts,
     }
-ft1Classifier = 'Pass7_Classifier'
+ft1Classifier = 'Pass6_Reprocessing_Classifier'
 ft1Vars = os.path.join(evclData, 'FT1variables')
 ls1Vars = os.path.join(evclData, 'LS1variables')
 ft1Dicts = {
@@ -604,9 +619,9 @@ ft1Dicts = {
 
 #diffRspModel = os.path.join(L1Volume, 'diffRsp', 'v0r0p0', 'data', 'source_model_v01.xml')
 #diffRspModel = os.path.join(L1ProcROOT, 'data', 'diffuseModel.xml')
-diffRspModel = '/afs/slac.stanford.edu/g/glast/ground/releases/analysisFiles/diffuse/v1/source_model_v01.xml'
-diffRspIrf = 'P7_V1_DIFFUSE'
-diffRspMinClass = 8
+diffRspModel = '/afs/slac.stanford.edu/g/glast/ground/releases/analysisFiles/diffuse/v2/source_model_v02.xml'
+diffRspIrf = 'P6_V3_DIFFUSE'
+diffRspMinClass = 3
 
 verifyOptions = {
     'InProgress': '',
@@ -691,7 +706,13 @@ if testMode:
         import fileOps
         fileOps.dirMode = 0777
     except ImportError:
-        pass    
+        pass
+    pass
+try:
+    import stageFiles
+    stageFiles.defaultStrictSetup = True
+except ImportError:
+    pass
 
 # LSF stuff
 # allocationGroup = 'glastdata' # don't use this anymore, policies have changed

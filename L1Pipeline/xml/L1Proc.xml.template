@@ -1452,7 +1452,7 @@
         <var name="%(ft1BadGti_versionName)s">%(ft1BadGti_version)s</var>
         <var name="%(ft1_versionName)s">%(ft1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerFT1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
@@ -1492,7 +1492,7 @@
         <var name="%(merit_versionName)s">%(merit_version)s</var>
         <var name="%(electronFt1BadGti_versionName)s">%(electronFt1BadGti_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;rusage[scratch=1]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerMerit" status="SUCCESS"/>
       </depends>
@@ -1520,7 +1520,7 @@
         <var name="%(electronFt1BadGti_versionName)s">%(electronFt1BadGti_version)s</var>
         <var name="%(electronFt1_versionName)s">%(electronFt1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;rusage[scratch=1]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerElectronFt1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
@@ -1549,7 +1549,7 @@
         <var name="%(merit_versionName)s">%(merit_version)s</var>
         <var name="%(ls1BadGti_versionName)s">%(ls1BadGti_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerMerit" status="SUCCESS"/>
       </depends>
@@ -1577,7 +1577,7 @@
         <var name="%(ls1BadGti_versionName)s">%(ls1BadGti_version)s</var>
         <var name="%(ls1_versionName)s">%(ls1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
       <depends>
         <after process="registerLS1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
@@ -2653,7 +2653,7 @@
         <variables>
           <var name="fileType">ft1NoDiffRsp</var>
         </variables>
-        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
         <depends>
           <after process="mergeMeritCrumbs" status="SUCCESS"/>
         </depends>
@@ -2663,7 +2663,7 @@
         <variables>
           <var name="fileType">ft1BadGti</var>
         </variables>
-        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=oracle11 python2.5 ${L1ProcROOT}/diffRsp.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/diffRsp.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;rusage[scratch=1]&quot; " />
         <depends>
           <after process="makeFT1" status="SUCCESS"/>
         </depends>

@@ -7,7 +7,7 @@ import config
 
 import GPLinit
 
-import acqQuery
+# import acqQuery
 import fileNames
 import meritFiles
 import runner
@@ -59,9 +59,9 @@ classifier = config.ft1Classifier
 
 runNumber = int(os.environ['runNumber'])
 
-# run start and stop from ACQSUMMARY
-tStart, tStop = acqQuery.runTimes(runNumber)
-print >> sys.stderr, 'ACQSUMMARY:', tStart, tStop
+# # run start and stop from ACQSUMMARY
+# tStart, tStop = acqQuery.runTimes(runNumber)
+# print >> sys.stderr, 'ACQSUMMARY:', tStart, tStop
 
 # run start and stop from merit file
 mStart, mStop = meritFiles.startAndStop(stagedMeritFile)
