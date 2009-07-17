@@ -16,7 +16,12 @@ import time
 
 import config
 
-import fileOps
+try:
+    import fileOps
+except ImportError:
+    print >> sys.stderr, "Couldn't import fileOps. This is normal when installing, but may cause trouble otherwise."
+    pass
+
 import finders
 import variables
 
