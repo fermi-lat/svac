@@ -1,10 +1,10 @@
 ** @file release.notes
  * Package Monitor
- * Coordinator: D. Paneque <dpaneque@slac.stanford.edu>
+ * Coordinator: E. Charles <echarles@slac.stanford.edu> 
  *
  *                  EOH
 
-v1r3p2 2009/06/06  (TO BE TAGGED)
+v1r3p2 2009/06/06  (DEV)
 -------------------------------
 First tag with stag 01-03-02 ?
 Added new object to retrieve quantity FastMon_Spacecraft_Distance_To_SAA
