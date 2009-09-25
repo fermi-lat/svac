@@ -4,12 +4,18 @@
  *
  *                  EOH
 
+v1r3p3 2009/09/25 (DEV)
+-------------------------------
+The CMT tag was not properly created for v1r3p3
+
+
  Monitor-01-03-02 07-Aug-2009 bregeon upgrade to v1r3p2 - first stag tag as01-03-02
 v1r3p2 2009/06/06  (DEV)
 -------------------------------
 First tag with stag 01-03-02 ?
 Added new object to retrieve quantity FastMon_Spacecraft_Distance_To_SAA
 This addressses jira GDQMQ-311
+
 
 v1r3p1 2009/06/06  (DEV) 
 -------------------------------
