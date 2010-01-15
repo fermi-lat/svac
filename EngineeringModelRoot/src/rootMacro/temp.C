@@ -2,10 +2,6 @@
 
 gROOT->Reset();
 
-#include <map>
-std::map<int, int> m;
-m[0] = 100;
-
 TCanvas* c1 = new TCanvas;
 c1->Divide(1,2);
 gPad->SetBorderMode(0);
