@@ -4,6 +4,12 @@
  *
  *                  EOH
 
+v1r3p4 2010/01/15 (DEV)
+-------------------------------
+Add new object MonObjInput_GoodEvent to be able to cut on this variable to 
+remove error events from the digi disitributions as in FastMon
+GDQMQ-325
+
  Monitor-01-03-03 25-Sep-2009 monzani trying again to get a cmt tag
 v1r3p3 2009/09/25 (DEV)
 -------------------------------
