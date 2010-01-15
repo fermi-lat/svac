@@ -8,6 +8,14 @@
 and planes and sum arrays in quandrature (used to sum up errors).
 - Added file doc/johan.readme containing some notes about how to add
 new quantities to the trending (mostly an e-mail from David Paneque).
+- Added the errors for some quantities with alarms on:
+A trackermon/MonInput_fracSat_err.cxx
+A trackermon/MonInput_fracSat_err.h
+A trackermon/MonInput_layerOcc_err.cxx
+A trackermon/MonInput_layerOcc_err.h
+A trackermon/MonInput_stripOcc_err.cxx
+A trackermon/MonInput_stripOcc_err.h
+and MonObjFactory.cxx modified accordingly.
 * Relevant Jira(s): GDQMQ-327
 
 
