@@ -179,6 +179,7 @@ class RFun{
   static unsigned loopovertkrplanes_int(const Int_t invector[]);
   static Double_t loopovertkrplanes_double(const Double_t invector[]);
   static Double_t loopovertowerANDtkrplanes_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >&);
+  static Double_t loopovertowerANDtkrplanes_square_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >&);
 
     //(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
        
