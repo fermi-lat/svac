@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-01-04-00 15-Jan-2010 lbaldini Some new variables added.
 - Added new function in RFun.h and RFun.cxx to loop over tracker towers
 and planes and sum arrays in quandrature (used to sum up errors).
 - Added file doc/johan.readme containing some notes about how to add
