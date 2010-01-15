@@ -1,0 +1,270 @@
+/afs/slac/g/glast/ground/releases/volume03/L1Proc/1.63/svac/Monitor/v1r2p23/rh9_gcc32opt/runStrip_t.exe -b 15
+-c /afs/slac/g/glast/ground/releases/volume03/L1Proc/1.63/dataMonitoring/DigiReconCalMeritCfg/v1r2p17/monconfig_digi_histos.xml
+-d /afs/slac.stanford.edu/g/glast/ground/PipelineStaging/l1Stage/r0240815740/e00000000000000100226/digi/r0240815740_e00000000000000100226_digi.root
+-o temp -g html -w /afs/slac/g/glast/ground/releases/volume03/L1Proc/1.63/svac/Monitor/v1r2p23/rh9_gcc32opt -p 
+
+
+Instructions to add a new quantity:
+
+1 - Register quantity, define code to retrieve quantity from input root file
+    This is done with script makeNewMonObject.pl (see below).
+    If quantity is a vector, you have to modify slightly the classes 
+    written by that script. See vector example MonInput_FastMon_TkrHits_TowerPlane. 
+    The Fast mon input objects will be stored in directory /src/fastmon/
+2 - Compile code
+3 - Include the quantity in the monconfig files (trending/histos)
+4 - Run the executable runsStrip_t.exe with the correct flags. 
+    The FastMon root file is specified with the flag -f (see demo below)
+
+
+DEMO: Add variable geomagnetic_InvariantLatitude (Double)
+The steps described above are expanded:
+
+****  1 - Register quantity,   ************
+
+dpaneque@noric04 $ pwd
+/a/sulky36/g.glast.u33/dpaneque/DataMonitoring/20080204/svac/Monitor/src
+
+dpaneque@noric04 $ makeNewMonObject.pl 
+Interactive program to create a new monitoring input object
+
+Name of the object: FastMon_geomagnetic_InvariantLatitude
+One-line description of object: Geomagnetic invariant latitude 
+What type of variable is this?
+0 for Int_t
+1 for Bool_t
+2 for UInt_t
+3 for Double_t
+4 for ULong_t
+5 for UShort_t
+6 for Float_t
+7 for Char_t
+8 for Short_t
+9 for Long64_t
+10 for ULong64_t
+3
+What tree is the source of the data?
+0 for DigiEvent
+1 for ReconEvent
+2 for McEvent
+3 for MeritEvent
+4 for SvacEvent
+5 for CalEvent
+6 for FastMonEvent
+6
+What branch of the tree has to be activated?
+geomagnetic_InvariantLatitude
+What is the function to access the quantity in the tree?
+FastMonEvent->NotNeeded
+Create new object (y/n)?
+y
+Update MonObjectFactory.cxx ?
+y
+You are now ready to compile. Good luck...
+
+
+****  2 - Compile code  **********
+
+
+dpaneque@noric04 $ cd ../cmt/
+dpaneque@noric04 $ make
+------> (Makefile.header) Rebuilding constituents.make
+------> (constituents.make) Rebuilding setup.make rh9_gcc32opt.make
+CMTCONFIG=rh9_gcc32opt
+../rh9_gcc32opt/Monitorsetup.make untouched 
+setup.make ok
+rh9_gcc32opt.make ok
+------> (constituents.make) Rebuilding library links
+------> (constituents.make) all done
+------> (constituents.make) Building runStrip_t.make
+Application runStrip_t
+------> (constituents.make) Starting runStrip_t
+------> (runStrip_t.make) Rebuilding ../rh9_gcc32opt/runStrip_t_dependencies.make
+../rh9_gcc32opt/MonObjFactory.o
+cd ../rh9_gcc32opt/; g++ -c -I /a/sulky36/g.glast.u33/dpaneque/DataMonitoring/20080204/svac/Monitor  -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/xmlBase/v5r4" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/detModel/v2r21" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/xmlUtil/v3r4" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/mcRootData/v2r21p5" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/digiRootData/v9r29p3" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/reconRootData/v9r17p3" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/configData/v1r4p1" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/commonRootData/v2r15p5" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/LdfEvent/v4r1" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-v13r9p1/lsfData/v0r8p1" -I"/a/sulky36/g.glast.u30/builds/rh9_gcc32
+
+
+BLa, bla, bla ....
+
+
+st/ground/GLAST_EXT/rh9_gcc32opt/gaudi/v18r1-gl4/lib -lGaudiHistory  -L/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/gaudi/v18r1-gl4/lib -lboost_filesystem-gcc   -L/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/CLHEP/1.9.2.2/lib -lCLHEP  -L/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/python/2.5.1/lib/python2.5/config -lpython2.5 -lpthread -lm -ldl -lutil -rdynamic     -L /afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/cppunit/1.10.2/lib/ -lcppunit -ldl     -L/afs/slac/g/glast/ground/GLAST_EXT/rh9_gcc32opt/MYSQL/4.1.18/lib/mysql -lmysqlclient  ; mv -f inputObjects.exe.new inputObjects.exe
+------> inputObjects ok
+------> (constituents.make) inputObjects done
+ all ok.
+dpaneque@noric04 $ 
+
+*****    3 - Include the quantity in the monconfig files (trending/histos) ***
+
+Then you need include this variable in the monconfig trending file
+monconfig_fastmon_v1_trending.xml
+
+
+First in the input list: 
+
+ <inputList name="top"> 
+
+    <!-- Environment quantities -->
+   <object> FastMon_geomagnetic_InvariantLatitude</object>
+
+     <!-- Other objects here .... -->
+
+  </inputList>
+
+
+And then in the output list, defining the type of quantity (counter, mean...) 
+The parameter that you will see in the output root file is the one in hte output list
+
+
+
+ <outputList name="top">
+  
+     <!-- Environment quantities -->
+
+     <object>
+      <name> FastMon_GeoMag_InvariantLatitude </name>
+      <formula><![CDATA[ FastMon_geomagnetic_InvariantLatitude ]]></formula>
+      <cut><![CDATA[ ]]></cut>
+      <type> mean </type>
+      <description> Mean value of the geomagnetic invariant latitude </description>
+    </object>
+
+
+ <!-- Other objects here .... -->
+
+
+  </outputList>
+
+
+And that is it. It is ready to go.
+
+**********   4 - Run the executable runsStrip_t.exe  **************
+
+
+
+The compiled code is at:
+
+/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080204/svac/Monitor/rh9_gcc32opt
+
+I made a directory 
+FastMon_SO; to store the dynamic libraries
+test_2008Feb; to store the output of the program
+
+Let's run for 10000 evts, binning the data in 15 seconds:
+
+dpaneque@noric04 $ cd ../rh9_gcc32opt/
+dpaneque@noric04 $ runStrip_t.exe -n 10000 -w FastMon_SO -b 15 -c /nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080204/svac/Monitor/src/monconfig_fastmon_v1_trending.xml   -f /nfs/farm/g/glast/u33/dpaneque/DataMonitoring/DataTmp/r0252672900_v000_fastMonTuple.root -o test_2008Feb/FastMon_OutRoot -g test_2008Feb/FastMon_OutHtml 
+
+Data type : Normal
+Input fastmon files:
+   1) /nfs/farm/g/glast/u33/dpaneque/DataMonitoring/DataTmp/r0252672900_v000_fastMonTuple.root
+output file prefix: test_2008Feb/FastMon_OutRoot
+timestamp: Tue Feb 26 13:02:41 2008
+Event cut 
+Formula/cut for FastMon_TkrHits_TestRFun_InLoop has not changed. Using old library
+Formula/cut for SillyVariable has not changed. Using old library
+Formula/cut for FastMon_TkrHits_TestRFun has not changed. Using old library
+Formula/cut for FastMon_NTkrHits_TowerPlane has not changed. Using old library
+Formula/cut for FastMon_TkrHits_TowerPlane has not changed. Using old library
+Number of events used: 10000
+Starting at event: 0
+Sat Jan  3 10:41:35 2009
+(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)
+.Sat Jan  3 10:41:50 2009
+(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)
+
+Time profile for collection FastMonEvent:
+============================================
+FastMon_TkrHits                                             : 0.003086 seconds
+FastMon_TkrHits_TowerPlane                                  : 0.003203 seconds
+FastMon_condsummary                                         : 0.002921 seconds
+FastMon_geomagnetic_InvariantLatitude                       : 0.00292 seconds
+fastmontimestampdouble                                      : 0.002692 seconds
+-------------------------------------------------------
+Total event reading time for collection FastMonEvent        : 1.90643 seconds
+Total time for setting values for collection FastMonEvent   : 0.014822 seconds
+
+
+Time profile of primary output variables:
+=========================================
+FastMon_GeoMag_InvariantLatitude                            : 0.054082 seconds
+FastMon_TkrHits_TestRFun_InLoop                             : 0.06476 seconds
+FastMon_TkrHits                                             : 0.017108 seconds
+SillyVariable                                               : 0.792285 seconds
+FastMon_TkrHits_TestRFun                                    : 0.339456 seconds
+FastMon_NTkrHits_TowerPlane                                 : 0.922733 seconds
+FastMon_TkrHits_TowerPlane                                  : 0.503081 seconds
+-------------------------------------------------------
+Total time usage for collection Primary                     : 2.69351 seconds
+
+Time profile of secondary output variables:
+===========================================
+-------------------------------------------------------
+Total time usage for collection Secondary                   : 0 seconds
+
+Global cut                                                  : 0.03791 seconds
+Total time spent in event loop                              : 4.75674 seconds
+
+
+
+The output root file is located at:
+
+/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080204/svac/Monitor/rh9_gcc32opt/test_2008Feb/FastMon_OutRoot_time.root
+
+Ups ! I just noticed that this quantity has the value 0 for all events in the original file you guys provided me. Consequently, the 2 bins produced by the code have a mean of zero. Anyhow, you get the idea of how it works.
+The other quantities I implemented before have reasonable values. 
+
+
+You also get HTML files with the parameters used:
+
+FastMon_OutHtml_Parameters.html
+FastMon_OutHtml
+
+
+For completeness, I also made a config file to produce histograms. 
+
+monconfig_fastmon_v1_histos.xml
+
+You can run it like this:
+
+dpaneque@noric04 $ runStrip_t.exe -n 10000 -w FastMon_SO -b 15 -c /nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080204/svac/Monitor/src/monconfig_fastmon_v1_histos.astmon files:
+   1) /nfs/farm/g/glast/u33/dpaneque/DataMonitoring/DataTmp/r0252672900_v000_fastMonTuple.root
+output file prefix: test_2008Feb/FastMon_Histos_OutRoot
+timestamp: Tue Feb 26 13:11:10 2008
+Event cut 
+Formula/cut for FastMon_TkrHits_TestRFun_TH1 has not changed. Using old library
+Formula/cut for FastMon_TkrHits_TH1_Tower has not changed. Using old library
+Number of events used: 10000
+Starting at event: 0
+Sat Jan  3 10:41:35 2009
+(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)
+.Sat Jan  3 10:41:50 2009
+(The date printout is only relevant if the timestamp happens to be in seconds elapsed from Mission start)
+
+Time profile for collection FastMonEvent:
+============================================
+FastMon_TkrHits                                             : 0.002852 seconds
+FastMon_TkrHits_TowerPlane                                  : 0.0027 seconds
+FastMon_condsummary                                         : 0.002661 seconds
+FastMon_geomagnetic_InvariantLatitude                       : 0.00255 seconds
+fastmontimestampdouble                                      : 0.002563 seconds
+-------------------------------------------------------
+Total event reading time for collection FastMonEvent        : 0.678848 seconds
+Total time for setting values for collection FastMonEvent   : 0.013326 seconds
+
+
+Time profile of primary output variables:
+=========================================
+FastMon_TkrHits_TH1                                         : 0.025158 seconds
+FastMon_TkrHits_TestRFun_TH1                                : 0.292182 seconds
+FastMon_TkrHits_TH1_Tower                                   : 0.083619 seconds
+FastMon_CondSummaryWord_TH1                                 : 0.010073 seconds
+-------------------------------------------------------
+Total time usage for collection Primary                     : 0.411032 seconds
+
+Time profile of secondary output variables:
+===========================================
+-------------------------------------------------------
+Total time usage for collection Secondary                   : 0 seconds
+
+Global cut                                                  : 0.017935 seconds
+Total time spent in event loop                              : 1.2111 seconds
