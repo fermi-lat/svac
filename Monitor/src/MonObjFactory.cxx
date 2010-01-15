@@ -252,6 +252,8 @@
 // Last updated with object TemBug by user dpaneque on Fri Mar 27 19:50:54 2009
 // Last updated with object FT1EventClass by user dpaneque on Thu Jun  4 23:44:24 2009
 // Last updated with object FastMon_spacecraft_distance_to_saa by user bregeon on Wed Aug  5 13:14:06 2009
+// Last updated with object GoodEvent by user bregeon on Tue Jan 12 15:14:48 2010
+#include "digi/MonInput_GoodEvent.h"
 #include "fastmon/MonInput_FastMon_spacecraft_distance_to_saa.h"
 #include "merit/MonInput_FT1EventClass.h"
 #include "digi/MonInput_TemBug.h"
@@ -987,6 +989,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1EventClass;
   if (s=="FastMon_spacecraft_distance_to_saa")
     return new MonInput_FastMon_spacecraft_distance_to_saa;
+  if (s=="GoodEvent")
+    return new MonInput_GoodEvent;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1238,6 +1242,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("TemBug");
   names.push_back("FT1EventClass");
   names.push_back("FastMon_spacecraft_distance_to_saa");
+  names.push_back("GoodEvent");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
