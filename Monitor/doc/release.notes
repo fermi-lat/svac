@@ -4,12 +4,20 @@
  *
  *                  EOH
 
+- Added new function in RFun.h and RFun.cxx to loop over tracker towers
+and planes and sum arrays in quandrature (used to sum up errors).
+- Added file doc/johan.readme containing some notes about how to add
+new quantities to the trending (mostly an e-mail from David Paneque).
+* Relevant Jira(s): GDQMQ-327
+
+
  Monitor-01-03-04 15-Jan-2010 bregeon Add GoodEvent quantity - GDQMQ-325
 v1r3p4 2010/01/15 (DEV)
 -------------------------------
 Add new object MonObjInput_GoodEvent to be able to cut on this variable to 
 remove error events from the digi disitributions as in FastMon
 GDQMQ-325
+
 
  Monitor-01-03-03 25-Sep-2009 monzani trying again to get a cmt tag
 v1r3p3 2009/09/25 (DEV)
