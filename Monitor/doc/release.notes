@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-01-03-04 15-Jan-2010 bregeon Add GoodEvent quantity - GDQMQ-325
 v1r3p4 2010/01/15 (DEV)
 -------------------------------
 Add new object MonObjInput_GoodEvent to be able to cut on this variable to 
