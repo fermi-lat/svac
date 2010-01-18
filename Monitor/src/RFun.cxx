@@ -1294,7 +1294,39 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
   return returnval;
 }
 
+ // Overload to be able to correct for eath limb in the field of view when the Zenith angle is given
+Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
+			    Float_t Rate,  Float_t RateErr, char* RetType)
+{
+  
+  Float_t retValue = NormalizeRate(RateType,MagneticInfo,Rate,RateErr,RetType);
 
+  // Correcting for earth limb in the field of view - GDQMQ-330
+  std::map<std::string, std::vector<float> >::const_iterator itearth=m_EarthLimbCorrFactors.find(RateType);
+  if(itearth==m_EarthLimbCorrFactors.end())
+    {
+      std::cerr << "RFun::NormalizeRate:ERROR" << std::endl 
+		<< "Earth limb correction factors for rate type " << RateType 
+		<< " do not exist in file " << m_normfactascii << std::endl;
+      assert(0);
+    }
+
+  Float_t corrFact=0.;
+    
+  for(unsigned int i=0; i<(*itearth).second.size();i++){
+    Float_t param=(*itearth).second[i];
+    corrFact+= param * pow(ZenithAngle,(int)i);
+    }
+  if (corrFact<=0.1)
+    corrFact=1.;
+
+  // Returning correct value
+  // std::cout<<"corrFact "<<corrFact<<std::endl;
+  return retValue/corrFact;
+
+}
+
+// Normalization for vectors
 Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo, 
 				  Float_t Rate,  Float_t RateErr, char* RetType,int dim)
 {
@@ -1303,4 +1335,15 @@ Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo,
   sprintf(RateTypeWithDim,"%s[%d]",RateType,dim);
 
   return NormalizeRate(RateTypeWithDim,MagneticInfo,Rate,RateErr,RetType);
+}
+
+ // Overload when ZenithAngle is also available
+Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
+				  Float_t Rate,  Float_t RateErr, char* RetType,int dim)
+{
+
+  char RateTypeWithDim[100];
+  sprintf(RateTypeWithDim,"%s[%d]",RateType,dim);
+
+  return NormalizeRate(RateTypeWithDim,MagneticInfo,ZenithAngle,Rate,RateErr,RetType);
 }

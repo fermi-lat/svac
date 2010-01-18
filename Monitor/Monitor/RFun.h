@@ -157,8 +157,15 @@ class RFun{
 
   static Float_t NormalizeRate(char* RateType, Float_t MagneticInfo, 
 			       Float_t Rate,  Float_t RateErr, char* RetType);
+  // OVerload when Zenith Angle is given too
+  static Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
+			       Float_t Rate,  Float_t RateErr, char* RetType);
+
 
   static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo, 
+				     Float_t Rate,  Float_t RateErr, char* RetType,int dim);
+  // OVerload when Zenith Angle is given too
+  static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
 				     Float_t Rate,  Float_t RateErr, char* RetType,int dim);
 
  
