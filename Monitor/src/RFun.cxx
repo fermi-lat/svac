@@ -728,6 +728,7 @@ int RFun::m_previousdatagramnumber[5];
 bool  RFun::makeinitdatagraminfo = true;
 
 std::map<std::string,std::list<std::vector<float> > > RFun::m_NormFactors;
+std::map<std::string, std::vector<float> > RFun::m_EarthLimbCorrFactors;
 std::string RFun::m_normfactascii;
 
 
@@ -1059,6 +1060,33 @@ int RFun::LoadNormFactors()
 	  return 3;
 	}
     }
+
+    // get rate name
+    if(tokens[0] == "Earth limb correction fit parameters"){
+      unsigned int nparams=atoi(tokens[1].c_str());
+      std::cout<<"Earthlimb N params: "<<nparams<<std::endl;
+      for(int unsigned it = 0; it<nparams;it++){
+	  std::string val;
+	  std::string val_err;
+	  std::string::size_type pos = tokens[1].find("+/-");
+	  float fval=0.;
+	  float fval_err=0.;
+	  if(pos < tokens[1].size()){ // There is value  related error
+		val = tokens[1].substr(0,pos);
+		val_err = tokens[1].substr(pos+3,tokens[1].size());
+		fval = atof(val.c_str());
+		fval_err = atof(val_err.c_str());
+		m_EarthLimbCorrFactors[ratename].push_back(fval);
+		}  
+	}
+      
+      for(int unsigned it = 0; it<nparams;it++)
+        std::cout<<"Earthlimb params: "<<m_EarthLimbCorrFactors[ratename].at(it)<<std::endl;
+	
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
     
     if(ingestdata == 0 && newrate && refrate[0] > -2 && tokens[0] == "Start"){
       ingestdata = 1;

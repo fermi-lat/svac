@@ -203,6 +203,7 @@ class RFun{
 
   // public memeber data
   static std::map<std::string,std::list<std::vector<float> > > m_NormFactors;
+  static std::map<std::string, std::vector<float> > m_EarthLimbCorrFactors;
   static std::string m_normfactascii;
 
 
