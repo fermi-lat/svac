@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-01-05-00 18-Jan-2010 bregeon Handling earth limb correction for rate normalization - GDQMQ-317 GDQMQ-330
 
 Add code to use the earth limb correction polynome in RFun
   NormalizedRate was overloaded to take a new parameter ZenithAngle after the McIlwainL
