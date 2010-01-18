@@ -5,6 +5,8 @@
  *                  EOH
 
 
+Add code to use the earth limb correction polynome in RFun
+  NormalizedRate was overloaded to take a new parameter ZenithAngle after the McIlwainL
 Add code to read EarthLimb correction parameters - 
 * Relevant Jira(s): GDQMQ-317 GDQMQ-33
 
