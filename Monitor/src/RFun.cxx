@@ -1023,7 +1023,7 @@ int RFun::LoadNormFactors()
       inputFile.getline(buffer,bufSize);
       continue;
     }
-
+    
     // get rate name
     if(tokens[0] == "RateName"){
       newrate = 1;
@@ -1062,10 +1062,15 @@ int RFun::LoadNormFactors()
     }
 
     // get rate name
-    if(tokens[0] == "Earth limb correction fit parameters"){
+    if(tokens[0] == "EarthLimbCorr"){
       unsigned int nparams=atoi(tokens[1].c_str());
-      std::cout<<"Earthlimb N params: "<<nparams<<std::endl;
+      // start reading parameters
       for(int unsigned it = 0; it<nparams;it++){
+	  // read line and tokenize it
+          inputFile.getline(buffer,bufSize);
+          std::string inputLine(buffer);
+          std::vector <std::string> tokens;
+	  facilities::Util::stringTokenize(inputLine, "\t :", tokens);
 	  std::string val;
 	  std::string val_err;
 	  std::string::size_type pos = tokens[1].find("+/-");
@@ -1077,12 +1082,9 @@ int RFun::LoadNormFactors()
 		fval = atof(val.c_str());
 		fval_err = atof(val_err.c_str());
 		m_EarthLimbCorrFactors[ratename].push_back(fval);
-		}  
+		}
 	}
-      
-      for(int unsigned it = 0; it<nparams;it++)
-        std::cout<<"Earthlimb params: "<<m_EarthLimbCorrFactors[ratename].at(it)<<std::endl;
-	
+      	
       inputFile.getline(buffer,bufSize);
       continue;
     }
