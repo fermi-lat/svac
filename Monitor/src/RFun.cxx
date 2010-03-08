@@ -1270,9 +1270,12 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
   Float_t NormRateErr = 0;
   if((*itr2)[2]>0 && (*itr2)[4]>0 && Rate>0){ // calculation is possible
     NormRate =  Rate/(*itr2)[2]/(*itr2)[4]; 
-    NormRateErr = NormRate*sqrt(pow((*itr2)[3]/(*itr2)[2],2)
-				+pow(RateErr/Rate,2)
-				+pow((*itr2)[5]/(*itr2)[4],2));
+    // Commented out by Luca B.---see GDQMQ-340.
+    //NormRateErr = NormRate*sqrt(pow((*itr2)[3]/(*itr2)[2],2)
+    //				+pow(RateErr/Rate,2)
+    //				+pow((*itr2)[5]/(*itr2)[4],2));
+    // And here is the replacement, we just pick up the relative error on the original rate.
+    NormRateErr = NormRate*(RateErr/Rate);
   }
 
   Float_t returnval = 0.0;
