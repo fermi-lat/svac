@@ -4,11 +4,14 @@
  *
  *                  EOH
 
- Monitor-01-05-00 18-Jan-2010 bregeon Handling earth limb correction for rate normalization - GDQMQ-317 GDQMQ-330
+- Calculation of the errors on the normalized rates changed.
+* Relevant Jira(s): GDQMQ-340
 
-Add code to use the earth limb correction polynome in RFun
-  NormalizedRate was overloaded to take a new parameter ZenithAngle after the McIlwainL
-Add code to read EarthLimb correction parameters - 
+
+ Monitor-01-05-00 18-Jan-2010 bregeon Handling earth limb correction for rate normalization - GDQMQ-317 GDQMQ-330
+- Add code to use the earth limb correction polynome in RFun
+- NormalizedRate was overloaded to take a new parameter ZenithAngle after the McIlwainL
+- Add code to read EarthLimb correction parameters - 
 * Relevant Jira(s): GDQMQ-317 GDQMQ-33
 
  Monitor-01-04-00 15-Jan-2010 lbaldini Some new variables added.
