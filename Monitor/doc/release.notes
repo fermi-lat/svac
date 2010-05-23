@@ -4,6 +4,16 @@
  *
  *                  EOH
 
+
+ Monitor-01-06-01  (22-May-2010; D.Paneque)
+-------------------------------------------
+Changes in MonValue_t.cxx file so that the code runs with root 5.26. 
+This change removes backwards compatibility with root 5.14, which I guess 
+it is not necessary any longer. 
+
+
+
+
  Monitor-01-06-00 08-Mar-2010 lbaldini Calculation of the errors on the normalized rates changed.
 - Calculation of the errors on the normalized rates changed.
 * Relevant Jira(s): GDQMQ-340
