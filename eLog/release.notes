@@ -34,23 +34,3 @@ v2r2p7
 
 Change update.py to handle bay numbers that aren't a single digit (SVAC-65).
 
-
-v2r3p0
-
-Handle LICOS runs.
-
-v2r3p1
-
-Make the web link for online reort point to the directory where rcReport
-lives, rather than the top-level run directory.
-
-v2r3p2
-
-Fail if we can't read or parse rcReport.
-
-v2r3p3 2007-06-18
-
-Use /afs/slac/package/oracle/common/coraenv_current for setup instead of 
-deprecated /usr/local/bin/coraenvp.
-Use /afs/slac.stanford.edu/package/python/2.4.3/i386_linux24/bin/linux2.4
-

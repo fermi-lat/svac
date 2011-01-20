@@ -1,4 +1,3 @@
-#!/afs/slac.stanford.edu/package/python/2.4.3/i386_linux24/bin/python2.4
 #!/usr/bin/env python2.4
 
 """Usage: update.py [xmlFile] [dataRoot] [rawRoot]
@@ -246,7 +245,7 @@ except:
     msg = 'rcReport %s is missing, unreadable, or invalid.\n' % xmlFileName
     sys.stderr.write(msg)
     errFile.write(msg)
-    sys.exit(1)
+    sys.exit(0)
     
 reports = doc.getElementsByTagName(testReportTag)
 
@@ -384,18 +383,10 @@ for report in reports:
 
     # construct URL string for online test report 
     
-    # get directory where report lives
-    onlineDir = os.path.dirname(xmlFileName)
-    dirs = onlineDir.split(os.sep)
-    index = dirs.index(data[runIdTag])
-    # include run in onlineTail so we don't get an emty list
-    # onlineTail = '/'.join(dirs[index+1:])
-    onlineTail = '/'.join(dirs[index:])
-    print onlineTail
-    onlineReportUrl = '/'.join((rawDataDir, onlineTail))
+    onlineReportUrl = rawDataDir + '/' + data[runIdTag] + '/'
     
     if(data.has_key(onlineReportTag)):
-        onlineReportUrl = '/'.join((onlineReportUrl, data[onlineReportTag]))
+        onlineReportUrl += data[onlineReportTag]
 
     # mangle serial # fields if this is an analysis run
     if data.has_key(analTag) and eval(data[analTag]):
