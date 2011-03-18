@@ -157,16 +157,18 @@ class RFun{
 
   static Float_t NormalizeRate(char* RateType, Float_t MagneticInfo, 
 			       Float_t Rate,  Float_t RateErr, char* RetType);
-  // OVerload when Zenith Angle is given too
-  static Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
-			       Float_t Rate,  Float_t RateErr, char* RetType);
+  // OVerload when Zenith Angle and Longitude are given too
+  static Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
+                 Float_t ZenithAngle, Float_t Longitude,
+                 Float_t Rate,  Float_t RateErr, char* RetType);
 
 
   static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo, 
 				     Float_t Rate,  Float_t RateErr, char* RetType,int dim);
-  // OVerload when Zenith Angle is given too
-  static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
-				     Float_t Rate,  Float_t RateErr, char* RetType,int dim);
+  // OVerload when Zenith Angle and Longitude are given too
+  static Float_t NormalizeRateVector(char* RateType, Float_t MagneticInfo,
+                 Float_t ZenithAngle, Float_t Longitude,
+                 Float_t Rate,  Float_t RateErr, char* RetType,int dim);
 
  
   // 
@@ -211,6 +213,7 @@ class RFun{
   // public memeber data
   static std::map<std::string,std::list<std::vector<float> > > m_NormFactors;
   static std::map<std::string, std::vector<float> > m_EarthLimbCorrFactors;
+  static std::map<std::string, std::vector<float> > m_LongitudeCorr;
   static std::string m_normfactascii;
 
 

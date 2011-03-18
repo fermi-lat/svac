@@ -729,6 +729,7 @@ bool  RFun::makeinitdatagraminfo = true;
 
 std::map<std::string,std::list<std::vector<float> > > RFun::m_NormFactors;
 std::map<std::string, std::vector<float> > RFun::m_EarthLimbCorrFactors;
+std::map<std::string, std::vector<float> > RFun::m_LongitudeCorr;
 std::string RFun::m_normfactascii;
 
 
@@ -1061,11 +1062,43 @@ int RFun::LoadNormFactors()
 	}
     }
 
-    // get rate name
+    // get tag name
     if(tokens[0] == "EarthLimbCorr"){
       unsigned int nparams=atoi(tokens[1].c_str());
+      // read first line with formula
+      inputFile.getline(buffer,bufSize);
       // start reading parameters
-      for(int unsigned it = 0; it<nparams;it++){
+      for(int unsigned it = 1; it<nparams;it++){
+	    // read line and tokenize it
+        inputFile.getline(buffer,bufSize);
+        std::string inputLine(buffer);
+        std::vector <std::string> tokens;
+	    facilities::Util::stringTokenize(inputLine, "\t :", tokens);
+	    std::string val;
+	    std::string val_err;
+	    std::string::size_type pos = tokens[1].find("+/-");
+	    float fval=0.;
+	    float fval_err=0.;
+	    if(pos < tokens[1].size()){ // There is value  related error
+	  	  val = tokens[1].substr(0,pos);
+		  val_err = tokens[1].substr(pos+3,tokens[1].size());
+		  fval = atof(val.c_str());
+		  fval_err = atof(val_err.c_str());
+		  m_EarthLimbCorrFactors[ratename].push_back(fval);
+		  }
+	    }
+      	
+      inputFile.getline(buffer,bufSize);
+      continue;
+    }
+
+    // get tag name
+    if(tokens[0] == "LongitudeCorr"){
+      unsigned int nparams=atoi(tokens[1].c_str());
+      // read first line with formula -- not used
+      inputFile.getline(buffer,bufSize);
+      // start reading parameters
+      for(int unsigned it = 1; it<nparams;it++){
 	  // read line and tokenize it
           inputFile.getline(buffer,bufSize);
           std::string inputLine(buffer);
@@ -1081,15 +1114,15 @@ int RFun::LoadNormFactors()
 		val_err = tokens[1].substr(pos+3,tokens[1].size());
 		fval = atof(val.c_str());
 		fval_err = atof(val_err.c_str());
-		m_EarthLimbCorrFactors[ratename].push_back(fval);
+		m_LongitudeCorr[ratename].push_back(fval);
 		}
-	}
+	  }
       	
       inputFile.getline(buffer,bufSize);
       continue;
     }
 
-    
+    // New rate
     if(ingestdata == 0 && newrate && refrate[0] > -2 && tokens[0] == "Start"){
       ingestdata = 1;
       listofnormfactors.clear(); // prepare for new data ingestion
@@ -1209,7 +1242,6 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
 	}
     }
 
-
   // Check that rate is in map
   //std::cout << "Checking rate name " << std::endl;  
   std::map<std::string,std::list<std::vector<float> > >::const_iterator itr=m_NormFactors.find(RateType);
@@ -1297,13 +1329,15 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
   return returnval;
 }
 
- // Overload to be able to correct for eath limb in the field of view when the Zenith angle is given
-Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
-			    Float_t Rate,  Float_t RateErr, char* RetType)
+ // Overload to be able to correct for earth limb in the field of view when the Zenith angle is given
+Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
+        Float_t ZenithAngle, Float_t Longitude,
+        Float_t Rate,  Float_t RateErr, char* RetType)
 {
   
   Float_t retValue = NormalizeRate(RateType,MagneticInfo,Rate,RateErr,RetType);
-
+  Float_t corrFact = 1.;
+  
   // Correcting for earth limb in the field of view - GDQMQ-330
   std::map<std::string, std::vector<float> >::const_iterator itearth=m_EarthLimbCorrFactors.find(RateType);
   if(itearth==m_EarthLimbCorrFactors.end())
@@ -1314,19 +1348,37 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo, Float_t Zenith
       assert(0);
     }
 
-  Float_t corrFact=0.;
-    
-  for(unsigned int i=0; i<(*itearth).second.size();i++){
-    Float_t param=(*itearth).second[i];
-    corrFact+= param * pow(ZenithAngle,(int)i);
-    }
+  // Formula is [0] + [1]*(x>[3])*(x-[3]) + [2]*(x>[3])*(x-[3])**2
+  Float_t p0=0., p1=0., p2=0., p3=0.; 
+  p0=(*itearth).second[0];
+  p1=(*itearth).second[1];
+  p2=(*itearth).second[2];
+  p3=(*itearth).second[3];
+  corrFact=p0;
+  if(ZenithAngle>p3)
+    corrFact+= p1*(ZenithAngle-p3) + p2*(ZenithAngle-p3)*(ZenithAngle-p3);
+  // If correction factor is too small, give up
   if (corrFact<=0.1)
     corrFact=1.;
 
-  // Returning correct value
-  // std::cout<<"corrFact "<<corrFact<<std::endl;
-  return retValue/corrFact;
+  // Correcting for longitude dip
+  std::map<std::string, std::vector<float> >::const_iterator itlon=m_LongitudeCorr.find(RateType);
+  if(itlon==m_LongitudeCorr.end())
+    {
+      std::cerr << "RFun::NormalizeRate:ERROR" << std::endl 
+		<< "Longitude correction factors for rate type " << RateType 
+		<< " do not exist in file " << m_normfactascii << std::endl;
+      assert(0);
+    }
+  //Function : min(1, 1 - [0] + [0]*abs([2]*(x - [1])))
+  Float_t lonCorr=1.;
+  p0=(*itlon).second[0];
+  p1=(*itlon).second[1];
+  p2=(*itlon).second[2];
+  lonCorr=TMath::Min(1., 1. - p0 + p0*TMath::Abs(p2*(Longitude - p1)));
 
+  // Returning normalized value
+  return retValue/(corrFact*lonCorr);
 }
 
 // Normalization for vectors
@@ -1340,13 +1392,14 @@ Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo,
   return NormalizeRate(RateTypeWithDim,MagneticInfo,Rate,RateErr,RetType);
 }
 
- // Overload when ZenithAngle is also available
-Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo, Float_t ZenithAngle,
-				  Float_t Rate,  Float_t RateErr, char* RetType,int dim)
+ // Overload when ZenithAngle and Longitude are also available
+Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo,
+        Float_t ZenithAngle, Float_t Longitude,
+        Float_t Rate,  Float_t RateErr, char* RetType,int dim)
 {
 
   char RateTypeWithDim[100];
   sprintf(RateTypeWithDim,"%s[%d]",RateType,dim);
 
-  return NormalizeRate(RateTypeWithDim,MagneticInfo,ZenithAngle,Rate,RateErr,RetType);
+  return NormalizeRate(RateTypeWithDim,MagneticInfo,ZenithAngle,Longitude,Rate,RateErr,RetType);
 }
