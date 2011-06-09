@@ -256,6 +256,12 @@
 // Last updated with object fracSat_err by user lbaldini on Thu Jan 14 18:31:31 2010
 // Last updated with object layerOcc_err by user lbaldini on Fri Jan 15 11:25:13 2010
 // Last updated with object stripOcc_err by user lbaldini on Fri Jan 15 13:01:16 2010
+// Last updated with object EvtCREventClass by user dpaneque on Wed Jun  8 17:02:20 2011
+// Last updated with object FT1EventClassBitMap by user dpaneque on Wed Jun  8 19:17:51 2011
+// Last updated with object EvtCREventClassBitMap by user dpaneque on Wed Jun  8 19:38:30 2011
+#include "merit/MonInput_EvtCREventClassBitMap.h"
+#include "merit/MonInput_FT1EventClassBitMap.h"
+#include "merit/MonInput_EvtCREventClass.h"
 #include "trackermon/MonInput_stripOcc_err.h"
 #include "trackermon/MonInput_layerOcc_err.h"
 #include "trackermon/MonInput_fracSat_err.h"
@@ -1005,6 +1011,12 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="stripOcc_err_TowerPlane")
     return new MonInput_stripOcc_err;
   // Modification by lb ended.
+  if (s=="EvtCREventClass")
+    return new MonInput_EvtCREventClass;
+  if (s=="FT1EventClassBitMap")
+    return new MonInput_FT1EventClassBitMap;
+  if (s=="EvtCREventClassBitMap")
+    return new MonInput_EvtCREventClassBitMap;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1260,6 +1272,9 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("fracSat_err");
   names.push_back("layerOcc_err");
   names.push_back("stripOcc_err");
+  names.push_back("EvtCREventClass");
+  names.push_back("FT1EventClassBitMap");
+  names.push_back("EvtCREventClassBitMap");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);

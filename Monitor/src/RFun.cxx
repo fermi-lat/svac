@@ -1403,3 +1403,29 @@ Float_t RFun::NormalizeRateVector(char* RateType, Float_t MagneticInfo,
 
   return NormalizeRate(RateTypeWithDim,MagneticInfo,ZenithAngle,Longitude,Rate,RateErr,RetType);
 }
+
+int RFun::IsBitSet(unsigned number, unsigned bitposition)
+{
+  if (number & 1 << bitposition)
+    return 1;
+
+  return 0;
+}
+
+/*
+std::vector<double> RFun::GetVectorWithBitMapFromFT1EventClass(unsigned FT1EventClass)
+{
+  std::vector<double> bitmapvector;
+  for (Int_t i =0;i<16;i++)
+    bitmapvector.push_back(0.0);
+
+  // Fill vector with FT1EventClass bit map
+  for (Int_t i= 0;i<16;i++)
+    {
+      if(FT1EventClass & 1 << i)
+	bitmapvector[i] = 1.0;
+    }
+
+  return vector;
+}
+*/

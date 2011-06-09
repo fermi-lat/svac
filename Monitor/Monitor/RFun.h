@@ -182,6 +182,14 @@ class RFun{
 
   */ 
 
+  // Function to check whether bit is up
+  // It returns 1 if bit is set, it returns zero otherwise
+  static int IsBitSet(unsigned number, unsigned bitposition);
+
+  // Function to dump the bit map from FT1EventClass variable into a 16-dim vector
+  //static std::vector<double> GetVectorWithBitMapFromFT1EventClass(unsigned FT1EventClass);
+
+
   // This works !!
 
   static unsigned loopovertowerANDtkrplanes_int(ROOT::TArrayProxy<ROOT::TArrayType<Int_t, 36> >&);
