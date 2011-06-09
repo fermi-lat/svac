@@ -11,7 +11,7 @@
 
 #define NAME FT1EventClass
 #define OUTBRANCH "FT1EventClass"
-#define LEAF "FT1EventClass/I"
+#define LEAF "FT1EventClass/i"
 #define INBRANCH "FT1EventClass"
 #define ACCESSOR NotApplicable
 #define MONSOURCE MeritEvent

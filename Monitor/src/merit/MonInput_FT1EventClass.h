@@ -13,7 +13,7 @@
 
 // user defined part
 
-#define VARTYPE Int_t 
+#define VARTYPE UInt_t 
 
 // end user defined part
 
