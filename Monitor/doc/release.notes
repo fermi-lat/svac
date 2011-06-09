@@ -4,6 +4,21 @@
  *
  *                  EOH
 
+
+Monitor-01-08-00  (9-June-2011; D. Paneque)
+-------------------------------------------
+Changes in code to deal with the new variable rates with P7. 
+Added the following objects:
+MonInput_EvtCREventClass.[h,cxx]
+MonInput_EvtCREventClassBitMap.[h,cxx]
+MonInput_FT1EventClassBitMap.[h,cxx]
+
+Modifications in the following files:
+MonInput_FT1EventClass.[h, cxx]
+RFun.[h,cxx]
+MonObjFactory.cxx
+
+
  Monitor-01-07-00 22-Mar-2011 bregeon Update normalization function
 - Update NormalizedRate to read longitude and correct rates
   for longitude.
