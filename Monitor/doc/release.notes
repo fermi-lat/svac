@@ -4,6 +4,17 @@
  *
  *                  EOH
 
+Monitor-01-09-00  (14-June-2011; D. Paneque)
+--------------------------------------------
+Changes in code to monitor the LLE events vs RA nd DEC. 
+Added the following objects:
+MonInput_LLE_Vector_RA_Dec.[h,cxx]
+
+Modificaiton in the following files:
+MonObjFactory.cxx
+MergeHistFiles.cxx
+
+
  Monitor-01-08-00 09-Jun-2011 dpaneque Updates to deal with P7 variables
 
 Monitor-01-08-00  (9-June-2011; D. Paneque)
