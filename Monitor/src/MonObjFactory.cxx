@@ -259,6 +259,8 @@
 // Last updated with object EvtCREventClass by user dpaneque on Wed Jun  8 17:02:20 2011
 // Last updated with object FT1EventClassBitMap by user dpaneque on Wed Jun  8 19:17:51 2011
 // Last updated with object EvtCREventClassBitMap by user dpaneque on Wed Jun  8 19:38:30 2011
+// Last updated with object LLE_Vector_RA_Dec by user dpaneque on Mon Jun 13 17:28:23 2011
+#include "merit/MonInput_LLE_Vector_RA_Dec.h"
 #include "merit/MonInput_EvtCREventClassBitMap.h"
 #include "merit/MonInput_FT1EventClassBitMap.h"
 #include "merit/MonInput_EvtCREventClass.h"
@@ -1017,6 +1019,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1EventClassBitMap;
   if (s=="EvtCREventClassBitMap")
     return new MonInput_EvtCREventClassBitMap;
+  if (s=="LLE_Vector_RA_Dec")
+    return new MonInput_LLE_Vector_RA_Dec;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1275,6 +1279,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("EvtCREventClass");
   names.push_back("FT1EventClassBitMap");
   names.push_back("EvtCREventClassBitMap");
+  names.push_back("LLE_Vector_RA_Dec");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
