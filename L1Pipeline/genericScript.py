@@ -196,6 +196,7 @@ def main():
     runDir = fileNames.fileName(None, dlId, runId)
 
     files = {}
+    args = {}
 
     inFileTList = os.environ.get('inFileTypes')
     if inFileTList is not None:

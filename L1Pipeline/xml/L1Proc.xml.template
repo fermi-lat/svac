@@ -1517,7 +1517,7 @@
     <process name="ft2Runs" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="%(digi_versionName)s">%(digi_version)s</var>
-        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(ft2SecondsNoQual_versionName)s">%(ft2SecondsNoQual_version)s</var>
         <var name="%(digiGap_versionName)s">%(digiGap_version)s</var>
         <var name="%(magic7L1_versionName)s">%(magic7L1_version)s</var>
         <var name="%(merit_versionName)s">%(merit_version)s</var>
@@ -1535,10 +1535,10 @@
       </depends>
     </process>
 
-    <process name="registerFt2Seconds" autoRetryMaxAttempts="%(retries)s">
+    <process name="registerFt2SecondsNoQual" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="parentProcess">ft2Runs</var>
-        <var name="fileType">ft2Seconds</var>
+        <var name="fileType">ft2SecondsNoQual</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -1564,20 +1564,20 @@
 
     <process name="makeFT2" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
-        <var name="%(ft2_versionName)s">%(ft2_version)s</var>
+        <var name="%(ft2SecondsNoQual_versionName)s">%(ft2SecondsNoQual_version)s</var>
+        <var name="%(ft2NoQual_versionName)s">%(ft2NoQual_version)s</var>
       </variables>
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeFT2File.py" batchOptions=" -q %(shortQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
         <!-- <after process="ingestFT2" status="SUCCESS"/> -->
-        <after process="registerFt2Seconds" status="SUCCESS"/>
+        <after process="registerFt2SecondsNoQual" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="registerFT2" autoRetryMaxAttempts="%(retries)s">
+    <process name="registerFT2NoQual" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="parentProcess">makeFT2</var>
-        <var name="fileType">ft2</var>
+        <var name="fileType">ft2NoQual</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -1589,6 +1589,63 @@
       </depends>
     </process>
 
+    <process name="setupQuality">
+      <script><![CDATA[
+%(setupQScriptBody)s
+]]>
+      </script>
+      <depends>
+        <after process="findChunks" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="flagFT2" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="badRanges">${pipeline.processInstance("setupQuality").getVariable("badRanges")}</var>
+        <var name="%(ft2_versionName)s">%(ft2_version)s</var>
+        <var name="%(ft2NoQual_versionName)s">%(ft2NoQual_version)s</var>
+        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(ft2SecondsNoQual_versionName)s">%(ft2SecondsNoQual_version)s</var>
+        <var name="inFileTypes">ft2NoQual/ft2SecondsNoQual</var>
+        <var name="outFileTypes">ft2/ft2Seconds</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+      <depends>
+        <after process="registerFT2NoQual" status="SUCCESS"/>
+        <after process="setupQuality" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerFT2" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">flagFT2</var>
+        <var name="fileType">ft2</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="flagFT2" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerFt2Seconds" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">flagFT2</var>
+        <var name="fileType">ft2Seconds</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="flagFT2" status="SUCCESS"/>
+      </depends>
+    </process>
+
     <process name="exportFT2" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="fileType">ft2</var>
@@ -1597,6 +1654,17 @@
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/exportStuff.py" batchOptions=" -q %(expressQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
         <after process="registerFT2" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="wrapupQuality">
+      <script><![CDATA[
+%(wrapupQScriptBody)s
+]]>
+      </script>
+      <depends>
+        <after process="registerFt2Seconds" status="SUCCESS"/>
+        <after process="exportFT2" status="SUCCESS"/>
       </depends>
     </process>
 
@@ -2795,7 +2863,6 @@
         <after process="digiHistLogger" status="SUCCESS"/>
         <after process="digiTrendLogger" status="SUCCESS"/>
         <after process="exportFT1" status="SUCCESS"/>
-        <after process="exportFT2" status="SUCCESS"/>
         <after process="exportLS1" status="SUCCESS"/>
         <after process="exportLS3" status="SUCCESS"/>
         <after process="fastMonErrorLogger" status="SUCCESS"/>
@@ -2862,6 +2929,7 @@
         <after process="verifyErrorLogger" status="SUCCESS"/>
         <after process="verifyFt1ErrorLogger" status="SUCCESS"/>
         <after process="verifyFt2ErrorLogger" status="SUCCESS"/>
+        <after process="wrapupQuality" status="SUCCESS"/>
         <after process="verifyMeritErrorLogger" status="SUCCESS"/>
       </depends>
       <createsSubtasks>
