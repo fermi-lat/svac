@@ -250,26 +250,24 @@
 // Last updated with object TkrNumTracks by user dpaneque on Fri Sep 12 00:06:29 2008
 // Last updated with object CalMIPRatio by user dpaneque on Fri Sep 12 00:39:02 2008
 // Last updated with object TemBug by user dpaneque on Fri Mar 27 19:50:54 2009
-// Last updated with object FT1EventClass by user dpaneque on Thu Jun  4 23:44:24 2009
 // Last updated with object FastMon_spacecraft_distance_to_saa by user bregeon on Wed Aug  5 13:14:06 2009
 // Last updated with object GoodEvent by user bregeon on Tue Jan 12 15:14:48 2010
 // Last updated with object fracSat_err by user lbaldini on Thu Jan 14 18:31:31 2010
 // Last updated with object layerOcc_err by user lbaldini on Fri Jan 15 11:25:13 2010
 // Last updated with object stripOcc_err by user lbaldini on Fri Jan 15 13:01:16 2010
-// Last updated with object EvtCREventClass by user dpaneque on Wed Jun  8 17:02:20 2011
 // Last updated with object FT1EventClassBitMap by user dpaneque on Wed Jun  8 19:17:51 2011
 // Last updated with object EvtCREventClassBitMap by user dpaneque on Wed Jun  8 19:38:30 2011
-// Last updated with object LLE_Vector_RA_Dec by user dpaneque on Mon Jun 13 17:28:23 2011
-#include "merit/MonInput_LLE_Vector_RA_Dec.h"
+// Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
+// Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
+#include "merit/MonInput_FT1Dec.h"
+#include "merit/MonInput_FT1Ra.h"
 #include "merit/MonInput_EvtCREventClassBitMap.h"
 #include "merit/MonInput_FT1EventClassBitMap.h"
-#include "merit/MonInput_EvtCREventClass.h"
 #include "trackermon/MonInput_stripOcc_err.h"
 #include "trackermon/MonInput_layerOcc_err.h"
 #include "trackermon/MonInput_fracSat_err.h"
 #include "digi/MonInput_GoodEvent.h"
 #include "fastmon/MonInput_FastMon_spacecraft_distance_to_saa.h"
-#include "merit/MonInput_FT1EventClass.h"
 #include "digi/MonInput_TemBug.h"
 #include "merit/MonInput_CalMIPRatio.h"
 #include "merit/MonInput_TkrNumTracks.h"
@@ -999,8 +997,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalMIPRatio;
   if (s=="TemBug")
     return new MonInput_TemBug;
-  if (s=="FT1EventClass")
-    return new MonInput_FT1EventClass;
   if (s=="FastMon_spacecraft_distance_to_saa")
     return new MonInput_FastMon_spacecraft_distance_to_saa;
   if (s=="GoodEvent")
@@ -1013,14 +1009,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="stripOcc_err_TowerPlane")
     return new MonInput_stripOcc_err;
   // Modification by lb ended.
-  if (s=="EvtCREventClass")
-    return new MonInput_EvtCREventClass;
   if (s=="FT1EventClassBitMap")
     return new MonInput_FT1EventClassBitMap;
   if (s=="EvtCREventClassBitMap")
     return new MonInput_EvtCREventClassBitMap;
-  if (s=="LLE_Vector_RA_Dec")
-    return new MonInput_LLE_Vector_RA_Dec;
+  if (s=="FT1Ra")
+    return new MonInput_FT1Ra;
+  if (s=="FT1Dec")
+    return new MonInput_FT1Dec;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1270,16 +1266,15 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("TkrNumTracks");
   names.push_back("CalMIPRatio");
   names.push_back("TemBug");
-  names.push_back("FT1EventClass");
   names.push_back("FastMon_spacecraft_distance_to_saa");
   names.push_back("GoodEvent");
   names.push_back("fracSat_err");
   names.push_back("layerOcc_err");
   names.push_back("stripOcc_err");
-  names.push_back("EvtCREventClass");
   names.push_back("FT1EventClassBitMap");
   names.push_back("EvtCREventClassBitMap");
-  names.push_back("LLE_Vector_RA_Dec");
+  names.push_back("FT1Ra");
+  names.push_back("FT1Dec");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);

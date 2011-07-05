@@ -156,6 +156,8 @@ void MonValue::makeProxy(TTree* tree){
   execmap["foreachcalxface:"]= "for(int calxface=0;calxface<2;calxface++){";
   execmap["foreachcalxrange:"]= "for(int calxrange=0;calxrange<4;calxrange++){";
   execmap["foreachpos:"]= "for(int pos=0;pos<3;pos++){";
+  execmap["foreachllerabin:"]= "for(int llerabin=0;llerabin<8;llerabin++){";
+  execmap["foreachlledecbin:"]= "for(int lledecbin=0;lledecbin<5;lledecbin++){";  
   execmap["foronetime:"]= "{";
 
 

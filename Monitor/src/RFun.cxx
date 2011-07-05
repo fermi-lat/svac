@@ -1412,20 +1412,56 @@ int RFun::IsBitSet(unsigned number, unsigned bitposition)
   return 0;
 }
 
-/*
-std::vector<double> RFun::GetVectorWithBitMapFromFT1EventClass(unsigned FT1EventClass)
-{
-  std::vector<double> bitmapvector;
-  for (Int_t i =0;i<16;i++)
-    bitmapvector.push_back(0.0);
 
-  // Fill vector with FT1EventClass bit map
-  for (Int_t i= 0;i<16;i++)
+
+// Function that returns whether the event (defined by FT1Ra and FT1Dec) falls into 
+  // one of the predefined circles with 45 deg radius centered at following  RA and Dec locations: 
+  // RA=[0,45,90,135,180,225,270,315], Dec=[-90,-45,0,45,90]"
+  // This will be used to define the quantity LLEvents_BinsRaDec[8][5]
+
+int RFun::IsEventInThisRaDecBin(Float_t Ra, Float_t Dec, int thisrabin, int thisdecbin)
+{
+
+ Float_t m_radius = 45.0;
+ Float_t RefRa = Float_t(thisrabin)*m_radius;
+ Float_t RefDec = -90.0+Float_t(thisdecbin)*m_radius;
+
+ // std::cout << "RFun::IsEventInThisRaDecBin: ThisRaBin, ThisDecBin, Reference RA and Dec " 
+ //	   << thisrabin << ", " << thisdecbin << ", " << RefRa << ", " << RefDec << std::endl;
+ // std::cout << "RFun::IsEventInThisRaDecBin: Event coordinates Ra, Dec " << Ra << ", " << Dec << std::endl;
+
+ if(getSeparation(RefRa,RefDec,Ra,Dec) < m_radius){
+   // std::cout << "This Event falls into this bin" << std::endl;
+   return 1;
+ }
+ else
+   return 0;
+
+}
+
+// Get Angular separation between two points defined by Ra and Dec
+Float_t RFun::getSeparation(Float_t RefRA,Float_t RefDec,Float_t RA,Float_t Dec)
+{
+// Check input values
+
+  if (RefRA <-360.0 || RefRA >360.0 || RefDec <-90.0 || RefDec >90.0 || RA <-360.0 || RA >360.0 || Dec <-90.0 || Dec >90.0)
     {
-      if(FT1EventClass & 1 << i)
-	bitmapvector[i] = 1.0;
+      //std::cout << "MonInput_LLE_Vector_RA_Dec::getSeparation: WARNING " << std::endl;
+      //std::cout << "Input values are out of bounds" << std::endl;
+      //std::cout << "RefRA, RefDec, RA, Dec" << RefRA << ", " << RefDec << ", " << ", " << RA << ", " << Dec << std::endl;
+      //std::cout << "Returning 400" << std::endl;
+      return 400.0;
     }
 
-  return vector;
+  //std::cout << "RefRA = " << RefRA << " RefDec = " << RefDec << std::endl;
+  //std::cout << "RA = " << RA << " Dec = " << Dec << std::endl;
+
+
+  Float_t m_PI = 3.14159265358979312;
+  Float_t angsep = 180./m_PI * acos((cos((90.-RefDec)/180.*m_PI)*cos((90.-Dec)/180.*m_PI)+(sin((90.-RefDec)/180.*m_PI)*sin((90.-Dec)/180.*m_PI)*cos((RefRA-RA)/180.*m_PI))));
+
+  // std::cout << "RFun::getSeparation: The angular separation is = " << angsep << std::endl;
+  return angsep;
+
 }
-*/
+

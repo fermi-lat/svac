@@ -186,8 +186,16 @@ class RFun{
   // It returns 1 if bit is set, it returns zero otherwise
   static int IsBitSet(unsigned number, unsigned bitposition);
 
-  // Function to dump the bit map from FT1EventClass variable into a 16-dim vector
-  //static std::vector<double> GetVectorWithBitMapFromFT1EventClass(unsigned FT1EventClass);
+  // Function that returns whether the event (defined by FT1Ra and FT1Dec) falls into 
+  // one of the predefined circles with 45 deg radius centered at following  RA and Dec locations: 
+  // RA=[0,45,90,135,180,225,270,315], Dec=[-90,-45,0,45,90]"
+  // This will be used to define the quantity LLEvents_BinsRaDec[8][5]
+
+  static int IsEventInThisRaDecBin(Float_t Ra, Float_t Dec, int thisrabin, int thisdecbin);
+  
+
+  // Get Angular separation between two points defined by Ra and Dec
+  static Float_t getSeparation(Float_t RefRA,Float_t RefDec,Float_t RA,Float_t Dec);
 
 
   // This works !!
