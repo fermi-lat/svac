@@ -4,7 +4,31 @@
  *
  *                  EOH
 
- Monitor-01-09-00 14-Jun-2011 dpaneque Updates to monitor LLE vs RA and DEC, as requested in GDQMQ-352 
+Monitor-01-09-01  (05-July-2011; D. Paneque)  
+-------------------------------------------- 
+Modifications in the code in order to properly 
+retrieve and compute some of the Pass7 monitoring variables.
+
+Removed classes:
+merit/
+MonInput_EvtCREventClass.h, MonInput_EvtCREventClass.cxx, MonInput_FT1EventClass.h, 
+MonInput_FT1EventClass.cxx, MonInput_LLE_Vector_RA_Dec.h, MonInput_LLE_Vector_RA_Dec.cxx
+
+
+Added classes:
+merit/
+MonInput_FT1Ra.h MonInput_FT1Ra.cxx MonInput_FT1Dec.h MonInput_FT1Dec.cxx
+
+
+
+Modified Classes
+
+RFun.[h,cxx]
+MonObjFactory.cxx
+MonValue_t.cxx
+
+
+
 Monitor-01-09-00  (14-June-2011; D. Paneque)
 --------------------------------------------
 Changes in code to monitor the LLE events vs RA nd DEC. 
