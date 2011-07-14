@@ -26,6 +26,7 @@ import runner
 
 def slowFilesAlert(inFiles):
     """Notify log watcher or L1 mailing list or something"""
+    lines = ''.join('%s %d\n' % items for items in inFiles)
     return
 
 
@@ -71,7 +72,7 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
         if fileStatus:
             realInFiles.append(inFile)
             if fileStatus > 1:
-                slowFiles.append(inFile)
+                slowFiles.append((inFile, fileStatus))
         else:
             print >> sys.stderr, "Couldn't find input file %s" % inFile
             missingInFiles.append(inFile)
