@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-01-09-02 05-Aug-2011 bregeon Take the abs of the ZenithAngle--Pass7
  Monitor-01-09-01 05-Jul-2011 dpaneque Modifications in the code to properly retrieve and compute monitoring quantities with Pass7 variables
 Monitor-01-09-01  (05-July-2011; D. Paneque)  
 -------------------------------------------- 
