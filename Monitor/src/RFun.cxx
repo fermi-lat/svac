@@ -1334,6 +1334,9 @@ Float_t RFun::NormalizeRate(char* RateType, Float_t MagneticInfo,
         Float_t ZenithAngle, Float_t Longitude,
         Float_t Rate,  Float_t RateErr, char* RetType)
 {
+  // With Pass7 ZenithAngle became signed
+  // get the absolute value for now, will fix with Pass8...
+  ZenithAngle=fabs(ZenithAngle);
   
   Float_t retValue = NormalizeRate(RateType,MagneticInfo,Rate,RateErr,RetType);
   Float_t corrFact = 1.;
