@@ -1601,7 +1601,8 @@
 
     <process name="flagFT2" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="badRanges">${pipeline.processInstance("setupQuality").getVariable("badRanges")}</var>
+        <var name="btiProcess">setupQuality</var>
+        <var name="badRanges">${pipeline.processInstance(btiProcess).getVariable("badRanges")}</var>
         <var name="%(ft2_versionName)s">%(ft2_version)s</var>
         <var name="%(ft2NoQual_versionName)s">%(ft2NoQual_version)s</var>
         <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
@@ -1609,7 +1610,7 @@
         <var name="inFileTypes">ft2NoQual/ft2SecondsNoQual</var>
         <var name="outFileTypes">ft2/ft2Seconds</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
       <depends>
         <after process="registerFT2NoQual" status="SUCCESS"/>
         <after process="setupQuality" status="SUCCESS"/>
@@ -1658,6 +1659,9 @@
     </process>
 
     <process name="wrapupQuality">
+      <variables>
+        <var name="btiProcess">flagFT2</var>
+      </variables>
       <script><![CDATA[
 %(wrapupQScriptBody)s
 ]]>
@@ -2377,6 +2381,19 @@
       </depends>
     </process>
  
+    <process name="suggestQuality" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="btiProcess">findSolarFlares</var>
+      </variables>
+      <script><![CDATA[
+%(suggestBody)s
+]]>
+      </script>
+      <depends>
+        <after process="findSolarFlares" status="SUCCESS"/>
+      </depends>
+    </process>
+ 
     <process name="scanReconTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="subTask">doChunk</var>
@@ -2925,6 +2942,7 @@
         <after process="registerTkrReport" status="SUCCESS"/>
         <after process="registerVerifyHisto" status="SUCCESS"/>
         <after process="scanReconChunks" status="SUCCESS"/>
+        <after process="suggestQuality" status="SUCCESS"/>
         <after process="tkrTrendLogger" status="SUCCESS"/>
         <after process="verifyErrorLogger" status="SUCCESS"/>
         <after process="verifyFt1ErrorLogger" status="SUCCESS"/>

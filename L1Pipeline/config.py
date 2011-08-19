@@ -708,6 +708,8 @@ waitingStatus = 'InProgress'
 
 solarFlareFlag = -1
 
+astroTools = "/afs/slac/g/glast/applications/astroTools/astrotools_setup.sh"
+
 os.environ['CMTCONFIG'] = cmtConfig
 os.environ['CMTPATH'] = cmtPath
 os.environ['GLAST_EXT'] = glastExt

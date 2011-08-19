@@ -24,6 +24,7 @@ scriptNames = {
     'setupQScriptBody': 'setupQuality.py',
     'statusScriptBody': 'setStatus.py',
     'successScriptBody': 'setSuccessful.py',
+    'suggestBody': 'suggestQuality.py',
     'wrapupQScriptBody': 'wrapupQuality.py',
     }
 
