@@ -9,48 +9,43 @@ if __name__ == "__main__":
 
 import config
 
+import fileNames
+import meritFiles
 import runner
 
-
-def diffRsp(files, inFileTypes, outFileTypes, workDir, **args):
+def gtSelect(files, inFileTypes, outFileTypes, workDir, **args):
     status = 0
 
     inFileType = inFileTypes[0]
     ft2FileType = inFileTypes[1]
-
     assert len(outFileTypes) == 1
     outFileType = outFileTypes[0]
-
-    stSetup = config.stSetup
-    app = os.path.join(config.stExeDir, 'gtdiffrsp')
 
     stagedInFile = files[inFileType]
     stagedFt2File = files[ft2FileType]
     stagedOutFile = files[outFileType]
 
+    stSetup = config.stSetup
+    selectapp = os.path.join(config.stExeDir, 'gtselect')
+    timeapp = os.path.join(config.stExeDir, 'gtmktime')
+
+    eventClass = config.gtSelectClass[outFileType]
+
+    timeFilter = 'LIVETIME>0'
+    evtFilter = 'evclass=%(eventClass)s' % locals() 
+
     instDir = config.ST
     glastExt = config.glastExtSCons
 
-    tmpFt1File = stagedInFile + '.tmp'
-    os.rename(stagedInFile, tmpFt1File)
-
-    cmdHead = '''
+    cmd = '''
     cd %(workDir)s
     export INST_DIR=%(instDir)s
     export GLAST_EXT=%(glastExt)s
     source %(stSetup)s
+    %(selectapp)s infile=%(stagedInFile)s %(evtFilter)s emin=0 emax=0 zmax=180 outfile=FT1_tmp.fit
+    echo gtselect done, now working on gtmktime
+    %(timeapp)s overwrite=yes roicut=no scfile=%(stagedFt2File)s filter="%(timeFilter)s" evfile=FT1_tmp.fit outFile=%(stagedOutFile)s
     ''' % locals()
 
-    for evcls in config.diffRspMap.keys():
-        irf = config.diffRspMap[evcls]['irf']
-        model = config.diffRspMap[evcls]['model']
-        cmdTail = '''%(app)s scfile=%(stagedFt2File)s evfile=%(tmpFt1File)s srcmdl=%(model)s irfs=%(irf)s evclass=%(evcls)s
-        ''' % locals()
-        cmd = cmdHead + cmdTail
-        status |= runner.run(cmd)
-        if status: return status
-        continue
-
-    os.rename(tmpFt1File, stagedOutFile)
-
+    status = runner.run(cmd)
     return status

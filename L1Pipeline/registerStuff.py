@@ -11,7 +11,9 @@ def getVar(fileType, name):
     value = parentPI.getVariable(mangledName)
     return value
 
-parentPI = pipeline.getProcessInstance(parentProcess)
+currentStream = pipeline.getCurrentStream()
+
+parentPI = currentStream.getProcessInstance(parentProcess)
 
 runNumber = int(RUNID[1:])
 
@@ -23,7 +25,7 @@ site = getVar(fileType, 'site')
 fileName = getVar(fileType, 'fileName')
 version = getVar(fileType, 'ver')
 
-fcPi = pipeline.getProcessInstance(timeProcess)
+fcPi = currentStream.getProcessInstance(timeProcess)
 lessBrokenTStart = fcPi.getVariable('tStart')
 lessBrokenTStop = fcPi.getVariable('tStop')
 mootAlias = fcPi.getVariable('mootAlias')

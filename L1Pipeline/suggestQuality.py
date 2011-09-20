@@ -1,5 +1,6 @@
 creator = pipeline.getTaskVersionPath()
-btiProcess = pipeline.getProcessInstance(btiProcess)
+currentStream = pipeline.getCurrentStream()
+btiProcess = currentStream.getProcessInstance(btiProcess)
 badRanges = btiProcess.getVariable("badRanges")
 ranges = []
 if badRanges == 'x':

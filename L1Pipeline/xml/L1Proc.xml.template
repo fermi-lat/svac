@@ -45,7 +45,7 @@
   <process name="kludgeAsp" autoRetryMaxAttempts="%(retries)s">
     <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/kludgeAsp.py" batchOptions=" -q %(expressQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
     <depends>
-      <after process="doRun.registerFT1" status="SUCCESS"/>
+      <after process="doRun.registerExtendedFT1" status="SUCCESS"/>
       <after process="doRun.registerFT2" status="SUCCESS"/>
     </depends>
   </process>
@@ -190,7 +190,7 @@
 
     <process name="mergeDigi" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanDigi").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanDigi").getVariable("goodPis")}</var>  
         <var name="outFileTypes">digi</var>
         <var name="%(digi_versionName)s">%(digi_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -232,7 +232,7 @@
 
     <process name="mergeDigiHist" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanDigiHist").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanDigiHist").getVariable("goodPis")}</var>  
         <var name="outFileTypes">digiHist</var>
         <var name="%(digiHist_versionName)s">%(digiHist_version)s</var>
       </variables>
@@ -455,7 +455,7 @@
 
     <process name="mergeDigiTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanDigiTrend").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanDigiTrend").getVariable("goodPis")}</var>  
         <var name="outFileTypes">digiTrend</var>
         <var name="%(digiTrend_versionName)s">%(digiTrend_version)s</var>
       </variables>
@@ -635,7 +635,7 @@
 
     <process name="mergeCalTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanCalTrend").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanCalTrend").getVariable("goodPis")}</var>  
         <var name="outFileTypes">calTrend</var>
         <var name="%(calTrend_versionName)s">%(calTrend_version)s</var>
       </variables>
@@ -921,7 +921,7 @@
 
     <process name="mergeFastMonTuple" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonTuple").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonTuple").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonTuple</var>
         <var name="%(fastMonTuple_versionName)s">%(fastMonTuple_version)s</var>
       </variables>
@@ -948,7 +948,7 @@
  
     <process name="mergeFastMonError" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonTuple").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonTuple").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonError</var>
         <var name="%(fastMonError_versionName)s">%(fastMonError_version)s</var>
       </variables>
@@ -1050,7 +1050,7 @@
 
     <process name="mergeFastMonHist" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonHist").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonHist").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonHist</var>
         <var name="%(fastMonHist_versionName)s">%(fastMonHist_version)s</var>
       </variables>
@@ -1074,36 +1074,7 @@
         <after process="mergeFastMonHist" status="SUCCESS"/>
       </depends>
     </process>
- 
-    <process name="compDigiFastMon" autoRetryMaxAttempts="%(retries)s">
-      <variables>
-        <var name="fileType">compareDFm</var>
-        <var name="%(digiHist_versionName)s">%(digiHist_version)s</var>
-        <var name="%(fastMonHist_versionName)s">%(fastMonHist_version)s</var>
-        <var name="%(compareDFm_versionName)s">%(compareDFm_version)s</var>
-      </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/compDigiFastMon.py" batchOptions=" -q %(mediumQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
-      <depends>
-        <after process="registerDigiHist" status="SUCCESS"/>
-        <after process="registerFastMonHist" status="SUCCESS"/>
-      </depends>
-    </process>
 
-    <process name="registerCmpDFm" autoRetryMaxAttempts="%(retries)s">
-      <variables>
-        <var name="parentProcess">compDigiFastMon</var>
-        <var name="fileType">compareDFm</var>
-        <var name="timeProcess">findChunks</var>
-      </variables>
-      <script><![CDATA[
-%(registerBody)s
-]]>
-      </script>
-      <depends>
-        <after process="compDigiFastMon" status="SUCCESS"/>
-      </depends>
-    </process>
- 
     <process name="fastMonHistAlarm" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="inFileTypes">fastMonHist</var>
@@ -1170,7 +1141,7 @@
 
     <process name="mergeFastMonTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonTrend").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonTrend").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonTrend</var>
         <var name="%(fastMonTrend_versionName)s">%(fastMonTrend_version)s</var>
       </variables>
@@ -1272,7 +1243,7 @@
 
     <process name="mergeGcrChunks" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanGcrChunks").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanGcrChunks").getVariable("goodPis")}</var>  
         <var name="outFileTypes">gcr</var>
         <var name="%(gcr_versionName)s">%(gcr_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -1314,7 +1285,7 @@
 
     <process name="mergeMeritChunks" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanMeritChunks").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanMeritChunks").getVariable("goodPis")}</var>  
         <var name="outFileTypes">merit</var>
         <var name="%(merit_versionName)s">%(merit_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -1369,7 +1340,7 @@
       </depends>
     </process>
 
- <!-- no electrons in pass 6
+ 
     <process name="electronMerit" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="inFileTypes">merit</var>
@@ -1398,7 +1369,7 @@
         <after process="electronMerit" status="SUCCESS"/>
       </depends>
     </process>
- -->
+
 
     <process name="verifyMerit" autoRetryMaxAttempts="%(retries)s">
       <variables>
@@ -1521,7 +1492,7 @@
         <var name="%(digiGap_versionName)s">%(digiGap_version)s</var>
         <var name="%(magic7L1_versionName)s">%(magic7L1_version)s</var>
         <var name="%(merit_versionName)s">%(merit_version)s</var>
-        <var name="runQuality">${pipeline.processInstance("setRunning").getVariable("runQuality")}</var>
+        <var name="runQuality">${pipeline.getCurrentStream.getProcessInstance("setRunning").getVariable("runQuality")}</var>
         <var name="mootAlias">${pipeline.getCurrentStream().getProcessInstance("findChunks").getVariable("mootAlias")}</var>
 
 <!--        <var name="L1_magic7L1_filename">${datacatalog.getDataset(RUNID, "/Data/Flight/Level1/"+DATASOURCE, "MAGIC7L1").getLocation("SLAC_XROOT").getPath()}</var>   -->
@@ -1602,7 +1573,7 @@
     <process name="flagFT2" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="btiProcess">setupQuality</var>
-        <var name="badRanges">${pipeline.processInstance(btiProcess).getVariable("badRanges")}</var>
+        <var name="badRanges">${pipeline.getCurrentStream.getProcessInstance(btiProcess).getVariable("badRanges")}</var>
         <var name="%(ft2_versionName)s">%(ft2_version)s</var>
         <var name="%(ft2NoQual_versionName)s">%(ft2NoQual_version)s</var>
         <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
@@ -1776,7 +1747,7 @@
 
     <process name="mergeFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFT1").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFT1").getVariable("goodPis")}</var>  
         <var name="outFileTypes">ft1BadGti</var>
         <var name="%(ft1BadGti_versionName)s">%(ft1BadGti_version)s</var>
       </variables>
@@ -1803,22 +1774,23 @@
 
     <process name="gtiFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="fileType">ft1</var>
-        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="inFileTypes">ft1BadGti/ft2Seconds</var>
+        <var name="outFileTypes">extendedFT1</var>
         <var name="%(ft1BadGti_versionName)s">%(ft1BadGti_version)s</var>
-        <var name="%(ft1_versionName)s">%(ft1_version)s</var>
+        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(extendedFT1_versionName)s">%(extendedFT1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
         <after process="registerFT1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="registerFT1" autoRetryMaxAttempts="%(retries)s">
+    <process name="registerExtendedFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="parentProcess">gtiFT1</var>
-        <var name="fileType">ft1</var>
+        <var name="fileType">extendedFT1</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -1827,6 +1799,35 @@
       </script>
       <depends>
         <after process="gtiFT1" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="filterFT1" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="inFileTypes">extendedFT1/ft2Seconds</var>        
+        <var name="outFileTypes">ft1</var>
+        <var name="%(extendedFT1_versionName)s">%(extendedFT1_version)s</var>
+        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(ft1_versionName)s">%(ft1_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <depends>
+        <after process="registerExtendedFT1" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerFT1" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">filterFT1</var>
+        <var name="fileType">ft1</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="filterFT1" status="SUCCESS"/>
       </depends>
     </process>
 
@@ -1843,12 +1844,12 @@
 
     <process name="verifyFt1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="%(ft1_versionName)s">%(ft1_version)s</var>
+        <var name="%(extendedFT1_versionName)s">%(extendedFT1_version)s</var>
         <var name="%(verifyFt1Error_versionName)s">%(verifyFt1Error_version)s</var>
       </variables>
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/verifyFt1.py" batchOptions=" -q %(mediumQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
       <depends>
-        <after process="registerFT1" status="SUCCESS"/>
+        <after process="registerExtendedFT1" status="SUCCESS"/>
       </depends>
     </process>
 
@@ -1929,23 +1930,23 @@
       </depends>
     </process>
 
-<!-- No electrons in pass 6 --> <!--
-    <process name="electronFt1BadGti" autoRetryMaxAttempts="%(retries)s">
+    <process name="electronFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="fileType">electronFt1BadGti</var>
+        <var name="inFileTypes">merit</var>
+        <var name="outFileTypes">electronFT1BadGti</var>
         <var name="%(merit_versionName)s">%(merit_version)s</var>
-        <var name="%(electronFt1BadGti_versionName)s">%(electronFt1BadGti_version)s</var>
+        <var name="%(electronFT1BadGti_versionName)s">%(electronFT1BadGti_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeFT1.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
-        <after process="registerMerit" status="SUCCESS"/>
+        <after process="registerElectronMerit" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="registerElectronFt1BadGti" autoRetryMaxAttempts="1">
+    <process name="registerElectronFT1BadGti" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="parentProcess">electronFt1BadGti</var>
-        <var name="fileType">electronFt1BadGti</var>
+        <var name="parentProcess">electronFT1</var>
+        <var name="fileType">electronFT1BadGti</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -1953,28 +1954,29 @@
 ]]>
       </script>
       <depends>
-        <after process="electronFt1BadGti" status="SUCCESS"/>
+        <after process="electronFT1" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="gtiElectronFt1" autoRetryMaxAttempts="1">
+    <process name="gtiElectronFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="fileType">electronFt1</var>
+        <var name="inFileTypes">electronFT1BadGti/ft2Seconds</var>
+        <var name="outFileTypes">electronFT1</var>
         <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
-        <var name="%(electronFt1BadGti_versionName)s">%(electronFt1BadGti_version)s</var>
-        <var name="%(electronFt1_versionName)s">%(electronFt1_version)s</var>
+        <var name="%(electronFT1BadGti_versionName)s">%(electronFT1BadGti_version)s</var>
+        <var name="%(electronFT1_versionName)s">%(electronFT1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
-        <after process="registerElectronFt1BadGti" status="SUCCESS"/>
+        <after process="registerElectronFT1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="registerElectronFt1" autoRetryMaxAttempts="%(retries)s">
+    <process name="registerElectronFT1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="parentProcess">gtiElectronFt1</var>
-        <var name="fileType">electronFt1</var>
+        <var name="parentProcess">gtiElectronFT1</var>
+        <var name="fileType">electronFT1</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -1982,10 +1984,10 @@
 ]]>
       </script>
       <depends>
-        <after process="gtiElectronFt1" status="SUCCESS"/>
+        <after process="gtiElectronFT1" status="SUCCESS"/>
       </depends>
     </process>
---> <!-- No electrons in pass 6 -->
+
 
     <process name="makeLS1" autoRetryMaxAttempts="%(retries)s">
       <variables>
@@ -2000,7 +2002,7 @@
       </depends>
     </process>
 
-    <process name="registerLS1BadGti" autoRetryMaxAttempts="1">
+    <process name="registerLS1BadGti" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="parentProcess">makeLS1</var>
         <var name="fileType">ls1BadGti</var>
@@ -2015,24 +2017,25 @@
       </depends>
     </process>
 
-    <process name="gtiLS1" autoRetryMaxAttempts="1">
+    <process name="gtiLS1" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="fileType">ls1</var>
+        <var name="inFileTypes">ls1BadGti/ft2Seconds</var>        
+        <var name="outFileTypes">extendedLS1</var>
         <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
         <var name="%(ls1BadGti_versionName)s">%(ls1BadGti_version)s</var>
-        <var name="%(ls1_versionName)s">%(ls1_version)s</var>
+        <var name="%(extendedLS1_versionName)s">%(extendedLS1_version)s</var>
       </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/fixGTI.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
         <after process="registerLS1BadGti" status="SUCCESS"/>
         <after process="registerFt2Seconds" status="SUCCESS"/>
       </depends>
     </process>
 
-    <process name="registerLS1" autoRetryMaxAttempts="%(retries)s">
+    <process name="registerExtendedLS1" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="parentProcess">gtiLS1</var>
-        <var name="fileType">ls1</var>
+        <var name="fileType">extendedLS1</var>
         <var name="timeProcess">findChunks</var>
       </variables>
       <script><![CDATA[
@@ -2044,6 +2047,35 @@
       </depends>
     </process>
 
+    <process name="filterLS1" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="inFileTypes">extendedLS1/ft2Seconds</var>        
+        <var name="outFileTypes">ls1</var>
+        <var name="%(extendedLS1_versionName)s">%(extendedLS1_version)s</var>
+        <var name="%(ft2Seconds_versionName)s">%(ft2Seconds_version)s</var>
+        <var name="%(ls1_versionName)s">%(ls1_version)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
+      <depends>
+        <after process="registerExtendedLS1" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerLS1" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">filterLS1</var>
+        <var name="fileType">ls1</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="filterLS1" status="SUCCESS"/>
+      </depends>
+    </process>
+
     <process name="exportLS1" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="fileType">ls1</var>
@@ -2052,45 +2084,6 @@
       <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/exportStuff.py" batchOptions=" -q %(expressQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
       <depends>
         <after process="registerLS1" status="SUCCESS"/>
-      </depends>
-    </process>
-
-    <process name="makeLS3" autoRetryMaxAttempts="%(retries)s">
-      <variables>
-        <var name="%(ft1_versionName)s">%(ft1_version)s</var>
-        <var name="%(ft2_versionName)s">%(ft2_version)s</var>
-        <var name="%(ls3_versionName)s">%(ls3_version)s</var>
-      </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/makeLS3.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
-      <depends>
-        <after process="registerFT1" status="SUCCESS"/>
-        <after process="registerFT2" status="SUCCESS"/>
-      </depends>
-    </process>
-
-    <process name="registerLS3" autoRetryMaxAttempts="%(retries)s">
-      <variables>
-        <var name="parentProcess">makeLS3</var>
-        <var name="fileType">ls3</var>
-        <var name="timeProcess">findChunks</var>
-      </variables>
-      <script><![CDATA[
-%(registerBody)s
-]]>
-      </script>
-      <depends>
-        <after process="makeLS3" status="SUCCESS"/>
-      </depends>
-    </process>
-
-    <process name="exportLS3" autoRetryMaxAttempts="%(retries)s">
-      <variables>
-        <var name="fileType">ls3</var>
-        <var name="%(ls3_versionName)s">%(ls3_version)s</var>
-      </variables>
-      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/exportStuff.py" batchOptions=" -q %(expressQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
-      <depends>
-        <after process="registerLS3" status="SUCCESS"/>
       </depends>
     </process>
 
@@ -2110,7 +2103,7 @@
 
     <process name="mergeCalChunks" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanCalChunks").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanCalChunks").getVariable("goodPis")}</var>  
         <var name="outFileTypes">cal</var>
         <var name="%(cal_versionName)s">%(cal_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -2152,7 +2145,7 @@
 
     <process name="mergeMeritTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanMeritTrend").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanMeritTrend").getVariable("goodPis")}</var>  
         <var name="outFileTypes">meritTrend</var>
         <var name="%(meritTrend_versionName)s">%(meritTrend_version)s</var>
       </variables>
@@ -2410,7 +2403,7 @@
 
     <process name="mergeReconTrend" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanReconTrend").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconTrend").getVariable("goodPis")}</var>  
         <var name="outFileTypes">reconTrend</var>
         <var name="%(reconTrend_versionName)s">%(reconTrend_version)s</var>
       </variables>
@@ -2514,7 +2507,7 @@
 
     <process name="mergeReconHist" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanReconHist").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconHist").getVariable("goodPis")}</var>  
         <var name="outFileTypes">reconHist</var>
         <var name="%(reconHist_versionName)s">%(reconHist_version)s</var>
       </variables>
@@ -2634,7 +2627,7 @@
 
     <process name="mergeTkrAnalysis" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanTkrAnalysis").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanTkrAnalysis").getVariable("goodPis")}</var>  
         <var name="outFileTypes">tkrAnalysis</var>
         <var name="%(tkrAnalysis_versionName)s">%(tkrAnalysis_version)s</var>
       </variables>
@@ -2829,7 +2822,7 @@
 
     <process name="mergeSvacChunks" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanSvacChunks").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanSvacChunks").getVariable("goodPis")}</var>  
         <var name="outFileTypes">svac</var>
         <var name="%(svac_versionName)s">%(svac_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -2881,7 +2874,6 @@
         <after process="digiTrendLogger" status="SUCCESS"/>
         <after process="exportFT1" status="SUCCESS"/>
         <after process="exportLS1" status="SUCCESS"/>
-        <after process="exportLS3" status="SUCCESS"/>
         <after process="fastMonErrorLogger" status="SUCCESS"/>
         <after process="fastMonHistLogger" status="SUCCESS"/>
         <after process="fastMonTrendLogger" status="SUCCESS"/>
@@ -2920,11 +2912,7 @@
         <after process="reconTrendLogger" status="SUCCESS"/>
         <after process="registerAcdPlots" status="SUCCESS"/>
         <after process="registerCal" status="SUCCESS"/>
-        <after process="registerCmpDFm" status="SUCCESS"/>
-<!-- No electrons in pass 6
-        <after process="registerElectronFt1" status="SUCCESS"/>
-        <after process="registerElectronMerit" status="SUCCESS"/>
--->
+        <after process="registerElectronFT1" status="SUCCESS"/>
         <after process="registerFastMonTuple" status="SUCCESS"/>
         <after process="registerFilteredMerit" status="SUCCESS"/>
         <after process="registerGcr" status="SUCCESS"/>
@@ -3180,7 +3168,7 @@
           <var name="reportType">fastMonHist</var>
           <var name="inFileTypes">fastMonTuple</var>
           <var name="outFileTypes">fastMonHist</var>
-          <var name="%(fastMonTuple_versionName)s">${pipeline.processInstance("fastMonTuple").getVariable("L1_PI_version")}</var>
+          <var name="%(fastMonTuple_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fastMonTuple").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3192,7 +3180,7 @@
         <variables>
           <var name="inFileTypes">fastMonTuple</var>
           <var name="outFileTypes">fastMonTrend</var>
-          <var name="%(fastMonTuple_versionName)s">${pipeline.processInstance("fastMonTuple").getVariable("L1_PI_version")}</var>
+          <var name="%(fastMonTuple_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fastMonTuple").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3204,7 +3192,7 @@
         <variables>
           <var name="inFileTypes">digi</var>
           <var name="outFileTypes">digiHist</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3216,7 +3204,7 @@
         <variables>
           <var name="inFileTypes">digi</var>
           <var name="outFileTypes">digiTrend</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3228,7 +3216,7 @@
         <variables>
           <var name="inFileTypes">digi</var>
           <var name="outFileTypes">calTrend</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3240,8 +3228,8 @@
         <variables>
           <var name="inFileTypes">digi</var>
           <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(ft2Fake_versionName)s">${pipeline.processInstance("fakeFT2").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(ft2Fake_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fakeFT2").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
         <depends>
@@ -3280,7 +3268,7 @@
       <process name="mergeMeritCrumbs" autoRetryMaxAttempts="%(retries)s">
         <variables>
           <var name="outFileTypes">merit</var>
-          <var name="goodPis">${pipeline.processInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
+          <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
           <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
@@ -3293,7 +3281,7 @@
         <variables>
           <var name="outFileTypes">recon</var>
           <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
-          <var name="goodPis">${pipeline.processInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
+          <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3306,7 +3294,7 @@
         <variables>
           <var name="outFileTypes">cal</var>
           <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
-          <var name="goodPis">${pipeline.processInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
+          <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3319,7 +3307,7 @@
         <variables>
           <var name="outFileTypes">gcr</var>
           <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
-          <var name="goodPis">${pipeline.processInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
+          <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3332,7 +3320,7 @@
         <variables>
           <var name="inFileTypes">merit</var>
           <var name="outFileTypes">ft1NoDiffRsp</var>
-          <var name="%(merit_versionName)s">${pipeline.processInstance("mergeMeritCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(merit_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeMeritCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
         <depends>
@@ -3344,8 +3332,8 @@
         <variables>
           <var name="inFileTypes">ft1NoDiffRsp/ft2Fake</var>
           <var name="outFileTypes">ft1BadGti</var>
-          <var name="%(ft1NoDiffRsp_versionName)s">${pipeline.processInstance("makeFT1").getVariable("L1_PI_version")}</var>
-          <var name="%(ft2Fake_versionName)s">${pipeline.processInstance("fakeFT2").getVariable("L1_PI_version")}</var>
+          <var name="%(ft1NoDiffRsp_versionName)s">${pipeline.getCurrentStream.getProcessInstance("makeFT1").getVariable("L1_PI_version")}</var>
+          <var name="%(ft2Fake_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fakeFT2").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(mediumQ)s -sp ${highPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; " />
         <depends>
@@ -3357,8 +3345,8 @@
         <variables>
           <var name="inFileTypes">digi/merit</var>
           <var name="outFileTypes">meritTrend</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(merit_versionName)s">${pipeline.processInstance("mergeMeritCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(merit_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeMeritCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3371,9 +3359,9 @@
         <variables>
           <var name="inFileTypes">cal/digi/recon</var>
           <var name="outFileTypes">reconHist</var>
-          <var name="%(cal_versionName)s">${pipeline.processInstance("mergeCalCrumbs").getVariable("L1_PI_version")}</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(recon_versionName)s">${pipeline.processInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(cal_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeCalCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(recon_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3387,9 +3375,9 @@
         <variables>
           <var name="inFileTypes">cal/digi/recon</var>
           <var name="outFileTypes">reconTrend</var>
-          <var name="%(cal_versionName)s">${pipeline.processInstance("mergeCalCrumbs").getVariable("L1_PI_version")}</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(recon_versionName)s">${pipeline.processInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(cal_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeCalCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(recon_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3403,8 +3391,8 @@
         <variables>
           <var name="inFileTypes">digi/recon</var>
           <var name="outFileTypes">tkrAnalysis</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(recon_versionName)s">${pipeline.processInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(recon_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3417,8 +3405,8 @@
         <variables>
           <var name="inFileTypes">digi/recon</var>
           <var name="outFileTypes">svac</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitization").getVariable("L1_PI_version")}</var>
-          <var name="%(recon_versionName)s">${pipeline.processInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitization").getVariable("L1_PI_version")}</var>
+          <var name="%(recon_versionName)s">${pipeline.getCurrentStream.getProcessInstance("mergeReconCrumbs").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3539,7 +3527,7 @@
 
     <process name="mergeDigiLci" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanDigiLci").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanDigiLci").getVariable("goodPis")}</var>  
         <var name="outFileTypes">digi</var>
         <var name="%(digi_versionName)s">%(digi_version)s</var>
         <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
@@ -3581,7 +3569,7 @@
 
      <process name="mergeDigiHistLci" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanDigiHistLci").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanDigiHistLci").getVariable("goodPis")}</var>  
         <var name="outFileTypes">digiHist</var>
         <var name="%(digiHist_versionName)s">%(digiHist_version)s</var>
       </variables>
@@ -3622,7 +3610,7 @@
 
     <process name="mergeFastMonErrorLci" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonTupleLci").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonTupleLci").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonError</var>
         <var name="%(fastMonError_versionName)s">%(fastMonError_version)s</var>
       </variables>
@@ -3649,7 +3637,7 @@
 
     <process name="mergeFastMonTupleLci" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonTupleLci").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonTupleLci").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonTuple</var>
         <var name="%(fastMonTuple_versionName)s">%(fastMonTuple_version)s</var>
       </variables>
@@ -3690,7 +3678,7 @@
 
     <process name="mergeFastMonHistLci" autoRetryMaxAttempts="%(retries)s">
       <variables>
-        <var name="goodPis">${pipeline.processInstance("scanFastMonHistLci").getVariable("goodPis")}</var>  
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanFastMonHistLci").getVariable("goodPis")}</var>  
         <var name="outFileTypes">fastMonHist</var>
         <var name="%(fastMonHist_versionName)s">%(fastMonHist_version)s</var>
       </variables>
@@ -3787,7 +3775,7 @@
           <var name="reportType">fastMonHist</var>
           <var name="inFileTypes">fastMonTuple</var>
           <var name="outFileTypes">fastMonHist</var>
-          <var name="%(fastMonTuple_versionName)s">${pipeline.processInstance("fastMonTupleLci").getVariable("L1_PI_version")}</var>
+          <var name="%(fastMonTuple_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fastMonTupleLci").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
@@ -3799,7 +3787,7 @@
         <variables>
           <var name="inFileTypes">digi</var>
           <var name="outFileTypes">digiHist</var>
-          <var name="%(digi_versionName)s">${pipeline.processInstance("digitizationLci").getVariable("L1_PI_version")}</var>
+          <var name="%(digi_versionName)s">${pipeline.getCurrentStream.getProcessInstance("digitizationLci").getVariable("L1_PI_version")}</var>
         </variables>
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
