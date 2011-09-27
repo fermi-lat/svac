@@ -3,7 +3,11 @@
 import os
 import re
 import sys
+import time
 
+import config
+
+import fileOps
 import runner
 
 termRe = re.compile('\d{3}$') # how we recognize a terminal directory
@@ -20,8 +24,11 @@ allTags = [delivTag, runTag]
 
 preWash = """find * \( -name '*.gz' -exec gunzip '{}' \; -print \) -o \( \( -name 'core.*' -o -name '*.root' \) -exec rm '{}' \; -print \)"""
 
+lockFile = 'haltZip'
 
-def shuffleDirs(topDir):
+zipBin = os.path.join(config.L1Bin, 'zip')
+
+def shuffleDirs(topDir, options):
     head, tail = os.path.split(topDir)
     if head:
         origDir = os.getcwd()
@@ -64,13 +71,27 @@ def moveDirs(can, head, prefChars=None):
     return zippables
 
 
-def doZip(topDir):
+def doZip(topDir, options):
     status = 0
+
+    delay = int(options.delay)
+    
     origDir = os.getcwd()
     os.chdir(topDir)
     zippables = findZippables(topDir)
     for tag, subDirs in zippables.items():
         for subDir in subDirs:
+
+            while fileOps.exists(lockFile, maxTry=1, minWait=0, maxWait=0):
+                if delay < 0:
+                    print >> sys.stdout, 'Exiting due to lock file.'
+                    sys.exit(0)
+                else:
+                    print >> sys.stdout, 'Sleeping %d seconds' % delay
+                    time.sleep(delay)
+                    pass
+                continue
+            
             status |= zipOne(subDir, tag)
             if status: return status
             continue
@@ -95,7 +116,7 @@ def zipOne(source, tag, unGz=True):
     print >> sys.stderr, 'Zipping %s' % source
     
     status = 0
-    
+
     origDir = os.getcwd()
     os.chdir(source)
 
@@ -115,13 +136,13 @@ def zipOne(source, tag, unGz=True):
     if unGz: status |= runner.run(preWash)
     if status: return status
 
-    cmd = "zip -9 -T -r -m %s * -x '*.root' 'core.*'" % zipPath
+    cmd = "%s -9 -T -r -m %s * -x '*.root' 'core.*'" % (zipBin, zipPath)
     status |= runner.run(cmd)
     if status: return status
 
     os.chdir(origDir)
     os.removedirs(source)
-    return
+    return status
 
 
 def getDelivsAndRuns(topDir):    
@@ -199,14 +220,23 @@ def parseArgs():
     funks = funkTable.keys()
     funks.sort()
 
-    parser.add_option('-m', '--mode', dest='mode', metavar='MODE',
+    parser.add_option('-a', '--action', dest='action', metavar='ACTION',
                       default=None,
-                      help='mode (required): one of %s' % funks)
+                      help='action (required): one of %s' % funks)
+    parser.add_option('-d', '--destination', dest='dest', metavar='DESTINATION',
+                      default=zipDest,
+                      help='NOT IMPLEMENTED! destination: where do you want the zip files to go?')
+    parser.add_option('-m', '--mode', dest='mode', metavar='MODE',
+                      default='PROD',
+                      help='pipeline mode: one of [DEV, PROD, TEST]')
+    parser.add_option('-w', '--wait', dest='delay', metavar='DELAY',
+                      default=-1,
+                      help='sleep this many seconds when locked out of zipping. Exit immediately if negative.')
+    
     (options, args) = parser.parse_args()
 
-
-    if options.mode not in funks:
-        print >> sys.stderr, "You have to supply a mode, and it must be one of %s" % funks
+    if options.action not in funks:
+        print >> sys.stderr, "You have to supply an action (-a), and it must be one of %s" % funks
         sys.exit(1)
         pass
     
@@ -215,9 +245,9 @@ def parseArgs():
 
 def main():
     options, args = parseArgs()
-    funk = funkTable[options.mode]
+    funk = funkTable[options.action]
     for topDir in args:
-        funk(topDir)
+        funk(topDir, options)
     return
 
 if __name__ == "__main__":

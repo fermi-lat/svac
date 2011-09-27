@@ -19,6 +19,7 @@ creator = '-'.join([L1Name, L1Version])
 L1Volume = '/afs/slac/g/glast/ground/releases/volume13'
 L1CmtBase = os.environ.get('L1_BUILD_DIR') or os.path.join(L1Volume, 'L1Proc')
 L1Cmt = os.path.join(L1CmtBase, L1Version)
+L1Bin = os.path.join(L1Cmt, 'bin')
 
 doCleanup = True
 
