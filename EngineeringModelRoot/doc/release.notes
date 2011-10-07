@@ -1,3 +1,12 @@
+** @file release.notes
+* Package EngineeringModelRoot
+* Authors: awb, mem
+*
+*                  EOH
+
+
+-       Added SConscript, compiling with scons, first stag
+
 v4r4	March 23, 2009
 awb	Added a new variable: EventTemBug. Needs the new LDF.
 
