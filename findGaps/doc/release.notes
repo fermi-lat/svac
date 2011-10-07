@@ -1,0 +1,16 @@
+Oct 07, 2011: mem
+findGaps-02-00-00 - adding SConscript
+
+Apr 22, 2009: mem
+v1r2    - More verbosity in std output
+
+Apr 22, 2009: mem
+v1r1    - Better handling of end of the gap
+
+Apr 21, 2009: mem
+v1r0    - Working prototype
+
+Apr 21, 2009: mem
+v1r0    - Initial revision
+
+ findGaps-02-00-00 07-Oct-2011 monzani adding SConscript, first tag with stag

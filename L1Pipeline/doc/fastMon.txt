@@ -1,0 +1,41 @@
+Date: Mon, 16 Apr 2007 16:10:06 +0200
+From: "[ISO-8859-15] Carmelo Sgrò" <carmelo.sgro@pi.infn.it>
+To: Anders Borgland <borgland@slac.stanford.edu>, focke@slac.stanford.edu
+Cc: Luca Baldini <luca.baldini@pi.infn.it>,
+    Johan Bregeon <johan.bregeon@pi.infn.it>
+Subject: FastMon on the pipeline
+
+Hi,
+we made some modifications on the Fast Mon code to make it run from a shell script.
+Now you can run from any directory you want, provided that you set two environmental variables:
+FAST_MON_DIR : points to the directory that contains the code and it's used to write the iterators classes
+XML_CONFIG_DIR : points to the directory of the default xml configuration files
+
+It works on lat-hobbit3, with the right environment (i.e. sourcing /afs/slac/u/gl/carmelo/FastMonTest/isoc.cshrc).
+An example of shell script is in /afs/slac/u/gl/carmelo/FastMonTest/runFastMon.sh
+
+I have no idea about what is needed to run it on the pipeline, can you try and tell us if it works (I don't think so) or
+where it crashes?
+
+Ciao
+Carmelo
+
+
+
+we are implementing the agreed modifications the the FastMon. The first important one is how to run it: as required by
+Warren, you MUST now explicitly write the output ntuple file path (using the -o option) and the histograms file path (using
+the -p option). The -d option no longer exists.
+Here is an example, if you run the command:
+
+./pDataProcessor.py -c ../xml/config.xml -o /data/outfiles/test.root -p /data/outfiles/histograms.root
+/data/evtfiles/test.evt
+
+you will run it on the input file: "/data/evtfiles/test.evt"
+and you will create the ntuple output file: "/data/outfiles/test.root"
+and the histograms output file: "/data/outfiles/histograms.root"
+the error file will be: "/data/outfiles/test.error.pickle" (this will change, do you want to explicitly set the name?)
+
+Important notices:
+- the two root files must be different! (pDataProcessor will exit otherwise)
+- the last version includes the correct absolute timestamp calculation.
+
