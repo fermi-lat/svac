@@ -4,6 +4,8 @@
 *
 *                  EOH
 
+- actually, this is c++, not python
+
  findGaps-02-01-00 07-Oct-2011 monzani modified SConscript
 - no need to produce an include file
 

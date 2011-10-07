@@ -1,4 +1,4 @@
-# -*- python -*-
+# -*- C++ -*-
 # $Header$
 # Authors: M.E. Monzani <monzani@slac.stanford.edu>
 # Version: findGaps-02-01-00
