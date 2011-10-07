@@ -16,7 +16,7 @@ progEnv.Tool('digiRootDataLib')
 findGaps = progEnv.Program('findGaps', listFiles(['src/*.cxx']))
 
 progEnv.Tool('registerTargets', package = 'findGaps',
-             includes = ['src/findGaps.h'], binaryCxts = [[findGaps, progEnv]])
+             binaryCxts = [[findGaps, progEnv]])
 
 
 
