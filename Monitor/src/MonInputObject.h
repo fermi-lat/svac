@@ -8,7 +8,7 @@
 #define MonInputObject_h
 
 #include <string>
-#include <time.h>
+#include <ctime>
 
 class TTree;
 class TObject;

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <iomanip>
-#include <time.h>
+#include <ctime>
 //
 // ROOT-io
 #include "TROOT.h"

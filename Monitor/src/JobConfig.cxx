@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string>
 #include <fstream>
-#include <time.h>
+#include <ctime>
 
 // ROOT io
 #include "TSystem.h"

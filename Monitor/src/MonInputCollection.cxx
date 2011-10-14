@@ -5,7 +5,7 @@
 #include "MonInputCollection.h"
 #include <iostream>
 #include <iomanip>
-#include <time.h>
+#include <ctime>
 
 
 MonInputCollection::MonInputCollection(TTree* tree, std::string type):m_intree(tree),m_type(type),m_timeprof(0){

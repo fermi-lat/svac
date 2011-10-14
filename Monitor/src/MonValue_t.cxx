@@ -12,7 +12,7 @@
 #include <fstream>
 #include <unistd.h>
 #include "compareFiles.h"
-#include <time.h>
+#include <ctime>
 #include <map>
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
@@ -471,7 +471,7 @@ void MonValue::increment(TTree* tree){
 	  singleincrement(&val[i]);
       }
     }
-  }    
+  }   
   clock_gettime(CLOCK_REALTIME, &ts2);
   // std::cout<<"Moninputcollection "<<ts1.tv_nsec<<" "<<ts2.tv_nsec<<std::endl;
   unsigned long starttime=ts1.tv_sec*1000000+ts1.tv_nsec/1000;

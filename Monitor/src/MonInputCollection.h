@@ -9,7 +9,7 @@
 #include <string>
 #include "MonInputObject.h"
 #include "Rtypes.h"
-#include <time.h>
+#include <ctime>
 
 class TObject;
 
