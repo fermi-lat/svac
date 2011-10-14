@@ -8,9 +8,15 @@ Import('packages')
 progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
 
-locIncs = listFiles(['Monitor/*.h','src/*.h','src/recon/*.h'])
-libEnv.Tool('addLinkDeps', package='Monitor', toBuild='rootlib')
+progEnv.Tool('commonRootDataLib')
 progEnv.Tool('digiRootDataLib')
+progEnv.Tool('mcRootDataLib')
+progEnv.Tool('reconRootDataLib')
+progEnv.Tool('facilitiesLib')
+progEnv.Tool('xmlBaseLib')
+progEnv.Tool('configDataLib')
+progEnv.Tool('calibUtilLib')
+progEnv.Tool('identsLib')
 
 runStrip_t = progEnv.Program('runStrip_t', listFiles(['src/JobConfig.cxx', 'src/MonValue_t.cxx', 
 				'src/MonValueImpls_t.cxx', 'src/MonInputCollection.cxx', 'src/MonInputCollection_*.cxx', 
@@ -33,5 +39,4 @@ inputObjects = progEnv.Program('inputObjects', listFiles(['src/inputObjects.cxx'
 progEnv.Tool('registerTargets', package = 'Monitor',
              binaryCxts = [[runStrip_t,progEnv],[treemerge,progEnv],
 	     [MergeHistFiles,progEnv],[MakeACDNicePlots,progEnv],[inputObjects,progEnv]],
-	     includes = listFiles(['Monitor/*.h','src/*.h','src/recon/*.h']))
-
+	     includes = listFiles(['Monitor/*.h']))
