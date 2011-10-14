@@ -9,6 +9,7 @@ progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
 
 progEnv.Tool('addLibrary', library = baseEnv['rootLibs'])
+progEnv.Tool('addLibrary', library = baseEnv['rootGuiLibs'])
 progEnv.Tool('commonRootDataLib')
 progEnv.Tool('digiRootDataLib')
 progEnv.Tool('mcRootDataLib')
