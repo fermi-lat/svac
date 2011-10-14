@@ -8,7 +8,7 @@ Import('packages')
 progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
 
-locIncs = listFiles(['Monitor/*.h'])
+locIncs = listFiles(['Monitor/*.h','src/*.h','src/recon/*.h'])
 libEnv.Tool('addLinkDeps', package='Monitor', toBuild='rootlib')
 progEnv.Tool('digiRootDataLib')
 
@@ -33,5 +33,5 @@ inputObjects = progEnv.Program('inputObjects', listFiles(['src/inputObjects.cxx'
 progEnv.Tool('registerTargets', package = 'Monitor',
              binaryCxts = [[runStrip_t,progEnv],[treemerge,progEnv],
 	     [MergeHistFiles,progEnv],[MakeACDNicePlots,progEnv],[inputObjects,progEnv]],
-	     includes = listFiles(['Monitor/*.h']))
+	     includes = listFiles(['Monitor/*.h','src/*.h','src/recon/*.h']))
 
