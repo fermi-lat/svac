@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-02-00-00 14-Oct-2011 monzani now building with SCons
 - Upgrading Monitor to SCons build
 
  Monitor-01-09-02 05-Aug-2011 bregeon Take the abs of the ZenithAngle--Pass7
