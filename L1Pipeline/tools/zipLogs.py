@@ -22,7 +22,7 @@ delivTag = 'deliveries'
 runTag = 'runs'
 allTags = [delivTag, runTag]
 
-preWash = """find * \( -name '*.gz' -exec gunzip '{}' \; -print \) -o \( \( -name 'core.*' -o -name '*.root' \) -exec rm '{}' \; -print \)"""
+preWash = """find * \( -name '*.gz' -exec gunzip '{}' \; -print \) -o \( \( -name 'core.*' -o -name '*.root' \) -exec rm -f '{}' \; -print \)"""
 
 lockFile = 'haltZip'
 
