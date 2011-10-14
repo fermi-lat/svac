@@ -39,5 +39,4 @@ inputObjects = progEnv.Program('inputObjects', listFiles(['src/inputObjects.cxx'
 
 progEnv.Tool('registerTargets', package = 'Monitor',
              binaryCxts = [[runStrip_t,progEnv],[treemerge,progEnv],
-	     [MergeHistFiles,progEnv],[MakeACDNicePlots,progEnv],[inputObjects,progEnv]],
-	     includes = listFiles(['Monitor/*.h', 'src/*.h']))
+	     [MergeHistFiles,progEnv],[MakeACDNicePlots,progEnv],[inputObjects,progEnv]])
