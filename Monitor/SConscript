@@ -10,6 +10,7 @@ libEnv = baseEnv.Clone()
 
 progEnv.Tool('addLibrary', library = baseEnv['rootLibs'])
 progEnv.Tool('addLibrary', library = baseEnv['rootGuiLibs'])
+progEnv.Tool('addLibrary', library = baseEnv['xercesLibs'])
 progEnv.Tool('commonRootDataLib')
 progEnv.Tool('digiRootDataLib')
 progEnv.Tool('mcRootDataLib')
@@ -29,7 +30,7 @@ runStrip_t = progEnv.Program('runStrip_t', listFiles(['src/JobConfig.cxx', 'src/
 				'src/digi/MonInput_*.cxx', 'src/compareFiles.cxx', 'src/MonGlobalCut.cxx', 'src/Geo.cxx', 
 				'src/TestReport.cxx', 'src/RFun.cxx', 'src/MonInputObject.cxx', 'src/AcdPeds.cxx', 
 				'src/AcdPedProxy.cxx', 'src/AcdPedParser.cxx', 'src/CalPeds.cxx', 'src/CalPedProxy.cxx', 
-				'srcCalPedParser.cxx']))
+				'src/CalPedParser.cxx']))
 treemerge = progEnv.Program('treemerge', ['src/treemerge.cxx'])
 MergeHistFiles = progEnv.Program('MergeHistFiles', ['src/MergeHistFiles.cxx'])
 MakeACDNicePlots = progEnv.Program('MakeACDNicePlots', ['src/MakeACDNicePlots.cxx'])
