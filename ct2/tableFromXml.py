@@ -56,11 +56,7 @@ def addPathStep(items, tag):
         children = element.getElementsByTagName(tag)
         for child in children:
             id = child.getAttribute('ID') or 0
-            try:
-                id = int(id)
-            except ValueError:
-                pass
-            newCoord = coord + (id,)
+            newCoord = coord + (int(id),)
             newItems.append((newCoord, child))
             pass
         pass

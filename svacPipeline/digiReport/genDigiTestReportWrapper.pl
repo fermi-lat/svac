@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 
@@ -23,40 +23,34 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $digiRootFile = $inFiles->{'digi'};
+my $splitInfoFile = $inFiles->{'splitInfo'};
 my $optionFile = $outFiles->{'jobOptions'};
 my $shellFile = $outFiles->{'script'};
-my $histoFile = $outFiles->{'histogram'};
 my $tarBall = $outFiles->{'tarBall'};
 
 my $exe = $ENV{'digiReportScript'};
 
-my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$histoFile' '$tarBall'";
+my $command = "$exe '$runName' '$digiRootFile' '$splitInfoFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
 
 my $rc = $ex->execute();
 
-if ( defined($rc) ) {
-    if ( $rc == 0 ) {
-        #terminated successfully
-        exit(0);
-    } else {
-        #your app failed, interpret return code
-        #and then exit non-zero
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
     
-        #(do some stuff here if you want)
-        exit($rc);         
-    }
+    #(do some stuff here if you want)
+    exit($rc);
 } else {
     if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
         # Your app is not present!!!
@@ -66,7 +60,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

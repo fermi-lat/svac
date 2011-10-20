@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 # a utility script to update one column in the elogReport table 
 # usage: it takes three arguments. First argument is the runId of the run to be
@@ -11,14 +11,6 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-use lib "$ENV{'svacPlRoot'}/lib";
-use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup10.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 if($#ARGV+1 != 3) {
     die 'require three arguments: runId, columnName, value';
 }
@@ -27,14 +19,13 @@ my $runId = $ARGV[0];
 my $columnName = $ARGV[1];
 my $value = $ARGV[2];
 
-print STDERR "Run: [$runId], Column: [$columnName], Value: [$value]\n";
+$ENV{'TWO_TASK'}='SLAC_TCP';
+$ENV{'ORACLE_HOME'} = "/afs/slac/package/oracle/8.1.6/sun4x_56";
+$ENV{'TNS_ADMIN'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/network/admin/tnsnames.ora";
+$ENV{'LIBHOME'} = "/afs/slac/package/oracle/8.1.6/sun4x_56/lib";
 
-if ($ENV{'svacTestMode'}) {
-	print STDERR "Running in test mode, not updating eLog.\n";
-	exit 0;
-}
 
-$dbh = DBI->connect($ENV{'dbName'}, $ENV{'userName'}, $ENV{'passWd'}) or die 'connect db failed: '.$dbh->errstr;
+$dbh = DBI->connect('DBI:Oracle:SLAC_TCP', 'GLAST_CAL', '9square#') or die 'connect db failed: '.$dbh->errstr;
 
 my $sqlStr = "update elogReport set $columnName='$value' where runId = $runId";
 

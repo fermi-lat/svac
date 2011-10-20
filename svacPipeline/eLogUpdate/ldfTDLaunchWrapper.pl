@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 # Demonstration script.
 # Submitted to batch by pipeline scheduler.
@@ -28,27 +28,19 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLatte'};
+my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
-if (!$doDigi) {
-	exit(0);
+if ((! -e $ldfFile) || (-z $ldfFile)) {
+    print "LDF file [$ldfFile] does not exist or has zero size, not launching digitization task.\n";
+    exit(0);
 }
 
 print "Running command: [$command]\n";
@@ -57,17 +49,15 @@ my $ex = new Exec("$command");
 
 my $rc = $ex->execute();
 
-if ( defined($rc) ) {
-    if ( $rc == 0 ) {
-        #terminated successfully
-        exit(0);
-    } else {
-        #your app failed, interpret return code
-        #and then exit non-zero
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
     
-        #(do some stuff here if you want)
-        exit($rc);         
-    }
+    #(do some stuff here if you want)
+    exit($rc);
 } else {
     if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
         # Your app is not present!!!
@@ -77,7 +67,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

@@ -12,14 +12,12 @@ use Exec;
 ##
 #####################################################
 
-my $run_num=shift;
-my $task_pk=shift;
-my $taskProcess_name=shift;
-print "$run_num, $task_pk, $taskProcess_name\n";
-my $proc = new DPFProc($run_num, $task_pk, $taskProcess_name);
-
+my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
+my $runName = $proc->{'run_name'};
+
 #####################################################
 ##
 ##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
@@ -30,23 +28,13 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-#my $mcRootFile = $inFiles->{'mc'};
-my $mcRootFile = 'emptyFile';
-system("touch $mcRootFile");
+my $exe = $ENV{'taskLauncher'};
 
-my $digiRootFile = $inFiles->{'digi'};
-my $reconRootFile = $inFiles->{'recon'};
-
-my $svacRootFile = $outFiles->{'svac'};
-my $histFile = $outFiles->{'histogram'};
-my $optionFile = $outFiles->{'jobOptions'};
-my $shellFile = $outFiles->{'script'};
-
-my $exe = $ENV{'svacTupleScript'};
-
-my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
+my $newTask = $ENV{'configReportTask'};
+my $schemaFile = $inFiles->{'schema'};
+my $snapFile = $inFiles->{'snapshot'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile' '$snapFile'";
 print "Running command: [$command]\n";
-
 
 my $ex = new Exec("$command");
 

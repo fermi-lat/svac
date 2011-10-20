@@ -1,22 +1,20 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 
 if ($#ARGV != 5) {
-    die "Usage: $0 runId digiRootFile optionFile shellFile histoFile tarBall";
+    die "Usage: $0 digiRootFile splitInfoFile optionFile shellFile tarBall";
 }
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $digiRootFile, $optionFile, $shellFile, $histoFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $splitInfoFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
   runName:      [$runName]
   digiRootFile: [$digiRootFile]
+  splitInfoFile:[$splitInfoFile]
   optionFile:   [$optionFile]
   shellFile:    [$shellFile]
-  histoFile:    [$histoFile]
   tarBall:      [$tarBall]
 EOT
 
@@ -37,36 +35,31 @@ my $cmtDir = $ENV{'digiReportCmt'};
 my $exe = $ENV{'digiReportApp'};
 my $digiReportVersion = $ENV{'digiReportVersion'};
 my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
-my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
-my $calCalibSerNo = $ENV{'calCalibSerNo'};
+my $calibGenTKRVersion = $ENV{'calibGenTKRVersion'};
+my $calibGenCALVersion = $ENV{'calibGenCALVersion'};
 my $latexHeaderFile = $ENV{'latexHeaderFile'};
 my $doxyFile = $ENV{'digiRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
-
-my $histOrig = $runName . '_hist.root';
 
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
 print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
-print OPTFILE qq{$digiReportVersion \n};
+print OPTFILE qq{$testReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
-print OPTFILE qq{$tkrCalibSerNo \n};
-print OPTFILE qq{$calCalibSerNo \n};
+print OPTFILE qq{$calibGenTKRVersion \n};
+print OPTFILE qq{$calibGenCALVersion \n};
+print OPTFILE qq{$splitInfoFile \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
-print SHELLFILE "setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'} \n";
-print SHELLFILE "setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'} \n";
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
-print SHELLFILE qq{$exe $optionFile || exit 1 \n};
+print SHELLFILE qq{$exe $optionFile || exit 1\n};
 print SHELLFILE qq{cd $reportDir \n};
-print SHELLFILE qq{mv $histOrig $histoFile \n};
-print SHELLFILE qq{ln -s $histoFile $histOrig \n};
 print SHELLFILE qq{setenv latexHeader '$latexHeaderFile' \n};
 print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};
 print SHELLFILE qq{doxygen $doxyFile \n};
@@ -77,7 +70,7 @@ print SHELLFILE qq{dvips -o $psFile $dviFile \n};
 print SHELLFILE qq{ps2pdf $psFile $pdfFile \n};
 print SHELLFILE qq{cd $reportDir \n};
 print SHELLFILE qq{tar cf $tarBall . \n};
-print SHELLFILE qq{cd $pwd \n};
+print SHELLFILE qq{cd $pwd};
 close(SHELLFILE);
 system("chmod +rwx $shellFile");
 

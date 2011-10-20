@@ -1,31 +1,23 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 
-if ($#ARGV != 6) {
-    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall taskName";
+if ($#ARGV != 5) {
+    die "Useage: $0 runName digiRootFile reconRootFile splitInfoFile optionFile shellFile tarBall";
 }
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall, $taskName) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $splitInfoFile $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
   runName:       [$runName]
   digiRootFile:  [$digiRootFile]
   reconRootFile: [$reconRootFile]
+  splitInfoFile: [$splitInfoFile]
   optionFile:    [$optionFile]
   shellFile:     [$shellFile]
   tarBall:       [$tarBall]
-  taskName:      [$taskName]
 EOT
-
-my $reconDir = `dirname $reconRootFile`;
-chomp $reconDir;
-# remove leftover marker files
-my $marker = "$reconDir/$ENV{'doneUsingRecon'}.$taskName";
-unlink $marker;
 
 my $reportDir = `dirname $tarBall`;
 chomp $reportDir;
@@ -42,12 +34,13 @@ my $cmtDir = $ENV{'reconReportCmt'};
 my $exe = $ENV{'reconReportApp'};
 my $reconReportVersion = $ENV{'reconReportVersion'};
 my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
-my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
-my $calCalibSerNo = $ENV{'calCalibSerNo'};
+my $calibGenTKRVersion = $ENV{'calibGenTKRVersion'};
+my $calibGenCALVersion = $ENV{'calibGenCALVersion'};
 my $latexHeaderFile = $ENV{'latexHeaderFile'};
-my $doxyFile = $ENV{'reconRepDoxyFile'};
+my $doxyFile = $ENV{'digiRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
 
+my $doxyFile = $ENV{'reconRepDoxyFile'};
 
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
@@ -56,18 +49,17 @@ print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
 print OPTFILE qq{$reconReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
-print OPTFILE qq{$tkrCalibSerNo \n};
-print OPTFILE qq{$calCalibSerNo \n};
+print OPTFILE qq{$calibGenTKRVersion \n};
+print OPTFILE qq{$calibGenCALVersion \n};
+print OPTFILE qq{$splitInfoFile \n};
 close(OPTFILE);
 
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
-print SHELLFILE "setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'} \n";
-print SHELLFILE "setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'} \n";
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
-print SHELLFILE qq{$exe $optionFile || exit 1 \n};
+print SHELLFILE qq{$exe $optionFile || exit 1\n};
 print SHELLFILE qq{cd $reportDir \n};
 print SHELLFILE qq{setenv latexHeader '$latexHeaderFile' \n};
 print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};

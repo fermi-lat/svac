@@ -59,7 +59,6 @@ nPlanes = 2 * nTrcs
 nSides = 4
 #
 # planeMap[gtcc][gtrc] gives the plane as seen in the recon file
-# but they are changing this after EM2?
 even = range(0, nPlanes, 2)[::-1]
 odd = range(1, nPlanes, 2)[::-1]
 planeMap = [odd] * nSides + [even] * nSides

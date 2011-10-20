@@ -8,11 +8,13 @@
 
 """
 
+
+
 #
 def mapTkrDac(dac):
     """@brief Display range and threshhold for a GTFE dac.
     Uses getThrDac and getThrDacRange."""
-    return '%s,<B>%s</B>' % (getThrDACRange(dac), getThrDAC(dac))
+    return '%s,%s' % (getThrDACRange(dac), getThrDAC(dac))
 
 #
 def getThrDAC(dac):
@@ -49,37 +51,3 @@ def ticksToTime(ticks):
     scaled = int(scaled + 0.5)
     time = '%s%s' % (scaled, jobOptions.timeUnits)
     return time
-
-
-#
-def displayHv(steps):
-    """Display registers that measure HV voltage.
-    Uses stepsToVolts.
-    """
-    volts = '%s (%s)' % (steps, stepsToVolts(steps))
-    return volts
-
-#
-def stepsToVolts(steps):
-    """Convert HV registers to volts."""
-    import jobOptions
-    volts = steps * jobOptions.vScale
-    volts = '%.1f%s' % (volts, jobOptions.voltUnit)
-    return volts
-
-
-#
-def logical(bit):
-	"""Display a logical value."""
-	return ['Off', 'On'][bit]
-
-
-#
-def displayHex(value):
-    """@brief Display hex values."""
-    return '%#X' % value
-
-#
-def displayNull(value):
-    """@brief Return argument unchanged"""
-    return value

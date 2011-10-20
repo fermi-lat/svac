@@ -2,15 +2,7 @@
 import html
 
 def twoDTable(array, title, (yTitle, xTitle), (yLabels, xLabels)):
-    haveData = False
-    if len(array):
-        nXVals = len(array[0])
-        if nXVals:
-            haveData = True
-            pass
-        pass
-    if not haveData:
-        return ''
+    nXVals = len(array[0])
 
     table = html.Element("TABLE", attr={"BORDER": 1})
 
