@@ -326,7 +326,9 @@ int main(int argn, char** argc) {
   char inclpath[512];
   //sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   //gSystem->AddIncludePath(inclpath);
-  sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
+  //sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
+  //This setting is ugly but necessary to compile with SCons
+  sprintf(inclpath," -I%s/include ",getenv("INST_DIR"));
   gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
 #ifdef oldROOT

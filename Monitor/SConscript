@@ -22,6 +22,8 @@ progEnv.Tool('configDataLib')
 progEnv.Tool('calibUtilLib')
 progEnv.Tool('identsLib')
 
+progEnv.AppendUnique(LINKFLAGS = ['-rdynamic'])
+
 runStrip_t = progEnv.Program('runStrip_t', listFiles(['src/JobConfig.cxx', 'src/MonValue_t.cxx', 
 				'src/MonValueImpls_t.cxx', 'src/MonInputCollection.cxx', 'src/MonInputCollection_*.cxx', 
 				'src/MonEventLooper_t.cxx', 'src/runStrip_t.cxx', 'src/MonObjFactory.cxx', 
