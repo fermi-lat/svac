@@ -1,5 +1,9 @@
 #!/usr/local/bin/perl -w
 
+# Demonstration script.
+# Submitted to batch by pipeline scheduler.
+# You need only modify the last section...
+
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -15,6 +19,7 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
 
 #####################################################
@@ -27,18 +32,13 @@ use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
-my $digiRootFile = $inFiles->{'digi'};
-my $optionFile = $outFiles->{'jobOptions'};
-my $shellFile = $outFiles->{'script'};
-my $tarBall = $outFiles->{'tarBall'};
+my $exe = $ENV{'eLogLauncher'};
 
-my $exe = $ENV{'digiReportScript'};
+my $ldfFile = $inFiles->{'ldf'};
+my $command = "$exe '$taskName' '$runName' '$ldfFile'";
 
-my $command = "$exe '$runName' '$digiRootFile' '$optionFile' '$shellFile' '$tarBall'";
 print "Running command: [$command]\n";
-
 my $ex = new Exec("$command");
-
 my $rc = $ex->execute();
 
 if ($rc == 0) {

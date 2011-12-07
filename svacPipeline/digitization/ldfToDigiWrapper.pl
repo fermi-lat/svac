@@ -15,7 +15,6 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $runName = $proc->{'run_name'};
 
 #####################################################
 ##
@@ -23,38 +22,36 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
 
-my $exe = $ENV{'digitizationScript'};
-$command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
-print STDERR "Running command: [$command]\n";
+$ENV{'ldfFile'} = $ldfFile;
+$ENV{'shellFile'} = $shellFile;
+$ENV{'jobOptionFile'} = $jobOptionFile;
+$ENV{'digiRootFile'}= $digiRootFile;
+
+my $command = $ENV{'digitizationScript'};
+print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
 
 my $rc = $ex->execute();
 
-if ( defined($rc) ) {
-    if ( $rc == 0 ) {
-        #terminated successfully
-        exit(0);
-    } else {
-        #your app failed, interpret return code
-        #and then exit non-zero
+if ($rc == 0) {
+    #terminated successfully:
+    exit(0);
+} elsif ( defined($rc) ) {
+    #your app failed, interpret return code
+    #and then exit non-zero
     
-        #(do some stuff here if you want)
-        exit($rc);         
-    }
+    #(do some stuff here if you want)
+    exit($rc);
 } else {
     if (( !$ex->{'success'} ) && ( !defined($ex->{'signal_number'}) )) {
         # Your app is not present!!!
@@ -64,7 +61,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

@@ -2,13 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 6) {
-    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall taskName";
+if ($#ARGV != 5) {
+    die "Useage: $0 runName digiRootFile reconRootFile optionFile shellFile tarBall";
 }
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall, $taskName) = @ARGV;
+my ($runName, $digiRootFile, $reconRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
@@ -18,14 +16,7 @@ $0 running with:
   optionFile:    [$optionFile]
   shellFile:     [$shellFile]
   tarBall:       [$tarBall]
-  taskName:      [$taskName]
 EOT
-
-my $reconDir = `dirname $reconRootFile`;
-chomp $reconDir;
-# remove leftover marker files
-my $marker = "$reconDir/$ENV{'doneUsingRecon'}.$taskName";
-unlink $marker;
 
 my $reportDir = `dirname $tarBall`;
 chomp $reportDir;
@@ -45,9 +36,10 @@ my $EngineeringModelVersion = $ENV{'EngineeringModelVersion'};
 my $tkrCalibSerNo = $ENV{'tkrCalibSerNo'};
 my $calCalibSerNo = $ENV{'calCalibSerNo'};
 my $latexHeaderFile = $ENV{'latexHeaderFile'};
-my $doxyFile = $ENV{'reconRepDoxyFile'};
+my $doxyFile = $ENV{'digiRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
 
+my $doxyFile = $ENV{'reconRepDoxyFile'};
 
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
@@ -64,8 +56,6 @@ open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
-print SHELLFILE "setenv CMTCONFIG $ENV{'SVAC_CMTCONFIG'} \n";
-print SHELLFILE "setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'} \n";
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
 print SHELLFILE qq{cd $reportDir \n};

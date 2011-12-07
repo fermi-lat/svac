@@ -2,24 +2,18 @@
 
 use strict;
 
-use File::Copy;
+my $ldfFile = $ENV{'ldfFile'};
 
-if ($#ARGV != 4) {
-    die "Usage: $0 runName ldfFile shellFile jobOptionFile digiRootFile";
-}
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $ldfFile, $shellFile, $jobOptionFile, $digiRootFile) = @ARGV;
+my $shellFile = $ENV{'shellFile'};
+my $jobOptionFile = $ENV{'jobOptionFile'};
+my $digiRootFile = $ENV{'digiRootFile'};
 
 my $cmtPath = $ENV{'CMTPATH'};
 my $cmtDir = $ENV{'ldfToDigiCmt'};
 my $exe = $ENV{'ldfToDigiApp'};
-my $query = $ENV{'eLogQuery'};
-my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
-my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
+my $ldfFileType = $ENV{'ldfFileType'};
 
-print STDERR <<EOT;
+print <<EOT;
 $0 running with options:
   ldfFile:       $ldfFile
   shellFile:     $shellFile
@@ -29,39 +23,19 @@ $0 running with options:
   cmtDir:        $cmtDir
   exe :          $exe
 EOT
-
-# put .htaccess file in working directory to prevent HTTP downloads of 
-# ROOT files
-my $workDir = `dirname $digiRootFile`;
-chomp $workDir;
-copy($ENV{htAccess}, "$workDir/.htaccess");
-
-# put ldfFITS file in eLog
-my $eLogCmd = "$ENV{'svacPlLib'}/updateElogReportTable.pl '$runName' FitsFile '$ldfFile'";
-print "NOT Running command [$eLogCmd]\n";
-#system($eLogCmd);
+    
+#my $glastRoot = "/afs/slac.stanford.edu/g/glast";
+#my $glastScript = "$glastRoot/ground/scripts/user.cshrc";
 
 if (-z $ldfFile) {
-    print STDERR "LDF file [$ldfFile] has zero size.\n";
+    print "LDF file [$ldfFile] has zero size.\n";
     exit 0;
 }
 
-my %extensions = ('evt'  => 'CCSDSFILE',
-                  'fits' => 'LDFFITS',
-                  'ldf'  => 'LDFFILE',
-                  'xml'  => 'CCSDSFILE');
-
-# determine type of input file
-my @fields = split(/\./, $ldfFile);
-my $ldfFileType = $extensions{$fields[-1]};
-
-# create csh script to do digitization
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
 print SHELLFILE "#!/bin/csh \n \n";
 print SHELLFILE "unsetenv LD_LIBRARY_PATH \n";
 #print SHELLFILE "source $glastScript \n";
-print SHELLFILE "setenv CMTCONFIG $svacCmtConfig \n";
-print SHELLFILE "setenv GLAST_EXT $svacGlastExt \n";
 print SHELLFILE "setenv CMTPATH $cmtPath \n";
 print SHELLFILE "pushd $cmtDir \n";
 print SHELLFILE "source setup.csh \n";
@@ -79,28 +53,46 @@ close(SHELLFILE);
 # create option file for converting ebf files
 open(JOBOPTIONFILE, ">$jobOptionFile") || die "Can't open $jobOptionFile, abortted!";
 print JOBOPTIONFILE <<EOF;
-#include "\$GLEAMROOT/src/jobOptions/pipeline/ldf2digi.txt"
-EventSelector.StorageType = "$ldfFileType";
-EventSelector.FileName = "$ldfFile";
+ApplicationMgr.DLLs+= { "GaudiAlg", "GaudiAud"};
+ApplicationMgr.ExtSvc += {"ChronoStatSvc"};
+AuditorSvc.Auditors = {"ChronoAuditor"};
+ApplicationMgr.DLLs += {"LdfConverter"};
+//EventSelector.Instrument = "EM";
+ApplicationMgr.ExtSvc += { 
+    "LdfEventSelector/EventSelector" , 
+    "LdfCnvSvc/EventCnvSvc"
+    };
+EventPersistencySvc.CnvServices = {"EventCnvSvc"};
+ApplicationMgr.TopAlg = {
+      "Sequencer/Top" };
+Generator.Members = {};
+Digitization.Members = {};
+Top.Members={
+    "Sequencer/Trigger",
+    "Sequencer/Output" 
+};
+ApplicationMgr.DLLs += {"GlastSvc"};
+ApplicationMgr.ExtSvc += { "GlastDetSvc"};
+//GlastDetSvc.xmlfile="\$(XMLGEODBSROOT)/xml/em2/em2SegVols.xml";
+GlastDetSvc.visitorMode="recon";
+ApplicationMgr.DLLs +={ 
+    "Trigger", "RootIo"
+}; 
+Trigger.Members = {"TriggerAlg"};
+TriggerAlg.mask = 0;
+
+ApplicationMgr.ExtSvc += { "RootIoSvc" };
+digiRootWriterAlg.OutputLevel=3;
+Output.Members = {
+    "digiRootWriterAlg"
+};
 digiRootWriterAlg.digiRootFile = "$digiRootFile";
-GlastDetSvc.xmlfile = "\$(XMLGEODBSROOT)/xml/latAssembly/latAssemblySegVols.xml";
-digiRootWriterAlg.bufferSize = 100000;
+EventSelector.StorageType = "$ldfFileType";
+EventSelector.InputList = {"$ldfFile"};
+EventSelector.OutputLevel = 4;
+MessageSvc.OutputLevel = 3;
+ApplicationMgr.EvtMax  = 100000000;
 EOF
-
-## temporary hack to fix runs w/ improper MOOT key
-print JOBOPTIONFILE 'TrgConfigSvc.configureFrom = "Default";' . "\n";
-
-my $testName = `$query $runName TESTNAME`;
-chomp($testName);
-print STDERR "TESTNAME is $testName\n";
-if ($testName =~ 'LAT-71x') {
-	print STDERR "Using Moun gain\n";
-	print JOBOPTIONFILE <<EOF;
-CalibDataSvc.CalibFlavorList += {"vanilla-muongain"};
-CalCalibSvc.DefaultFlavor     = "vanilla-muongain";
-EOF
-}
-
 close(JOBOPTIONFILE);
 
 system("chmod +rwx $shellFile");

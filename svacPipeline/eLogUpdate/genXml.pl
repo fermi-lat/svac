@@ -2,64 +2,58 @@
 
 use strict;
 
-use lib "$ENV{'svacPlRoot'}/lib";
+use lib "$ENV{'svacPlRoot'}/lib-current";
 use environmentalizer;
-environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
+environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup-current/svacPlSetup.cshrc");
 
 my $batchgroup = $ENV{'batchgroup'};
 
+# eLog
 my $eLogDataDir = $ENV{'svacHead'};
-
-use MakeMeta;
-my %metaWrappers = (MakeMeta::makeMeta($ENV{'eLogTaskDir'}, 
-									  "populateElogDb", 
-									   "ldfTDLaunch", "retDefTDLaunch"),
-					MakeMeta::makeMeta($ENV{'svacPlLib'}, 
-									   "Launch")
-					);
-
 
 my $updateElogDbXml = 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <pipeline
     xmlns=\"http://glast-ground.slac.stanford.edu/pipeline\"
     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
-    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/Pipeline/schemas/1.1/pipeline.xsd\">
+    xsi:schemaLocation=\"http://glast-ground.slac.stanford.edu/pipeline http://glast-ground.slac.stanford.edu/pipeline.xsd\">
 
     <name>$ENV{'eLogTask'}</name>
     <type>Report</type>
-    <dataset-base-path></dataset-base-path>
+    <dataset-base-path>$ENV{'dataHead'}</dataset-base-path>
     <run-log-path>/temp/</run-log-path>
+        <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
+            $ENV{'eLogTaskDir'}/populateElogDbWrapper.pl
+        </executable>
+        <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
+            $ENV{'eLogTaskDir'}/ldfTDLaunchWrapper.pl
+        </executable>
+        <executable name=\"LaunchConfRep\" version=\"$ENV{'eLogTaskVersion'}\">
+            $ENV{'eLogTaskDir'}/ConfTLaunchWrapper.pl
+        </executable>
 
-    <executable name=\"populateElogDb\" version=\"$ENV{'eLogTaskVersion'}\">
-        $metaWrappers{'populateElogDb'}
-    </executable>
-    <executable name=\"LaunchDigi\" version=\"$ENV{'eLogTaskVersion'}\">
-        $metaWrappers{'retDefTDLaunch'}
-    </executable>
+        <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
+            <working-directory>$ENV{'eLogDataDirFull'}</working-directory>
+            <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
+        </batch-job-configuration>
 
-    <batch-job-configuration name=\"express-job\" queue=\"express\" group=\"$batchgroup\">
-        <working-directory>$ENV{'eLogDataDirFull'}</working-directory>
-        <log-file-path>$ENV{'eLogDataDirFull'}</log-file-path>
-    </batch-job-configuration>
+        <file file-type=\"xml\"  name=\"snapshot\" type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"xml\"  name=\"schema\"   type=\"text\"    >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"fits\" name=\"ldf\"      type=\"LDF\"     >$ENV{'onlineDataDir'}</file>
+        <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">$ENV{'onlineDataDir'}</file>
+        <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >$ENV{'eLogDataDir'}</file>
 
-    <file file-type=\"evt\"  name=\"RetDef\"   type=\"RetDef\"  >
-        <path>$ENV{'onlineDataDirFull'}</path>
-    </file>
-    <file file-type=\"xml\"  name=\"rcReport\" type=\"rcReport\">
-        <path>$ENV{'onlineDataDirFull'}/LICOS</path>
-    </file>
-    <file file-type=\"csh\"  name=\"script\"   type=\"script\"  >
-        <path>$ENV{'eLogDataDirFull'}</path>
-    </file>
-
-    <processing-step name=\"populateElogDb\" executable=\"populateElogDb\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"rcReport\"/>
-                    <output-file name=\"script\"/>
-    </processing-step>
-    <processing-step name=\"$ENV{'digitizationTask'}\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
-                    <input-file name=\"RetDef\"/>
-    </processing-step>
+        <processing-step name=\"populateElogDb\" executable=\"populateElogDb\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"rcReport\"/>
+                        <output-file name=\"script\"/>
+        </processing-step>
+        <processing-step name=\"LaunchDigi\" executable=\"LaunchDigi\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"ldf\"/>
+        </processing-step>
+        <processing-step name=\"LaunchConfRep\" executable=\"LaunchConfRep\" batch-job-configuration=\"express-job\">
+                        <input-file name=\"schema\"/>
+                        <input-file name=\"snapshot\"/>
+        </processing-step>
 </pipeline>
 ";
 

@@ -2,27 +2,11 @@
 
 use strict;
 
-use File::Copy;
-
-if ($#ARGV != 7) {
-    die "Usage: $0 mcRootFile digiRootFile reconRootFile svacRootFile histFile optionFile shellFile taskName";
+if ($#ARGV != 6) {
+    die "Usage: $0 mcRootFile digiRootFile reconRootFile svacRootFile histFile optionFile shellFile";
 }
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($mcRootFile, $digiRootFile, $reconRootFile, $svacRootFile, $histFile, $optionFile, $shellFile, $taskName) = @ARGV;
-
-my $reconDir = `dirname $reconRootFile`;
-chomp $reconDir;
-# remove leftover marker files
-my $marker = "$reconDir/$ENV{'doneUsingRecon'}.$taskName";
-unlink $marker;
-
-my $cmtPath = $ENV{'CMTPATH'};
-my $cmtDir = $ENV{'svacTupleCmt'};
-my $exe = $ENV{'svacTupleApp'};
-my $svacCmtConfig = $ENV{'SVAC_CMTCONFIG'};
-my $svacGlastExt = $ENV{'SVAC_GLAST_EXT'};
+my ($mcRootFile, $digiRootFile, $reconRootFile, $svacRootFile, $histFile, $optionFile, $shellFile) = @ARGV;
 
 print <<EOT;
 $0 running with:
@@ -33,14 +17,11 @@ $0 running with:
   histFile:      $histFile
   optionFile:    $optionFile
   shellFile:     $shellFile
-  taskName:      [$taskName]
 EOT
 
-# put .htaccess file in working directory to prevent HTTP downloads of 
-# ROOT files
-my $workDir = `dirname $svacRootFile`;
-chomp $workDir;
-copy($ENV{htAccess}, "$workDir/.htaccess");
+my $cmtPath = $ENV{'CMTPATH'};
+my $cmtDir = $ENV{'svacTupleCmt'};
+my $exe = $ENV{'svacTupleApp'};
 
 #create option file for Main.exe
 open(OPTIONFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
@@ -55,8 +36,6 @@ close(OPTIONFILE);
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile for input, abortted!";
 print SHELLFILE qq{#!/bin/csh \n \n};
 print SHELLFILE qq{unsetenv LD_LIBRARY_PATH \n};
-print SHELLFILE "setenv CMTCONFIG $svacCmtConfig \n";
-print SHELLFILE "setenv GLAST_EXT $svacGlastExt \n";
 print SHELLFILE qq{setenv CMTPATH $cmtPath \n};
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
