@@ -6,20 +6,11 @@
 struct NtupleDef {
 
   int m_runId;
-  unsigned long long m_eventId;
+  int m_eventId;
   int m_seqNo;
 
-  // Keys:
-  unsigned int m_latcKey;  
-  unsigned int m_latcIgnore;  
-  unsigned int m_mootKey;
-
-  // Compressed event size:
-  int m_compressedEventSize;
-  int m_compressionLevel;
-
   // Event size in bytes:
-  unsigned long m_eventSize;
+  int m_eventSize;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -43,9 +34,14 @@ struct NtupleDef {
   // no of hit strips per tower, per layer, per view
   int m_nStrips[g_nTower][g_nTkrLayer][g_nView];    //nStrips
 
-  // TOT values 
-  int m_tkrToTRaw[g_nTower][g_nTkrLayer][g_nView][g_nTot]; 
-  float m_tkrToTMips[g_nTower][g_nTkrLayer][g_nView][g_nTot]; 
+  // every tot values 
+  int m_tot[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //tot
+
+  // every corrected tot values using Hiro's linear correction 
+  float m_totCorrLinear[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //totCorr
+
+  // every corrected tot values using Hiro's linear correction 
+  float m_totCorrQuad[g_nTower][g_nTkrLayer][g_nView][g_nTot]; //totCorr
 
   // energy deposited in each tower, each layer and each view
   float m_depositEne[g_nTower][g_nTkrLayer][g_nView]; //depositEne
@@ -76,17 +72,9 @@ struct NtupleDef {
   float m_tkr2EndPos[3];
   float m_tkr2EndDir[3];
 
-  float m_tkr1Pos[3];
-  float m_tkr2Pos[3];
-  float m_tkr1Dir[3];
-  float m_tkr2Dir[3];
-
-
-
   // ACD Digi information:
   float m_acdMCEnergy[g_nAcdTile];
   int m_acdPha[g_nAcdTile][2];
-  int m_acdCnoMap[g_nAcdTile][2];
   int m_acdHitMap[g_nAcdTile][2];
   int m_acdRange[g_nAcdTile][2];
   int m_acdOddParityError[g_nAcdTile][2];
@@ -106,8 +94,10 @@ struct NtupleDef {
 
   // ACD Recon information:
   float m_acdEnergy;
+  float m_acdDoca;
   float m_acdGammaDoca;
   float m_acdActiveDist;
+  int   m_acdMinDocaId;
   int   m_acdTileCount;
 
   float m_acdRibbonActiveDist;
@@ -117,8 +107,6 @@ struct NtupleDef {
   int m_acdRibbonActiveDistId;
   float m_acdCornerDoca;
 
-  float m_acdObservedMips;
-  float m_acdObservedMipsTopHalf;
 
   // ACD-TKR intersection information:
   int m_acdNumTkrIntersection;
@@ -159,11 +147,9 @@ struct NtupleDef {
   int m_acdGapPocaNbrTrack1;
   int m_acdGapPocaNbrTrack2;
 
-  int m_acdGapPocaTrackID[2][4];
-  int m_acdGapPocaTileID[2][4];
-  float m_acdGapPocaDoca[2][4];
-  int m_acdGapPocaGapIndex[2][2];
-  int m_acdGapPocaGapType[2][2];
+  int m_acdGapPocaTrackID[2][2];
+  int m_acdGapPocaTileID[2][2];
+  float m_acdGapPocaDoca[2][2];
 
   // ACD POCA:
   float m_acdPocaDoca[2][2];
@@ -179,6 +165,27 @@ struct NtupleDef {
   int   m_acdPocaTrackID[2][2];
   int   m_acdPocaNbrTrack1;
   int   m_acdPocaNbrTrack2;
+
+  // CAL MIP information:
+  int m_calMipNum;
+
+  float m_calMip1Pos[3];
+  float m_calMip1Dir[3];
+  float m_calMip1Chi2;
+  float m_calMip1D2edge;
+  float m_calMip1ArcLen;
+  float m_calMip1Ecor;
+  float m_calMip1EcorRms;
+  float m_calMip1Erm;
+
+  float m_calMip2Pos[3];
+  float m_calMip2Dir[3];
+  float m_calMip2Chi2;
+  float m_calMip2D2edge;
+  float m_calMip2ArcLen;
+  float m_calMip2Ecor;
+  float m_calMip2EcorRms;
+  float m_calMip2Erm;
 
   // Cal measured energy
   float m_calEnergy;
@@ -202,14 +209,14 @@ struct NtupleDef {
   float m_convAngle;
 
   // maximal TOT value at the top hit layer at each tower
-  float m_topToT[g_nTower];
+  float m_topTot[g_nTower];
 
   // maximal TOT value at the layer of the fit vertex point
-  float m_convToT;
+  float m_convTot;
 
   // energy deposited in each crystal
   // default values are -9999
-  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol];
+  float m_xtalEne[g_nTower][g_nCalLayer][g_nCol][g_nFace];
 
   // maximal deposited energy in a single crystal
   float m_maxCalEnergy;
@@ -220,7 +227,6 @@ struct NtupleDef {
   //                                                                                                                                                                                                           
   // Context information:                                                                                                                                                                                      
   //                                                                                                                                                                                                           
-  unsigned int m_contextRunInfoDataTransferID;
   int m_contextRunInfoPlatform;
   int m_contextRunInfoDataOrigin;
   unsigned int m_contextRunInfoID;
@@ -246,11 +252,10 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeToneCurrentTimeSecs;
   unsigned int m_contextLsfTimeTimeToneCurrentFlywheeling;
   int m_contextLsfTimeTimeToneCurrentFlagsValid;
-  int m_contextLsfTimeTimeToneCurrentIsSourceGps;
+  int m_contextLsfTimeTimeToneCurrentMissingGps;
   int m_contextLsfTimeTimeToneCurrentMissingCpuPps;
   int m_contextLsfTimeTimeToneCurrentMissingLatPps;
   int m_contextLsfTimeTimeToneCurrentMissingTimeTone;
-  int m_contextLsfTimeTimeToneCurrentEarlyEvent;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeHacks;
   unsigned int m_contextLsfTimeTimeToneCurrentGemTimeTicks;
 
@@ -258,88 +263,25 @@ struct NtupleDef {
   unsigned int m_contextLsfTimeTimeTonePreviousTimeSecs;
   unsigned int m_contextLsfTimeTimeTonePreviousFlywheeling;
   int m_contextLsfTimeTimeTonePreviousFlagsValid;
-  int m_contextLsfTimeTimeTonePreviousIsSourceGps;
+  int m_contextLsfTimeTimeTonePreviousMissingGps;
   int m_contextLsfTimeTimeTonePreviousMissingCpuPps;
   int m_contextLsfTimeTimeTonePreviousMissingLatPps;
   int m_contextLsfTimeTimeTonePreviousMissingTimeTone;
-  int m_contextLsfTimeTimeTonePreviousEarlyEvent;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeHacks;
   unsigned int m_contextLsfTimeTimeTonePreviousGemTimeTicks;
   unsigned int m_contextLsfTimeTimeToneGemTimeHacks;
   unsigned int m_contextLsfTimeTimeToneGemTimeTicks;
   unsigned int m_contextLsfTimeTimeTicks;
 
-  unsigned int m_contextLsfTimeTimeHackHacks;
-  unsigned int m_contextLsfTimeTimeHackTicks;
-
   int m_contextRunType;
 
 
-  // OBF:
-  int m_obfPassedGAMMA;
-  int m_obfPassedMIP;
-  int m_obfPassedHIP;
-  int m_obfPassedDGN; 
 
-  unsigned int m_obfFilterStatusBits;
-
-  unsigned int m_obfGAMMAStatusWord;
-  unsigned int m_obfGAMMAVetoMask;
-  unsigned int m_obfGAMMAVetoBit;
-  unsigned int m_obfGAMMAPrescalerWord;
-  unsigned int m_obfGAMMAEnergy;
-  unsigned int m_obfGAMMAStage;
-  unsigned int m_obfGAMMAState;
-
-  unsigned int m_obfMIPState;
-  unsigned int m_obfHIPState;
-  unsigned int m_obfDGNState;
-
-
-  // Real filter bits:
-  int m_fswGAMMAState;
-  int m_fswDGNState;
-  int m_fswHIPState;
-  int m_fswMIPState;
-  int m_fswPassthruState;
-
-  unsigned int m_fswGAMMAPrescaleFactor;
-  unsigned int m_fswDGNPrescaleFactor;
-  unsigned int m_fswHIPPrescaleFactor;
-  unsigned int m_fswMIPPrescaleFactor;
-  unsigned int m_fswPassthruPrescaleFactor;
-
-  int m_fswGAMMAPrescaleIndex;
-  int m_fswDGNPrescaleIndex;
-  int m_fswHIPPrescaleIndex;
-  int m_fswMIPPrescaleIndex;
-  int m_fswPassthruPrescaleIndex;
-
-  int m_fswGAMMAHasRSD;
-  int m_fswMIPHasRSD;
-  int m_fswHIPHasRSD;
-  int m_fswDGNHasRSD;
-  int m_fswPassthruHasRSD;
-
-  unsigned int m_fswGAMMAStatusWord;
-  unsigned int m_fswMIPStatusWord;
-  unsigned int m_fswHIPStatusWord;
-  unsigned int m_fswDGNStatusWord;
-  unsigned int m_fswPassthruStatusWord;
-
-  unsigned int m_fswGAMMAAllVetoBits;
-  unsigned int m_fswMIPAllVetoBits;
-  unsigned int m_fswHIPAllVetoBits;
-  unsigned int m_fswDGNAllVetoBits;
- 
-  unsigned int m_fswGAMMAStage;
-  unsigned int m_fswGAMMAEnergyValid;
-  unsigned int m_fswGAMMAVersion;
-  int m_fswGAMMAEnergyInLeus;
-
-  
-
-  
+  // time information. This may change depending on future data format
+  unsigned int m_ebfSecond, m_ebfNanoSecond;
+  unsigned int m_upperTime, m_lowerTime;
+  double m_timeSeconds;
+  double m_triggerTicks;
 
 
   //diagnostic info
@@ -349,15 +291,6 @@ struct NtupleDef {
 
   // event summary word
   unsigned int m_summaryWord;
-
-  // Trigger engines:
-  int m_trgEngineGlt;
-  int m_trgEngineGem;
-
-  // Addition trigger info:
-  int m_gemPrescale;
-  int m_gltPrescale;
-  int m_gltPrescaleExpired;
 
   // GEM information:
   int m_gemConditionsWord;
@@ -409,10 +342,6 @@ struct NtupleDef {
   // Event quality:
   unsigned int m_eventFlags;
 
-  // Gleam flag:  
-  unsigned int m_eventGleamFlags;
-
-
   // Error flags:
   int m_eventBadEventSequence;
   int m_eventBadTkrRecon;
@@ -420,7 +349,6 @@ struct NtupleDef {
   int m_eventTemError;
   int m_eventTrgParityError;
   int m_eventBadLdfStatus;
-  int m_eventTemBug;
   int m_eventGtrcPhase;
   int m_eventGtfePhase;
   int m_eventGtccFifo;
@@ -433,19 +361,6 @@ struct NtupleDef {
   int m_eventGtccError;
   int m_eventPhaseError;
   int m_eventTimeoutError;
-
-  int m_eventReadout4;
-  int m_eventZeroSuppress;
-  int m_eventMarker;
-  int m_eventCalStrobe;
-  int m_eventTag;
-  int m_eventTACK;
-
-  double m_eventMCLivetime;
- 
-  double m_cCSDStime;
-  int    m_cCSDSapID;
-  int    m_cCSDSscID;
 
 
   // decoded trigger primitive for the tracker

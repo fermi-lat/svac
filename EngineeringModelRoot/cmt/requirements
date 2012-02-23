@@ -1,5 +1,6 @@
 package EngineeringModelRoot
-version v4r4
+version v3r0p1
+
 
 use GlastPolicy v*
 use mcRootData v*
@@ -9,7 +10,7 @@ use reconRootData v*
 use ROOT v* IExternal
 use idents v*
 use Event v*
-#use calibTkrUtil *
+use calibTkrUtil *
 
 #the following prepend makes the includes folder available locally: avoid the package_include
 macro_prepend includes "-I $(ENGINEERINGMODELROOTROOT) -I $(ENGINEERINGMODELROOTROOT)/src " WIN32 "/I $(ENGINEERINGMODELROOTROOT) /I $(ENGINEERINGMODELROOTROOT)\src  "
@@ -22,19 +23,18 @@ macro_append ROOT_linkopts " -lHist -lTreePlayer -lGraf -lGraf3d"
 
 macro engineeringmodelroot_linkopts "$(ROOT_linkopts) $(mcRootData_linkopts) $(digiRootData_linkopts) $(reconRootData_linkopts) " 
 
-application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx 
-#application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx $(calibTkrUtil_srcs)
+application RunRootAnalyzer RunRootAnalyzer.cxx RootAnalyzer.cxx NtupleDef.cxx ElecToGeo.cxx timestamps.cxx $(calibTkrUtil_srcs)
 
-#application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
+application mergeNtuple mergeNtuple.cxx NtupleDef.cxx
 
-#application mergeRoot mergeRoot.cxx 
+application mergeRoot mergeRoot.cxx 
 
-#application mergeRoot_mc mergeRoot_mc.cxx 
+application mergeRoot_mc mergeRoot_mc.cxx 
 
-#application AnalyzeAcd AnalyzeAcd.cxx
+application AnalyzeAcd AnalyzeAcd.cxx
 
-#application AnalyzeCal AnalyzeCal.cxx
+application AnalyzeCal AnalyzeCal.cxx
 
-#application AnalyzeTkr AnalyzeTkr.cxx GeoToElec.cxx 
+application AnalyzeTkr AnalyzeTkr.cxx GeoToElec.cxx 
 
-#application HitOccupancy HitOccupancy.cxx GeoToElec.cxx 
+application HitOccupancy HitOccupancy.cxx GeoToElec.cxx 
