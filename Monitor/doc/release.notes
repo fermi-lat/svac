@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-02-01-01 23-Feb-2012 monzani one more cassert was missing
  Monitor-02-01-00 23-Feb-2012 monzani including cassert wherever needed
 - adding #include <cassert> everywhere (required by gcc41)
 
