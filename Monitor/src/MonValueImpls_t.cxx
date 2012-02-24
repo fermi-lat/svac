@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <string.h>
 #include <math.h> // needed to use functions isnan and isinf
+#include <cassert>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
 const Float_t MonMinMax::s_huge(1.e20);
