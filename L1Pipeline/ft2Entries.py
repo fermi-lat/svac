@@ -22,8 +22,7 @@ runId = os.environ['RUNID']
 staged = stageFiles.StageSet(excludeIn=config.excludeIn)
 finishOption = config.finishOption
 
-# fileType = 'ft2SecondsNoQual'
-fileType = os.environ['outFileType']
+fileType = 'ft2Txt'
 
 app = config.apps['makeFT2']
 
@@ -39,23 +38,34 @@ realM7File = fileNames.fileName('magic7L1', dlId, runId)
 stagedM7File=  staged.stageIn(realM7File)
 
 #output
-ft2Seconds = fileNames.fileName(fileType, dlId, runId, next=True)
+#txtFt2File = fileNames.fileName(fileType, dlId, runId, next=True)
+#stagedFt2TxtFile = staged.stageOut(txtFt2File)
+ft2Seconds = fileNames.fileName('ft2Seconds', dlId, runId, next=True)
 stagedFt2FitsFile = staged.stageOut(ft2Seconds)
 
 workDir = os.path.dirname(stagedFt2FitsFile)
-l1Setup = config.l1Setup
-instDir = config.L1Build
-glastExt = config.glastExt
+
+setupScript = config.packages['ft2Util']['setup']
 
 #realGapFile = os.path.join(
 #    os.environ['DOWNLINK_RAWDIR'], 'event_gaps_%s.txt' % dlId)
 realGapFile = fileNames.fileName('digiGap', dlId, runId)
 if os.path.exists(realGapFile):
     stagedGapFile =  staged.stageIn(realGapFile)
-    gapOpts = ' -gapfile %s ' % stagedGapFile
+    gapOpts = ' -Gaps_File %s ' % stagedGapFile
 else:
     gapOpts = ''
     pass
+
+datasource = os.environ['DATASOURCE']
+if datasource == 'MC':
+    mcOpt = '--MC'
+else:
+    mcOpt = ''
+    pass
+
+cmtPath = config.ft2CmtPath
+stLibDir = config.stLibDir
 
 # run start and stop from merit file
 mStart, mStop = meritFiles.startAndStop(stagedMeritFile)
@@ -63,38 +73,38 @@ print >> sys.stderr, 'merit:', mStart, mStop
 tStart = mStart - config.ft2Pad
 tStop = mStop + config.ft2Pad
 
+liveTimeTolerance = config.ft2liveTimeTolerance
+#lTTolOpt = '-LiveTimeTolerance %s' % liveTimeTolerance
+lTTolOpt = ''
+
 template = config.ft2Template
-templOpt = '-templateFT2 %s' % template
+templOpt = '-new_tpl %s' % template
 
 qualStr = os.environ['runQuality']
 print >> sys.stderr, 'Run quality:', qualStr
 dataQuality = ft2Columns.qualityFlag(qualStr)
-qualOpt = '-dataquality %d' % dataQuality
+qualOpt = '-DataQual %d' % dataQuality
 
 mootAlias = os.environ['mootAlias']
 print >> sys.stderr, 'MOOT alias:', mootAlias
 latConfig = ft2Columns.configFlag(mootAlias)
-configOpt = '-latconfig %d' % latConfig
-
-version = fileNames.version(ft2Seconds)
-versOpt = '-version %d' % version
+configOpt = '-LatConfig %d' % latConfig
 
 cmd = '''
 cd %(workDir)s
-export INST_DIR=%(instDir)s 
-export GLAST_EXT=%(glastExt)s
-TIMING_DIR=$GLAST_EXT/extFiles/v0r9/jplephem ; export TIMING_DIR
-source %(l1Setup)s
-%(app)s -digifile %(stagedDigiFile)s -meritfile %(stagedMeritFile)s -m7file %(stagedM7File)s -ft2file %(stagedFt2FitsFile)s %(gapOpts)s -ft2start %(tStart).17g -ft2stop %(tStop).17g %(templOpt)s %(qualOpt)s %(configOpt)s %(versOpt)s
+export CMTPATH=%(cmtPath)s
+source %(setupScript)s
+%(app)s -DigiFile %(stagedDigiFile)s -MeritFile %(stagedMeritFile)s -M7File %(stagedM7File)s -FT2_fits_File %(stagedFt2FitsFile)s %(gapOpts)s %(mcOpt)s -DigiTstart %(tStart).17g -DigiTstop %(tStop).17g %(templOpt)s %(qualOpt)s %(configOpt)s %(lTTolOpt)s
 ''' % locals()
 
 status = runner.run(cmd)
 if status: finishOption = 'wipe'
 
-status |= staged.finish(finishOption)
-
 if not status:
-    registerPrep.prep(fileType, ft2Seconds)
+    #registerPrep.prep(fileType, txtFt2File)
+    registerPrep.prep('ft2Seconds', ft2Seconds)
     pass
+
+status |= staged.finish(finishOption)
 
 sys.exit(status)

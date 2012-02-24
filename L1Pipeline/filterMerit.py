@@ -45,7 +45,7 @@ def electronMerit(files, **extra):
 
 
 def _filter(inFile, treeName, outFile, outFileType):
-    tCut = readCut(config.filterClassifyMap[outFileType]['cutFile'])
+    tCut = readCut(config.cutFiles[outFileType])
     logMsg = """Filtering:
     inFile: %(inFile)s
     outFile: %(outFile)s

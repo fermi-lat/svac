@@ -24,12 +24,6 @@ import pipeline
 import runner
 
 
-def slowFilesAlert(inFiles):
-    """Notify log watcher or L1 mailing list or something"""
-    lines = ''.join('%s %d\n' % items for items in inFiles)
-    return
-
-
 def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
     status = 0
 
@@ -37,9 +31,6 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
 
     assert len(outFileTypes) == 1
     fileType = outFileTypes[0]
-    l1Setup = config.l1Setup
-    instDir = config.L1Build
-    glastExt = config.glastExt
 
     # This is backwards. Should be a map from fileType to merge function.
     # Which requires putting the per-type merge code into functions.
@@ -69,13 +60,9 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
     expectedInFiles = fileNames.findPieces(fileType, dlId, runId, chunkId)
     realInFiles = []
     missingInFiles = []
-    slowInFiles = []
     for inFile in expectedInFiles:
-        fileStatus = fileOps.exists(inFile)
-        if fileStatus:
+        if fileOps.exists(inFile):
             realInFiles.append(inFile)
-            if fileStatus > 1:
-                slowInFiles.append((inFile, fileStatus))
         else:
             print >> sys.stderr, "Couldn't find input file %s" % inFile
             missingInFiles.append(inFile)
@@ -88,23 +75,23 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
         pass
 
     # Here we should send a message to the log watcher if we didn't find all of
-    # the expected input files or any were slow.
-    
-    idStr = 'run %s' % runId
-    target = '%s' %runId
-    if level == 'chunk':
-        idStr += ' chunk %s' % chunkId
-        target += '.%s'  % chunkId
-        pass
-    kwargs = {'tgt': target}
-
-    if missingInFiles:
+    # the expected input files.
+    if numInFiles != len(expectedInFiles):
+        idStr = 'run %s' % runId
+        target = '%s' %runId
+        if level == 'chunk':
+            idStr += ' chunk %s' % chunkId
+            target += '.%s'  % chunkId
+            pass
         msg = """Merging %(fileType)s file for %(idStr)s could not find all expected input files.""" % locals()
         print >> sys.stderr, msg
-        print >> sys.stderr, missingInFiles
+
+        kwargs = {'tgt': target}
+    
         l1Logger.error(msg, **kwargs)
 
         print >> sys.stderr, 'Supressing cleanup.'
+
         process = pipeline.getProcess()
         streamPath = os.environ.get('PIPELINE_STREAMPATH')
         processInstance = os.environ.get('PIPELINE_PROCESSINSTANCE')
@@ -114,14 +101,7 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
             content += '%s\n' % inFile
             continue
         fileNames.makeMergeLock(runId, content)
-
-        pass
-
-    if slowInFiles:
-        msg = """Merging %(fileType)s file for %(idStr)s had slow input files.""" % locals()
-        print >> sys.stderr, msg
-        print >> sys.stderr, slowInFiles
-        l1Logger.warn(msg, **kwargs)
+        
         pass
 
     outFile = files[fileType]
@@ -165,26 +145,24 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
     print >> sys.stderr, '------------------- start merge ------------------'
 
     if fileType in mergeTypes['report']:
+        setup = config.packages['Monitor']['setup']
         mergeConfig = config.mergeConfigs[fileType]
         app = config.apps['reportMerge']
         cmd = """
         cd %(workDir)s
-        export INST_DIR=%(instDir)s 
-        export GLAST_EXT=%(glastExt)s
-        source %(l1Setup)s
+        source %(setup)s
         %(app)s -c %(mergeConfig)s -o %(outFile)s %(inFileString)s
         """ % locals()
         status |= runner.run(cmd)
 
 
     elif fileType in mergeTypes['trend']:
+        setup = config.packages['Monitor']['setup']
         app = config.apps['trendMerge']
         treeName = 'Time'
         cmd = '''
         cd %(workDir)s
-        export INST_DIR=%(instDir)s 
-        export GLAST_EXT=%(glastExt)s
-        source %(l1Setup)s
+        source %(setup)s
         %(app)s %(inFileString)s -o %(outFile)s -t %(treeName)s
         ''' % locals()
         status |= runner.run(cmd)

@@ -3,60 +3,65 @@
 import os
 import sys
 
-if __name__ == "__main__":
-    print >> sys.stderr, "This module is not supported as main script"
-    sys.exit(1)
-
 import config
 
 import GPLinit
 
+import fileNames
+import registerPrep
 import runner
+import stageFiles
 
+level = 'run'
 
-def alarmHandler(files, idArgs, inFileTypes, level, outFileTypes, workDir, **args):
-    assert level == 'run'
+head, dlId = os.path.split(os.environ['DOWNLINK_RAWDIR'])
+if not dlId: head, dlId = os.path.split(head)
+runId = os.environ['RUNID']
 
-    dlId, runId, chunkId, crumbId = idArgs
+staged = stageFiles.StageSet(excludeIn=config.excludeIn)
+finishOption = config.finishOption
 
-    # this will choke unless there is exacly 1 member in inFileTypes
-    fileType, = inFileTypes
-    
-    alarmFileType, = outFileTypes
+fileType = os.environ['fileType']
+defaultAlarmFileType = fileType + 'Alarm'
+alarmFileType = os.environ.get('alarmFileType', defaultAlarmFileType)
 
-    stagedInFile = files[fileType]
+realInFile = fileNames.fileName(fileType, dlId, runId)
+stagedInFile = staged.stageIn(realInFile)
 
-    stagedAlarmFile = files[alarmFileType]
+realAlarmFile = fileNames.fileName(alarmFileType, dlId, runId, next=True)
+stagedAlarmFile = staged.stageOut(realAlarmFile)
 
-    python = config.python
+workDir = os.path.dirname(stagedAlarmFile)
 
-    package = config.packages['Common']
-    l1Setup = config.l1Setup
+python = config.python
 
-    if fileType in ['fastMonError','verifyLog','verifyFt1Error','verifyFt2Error','verifyMeritError']:
-        app = config.apps['errorHandler']
-        exceptionArgs = ''
-        refArgs = ''
-    else:
-        app = config.apps['alarmHandler']
-        exceptionFile = config.alarmExceptions[fileType]
-        exceptionArgs = '-x %s' % exceptionFile
-        refArgs = '-R %s' % config.alarmRefDir
-        pass
+package = config.packages['Common']
+setup = package['setup']
 
-    configFile = config.alarmConfigs[fileType]
+if fileType in ['fastMonError','verifyLog','verifyFt2Error']:
+    app = config.apps['errorHandler']
+    exceptionArgs = ''
+    refArgs = ''
+else:
+    app = config.apps['alarmHandler']
+    exceptionFile = config.alarmExceptions[fileType]
+    exceptionArgs = '-x %s' % exceptionFile
+    refArgs = '-R %s' % config.alarmRefDir
+    pass
 
-    instDir = config.L1Build
-    glastExt = config.glastExt
-         
-    cmd = '''
-    export INST_DIR=%(instDir)s 
-    export GLAST_EXT=%(glastExt)s 
-    source %(l1Setup)s
-    cd %(workDir)s
-    %(python)s %(app)s -c %(configFile)s %(exceptionArgs)s %(refArgs)s -o %(stagedAlarmFile)s %(stagedInFile)s
-    ''' % locals()
+configFile = config.alarmConfigs[fileType]
 
-    status = runner.run(cmd)
+cmd = '''
+cd %(workDir)s
+source %(setup)s
+%(python)s %(app)s -c %(configFile)s %(exceptionArgs)s %(refArgs)s -o %(stagedAlarmFile)s %(stagedInFile)s
+''' % locals()
 
-    return status
+status = runner.run(cmd)
+if status: finishOption = 'wipe'
+
+status |= staged.finish(finishOption)
+
+if not status: registerPrep.prep(alarmFileType, realAlarmFile)
+
+sys.exit(status)

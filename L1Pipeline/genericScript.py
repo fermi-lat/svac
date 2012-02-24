@@ -23,46 +23,22 @@ import variables
 moduleTable = {
     # 'processName': ('moduleName', 'functionName', ['cleanupName']),
     # no entry required if process, module, func are the same and no cleanup
-    'acdPedsAlarm': ('alarmHandler', 'alarmHandler'),
-    'acdPedsLogger': ('alarmLogger', 'alarmLogger'),
-    'calGainsAlarm': ('alarmHandler', 'alarmHandler'),
-    'calGainsLogger': ('alarmLogger', 'alarmLogger'),
-    'calPedsAlarm': ('alarmHandler', 'alarmHandler'),
-    'calPedsLogger': ('alarmLogger', 'alarmLogger'),
     'calHist': ('runStrip', 'runStrip'),
-    'calHistAlarm': ('alarmHandler', 'alarmHandler'),
-    'calHistLogger': ('alarmLogger', 'alarmLogger'),
     'calTrend': ('runStrip', 'runStrip'),
     'diffRspFT1': ('diffRsp', 'diffRsp'),
     'digitization': ('digitize', 'digitize'),
     'digitizationLci': ('digitize', 'digitize'),
     'digiHist': ('runStrip', 'runStrip'),
-    'digiHistAlarm': ('alarmHandler', 'alarmHandler'),
     'digiHistLci': ('runStrip', 'runStrip'),
-    'digiHistLogger': ('alarmLogger', 'alarmLogger'),
     'digiTrend': ('runStrip', 'runStrip'),
-    'digiTrendAlarm': ('alarmHandler', 'alarmHandler'),
-    'digiTrendLogger': ('alarmLogger', 'alarmLogger'),
     'electronMerit': ('filterMerit', 'electronMerit'),
-    'electronFT1': ('makeFT1', 'makeFT1'),
-    'fastMonErrorAlarm': ('alarmHandler', 'alarmHandler'),
-    'fastMonErrorLogger': ('alarmLogger', 'alarmLogger'),
     'fastMonHist': ('fastMon', 'fastMon'),
-    'fastMonHistAlarm': ('alarmHandler', 'alarmHandler'),
-    'fastMonHistLogger': ('alarmLogger', 'alarmLogger'),
     'fastMonHistLci': ('fastMon', 'fastMon'),
     'fastMonTrend': ('runStrip', 'runStrip'),
-    'fastMonTrendAlarm': ('alarmHandler', 'alarmHandler'),
-    'fastMonTrendLogger': ('alarmLogger', 'alarmLogger'),
     'fastMonTuple': ('fastMon', 'fastMon'),
     'fastMonTupleLci': ('fastMon', 'fastMon'),
-    'filterFT1': ('gtSelect', 'gtSelect'),
-    'filterLS1': ('gtSelect', 'gtSelect'),
     'findChunks': ('findChunks', 'findChunks', 'cleanup'),
     'findChunksLci': ('findChunks', 'findChunks', 'cleanup'),
-    'gtiElectronFT1': ('fixGTI', 'fixGTI'),
-    'gtiFT1': ('fixGTI', 'fixGTI'),
-    'gtiLS1': ('fixGTI', 'fixGTI'),
     'makeLS1': ('makeFT1', 'makeFT1'),
     'mergeCalCrumbs': ('mergeStuff', 'merge'),
     'mergeCalChunks': ('mergeStuff', 'merge'),
@@ -92,32 +68,12 @@ moduleTable = {
     'mergeSvacChunks': ('mergeStuff', 'merge'),
     'mergeTkrAnalysis': ('mergeStuff', 'merge'),
     'meritHist': ('runStrip', 'runStrip'),
-    'meritHistAlarm': ('alarmHandler', 'alarmHandler'),
-    'meritHistLogger': ('alarmLogger', 'alarmLogger'),
     'meritTrend': ('runStrip', 'runStrip'),
-    'meritTrendAlarm': ('alarmHandler', 'alarmHandler'),
-    'meritTrendLogger': ('alarmLogger', 'alarmLogger'),
     'reconHist': ('runStrip', 'runStrip'),
-    'reconHistAlarm': ('alarmHandler', 'alarmHandler'),
-    'reconHistLogger': ('alarmLogger', 'alarmLogger'),
     'reconTrend': ('runStrip', 'runStrip'),
-    'reconTrendAlarm': ('alarmHandler', 'alarmHandler'),
-    'reconTrendLogger': ('alarmLogger', 'alarmLogger'),
     'svacTuple': ('makeSvac', 'svacTuple'),
     'tkrAnalysis': ('tkrRootAnalysis', 'tkrAnalysis'),
     'tkrTrend': ('runStrip', 'runStrip'),
-    'tkrTrendAlarm': ('alarmHandler', 'alarmHandler'),
-    'tkrTrendLogger': ('alarmLogger', 'alarmLogger'),
-    'verifyErrorAlarm': ('alarmHandler', 'alarmHandler'),
-    'verifyErrorLogger': ('alarmLogger', 'alarmLogger'),
-    'verifyErrorAlarmComp': ('alarmHandler', 'alarmHandler'),
-    'verifyErrorLoggerComp': ('alarmLogger', 'alarmLogger'),
-    'verifyFt1ErrorAlarm': ('alarmHandler', 'alarmHandler'),
-    'verifyFt1ErrorLogger': ('alarmLogger', 'alarmLogger'),
-    'verifyFt2ErrorAlarm': ('alarmHandler', 'alarmHandler'),
-    'verifyFt2ErrorLogger': ('alarmLogger', 'alarmLogger'),
-    'verifyMeritErrorAlarm': ('alarmHandler', 'alarmHandler'),
-    'verifyMeritErrorLogger': ('alarmLogger', 'alarmLogger'),
     }
 
 def getFuncs(procName):
@@ -134,39 +90,8 @@ def getFuncs(procName):
     return function, cleanupFunc
 
 
-def tryToCall(func, *args, **kwargs):
-    print >> sys.stderr, 'About to run %s with args %s, %s' % (func, args, kwargs)
-    try:
-        status = func(*args, **kwargs)
-    except:
-        print >> sys.stderr, 'Failed!'
-        traceback.print_exc()
-        status = 1
-        pass
-    return status
-
-
-def finalize(status, args, staged, cleanupFunc=None):
-    args['status'] = status
-    if cleanupFunc is not None: status |= cleanupFunc(**args)
-    
-    if status:
-        finishOption = 'wipe'
-    else:
-        finishOption = config.finishOption
-        pass
-    status |= staged.finish(finishOption)
-    
-    sys.exit(status)
-    return
-
-
 def main():
     status = 0
-
-    procName = pipeline.getProcess()
-    # this crashes without cleanup if the module won't compile
-    function, cleanupFunc = getFuncs(procName)
 
     head, dlId = os.path.split(os.environ['DOWNLINK_RAWDIR'])
     if not dlId: head, dlId = os.path.split(head)
@@ -196,13 +121,15 @@ def main():
     piVersion = int(os.environ['PIPELINE_PROCESSINSTANCE'])
     pipeline.setVariable('L1_PI_version', piVersion)
 
+    procName = pipeline.getProcess()
+    function, cleanupFunc = getFuncs(procName)
+
     staged = stageFiles.StageSet(excludeIn=config.excludeIn)
     workDir = staged.stageDir
 
     runDir = fileNames.fileName(None, dlId, runId)
 
     files = {}
-    args = {}
 
     inFileTList = os.environ.get('inFileTypes')
     if inFileTList is not None:
@@ -254,14 +181,37 @@ def main():
         'workDir': workDir,
         }
 
-    status |= tryToCall(function, **args)
+    try:
+        print >> sys.stderr, 'About to run %s with args %s' % (function, args)
+        status |= function(**args)
+    except:
+        print >> sys.stderr, 'Failed!'
+        traceback.print_exc()
+        status |= 1
+        pass
     print >> sys.stderr, 'Status = %s' % status
     
     finalize(status, args, staged, cleanupFunc)
 
     return status
 
-if __name__ == '__main__':
-    status = main()
+
+def finalize(status, args, staged, cleanupFunc=None):
+    args['status'] = status
+    if cleanupFunc is not None: status |= cleanupFunc(**args)
+    
+    if status:
+        finishOption = 'wipe'
+    else:
+        finishOption = config.finishOption
+        pass
+    status |= staged.finish(finishOption)
+    
     sys.exit(status)
+    return
+
+
+if __name__ == '__main__':
+    main()
+    pass
 

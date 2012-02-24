@@ -46,12 +46,9 @@ fileTypes = {
     'digiHistAlarm': 'xml',
     'digiTrend': 'root',
     'digiTrendAlarm': 'xml',
-    'electronFT1': 'fit',
-    'electronFT1BadGti': 'fit',
+    'electronFt1': 'fit',
+    'electronFt1BadGti': 'fit',
     'electronMerit': 'root',
-    'event': 'evt',
-    'extendedFT1': 'fit',
-    'extendedLS1': 'fit',
     'fastMonError': 'xml',
     'fastMonErrorAlarm': 'xml',
     'fastMonHist': 'root',
@@ -64,9 +61,7 @@ fileTypes = {
     'ft1BadGti': 'fit',
     'ft1NoDiffRsp': 'fit',
     'ft2': 'fit',
-    'ft2NoQual': 'fit',
     'ft2Seconds': 'fit',
-    'ft2SecondsNoQual': 'fit',
     'ft2Fake': 'fit',
     'ft2Txt': 'txt',
     'gcr': 'root',
@@ -87,9 +82,6 @@ fileTypes = {
     'reconHistAlarmDist': 'root',
     'reconTrend': 'root',
     'reconTrendAlarm': 'xml',
-    'solarFlareHist': 'root',
-    'solarFlareLog': 'xml',
-    'solarFlarePlot': 'png',
     'svac': 'root',
     'svacHist': 'root',
     'timeSpan': 'txt',
@@ -102,22 +94,14 @@ fileTypes = {
     'verifyLog': 'xml',
     'verifyHisto': 'root',
     'verifyErrorAlarm': 'xml',
-    'verifyFt1Error': 'xml',
-    'verifyFt1ErrorAlarm': 'xml',
     'verifyFt2Error': 'xml',
     'verifyFt2ErrorAlarm': 'xml',
-    'verifyMeritError': 'xml',
-    'verifyMeritErrorAlarm': 'xml',
     }
 
 pTag = '_p%03d' % config.procVer
-ft2PTag = '_p%03d' % config.ft2ProcVer
 exportTags = { # files exported to FSSC use a different naming rule
-    'electronFT1': 'gll_el' + pTag,
-    'extendedFT1': 'gll_xp' + pTag,
-    'extendedLS1': 'gll_xe' + pTag,
     'ft1': 'gll_ph' + pTag,
-    'ft2': 'gll_pt' + ft2PTag,
+    'ft2': 'gll_pt',
     'ls1': 'gll_ev' + pTag,
     'ls3': 'gll_lt',
     }
@@ -154,35 +138,6 @@ def checkMergeLock(runId):
     return
 
 
-verifyLockBase = 'verifyLock' # lock file for missing data
-def verifyLockName(runId):
-    runDir = fileName(None, None, runId)
-    verifyLockName = os.path.join(runDir, verifyLockBase)
-    return verifyLockName
-def makeVerifyLock(runId, content=''):
-    verifyLock = verifyLockName(runId)
-    print >> sys.stderr, 'Trying to append to %s ... ' % verifyLock,
-    fp = open(verifyLock, 'a')
-    fp.write(content)
-    fp.close()
-    print >> sys.stderr, 'OK'
-    return
-def checkVerifyLock(runId):
-    verifyLock = verifyLockName(runId)
-    print >> sys.stderr, 'Checking for %s ... ' % verifyLock,
-    if os.path.exists(verifyLock):
-        print >> sys.stderr, 'yep.'
-        fp = open(verifyLock)
-        print >> sys.stderr, 'Contents:'
-        print >> sys.stderr, fp.read()
-        fp.close()
-        return verifyLock
-    else:
-        print >> sys.stderr, 'nope.'
-        return False
-    return
-
-
 def dataCatGroup(fileType):
     dsType = fileType.upper()
     return dsType
@@ -211,9 +166,9 @@ def getSite(fileName):
     return site
 
 def fileName(fileType, dlId, runId=None, chunkId=None, crumbId=None,
-             next=False, version=None, ignoreName=False):
+             next=False, version=None):
 
-    if fileType is not None and not ignoreName:
+    if fileType is not None:
         try:
             fullName = variables.getVar(fileType, 'fileName')
         except KeyError:

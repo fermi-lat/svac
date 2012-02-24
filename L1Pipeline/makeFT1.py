@@ -15,26 +15,23 @@ import runner
 import rounding
 
 
-def makeFT1(files, inFileTypes, outFileTypes, workDir, **args):
+def makeFT1(files, level, outFileTypes, workDir, **args):
     status = 0
 
-    inFileType = inFileTypes[0]
-
     assert len(outFileTypes) == 1
-    outFileType = outFileTypes[0]
+    fileType = outFileTypes[0]
 
     evtClassDefsPython = config.packages['evtClassDefs']['python']
 
     stSetup = config.stSetup
-    app = config.apps['makeFT1']
+    app = os.path.join('$FITSGENAPPSROOT', '$CMTCONFIG', 'makeFT1.exe')
 
-    stagedMeritFile = files[inFileType]
-    stagedFt1File = files[outFileType]
+    stagedMeritFile = files['merit']
 
-    xmlClassifier = config.xmlClassifier
-    tCuts = config.filterClassifyMap[outFileType]['cutFile']
-    classifier = config.filterClassifyMap[outFileType]['classifier']
-    dictionary = config.filterClassifyMap[outFileType]['ft1Dict']
+    stagedFt1File = files[fileType]
+
+    tCuts = config.cutFiles[fileType]
+    classifier = config.ft1Classifier
 
     # run start and stop from merit file
     mStart, mStop = meritFiles.startAndStop(stagedMeritFile)
@@ -43,19 +40,20 @@ def makeFT1(files, inFileTypes, outFileTypes, workDir, **args):
     cutStart = rounding.roundDown(mStart, config.ft1Digits)
     cutStop = rounding.roundUp(mStop, config.ft1Digits)
 
-    version = fileNames.version(stagedFt1File)
-    procVer = config.procVer
+    dictionary = config.ft1Dicts[fileType[:3]]
 
-    instDir = config.ST
-    glastExt = config.glastExt
+    version = fileNames.version(stagedFt1File)
+
+    procVer = config.procVer
+    
+    cmtPath = config.stCmtPath
 
     cmd = '''
     cd %(workDir)s
-    export INST_DIR=%(instDir)s 
-    export GLAST_EXT=%(glastExt)s 
+    export CMTPATH=%(cmtPath)s
     source %(stSetup)s
     PYTHONPATH=%(evtClassDefsPython)s:$PYTHONPATH ; export PYTHONPATH
-    %(app)s rootFile=%(stagedMeritFile)s fitsFile=%(stagedFt1File)s TCuts=%(tCuts)s xml_classifier="%(xmlClassifier)s" evtclsmap=%(classifier)s tstart=%(cutStart).17g tstop=%(cutStop).17g dict_file=%(dictionary)s file_version=%(version)s proc_ver=%(procVer)s
+    %(app)s rootFile=%(stagedMeritFile)s fitsFile=%(stagedFt1File)s TCuts=%(tCuts)s event_classifier="%(classifier)s" xml_classifier=none tstart=%(cutStart).17g tstop=%(cutStop).17g dict_file=%(dictionary)s file_version=%(version)s proc_ver=%(procVer)s
     ''' % locals()
 
     status |= runner.run(cmd)

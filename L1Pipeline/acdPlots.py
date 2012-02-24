@@ -1,44 +1,51 @@
 #!/afs/slac/g/glast/isoc/flightOps/rhel3_gcc32/ISOC_PROD/bin/shisoc python2.5
 
-import os
 import sys
-
-if __name__ == "__main__":
-    print >> sys.stderr, "This module is not supported as main script"
-    sys.exit(1)
+import os
 
 import config
 
 import GPLinit
 
+import fileNames
+import registerPrep
 import runner
+import stageFiles
 
+status = 0
+finishOption = config.finishOption
 
-def acdPlots(files, idArgs, **args):
-    fileType = 'acdPlots'
+head, dlId = os.path.split(os.environ['DOWNLINK_RAWDIR'])
+if not dlId: head, dlId = os.path.split(head)
+runId = os.environ['RUNID']
 
-    status = 0
+staged = stageFiles.StageSet(excludeIn=config.excludeIn)
 
-    dlId, runId, chunkId, crumbId = idArgs
+fileType = 'acdPlots'
 
-    stagedInFile = files['digiHist']
-    stagedOutFile = files[fileType]
+realInFile = fileNames.fileName('digiHist', dlId, runId)
+stagedInFile = staged.stageIn(realInFile)
 
-    package = config.packages['Monitor']
-    l1Setup = config.l1Setup
-    app = config.apps[fileType]
+realOutFile = fileNames.fileName(fileType, dlId, runId, next=True)
+stagedOutFile = staged.stageOut(realOutFile)
 
-    libraryPath = config.libraryPath
-    instDir = config.L1Build
-    glastExt = config.glastExt
+package = config.packages['Monitor']
+setup = package['setup']
+app = config.apps['acdPlots']
 
-    cmd = '''
-    export INST_DIR=%(instDir)s 
-    export GLAST_EXT=%(glastExt)s 
-    source %(l1Setup)s
-    %(app)s -i %(stagedInFile)s -t %(stagedOutFile)s
-    ''' % locals()
+libraryPath = config.libraryPath
 
-    status |= runner.run(cmd)
+cmd = '''
+source %(setup)s
+#export LD_LIBRARY_PATH=%(libraryPath)s
+%(app)s -i %(stagedInFile)s -t %(stagedOutFile)s
+''' % locals()
 
-    return status
+status |= runner.run(cmd)
+
+if status: finishOption = 'wipe'
+status |= staged.finish(finishOption)
+
+if not status: registerPrep.prep(fileType, realOutFile)
+
+sys.exit(status)

@@ -26,6 +26,7 @@ def runStrip(files, idArgs, outFileTypes, workDir, **args):
     options = config.monitorOptions[reportType]
 
     package = config.packages['Monitor']
+    setup = package['setup']
     app = package['app']
 
     outFile = files[reportType]
@@ -52,10 +53,8 @@ def runStrip(files, idArgs, outFileTypes, workDir, **args):
         pass
 
     tdBin = config.tdBin[reportType]
-    codeDir = config.l1ExeDir
-    l1Setup = config.l1Setup
-    instDir = config.L1Build
-    glastExt = config.glastExt
+
+    codeDir = config.packages['Monitor']['bin']
 
     # if reportType in ['calHist', 'calTrend']:
     #     zOpt = '' # keep transient data in a temp file
@@ -77,9 +76,7 @@ def runStrip(files, idArgs, outFileTypes, workDir, **args):
     htmlHead = 'html'
 
     cmd = """cd %(workDir)s
-    export INST_DIR=%(instDir)s 
-    export GLAST_EXT=%(glastExt)s
-    source %(l1Setup)s
+    source %(setup)s
     %(app)s %(zOpt)s -b %(tdBin)s -c %(options)s %(inFileOpts)s -o %(tmpHead)s -g %(htmlHead)s -w %(codeDir)s -p %(mcOpt)s || exit 1
     mv %(tmpOut)s %(outFile)s
     """ % locals()

@@ -16,13 +16,11 @@ runId = os.environ['RUNID']
 
 runNumber = int(runId.lstrip('r0'))
 
-tStart = os.environ['tStart']
-tStop = os.environ['tStop']
-mootKey = os.environ['mootKey']
-mootAlias = os.environ['mootAlias']
+tStart, tStop = acqQuery.runTimes(runNumber)
+pipeline.setVariable('tStart', '%.17g' % tStart)
+pipeline.setVariable('tStop', '%.17g' % tStop)
 
-pipeline.setVariable('tStart', tStart)
-pipeline.setVariable('tStop', tStop)
+mootKey, mootAlias = acqQuery.query([runNumber], ['moot_key', 'moot_alias'])[runNumber]
 pipeline.setVariable('mootKey', mootKey)
 pipeline.setVariable('mootAlias', mootAlias)
 

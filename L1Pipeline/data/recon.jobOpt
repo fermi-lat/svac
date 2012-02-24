@@ -1,9 +1,9 @@
-#include "$GLEAMJOBOPTIONSPATH/jobOptions/pipeline/readigi_runrecon.txt"
+#include "$GLEAMROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
 digiRootReaderAlg.digiRootFileList = { "$digiChunkFile" } ;
 reconRootWriterAlg.reconRootFile = "$reconCrumbFile";
 RootTupleSvc.filename = "$meritCrumbFile";
 CalTupleAlg.tupleFilename = "$calCrumbFile";
 gcrSelectRootWriterAlg.gcrSelectRootFile = "$gcrCrumbFile";
 PtValsAlg.PointingHistory = {"$fakeFT2File","", ""};
-GlastDetSvc.xmlfile = "$(XMLGEODBSXMLPATH)/$(gleamGeometry)";
+GlastDetSvc.xmlfile = "$(XMLGEODBSROOT)/xml/$(gleamGeometry)";
 ApplicationMgr.EvtMax = 2147483647; 

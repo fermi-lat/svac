@@ -1,4 +1,4 @@
-#include "$GLEAMJOBOPTIONSPATH/jobOptions/pipeline/readigi_runrecon.txt"
+#include "$GLEAMROOT/src/jobOptions/pipeline/readigi_runrecon.txt"
 digiRootReaderAlg.digiRootFileList = { "$digiChunkFile" } ;
 //RootIoSvc.StartingIndex = $crumbStart;
 //ApplicationMgr.EvtMax = $crumbEvents;
@@ -7,7 +7,7 @@ RootTupleSvc.filename = "$meritCrumbFile";
 CalTupleAlg.tupleFilename = "$calCrumbFile";
 gcrSelectRootWriterAlg.gcrSelectRootFile = "$gcrCrumbFile";
 PtValsAlg.PointingHistory = {"$fakeFT2File","", ""};
-GlastDetSvc.xmlfile = "$(XMLGEODBSXMLPATH)/$(gleamGeometry)";
+GlastDetSvc.xmlfile = "$(XMLGEODBSROOT)/xml/$(gleamGeometry)";
 
 AcdCalibSvc.DefaultFlavor = "MC_OktoberFest07";
 

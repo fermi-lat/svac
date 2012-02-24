@@ -40,7 +40,7 @@ def verifyChunk(headerData):
         print >> sys.stderr, 'events go backwards!'
         return False
 
-    if nEvt > nMax + 2: # there could be 2 duplicated sweep events
+    if nEvt > nMax:
         print >> sys.stderr, 'chunk has too many events: %d > %d' % (nEvt, nMax)
         return False
     
@@ -53,14 +53,9 @@ def verifyChunk(headerData):
 
 
 def verifyList(chunks):
-    """Return something false if any trouble, otherwise run start and stop."""
-    
     print >> sys.stderr, 'Testing chunks...'
 
     nChunks = len(chunks)
-    if nChunks < 1:
-        print >> sys.stderr, 'No chunks to process, failing.'
-        return False
     if nChunks > config.maxChunks:
         print >> sys.stderr, '%d chunks is too many (%d max), failing.' % \
               (nChunks, config.maxChunks)
@@ -111,10 +106,6 @@ def verifyList(chunks):
         continue
 
     print >> sys.stderr, 'OK'
-
-    tStart = bySec[0]['begSec']
-    tStop = bySec[-1]['endSec'] + 1 # the value from the header is truncated
-
-    return tStart, tStop
+    return True
 
 

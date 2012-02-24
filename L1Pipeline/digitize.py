@@ -12,12 +12,15 @@ import config
 import rootFiles
 import runner
 
-def digitize(files, idArgs, workDir, staged, **args):
+def digitize(**args):
     status = 0
 
-    os.environ['EVTFILE'] = files['event']
-    stagedDigiFile = files['digi']
+    staged = args['staged']
+    os.environ['EVTFILE'] = staged.stageIn(os.environ['EVTFILE'])
+    stagedDigiFile = args['files']['digi']
     os.environ['digiChunkFile'] = stagedDigiFile
+
+    workDir = args['workDir']
 
     app = config.apps['digi']
     options =  config.digiOptions
@@ -41,12 +44,7 @@ def digitize(files, idArgs, workDir, staged, **args):
     os.environ['gleamGeometry'] = geometry
     options = config.digiOptions[dataSource]
 
-    instDir = config.glastLocation
-    glastExt = config.glastExt
-
     cmd = '''
-    export INST_DIR=%(instDir)s 
-    export GLAST_EXT=%(glastExt)s 
     cd %(workDir)s
     %(app)s %(options)s
     ''' % locals()

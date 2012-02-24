@@ -3,51 +3,72 @@
 import os
 import sys
 
-if __name__ == "__main__":
-    print >> sys.stderr, "This module is not supported as main script"
-    sys.exit(1)
-
 import config
 
+import GPLinit
+
 import fileNames
-import meritFiles
 import runner
-import pyfits
+import stageFiles
+import registerPrep
 
-def fixGTI(files, inFileTypes, outFileTypes, workDir, **args):
-    status = 0
+head, dlId = os.path.split(os.environ['DOWNLINK_RAWDIR'])
+if not dlId: head, dlId = os.path.split(head)
+runId = os.environ['RUNID']
+chunkId = os.environ.get('CHUNK_ID') # might not be set
+crumbId = os.environ.get('CRUMB_ID') # might not be set
+idArgs = (dlId, runId, chunkId, crumbId)
 
-    inFileType = inFileTypes[0]
-    ft2FileType = inFileTypes[1]
+if chunkId is None:
+    level = 'run'
+    next = True
+else:
+    if crumbId is None:
+        level = 'chunk'
+    else:
+        level = 'crumb'
+        pass
+    next = False
+    pass
 
-    assert len(outFileTypes) == 1
-    outFileType = outFileTypes[0]
+fileType = os.environ['fileType']
+inFileType = fileType + 'BadGti'
 
-    stSetup = config.stSetup
-    app = config.apps['fixGTI']
+staged = stageFiles.StageSet(excludeIn=config.excludeIn)
+finishOption = config.finishOption
 
-    stagedInFile = files[inFileType]
-    stagedFt2File = files[ft2FileType]
-    stagedOutFile = files[outFileType]
+stSetup = config.stSetup
+app = os.path.join('$DATASUBSELECTORROOT', '$CMTCONFIG', 'gtmktime.exe')
 
-    version = fileNames.version(stagedOutFile)
-    print >> sys.stderr, "Updating the header version in %s to %d" % (stagedInFile, version)
-    fixVer = pyfits.open(stagedInFile,mode='update')
-    fixVer[0].header.update('VERSION',version)
-    fixVer.close()
+realInFile = fileNames.fileName(inFileType, *idArgs)
+stagedInFile = staged.stageIn(realInFile)
 
-    filter = 'LIVETIME>0'
+realFt2File = fileNames.fileName('ft2Seconds', *idArgs)
+stagedFt2File = staged.stageIn(realFt2File)
 
-    instDir = config.ST
-    glastExt = config.glastExt
+realOutFile = fileNames.fileName(fileType, next=next, *idArgs)
+stagedOutFile = staged.stageOut(realOutFile)
 
-    cmd = '''
-    cd %(workDir)s
-    export INST_DIR=%(instDir)s
-    export GLAST_EXT=%(glastExt)s
-    source %(stSetup)s
-    %(app)s overwrite=yes roicut=no scfile=%(stagedFt2File)s filter="%(filter)s" evfile=%(stagedInFile)s outFile=%(stagedOutFile)s
-    ''' % locals()
+workDir = os.path.dirname(stagedOutFile)
 
-    status = runner.run(cmd)
-    return status
+version = fileNames.version(realOutFile)
+
+filter = 'LIVETIME>0'
+
+cmtPath = config.stCmtPath
+
+cmd = '''
+cd %(workDir)s
+export CMTPATH=%(cmtPath)s
+source %(stSetup)s
+%(app)s overwrite=yes roicut=no scfile=%(stagedFt2File)s filter="%(filter)s" evfile=%(stagedInFile)s outFile=%(stagedOutFile)s
+''' % locals()
+
+status = runner.run(cmd)
+if status: finishOption = 'wipe'
+
+status |= staged.finish(finishOption)
+
+if level == 'run' and not status: registerPrep.prep(fileType, realOutFile)
+
+sys.exit(status)

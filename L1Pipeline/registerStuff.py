@@ -4,15 +4,14 @@
 # This script is automagically pasted into the XML at install time
 
 from java.util import HashMap
+from org.glast.datacat.client.sql import NewDataset
 
 def getVar(fileType, name):
     mangledName = '_'.join([nameManglingPrefix, fileType, name])
     value = parentPI.getVariable(mangledName)
     return value
 
-currentStream = pipeline.getCurrentStream()
-
-parentPI = currentStream.getProcessInstance(parentProcess)
+parentPI = pipeline.getProcessInstance(parentProcess)
 
 runNumber = int(RUNID[1:])
 
@@ -24,7 +23,7 @@ site = getVar(fileType, 'site')
 fileName = getVar(fileType, 'fileName')
 version = getVar(fileType, 'ver')
 
-fcPi = currentStream.getProcessInstance(timeProcess)
+fcPi = pipeline.getProcessInstance(timeProcess)
 lessBrokenTStart = fcPi.getVariable('tStart')
 lessBrokenTStop = fcPi.getVariable('tStop')
 mootAlias = fcPi.getVariable('mootAlias')
@@ -47,6 +46,6 @@ if mdRepr:
 
 print attributes
 
-dsNew = datacatalog.newDataset(dsName, fileFormat, dcType, dataCatDir, dcGroup, site, fileName)
+dsNew = NewDataset(dsName, fileFormat, dcType, dataCatDir, dcGroup, site, fileName)
 dsNew.setVersionID(version)
 ds = datacatalog.registerDataset(dsNew, attributes);

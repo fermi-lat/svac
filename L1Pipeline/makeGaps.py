@@ -29,16 +29,15 @@ realGapFile = fileNames.fileName('digiGap', dlId, runId, next=True)
 stagedGapFile = staged.stageOut(realGapFile)
 
 workDir = os.path.dirname(stagedDigiFile)
-l1Setup = config.l1Setup
-instDir = config.L1Build
-glastExt = config.glastExt
+
+package = config.packages['findGaps']
+setup = package['setup']
+
 app = config.apps['findGaps']
 
 cmd = '''
 cd %(workDir)s
-export INST_DIR=%(instDir)s 
-export GLAST_EXT=%(glastExt)s
-source %(l1Setup)s
+source %(setup)s
 %(app)s -d %(stagedDigiFile)s -g %(stagedGapFile)s
 ''' % locals()
 

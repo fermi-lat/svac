@@ -12,45 +12,41 @@ import config
 import runner
 
 
-def diffRsp(files, inFileTypes, outFileTypes, workDir, **args):
+def diffRsp(files, outFileTypes, workDir, **args):
     status = 0
 
-    inFileType = inFileTypes[0]
-    ft2FileType = inFileTypes[1]
+    inFileType = 'ft1NoDiffRsp'
 
     assert len(outFileTypes) == 1
     outFileType = outFileTypes[0]
 
     stSetup = config.stSetup
-    app = config.apps['diffRsp']
+    app = os.path.join('$LIKELIHOODROOT', '$CMTCONFIG', 'gtdiffrsp.exe')
 
     stagedInFile = files[inFileType]
-    stagedFt2File = files[ft2FileType]
+
+    stagedFt2File = files['ft2Fake']
+
     stagedOutFile = files[outFileType]
 
-    instDir = config.ST
-    glastExt = config.glastExt
+    model = config.diffRspModel
 
-    tmpFt1File = stagedInFile + '.tmp'
-    os.rename(stagedInFile, tmpFt1File)
+    cmtPath = config.stCmtPath
 
-    cmdHead = '''
+    cmdParts = ['''
     cd %(workDir)s
-    export INST_DIR=%(instDir)s
-    export GLAST_EXT=%(glastExt)s
+    export CMTPATH=%(cmtPath)s
     source %(stSetup)s
-    ''' % locals()
+    mv %(stagedInFile)s %(stagedOutFile)s
+    date''' % locals()]
 
-    for evcls in config.diffRspMap.keys():
-        irf = config.diffRspMap[evcls]['irf']
-        model = config.diffRspMap[evcls]['model']
-        cmdTail = '''%(app)s scfile=%(stagedFt2File)s evfile=%(tmpFt1File)s srcmdl=%(model)s irfs=%(irf)s evclass=%(evcls)s
-        ''' % locals()
-        cmd = cmdHead + cmdTail
-        status |= runner.run(cmd)
-        if status: return status
+    for diffRspMinClass, irf in config.diffRspIrfs.items():
+        cmdParts.append('''    %(app)s scfile=%(stagedFt2File)s evfile=%(stagedOutFile)s srcmdl=%(model)s irfs=%(irf)s evclsmin=%(diffRspMinClass)r
+        date
+        ''' % locals())
         continue
-
-    os.rename(tmpFt1File, stagedOutFile)
+    cmd = '\n'.join(cmdParts)
+    
+    status |= runner.run(cmd)
 
     return status

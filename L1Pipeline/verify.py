@@ -31,36 +31,30 @@ realVerifyHistoFile = fileNames.fileName('verifyHisto', dlId, runId, next=True)
 verifyHistoFile = staged.stageOut(realVerifyHistoFile)
 
 workDir = os.path.dirname(verifyLogFile)
-l1Setup = config.l1Setup
-instDir = config.L1Build
-glastExt = config.glastExt
+
+cmtPath = config.ft2CmtPath
 
 package = config.packages['TestReport']
+setupScript = package['setup']
 app = config.apps['runVerify']
 jobOption = config.verifyOptions[completeness] 
 truncation = config.verifyOptions['Truncation']
 
-verifyLock = fileNames.checkVerifyLock(runId)
-if (verifyLock): 
-    print >> sys.stderr, 'Unlinking %s ... ' % verifyLock
-    os.unlink(verifyLock)
-
 cmd = '''
 cd %(workDir)s
-export INST_DIR=%(instDir)s 
-export GLAST_EXT=%(glastExt)s
-source %(l1Setup)s
+export CMTPATH=%(cmtPath)s
+source %(setupScript)s
 %(app)s -d %(stagedDigiFile)s -x %(verifyLogFile)s -r %(verifyHistoFile)s -t %(truncation)s %(jobOption)s
 ''' % locals()
 
 status = runner.run(cmd)
-if (status == 153 or status == 154): 
+if status == 153: 
     process = pipeline.getProcess()
     streamPath = os.environ.get('PIPELINE_STREAMPATH')
     processInstance = os.environ.get('PIPELINE_PROCESSINSTANCE')
     timeStamp = time.ctime()
     content = 'Locked by %s %s pipk = %s at %s\n' % (process, streamPath, processInstance, timeStamp)
-    fileNames.makeVerifyLock(runId, content)
+    fileNames.makeMergeLock(runId, content)
     status = 0
 
 if status: finishOption = 'wipe'

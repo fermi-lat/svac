@@ -1,22 +1,18 @@
 
 
-finalStates = ['SUCCESS', 'FAILED', 'TERMINATED', 'CANCELED']
+finalOrRunning = ['SUCCESS', 'FAILED', 'TERMINATED', 'CANCELED', 'RUNNING']
 def getStreams():
     thisStream = pipeline.getCurrentStream()
-    thisId = thisStream.getId()
-    thisPath = thisStream.getIdPath()
-    print 'stream path: %s' % thisPath
+    id = thisStream.getId()
+    print 'stream id: %s' % id
     thisTask = thisStream.getTask()
     print 'this task: %s' % thisTask
     rdlStreams = []
-    allStreams = thisTask.getStreams(thisId)
+    allStreams = thisTask.getStreams(id)
     for stream in allStreams:
-        thatPath = stream.getIdPath()
         status = stream.getStatus()
-        print stream, thatPath, status
-        if thatPath == thisPath or status in finalStates:
-            rdlStreams.append(stream)
-            pass
+        print stream, status
+        if status in finalOrRunning: rdlStreams.append(stream)
         continue
     return rdlStreams
 

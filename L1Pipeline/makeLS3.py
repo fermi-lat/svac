@@ -21,10 +21,9 @@ finishOption = config.finishOption
 
 fileType = 'ls3'
 
-stSetup = config.stSetup
 app = config.apps['makeLS3']
 
-realFt1File = fileNames.fileName('extendedFT1', dlId, runId)
+realFt1File = fileNames.fileName('ft1', dlId, runId)
 stagedFt1File = staged.stageIn(realFt1File)
 realFt2File = fileNames.fileName('ft2', dlId, runId)
 stagedFt2File = staged.stageIn(realFt2File)
@@ -36,14 +35,11 @@ workDir = os.path.dirname(stagedLs3File)
 
 version = fileNames.version(realLs3File)
 
-instDir = config.ST
-glastExt = config.glastExt
+cmtPath = config.stCmtPath
 
 cmd = '''
 cd %(workDir)s
-export INST_DIR=%(instDir)s 
-export GLAST_EXT=%(glastExt)s 
-source %(stSetup)s
+export CMTPATH=%(cmtPath)s
 %(app)s evfile=%(stagedFt1File)s scfile=%(stagedFt2File)s outfile=%(stagedLs3File)s dcostheta=0.025 binsz=1 file_version=%(version)s
 ''' % locals()
 
