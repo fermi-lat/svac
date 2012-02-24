@@ -6,6 +6,7 @@
 //
 #include "MonInput_AcdHit_GafeGarc.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

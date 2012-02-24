@@ -6,6 +6,7 @@
 //
 #include "MonInput_Range4.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

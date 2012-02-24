@@ -6,6 +6,7 @@
 //
 #include "MonInput_AcdVeto_GafeGarc.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

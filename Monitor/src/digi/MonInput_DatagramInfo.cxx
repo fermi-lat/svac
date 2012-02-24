@@ -6,6 +6,7 @@
 //
 #include "MonInput_DatagramInfo.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

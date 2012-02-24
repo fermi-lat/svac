@@ -6,6 +6,7 @@
 //
 #include "MonInput_AcdGemROI_Tower.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

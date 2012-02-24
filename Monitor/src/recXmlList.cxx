@@ -2,6 +2,7 @@
 #include "recXmlList.h"
 #include <vector>
 #include <list>
+#include <cassert>
 #include "xmlBase/Dom.h"
 using namespace xmlBase;
 

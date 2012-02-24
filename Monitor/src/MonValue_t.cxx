@@ -14,6 +14,7 @@
 #include "compareFiles.h"
 #include <ctime>
 #include <map>
+#include <cassert>
 
 std::vector<double> *MonValue::m_result=new std::vector<double>;
 std::vector<double> *MonValue::m_result2=new std::vector<double>;

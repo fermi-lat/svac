@@ -8,6 +8,7 @@
 #include <iostream>
 #include <iomanip>
 #include <ctime>
+#include <cassert>
 //
 // ROOT-io
 #include "TROOT.h"

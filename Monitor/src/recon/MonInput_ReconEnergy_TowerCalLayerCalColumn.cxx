@@ -6,6 +6,7 @@
 //
 #include "MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

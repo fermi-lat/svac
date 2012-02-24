@@ -1,6 +1,7 @@
 #include "CalPedProxy.h"
 #include "CalPedParser.h"
 #include "calibUtil/Metadata.h"
+#include <cassert>
 using calibUtil::Metadata;
 
 CalPeds* CalPedProxy::m_thepeds=0;

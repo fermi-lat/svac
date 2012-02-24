@@ -6,6 +6,7 @@
 //
 #include "MonInput_Tick20MHzDeviation.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

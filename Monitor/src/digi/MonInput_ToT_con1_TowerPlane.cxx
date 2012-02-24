@@ -8,6 +8,7 @@
 #include "digiRootData/GlastAxis.h"
 #include "../Geo.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

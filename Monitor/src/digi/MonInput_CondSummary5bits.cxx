@@ -6,6 +6,7 @@
 //
 #include "MonInput_CondSummary5bits.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

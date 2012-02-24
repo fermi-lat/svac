@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <vector>
+#include <cassert>
 
 // ROOT IO
 #include "digiRootData/DigiEvent.h"

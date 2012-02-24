@@ -6,6 +6,7 @@
 //
 #include "MonInput_CalHiTriggerTower.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

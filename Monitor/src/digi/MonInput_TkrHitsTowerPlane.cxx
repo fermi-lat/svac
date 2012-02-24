@@ -9,6 +9,7 @@
 #include "../Geo.h"
 
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 #define NAME TkrHitsTowerPlane

@@ -6,6 +6,7 @@
 //
 #include "MonInput_configkey1852.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

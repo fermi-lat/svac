@@ -6,6 +6,7 @@
 //
 #include "MonInput_condarrcalhi.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

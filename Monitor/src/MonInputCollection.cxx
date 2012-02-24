@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <ctime>
+#include <cassert>
 
 
 MonInputCollection::MonInputCollection(TTree* tree, std::string type):m_intree(tree),m_type(type),m_timeprof(0){

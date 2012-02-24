@@ -3,6 +3,7 @@
 
 // To attach to trees
 #include "TTree.h"
+#include <cassert>
 
 const ULong64_t MonCounterDiff::s_maxVal64(0xFFFFFFFFFFFFFFFF);
 const Float_t MonMinMax::s_huge(1e35);

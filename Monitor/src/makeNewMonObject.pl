@@ -200,6 +200,7 @@ print CFILE "//
 //
 #include \"MonInput_$name.h\"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

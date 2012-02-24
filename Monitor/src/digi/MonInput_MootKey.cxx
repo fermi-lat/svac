@@ -6,6 +6,7 @@
 //
 #include "MonInput_MootKey.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

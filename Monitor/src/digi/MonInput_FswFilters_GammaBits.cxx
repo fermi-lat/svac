@@ -6,6 +6,7 @@
 //
 #include "MonInput_FswFilters_GammaBits.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

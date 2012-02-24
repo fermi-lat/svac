@@ -6,6 +6,7 @@
 //
 #include "MonInput_AcdGemCNO_GARC.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

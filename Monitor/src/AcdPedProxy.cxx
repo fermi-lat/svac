@@ -1,6 +1,7 @@
 #include "AcdPedProxy.h"
 #include "AcdPedParser.h"
 #include "calibUtil/Metadata.h"
+#include <cassert>
 using calibUtil::Metadata;
 
 AcdPeds* AcdPedProxy::m_thepeds=0;

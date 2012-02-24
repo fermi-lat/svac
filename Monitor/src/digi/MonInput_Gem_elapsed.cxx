@@ -6,6 +6,7 @@
 //
 #include "MonInput_Gem_elapsed.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

@@ -4,6 +4,7 @@
 #include <fstream>
 #include "calibUtil/Metadata.h"
 #include <unistd.h>
+#include <cassert>
 #include "xmlBase/Dom.h"
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMNodeList.hpp>

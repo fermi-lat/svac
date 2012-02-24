@@ -6,6 +6,7 @@
 //
 #include "MonInput_CompressionLevel.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

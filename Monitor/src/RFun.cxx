@@ -11,6 +11,7 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <cassert>
 
 
 // for the tokenizer

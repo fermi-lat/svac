@@ -4,6 +4,8 @@
  *
  *                  EOH
 
+- adding #include <cassert> everywhere (required by gcc41)
+
  Monitor-02-00-01 19-Oct-2011 monzani More Scons work
 - Some work needed to be able to generate the shared objects
 

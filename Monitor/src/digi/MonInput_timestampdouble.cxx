@@ -6,6 +6,7 @@
 //
 #include "MonInput_timestampdouble.h"
 #include <iostream>
+#include <cassert>
 #include <iomanip>
 
 // User defined part 

@@ -6,6 +6,7 @@
 //
 #include "MonInput_sourceGps.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

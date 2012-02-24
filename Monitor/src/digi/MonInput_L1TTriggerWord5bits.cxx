@@ -6,6 +6,7 @@
 //
 #include "MonInput_L1TTriggerWord5bits.h"
 #include <iostream>
+#include <cassert>
 
 // User defined part 
 

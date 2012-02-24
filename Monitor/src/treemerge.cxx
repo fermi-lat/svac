@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <cassert>
 #include "TFile.h"
 #include "TTree.h"
 #include "TLeaf.h"

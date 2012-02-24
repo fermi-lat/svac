@@ -20,6 +20,7 @@
 #include <list>
 #include <map>
 #include <vector>
+#include <cassert>
 
 #include "MonConfigParser.h"
 
