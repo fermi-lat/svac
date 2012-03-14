@@ -354,7 +354,7 @@ void MonValue::makeProxy(TTree* tree){
       }
     }
   }
-  char rootcommand[128];
+  char rootcommand[256];
   if (compile){
     if(access((m_sodir+m_name+"Selector.h").c_str(),F_OK)==0)unlink((m_sodir+m_name+"Selector.h").c_str());
     if (m_cut!=""){
