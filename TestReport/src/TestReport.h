@@ -11,13 +11,6 @@
 #include "mcRootData/McEvent.h"
 #include "reconRootData/ReconEvent.h"
 #include "digiRootData/DigiEvent.h"
-#include "enums/TriggerBits.h"
-#include "reconRootData/AcdRecon.h"
-#include "reconRootData/AcdTkrIntersection.h"
-#include "digiRootData/AcdDigi.h"
-
-#include "calibTkrUtil/TkrNoiseOcc.h"
-
 
 /**
  * \class TestReport
@@ -29,13 +22,9 @@ class TestReport {
 
  public:
 
-  static Float_t efficDivide(TH1& top, const TH1& bottom, Bool_t inEffic = kFALSE);
-
- public:
-
   TestReport(const char* dir, const char* prefix, const char* version,
-	     const char* emVersion, const char*tkrCalibSerNo, 
-	     const char* calCalibSerNo);
+	     const char* emVersion, const char*tkrV, const char* calV,
+	     const char* splitF);
   ~TestReport();
 
   void analyzeTrees(const char* mcFileName,
@@ -85,22 +74,20 @@ class TestReport {
     HistAttribute(const char* xTitle="", const char* yTitle="", 
 		  float axisTitleSize=0.04, float axisLabelSize=0.04, 
 		  float xTitleOffset=1, float yTitleOffset=1,
-		  bool canRebin=true,  bool use2DStat=false) : 
+		  bool canRebin=true) : 
       Attribute(xTitle, yTitle, axisTitleSize, axisLabelSize, xTitleOffset,
-		yTitleOffset), m_canRebin(canRebin), m_use2DStat(use2DStat) { }
+		yTitleOffset), m_canRebin(canRebin) { }
 
     void set(const char* xTitle="", const char* yTitle="", 
 	     float axisTitleSize=0.04, float axisLabelSize=0.04, 
-	     float xTitleOffset=1, float yTitleOffset=1, bool canRebin=true, bool use2DStat=false)  
+	     float xTitleOffset=1, float yTitleOffset=1, bool canRebin=true)  
     {
       Attribute::set(xTitle, yTitle, axisTitleSize, axisLabelSize, 
 		     xTitleOffset, yTitleOffset);
       m_canRebin = canRebin;
-      m_use2DStat = use2DStat;
     }
 
     bool m_canRebin;
-    bool m_use2DStat;
   };
 
   struct GraphAttribute : public Attribute{
@@ -127,12 +114,12 @@ class TestReport {
 
   struct PlotAttribute {
     PlotAttribute::PlotAttribute(const char* file=0, const char* caption=0,
-				 const char* label=0, bool yLog=0, bool zLog=0,
+				 const char* label=0, bool yLog=0,
 				 float height=10, float width=15, int x=606,
-				 int y=410, int stat=1111, bool statBox=0) : 
-      m_file(file), m_caption(caption), m_label(label), m_yLog(yLog), m_zLog(zLog),
+				 int y=410, int stat=1111) : 
+      m_file(file), m_caption(caption), m_label(label), m_yLog(yLog),
 	 m_height(height), m_width(width), m_xPixel(x), m_yPixel(y),
-	 m_statMode(stat), m_statBox(statBox)
+	 m_statMode(stat)
     { 
       m_2dPlotType = COLZ;
       m_nColor = 3;
@@ -145,14 +132,13 @@ class TestReport {
     }
 
     void set(const char* file=0, const char* caption=0, const char* label=0, 
-	     bool yLog=0, bool zLog=0, float height=10, float width=15, int x=606, 
-	     int y=410, int stat=1111, bool statBox=0)
+	     bool yLog=0, float height=10, float width=15, int x=606, 
+	     int y=410, int stat=1111)
     {
       m_file = file;
       m_caption = caption;
       m_label = label;
       m_yLog = yLog;
-      m_zLog = zLog;
       m_height = height;
       m_width = width;
       m_xPixel = x;
@@ -160,7 +146,6 @@ class TestReport {
       m_nColor = 3;
       m_2dPlotType = COLZ;
       m_statMode = stat;
-      m_statBox = statBox;
     }
 
     /// name of file to be produced, note file type such as ".eps" is not
@@ -169,7 +154,6 @@ class TestReport {
     const char* m_caption;
     const char* m_label;
     bool m_yLog;
-    bool m_zLog;
 
     /// height and width of a plot in latex
     float m_height;
@@ -187,7 +171,6 @@ class TestReport {
 
     /// mode controlling what are drawn in the stat box
     int m_statMode;
-    bool m_statBox;
   };
 
   struct TableDef {
@@ -254,31 +237,12 @@ class TestReport {
 
   void produceReconEnePlots();
 
-  void produceEpuPlot();
-
-  void produceGemDiscardedPlot();
-
-  void produceTriggerPerTowerPlot();
-
-  void produceCondArrivalTimesPlots();
-
-  void produceAcdTriggerPlots();
-
-  void produceTimeIntervalPlotSBC();
-  void produceTimeIntervalPlotGEM();
-
-  void produceTriggerRatePlot(); 
+  void produceTimeIntervalPlot();
 
   void produceNHitPlane2DPlot();
 
   /// produce plots of histogram m_alignCalTkr
   void produceAlignCalTkrPlot();
-
-  /// Produce plots of histogram m_nAcdDigis
-  void produceAcdDigiPlots();
-
-  /// Produce plots of histogram m_nAcdDigis
-  void produceAcdTkrReconPlots();
 
   /// set some common parameters for a 1D histogram
   void setHistParameters(TH1* h, const HistAttribute& att);
@@ -307,9 +271,6 @@ class TestReport {
   /// apply \ in front of some latex special characters 
   void applyDash(std::string* x, int n) const;
 
-  /// convert to the dense acd notation
-  static UShort_t getGemId(UInt_t id);
-    
   /// used in producing caption for a plot in a latex file. It will put the
   /// first sentence in the caption to be bold face.
   std::string boldFaceLatex(const std::string& s);
@@ -323,6 +284,8 @@ class TestReport {
 
   /// delete sub strings enclosed between @html and @html
   std::string eraseHtmlStr(const std::string& s);
+
+  bool isLowEnd(int tower, int layer, int iView, int stripId);
 
   void analyzeMcTree() { }
 
@@ -344,8 +307,8 @@ class TestReport {
   /// version of the EngineeringModel package
   std::string m_emVersion;
  
-  std::string m_tkrCalibSerNo;
-  std::string m_calCalibSerNo;
+  std::string m_tkrCalibVersion;
+  std::string m_calCalibVersion;
 
   TFile* m_outputFile;
 
@@ -365,228 +328,23 @@ class TestReport {
   DigiEvent* m_digiEvent;
 
   enum {g_nLayer = 18, g_nView = 2, g_nPlane = 36, g_nStrip = 1536, 
-	g_nFEC = 24, g_nTower = 16, g_satTot = 250, g_overlapTot = 255,
-        g_nCalLayer = 8, g_nEnd =2};
+	g_nFEC = 24, g_nTower = 16, g_satTot = 255, g_nCalLayer = 8,
+	g_nEnd =2};
 
   /// trigger histogram
   TH1F* m_trigger;
 
   /// no of bad events indicated in event summary data
-  unsigned int m_nBadEvts;
-
-  // LATTE?
-  int m_isLATTE;
-
-  // Bay 10, layer 0 split:
-  int m_bay10Layer0SplitDefault;
-
-  // Ground ID:
-  unsigned int m_firstGroundID;
-  unsigned int m_lastGroundID;
-  unsigned int m_previousGroundID;
-  int m_counterGroundID;
-
-  // Datagrams:
-  int m_counterDataDiagramsEpu0;
-  int m_nbrDataGramsEpu0;
-  int m_nbrEventsDataGramsEpu0;
-  unsigned int m_firstDataGramEpu0;
-  unsigned int m_thisDataGramEpu0;
-  unsigned int m_previousDataGramEpu0;
-  unsigned int m_previousPreviousDataGramEpu0;
-  int m_endRunDataGramEpu0;
-  int m_fullDataGramEpu0;
-  int m_beginRunDataGramEpu0;
-
-  int m_counterDataDiagramsEpu1;
-  int m_nbrDataGramsEpu1;
-  int m_nbrEventsDataGramsEpu1;
-  unsigned int m_firstDataGramEpu1;
-  unsigned int m_thisDataGramEpu1;
-  unsigned int m_previousDataGramEpu1;
-  unsigned int m_previousPreviousDataGramEpu1;
-  int m_endRunDataGramEpu1;
-  int m_fullDataGramEpu1;
-  int m_beginRunDataGramEpu1;
-
-  int m_counterDataDiagramsEpu2;
-  int m_nbrDataGramsEpu2;
-  int m_nbrEventsDataGramsEpu2;
-  unsigned int m_firstDataGramEpu2;
-  unsigned int m_thisDataGramEpu2;
-  unsigned int m_previousDataGramEpu2;
-  unsigned int m_previousPreviousDataGramEpu2;
-  int m_endRunDataGramEpu2;
-  int m_fullDataGramEpu2;
-  int m_beginRunDataGramEpu2;
-
-  int m_counterCyclesSiu0;
-  int m_counterDataDiagramsSiu0;
-  int m_nbrDataGramsSiu0;
-  int m_nbrEventsDataGramsSiu0;
-  unsigned int m_firstDataGramSiu0;
-  unsigned int m_thisDataGramSiu0;
-  unsigned int m_previousDataGramSiu0;
-  unsigned int m_previousPreviousDataGramSiu0;
-  int m_endCountDataGramSiu0;
-  int m_fullDataGramSiu0;
-  int m_beginRunDataGramSiu0;
-
-  int m_counterCyclesSiu1;
-  int m_counterDataDiagramsSiu1;
-  int m_nbrDataGramsSiu1;
-  int m_nbrEventsDataGramsSiu1;
-  unsigned int m_firstDataGramSiu1;
-  unsigned int m_thisDataGramSiu1;
-  unsigned int m_previousDataGramSiu1;
-  unsigned int m_previousPreviousDataGramSiu1;
-  int m_endCountDataGramSiu1;
-  int m_fullDataGramSiu1;
-  int m_beginRunDataGramSiu1;
-
-  int m_datagramGapsEPU0;
-  int m_datagramGapsEPU1;
-  int m_datagramGapsEPU2;
-  int m_datagramGapsSIU0;
-  int m_datagramGapsSIU1;
-
-  /// number of events in the digi root file
-  int m_nEvent;
-  int m_nEventNoPeriodic;
-
-  // Number of GEM related quantities:
-  ULong64_t m_nbrPrescaled;
-  ULong64_t m_nbrDeadZone;
-  ULong64_t m_nbrDiscarded;
-  Long64_t m_deltaSequenceNbrEvents;
-
-  /// number of events with 3 in a row trigger in GEM
-  int m_nTkrTrigger;
-
-  /// number of events with strip ID outside the range from 0 to 1535
-  int m_nEventBadStrip;
-
-  /// number of events with more than 63 strips per GTRC
-  int m_nEventMoreStrip;
-
-  /// number of events with saturated TOT (250 ADC )
-  int m_nEventSatTot;
-
-  /// number of events with 0 TOT but at least 1 strip
-  int m_nEventZeroTot;
-
-  /// number of events with TOT values outside range [0, g_overlapTot]
-  int m_nEvtInvalidTot;
-
-  /// number of events with TOT values outside range [0, g_satTot] i.e. overlapped triggers
-  int m_nEvtOverlapTriggerTot;
-
-  /// number of events with none zero TOT but no strip hit
-  int m_nEventBadTot;
-
-  /// time of first trigger
-  UInt_t m_startTime;
-
-  /// time of last trigger
-  UInt_t m_endTime;
-
-  // Livetime:
-  double m_liveTime;
- 
-  ULong64_t m_elapsedTime;
-
-  int m_nbrEventsNormal;
-  int m_nbrEvents4Range;
-  int m_nbrEvents4RangeNonZS;
-
-  // Extended counters problem?
-  Int_t m_extendedCountersFlag;
-
-  // Time tone problem?
-  Int_t m_backwardsTimeTone;
-  Int_t m_identicalTimeTones;
-
-  // Timetone counters and flags:
-  UInt_t m_nbrFlywheeling;
-
-  Int_t m_nbrIncomplete;
-  Int_t m_nbrMissingGps;
-  Int_t m_isSourceGPS;
-  Int_t m_nbrMissingCpuPps;
-  Int_t m_nbrMissingLatPps;
-  Int_t m_nbrMissingTimeTone;
-  Int_t m_nbrEarlyEvent;
-
-  /// percentage of events with TKR trigger but less than 6 digis in a tower
-  TGraph* m_nDigi;
-
-  // ACD parity errors:
-  unsigned int m_nAcdOddParityError;
-  unsigned int m_nAcdHeaderParityError;
-
-
-  // Error flags:
-  Int_t m_eventBadEventSequence;
-  Int_t m_eventBadTkrRecon;
-  Int_t m_eventPacketError;
-  Int_t m_eventTemError;
-  Int_t m_eventTrgParityError;
-  Int_t m_eventBadLdfStatus;
-  Int_t m_eventGtrcPhase;
-  Int_t m_eventGtfePhase;
-  Int_t m_eventGtccFifo;
-  Int_t m_eventGtccHdrParity;
-  Int_t m_eventGtccWcParity;
-  Int_t m_eventGtrcSummary;
-  Int_t m_eventGtccDataParity;
-  Int_t m_eventGtccTimeout;
-  Int_t m_eventGcccError;
-  Int_t m_eventGtccError;
-  Int_t m_eventPhaseError;
-  Int_t m_eventTimeoutError;
-
-  Int_t m_eventIsPeriodic;
-
-  // Acd Digi based histograms
-  TH1F* m_AcdTileIdOnePMT;
-  TH1F* m_AcdTileIdOneVeto;
-
-  TH1F* m_AcdHitMap;
-  TH1F* m_AcdVetoMap;
-  
-  TH2F* m_AcdPhaMapA;
-  TH2F* m_AcdPhaMapB;
-
-  // Acd Recon based histograms
-  TH1F* m_AcdEfficMap;
-  TH1F* m_AcdInEfficMap;
-
-  TH2F* m_AcdMissMapTop;
-  TH2F* m_AcdMissMapMinusX;
-  TH2F* m_AcdMissMapMinusY;
-  TH2F* m_AcdMissMapPlusX;
-  TH2F* m_AcdMissMapPlusY;
-
-
-
-  // Triggger rates:
-  TH1F* m_triggerRate;
-  TH1F* m_triggerLivetimeRate;
-  TH1F* m_livetimeRate;
-  TH1F* m_deadzoneRate;
-  TH1F* m_discardedRate;
-
-
-  /// number of events with different Glt trigger:
-  long m_nEvtGltTrigger[enums::number_of_trigger_bits];
+  unsigned m_nBadEvts;
 
   /// condition summary in GEM
   TH1F* m_condSummary;
 
+  /// number of events in the digi root file
+  int m_nEvent;
 
-  /// number of events with different GEM trigger
-  long m_nEvtGemTrigger[enums::GEM_offset];
-
+  /// number of events with 3 in a row trigger in GEM
+  int m_nTkrTrigger;
 
   /// number of events with different number of digis.
   /// For example: m_nEventDigi[0] is number of events with 0 digi
@@ -595,6 +353,11 @@ class TestReport {
   /// tower is used
   int m_nEventDigi[7];
 
+  /// number of events with strip ID outside the range from 0 to 1535
+  int m_nEventBadStrip;
+
+  /// number of events with more than 63 strips per GTRC
+  int m_nEventMoreStrip;
 
   /// number of strip hits for each tower
   TH1F* m_nHit[g_nTower];
@@ -651,44 +414,23 @@ class TestReport {
   /// TOT distributions
   TH1F* m_tot[g_nTower][g_nPlane][2];
 
+  /// number of events with saturated TOT (250 ADC )
+  int m_nEventSatTot;
 
+  /// number of events with 0 TOT but at least 1 strip
+  int m_nEventZeroTot;
 
-  // epu number
-  TH1F* m_epu;
+  /// number of events with TOT values outside range [0, g_satTot]
+  int m_nEvtInvalidTot;
 
-  TH1F* m_datagramsEPU0;
-  TH1F* m_datagramsEPU1;
-  TH1F* m_datagramsEPU2;
-  TH1F* m_datagramsSIU0;
-  TH1F* m_datagramsSIU1;
+  /// number of events with none zero TOT but no strip hit
+  int m_nEventBadTot;
 
-  TH1F* m_deltaTimeDGCTEvtEPU0;
-  TH1F* m_deltaTimeDGCTEvtEPU1;
-  TH1F* m_deltaTimeDGCTEvtEPU2;
-  TH1F* m_deltaTimeDGCTEvtSIU0;
-  TH1F* m_deltaTimeDGCTEvtSIU1;
+  /// time of first trigger
+  UInt_t m_startTime;
 
-  TH1F* m_deltaEventIDEPU0;
-  TH1F* m_deltaEventIDEPU1;
-  TH1F* m_deltaEventIDEPU2;
-  TH1F* m_deltaEventIDSIU0;
-  TH1F* m_deltaEventIDSIU1;
-
-  // GEM discarded events:
-  TH1F* m_gemDiscarded;
-  TH1F* m_gemDiscardedTime;
-
-  // GEM deadzone events:
-  TH1F* m_gemDeadzone;
-
-  // Number of triggers per tower:
-  TH1F* m_tkrPerTower;
-  TH1F* m_calLoPerTower;
-  TH1F* m_calHiPerTower;
-
-  int m_tkrPerTowerArray[g_nTower];
-  int m_calLoPerTowerArray[g_nTower];
-  int m_calHiPerTowerArray[g_nTower];
+  /// time of last trigger
+  UInt_t m_endTime;
 
   /// histogram of time between adjacent event in mili second
   TH1F* m_timeInterval;
@@ -699,22 +441,9 @@ class TestReport {
 
   /// histogram of time between adjacent event in mili second, taken from GEM
   TH1F* m_timeIntervalGem;
-  TH1F* m_timeIntervalGemZoom;
 
-  TH1F* m_deltaWindowOpenTime;
-  TH1F* m_deltaWindowOpenTimeZoom;
-
-  TH1F* m_tick20MHzDeviation;
-  TH1F* m_tick20MHzDeviationZoom;
-
-  TH1F* m_timeIntervalElapsed;
-
-  TH1F* m_condArrivalTimeTKR;
-  TH1F* m_condArrivalTimeROI;
-  TH1F* m_condArrivalTimeCalLo;
-  TH1F* m_condArrivalTimeCalHi;
-  TH1F* m_condArrivalTimeCNO;
-
+  /// percentage of events with TKR trigger but less than 6 digis in a tower
+  TGraph* m_nDigi;
 
   /// no. of events in each tower with TKR trigger
   int m_nTkrEvent[g_nTower];
@@ -755,29 +484,12 @@ class TestReport {
   /// TKR split info. The array contains no. of cards read from each end
   int m_nFec[g_nTower][g_nLayer][g_nView][2];
 
+  /// input file containing TKR split info 
+  std::ifstream m_tkrSplitF;
+
   /// histograms containing distance between reconstructed CAL cluster xy 
   /// position and the position extrapolated from the reconstructed track 
   /// in TKR
   TH1F* m_alignCalTkr;
-
-  // Histograms for the ACD digis:
-  TH1F* m_nAcdDigis;
-
-
-  TH2F* m_AcdGarcGafeHitMap;
-  TH2F* m_AcdGarcGafeVetoMap;  
-
-  // Acd-related stuff in the GEM
-  TH1F* m_AcdGemVetoMap;
-  TH1F* m_AcdGemCnoMap;
-  TH1F* m_AcdGemRoiMap;
-
-  // Path-length corrected MIP
-  TH2F* m_AcdMipMapA;
-  TH2F* m_AcdMipMapB;
-
-  // for TKR noise analysis report
-  TkrNoiseOcc* m_tkrNoiseOcc;
-  TDirectory* m_tkrNoiseOcc_dir;
 };
 #endif

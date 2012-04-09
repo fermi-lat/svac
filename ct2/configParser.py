@@ -19,19 +19,10 @@ import temUtil
 import jobOptions
 
 #
-def hasReg(doc, reg):
-    gotOne = True
-    elts = doc.getElementsByTagName(reg)
-    if len(elts) < 1:
-        gotOne = False
-    return gotOne
-    
-
-#
 def hasGlt(doc):
     """"""
     hasGlt = True
-    glts = doc.getElementsByTagName(jobOptions.presenceTags['GLT'])
+    glts = doc.getElementsByTagName('GGLT')
     if len(glts) < 1:
         hasGlt = False
     return hasGlt
@@ -41,8 +32,8 @@ def globalStuff(doc):
     """@brief Deal with stuff that applies to the whole instrument"""
     
     output = []
-    
-    sectionTitle = 'Globals'
+
+    sectionTitle = 'LAT globals'
     output.append(html.Heading(sectionTitle, 1))
 
     if hasGlt(doc):
@@ -70,9 +61,10 @@ def globalDBStrings():
 
     values = eLogDB.query(*args)
     values = map(nicenDBStrings, values)
+
     for tag, value in zip(tags, values):
         if not value:
-            continue
+            break
         label = jobOptions.globalDBStringLabels[tag]
         line = "%s: %s\n" % (label, value)
         output.append(line)
@@ -107,7 +99,7 @@ def hasTkr(doc):
 
     hasTkr = True
 
-    frontEnds = doc.getElementsByTagName(jobOptions.presenceTags['TKR'])
+    frontEnds = doc.getElementsByTagName('GTFE')
     if len(frontEnds) < 1:
         hasTkr = False
     
@@ -414,7 +406,15 @@ def oneGtrcReg(doc, tag):
 #
 def hasAcd(doc):
     """@brief Do we have an ACD?"""
-    return hasReg(doc, jobOptions.presenceTags['ACD'])
+
+    hasAcd = True
+
+    frontEnds = doc.getElementsByTagName("GAFE")
+    if len(frontEnds) < 1:
+        hasAcd = False
+        pass
+
+    return hasAcd
     
 #
 def oneGarc(doc, name, mappers):
@@ -574,7 +574,7 @@ def gafeRegs(doc):
     return output
 
 #
-def acdStuff(arcDoc, afeDoc):
+def acdStuff(doc):
     """@brief ACD stuff"""
     output = []
 
@@ -583,17 +583,14 @@ def acdStuff(arcDoc, afeDoc):
     output.append(html.Element("HR"))
     output.append(html.Element("HR"))
 
-    if jobOptions.mode is jobOptions.latteMode:
-        output.append(html.Heading('Voltage conversions are bogus!', 2))
-        output.append(html.Element("HR"))
-        output.extend(manyGarcs(arcDoc, jobOptions.acdHvTags, jobOptions.voltMap))
-        output.extend(manyGarcs(arcDoc, jobOptions.acdGarcRandom, jobOptions.hexMap))
-        output.extend(garcPha(arcDoc))
-        output.append(html.Element("HR"))
-        output.append(html.Element("HR"))
-        pass
-    
-    output.extend(gafeRegs(afeDoc))
+    output.append(html.Heading('Voltage conversions are bogus!', 2))
+    output.append(html.Element("HR"))
+    output.extend(manyGarcs(doc, jobOptions.acdHvTags, jobOptions.voltMap))
+    output.extend(manyGarcs(doc, jobOptions.acdGarcRandom, jobOptions.hexMap))
+    output.extend(garcPha(doc))
+    output.append(html.Element("HR"))
+    output.append(html.Element("HR"))
+    output.extend(gafeRegs(doc))
     output.append(html.Element("HR"))
         
     return output
@@ -606,7 +603,7 @@ def hasCal(doc):
 
     hasCal = True
     
-    frontEnds = doc.getElementsByTagName(jobOptions.presenceTags['CAL'])
+    frontEnds = doc.getElementsByTagName("GCFE")
     if len(frontEnds) < 1:
         hasCal = False
     
@@ -745,7 +742,7 @@ def hasGem(doc):
     
     hasGem = True
     
-    gems = doc.getElementsByTagName(jobOptions.presenceTags['GEM'])
+    gems = doc.getElementsByTagName("GGEM")
     if len(gems) < 1:
         hasGem = False
     
@@ -861,7 +858,7 @@ def oneGcrcDelay(doc, tag):
 #
 def hasTem(doc):
     """@brief Do we have any TEMs?"""
-    return hasReg(doc, jobOptions.presenceTags['TEM'])
+    return hasTkr(doc) or hasCal(doc)
 
 #
 def perTem(doc):
