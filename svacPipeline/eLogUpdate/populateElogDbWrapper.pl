@@ -22,13 +22,9 @@ my $outFiles = $proc->{'outFiles'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 my $shellFile = $outFiles->{'script'};
 my $rcReport = $inFiles->{'rcReport'};
@@ -62,7 +58,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

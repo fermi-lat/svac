@@ -15,7 +15,6 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
 
 #####################################################
@@ -24,29 +23,17 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
+my $snapshot = $inFiles->{'snapshot'};
+#my $split = $inFiles->{'splits'};
 my $tarBall = $outFiles->{'tarBall'};
-
-my $snapFile;
-if ($taskName =~ /latte/) {
-	$snapFile = $inFiles->{'snapshot'};
-} elsif ($taskName =~ /licos/) {
-	$snapFile = $inFiles->{'algorithm'};
-} else {
-	print STDERR "Bad task name $taskName.\n";
-	exit(1)
-}
 
 my $exe = $ENV{'configTablesScript'};
 
-my $command = "$exe '$runName' '$snapFile' '$tarBall'";
+my $command = "$exe '$runName' '$snapshot' '$tarBall'";
 print "Running command: [$command]\n";
 
 
@@ -74,7 +61,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

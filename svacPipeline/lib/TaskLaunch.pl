@@ -4,8 +4,6 @@ use strict;
 
 use File::Basename;
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $oldFile;
 my ($oldTask, $newTask, $runName, @files) = @ARGV;
 

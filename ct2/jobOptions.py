@@ -13,128 +13,119 @@ tarBall = 'configReport.tgz'
 outFile = os.environ['configReportUrl']
 version = os.environ['configReportVersion']
 
-licosMode = 'licos'
-latteMode = 'latte'
-modes = {
-    u'algorithm': licosMode,
-    u'configuration': latteMode,
-    }
-mode = 'bogus'
-
-
 # register subfields and their descriptions
 tables = {
 
-    'ZERO_SUPP_GLT': ('GLT/zero_suppress',
+    'ZERO_SUPP_GLT': ('GGLT/zero_suppress',
                       'CAL Zero Suppression'),
-    'FOUR_RANGE_GLT': ('GLT/four_range_readout',
+    'FOUR_RANGE_GLT': ('GGLT/four_range_readout',
                        'CAL Four Range Readout'),
 
-    'ZERO_SUPP': ('GEM/GEMMG/engine_*:21',
+    'ZERO_SUPP': ('GGEM/GGEMMG/engine_*:21',
                   'CAL 0 Suppression'),
-    'FOUR_RANGE': ('GEM/GEMMG/engine_*:20',
+    'FOUR_RANGE': ('GGEM/GGEMMG/engine_*:20',
                    'CAL 4 Range Readout'),
-    'PRESCALE': ('GEM/GEMMG/engine_*:0-7',
+    'PRESCALE': ('GGEM/GGEMMG/engine_*:0-7',
                  'Prescale'),
-    'INHIBIT': ('GEM/GEMMG/engine_*:15',
+    'INHIBIT': ('GGEM/GGEMMG/engine_*:15',
                 'Inhibit'),
 
-    'CONDITION': ('GEM/GEMSC/conditions_*',
+    'CONDITION': ('GGEM/GGEMSC/conditions_*',
                   'Trigger Condition -> Message engine lookup table'),
 
-    'TEM_DIAG': ('TEM/data_masks:12',
+    'TEM_DIAG': ('GTEM/data_masks:12',
                  'TEM Diagnostics'),
     
-    'TKR_NR': ('TEM/TCC/TRC/csr:7-11', # used to calc GTRC splits
+    'TKR_NR': ('GTEM/GTCC/GTRC/csr:7-11', # used to calc GTRC splits
                'Number of GTFEs to read'), 
-    'TKR_MODE': ('TEM/TCC/TRC/TFE/mode', # used to calc GTRC splits
+    'TKR_MODE': ('GTEM/GTCC/GTRC/GTFE/mode', # used to calc GTRC splits
                  'TKR front end mode (L or R)'),
-    'TKR_DAC': ('TEM/TCC/TRC/TFE/dac', # TKR DAC
+    'TKR_DAC': ('GTEM/GTCC/GTRC/GTFE/dac', # TKR DAC
                 'TKR DAC (range,<B>threshhold</B>)'),
 
-    'TKR_OR_STRETCH': ('TEM/TCC/TRC/csr:12-16', 
+    'TKR_OR_STRETCH': ('GTEM/GTCC/GTRC/csr:12-16', # WTF overlaps TKR_NR?
                        'TKR OR_STRETCH'),
 
-    'CAL_LAD': ('TEM/CCC/CRC/CFE/log_acpt',
+    'CAL_LAD': ('GTEM/GCCC/GCRC/GCFE/log_acpt',
                 "CAL Log Accept Discriminator (zero suppression)"), 
-    'CAL_FHE': ('TEM/CCC/CRC/CFE/fhe_dac',
+    'CAL_FHE': ('GTEM/GCCC/GCRC/GCFE/fhe_dac',
                 "CAL High Energy Trigger Discriminator"), 
-    'CAL_FLE': ('TEM/CCC/CRC/CFE/fle_dac',
+    'CAL_FLE': ('GTEM/GCCC/GCRC/GCFE/fle_dac',
                 "CAL Low Energy Trigger Discriminator"), 
-    'CAL_RNG': ('TEM/CCC/CRC/CFE/rng_uld_dac',
+    'CAL_RNG': ('GTEM/GCCC/GCRC/GCFE/rng_uld_dac',
                 "CAL Readout Range Select Discriminator"), 
-    'CAL_REF': ('TEM/CCC/CRC/CFE/ref_dac',
+    'CAL_REF': ('GTEM/GCCC/GCRC/GCFE/ref_dac',
                 "CAL DAC for DC Reference"), 
 
-    'CAL_DELAY': ('TEM/CCC/trg_alignment:0-7',
+    'CAL_DELAY': ('GTEM/GCCC/trg_alignment:0-7',
                   'Delay from CAL trigger discriminator to TEM trigger primitive formation'), 
-    'TKR_DELAY': ('TEM/TCC/trg_alignment:0-7',
+    'TKR_DELAY': ('GTEM/GTCC/trg_alignment:0-7',
                   'Delay from TKR trigger discriminator to TEM trigger primitive formation'), 
-    'ACD_DELAY': ('AEM/ARC/veto_delay',
+    'ACD_DELAY': ('GAEM/GARC/veto_delay',
                   'Delay from ACD trigger discriminator to AEM trigger primitive formation'), 
     
-    'CAL_WIDTH': ('TEM/CCC/trg_alignment:8-15',
+    'CAL_WIDTH': ('GTEM/GCCC/trg_alignment:8-15',
                   'Stretch width of CAL trigger primitive'), 
-    'ACD_WIDTH': ('AEM/ARC/veto_width',
+    'ACD_WIDTH': ('GAEM/GARC/veto_width',
                   'Stretch width of ACD trigger primitive'), 
     
-    'ACD_LATCH_DELAY': ('AEM/ARC/hitmap_delay',
+    'ACD_LATCH_DELAY': ('GAEM/GARC/hitmap_delay',
                         'Delay from ACD trigger primitive to AEM hitmap data latch'), 
-    'ACD_LATCH_WIDTH': ('AEM/ARC/hitmap_width',
+    'ACD_LATCH_WIDTH': ('GAEM/GARC/hitmap_width',
                         'Stretch width of ACD trigger primitive to AEMXS hitmap data latch'), 
-    'ACD_HITMAP_DEADTIME': ('AEM/ARC/hitmap_deadtime',
+    'ACD_HITMAP_DEADTIME': ('GAEM/GARC/hitmap_deadtime',
                             'Time added to hitmap signals'),
-    'ACD_HOLD_DELAY': ('AEM/ARC/hold_delay',
+    'ACD_HOLD_DELAY': ('GAEM/GARC/hold_delay',
                        'Delay from trigger to hold'),
-    'ACD_ADC_TACQ': ('AEM/ARC/adc_tacq',
+    'ACD_ADC_TACQ': ('GAEM/GARC/adc_tacq',
                      'ADC acquisition time'),
-   
-    'GEM_WIDTH': ('GEM/GEMW/window_width',
+    
+    'GEM_WIDTH': ('GGEM/GGEMW/window_width',
                   'Width of trigger window in GEM'), 
     
-    'CAL_TRGSEQ': ('TEM/cal_trgseq',
+    'CAL_TRGSEQ': ('GTEM/cal_trgseq',
                    'Delay from trigger TACK to CAL shaper hold'), 
-    'TKR_TRGSEQ': ('TEM/tkr_trgseq',
+    'TKR_TRGSEQ': ('GTEM/tkr_trgseq',
                    'Delay from trigger TACK to TKR shaper hold'), 
-    'ACD_TRGSEQ': ('AEM/trgseq',
+    'ACD_TRGSEQ': ('GAEM/trgseq',
                    'Delay from trigger TACK to ACD shaper hold'),
 
-    'DELAY_1': ('TEM/CCC/CRC/delay_1',
+    'DELAY_1': ('GTEM/GCCC/GCRC/delay_1',
                 'CAL Range Decision Time (nominal=31)'),
-    'DELAY_2': ('TEM/CCC/CRC/delay_2',
+    'DELAY_2': ('GTEM/GCCC/GCRC/delay_2',
                 'CAL Time After Range Decision Until ADC Readout Time (nominal=53)'),
-    'DELAY_3': ('TEM/CCC/CRC/delay_3',
+    'DELAY_3': ('GTEM/GCCC/GCRC/delay_3',
                 'CAL ADC Readout Time (nominal=133)'),
     
-    'CAL_DIAG': ('TEM/CCC/trg_alignment:16-23',
+    'CAL_DIAG': ('GTEM/GCCC/trg_alignment:16-23',
                  'Hold trigger primitive for TEM diagnostic latching of CAL trigger primitive'), 
-    'TKR_DIAG': ('TEM/TCC/trg_alignment:16-23',
+    'TKR_DIAG': ('GTEM/GTCC/trg_alignment:16-23',
                  'Hold trigger primitive for TEM diagnostic latching of TKR trigger primitive'), 
 
 
-    'ACD_HVBS': ('AEM/ARC/hvbs',
+    'ACD_HVBS': ('GAEM/GARC/hvbs',
                  'Requested High Voltage (HV) for normal operation'),
-    'ACD_SAA': ('AEM/ARC/saa',
+    'ACD_SAA': ('GAEM/GARC/saa',
                 'Requested High Voltage (HV) for SAA operation'),
-    'ACD_USE_HV_NORMAL': ('AEM/ARC/use_hv_normal',
+    'ACD_USE_HV_NORMAL': ('GAEM/GARC/use_hv_normal',
                           'Current High Voltage (HV) for normal operation'),
-    'ACD_USE_HV_SAA': ('AEM/ARC/use_hv_saa',
+    'ACD_USE_HV_SAA': ('GAEM/GARC/use_hv_saa',
                        'Current High Voltage (HV) for SAA operation'),
 
-    'ACD_MODE': ('AEM/ARC/mode',
+    'ACD_MODE': ('GAEM/GARC/mode',
                  'Various bit fields for mode settings'),
-    'ACD_STATUS': ('AEM/ARC/status',
+    'ACD_STATUS': ('GAEM/GARC/status',
                    'Status'),
 
-    'ACD_CONFIG_REG': ('AEM/ARC/AFE/configuration',
+    'ACD_CONFIG_REG': ('GAEM/GARC/GAFE/configuration',
                        'Configuration setup'),
-    'ACD_VETO_DAC': ('AEM/ARC/AFE/veto_dac',
+    'ACD_VETO_DAC': ('GAEM/GARC/GAFE/veto_dac',
                      'Set VETO threshold (coarse)'),
-    'ACD_VETO_VERNIER': ('AEM/ARC/AFE/veto_vernier',
+    'ACD_VETO_VERNIER': ('GAEM/GARC/GAFE/veto_vernier',
                          'Set VETO threshold (fine)'),
-    'ACD_HLD_DAC': ('AEM/ARC/AFE/hld_dac',
+    'ACD_HLD_DAC': ('GAEM/GARC/GAFE/hld_dac',
                     'Set HLD threshold'),
-    'ACD_BIAS_DAC': ('AEM/ARC/AFE/bias_dac',
+    'ACD_BIAS_DAC': ('GAEM/GARC/GAFE/bias_dac',
                      'Set bias value'),
 
     '': ('',
@@ -147,12 +138,10 @@ mappers = {'TKR_DAC': mappings.mapTkrDac}
 # logical values that apply to the whole LAT
 globoLogicals = ('ZERO_SUPP_GLT', 'FOUR_RANGE_GLT')
 
-globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO', 'RELEASE')
+globalDBKeys = ('NoOfTowers', 'CAL_SER_NO', 'TKR_SER_NO')
 globalDBStringLabels = {'NoOfTowers': 'Number of Towers',
                         'TKR_SER_NO': 'TKR Serial #s',
-                        'CAL_SER_NO': 'CAL Serial #s',
-                        'RELEASE': 'LICOS/LATTE Release',
-                        }
+                        'CAL_SER_NO': 'CAL Serial #s'}
 
 # GEM stuff
 # # stuff to display from message engines
@@ -189,8 +178,8 @@ gafeLabels = ('GARC', 'GAFE')
 # HV info
 acdHvTags = ('ACD_HVBS', 'ACD_USE_HV_NORMAL', 'ACD_SAA', 'ACD_USE_HV_SAA')
 
-acdMaskRegs = {'PHA': ('AEM/ARC/pha_en_0', 'AEM/GARC/pha_en_1'),
-               'veto': ('AEM/ARC/veto_en_0', 'AEM/GARC/veto_en_1')}
+acdMaskRegs = {'PHA': ('GAEM/GARC/pha_en_0', 'AEM/GARC/pha_en_1'),
+               'veto': ('GAEM/GARC/veto_en_0', 'AEM/GARC/veto_en_1')}
 acdGarcRandom = ('ACD_MODE', 'ACD_STATUS')
 
 acdGafeHex = ('ACD_CONFIG_REG', )
@@ -258,56 +247,4 @@ voltMap = (mappings.displayHv, voltLabel)
 hexMap = (mappings.displayHex, '')
 
 # put this in empty table cells
-absent = 'Broadcast'
-
-# These are tags that we use to determine if various subsystems are present
-presenceTags = {
-    'TEM': 'TEM',
-    'TKR': 'TFE',
-    'CAL': 'CFE',
-    'GEM': 'GEM',
-    'GLT': 'GLT',
-    'ACD': 'AFE',
-    }
-
-# Shapes of register tables for the whole LAT
-shapes = {
-    'TEM': (16,),
-    'AEM': (12,),
-    'ARC': (12, 1),
-    'CCC': (16, 4),
-    'TCC': (16, 8),
-    'CRC': (16, 4, 4),
-    'TRC': (16, 8, 9),
-    'AFE': (12, 1, 18),
-    'CFE': (16, 4, 4, 12),
-    'TFE': (16, 8, 9, 24),
-    '': (),
-    }
-
-# Modify various strings to switch from LICOS to LATTE mode
-def toLatte():
-    global absent
-    dictToLatte(tables)
-    dictToLatte(acdMaskRegs)
-    tagsToLatte(presenceTags)
-    absent = 'Absent'
-    return
-
-def regToLatte(oldPath):
-    tags = oldPath.split('/')
-    tags[:-1] = ['G' + tag for tag in tags[:-1]]
-    newPath = '/'.join(tags)
-    return newPath
-
-def dictToLatte(regDict):
-    for key, (path, label) in regDict.items():
-        path = regToLatte(path)
-        regDict[key] = (path, label)
-        pass
-    return
-
-def tagsToLatte(tagDict):
-    for key, value in tagDict.items():
-        tagDict[key] = 'G' + value
-    return
+absent = 'Absent'

@@ -34,14 +34,12 @@ my $pdfFile = 'refman.pdf';
 my $htmlFile = 'index.html';
 my $pwd =  $ENV{PWD};
 
-my $appRoot = '/nfs/farm/g/glast/u33/borgland/Releases/GlastRelease-v13r5p5/Code-opt/svac/';
-my $testReportVersion = 'v4r1';
-my $emVersion = 'v13r5p5';
-my $cmtPath = "$appRoot:/nfs/farm/g/glast/u30/builds/rh9_gcc32opt/GlastRelease/GlastRelease-$emVersion";
-my $cmtDir = "$appRoot/TestReport/$testReportVersion/cmt";
-my $exeDir = "$appRoot/TestReport/$testReportVersion/rh9_gcc32opt";
-my $doxyFile = "$appRoot/TestReport/$testReportVersion/src/ReportDoxyfile";
-my $latexHeader = "$appRoot/TestReport/$testReportVersion/src/latexHeader.tex";
+my $appRoot = '/nfs/farm/g/glast/u06/chen/svac';
+my $cmtPath = "$appRoot:/nfs/farm/g/glast/u09/builds/rh9_gcc32/EngineeringModel/EngineeringModel-v3r0407p3";
+my $cmtDir = "$appRoot/TestReport/v3r2/cmt";
+my $exeDir = "$appRoot/TestReport/v3r2/rh9_gcc32";
+my $doxyFile = "$appRoot/TestReport/v3r2/src/ReportDoxyfile";
+my $latexHeader = "$appRoot/TestReport/v3r2/src/latexHeader.tex";
 
 my $shellFile = $reportDir.'/'.$prefix.'_report.scr';
 open(SHELLFILE, ">$shellFile") || die "Can't open $shellFile, abortted!";
