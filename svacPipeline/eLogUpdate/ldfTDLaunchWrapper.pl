@@ -28,25 +28,18 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLatte'};
+my $newTask = $ENV{'digitizationTask'};
 my $ldfFile = $inFiles->{'ldf'};
 my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
 
 my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
 chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
 if (!$doDigi) {
 	exit(0);
 }
@@ -77,7 +70,7 @@ if ( defined($rc) ) {
         if ($ex->{'core_dump'}) {
             #your app core dumped
         }
-        if (defined($ex->{'signal_number'})) {
+        if ($ex->{'signal_number'} != undef) {
             #your app terminated with a signal
             my $signal_number = $ex->{'signal_number'};
         }

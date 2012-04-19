@@ -15,6 +15,7 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
 
 #####################################################
@@ -27,13 +28,12 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $ldfFile = $inFiles->{'ldf'};
-my $shellFile = $outFiles->{'script'};
-my $jobOptionFile = $outFiles->{'jobOptions'};
-my $digiRootFile = $outFiles->{'digi'};
+my $exe = $ENV{'taskLauncher'};
 
-my $exe = $ENV{'digitizationScript'};
-my $command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
+my $newTask = $ENV{'configReportTask'};
+my $schemaFile = $inFiles->{'schema'};
+my $snapFile = $inFiles->{'snapshot'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$schemaFile' '$snapFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

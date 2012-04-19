@@ -1,5 +1,9 @@
 #!/usr/local/bin/perl -w
 
+# Demonstration script.
+# Submitted to batch by pipeline scheduler.
+# You need only modify the last section...
+
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -15,6 +19,7 @@ use Exec;
 my $proc = new DPFProc(@ARGV);
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
+my $taskName = $proc->{'task_name'};
 my $runName = $proc->{'run_name'};
 
 #####################################################
@@ -27,13 +32,26 @@ use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
-my $ldfFile = $inFiles->{'ldf'};
-my $shellFile = $outFiles->{'script'};
-my $jobOptionFile = $outFiles->{'jobOptions'};
-my $digiRootFile = $outFiles->{'digi'};
+my $exe = $ENV{'taskLauncher'};
 
-my $exe = $ENV{'digitizationScript'};
-my $command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
+my $newTask = $ENV{'reconTask'};
+my $digiRootFile = $inFiles->{'digi'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
+
+if (! -e $digiRootFile) {
+    print "Digi file [$digiRootFile] does not exist, not launching recon task.\n";
+    exit(0);
+}
+
+my $doRecon = `$ENV{'decideReconScript'} $runName`;
+chomp $doRecon;
+if ($doRecon == 1) {
+    print "Reconstructable run, status: $doRecon\n";
+} else {
+    print "This is not a reconstructable run, status: $doRecon\n";
+    exit(0)
+}
+
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

@@ -1,12 +1,9 @@
 
 Command-line tools to operate the pipeline are located in $PDB_HOME, the
-canonical value for the production pipeline is
-/afs/slac.stanford.edu/u/gl/glastdpf/pdb.  This environment variable must be
-set in order to use these tools.  The proper value (as well as a couple othe
-necessary ones) can be set by sourcing ~glast/pdb_config/dpf_config_prod.csh
-("prod" can be replaced by "test" or "dev", there are also versions for sh).
+canonical value for the production pipeline is /u/gl/glast/software/DPF/PDB/.
+This environment variable must be set in order to use these tools.
 
-There are 4 main scripts: createRun.pl, deleteRun.pl, failStalledRun.pl, and
+There are 3 main scripts: createRun.pl, deleteRun.pl, and
 rollBackFailedRun.pl.  All have the same arguments: <script> task run.
 
 rollBackFailedRun.pl retries the last process in a run that failed.  This is
@@ -21,9 +18,6 @@ from a transient error or something external to the SVAC tasks that DIDN'T
 cause a failure, you will have to use deleteRun.pl first to get the run out of
 GINO's database, then use createRun.pl.  Inform the CCB (Richard) if you have
 to do this.
-
-failStalledRun.pl can be used to fail a run that is stuck in prepared,
-finalizing, or some other state.  The run can then be rolled back.
 
 Reprocessing ... is a bit complicated.  There's not THAT much to it - make
 symlinks to the appropriate input files, with the appropriate names, and do a

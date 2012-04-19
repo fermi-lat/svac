@@ -4,8 +4,6 @@
 
 use strict;
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my ($oldTask, $runName, $rcReport, $snapshot, $ldfFile) = @ARGV;
 
 my $launcher = $ENV{'taskLauncher'};
@@ -13,7 +11,7 @@ my $launcher = $ENV{'taskLauncher'};
 my $status = 0;
 
 # launch eLog task
-my $nextTask = $ENV{'eLogTaskLatte'};
+my $nextTask = $ENV{'eLogTask'};
 my $eLogCommand = "$launcher '$oldTask' '$nextTask' '$runName' '$rcReport' '$snapshot' '$ldfFile'";
 
 my @commands = ($eLogCommand);

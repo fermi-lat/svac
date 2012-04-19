@@ -20,11 +20,10 @@ run cd ${dataDir}
 set dataSets='ldf_LDF.fits rcReport_rcReport.xml snapshot_text.xml'
 
 set oldTask=${onlineTask}
-set newTask=${eLogTaskLatte}
+set newTask=${eLogTask}
 
 foreach dataSet ($dataSets)
     set oldName=${oldTask}_${run}_${dataSet}
-	echo $oldName
 	test -e ${oldName} || continue
 	set newName=`echo $oldName | sed s/${oldTask}/${newTask}/`
 	test -e ${newName} || ( run ln -s ${oldName} ${newName} )
