@@ -9,7 +9,7 @@ import os
 import sys
 
 L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
-L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "3.3"
+L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "3.4"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
 
@@ -178,11 +178,11 @@ groundRoot = os.path.join(glastRoot, 'ground')
 #glastSetupCsh = os.path.join(groundRoot, 'scripts', 'group.cshrc')
 scons = '/afs/slac.stanford.edu/g/glast/applications/install/@sys/usr/bin/scons'
 #
-optConfig = 'redhat4-i686-32bit-gcc34-Optimized'
-glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat4-i686-32bit-gcc34')
+optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
+glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
 #
-releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
-glastVersion = '17-35-24-lp22'
+releaseDir = os.path.join(groundRoot, 'releases', 'volume07')
+glastVersion = '17-35-24-gr25'
 releaseName = 'GlastRelease'
 #
 glastName = '-'.join((releaseName, glastVersion))
@@ -204,11 +204,11 @@ reconOptions = {
     'MC': os.path.join(L1Data, 'recon.jobOpt.mc'),
 }
 
-rootSys = os.path.join(glastExt, 'ROOT/v5.26.00a-gl6/gcc34')
+rootSys = os.path.join(glastExt, 'ROOT/v5.26.00a-gl6/gcc41')
 haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
-stDir = os.path.join(groundRoot, 'releases', 'volume12')
+stDir = os.path.join(groundRoot, 'releases', 'volume07')
 stVersion = '09-27-01'
 stName = 'ScienceTools'
 
@@ -223,7 +223,7 @@ l1ExeDir = os.path.join(L1Build, 'exe', optConfig)
 l1Setup = os.path.join(l1BinDir, '_setup.sh')
 
 isoc = '/afs/slac/g/glast/isoc/flightOps'
-isocPlatform = 'rhel4_gcc34'
+isocPlatform = 'rhel5_gcc41'
 isocMode = os.environ.get('isocMode', 'ISOC_PROD')
 isocBin = os.path.join(isoc, isocPlatform, isocMode, 'bin')
 isocRun = os.path.join(isoc, isocPlatform, '${isocMode}', 'bin', 'isoc run')
@@ -293,13 +293,17 @@ sConsPackages = {
         'repository': 'svac',
         'version': 'findGaps-02-02-00',
         },
+    'fitsGen': {
+        'repository': '',
+        'version': 'fitsGen-06-03-00',
+        },
     'ft2Util': {
         'repository': '',
         'version': 'ft2Util-02-00-03',
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-02-00-01',
+        'version': 'Monitor-02-01-03',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -331,10 +335,6 @@ cvsPackages = {
     'FastMonCfg': {
         'repository': 'dataMonitoring',
         'version': 'FastMonCfg-02-02-01',
-        },
-    'fitsGen': {
-        'repository': '',
-        'version': 'fitsGen-06-03-00',
         },
     'GPLtools': {
         'repository': '',
@@ -692,7 +692,7 @@ midPriority = 60      # monitoring & dependencies
 standardPriority = 50 # everything else (which isn't much, really)
 #
 minCrumbCpuf = 9
-standardSelect = 'rhel40 || rhel50'
+standardSelect = 'rhel50'
 standardRusage = 'scratch=1'
 bigRusage = 'scratch=250'
 #
