@@ -209,7 +209,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume07')
-stVersion = '09-27-01'
+stVersion = '09-28-00'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
