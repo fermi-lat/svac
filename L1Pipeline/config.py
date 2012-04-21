@@ -182,7 +182,7 @@ optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
 glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
 #
 releaseDir = os.path.join(groundRoot, 'releases', 'volume07')
-glastVersion = '17-35-24-gr26'
+glastVersion = '17-35-24-gr27'
 releaseName = 'GlastRelease'
 #
 glastName = '-'.join((releaseName, glastVersion))
@@ -209,7 +209,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume07')
-stVersion = '09-28-00'
+stVersion = '09-27-01'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
@@ -299,7 +299,7 @@ sConsPackages = {
         },
     'ft2Util': {
         'repository': '',
-        'version': 'ft2Util-02-00-03',
+        'version': 'ft2Util-02-00-06',
         },
     'Monitor': {
         'repository': 'svac',
