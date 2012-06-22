@@ -23,32 +23,18 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my $command;
 
 my $ldfFile = $inFiles->{'RetDef'};
 my $shellFile = $outFiles->{'script'};
 my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
-my $evtList = $outFiles->{'evtList'};
-
-# Make list of input files to delete later
-my $inDir = `dirname $ldfFile`;
-chomp $inDir;
-$command = "ls $inDir/*.{evt,pkt} > $evtList";
-print STDERR "Running command [$command]";
-system($command);
 
 my $exe = $ENV{'digitizationScript'};
 my $command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
-print STDERR "Running command: [$command]\n";
+print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
 

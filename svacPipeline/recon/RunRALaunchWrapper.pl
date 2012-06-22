@@ -34,18 +34,12 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLicos'};
-my $ldfFile = $inFiles->{'RetDef'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
-
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
-if (!$doDigi) {
-	exit(0);
-}
+my $newTask = $ENV{'svacTupleTask'};
+#my $mcRootFile = $inFiles->{'mc'};
+my $digiRootFile = $inFiles->{'digi'};
+my $reconRootFile = $inFiles->{'recon'};
+#my $command = "$exe '$taskName' '$newTask' '$runName' '$mcRootFile' '$digiRootFile' '$reconRootFile'";
+my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile' '$reconRootFile'";
 
 print "Running command: [$command]\n";
 

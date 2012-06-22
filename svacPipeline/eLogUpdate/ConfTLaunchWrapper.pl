@@ -1,9 +1,5 @@
 #!/usr/local/bin/perl -w
 
-# Demonstration script.
-# Submitted to batch by pipeline scheduler.
-# You need only modify the last section...
-
 use strict;
 
 use lib $ENV{'PDB_HOME'};
@@ -34,19 +30,9 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLicos'};
-my $ldfFile = $inFiles->{'RetDef'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
-
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
-if (!$doDigi) {
-	exit(0);
-}
-
+my $newTask = $ENV{'configReportTask'};
+my $snapFile = $inFiles->{'snapshot'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$snapFile'";
 print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");

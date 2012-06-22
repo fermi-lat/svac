@@ -4,43 +4,34 @@
 
 use strict;
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 #environmentalizer::sourceCsh("$ENV{SVAC_PDB_CONFIG}");
 
 my $runName = $ARGV[0];
 
-die "You must suppy a runId!" if not $runName;
-
 my $onlineDataDir = "$ENV{'onlineHead'}/$ENV{'onlineSubDir'}/$runName";
-my $licosDir = $onlineDataDir . '/LICOS';
-
-die "Directory $licosDir does not exist.\n" unless -d $licosDir;
 
 my $launcher = "$ENV{'PDB_HOME'}/createRun.pl";
 
 my $status = 0;
 
-my $nextTask = $ENV{'eLogTask'};
+# launch eLog task
+my $nextTask = $ENV{'eLogTaskLicos'};
+my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my $rcReportBase = "${nextTask}_${runName}_rcReport_rcReport.xml";
 my $RetDefBase = "${nextTask}_${runName}_RetDef_RetDef.evt";
 
-my $rcReportIn = $licosDir . '/' . 'rcReport.out';
+my $rcReportIn = $onlineDataDir . '/LICOS/' . 'rcReport.out';
 my $RetDefIn = $onlineDataDir . '/' . $runName . '.evt';
+my @inFiles = ($rcReportIn, $RetDefIn);
 
-my @inFiles = ($rcReportIn, $rcReportIn, $RetDefIn);
-
-my $rcReportOut = $licosDir . '/' . $rcReportBase;
-my $rcReportXml = $licosDir . '/' . $runName . '_rcReport.xml';
+my $rcReportOut = $onlineDataDir . '/LICOS/' . $rcReportBase;
 my $RetDefOut = $onlineDataDir . '/' . $RetDefBase;
-my @outFiles = ($rcReportOut, $rcReportXml, $RetDefOut);
+my @outFiles = ($rcReportOut, $RetDefOut);
 
 for (my $ii=0; $ii<=$#inFiles; $ii++) {
 	my $inFile = $inFiles[$ii];
@@ -52,9 +43,6 @@ for (my $ii=0; $ii<=$#inFiles; $ii++) {
 		system("touch $outFile");
 	}
 }
-
-# launch eLog task
-my $eLogCommand = "$launcher '$nextTask' '$runName'";
 
 my @commands = ('date', $eLogCommand);
 

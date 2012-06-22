@@ -4,8 +4,6 @@
 
 use strict;
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 my ($oldTask, $runName, $rcReport, $snapshot, $ldfFile) = @ARGV;
 
 my $launcher = $ENV{'taskLauncher'};

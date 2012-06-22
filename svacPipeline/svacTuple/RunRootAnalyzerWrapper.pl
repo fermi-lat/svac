@@ -20,20 +20,15 @@ my $proc = new DPFProc($run_num, $task_pk, $taskProcess_name);
 
 my $inFiles = $proc->{'inFiles'};
 my $outFiles = $proc->{'outFiles'};
-my $taskName = $proc->{'task_name'};
 #####################################################
 ##
 ##  END:  DON'T TOUCH STUFF BETWEEN THESE COMMENTS
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 #my $mcRootFile = $inFiles->{'mc'};
 my $mcRootFile = 'emptyFile';
@@ -49,7 +44,7 @@ my $shellFile = $outFiles->{'script'};
 
 my $exe = $ENV{'svacTupleScript'};
 
-my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile' '$taskName'";
+my $command = "$exe '$mcRootFile' '$digiRootFile' '$reconRootFile' '$svacRootFile' '$histFile' '$optionFile' '$shellFile'";
 print "Running command: [$command]\n";
 
 

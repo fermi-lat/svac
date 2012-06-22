@@ -11,13 +11,9 @@ use vars qw{$dbh};
 use DBI;
 use DBI qw(:sql_types);
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup10.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 if($#ARGV+1 != 3) {
     die 'require three arguments: runId, columnName, value';
@@ -29,7 +25,7 @@ my $value = $ARGV[2];
 
 print STDERR "Run: [$runId], Column: [$columnName], Value: [$value]\n";
 
-if ($ENV{'svacTestMode'}) {
+if ($ENV{'eLogTestOnly'}) {
 	print STDERR "Running in test mode, not updating eLog.\n";
 	exit 0;
 }
