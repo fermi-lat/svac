@@ -21,6 +21,7 @@ modes = {
     }
 mode = 'bogus'
 
+latcBcast = ['TEM', 'TDC', 'AFE', 'CFE', 'TFE', 'ARC', 'bcast', 'TCC', 'CCC', ]
 
 # register subfields and their descriptions
 tables = {
@@ -52,7 +53,7 @@ tables = {
     'TKR_DAC': ('TEM/TCC/TRC/TFE/dac', # TKR DAC
                 'TKR DAC (range,<B>threshhold</B>)'),
 
-    'TKR_OR_STRETCH': ('TEM/TCC/TRC/csr:12-16', 
+    'TKR_OR_STRETCH': ('TEM/TCC/TRC/csr:12-16', # WTF overlaps TKR_NR?
                        'TKR OR_STRETCH'),
 
     'CAL_LAD': ('TEM/CCC/CRC/CFE/log_acpt',
@@ -258,7 +259,7 @@ voltMap = (mappings.displayHv, voltLabel)
 hexMap = (mappings.displayHex, '')
 
 # put this in empty table cells
-absent = 'Broadcast'
+absent = 'Absent'
 
 # These are tags that we use to determine if various subsystems are present
 presenceTags = {
@@ -270,28 +271,11 @@ presenceTags = {
     'ACD': 'AFE',
     }
 
-# Shapes of register tables for the whole LAT
-shapes = {
-    'TEM': (16,),
-    'AEM': (12,),
-    'ARC': (12, 1),
-    'CCC': (16, 4),
-    'TCC': (16, 8),
-    'CRC': (16, 4, 4),
-    'TRC': (16, 8, 9),
-    'AFE': (12, 1, 18),
-    'CFE': (16, 4, 4, 12),
-    'TFE': (16, 8, 9, 24),
-    '': (),
-    }
-
 # Modify various strings to switch from LICOS to LATTE mode
 def toLatte():
-    global absent
     dictToLatte(tables)
     dictToLatte(acdMaskRegs)
     tagsToLatte(presenceTags)
-    absent = 'Absent'
     return
 
 def regToLatte(oldPath):

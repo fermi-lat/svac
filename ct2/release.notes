@@ -9,19 +9,3 @@ v3r1p5:
 Don't crash if there are no TEMs.
 Produce nicer-looking output when hardware is missing.
 Put more of some types of table across page, fewer of others.
-
-
-v4r0p0:
-
-Rudimentray LICOS support.
-Fix a bug in global section.
-
-
-v4r0p1:
-
-Fix bugs when snapshot is missing or bad.
-
-
-v4r0p2:
-
-More LICOS work.

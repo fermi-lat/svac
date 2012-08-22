@@ -59,22 +59,12 @@ void RootAnalyzer::produceOutputFile()
 {
   //  TDirectory* saveDir = gDirectory;
 
-
   if(m_outputFile) {
     //m_outputFile->cd("TkrCalib");
     //m_tkrCalib->saveAllHist();
     //m_tkrNoiseOcc->writeAnaToHis(m_tkrNoiseOcc_dir);
     m_outputFile->cd();
-    //m_outputFile->Write(0, TObject::kOverwrite);
-    
-    // awb
-    int returnCode;
-    returnCode = m_outputFile->Write(0, TObject::kOverwrite);
-    
-    if (returnCode == 0) {
-      std::cout << "ERROR! Problem writing the output SVAC root file!" << std::endl;
-      exit(1);
-    }
+    m_outputFile->Write(0, TObject::kOverwrite);
     m_outputFile->Close();
   }
 
@@ -83,6 +73,7 @@ void RootAnalyzer::produceOutputFile()
     m_histFile->Write(0, TObject::kOverwrite);
     m_histFile->Close();
   }
+
   //  saveDir->cd();
 }
 
@@ -297,9 +288,6 @@ void RootAnalyzer::analyzeReconTree()
       }
     }
   }
-
-  // Gleam flags:
-  m_ntuple.m_eventGleamFlags = m_reconEvent->getGleamEventFlags();
 
   // calculate energy measured in calorimeter
   CalRecon* calRecon = m_reconEvent->getCalRecon();
@@ -615,19 +603,6 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedGAMMA = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_gammaStatus>>4); 
-
-    UInt_t gammaState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getState();
-    m_ntuple.m_obfGAMMAState = gammaState;
-
-    m_ntuple.m_obfGAMMAStatusWord    = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getStatusWord(); 
-    m_ntuple.m_obfGAMMAVetoMask      = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoMask();
-    m_ntuple.m_obfGAMMAVetoBit       = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getVetoBit();
-    m_ntuple.m_obfGAMMAPrescalerWord = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter)->getPrescalerWord(); 
-
-    const IObfStatus* gammaStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::GammaFilter);
-    m_ntuple.m_obfGAMMAEnergy = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getEnergy(); 
-    m_ntuple.m_obfGAMMAStage  = dynamic_cast<const ObfGammaStatus*> (gammaStatus)->getStage();
-
   }
   if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter) != 0) {
     UChar_t m_mipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getFiltersb();
@@ -636,43 +611,46 @@ void RootAnalyzer::analyzeDigiTree()
       m_ntuple.m_obfPassedMIP = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_mipStatus>>4) << 4; 
-
-    UInt_t mipState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::MipFilter)->getState();
-    m_ntuple.m_obfMIPState = mipState;
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter) != 0) { 
-    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter) != 0) { 
+    UChar_t m_hipStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HFCFilter)->getFiltersb();
     int m_hipStatusInt = m_hipStatus>>4;
     if (m_hipStatusInt==0 || m_hipStatusInt==6) {
       m_ntuple.m_obfPassedHIP = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_hipStatus>>4) << 8; 
-
-    UInt_t hipState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::HipFilter)->getState();
-    m_ntuple.m_obfHIPState = hipState;
   }
-  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter) != 0) {
-    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getFiltersb();
+  if (m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter) != 0) {
+    UChar_t m_dgnStatus = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DFCFilter)->getFiltersb();
     int m_dgnStatusInt = m_dgnStatus>>4;
     if (m_dgnStatusInt==0 || m_dgnStatusInt==6) {
       m_ntuple.m_obfPassedDGN = 1;
     }
     m_ntuple.m_obfFilterStatusBits |= (m_dgnStatusInt>>4) << 12; 
-    UInt_t dgnState = m_digiEvent->getObfFilterStatus().getFilterStatus(ObfFilterStatus::DgnFilter)->getState();
-    m_ntuple.m_obfDGNState = dgnState;
   }
   
 
   // FSW filter bits:
   const LpaGammaFilter *gamma = m_digiEvent->getGammaFilter();
   if (gamma) {
-    m_ntuple.m_fswGAMMAState          = gamma->getState();
-    m_ntuple.m_fswGAMMAPrescaleFactor = gamma->getPrescaleFactor();
-    m_ntuple.m_fswGAMMAPrescaleIndex  = gamma->prescalerIndex();
-    m_ntuple.m_fswGAMMAVersion        = gamma->getVersion(); 
-    
+    if (gamma->passed()) {
+      m_ntuple.m_fswGAMMAState = 0;
+    }
+    if (gamma->vetoed()) {
+      m_ntuple.m_fswGAMMAState = 2;
+    }
+    if (gamma->leaked()) {
+      m_ntuple.m_fswGAMMAState = 3;
+    }
+    if (gamma->suppressed()) {
+      m_ntuple.m_fswGAMMAState = 1;
+    }
+    if (gamma->ignored()) {
+      m_ntuple.m_fswGAMMAState = 4;
+    }  
+
     if (gamma->has()) {
-      m_ntuple.m_fswGAMMAHasRSD = 1;
+      m_ntuple.m_fswGammaHasRSD = 1;
 
       m_ntuple.m_fswGAMMAStatusWord  = gamma->getStatusWord();
       m_ntuple.m_fswGAMMAAllVetoBits = gamma->getAllVetoBits();
@@ -686,9 +664,21 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaMipFilter *mip = m_digiEvent->getMipFilter();
   if (mip) {
-    m_ntuple.m_fswMIPState          = mip->getState();
-    m_ntuple.m_fswMIPPrescaleFactor = mip->getPrescaleFactor();
-    m_ntuple.m_fswMIPPrescaleIndex  = mip->prescalerIndex();
+    if (mip->passed()) {
+      m_ntuple.m_fswMIPState = 0;
+    }
+    if (mip->vetoed()) {
+      m_ntuple.m_fswMIPState = 2;
+    }
+    if (mip->leaked()) {
+      m_ntuple.m_fswMIPState = 3;
+    }
+    if (mip->suppressed()) {
+      m_ntuple.m_fswMIPState = 1;
+    }
+    if (mip->ignored()) {
+      m_ntuple.m_fswMIPState = 4;
+    }  
 
     if (mip->has()) {
       m_ntuple.m_fswMIPHasRSD = 1;
@@ -701,9 +691,21 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaHipFilter *hip = m_digiEvent->getHipFilter();
   if (hip) {
-    m_ntuple.m_fswHIPState          = hip->getState();
-    m_ntuple.m_fswHIPPrescaleFactor = hip->getPrescaleFactor();
-    m_ntuple.m_fswHIPPrescaleIndex  = hip->prescalerIndex();
+    if (hip->passed()) {
+      m_ntuple.m_fswHIPState = 0;
+    }
+    if (hip->vetoed()) {
+      m_ntuple.m_fswHIPState = 2;
+    }
+    if (hip->leaked()) {
+      m_ntuple.m_fswHIPState = 3;
+    }
+    if (hip->suppressed()) {
+      m_ntuple.m_fswHIPState = 1;
+    }
+    if (hip->ignored()) {
+      m_ntuple.m_fswHIPState = 4;
+    }  
 
     if (hip->has()) {
       m_ntuple.m_fswHIPHasRSD = 1;
@@ -716,9 +718,21 @@ void RootAnalyzer::analyzeDigiTree()
 
   const LpaDgnFilter *dgn = m_digiEvent->getDgnFilter();
   if (dgn) {
-    m_ntuple.m_fswDGNState          = dgn->getState();
-    m_ntuple.m_fswDGNPrescaleFactor = dgn->getPrescaleFactor();
-    m_ntuple.m_fswDGNPrescaleIndex  = dgn->prescalerIndex();
+    if (dgn->passed()) {
+      m_ntuple.m_fswDGNState = 0;
+    }
+    if (dgn->vetoed()) {
+      m_ntuple.m_fswDGNState = 2;
+    }
+    if (dgn->leaked()) {
+      m_ntuple.m_fswDGNState = 3;
+    }
+    if (dgn->suppressed()) {
+      m_ntuple.m_fswDGNState = 1;
+    }
+    if (dgn->ignored()) {
+      m_ntuple.m_fswDGNState = 4;
+    }  
 
     if (dgn->has()) {
       m_ntuple.m_fswDGNHasRSD = 1;
@@ -731,12 +745,25 @@ void RootAnalyzer::analyzeDigiTree()
   
   const LpaPassthruFilter *passthru = m_digiEvent->getPassthruFilter();
   if (passthru) {
-    m_ntuple.m_fswPassthruState          = passthru->getState();
-    m_ntuple.m_fswPassthruPrescaleFactor = passthru->getPrescaleFactor();
-    m_ntuple.m_fswPassthruPrescaleIndex  = passthru->prescalerIndex();
+    if (passthru->passed()) {
+      m_ntuple.m_fswPassthruState = 0;
+    }
+    if (passthru->vetoed()) {
+      m_ntuple.m_fswPassthruState = 2;
+    }
+    if (passthru->leaked()) {
+      m_ntuple.m_fswPassthruState = 3;
+    }
+    if (passthru->suppressed()) {
+      m_ntuple.m_fswPassthruState = 1;
+    }
+    if (passthru->ignored()) {
+      m_ntuple.m_fswPassthruState = 4;
+    }  
 
     if (passthru->has()) {
-      m_ntuple.m_fswDGNHasRSD = 1; 
+      m_ntuple.m_fswDGNHasRSD = 1;
+ 
       m_ntuple.m_fswPassthruStatusWord  = passthru->getStatusWord();
     }
   }
@@ -748,21 +775,13 @@ void RootAnalyzer::analyzeDigiTree()
   //
   // Context information:
   //
-  unsigned int tmpLatcKey    = 0;
-  unsigned int tmpLatcIgnore = 0;
-
+  unsigned int tmpLatcKey = 0;
 
   if (m_digiEvent->getMetaEvent().keys() != 0) {
     tmpLatcKey    = m_digiEvent->getMetaEvent().keys()->LATC_master();
-    tmpLatcIgnore = m_digiEvent->getMetaEvent().keys()->LATC_ignore();
   }
-  m_ntuple.m_latcKey    = tmpLatcKey;
-  m_ntuple.m_latcIgnore = tmpLatcIgnore;
+  m_ntuple.m_latcKey = tmpLatcKey;
  
-  m_ntuple.m_mootKey = m_digiEvent->getMetaEvent().mootKey();
-
-  m_ntuple.m_compressedEventSize = m_digiEvent->getMetaEvent().compressedSize();
-  m_ntuple.m_compressionLevel    = m_digiEvent->getMetaEvent().compressionLevel();
 
   m_ntuple.m_contextRunInfoDataTransferID = m_digiEvent->getMetaEvent().run().dataTransferId();
   m_ntuple.m_contextRunInfoPlatform = m_digiEvent->getMetaEvent().run().platform();
@@ -853,6 +872,10 @@ void RootAnalyzer::analyzeDigiTree()
   unsigned tmpGemCalHe = m_digiEvent->getGem().getCalHeVector();
   unsigned tmpGemCno   = m_digiEvent->getGem().getCnoVector();
   
+
+  unsigned int tmpEbfSecond     = m_digiEvent->getEbfTimeSec();
+  unsigned int tmpEbfNanoSecond = m_digiEvent->getEbfTimeNanoSec();
+
   for (int iTower = 0; iTower<g_nTower; iTower++) {
     m_ntuple.m_gemTkrVector[iTower]   = ((tmpGemTkr >> iTower) & 1) ;      
     m_ntuple.m_gemRoiVector[iTower]   = ((tmpGemRoi >> iTower) & 1) ;      
@@ -895,7 +918,6 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventTemError         = m_digiEvent->getEventSummaryData().temError();
   m_ntuple.m_eventTrgParityError   = m_digiEvent->getEventSummaryData().trgParityError();
   m_ntuple.m_eventBadLdfStatus     = m_digiEvent->getEventSummaryData().badLdfStatus();
-  m_ntuple.m_eventTemBug           = m_digiEvent->getEventSummaryData().temBug();
   m_ntuple.m_eventGtrcPhase        = m_digiEvent->getEventSummaryData().gtrcPhase();
   m_ntuple.m_eventGtfePhase        = m_digiEvent->getEventSummaryData().gtfePhase();
   m_ntuple.m_eventGtccFifo         = m_digiEvent->getEventSummaryData().gtccFifo();
@@ -909,7 +931,7 @@ void RootAnalyzer::analyzeDigiTree()
   m_ntuple.m_eventPhaseError       = m_digiEvent->getEventSummaryData().phaseError();
   m_ntuple.m_eventTimeoutError     = m_digiEvent->getEventSummaryData().timeoutError();
 
-  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4();
+  m_ntuple.m_eventReadout4     = m_digiEvent->getEventSummaryData().readout4( );
   m_ntuple.m_eventZeroSuppress = m_digiEvent->getEventSummaryData().zeroSuppress();
   m_ntuple.m_eventMarker       = m_digiEvent->getEventSummaryData().marker();
   m_ntuple.m_eventCalStrobe    = m_digiEvent->getEventSummaryData().calStrobe();
@@ -1101,13 +1123,7 @@ void RootAnalyzer::fillOutputTree()
   if(m_outputFile) {
     TDirectory* saveDir = gDirectory;
     m_outputFile->cd();
-    int returnCode;
-    //m_tree->Fill();
-    returnCode = m_tree->Fill();
-    if (returnCode == -1) {
-      std::cout << "ERROR! Problem filling the tree!" << std::endl;
-      exit(1);
-    }
+    m_tree->Fill();
     saveDir->cd();
   }
 }
@@ -1275,7 +1291,7 @@ void RootAnalyzer::analyzeData()
 
 
   // awb
-  //nEvent = 10000;
+  //nEvent = 1000;
 
   //m_tkrCalib->setNevents(nEvent);
   //m_tkrCalib->setOutputFile(m_outputFile);
@@ -1475,9 +1491,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventID", &(m_ntuple.m_eventId), "EventID/i");
   m_tree->Branch("EventSize", &(m_ntuple.m_eventSize), "EventSize/i");
   m_tree->Branch("EventFlags", &(m_ntuple.m_eventFlags), "EventFlags/i");
-
-  m_tree->Branch("EventGleamFlags", &(m_ntuple.m_eventGleamFlags), "EventGleamFlags/i");
-
   m_tree->Branch("EvtTime", &(m_ntuple.m_timeStamp), "EvtTime/D");
   m_tree->Branch("EvtSummary", &(m_ntuple.m_summaryWord), "EvtSummary/i");
   m_tree->Branch("EvtMCLiveTime", &(m_ntuple.m_eventMCLivetime), "EvtMCLiveTime/D");
@@ -1498,7 +1511,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("EventTemError", &(m_ntuple.m_eventTemError), "EventTemError/I");
   m_tree->Branch("EventTrgParityError", &(m_ntuple.m_eventTrgParityError), "EventTrgParityError/I");
   m_tree->Branch("EventBadLdfStatus", &(m_ntuple.m_eventBadLdfStatus), "EventBadLdfStatus/I");
-  m_tree->Branch("EventTemBug", &(m_ntuple.m_eventTemBug), "EventTemBug/I");
   m_tree->Branch("EventGtrcPhase", &(m_ntuple.m_eventGtrcPhase), "EventGtrcPhase/I");
   m_tree->Branch("EventGtfePhase", &(m_ntuple.m_eventGtfePhase), "EventGtfePhase/I");
   m_tree->Branch("EventGtccFifo", &(m_ntuple.m_eventGtccFifo), "EventGtccFifo/I");
@@ -1614,12 +1626,7 @@ void RootAnalyzer::createBranches()
   // Context information:                                                                                                                                                                                      
   //
   m_tree->Branch("LatCKey", &(m_ntuple.m_latcKey), "LatCKey/i");
-  m_tree->Branch("LatCIgnore", &(m_ntuple.m_latcIgnore), "LatCIgnore/i");
-  m_tree->Branch("MootKey", &(m_ntuple.m_mootKey), "MootKey/i");
-                         
-  m_tree->Branch("CompressedEventSize", &(m_ntuple.m_compressedEventSize), "CompressedEventSize/I");
-  m_tree->Branch("CompressionLevel", &(m_ntuple.m_compressionLevel), "CompressionLevel/I");
-                                                                                                        
+                                                                                                                                 
   m_tree->Branch("ContextRunInfoDataTransferID", &(m_ntuple.m_contextRunInfoDataTransferID), "ContextRunInfoDataTransferID/i");
   m_tree->Branch("ContextRunInfoPlatform", &(m_ntuple.m_contextRunInfoPlatform), "ContextRunInfoPlatform/I");
   m_tree->Branch("ContextRunInfoDataOrigin", &(m_ntuple.m_contextRunInfoDataOrigin), "ContextRunInfoDataOrigin/I");
@@ -1681,19 +1688,6 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("ObfPassedDGN", &(m_ntuple.m_obfPassedDGN), "ObfPassedDGN/I");
   m_tree->Branch("ObfFilterStatusBits", &(m_ntuple.m_obfFilterStatusBits), "ObfFilterStatusBits/i");
 
-  m_tree->Branch("ObfGAMMAStatusWord", &(m_ntuple.m_obfGAMMAStatusWord), "ObfGAMMAStatusWord/i");
-  m_tree->Branch("ObfGAMMAVetoMask", &(m_ntuple.m_obfGAMMAVetoMask), "ObfGAMMAVetoMask/i");
-  m_tree->Branch("ObfGAMMAVetoBit", &(m_ntuple.m_obfGAMMAVetoBit), "ObfGAMMAVetoBit/i");
-  m_tree->Branch("ObfGAMMAPrescalerWord", &(m_ntuple.m_obfGAMMAPrescalerWord), "ObfGAMMAPrescalerWord/i");
-  m_tree->Branch("ObfGAMMAEnergy", &(m_ntuple.m_obfGAMMAEnergy), "ObfGAMMAEnergy/i");
-  m_tree->Branch("ObfGAMMAStage", &(m_ntuple.m_obfGAMMAStage), "ObfGAMMAStage/i");
-
-  m_tree->Branch("ObfGAMMAState", &(m_ntuple.m_obfGAMMAState),"ObfGAMMAState/i");
-  m_tree->Branch("ObfMIPState", &(m_ntuple.m_obfMIPState),"ObfMIPState/i");
-  m_tree->Branch("ObfHIPState", &(m_ntuple.m_obfHIPState),"ObfHIPState/i");
-  m_tree->Branch("ObfDGNState", &(m_ntuple.m_obfDGNState),"ObfDGNState/i");
-
-
   // FSW filter bits:
   m_tree->Branch("FswGAMMAState", &(m_ntuple.m_fswGAMMAState), "FswGAMMAState/I");
   m_tree->Branch("FswMIPState", &(m_ntuple.m_fswMIPState), "FswMIPState/I");
@@ -1701,19 +1695,7 @@ void RootAnalyzer::createBranches()
   m_tree->Branch("FswDGNState", &(m_ntuple.m_fswDGNState), "FswDGNState/I");
   m_tree->Branch("FswPassthruState", &(m_ntuple.m_fswPassthruState), "FswPassthruState/I");
 
-  m_tree->Branch("FswGAMMAPrescaleFactor", &(m_ntuple.m_fswGAMMAPrescaleFactor), "FswGAMMAPrescaleFactor/i");
-  m_tree->Branch("FswDGNPrescaleFactor", &(m_ntuple.m_fswDGNPrescaleFactor), "FswDGNPrescaleFactor/i");
-  m_tree->Branch("FswMIPPrescaleFactor", &(m_ntuple.m_fswMIPPrescaleFactor), "FswMIPPrescaleFactor/i");
-  m_tree->Branch("FswHIPPrescaleFactor", &(m_ntuple.m_fswHIPPrescaleFactor), "FswHIPPrescaleFactor/i");
-  m_tree->Branch("FswPassthruPrescaleFactor", &(m_ntuple.m_fswPassthruPrescaleFactor), "FswPassthruPrescaleFactor/i");
-
-  m_tree->Branch("FswGAMMAPrescaleIndex", &(m_ntuple.m_fswGAMMAPrescaleIndex), "FswGAMMAPrescaleIndex/I");
-  m_tree->Branch("FswDGNPrescaleIndex", &(m_ntuple.m_fswDGNPrescaleIndex), "FswDGNPrescaleIndex/I");
-  m_tree->Branch("FswMIPPrescaleIndex", &(m_ntuple.m_fswMIPPrescaleIndex), "FswMIPPrescaleIndex/I");
-  m_tree->Branch("FswHIPPrescaleIndex", &(m_ntuple.m_fswHIPPrescaleIndex), "FswHIPPrescaleIndex/I");
-  m_tree->Branch("FswPassthruPrescaleIndex", &(m_ntuple.m_fswPassthruPrescaleIndex), "FswPassthruPrescaleIndex/I");
-
-  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGAMMAHasRSD), "FswGAMMAHasRSD/I");
+  m_tree->Branch("FswGAMMAHasRSD", &(m_ntuple.m_fswGammaHasRSD), "FswGAMMAHasRSD/I");
   m_tree->Branch("FswMIPHasRSD", &(m_ntuple.m_fswMIPHasRSD), "FswMIPHasRSD/I");
   m_tree->Branch("FswHIPHasRSD", &(m_ntuple.m_fswHIPHasRSD), "FswHIPHasRSD/I");
   m_tree->Branch("FswDGNHasRSD", &(m_ntuple.m_fswDGNHasRSD), "FswDGNHasRSD/I");
@@ -1732,7 +1714,6 @@ void RootAnalyzer::createBranches()
 
   m_tree->Branch("FswGAMMAStage", &(m_ntuple.m_fswGAMMAStage), "FswGAMMAStage/i");
   m_tree->Branch("FswGAMMAEnergyValid", &(m_ntuple.m_fswGAMMAEnergyValid), "FswGAMMAEnergyValid/i");
-  m_tree->Branch("FswGAMMAVersion", &(m_ntuple.m_fswGAMMAVersion), "FswGAMMAVersion/i");
   m_tree->Branch("FswGAMMAEnergyInLeus", &(m_ntuple.m_fswGAMMAEnergyInLeus), "FswGAMMAEnergyInLeus/I");
 
 
