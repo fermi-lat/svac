@@ -34,17 +34,25 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLicos'};
-my $ldfFile = $inFiles->{'RetDef'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
+my $newTask = $ENV{'reconTask'};
+my $digiRootFile = $inFiles->{'digi'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
 
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
+if (! -e $digiRootFile) {
+    print "Digi file [$digiRootFile] does not exist, not launching recon task.\n";
+    exit(0);
 }
-if (!$doDigi) {
-	exit(0);
+
+my $doRecon = `$ENV{'decideReconScript'} $runName`;
+chomp $doRecon;
+if ($doRecon eq '1') {
+    print "Reconstructable run, status: $doRecon\n";
+} elsif ($doRecon eq '0') {
+    print "This is not a reconstructable run, status: $doRecon\n";
+    exit(0);
+} else {
+	print "Bad result from decideRecon.\n";
+	exit(1);
 }
 
 print "Running command: [$command]\n";

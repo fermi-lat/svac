@@ -1,12 +1,8 @@
 #!/usr/local/bin/perl -w
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use strict;
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 # Use Oracle 8 libs because the script we are launching is Python.
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/dbSetup8.cshrc");

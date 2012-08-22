@@ -23,13 +23,9 @@ my $runName = $proc->{'run_name'};
 ##
 #####################################################
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
 use lib "$ENV{'svacPlRoot'}/lib";
 use environmentalizer;
 environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
-
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
 
 my $ldfFile = $inFiles->{'ldf'};
 my $shellFile = $outFiles->{'script'};
@@ -37,8 +33,8 @@ my $jobOptionFile = $outFiles->{'jobOptions'};
 my $digiRootFile = $outFiles->{'digi'};
 
 my $exe = $ENV{'digitizationScript'};
-$command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
-print STDERR "Running command: [$command]\n";
+my $command = "$exe '$runName' '$ldfFile' '$shellFile' '$jobOptionFile' '$digiRootFile'";
+print "Running command: [$command]\n";
 
 my $ex = new Exec("$command");
 

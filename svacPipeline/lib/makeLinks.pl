@@ -5,7 +5,7 @@ use strict;
 use File::Basename;
 
 my $oldFile;
-my ($oldTask, $newTask, $runName, @files) = @ARGV;
+my ($oldTask, $newTask, @files) = @ARGV;
 
 # could also use "ln" or "cp"
 my $linker = "ln -s";
@@ -20,10 +20,6 @@ foreach $oldFile (@files) {
     #
     $status |= system("test -e $newFile || $linker $target $newFile");
 }
-
-my $command = "$ENV{'PDB_HOME'}/createRun.pl $newTask $runName";
-
-$status |= system($command);
 
 if ($status == 0) {
     exit 0;}

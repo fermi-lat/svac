@@ -2,13 +2,11 @@
 
 use strict;
 
-if ($#ARGV != 5) {
-    die "Usage: $0 runId digiRootFile optionFile shellFile histoFile tarBall";
+if ($#ARGV != 4) {
+    die "Usage: $0 digiRootFile optionFile shellFile tarBall";
 }
 
-print STDERR "$0: svacPlRoot=[$ENV{'svacPlRoot'}]\n";
-
-my ($runName, $digiRootFile, $optionFile, $shellFile, $histoFile, $tarBall) = @ARGV;
+my ($runName, $digiRootFile, $optionFile, $shellFile, $tarBall) = @ARGV;
 
 print <<EOT;
 $0 running with:
@@ -16,7 +14,6 @@ $0 running with:
   digiRootFile: [$digiRootFile]
   optionFile:   [$optionFile]
   shellFile:    [$shellFile]
-  histoFile:    [$histoFile]
   tarBall:      [$tarBall]
 EOT
 
@@ -43,14 +40,12 @@ my $latexHeaderFile = $ENV{'latexHeaderFile'};
 my $doxyFile = $ENV{'digiRepDoxyFile'};
 my $testReportVersion = $ENV{'TestReportVersion'};
 
-my $histOrig = $runName . '_hist.root';
-
 open(OPTFILE, ">$optionFile") || die "Can't open $optionFile for input, abortted!";
 print OPTFILE qq{$digiRootFile \n};
 print OPTFILE qq{$reconRootFile \n};
 print OPTFILE qq{$reportDir \n};
 print OPTFILE qq{$runName \n};
-print OPTFILE qq{$digiReportVersion \n};
+print OPTFILE qq{$testReportVersion \n};
 print OPTFILE qq{$EngineeringModelVersion \n};
 print OPTFILE qq{$tkrCalibSerNo \n};
 print OPTFILE qq{$calCalibSerNo \n};
@@ -65,8 +60,6 @@ print SHELLFILE "setenv GLAST_EXT $ENV{'SVAC_GLAST_EXT'} \n";
 print SHELLFILE qq{source $cmtDir/setup.csh \n};
 print SHELLFILE qq{$exe $optionFile || exit 1 \n};
 print SHELLFILE qq{cd $reportDir \n};
-print SHELLFILE qq{mv $histOrig $histoFile \n};
-print SHELLFILE qq{ln -s $histoFile $histOrig \n};
 print SHELLFILE qq{setenv latexHeader '$latexHeaderFile' \n};
 print SHELLFILE qq{setenv testReportVersion '$testReportVersion' \n};
 print SHELLFILE qq{doxygen $doxyFile \n};

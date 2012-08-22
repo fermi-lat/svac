@@ -16,9 +16,6 @@
 #include "reconRootData/AcdTkrIntersection.h"
 #include "digiRootData/AcdDigi.h"
 
-#include "calibTkrUtil/TkrNoiseOcc.h"
-
-
 /**
  * \class TestReport
  * \brief TestReport produces SVAC reports for both digi and recon data
@@ -260,14 +257,11 @@ class TestReport {
 
   void produceTriggerPerTowerPlot();
 
-  void produceCondArrivalTimesPlots();
-
   void produceAcdTriggerPlots();
 
   void produceTimeIntervalPlotSBC();
   void produceTimeIntervalPlotGEM();
 
-  void produceTriggerRatePlot(); 
 
   void produceNHitPlane2DPlot();
 
@@ -371,222 +365,31 @@ class TestReport {
   /// trigger histogram
   TH1F* m_trigger;
 
-  /// no of bad events indicated in event summary data
-  unsigned int m_nBadEvts;
-
   // LATTE?
   int m_isLATTE;
 
-  // Bay 10, layer 0 split:
-  int m_bay10Layer0SplitDefault;
-
-  // Ground ID:
-  unsigned int m_firstGroundID;
-  unsigned int m_lastGroundID;
-  unsigned int m_previousGroundID;
-  int m_counterGroundID;
-
-  // Datagrams:
-  int m_counterDataDiagramsEpu0;
-  int m_nbrDataGramsEpu0;
-  int m_nbrEventsDataGramsEpu0;
-  unsigned int m_firstDataGramEpu0;
-  unsigned int m_thisDataGramEpu0;
-  unsigned int m_previousDataGramEpu0;
-  unsigned int m_previousPreviousDataGramEpu0;
-  int m_endRunDataGramEpu0;
-  int m_fullDataGramEpu0;
-  int m_beginRunDataGramEpu0;
-
-  int m_counterDataDiagramsEpu1;
-  int m_nbrDataGramsEpu1;
-  int m_nbrEventsDataGramsEpu1;
-  unsigned int m_firstDataGramEpu1;
-  unsigned int m_thisDataGramEpu1;
-  unsigned int m_previousDataGramEpu1;
-  unsigned int m_previousPreviousDataGramEpu1;
-  int m_endRunDataGramEpu1;
-  int m_fullDataGramEpu1;
-  int m_beginRunDataGramEpu1;
-
-  int m_counterDataDiagramsEpu2;
-  int m_nbrDataGramsEpu2;
-  int m_nbrEventsDataGramsEpu2;
-  unsigned int m_firstDataGramEpu2;
-  unsigned int m_thisDataGramEpu2;
-  unsigned int m_previousDataGramEpu2;
-  unsigned int m_previousPreviousDataGramEpu2;
-  int m_endRunDataGramEpu2;
-  int m_fullDataGramEpu2;
-  int m_beginRunDataGramEpu2;
-
-  int m_counterCyclesSiu0;
-  int m_counterDataDiagramsSiu0;
-  int m_nbrDataGramsSiu0;
-  int m_nbrEventsDataGramsSiu0;
-  unsigned int m_firstDataGramSiu0;
-  unsigned int m_thisDataGramSiu0;
-  unsigned int m_previousDataGramSiu0;
-  unsigned int m_previousPreviousDataGramSiu0;
-  int m_endCountDataGramSiu0;
-  int m_fullDataGramSiu0;
-  int m_beginRunDataGramSiu0;
-
-  int m_counterCyclesSiu1;
-  int m_counterDataDiagramsSiu1;
-  int m_nbrDataGramsSiu1;
-  int m_nbrEventsDataGramsSiu1;
-  unsigned int m_firstDataGramSiu1;
-  unsigned int m_thisDataGramSiu1;
-  unsigned int m_previousDataGramSiu1;
-  unsigned int m_previousPreviousDataGramSiu1;
-  int m_endCountDataGramSiu1;
-  int m_fullDataGramSiu1;
-  int m_beginRunDataGramSiu1;
-
-  int m_datagramGapsEPU0;
-  int m_datagramGapsEPU1;
-  int m_datagramGapsEPU2;
-  int m_datagramGapsSIU0;
-  int m_datagramGapsSIU1;
-
-  /// number of events in the digi root file
-  int m_nEvent;
-  int m_nEventNoPeriodic;
-
-  // Number of GEM related quantities:
-  ULong64_t m_nbrPrescaled;
-  ULong64_t m_nbrDeadZone;
-  ULong64_t m_nbrDiscarded;
-  Long64_t m_deltaSequenceNbrEvents;
-
-  /// number of events with 3 in a row trigger in GEM
-  int m_nTkrTrigger;
-
-  /// number of events with strip ID outside the range from 0 to 1535
-  int m_nEventBadStrip;
-
-  /// number of events with more than 63 strips per GTRC
-  int m_nEventMoreStrip;
-
-  /// number of events with saturated TOT (250 ADC )
-  int m_nEventSatTot;
-
-  /// number of events with 0 TOT but at least 1 strip
-  int m_nEventZeroTot;
-
-  /// number of events with TOT values outside range [0, g_overlapTot]
-  int m_nEvtInvalidTot;
-
-  /// number of events with TOT values outside range [0, g_satTot] i.e. overlapped triggers
-  int m_nEvtOverlapTriggerTot;
-
-  /// number of events with none zero TOT but no strip hit
-  int m_nEventBadTot;
-
-  /// time of first trigger
-  UInt_t m_startTime;
-
-  /// time of last trigger
-  UInt_t m_endTime;
-
-  // Livetime:
-  double m_liveTime;
- 
-  ULong64_t m_elapsedTime;
-
-  int m_nbrEventsNormal;
-  int m_nbrEvents4Range;
-  int m_nbrEvents4RangeNonZS;
-
-  // Extended counters problem?
-  Int_t m_extendedCountersFlag;
-
-  // Time tone problem?
-  Int_t m_backwardsTimeTone;
-  Int_t m_identicalTimeTones;
-
-  // Timetone counters and flags:
-  UInt_t m_nbrFlywheeling;
-
-  Int_t m_nbrIncomplete;
-  Int_t m_nbrMissingGps;
-  Int_t m_isSourceGPS;
-  Int_t m_nbrMissingCpuPps;
-  Int_t m_nbrMissingLatPps;
-  Int_t m_nbrMissingTimeTone;
-  Int_t m_nbrEarlyEvent;
-
-  /// percentage of events with TKR trigger but less than 6 digis in a tower
-  TGraph* m_nDigi;
-
-  // ACD parity errors:
-  unsigned int m_nAcdOddParityError;
-  unsigned int m_nAcdHeaderParityError;
-
-
-  // Error flags:
-  Int_t m_eventBadEventSequence;
-  Int_t m_eventBadTkrRecon;
-  Int_t m_eventPacketError;
-  Int_t m_eventTemError;
-  Int_t m_eventTrgParityError;
-  Int_t m_eventBadLdfStatus;
-  Int_t m_eventGtrcPhase;
-  Int_t m_eventGtfePhase;
-  Int_t m_eventGtccFifo;
-  Int_t m_eventGtccHdrParity;
-  Int_t m_eventGtccWcParity;
-  Int_t m_eventGtrcSummary;
-  Int_t m_eventGtccDataParity;
-  Int_t m_eventGtccTimeout;
-  Int_t m_eventGcccError;
-  Int_t m_eventGtccError;
-  Int_t m_eventPhaseError;
-  Int_t m_eventTimeoutError;
-
-  Int_t m_eventIsPeriodic;
-
-  // Acd Digi based histograms
-  TH1F* m_AcdTileIdOnePMT;
-  TH1F* m_AcdTileIdOneVeto;
-
-  TH1F* m_AcdHitMap;
-  TH1F* m_AcdVetoMap;
-  
-  TH2F* m_AcdPhaMapA;
-  TH2F* m_AcdPhaMapB;
-
-  // Acd Recon based histograms
-  TH1F* m_AcdEfficMap;
-  TH1F* m_AcdInEfficMap;
-
-  TH2F* m_AcdMissMapTop;
-  TH2F* m_AcdMissMapMinusX;
-  TH2F* m_AcdMissMapMinusY;
-  TH2F* m_AcdMissMapPlusX;
-  TH2F* m_AcdMissMapPlusY;
-
-
-
-  // Triggger rates:
-  TH1F* m_triggerRate;
-  TH1F* m_triggerLivetimeRate;
-  TH1F* m_livetimeRate;
-  TH1F* m_deadzoneRate;
-  TH1F* m_discardedRate;
-
-
-  /// number of events with different Glt trigger:
+  /// number of events with different Glt trigger
   long m_nEvtGltTrigger[enums::number_of_trigger_bits];
+
+  /// no of bad events indicated in event summary data
+  unsigned m_nBadEvts;
+
+  /// Error bits: Currently OR'ed over all towers!
+  unsigned int m_nTrgParityErrors;
+  unsigned int m_nPacketErrors;
+  unsigned int m_nTemErrors;
 
   /// condition summary in GEM
   TH1F* m_condSummary;
 
-
   /// number of events with different GEM trigger
   long m_nEvtGemTrigger[enums::GEM_offset];
 
+  /// number of events in the digi root file
+  int m_nEvent;
+
+  /// number of events with 3 in a row trigger in GEM
+  int m_nTkrTrigger;
 
   /// number of events with different number of digis.
   /// For example: m_nEventDigi[0] is number of events with 0 digi
@@ -595,6 +398,11 @@ class TestReport {
   /// tower is used
   int m_nEventDigi[7];
 
+  /// number of events with strip ID outside the range from 0 to 1535
+  int m_nEventBadStrip;
+
+  /// number of events with more than 63 strips per GTRC
+  int m_nEventMoreStrip;
 
   /// number of strip hits for each tower
   TH1F* m_nHit[g_nTower];
@@ -651,35 +459,41 @@ class TestReport {
   /// TOT distributions
   TH1F* m_tot[g_nTower][g_nPlane][2];
 
+  /// number of events with saturated TOT (250 ADC )
+  int m_nEventSatTot;
+
+  /// number of events with 0 TOT but at least 1 strip
+  int m_nEventZeroTot;
+
+  /// number of events with TOT values outside range [0, g_overlapTot]
+  int m_nEvtInvalidTot;
+
+  /// number of events with TOT values outside range [0, g_satTot] i.e. overlapped triggers
+  int m_nEvtOverlapTriggerTot;
+
+  /// number of events with none zero TOT but no strip hit
+  int m_nEventBadTot;
+
+  /// time of first trigger
+  UInt_t m_startTime;
+
+  /// time of last trigger
+  UInt_t m_endTime;
+
+
+  /// time of first datagram
+  UInt_t m_startTimeDataGram;
+
+  /// time of last datagram
+  UInt_t m_endTimeDataGram;
 
 
   // epu number
   TH1F* m_epu;
 
-  TH1F* m_datagramsEPU0;
-  TH1F* m_datagramsEPU1;
-  TH1F* m_datagramsEPU2;
-  TH1F* m_datagramsSIU0;
-  TH1F* m_datagramsSIU1;
-
-  TH1F* m_deltaTimeDGCTEvtEPU0;
-  TH1F* m_deltaTimeDGCTEvtEPU1;
-  TH1F* m_deltaTimeDGCTEvtEPU2;
-  TH1F* m_deltaTimeDGCTEvtSIU0;
-  TH1F* m_deltaTimeDGCTEvtSIU1;
-
-  TH1F* m_deltaEventIDEPU0;
-  TH1F* m_deltaEventIDEPU1;
-  TH1F* m_deltaEventIDEPU2;
-  TH1F* m_deltaEventIDSIU0;
-  TH1F* m_deltaEventIDSIU1;
-
   // GEM discarded events:
   TH1F* m_gemDiscarded;
   TH1F* m_gemDiscardedTime;
-
-  // GEM deadzone events:
-  TH1F* m_gemDeadzone;
 
   // Number of triggers per tower:
   TH1F* m_tkrPerTower;
@@ -701,20 +515,12 @@ class TestReport {
   TH1F* m_timeIntervalGem;
   TH1F* m_timeIntervalGemZoom;
 
-  TH1F* m_deltaWindowOpenTime;
-  TH1F* m_deltaWindowOpenTimeZoom;
+  /// percentage of events with TKR trigger but less than 6 digis in a tower
+  TGraph* m_nDigi;
 
-  TH1F* m_tick20MHzDeviation;
-  TH1F* m_tick20MHzDeviationZoom;
-
-  TH1F* m_timeIntervalElapsed;
-
-  TH1F* m_condArrivalTimeTKR;
-  TH1F* m_condArrivalTimeROI;
-  TH1F* m_condArrivalTimeCalLo;
-  TH1F* m_condArrivalTimeCalHi;
-  TH1F* m_condArrivalTimeCNO;
-
+  // ACD parity errors:
+  unsigned int m_nAcdOddParityError;
+  unsigned int m_nAcdHeaderParityError;
 
   /// no. of events in each tower with TKR trigger
   int m_nTkrEvent[g_nTower];
@@ -763,6 +569,15 @@ class TestReport {
   // Histograms for the ACD digis:
   TH1F* m_nAcdDigis;
 
+  // Acd Digi based histograms
+  TH1F* m_AcdTileIdOnePMT;
+  TH1F* m_AcdTileIdOneVeto;
+
+  TH1F* m_AcdHitMap;
+  TH1F* m_AcdVetoMap;
+  
+  TH2F* m_AcdPhaMapA;
+  TH2F* m_AcdPhaMapB;
 
   TH2F* m_AcdGarcGafeHitMap;
   TH2F* m_AcdGarcGafeVetoMap;  
@@ -772,12 +587,21 @@ class TestReport {
   TH1F* m_AcdGemCnoMap;
   TH1F* m_AcdGemRoiMap;
 
+  // Acd Recon based histograms
+  // 
+  TH1F* m_AcdEfficMap;
+  TH1F* m_AcdInEfficMap;
+
+  TH2F* m_AcdMissMapTop;
+  TH2F* m_AcdMissMapMinusX;
+  TH2F* m_AcdMissMapMinusY;
+  TH2F* m_AcdMissMapPlusX;
+  TH2F* m_AcdMissMapPlusY;
+
   // Path-length corrected MIP
   TH2F* m_AcdMipMapA;
   TH2F* m_AcdMipMapB;
 
-  // for TKR noise analysis report
-  TkrNoiseOcc* m_tkrNoiseOcc;
-  TDirectory* m_tkrNoiseOcc_dir;
+
 };
 #endif

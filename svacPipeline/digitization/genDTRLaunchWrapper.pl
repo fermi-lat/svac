@@ -34,17 +34,13 @@ environmentalizer::sourceCsh("$ENV{'svacPlRoot'}/setup/svacPlSetup.cshrc");
 
 my $exe = $ENV{'taskLauncher'};
 
-my $newTask = $ENV{'digitizationTaskLicos'};
-my $ldfFile = $inFiles->{'RetDef'};
-my $command = "$exe '$taskName' '$newTask' '$runName' '$ldfFile'";
+my $newTask = $ENV{'digiReportTask'};
+my $digiRootFile = $inFiles->{'digi'};
+my $command = "$exe '$taskName' '$newTask' '$runName' '$digiRootFile'";
 
-my $doDigi = `$ENV{'decideDigiScript'} $runName $ldfFile`;
-chomp $doDigi;
-unless (length($doDigi)) {
-	die("Can't determine digitizability!\n");
-}
-if (!$doDigi) {
-	exit(0);
+if (! -e $digiRootFile) {
+    print "Digi file [$digiRootFile] does not exist, not launching digiReport task.\n";
+    exit(0);
 }
 
 print "Running command: [$command]\n";

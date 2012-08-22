@@ -1,4 +1,4 @@
-#! /usr/local/bin/python
+#! /afs/slac.stanford.edu/g/glast/applications/python/Python-2.2.2/i386_linux24/bin/python
 
 """Usage: updateUrl.py runId urlKey targetFile [dataRoot]
 
@@ -15,17 +15,12 @@ dataRoot is the root directory for the run tree on the FTP server
 import sys
 import os
 
-print >> sys.stderr, "%s: svacPlRoot=[%s]" % \
-      (sys.argv[0], os.environ['svacPlRoot'])
-
 reportPages = {"configReportUrl": os.environ['configReportUrl'],
                "digiReportUrl": os.environ['digiReportUrl'],
                "reconReportUrl": os.environ['reconReportUrl'],
-               "tkrReportUrl": os.environ['tkrReportUrl'],
                }
 
 goodKeys = ('configReportUrl', 'digiReportUrl', 'reconReportUrl',
-            'tkrReportUrl', 
             'digiRootFile', 'reconRootFile', 'meritRootFile', 'svacRootFile',
             'calRootFile',
             )
@@ -38,7 +33,7 @@ nArg = len(sys.argv)
 if nArg == 4:
     runId, urlKey, targetFile = sys.argv[1:]
     # used to form ftp URL - default value
-    rootDataDir = None
+    rootDataDir = os.environ['rootUrl']
 elif nArg == 5:
     runId, urlKey, targetFile, rootDataDir = sys.argv[1:]    
 else:
@@ -53,24 +48,17 @@ if urlKey not in goodKeys:
 
 # figure out the path to the target file
 #path = list(os.path.split(targetFile))
-print >> sys.stderr, targetFile
+print targetFile
 path = targetFile.split('/')
-print >> sys.stderr, path
+print path
 runIndex = path.index(runId)
 del path[:runIndex]
 if urlKey in reportPages:
     # This is a report, we've gotta replace the tarball with the web page
-    # And serve the page thru HTTP
     path[-1] = reportPages[urlKey]
-    defaultRootDir = os.environ['rootUrl']
-else:
-    # not a report, serve it thru FTP
-    defaultRootDir = os.environ['rootFtp']
-    pass
 path = os.path.join(*path)
-print >> sys.stderr, path
-if not rootDataDir:
-    rootDataDir = defaultRootDir
+print path
+
     
 # construct URL string
 reportUrl = "%s/%s" % (rootDataDir, path)
