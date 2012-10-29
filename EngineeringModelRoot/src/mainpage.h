@@ -42,16 +42,13 @@ For all the variables the default value is -9999.
 
 <TR> <TD> RunID </TD> <TD> UInt </TD>  <TD> Run number </TD> </TR> 
 
-<TR> <TD> EventID </TD> <TD> UInt64_t  </TD>  <TD> Event number: For Flight Software Runs this is really UInt64_t, but is currently stored as an UInt. The full event ID is stored in ContextGemScalersSequence 
+<TR> <TD> EventID </TD> <TD> UInt </TD>  <TD> Event number: For Flight Software Runs this is really UInt64_t, but is currently stored as an UInt. The full event ID is stored in ContextGemScalersSequence 
           variable. For LATTE the event number comes from a 
           32 bit online counter. The event numbers are always contigous, i.e. no gaps, except for runs taken with software prescaling. For runs taken before the middle of April 2005 
           it came from a 17 bits online counter and wrapped around at 128k events i.e. you could have multiple events with the same event sequence number. </TD> </TR>
 
-<TR> <TD> EventSize </TD> <TD> Int </TD>  <TD> Uncompressed event size in bytes. </TD> </TR>
-
-<TR> <TD> CompressedEventSize </TD> <TD> Int </TD>  <TD> Compressed event size in bytes. </TD> </TR>
-<TR> <TD> CompressionLevel    </TD> <TD> Int </TD>  <TD> Compression level. </TD> </TR>
-
+<TR> <TD> EventSize </TD> <TD> Int </TD>  <TD> Event size in bytes taken from the Fits file. It seems to be an 8 bytes offset with respect to the LDF event size (the FITS event size  
+          being larger). </TD> </TR>
 
 <TR> <TD> GltWord </TD> <TD> Int </TD> <TD> Trigger word made from digis: The definition of the bits can be found in enums/enums/TriggerBits.h and follows the definition of the 
           bits from the GltConditionsWord. The GltWord is the only trigger word available in the simulation as there is no GEM simulation.</TD> </TR>
@@ -65,11 +62,8 @@ For all the variables the default value is -9999.
 <TR> <TD> EvtSummary </TD> <TD> Int </TD> <TD> Summary word for each event. For a detailed explaination, see the Online document  
           http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf Chapter 3.5</TD> </TR>
 
-<TR> <TD> EventFlags </TD> <TD> Unsigned Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
+<TR> <TD> EventFlags </TD> <TD> Int </TD> <TD>  Event quality flags: A bit is set if there is an error in TKR Recon, a Packet error, a Summary error or a Trigger parity error.  
           The definition of the bits can be found in enums/enums/EventFlags.h </TD> </TR>
-
-<TR> <TD> EventGleamFlags </TD> <TD> Unsigned Int </TD> <TD> Gleam reconstruction event flags: A bit is set if there are problems with the reconstruction i.e. with TkrRecon (bit 0), CalRecon (bit 1) 
-                                     and AcdRecon (bit 2). A value fo 0 means no problems. See Gleam in enums/EventFlags.h for additional details. </TD> </TR>
 
 <TR> <TD> EventBadEventSequence </TD> <TD> Int </TD> <TD> Set if the event sequence is not monotonically increasing. </TD> </TR>
 <TR> <TD> EventBadTkrRecon      </TD> <TD> Int </TD> <TD> Set if there are too many TKR hits in the event. If so, TKR recon will not run on the event. </TD> </TR>
@@ -88,7 +82,6 @@ For all the variables the default value is -9999.
 <TR> <TD> EventGtccError        </TD> <TD> Int </TD> <TD> Set if there is a GTCC error in the event. </TD> </TR>
 <TR> <TD> EventGcccError        </TD> <TD> Int </TD> <TD> Set if there is a GCCC error in the event. </TD> </TR>
 <TR> <TD> EventPhaseError       </TD> <TD> Int </TD> <TD> Set if there is an event phase error in the event. </TD> </TR>
-<TR> <TD> EventTemBug           </TD> <TD> Int </TD> <TD> Set if there is a TEM bug in the event. Only works for the new LDF i.e. GR v15r47p7 and later ones.</A> 
 <TR> <TD> EventTimeoutError     </TD> <TD> Int </TD> <TD> Set if there is an event timeout error in the event. </TD> </TR> 
 
 <TR> <TD> EventReadout4      </TD> <TD> Int </TD> <TD> 4-range readout - see Chapter 3 in http://www-glast.slac.stanford.edu/IntegrationTest/ONLINE/docs/LATcom.pdf </TD> </TR>    
@@ -179,9 +172,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Context information from Flight Software </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. A value of 0 means that no key was available. Please use the MOOT key to retrieve any configuration information from MOOT!</TD> </TR>
-<TR> <TD> LatCIgnore               </TD> <TD> UInt </TD> <TD> LatC Ignore. </TD> </TR> 
-<TR> <TD> MootKey                  </TD> <TD> UInt </TD> <TD> Moot key. Use this key to retrieve any configuration information from Moot! </TD> </TR> 
+<TR> <TD> LatCKey                  </TD> <TD> UInt </TD> <TD> LatC master key. Use this key to query Moot about the hardware configuration. A value of 0 means that no key was available. </TD> </TR>
 
 <TR> <TD> ContextRunInfoDataTransferID </TD> <TD>  UInt </TD> <TD> ID of the data transfer from the MOC. This corresponds to either a real TDRSS downlink or a retransfer from the MOC. Note that 
                                                                    a run can be split between multiple data transfers. </TD> </TR>  
@@ -295,7 +286,7 @@ This means that this time will be later than the time of any event time. </TD> <
 <TR> <TD> FswGAMMAStage        </TD> <TD> UInt </TD> <TD> Bit mask indicating which stages of the GAMMA filter have been processed (if there is an RSD). </TD> </TR> 
 <TR> <TD> FswGAMMAEnergyValid  </TD> <TD> UInt </TD> <TD> Flag indicating the energy of the event was evaluated by the GAMMA filter (if there is an RSD). </TD> </TR> 
 <TR> <TD> FswGAMMAEnergyInLeus </TD> <TD>  Int </TD> <TD> Energy in units of LEUS (1/4 Mev) (if there is an RSD). </TD> </TR>
-<TR> <TD> FswGAMMAVersion      </TD> <TD> UInt </TD> <TD> Version of the FSW GAMMA-filter.  </TD> </TR> 
+
 
 </TABLE>
 
@@ -305,24 +296,18 @@ This means that this time will be later than the time of any event time. </TD> <
 <CAPTION ALIGN="TOP"> Gleam Onboard Filter </CAPTION>
 <TR> <TH> Variable name </TH> <TH> Type </TH> <TH>Meaning  </TH> </TR>
 
-<TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the GAMMA-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedMIP        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the MIP-filter and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedHIP        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
-<TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> DEPRECATED! USE THE STATE VARIABLES! Gleam filter: Variable equal to 1 if the event was PASSED or LEAKED by the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedGAMMA      </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the GAMMA-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedMIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the MIP-filter and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedHIP        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the HIP (Heavy ion filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfPassedDGN        </TD> <TD> Int  </TD> <TD> Gleam filter: Variable equal to 1 if the event passed the DGN (Diagnostic filter) and -1 if it didn't. </TD> </TR> 
+<TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. </TD> </TR>
 
-<TR> <TD> ObfFilterStatusBits </TD> <TD> UInt </TD> <TD> Gleam filter: Status bits from all filters: 4 bits each, in the order GAMMA, HIP, MIP and DGN. Use this to distinguish between PASSED and LEAKED for example. NB! The convention is NOT that same as the State convention. Use the State variables!</TD> </TR>
-
-<TR> <TD> ObfGAMMAState </TD> <TD> UInt </TD> <TD> State of the GAMMA-filter. It follows the same convention as the FSW GAMMA filter state! </TD> </TR>
-<TR> <TD> ObfMIPState </TD> <TD> UInt </TD> <TD> State of the MIP-filter. It follows the same convention as the FSW MIP filter state! </TD> </TR>
-<TR> <TD> ObfHIPState </TD> <TD> UInt </TD> <TD> State of the HIP-filter. It follows the same convention as the FSW HIP filter state! </TD> </TR>
-<TR> <TD> ObfDGNState </TD> <TD> UInt </TD> <TD> State of the DGN-filter. It follows the same convention as the FSW DGN filter state! </TD> </TR>
-
-<TR> <TD> ObfGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> ObfGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> ObfGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> ObfGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
-<TR> <TD> ObfGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter in units of LEUS (1/4 Mev). </TD> </TR> 
-<TR> <TD> ObfGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAStatusWord     </TD> <TD> UInt </TD> <TD> Gleam filter: StatusWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAVetoMask       </TD> <TD> UInt </TD> <TD> Gleam filter: VetoMask for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAVetoBit        </TD> <TD> UInt </TD> <TD> Gleam filter: VetoBit for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAPrescalerWord  </TD> <TD> UInt </TD> <TD> Gleam filter: PrescalerWord for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAEnergy         </TD> <TD> UInt </TD> <TD> Gleam filter: Energy for the GAMMA-filter. </TD> </TR> 
+<TR> <TD> OGAMMAStage          </TD> <TD> UInt </TD> <TD> Gleam filter: Stage for the GAMMA-filter. </TD> </TR> 
 
 </TABLE>
 

@@ -6,20 +6,14 @@
 struct NtupleDef {
 
   int m_runId;
-  unsigned long long m_eventId;
+  int m_eventId;
   int m_seqNo;
 
-  // Keys:
+  // LatC key:
   unsigned int m_latcKey;  
-  unsigned int m_latcIgnore;  
-  unsigned int m_mootKey;
-
-  // Compressed event size:
-  int m_compressedEventSize;
-  int m_compressionLevel;
 
   // Event size in bytes:
-  unsigned long m_eventSize;
+  int m_eventSize;
 
   // PDG encoding of the primary particle
   int m_parId;
@@ -280,7 +274,6 @@ struct NtupleDef {
   int m_obfPassedMIP;
   int m_obfPassedHIP;
   int m_obfPassedDGN; 
-
   unsigned int m_obfFilterStatusBits;
 
   unsigned int m_obfGAMMAStatusWord;
@@ -289,12 +282,6 @@ struct NtupleDef {
   unsigned int m_obfGAMMAPrescalerWord;
   unsigned int m_obfGAMMAEnergy;
   unsigned int m_obfGAMMAStage;
-  unsigned int m_obfGAMMAState;
-
-  unsigned int m_obfMIPState;
-  unsigned int m_obfHIPState;
-  unsigned int m_obfDGNState;
-
 
   // Real filter bits:
   int m_fswGAMMAState;
@@ -334,10 +321,8 @@ struct NtupleDef {
  
   unsigned int m_fswGAMMAStage;
   unsigned int m_fswGAMMAEnergyValid;
-  unsigned int m_fswGAMMAVersion;
   int m_fswGAMMAEnergyInLeus;
 
-  
 
   
 
@@ -409,10 +394,6 @@ struct NtupleDef {
   // Event quality:
   unsigned int m_eventFlags;
 
-  // Gleam flag:  
-  unsigned int m_eventGleamFlags;
-
-
   // Error flags:
   int m_eventBadEventSequence;
   int m_eventBadTkrRecon;
@@ -420,7 +401,6 @@ struct NtupleDef {
   int m_eventTemError;
   int m_eventTrgParityError;
   int m_eventBadLdfStatus;
-  int m_eventTemBug;
   int m_eventGtrcPhase;
   int m_eventGtfePhase;
   int m_eventGtccFifo;

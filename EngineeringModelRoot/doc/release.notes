@@ -1,47 +1,5 @@
-** @file release.notes
-* Package EngineeringModelRoot
-* Authors: awb, mem
-*
-*                  EOH
-
- EngineeringModelRoot-05-00-00 07-Oct-2011 monzani fist tag with stag
-
--       Added SConscript, compiling with scons, first stag
-
-v4r4	March 23, 2009
-awb	Added a new variable: EventTemBug. Needs the new LDF.
-
-v4r3 	August 11, 2008
-awb	Added EventGleamFlags.
-
-v4r2	August 6, 2008
-awb	Added compressed event size and compression level. Needs GR v15r35 or greater.
-        Added 'exit(1)' in case of problems writing the svac.root file.
-
-v4r1p8  July 28, 2008
-awb     Added version of the gamma-filter to the ntuple.
-
-v4r1p7	July 23, 2008
-awb	Added "state" variables for all filters.
-
-v4r1p6 	June 30, 2008
-awb 	Fixed type of event ID.
-
-v4r1p5 	June 26, 2008
-awb 	Fixed type error of event size.
-
-v4r1p4 June 23, 2008
-awb	Fixed typos in Obf variable names.
-
-v4r1p3 June 20, 2008
-awb	Fixed typo in DGN prescale factor.
-
-v4r1p2 June 20, 2008
-awb	Added Moot key.
-
-v4r1p1	June 19, 2008
-awb	Updated documentation.
-	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
+v4r1p0	June 19, 2008
+awb	Added filter prescale factors and indices for all the filters. Needs yet to be tagged GR. 
         Added some Gleam gamma-filter quantities.
 
 v4r0p0	May 30, 2008
