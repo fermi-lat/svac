@@ -54,6 +54,16 @@ int main(int argn, char** argc) {
   d.tree()->Write();
   fout->Close();
 
+  // Check the output file
+  fout = TFile::Open(outputFile.c_str());
+  if ( fout == 0 || fout->IsZombie() ) {
+    std::cerr << "Failed to open output File " << outputFile << std::endl;
+    return -1;
+  }
+  else {
+    std::cout<<outputFile<<" was written properly to disk."<<std::endl;
+  }
+
   return 0;
 }
 

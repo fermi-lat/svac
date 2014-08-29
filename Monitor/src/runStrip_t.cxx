@@ -385,6 +385,17 @@ int main(int argn, char** argc) {
     }
     fout->Close();
 
+    // Test if the file was written to disk properly
+    fout = TFile::Open(outputFile.c_str());
+    if ( fout == 0 || fout->IsZombie() ) {
+      std::cerr << "Failed to open output File " << outputFile << std::endl;
+      return -1;
+    }
+    else {
+    std::cout<<outputFile<<" was written properly to disk."<<std::endl;
+    }
+    fout->Close();
+ 
     // Write an html report
     std::string html=jc.htmlFile();
     if(html=="")html="Monitoring.html";
