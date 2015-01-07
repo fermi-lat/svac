@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-02-01-06 07-Jan-2015 monzani using strcpy correcty
  Monitor-02-01-05 29-Aug-2014 bregeon runStrip reopen outputfile and check it s not a zombie - GDM-140
  Monitor-02-01-04 20-Jun-2012 monzani added leap second from Jun 30, 2012
  Monitor-02-01-03 13-Mar-2012 monzani fixing the length for rootcommand in MonValue_t.cxx
