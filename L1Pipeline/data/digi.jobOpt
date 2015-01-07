@@ -1,5 +1,0 @@
-#include "$GLEAMJOBOPTIONSPATH/jobOptions/pipeline/ldf2digi.txt"
-EventSelector.FileName = "$EVTFILE";
-digiRootWriterAlg.digiRootFile = "$digiChunkFile"; 
-EventSelector.EventsToSkip="$(EVENTSTOSKIP)";
-// EventSelector.PrintEventIndex=true;
