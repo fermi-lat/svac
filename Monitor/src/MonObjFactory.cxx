@@ -2,6 +2,9 @@
 // Martin Kocian, SLAC, 2/1/07
 // Code written for GLAST
 //
+// M.E.M.: removed all merit/recon/svac variables in preparation for Pass8 
+// TODO: comment out from push_back function all merit/recon/svac variables
+//
 // Last updated with object timestamp by user kocian on Tue Feb 27 23:48:45 2007
 // Last updated with object acdLowerTileCount by user kocian on Tue Mar  6 21:10:00 2007
 // Last updated with object eventid by user kocian on Tue Mar  6 22:51:00 2007
@@ -259,18 +262,18 @@
 // Last updated with object EvtCREventClassBitMap by user dpaneque on Wed Jun  8 19:38:30 2011
 // Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
 // Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
-#include "merit/MonInput_FT1Dec.h"
-#include "merit/MonInput_FT1Ra.h"
-#include "merit/MonInput_EvtCREventClassBitMap.h"
-#include "merit/MonInput_FT1EventClassBitMap.h"
+//#include "merit/MonInput_FT1Dec.h"
+//#include "merit/MonInput_FT1Ra.h"
+//#include "merit/MonInput_EvtCREventClassBitMap.h"
+//#include "merit/MonInput_FT1EventClassBitMap.h"
 #include "trackermon/MonInput_stripOcc_err.h"
 #include "trackermon/MonInput_layerOcc_err.h"
 #include "trackermon/MonInput_fracSat_err.h"
 #include "digi/MonInput_GoodEvent.h"
 #include "fastmon/MonInput_FastMon_spacecraft_distance_to_saa.h"
 #include "digi/MonInput_TemBug.h"
-#include "merit/MonInput_CalMIPRatio.h"
-#include "merit/MonInput_TkrNumTracks.h"
+//#include "merit/MonInput_CalMIPRatio.h"
+//#include "merit/MonInput_TkrNumTracks.h"
 #include "fastmon/MonInput_FastMon_error_summary.h"
 #include "fastmon/MonInput_FastMon_spacecraft_orbit_inSAA.h"
 #include "fastmon/MonInput_FastMon_spacecraft_orbit_mode.h"
@@ -283,10 +286,10 @@
 #include "digi/MonInput_L1TTriggerWord5bits.h"
 #include "digi/MonInput_CondSummary5bits.h"
 #include "digi/MonInput_MootKey.h"
-#include "merit/MonInput_FswGamState.h"
-#include "merit/MonInput_GrbZDir.h"
-#include "merit/MonInput_GrbYDir.h"
-#include "merit/MonInput_GrbXDir.h"
+//#include "merit/MonInput_FswGamState.h"
+//#include "merit/MonInput_GrbZDir.h"
+//#include "merit/MonInput_GrbYDir.h"
+//#include "merit/MonInput_GrbXDir.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zgalB.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zgalL.h"
 #include "fastmon/MonInput_FastMon_spacecraft_earthlimb_fov.h"
@@ -296,10 +299,10 @@
 #include "fastmon/MonInput_FastMon_spacecraft_rock.h"
 
 #include "digi/MonInput_EventSizeInBytes.h"
-#include "merit/MonInput_PtSCzenith.h"
+//#include "merit/MonInput_PtSCzenith.h"
 #include "digi/MonInput_CurrentTimeToneMissing.h"
-#include "merit/MonInput_CTBParticleType.h"
-#include "merit/MonInput_MeritObfGamStatus.h"
+//#include "merit/MonInput_CTBParticleType.h"
+//#include "merit/MonInput_MeritObfGamStatus.h"
 #include "digi/MonInput_FswFilters_GammaBits.h"
 #include "digi/MonInput_DGNGemPrescale.h"
 #include "digi/MonInput_GemPrescale.h"
@@ -340,52 +343,52 @@
 #include "fastmon/MonInput_FastMon_spacecraft_pitch.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zdec.h"
 #include "fastmon/MonInput_FastMon_spacecraft_zra.h"
-#include "merit/MonInput_EvtEventId.h"
-#include "merit/MonInput_PtMagLat.h"
-#include "merit/MonInput_PtLon.h"
-#include "merit/MonInput_PtLat.h"
-#include "merit/MonInput_PtMcIlwainL.h"
-#include "merit/MonInput_PtMcIlwainB.h"
+//#include "merit/MonInput_EvtEventId.h"
+//#include "merit/MonInput_PtMagLat.h"
+//#include "merit/MonInput_PtLon.h"
+//#include "merit/MonInput_PtLat.h"
+//#include "merit/MonInput_PtMcIlwainL.h"
+//#include "merit/MonInput_PtMcIlwainB.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_modechanges.h"
-#include "merit/MonInput_AcdTkr1ActiveDist.h"
-#include "merit/MonInput_AcdTkr1ActDistTileEnergy.h"
-#include "merit/MonInput_AcdActDistTileEnergy.h"
-#include "merit/MonInput_AcdTotalEnergy.h"
-#include "merit/MonInput_AcdRibbonEnergy.h"
-#include "merit/MonInput_AcdRibbonActDist.h"
-#include "merit/MonInput_AcdActiveDist3D.h"
+//#include "merit/MonInput_AcdTkr1ActiveDist.h"
+//#include "merit/MonInput_AcdTkr1ActDistTileEnergy.h"
+//#include "merit/MonInput_AcdActDistTileEnergy.h"
+//#include "merit/MonInput_AcdTotalEnergy.h"
+//#include "merit/MonInput_AcdRibbonEnergy.h"
+//#include "merit/MonInput_AcdRibbonActDist.h"
+//#include "merit/MonInput_AcdActiveDist3D.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_mode.h"
-#include "merit/MonInput_Tkr1KalThetaMS.h"
-#include "merit/MonInput_Tkr1KalEne.h"
-#include "merit/MonInput_FilterStatus_HI.h"
-#include "merit/MonInput_FT1EarthAzimuth.h"
-#include "merit/MonInput_FT1ZenithTheta.h"
-#include "merit/MonInput_GltGemSummary.h"
-#include "merit/MonInput_CTBCalDocaAngle.h"
-#include "merit/MonInput_CTBGAM.h"
-#include "merit/MonInput_FT1Phi.h"
-#include "merit/MonInput_FT1Theta.h"
-#include "merit/MonInput_FT1Energy.h"
-#include "merit/MonInput_CalTransRms.h"
-#include "merit/MonInput_CalTrackAngle.h"
-#include "merit/MonInput_CalTwrEdgeCntr.h"
-#include "merit/MonInput_CalCsIRLn.h"
-#include "merit/MonInput_CalEnergyCorr.h"
-#include "merit/MonInput_CalEnergyRaw.h"
-#include "merit/MonInput_CalMipNum.h"
-#include "merit/MonInput_TkrSurplusHitRatio.h"
-#include "merit/MonInput_TkrSurplusHitsInside.h"
-#include "merit/MonInput_TkrBlankHits.h"
-#include "merit/MonInput_TkrThickHits.h"
-#include "merit/MonInput_TkrThinHits.h"
-#include "merit/MonInput_TkrSurplusHCInside.h"
-#include "merit/MonInput_Tkr1LATEdge.h"
-#include "merit/MonInput_Tkr1TwrGap.h"
-#include "merit/MonInput_TkrTwrEdge.h"
-#include "merit/MonInput_AcdVtxActiveDist.h"
-#include "merit/MonInput_AcdCornerDoca.h"
-#include "merit/MonInput_AcdRibbonCount.h"
-#include "merit/MonInput_AcdTileCount.h"
+//#include "merit/MonInput_Tkr1KalThetaMS.h"
+//#include "merit/MonInput_Tkr1KalEne.h"
+//#include "merit/MonInput_FilterStatus_HI.h"
+//#include "merit/MonInput_FT1EarthAzimuth.h"
+//#include "merit/MonInput_FT1ZenithTheta.h"
+//#include "merit/MonInput_GltGemSummary.h"
+//#include "merit/MonInput_CTBCalDocaAngle.h"
+//#include "merit/MonInput_CTBGAM.h"
+//#include "merit/MonInput_FT1Phi.h"
+//#include "merit/MonInput_FT1Theta.h"
+//#include "merit/MonInput_FT1Energy.h"
+//#include "merit/MonInput_CalTransRms.h"
+//#include "merit/MonInput_CalTrackAngle.h"
+//#include "merit/MonInput_CalTwrEdgeCntr.h"
+//#include "merit/MonInput_CalCsIRLn.h"
+//#include "merit/MonInput_CalEnergyCorr.h"
+//#include "merit/MonInput_CalEnergyRaw.h"
+//#include "merit/MonInput_CalMipNum.h"
+//#include "merit/MonInput_TkrSurplusHitRatio.h"
+//#include "merit/MonInput_TkrSurplusHitsInside.h"
+//#include "merit/MonInput_TkrBlankHits.h"
+//#include "merit/MonInput_TkrThickHits.h"
+//#include "merit/MonInput_TkrThinHits.h"
+//#include "merit/MonInput_TkrSurplusHCInside.h"
+//#include "merit/MonInput_Tkr1LATEdge.h"
+//#include "merit/MonInput_Tkr1TwrGap.h"
+//#include "merit/MonInput_TkrTwrEdge.h"
+//#include "merit/MonInput_AcdVtxActiveDist.h"
+//#include "merit/MonInput_AcdCornerDoca.h"
+//#include "merit/MonInput_AcdRibbonCount.h"
+//#include "merit/MonInput_AcdTileCount.h"
 #include "digi/MonInput_AcdVetoB_AcdTileDigiId.h"
 #include "digi/MonInput_AcdVetoA_AcdTileDigiId.h"
 #include "fastmon/MonInput_FastMon_CalLogEndRangeHit.h"
@@ -406,10 +409,10 @@
 #include "fastmon/MonInput_fastmontimestampdouble.h"
 #include "fastmon/MonInput_FastMon_TkrHits.h"
 #include "digi/MonInput_ZeroSuppress.h"
-#include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
-#include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
+//#include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
+//#include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
 #include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
-#include "recon/MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
+//#include "recon/MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
 #include "digi/MonInput_AcdHit_GafeGarc.h"
 #include "digi/MonInput_AcdVeto_GafeGarc.h"
 #include "digi/MonInput_AcdVeto_PmtGarcGafe.h"
@@ -426,36 +429,36 @@
 #include "digi/MonInput_DeltaEventTimeManual.h"
 #include "digi/MonInput_DeltaWindowOpen.h"
 #include "digi/MonInput_DeltaEventTime.h"
-#include "merit/MonInput_CTBBestEnergyRatio.h"
-#include "merit/MonInput_CTBBestEnergy.h"
-#include "merit/MonInput_CTBCORE.h"
-#include "merit/MonInput_CTBBestEnergyProb.h"
-#include "merit/MonInput_CTBClassLevel.h"
-#include "merit/MonInput_FT1ZenithTheta.h"
-#include "merit/MonInput_CTBBestZDir.h"
-#include "merit/MonInput_GltWord.h"
+//#include "merit/MonInput_CTBBestEnergyRatio.h"
+//#include "merit/MonInput_CTBBestEnergy.h"
+//#include "merit/MonInput_CTBCORE.h"
+//#include "merit/MonInput_CTBBestEnergyProb.h"
+//#include "merit/MonInput_CTBClassLevel.h"
+//#include "merit/MonInput_FT1ZenithTheta.h"
+//#include "merit/MonInput_CTBBestZDir.h"
+//#include "merit/MonInput_GltWord.h"
 #include "digi/MonInput_PrescaledDelta.h"
 #include "digi/MonInput_FilterBits.h"
 #include "digi/MonInput_Sequence.h"
-#include "recon/MonInput_AcdPhaMips_PmtB_AcdTile.h"
-#include "recon/MonInput_AcdPhaMips_PmtA_AcdTile.h"
+//#include "recon/MonInput_AcdPhaMips_PmtB_AcdTile.h"
+//#include "recon/MonInput_AcdPhaMips_PmtA_AcdTile.h"
 #include "digi/MonInput_OBFStatus.h"
 #include "digi/MonInput_CalReadoutRange.h"
 #include "cal/MonInput_CalXtalFaceSignal.h"
 #include "digi/MonInput_Range4.h"
 #include "digi/MonInput_CalXAdc_TowerCalLayerCalColumnFaceRange.h"
 #include "digi/MonInput_Tick20MHzDeviation.h"
-#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
+//#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
 #include "digi/MonInput_timestampdouble.h"
 #include "digi/MonInput_DeadZoneDelta.h"
 #include "digi/MonInput_DiscardedDelta.h"
 #include "digi/MonInput_condarrroi.h"
 #include "digi/MonInput_condarrcno.h"
 #include "digi/MonInput_condarrtkr.h"
-#include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
-#include "recon/MonInput_ReconVertexPosXYZ.h"
-#include "recon/MonInput_ReconDirXYZ.h"
-#include "recon/MonInput_ReconNumTracks.h"
+//#include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
+//#include "recon/MonInput_ReconVertexPosXYZ.h"
+//#include "recon/MonInput_ReconDirXYZ.h"
+//#include "recon/MonInput_ReconNumTracks.h"
 #include "digi/MonInput_CalXHit_TowerCalLayer.h"
 #include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
 #include "digi/MonInput_AcdPha_PmtA_AcdTile.h"
@@ -468,30 +471,30 @@
 #include "digi/MonInput_AcdGemCNO_GARC.h"
 #include "digi/MonInput_AcdGemROI_Tower.h"
 #include "digi/MonInput_AcdGemVeto_AcdTile.h"
-#include "merit/MonInput_mcid.h"
+//#include "merit/MonInput_mcid.h"
 #include "digi/MonInput_condarrcalhi.h"
 #include "digi/MonInput_condarrcallo.h"
-#include "recon/MonInput_xoverthresh.h"
-#include "merit/MonInput_callayers.h"
+//#include "recon/MonInput_xoverthresh.h"
+//#include "merit/MonInput_callayers.h"
 #include "digi/MonInput_ElapsedLast.h"
 #include "digi/MonInput_PrescaledLast.h"
 #include "digi/MonInput_DiscardedLast.h"
 #include "digi/MonInput_DeadZoneLast.h"
 #include "digi/MonInput_LivetimeLast.h"
-#include "merit/MonInput_CalEnergyRaw.h"
+//#include "merit/MonInput_CalEnergyRaw.h"
 #include "digi/MonInput_numvetotiles.h"
 #include "digi/MonInput_acdpha.h"
-#include "recon/MonInput_HFC.h"
+//#include "recon/MonInput_HFC.h"
 #include "digi/MonInput_ntkrdigis.h"
-#include "recon/MonInput_calxtalmaxtower.h"
-#include "merit/MonInput_evtelapsedtime.h"
-#include "merit/MonInput_gltnumtowers.h"
-#include "merit/MonInput_glttower.h"
-#include "merit/MonInput_gltgemsummary.h"
-#include "merit/MonInput_calxtalmaxene.h"
-#include "merit/MonInput_tkr1hits.h"
-#include "merit/MonInput_tkr1theta.h"
-#include "merit/MonInput_tkrnumtracks.h"
+//#include "recon/MonInput_calxtalmaxtower.h"
+//#include "merit/MonInput_evtelapsedtime.h"
+//#include "merit/MonInput_gltnumtowers.h"
+//#include "merit/MonInput_glttower.h"
+//#include "merit/MonInput_gltgemsummary.h"
+//#include "merit/MonInput_calxtalmaxene.h"
+//#include "merit/MonInput_tkr1hits.h"
+//#include "merit/MonInput_tkr1theta.h"
+//#include "merit/MonInput_tkrnumtracks.h"
 #include "digi/MonInput_CalHiTriggerTower.h"
 #include "digi/MonInput_CalLoTriggerTower.h"
 #include "digi/MonInput_filterstatus_hi.h"
@@ -503,10 +506,10 @@
 #include "digi/MonInput_TkrTriggerTower.h"
 #include "digi/MonInput_configkey1852.h"
 #include "digi/MonInput_condsummary.h"
-#include "svac/MonInput_calxtalene.h"
+//#include "svac/MonInput_calxtalene.h"
 #include "digi/MonInput_Gem_elapsed.h"
-#include "merit/MonInput_eventid.h"
-#include "merit/MonInput_acdLowerTileCount.h"
+//#include "merit/MonInput_eventid.h"
+//#include "merit/MonInput_acdLowerTileCount.h"
 #include "digi/MonInput_timestamp.h"
 #include "digi/MonInput_nAcd.h"
 #include "MonObjFactory.h"
@@ -521,14 +524,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_nAcd;
   if (s=="timestamp")
     return new MonInput_timestamp;
-  if (s=="acdLowerTileCount")
-    return new MonInput_acdLowerTileCount;
-  if (s=="eventid")
-    return new MonInput_eventid;
+//  if (s=="acdLowerTileCount")
+//    return new MonInput_acdLowerTileCount;
+//  if (s=="eventid")
+//    return new MonInput_eventid;
   if (s=="Gem_elapsed")
     return new MonInput_Gem_elapsed;
-  if (s=="calxtalene")
-    return new MonInput_calxtalene;
+//  if (s=="calxtalene")
+//    return new MonInput_calxtalene;
   if (s=="condsummary")
     return new MonInput_condsummary;
   if (s=="configkey1852")
@@ -544,8 +547,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_ToT_con0_TowerPlane;
   if (s=="ToT_con1_TowerPlane")
     return new MonInput_ToT_con1_TowerPlane;
-  if (s=="CalEnergyRaw")
-    return new MonInput_CalEnergyRaw;
+//  if (s=="CalEnergyRaw")
+//    return new MonInput_CalEnergyRaw;
   if (s=="LivetimeLast")
     return new MonInput_LivetimeLast;
   if (s=="DeadZoneLast")
@@ -564,7 +567,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalLoTriggerTower;
   if (s=="CalHiTriggerTower")
     return new MonInput_CalHiTriggerTower;
-  if (s=="tkrnumtracks")
+/*  if (s=="tkrnumtracks")
     return new MonInput_tkrnumtracks;
   if (s=="tkr1theta")
     return new MonInput_tkr1theta;
@@ -581,11 +584,11 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="evtelapsedtime")
     return new MonInput_evtelapsedtime;
   if (s=="calxtalmaxtower")
-    return new MonInput_calxtalmaxtower;
+    return new MonInput_calxtalmaxtower; */
   if (s=="ntkrdigis")
     return new MonInput_ntkrdigis;
-  if (s=="HFC")
-    return new MonInput_HFC;
+//  if (s=="HFC")
+//    return new MonInput_HFC;
   if (s=="acdpha")
     return new MonInput_acdpha;
   if (s=="numvetotiles")
@@ -612,26 +615,26 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdPha_PmtA_AcdTile;
   if (s=="AcdPha_PmtB_AcdTile")
     return new MonInput_AcdPha_PmtB_AcdTile;
-  if (s=="callayers")
-    return new MonInput_callayers;
-  if (s=="xoverthresh")
-    return new MonInput_xoverthresh;
+//  if (s=="callayers")
+//    return new MonInput_callayers;
+//  if (s=="xoverthresh")
+//    return new MonInput_xoverthresh;
   if (s=="condarrcallo")
     return new MonInput_condarrcallo;
   if (s=="condarrcalhi")
     return new MonInput_condarrcalhi;
-  if (s=="mcid")
-    return new MonInput_mcid;
+//  if (s=="mcid")
+//    return new MonInput_mcid;
   if (s=="CalXHit_TowerCalLayer")
     return new MonInput_CalXHit_TowerCalLayer;
-  if (s=="ReconNumTracks")
-    return new MonInput_ReconNumTracks;
-  if (s=="ReconDirXYZ")
-    return new MonInput_ReconDirXYZ;
-  if (s=="ReconVertexPosXYZ")
-    return new MonInput_ReconVertexPosXYZ;
-  if (s=="ReconEnergy_TowerCalLayer")
-    return new MonInput_ReconEnergy_TowerCalLayer;
+//  if (s=="ReconNumTracks")
+//    return new MonInput_ReconNumTracks;
+//  if (s=="ReconDirXYZ")
+//    return new MonInput_ReconDirXYZ;
+//  if (s=="ReconVertexPosXYZ")
+//    return new MonInput_ReconVertexPosXYZ;
+//  if (s=="ReconEnergy_TowerCalLayer")
+//    return new MonInput_ReconEnergy_TowerCalLayer;
   if (s=="condarrtkr")
     return new MonInput_condarrtkr;
   if (s=="condarrcno")
@@ -644,8 +647,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DeadZoneDelta;
   if (s=="timestampdouble")
     return new MonInput_timestampdouble;
-  if (s=="ReconEnergy_TowerCalLayerCalColumn")
-    return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
+//  if (s=="ReconEnergy_TowerCalLayerCalColumn")
+//    return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
   if (s=="Tick20MHzDeviation")
     return new MonInput_Tick20MHzDeviation;
   if (s=="CalXAdc_TowerCalLayerCalColumnFaceRange")
@@ -658,17 +661,17 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalReadoutRange;
   if (s=="OBFStatus")
     return new MonInput_OBFStatus;
-  if (s=="AcdPhaMips_PmtA_AcdTile")
-    return new MonInput_AcdPhaMips_PmtA_AcdTile;
-  if (s=="AcdPhaMips_PmtB_AcdTile")
-    return new MonInput_AcdPhaMips_PmtB_AcdTile;
+//  if (s=="AcdPhaMips_PmtA_AcdTile")
+//    return new MonInput_AcdPhaMips_PmtA_AcdTile;
+//  if (s=="AcdPhaMips_PmtB_AcdTile")
+//    return new MonInput_AcdPhaMips_PmtB_AcdTile;
   if (s=="Sequence")
     return new MonInput_Sequence;
   if (s=="FilterBits")
     return new MonInput_FilterBits;
   if (s=="PrescaledDelta")
     return new MonInput_PrescaledDelta;
-  if (s=="GltWord")
+/*  if (s=="GltWord")
     return new MonInput_GltWord;
   if (s=="CTBBestZDir")
     return new MonInput_CTBBestZDir;
@@ -683,7 +686,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="CTBBestEnergy")
     return new MonInput_CTBBestEnergy;
   if (s=="CTBBestEnergyRatio")
-    return new MonInput_CTBBestEnergyRatio;
+    return new MonInput_CTBBestEnergyRatio;*/
   if (s=="DeltaEventTime")
     return new MonInput_DeltaEventTime;
   if (s=="DeltaWindowOpen")
@@ -716,14 +719,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdVeto_GafeGarc;
   if (s=="AcdHit_GafeGarc")
     return new MonInput_AcdHit_GafeGarc;
-  if (s=="AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile")
-    return new MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile;
+//  if (s=="AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile")
+//    return new MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile;
   if (s=="AcdPha_PmtIdPmtRangeAcdTile")
     return new MonInput_AcdPha_PmtIdPmtRangeAcdTile;
-  if (s=="AcdGlobalPos_NotMatchedTrack_FacePosXYZ")
-    return new MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ;
-  if (s=="AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
-    return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
+//  if (s=="AcdGlobalPos_NotMatchedTrack_FacePosXYZ")
+//    return new MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ;
+//  if (s=="AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
+//    return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
   if (s=="ZeroSuppress")
     return new MonInput_ZeroSuppress;
   if (s=="FastMon_TkrHits")
@@ -764,7 +767,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdVetoA_AcdTileDigiId;
   if (s=="AcdVetoB_AcdTileDigiId")
     return new MonInput_AcdVetoB_AcdTileDigiId;
-  if (s=="AcdTileCount")
+/*  if (s=="AcdTileCount")
     return new MonInput_AcdTileCount;
   if (s=="AcdRibbonCount")
     return new MonInput_AcdRibbonCount;
@@ -839,12 +842,12 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="AcdTkr1ActDistTileEnergy")
     return new MonInput_AcdTkr1ActDistTileEnergy;
   if (s=="AcdTkr1ActiveDist")
-    return new MonInput_AcdTkr1ActiveDist;
+    return new MonInput_AcdTkr1ActiveDist; */
   if (s=="FastMon_meta_context_open_mode")
     return new MonInput_FastMon_meta_context_open_mode;
   if (s=="FastMon_meta_context_open_modechanges")
     return new MonInput_FastMon_meta_context_open_modechanges;
-  if (s=="PtMcIlwainB")
+/*  if (s=="PtMcIlwainB")
     return new MonInput_PtMcIlwainB;
   if (s=="PtMcIlwainL")
     return new MonInput_PtMcIlwainL;
@@ -855,7 +858,7 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="PtMagLat")
     return new MonInput_PtMagLat;
   if (s=="EvtEventId")
-    return new MonInput_EvtEventId;
+    return new MonInput_EvtEventId;*/
   if (s=="CurrentORPreviousTimeToneMissing")
     return new MonInput_CurrentORPreviousTimeToneMissing;
   if (s=="FastMon_spacecraft_zra")
@@ -936,14 +939,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DGNGemPrescale;
   if (s=="FswFilters_GammaBits")
     return new MonInput_FswFilters_GammaBits;
-  if (s=="MeritObfGamStatus")
-    return new MonInput_MeritObfGamStatus;
-  if (s=="CTBParticleType")
-    return new MonInput_CTBParticleType;
+//  if (s=="MeritObfGamStatus")
+//    return new MonInput_MeritObfGamStatus;
+//  if (s=="CTBParticleType")
+//    return new MonInput_CTBParticleType;
   if (s=="CurrentTimeToneMissing")
     return new MonInput_CurrentTimeToneMissing;
-  if (s=="PtSCzenith")
-    return new MonInput_PtSCzenith;
+//  if (s=="PtSCzenith")
+//    return new MonInput_PtSCzenith;
   if (s=="EventSizeInBytes")
     return new MonInput_EventSizeInBytes;
   if (s=="FastMon_spacecraft_rock")
@@ -960,14 +963,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_zgalL;
   if (s=="FastMon_spacecraft_zgalB")
     return new MonInput_FastMon_spacecraft_zgalB;
-  if (s=="GrbXDir")
-    return new MonInput_GrbXDir;
-  if (s=="GrbYDir")
-    return new MonInput_GrbYDir;
-  if (s=="GrbZDir")
-    return new MonInput_GrbZDir;
-  if (s=="FswGamState")
-    return new MonInput_FswGamState;
+//  if (s=="GrbXDir")
+//    return new MonInput_GrbXDir;
+//  if (s=="GrbYDir")
+//    return new MonInput_GrbYDir;
+//  if (s=="GrbZDir")
+//    return new MonInput_GrbZDir;
+//  if (s=="FswGamState")
+//    return new MonInput_FswGamState;
   if (s=="MootKey")
     return new MonInput_MootKey;
   if (s=="CondSummary5bits")
@@ -992,10 +995,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FastMon_spacecraft_orbit_inSAA;
   if (s=="FastMon_error_summary")
     return new MonInput_FastMon_error_summary;
-  if (s=="TkrNumTracks")
-    return new MonInput_TkrNumTracks;
-  if (s=="CalMIPRatio")
-    return new MonInput_CalMIPRatio;
+//  if (s=="TkrNumTracks")
+//    return new MonInput_TkrNumTracks;
+//  if (s=="CalMIPRatio")
+//    return new MonInput_CalMIPRatio;
   if (s=="TemBug")
     return new MonInput_TemBug;
   if (s=="FastMon_spacecraft_distance_to_saa")
@@ -1010,14 +1013,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="stripOcc_err_TowerPlane")
     return new MonInput_stripOcc_err;
   // Modification by lb ended.
-  if (s=="FT1EventClassBitMap")
-    return new MonInput_FT1EventClassBitMap;
-  if (s=="EvtCREventClassBitMap")
-    return new MonInput_EvtCREventClassBitMap;
-  if (s=="FT1Ra")
-    return new MonInput_FT1Ra;
-  if (s=="FT1Dec")
-    return new MonInput_FT1Dec;
+//  if (s=="FT1EventClassBitMap")
+//    return new MonInput_FT1EventClassBitMap;
+//  if (s=="EvtCREventClassBitMap")
+//    return new MonInput_EvtCREventClassBitMap;
+//  if (s=="FT1Ra")
+//    return new MonInput_FT1Ra;
+//  if (s=="FT1Dec")
+//    return new MonInput_FT1Dec;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
