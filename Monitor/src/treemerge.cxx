@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <algorithm>  
 #include "TFile.h"
 #include "TTree.h"
 #include "TLeaf.h"

@@ -1,9 +1,12 @@
 
 #include "recXmlList.h"
 #include <vector>
+#include <algorithm>  
 #include <list>
 #include <cassert>
 #include "xmlBase/Dom.h"
+#include <stdio.h>
+#include <string.h>
 using namespace xmlBase;
 
 recXmlList::recXmlList(){}
