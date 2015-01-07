@@ -1,7 +1,8 @@
 #include "MonObjFactory.h"
 #include "TestReport.h"
 #include <iostream>
-#include <string>
+#include <stdio.h>
+#include <string.h>
 #include <map>
 
 int main(){
