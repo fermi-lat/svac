@@ -283,11 +283,11 @@ sConsPackages = {
         },
     'calibTkrUtil': {
         'repository': '',
-        'version': 'calibTkrUtil-02-09-06-gr02',
+        'version': 'calibTkrUtil-02-10-01',
         },
     'findGaps': {
         'repository': 'svac',
-        'version': 'findGaps-02-02-00',
+        'version': 'findGaps-02-03-00',
         },
     'fitsGen': {
         'repository': '',
@@ -295,11 +295,11 @@ sConsPackages = {
         },
     'ft2Util': {
         'repository': '',
-        'version': 'ft2Util-02-02-00',
+        'version': 'ft2Util-02-04-00',
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-00-00',
+        'version': 'Monitor-03-01-00',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -307,7 +307,7 @@ sConsPackages = {
         },
     'TestReport': {
         'repository': 'svac',
-        'version': 'TestReport-12-01-00',
+        'version': 'TestReport-12-02-00',
         },
     }
 
@@ -318,7 +318,7 @@ cvsPackages = {
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'DigiReconCalMeritCfg-01-20-04',
+        'version': 'DigiReconCalMeritCfg-01-21-00',
         },
     'evtClassDefs': {
         'repository': '',

@@ -33,12 +33,13 @@ if len(sys.argv) > 1:
     reportTypes = sys.argv[1:]
 else:
     reportTypes = [
-        'calHist', 'calTrend',
-        'digiHist', 'digiTrend',
+        #'calHist', 'calTrend',
+        'digiHist', 
+        #'digiTrend',
         'fastMonTrend',
-        'meritHist', 'meritTrend',
-        'reconHist', 'reconTrend',
-        'tkrTrend',
+        #'meritHist', 'meritTrend',
+        #'reconHist', 'reconTrend',
+        #'tkrTrend',
         ]
     pass
 
