@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include <fstream>
+#include <stdlib.h>   
 
 #include "TROOT.h"
 #include "findGaps.h"
