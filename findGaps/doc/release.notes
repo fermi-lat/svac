@@ -4,6 +4,7 @@
 *
 *                  EOH
 
+ findGaps-02-03-00 08-Jan-2015 monzani added missing library
  findGaps-02-02-00 07-Oct-2011 monzani yet another fix to SConscript
 - actually, this is c++, not python
 
