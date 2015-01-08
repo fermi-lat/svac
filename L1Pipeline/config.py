@@ -1,4 +1,4 @@
-#!/afs/slac/g/glast/isoc/flightOps/rhel3_gcc32/ISOC_PROD/bin/shisoc python2.5
+#! /usr/bin/env python2.5
 
 """@brief Configuration.
 
@@ -9,7 +9,7 @@ import os
 import sys
 
 L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
-L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "4.9"
+L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "5.0"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
 
@@ -178,11 +178,11 @@ groundRoot = os.path.join(glastRoot, 'ground')
 #glastSetupCsh = os.path.join(groundRoot, 'scripts', 'group.cshrc')
 scons = '/afs/slac.stanford.edu/g/glast/applications/install/@sys/usr/bin/scons'
 #
-optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
-glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
+optConfig = 'redhat6-x86_64-64bit-gcc44-Optimized'
+glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
 #
-releaseDir = os.path.join(groundRoot, 'releases', 'volume10')
-glastVersion = '17-35-24-lp61'
+releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
+glastVersion = '20-10-00'
 releaseName = 'GlastRelease'
 #
 glastName = '-'.join((releaseName, glastVersion))
@@ -204,7 +204,7 @@ reconOptions = {
     'MC': os.path.join(L1Data, 'recon.jobOpt.mc'),
 }
 
-rootSys = os.path.join(glastExt, 'ROOT/v5.26.00a-gl6/gcc41')
+rootSys = os.path.join(glastExt, 'ROOT/v5.34.03-gr01/gcc44')
 haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
@@ -279,7 +279,7 @@ procVer = {
 sConsPackages = {
     'calibGenTKR': {
         'repository': '',
-        'version': 'calibGenTKR-04-08-01',
+        'version': 'calibGenTKR-04-08-03',
         },
     'calibTkrUtil': {
         'repository': '',
@@ -299,7 +299,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-02-01-05',
+        'version': 'Monitor-03-00-00',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -687,7 +687,7 @@ reconPriority = highPriority - 1 # to reduce self-throttling
 frdPriority = highPriority + 1
 #
 minCrumbCpuf = 9
-standardSelect = 'rhel60 || rhel50'
+standardSelect = 'rhel60'
 standardRusage = 'scratch=1'
 bigRusage = 'scratch=250'
 #
