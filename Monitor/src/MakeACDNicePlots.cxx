@@ -149,12 +149,12 @@ int main(int argn, char** argc)
 
   const Int_t NHistos=6;
   const Int_t NChannels = 604;
-  char* vhistoname[NHistos] = {"AcdVetoA_DigiIdMap_TH1",
-			       "AcdVetoB_DigiIdMap_TH1",
-			       "AcdVetoA_Or_B_DigiIdMap_TH1",
-			       "AcdVetoA_And_B_DigiIdMap_TH1",
-			       "AcdVetoB_And_NotA_DigiIdMap_TH1",
-			       "AcdVetoA_And_NotB_DigiIdMap_TH1"};
+  char* vhistoname[NHistos] = {(char *)"AcdVetoA_DigiIdMap_TH1",
+			       (char *)"AcdVetoB_DigiIdMap_TH1",
+			       (char *)"AcdVetoA_Or_B_DigiIdMap_TH1",
+			       (char *)"AcdVetoA_And_B_DigiIdMap_TH1",
+			       (char *)"AcdVetoB_And_NotA_DigiIdMap_TH1",
+			       (char *)"AcdVetoA_And_NotB_DigiIdMap_TH1"};
 
   Int_t SavePlots = 1; // 1 for YES, 0 for NO
   //std::string outplotpath = "/nfs/farm/g/glast/u33/dpaneque/DataMonitoring/20080227/svac/Monitor/rh9_gcc32opt/test_2008March/ADCPlots";

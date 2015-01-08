@@ -31,14 +31,14 @@ MonValue::MonValue(const char* name, const char* formula, const char* cut):
 
   // split up the name into the name part and the dimension part
 
-  char* dimpos=strchr(name,'[');
+  char* dimpos=(char*)strchr(name,'[');
   if (dimpos==0){
     m_name=std::string(name);
     m_dim=1;
     m_dimstring="";
   }else{
     char res[128];
-    char* dimpos=strchr(name,'[')+1;
+    char* dimpos=(char*)strchr(name,'[')+1;
     strncpy(res,name,dimpos-name-1);
     res[dimpos-name-1]='\0';
     m_name=std::string(res);

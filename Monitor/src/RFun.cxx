@@ -17,12 +17,12 @@
 // for the tokenizer
 #include "facilities/Util.h"
 
-const float RFun::acdped(unsigned int timestamp,int garc,int gafe){
+float RFun::acdped(unsigned int timestamp,int garc,int gafe){
   const AcdPeds* peds=AcdPedProxy::getAcdPeds(timestamp);
   return peds->mean(garc,gafe);
 }
 
-const float RFun::acdpedGemId(unsigned int timestamp, unsigned int gemid, int pmt){
+float RFun::acdpedGemId(unsigned int timestamp, unsigned int gemid, int pmt){
   unsigned int pmt_type(pmt);
   unsigned int garc = 10000000;
   unsigned int gafe = 10000000;
@@ -64,11 +64,11 @@ int RFun::iden(int i ){
 }
 
 #ifndef oldROOT
-const float RFun::calped(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
+float RFun::calped(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
   const CalPeds* peds=CalPedProxy::getCalPeds(timestamp);
   return peds->mean(tower,callayer,calcolumn,calend,calrange);
 }
-const float RFun::calpedwidth(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
+float RFun::calpedwidth(unsigned int timestamp,int tower,int callayer, int calcolumn, int calend, int calrange){
   const CalPeds* peds=CalPedProxy::getCalPeds(timestamp);
   return peds->width(tower,callayer,calcolumn,calend,calrange);
 }

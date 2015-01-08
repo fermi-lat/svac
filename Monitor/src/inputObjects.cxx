@@ -9,7 +9,7 @@ int main(){
   std::string html="InputObjects.html";
   TestReport r(html.c_str());
   r.newheadline("Input Objects");
-  char* inptable[]={"Name","Source","Description"};
+  char* inptable[]={(char *)"Name",(char *)"Source",(char *)"Description"};
   MonObjFactory f;
   std::map<std::string,std::map<std::string, std::string> > desc;
   desc=f.getDescriptions();

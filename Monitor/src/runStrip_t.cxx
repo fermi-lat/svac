@@ -431,7 +431,7 @@ int main(int argn, char** argc) {
     r.newheadline("<b><center>Input variables</b></center>");
 
 
-    char* inptable[]={"Name","Source","Description"};
+    char* inptable[]={(char *)"Name",(char *)"Source",(char *)"Description"};
     char* line[5];
     for (int j=0;j<5;j++)line[j]=new char[1024];
     r.starttable(inptable,3);
@@ -495,7 +495,7 @@ int main(int argn, char** argc) {
     }
     r.endtable();
     r.newheadline("<b><center>Output variables</b></center>");
-    char* outtable[]={"Name","Type","Formula","Cut","Description"};
+    char* outtable[]={(char *)"Name",(char *)"Type",(char *)"Formula",(char *)"Cut",(char *)"Description"};
     r.starttable(outtable,5);
     for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
 	itr !=outputlist.end();itr++){
@@ -551,7 +551,7 @@ int main(int argn, char** argc) {
   
 
     r2.newheadline("<center><b>Input variables</b></center>");
-    char* inptableparams[]={"Name","Source","Description"};
+    char* inptableparams[]={(char *)"Name",(char *)"Source",(char *)"Description"};
     char* lineparams[3];
     for (int j=0;j<3;j++)lineparams[j]=new char[1024];
     r2.starttable(inptableparams,3);
@@ -613,7 +613,7 @@ int main(int argn, char** argc) {
     }
     r2.endtable();
     r2.newheadline("<b><center>Output variables</b></center>");
-    char* outtableparams[]={"Name","Type","Description"};
+    char* outtableparams[]={(char *)"Name",(char *)"Type",(char *)"Description"};
     r2.starttable(outtableparams,3);
     for(std::list<std::map<std::string,std::string> >::iterator itr=outputlist.begin();
 	itr !=outputlist.end();itr++){
