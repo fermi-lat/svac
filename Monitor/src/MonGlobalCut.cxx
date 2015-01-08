@@ -61,7 +61,7 @@ void MonGlobalCut::makeProxy(TTree* tree){
       }
     }
   }
-  char rootcommand[128];
+  char rootcommand[512];
   if (compile){
     if(access((m_sodir+m_name+"globalCutSelector.h").c_str(),F_OK)==0)unlink((m_sodir+m_name+"globalCutSelector.h").c_str());
     tree->MakeProxy((m_sodir+m_name+"globalCutSelector").c_str(),(m_sodir+m_name+"_globalCut_val.C").c_str(),(m_sodir+m_name+"_globalCut_cut.C").c_str(),"nohist");

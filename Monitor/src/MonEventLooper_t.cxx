@@ -2,6 +2,7 @@
 // Base class
 #include "MonEventLooper_t.h"
 #include "MonValueImpls_t.h"
+#include "Monitor/RFun.h"
 //
 // stl
 #include <iostream>

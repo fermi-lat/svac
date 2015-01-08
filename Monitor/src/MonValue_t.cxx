@@ -1,5 +1,6 @@
 
 #include "MonValue_t.h"
+#include "Monitor/RFun.h"
 #include "TROOT.h"
 #include "TTree.h"
 #include "TSystem.h"
@@ -356,7 +357,7 @@ void MonValue::makeProxy(TTree* tree){
       }
     }
   }
-  char rootcommand[256];
+  char rootcommand[512];
   if (compile){
     if(access((m_sodir+m_name+"Selector.h").c_str(),F_OK)==0)unlink((m_sodir+m_name+"Selector.h").c_str());
     if (m_cut!=""){

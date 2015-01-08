@@ -27,6 +27,7 @@
 //
 // The thing that actually does the work
 #include "MonEventLooper_t.h"
+#include "Monitor/RFun.h"
 
 #include "MonObjFactory.h"
 #include "MonInputCollection_Digi.h"
