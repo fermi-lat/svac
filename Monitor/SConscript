@@ -41,8 +41,12 @@ inputObjects = progEnv.Program('inputObjects', listFiles(['src/inputObjects.cxx'
 				'src/merit/MonInput_*.cxx', 'src/cal/MonInput_*.cxx', 'src/fastmon/MonInput_*.cxx',
 				'src/trackermon/MonInput_*.cxx', 'src/svac/MonInput_*.cxx', 'mc/MonInput_*.cxx', 
 				'src/recon/MonInput_*.cxx', 'src/digi/MonInput_*.cxx', 'src/Geo.cxx', 'src/TestReport.cxx']))
+Monitor = libEnv.ComponentLibrary('Monitor', listFiles(['src/MonObjFactory.cxx', 'src/merit/MonInput_*.cxx', 'src/cal/MonInput_*.cxx', 
+				'src/fastmon/MonInput_*.cxx', 'src/trackermon/MonInput_*.cxx', 'src/svac/MonInput_*.cxx', 'mc/MonInput_*.cxx', 
+				'src/recon/MonInput_*.cxx', 'src/digi/MonInput_*.cxx', 'src/Geo.cxx', 'src/RFun.cxx']))
+
 
 progEnv.Tool('registerTargets', package = 'Monitor',
              binaryCxts = [[runStrip_t,progEnv],[treemerge,progEnv],
 	     [MergeHistFiles,progEnv],[MakeACDNicePlots,progEnv],[inputObjects,progEnv]],
-	     includes = listFiles(['Monitor/*.h']))
+	     libraryCxts = [[Monitor,libEnv]],includes = listFiles(['Monitor/*.h']))
