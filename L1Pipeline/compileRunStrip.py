@@ -34,10 +34,9 @@ if len(sys.argv) > 1:
 else:
     reportTypes = [
         #'calHist', 'calTrend',
-        'digiHist', 
-        #'digiTrend',
-        'fastMonTrend',
-        #'meritHist', 'meritTrend',
+        #'digiHist', 'digiTrend',
+        #'fastMonTrend',
+        'meritHist', 'meritTrend',
         #'reconHist', 'reconTrend',
         #'tkrTrend',
         ]

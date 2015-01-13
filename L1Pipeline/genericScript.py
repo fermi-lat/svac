@@ -89,6 +89,8 @@ moduleTable = {
     'mergeReconChunks': ('mergeStuff', 'merge'),
     'mergeReconHist': ('mergeStuff', 'merge'),
     'mergeReconTrend': ('mergeStuff', 'merge'),
+    'mergeRelationCrumbs': ('mergeStuff', 'merge'),
+    'mergeRelationChunks': ('mergeStuff', 'merge'),
     'mergeTkrAnalysis': ('mergeStuff', 'merge'),
     'meritHist': ('runStrip', 'runStrip'),
     'meritHistAlarm': ('alarmHandler', 'alarmHandler'),

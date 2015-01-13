@@ -2110,6 +2110,48 @@
       </depends>
     </process>
 
+    <process name="scanRelationChunks" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="subTask">doChunk</var>
+        <var name="subProcess">mergeRelationCrumbs</var>
+      </variables>
+      <script><![CDATA[
+%(scanScriptBody)s
+]]>
+      </script>
+      <depends>
+        <after process="doChunk.mergeRelationCrumbs" status="DONE"/>
+      </depends>
+    </process>
+
+    <process name="mergeRelationChunks" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanRelationChunks").getVariable("goodPis")}</var>  
+        <var name="outFileTypes">relation</var>
+        <var name="%(relation_versionName)s">%(relation_version)s</var>
+        <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
+      </variables>
+      <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[scratch=250]&quot; "/>
+      <depends>
+        <after process="scanRelationChunks" status="SUCCESS"/>
+      </depends>
+    </process>
+
+    <process name="registerRelation" autoRetryMaxAttempts="%(retries)s">
+      <variables>
+        <var name="parentProcess">mergeRelationChunks</var>
+        <var name="fileType">relation</var>
+        <var name="timeProcess">findChunks</var>
+      </variables>
+      <script><![CDATA[
+%(registerBody)s
+]]>
+      </script>
+      <depends>
+        <after process="mergeRelationChunks" status="SUCCESS"/>
+      </depends>
+    </process>
+
     <process name="scanCalChunks" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="subTask">doChunk</var>
@@ -2721,6 +2763,7 @@
         <after process="registerMeritHist" status="SUCCESS"/>
         <after process="registerOrbitPlot" status="SUCCESS"/>
         <after process="registerReconHistAlarmDist" status="SUCCESS"/>
+        <after process="registerRelation" status="SUCCESS"/>
         <after process="registerSolarFlareHist" status="SUCCESS"/>
         <after process="registerSolarFlareLog" status="SUCCESS"/>
         <after process="registerSolarFlarePlot" status="SUCCESS"/>
@@ -3267,7 +3310,18 @@
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
           <after process="scanReconCrumbs" status="SUCCESS"/>
-<!--          <after process="mergeMeritCrumbs" status="DONE"/>  This is an I/O optimization, not logically required. -->
+        </depends>
+      </process>
+
+      <process name="mergeRelationCrumbs" autoRetryMaxAttempts="%(retries)s">
+        <variables>
+          <var name="outFileTypes">relation</var>
+          <var name="LD_LIBRARY_PATH">%(libraryPath)s:%(grPath)s</var>
+          <var name="goodPis">${pipeline.getCurrentStream.getProcessInstance("scanReconCrumbs").getVariable("goodPis")}</var>  
+        </variables>
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+        <depends>
+          <after process="scanReconCrumbs" status="SUCCESS"/>
         </depends>
       </process>
 
@@ -3280,7 +3334,6 @@
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
           <after process="scanReconCrumbs" status="SUCCESS"/>
-<!--          <after process="mergeReconCrumbs" status="DONE"/>  This is an I/O optimization, not logically required. -->
         </depends>
       </process>
 
@@ -3293,7 +3346,6 @@
         <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(shortQ)s -sp ${standardPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
           <after process="scanReconCrumbs" status="SUCCESS"/>
-<!--          <after process="mergeCalCrumbs" status="DONE"/>  This is an I/O optimization, not logically required. -->
         </depends>
       </process>
 
@@ -3392,6 +3444,7 @@
           <after process="calTrend" status="SUCCESS"/>
           <after process="diffRspFT1" status="SUCCESS"/>
           <after process="mergeGcrCrumbs" status="SUCCESS"/>
+          <after process="mergeRelationCrumbs" status="SUCCESS"/>
           <after process="meritTrend" status="SUCCESS"/>
           <after process="reconHist" status="SUCCESS"/>
           <after process="reconTrend" status="SUCCESS"/>

@@ -8,7 +8,7 @@
 import os
 import sys
 
-L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
+L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc-p8"
 L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "5.0"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
@@ -209,7 +209,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume03')
-stVersion = '09-33-00'
+stVersion = '09-35-01'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
@@ -261,13 +261,13 @@ else:
     pass
 aspAlreadyLaunched = 160
 
-elFt1ProcVer = 202
-exFt1ProcVer = 203
-exLs1ProcVer = 202
-ft1ProcVer = 203
-ft2ProcVer = 202
-ft2SecondsProcVer = 203
-ls1ProcVer = 202
+elFt1ProcVer = 301
+exFt1ProcVer = 301
+exLs1ProcVer = 301
+ft1ProcVer = 301
+ft2ProcVer = 301
+ft2SecondsProcVer = 301
+ls1ProcVer = 301
 
 procVer = {
     'electronFT1BadGti': elFt1ProcVer,
@@ -299,7 +299,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-01-00',
+        'version': 'Monitor-03-04-00',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -318,11 +318,11 @@ cvsPackages = {
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'DigiReconCalMeritCfg-01-21-00',
+        'version': 'DigiReconCalMeritCfg-01-25-04',
         },
     'evtClassDefs': {
         'repository': '',
-        'version': 'evtClassDefs-00-19-05',
+        'version': 'evtClassDefs-01-00-03',
         },
     'FastMon': {
         'repository': 'dataMonitoring',
@@ -566,15 +566,15 @@ tdBin = {
 
 evclData = packages['evtClassDefs']['data']
 evclXml = packages['evtClassDefs']['xml']
-electronCuts = os.path.join(evclData, 'pass7.6_Electrons_cuts_L1')
-extendedCuts = os.path.join(evclData, 'pass7.6_Extended_cuts_L1')
-ft1Vars = os.path.join(evclData, 'FT1variables')
-ls1Vars = os.path.join(evclData, 'LS1variables')
+electronCuts = os.path.join(evclData, 'pass8.1_Transient_cuts_L1')
+extendedCuts = os.path.join(evclData, 'pass8.1_Transient_cuts_L1')
+ft1Vars = os.path.join(evclData, 'pass8_FT1variables')
+ls1Vars = os.path.join(evclData, 'pass8_LS1variables')
 electronClass = 'EvtCREventClass'
 photonClass = 'FT1EventClass'
 #transientCuts = os.path.join(evclData, 'pass7.6_Transient_cuts_L1')
 #sourceCuts = os.path.join(evclData, 'pass7.6_Source_cuts_L1')
-xmlClassifier =  os.path.join(evclXml, 'EvtClassDefs_P7REP.xml')
+xmlClassifier =  os.path.join(evclXml, 'EvtClassDefs_P8R1.xml')
 filterClassifyMap = {
     'electronMerit': {
         'cutFile': electronCuts,
