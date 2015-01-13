@@ -230,6 +230,8 @@
 // Last updated with object stripOcc_err by user lbaldini on Fri Jan 15 13:01:16 2010
 // Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
 // Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
+// Last updated with object FT1EventClass by user lbaldini on Tue Jan 13 15:31:52 2015
+#include "merit/MonInput_FT1EventClass.h"
 #include "merit/MonInput_FT1Dec.h"
 #include "merit/MonInput_FT1Ra.h"
 #include "trackermon/MonInput_stripOcc_err.h"
@@ -894,6 +896,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1Ra;
   if (s=="FT1Dec")
     return new MonInput_FT1Dec;
+  if (s=="FT1EventClass")
+    return new MonInput_FT1EventClass;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1122,6 +1126,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("stripOcc_err");
   names.push_back("FT1Ra");
   names.push_back("FT1Dec");
+  names.push_back("FT1EventClass");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
