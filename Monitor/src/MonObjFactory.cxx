@@ -6,8 +6,6 @@
 // TODO: comment out from push_back function all merit/recon/svac variables
 //
 // Last updated with object timestamp by user kocian on Tue Feb 27 23:48:45 2007
-// Last updated with object acdLowerTileCount by user kocian on Tue Mar  6 21:10:00 2007
-// Last updated with object eventid by user kocian on Tue Mar  6 22:51:00 2007
 // Last updated with object Gem_elapsed by user kocian on Fri Mar  9 19:50:55 2007
 // Last updated with object calxtalene by user kocian on Fri Mar  9 20:38:36 2007
 // Last updated with object condsummary by user kocian on Fri Mar  9 22:53:38 2007
@@ -32,14 +30,6 @@
 // Last updated with object filterstatus_hi by user kocian on Fri Apr 20 19:52:10 2007
 // Last updated with object CalLoTriggerTower by user kocian on Fri Apr 20 20:12:05 2007
 // Last updated with object CalHiTriggerTower by user kocian on Fri Apr 20 20:14:22 2007
-// Last updated with object tkrnumtracks by user kocian on Fri Apr 20 20:44:19 2007
-// Last updated with object tkr1theta by user kocian on Fri Apr 20 20:46:04 2007
-// Last updated with object tkr1hits by user kocian on Fri Apr 20 20:46:47 2007
-// Last updated with object calxtalmaxene by user kocian on Fri Apr 20 20:47:47 2007
-// Last updated with object gltgemsummary by user kocian on Fri Apr 20 22:06:31 2007
-// Last updated with object glttower by user kocian on Fri Apr 20 23:26:52 2007
-// Last updated with object gltnumtowers by user kocian on Fri Apr 20 23:27:36 2007
-// Last updated with object evtelapsedtime by user kocian on Fri Apr 20 23:38:22 2007
 // Last updated with object calxtalmaxtower by user kocian on Fri Apr 20 23:42:44 2007
 // Last updated with object ntkrdigis by user kocian on Mon Apr 23 17:13:41 2007
 // Last updated with object HFC by user kocian on Mon May 14 20:21:34 2007
@@ -56,11 +46,9 @@
 // Last updated with object AcdVetoB_AcdTile by user dpaneque on Tue Jun  5 00:44:35 2007
 // Last updated with object AcdPha_PmtA_AcdTile by user dpaneque on Tue Jun  5 01:11:11 2007
 // Last updated with object AcdPha_PmtB_AcdTile by user dpaneque on Tue Jun  5 01:12:23 2007
-// Last updated with object callayers by user kocian on Wed May 30 18:47:05 2007
 // Last updated with object xoverthresh by user kocian on Thu May 31 20:39:26 2007
 // Last updated with object condarrcallo by user kocian on Thu May 31 22:59:44 2007
 // Last updated with object condarrcalhi by user kocian on Thu May 31 23:00:27 2007
-// Last updated with object mcid by user kocian on Fri Jun  1 21:41:01 2007
 // Last updated with object CalXHit_TowerCalLayer by user dpaneque on Thu Jun 28 23:07:31 2007
 // Last updated with object ReconNumTracks by user dpaneque on Fri Jun 29 03:03:51 2007
 // Last updated with object ReconDirXYZ by user dpaneque on Fri Jun 29 03:05:08 2007
@@ -135,10 +123,6 @@
 // Last updated with object FastMon_CalLogEndRangeHit by user bregeon on Fri Feb 29 14:20:59 2008
 // Last updated with object AcdVetoA_AcdTileDigiId by user dpaneque on Sat Mar  1 22:58:58 2008
 // Last updated with object AcdVetoB_AcdTileDigiId by user dpaneque on Sat Mar  1 23:00:10 2008
-// Last updated with object AcdTileCount by user dpaneque on Wed Mar 12 18:57:08 2008
-// Last updated with object AcdRibbonCount by user dpaneque on Wed Mar 12 18:57:57 2008
-// Last updated with object AcdCornerDoca by user dpaneque on Wed Mar 12 19:39:40 2008
-// Last updated with object AcdVtxActiveDist by user dpaneque on Wed Mar 12 21:15:29 2008
 // Last updated with object TkrTwrEdge by user dpaneque on Wed Mar 12 23:29:00 2008
 // Last updated with object Tkr1TwrGap by user dpaneque on Wed Mar 12 23:29:50 2008
 // Last updated with object Tkr1LATEdge by user dpaneque on Wed Mar 12 23:31:08 2008
@@ -146,9 +130,7 @@
 // Last updated with object TkrThinHits by user dpaneque on Wed Mar 12 23:39:38 2008
 // Last updated with object TkrThickHits by user dpaneque on Wed Mar 12 23:40:25 2008
 // Last updated with object TkrBlankHits by user dpaneque on Wed Mar 12 23:41:07 2008
-// Last updated with object TkrSurplusHitsInside by user dpaneque on Thu Mar 13 00:19:55 2008
 // Last updated with object TkrSurplusHitRatio by user dpaneque on Thu Mar 13 00:20:43 2008
-// Last updated with object CalMipNum by user dpaneque on Thu Mar 13 00:37:17 2008
 // Last updated with object CalEnergyRaw by user dpaneque on Thu Mar 13 00:37:58 2008
 // Last updated with object CalEnergyCorr by user dpaneque on Thu Mar 13 00:38:31 2008
 // Last updated with object CalCsIRLn by user dpaneque on Thu Mar 13 00:39:11 2008
@@ -158,22 +140,11 @@
 // Last updated with object FT1Energy by user dpaneque on Thu Mar 13 01:03:40 2008
 // Last updated with object FT1Theta by user dpaneque on Thu Mar 13 01:04:31 2008
 // Last updated with object FT1Phi by user dpaneque on Thu Mar 13 01:05:06 2008
-// Last updated with object CTBGAM by user dpaneque on Thu Mar 13 01:05:58 2008
-// Last updated with object CTBCalDocaAngle by user dpaneque on Thu Mar 13 01:06:38 2008
 // Last updated with object GltGemSummary by user dpaneque on Thu Mar 13 01:08:29 2008
 // Last updated with object FT1ZenithTheta by user dpaneque on Thu Mar 13 01:11:09 2008
 // Last updated with object FT1EarthAzimuth by user dpaneque on Thu Mar 13 01:11:46 2008
-// Last updated with object FilterStatus_HI by user dpaneque on Thu Mar 13 05:02:53 2008
 // Last updated with object Tkr1KalEne by user dpaneque on Wed Mar 19 03:21:57 2008
 // Last updated with object Tkr1KalThetaMS by user dpaneque on Wed Mar 19 03:23:17 2008
-// Last updated with object AcdActiveDist3D by user dpaneque on Wed Apr  9 03:09:28 2008
-// Last updated with object AcdTkr1ActDistTileEnergy by user dpaneque on Wed Apr  9 03:11:16 2008
-// Last updated with object AcdRibbonActDist by user dpaneque on Wed Apr  9 03:11:59 2008
-// Last updated with object AcdRibbonEnergy by user dpaneque on Wed Apr  9 03:13:11 2008
-// Last updated with object AcdTotalEnergy by user dpaneque on Wed Apr  9 03:13:59 2008
-// Last updated with object AcdActDistTileEnergy by user dpaneque on Wed Apr  9 03:14:57 2008
-// Last updated with object AcdTkr1ActDistTileEnergy by user dpaneque on Wed Apr  9 03:32:57 2008
-// Last updated with object AcdTkr1ActiveDist by user dpaneque on Wed Apr  9 03:34:14 2008
 // Last updated with object FastMon_meta_context_open_mode by user bregeon on Wed Apr  9 10:04:23 2008
 // Last updated with object FastMon_meta_context_open_modechanges by user bregeon on Thu Apr 10 14:16:26 2008
 // Last updated with object PtMcIlwainB by user dpaneque on Fri Apr 18 02:44:04 2008
@@ -222,7 +193,6 @@
 // Last updated with object GemPrescale by user dpaneque on Sat May 24 21:46:05 2008
 // Last updated with object DGNGemPrescale by user dpaneque on Sat May 24 21:47:37 2008
 // Last updated with object FswFilters_GammaBits by user dpaneque on Sun May 25 23:31:55 2008
-// Last updated with object MeritObfGamStatus by user dpaneque on Thu May 29 04:12:59 2008
 // Last updated with object CTBParticleType by user dpaneque on Thu May 29 04:19:18 2008
 // Last updated with object CurrentTimeToneMissing by user dpaneque on Tue Jun 24 01:15:42 2008
 // Last updated with object PtSCzenith by user dpaneque on Tue Jul  1 01:21:11 2008
@@ -258,14 +228,10 @@
 // Last updated with object fracSat_err by user lbaldini on Thu Jan 14 18:31:31 2010
 // Last updated with object layerOcc_err by user lbaldini on Fri Jan 15 11:25:13 2010
 // Last updated with object stripOcc_err by user lbaldini on Fri Jan 15 13:01:16 2010
-// Last updated with object FT1EventClassBitMap by user dpaneque on Wed Jun  8 19:17:51 2011
-// Last updated with object EvtCREventClassBitMap by user dpaneque on Wed Jun  8 19:38:30 2011
 // Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
 // Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
 #include "merit/MonInput_FT1Dec.h"
 #include "merit/MonInput_FT1Ra.h"
-#include "merit/MonInput_EvtCREventClassBitMap.h"
-#include "merit/MonInput_FT1EventClassBitMap.h"
 #include "trackermon/MonInput_stripOcc_err.h"
 #include "trackermon/MonInput_layerOcc_err.h"
 #include "trackermon/MonInput_fracSat_err.h"
@@ -297,12 +263,10 @@
 #include "fastmon/MonInput_FastMon_spacecraft_xdec.h"
 #include "fastmon/MonInput_FastMon_spacecraft_xra.h"
 #include "fastmon/MonInput_FastMon_spacecraft_rock.h"
-
 #include "digi/MonInput_EventSizeInBytes.h"
 #include "merit/MonInput_PtSCzenith.h"
 #include "digi/MonInput_CurrentTimeToneMissing.h"
 #include "merit/MonInput_CTBParticleType.h"
-#include "merit/MonInput_MeritObfGamStatus.h"
 #include "digi/MonInput_FswFilters_GammaBits.h"
 #include "digi/MonInput_DGNGemPrescale.h"
 #include "digi/MonInput_GemPrescale.h"
@@ -350,22 +314,12 @@
 #include "merit/MonInput_PtMcIlwainL.h"
 #include "merit/MonInput_PtMcIlwainB.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_modechanges.h"
-#include "merit/MonInput_AcdTkr1ActiveDist.h"
-#include "merit/MonInput_AcdTkr1ActDistTileEnergy.h"
-#include "merit/MonInput_AcdActDistTileEnergy.h"
-#include "merit/MonInput_AcdTotalEnergy.h"
-#include "merit/MonInput_AcdRibbonEnergy.h"
-#include "merit/MonInput_AcdRibbonActDist.h"
-#include "merit/MonInput_AcdActiveDist3D.h"
 #include "fastmon/MonInput_FastMon_meta_context_open_mode.h"
 #include "merit/MonInput_Tkr1KalThetaMS.h"
 #include "merit/MonInput_Tkr1KalEne.h"
-#include "merit/MonInput_FilterStatus_HI.h"
 #include "merit/MonInput_FT1EarthAzimuth.h"
 #include "merit/MonInput_FT1ZenithTheta.h"
 #include "merit/MonInput_GltGemSummary.h"
-#include "merit/MonInput_CTBCalDocaAngle.h"
-#include "merit/MonInput_CTBGAM.h"
 #include "merit/MonInput_FT1Phi.h"
 #include "merit/MonInput_FT1Theta.h"
 #include "merit/MonInput_FT1Energy.h"
@@ -375,9 +329,7 @@
 #include "merit/MonInput_CalCsIRLn.h"
 #include "merit/MonInput_CalEnergyCorr.h"
 #include "merit/MonInput_CalEnergyRaw.h"
-#include "merit/MonInput_CalMipNum.h"
 #include "merit/MonInput_TkrSurplusHitRatio.h"
-#include "merit/MonInput_TkrSurplusHitsInside.h"
 #include "merit/MonInput_TkrBlankHits.h"
 #include "merit/MonInput_TkrThickHits.h"
 #include "merit/MonInput_TkrThinHits.h"
@@ -385,10 +337,6 @@
 #include "merit/MonInput_Tkr1LATEdge.h"
 #include "merit/MonInput_Tkr1TwrGap.h"
 #include "merit/MonInput_TkrTwrEdge.h"
-#include "merit/MonInput_AcdVtxActiveDist.h"
-#include "merit/MonInput_AcdCornerDoca.h"
-#include "merit/MonInput_AcdRibbonCount.h"
-#include "merit/MonInput_AcdTileCount.h"
 #include "digi/MonInput_AcdVetoB_AcdTileDigiId.h"
 #include "digi/MonInput_AcdVetoA_AcdTileDigiId.h"
 #include "fastmon/MonInput_FastMon_CalLogEndRangeHit.h"
@@ -409,8 +357,6 @@
 #include "fastmon/MonInput_fastmontimestampdouble.h"
 #include "fastmon/MonInput_FastMon_TkrHits.h"
 #include "digi/MonInput_ZeroSuppress.h"
-//#include "recon/MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
-//#include "recon/MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ.h"
 #include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
 //#include "recon/MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
 #include "digi/MonInput_AcdHit_GafeGarc.h"
@@ -471,11 +417,9 @@
 #include "digi/MonInput_AcdGemCNO_GARC.h"
 #include "digi/MonInput_AcdGemROI_Tower.h"
 #include "digi/MonInput_AcdGemVeto_AcdTile.h"
-#include "merit/MonInput_mcid.h"
 #include "digi/MonInput_condarrcalhi.h"
 #include "digi/MonInput_condarrcallo.h"
 //#include "recon/MonInput_xoverthresh.h"
-#include "merit/MonInput_callayers.h"
 #include "digi/MonInput_ElapsedLast.h"
 #include "digi/MonInput_PrescaledLast.h"
 #include "digi/MonInput_DiscardedLast.h"
@@ -487,14 +431,6 @@
 //#include "recon/MonInput_HFC.h"
 #include "digi/MonInput_ntkrdigis.h"
 //#include "recon/MonInput_calxtalmaxtower.h"
-#include "merit/MonInput_evtelapsedtime.h"
-#include "merit/MonInput_gltnumtowers.h"
-#include "merit/MonInput_glttower.h"
-#include "merit/MonInput_gltgemsummary.h"
-#include "merit/MonInput_calxtalmaxene.h"
-#include "merit/MonInput_tkr1hits.h"
-#include "merit/MonInput_tkr1theta.h"
-#include "merit/MonInput_tkrnumtracks.h"
 #include "digi/MonInput_CalHiTriggerTower.h"
 #include "digi/MonInput_CalLoTriggerTower.h"
 #include "digi/MonInput_filterstatus_hi.h"
@@ -508,11 +444,10 @@
 #include "digi/MonInput_condsummary.h"
 //#include "svac/MonInput_calxtalene.h"
 #include "digi/MonInput_Gem_elapsed.h"
-#include "merit/MonInput_eventid.h"
-#include "merit/MonInput_acdLowerTileCount.h"
 #include "digi/MonInput_timestamp.h"
 #include "digi/MonInput_nAcd.h"
 #include "MonObjFactory.h"
+
 #include <iostream>
 #include <cassert>
 
@@ -524,11 +459,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_nAcd;
   if (s=="timestamp")
     return new MonInput_timestamp;
-  if (s=="acdLowerTileCount")
-    return new MonInput_acdLowerTileCount;
-  if (s=="eventid")
-    return new MonInput_eventid;
-  if (s=="Gem_elapsed")
+
+    if (s=="Gem_elapsed")
     return new MonInput_Gem_elapsed;
 //  if (s=="calxtalene")
 //    return new MonInput_calxtalene;
@@ -536,7 +468,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condsummary;
   if (s=="configkey1852")
     return new MonInput_configkey1852;
-
   if (s=="TkrTriggerTower")
     return new MonInput_TkrTriggerTower;
   if (s=="TkrHitsTowerPlane")
@@ -567,22 +498,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalLoTriggerTower;
   if (s=="CalHiTriggerTower")
     return new MonInput_CalHiTriggerTower;
-  if (s=="tkrnumtracks")
-    return new MonInput_tkrnumtracks;
-  if (s=="tkr1theta")
-    return new MonInput_tkr1theta;
-  if (s=="tkr1hits")
-    return new MonInput_tkr1hits;
-  if (s=="calxtalmaxene")
-    return new MonInput_calxtalmaxene;
-  if (s=="gltgemsummary")
-    return new MonInput_gltgemsummary;
-  if (s=="glttower")
-    return new MonInput_glttower;
-  if (s=="gltnumtowers")
-    return new MonInput_gltnumtowers;
-  if (s=="evtelapsedtime")
-    return new MonInput_evtelapsedtime;
 //  if (s=="calxtalmaxtower")
 //    return new MonInput_calxtalmaxtower;
   if (s=="ntkrdigis")
@@ -615,16 +530,12 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdPha_PmtA_AcdTile;
   if (s=="AcdPha_PmtB_AcdTile")
     return new MonInput_AcdPha_PmtB_AcdTile;
-  if (s=="callayers")
-    return new MonInput_callayers;
 //  if (s=="xoverthresh")
 //    return new MonInput_xoverthresh;
   if (s=="condarrcallo")
     return new MonInput_condarrcallo;
   if (s=="condarrcalhi")
     return new MonInput_condarrcalhi;
-  if (s=="mcid")
-    return new MonInput_mcid;
   if (s=="CalXHit_TowerCalLayer")
     return new MonInput_CalXHit_TowerCalLayer;
 //  if (s=="ReconNumTracks")
@@ -767,14 +678,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdVetoA_AcdTileDigiId;
   if (s=="AcdVetoB_AcdTileDigiId")
     return new MonInput_AcdVetoB_AcdTileDigiId;
-  if (s=="AcdTileCount")
-    return new MonInput_AcdTileCount;
-  if (s=="AcdRibbonCount")
-    return new MonInput_AcdRibbonCount;
-  if (s=="AcdCornerDoca")
-    return new MonInput_AcdCornerDoca;
-  if (s=="AcdVtxActiveDist")
-    return new MonInput_AcdVtxActiveDist;
   if (s=="TkrTwrEdge")
     return new MonInput_TkrTwrEdge;
   if (s=="Tkr1TwrGap")
@@ -789,12 +692,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_TkrThickHits;
   if (s=="TkrBlankHits")
     return new MonInput_TkrBlankHits;
-  if (s=="TkrSurplusHitsInside")
-    return new MonInput_TkrSurplusHitsInside;
   if (s=="TkrSurplusHitRatio")
     return new MonInput_TkrSurplusHitRatio;
-  if (s=="CalMipNum")
-    return new MonInput_CalMipNum;
   if (s=="CalEnergyRaw")
     return new MonInput_CalEnergyRaw;
   if (s=="CalEnergyCorr")
@@ -813,36 +712,16 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1Theta;
   if (s=="FT1Phi")
     return new MonInput_FT1Phi;
-  if (s=="CTBGAM")
-    return new MonInput_CTBGAM;
-  if (s=="CTBCalDocaAngle")
-    return new MonInput_CTBCalDocaAngle;
   if (s=="GltGemSummary")
     return new MonInput_GltGemSummary;
   if (s=="FT1ZenithTheta")
     return new MonInput_FT1ZenithTheta;
   if (s=="FT1EarthAzimuth")
     return new MonInput_FT1EarthAzimuth;
-  if (s=="FilterStatus_HI")
-    return new MonInput_FilterStatus_HI;
   if (s=="Tkr1KalEne")
     return new MonInput_Tkr1KalEne;
   if (s=="Tkr1KalThetaMS")
     return new MonInput_Tkr1KalThetaMS;
-  if (s=="AcdActiveDist3D")
-    return new MonInput_AcdActiveDist3D;
-  if (s=="AcdRibbonActDist")
-    return new MonInput_AcdRibbonActDist;
-  if (s=="AcdRibbonEnergy")
-    return new MonInput_AcdRibbonEnergy;
-  if (s=="AcdTotalEnergy")
-    return new MonInput_AcdTotalEnergy;
-  if (s=="AcdActDistTileEnergy")
-    return new MonInput_AcdActDistTileEnergy;
-  if (s=="AcdTkr1ActDistTileEnergy")
-    return new MonInput_AcdTkr1ActDistTileEnergy;
-  if (s=="AcdTkr1ActiveDist")
-    return new MonInput_AcdTkr1ActiveDist; 
   if (s=="FastMon_meta_context_open_mode")
     return new MonInput_FastMon_meta_context_open_mode;
   if (s=="FastMon_meta_context_open_modechanges")
@@ -939,8 +818,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DGNGemPrescale;
   if (s=="FswFilters_GammaBits")
     return new MonInput_FswFilters_GammaBits;
-  if (s=="MeritObfGamStatus")
-    return new MonInput_MeritObfGamStatus;
   if (s=="CTBParticleType")
     return new MonInput_CTBParticleType;
   if (s=="CurrentTimeToneMissing")
@@ -1013,10 +890,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
   if (s=="stripOcc_err_TowerPlane")
     return new MonInput_stripOcc_err;
   // Modification by lb ended.
-  if (s=="FT1EventClassBitMap")
-    return new MonInput_FT1EventClassBitMap;
-  if (s=="EvtCREventClassBitMap")
-    return new MonInput_EvtCREventClassBitMap;
   if (s=="FT1Ra")
     return new MonInput_FT1Ra;
   if (s=="FT1Dec")
@@ -1033,8 +906,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   std::vector<std::string> names;
   names.push_back("nACD");
   names.push_back("timestamp");
-  names.push_back("acdLowerTileCount");
-  names.push_back("eventid");
   names.push_back("Gem_elapsed");
   names.push_back("calxtalene");
   names.push_back("condsummary");
@@ -1052,14 +923,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("filterstatus_hi");
   names.push_back("CalLoTriggerTower");
   names.push_back("CalHiTriggerTower");
-  names.push_back("tkrnumtracks");
-  names.push_back("tkr1theta");
-  names.push_back("tkr1hits");
-  names.push_back("calxtalmaxene");
-  names.push_back("gltgemsummary");
-  names.push_back("glttower");
-  names.push_back("gltnumtowers");
-  names.push_back("evtelapsedtime");
   names.push_back("calxtalmaxtower");
   names.push_back("ntkrdigis");
   names.push_back("HFC");
@@ -1076,11 +939,9 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdVetoB_AcdTile");
   names.push_back("AcdPha_PmtA_AcdTile");
   names.push_back("AcdPha_PmtB_AcdTile");
-  names.push_back("callayers");
   names.push_back("xoverthresh");
   names.push_back("condarrcallo");
   names.push_back("condarrcalhi");
-  names.push_back("mcid");
   names.push_back("CalXHit_TowerCalLayer");
   names.push_back("ReconNumTracks");
   names.push_back("ReconDirXYZ");
@@ -1153,10 +1014,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FastMon_CalLogEndRangeHit");
   names.push_back("AcdVetoA_AcdTileDigiId");
   names.push_back("AcdVetoB_AcdTileDigiId");
-  names.push_back("AcdTileCount");
-  names.push_back("AcdRibbonCount");
-  names.push_back("AcdCornerDoca");
-  names.push_back("AcdVtxActiveDist");
   names.push_back("TkrTwrEdge");
   names.push_back("Tkr1TwrGap");
   names.push_back("Tkr1LATEdge");
@@ -1164,9 +1021,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("TkrThinHits");
   names.push_back("TkrThickHits");
   names.push_back("TkrBlankHits");
-  names.push_back("TkrSurplusHitsInside");
   names.push_back("TkrSurplusHitRatio");
-  names.push_back("CalMipNum");
   names.push_back("CalEnergyRaw");
   names.push_back("CalEnergyCorr");
   names.push_back("CalCsIRLn");
@@ -1176,21 +1031,11 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FT1Energy");
   names.push_back("FT1Theta");
   names.push_back("FT1Phi");
-  names.push_back("CTBGAM");
-  names.push_back("CTBCalDocaAngle");
   names.push_back("GltGemSummary");
   names.push_back("FT1ZenithTheta");
   names.push_back("FT1EarthAzimuth");
-  names.push_back("FilterStatus_HI");
   names.push_back("Tkr1KalEne");
   names.push_back("Tkr1KalThetaMS");
-  names.push_back("AcdActiveDist3D");
-  names.push_back("AcdRibbonActDist");
-  names.push_back("AcdRibbonEnergy");
-  names.push_back("AcdTotalEnergy");
-  names.push_back("AcdActDistTileEnergy");
-  names.push_back("AcdTkr1ActDistTileEnergy");
-  names.push_back("AcdTkr1ActiveDist");
   names.push_back("FastMon_meta_context_open_mode");
   names.push_back("FastMon_meta_context_open_modechanges");
   names.push_back("PtMcIlwainB");
@@ -1275,8 +1120,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("fracSat_err");
   names.push_back("layerOcc_err");
   names.push_back("stripOcc_err");
-  names.push_back("FT1EventClassBitMap");
-  names.push_back("EvtCREventClassBitMap");
   names.push_back("FT1Ra");
   names.push_back("FT1Dec");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
