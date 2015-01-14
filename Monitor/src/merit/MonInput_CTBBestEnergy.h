@@ -13,7 +13,7 @@
 
 // user defined part
 
-#define VARTYPE Float_t 
+#define VARTYPE Double_t 
 
 // end user defined part
 
