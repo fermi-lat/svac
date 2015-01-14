@@ -1,9 +1,0 @@
-#include "$GLEAMJOBOPTIONSPATH/jobOptions/pipeline/readigi_runrecon.txt"
-digiRootReaderAlg.digiRootFileList = { "$digiChunkFile" } ;
-reconRootWriterAlg.reconRootFile = "$reconCrumbFile";
-RootTupleSvc.filename = "$meritCrumbFile";
-CalTupleAlg.tupleFilename = "$calCrumbFile";
-gcrSelectRootWriterAlg.gcrSelectRootFile = "$gcrCrumbFile";
-PtValsAlg.PointingHistory = {"$fakeFT2File","", ""};
-ApplicationMgr.EvtMax = 2147483647; 
-EventIntegrityAlg.mask = 4294966999;
