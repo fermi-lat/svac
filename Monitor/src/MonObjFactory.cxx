@@ -406,7 +406,7 @@
 //#include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
 //#include "recon/MonInput_ReconVertexPosXYZ.h"
 //#include "recon/MonInput_ReconDirXYZ.h"
-//#include "recon/MonInput_ReconNumTracks.h"
+#include "recon/MonInput_ReconNumTracks.h"
 #include "digi/MonInput_CalXHit_TowerCalLayer.h"
 #include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
 #include "digi/MonInput_AcdPha_PmtA_AcdTile.h"
@@ -540,8 +540,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_condarrcalhi;
   if (s=="CalXHit_TowerCalLayer")
     return new MonInput_CalXHit_TowerCalLayer;
-//  if (s=="ReconNumTracks")
-//    return new MonInput_ReconNumTracks;
+  if (s=="ReconNumTracks")
+    return new MonInput_ReconNumTracks;
 //  if (s=="ReconDirXYZ")
 //    return new MonInput_ReconDirXYZ;
 //  if (s=="ReconVertexPosXYZ")
