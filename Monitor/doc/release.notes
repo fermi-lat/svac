@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-06-03 15-Jan-2015 monzani solved the static initialization fiasco
  Monitor-03-06-02 15-Jan-2015 monzani more issues with version of root
  Monitor-03-06-01 15-Jan-2015 monzani more issues with version of root
  Monitor-03-06-00 15-Jan-2015 monzani backing out of some changes required for gcc44
