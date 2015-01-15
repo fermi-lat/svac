@@ -24,9 +24,6 @@ progEnv.Tool('identsLib')
 
 progEnv.AppendUnique(LINKFLAGS = ['-rdynamic'])
 
-Monitor = libEnv.ComponentLibrary('Monitor', listFiles(['src/RFun.cxx', 'src/MonObjFactory.cxx', 'src/merit/MonInput_*.cxx',
-				'src/cal/MonInput_*.cxx', 'src/fastmon/MonInput_*.cxx', 'src/trackermon/MonInput_*.cxx', 
-				'src/svac/MonInput_*.cxx', 'src/recon/MonInput_*.cxx', 'src/digi/MonInput_*.cxx', 'src/Geo.cxx']))
 runStrip_t = progEnv.Program('runStrip_t', listFiles(['src/JobConfig.cxx', 'src/MonValue_t.cxx', 
 				'src/MonValueImpls_t.cxx', 'src/MonInputCollection.cxx', 'src/MonInputCollection_*.cxx', 
 				'src/MonEventLooper_t.cxx', 'src/runStrip_t.cxx', 'src/MonObjFactory.cxx', 
@@ -44,6 +41,9 @@ inputObjects = progEnv.Program('inputObjects', listFiles(['src/inputObjects.cxx'
 				'src/merit/MonInput_*.cxx', 'src/cal/MonInput_*.cxx', 'src/fastmon/MonInput_*.cxx',
 				'src/trackermon/MonInput_*.cxx', 'src/svac/MonInput_*.cxx', 'mc/MonInput_*.cxx', 
 				'src/recon/MonInput_*.cxx', 'src/digi/MonInput_*.cxx', 'src/Geo.cxx', 'src/TestReport.cxx']))
+Monitor = libEnv.ComponentLibrary('Monitor', listFiles(['src/RFun.cxx', 'src/MonObjFactory.cxx', 'src/merit/MonInput_*.cxx',
+				'src/cal/MonInput_*.cxx', 'src/fastmon/MonInput_*.cxx', 'src/trackermon/MonInput_*.cxx', 
+				'src/svac/MonInput_*.cxx', 'src/recon/MonInput_*.cxx', 'src/digi/MonInput_*.cxx', 'src/Geo.cxx']))
 
 progEnv.Tool('registerTargets', package = 'Monitor',
              binaryCxts = [[runStrip_t,progEnv],[treemerge,progEnv],

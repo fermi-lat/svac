@@ -93,6 +93,11 @@ int main(int argn, char** argc) {
   // Stuff needed for MySQL for GlastRelease-v15r40
   facilities::commonUtilities::setupEnvironment();
 
+  //This setting is ugly but necessary to compile with SCons
+  char inclpath[512];
+  sprintf(inclpath," -I%s/include ",getenv("INST_DIR"));
+  gSystem->Load("libMonitor");
+  gSystem->AddIncludePath(inclpath);
 
   // configure
   JobConfig jc("runStrip.exe","This utility time series strip chart code");
@@ -324,14 +329,9 @@ int main(int argn, char** argc) {
   outcolsec->setSharedLibDir(jc.sodir());
   outcolsec->setDontCompile(jc.dontCompile());
   outcolsec->setDataType(jc.getDataType());
-  char inclpath[512];
   //sprintf(inclpath," -I%s ",getenv("CONFIGDATAROOT"));
   //gSystem->AddIncludePath(inclpath);
   //sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
-  //This setting is ugly but necessary to compile with SCons
-  sprintf(inclpath," -I%s/include ",getenv("INST_DIR"));
-  gSystem->Load("libMonitor");
-  gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
 #ifdef oldROOT
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter -DoldROOT ");
