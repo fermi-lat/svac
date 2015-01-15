@@ -27,7 +27,6 @@
 //
 // The thing that actually does the work
 #include "MonEventLooper_t.h"
-#include "Monitor/RFun.h"
 
 #include "MonObjFactory.h"
 #include "MonInputCollection_Digi.h"
@@ -331,7 +330,7 @@ int main(int argn, char** argc) {
   //sprintf(inclpath," -I%s ",getenv("MONITORROOT"));
   //This setting is ugly but necessary to compile with SCons
   sprintf(inclpath," -I%s/include ",getenv("INST_DIR"));
-  gSystem->Load("libMonitor");
+  //gSystem->Load("libMonitor");
   gSystem->AddIncludePath(inclpath);
   TString cmd = gSystem->GetMakeSharedLib(); 
 #ifdef oldROOT
