@@ -497,7 +497,7 @@ void MonEventLooper::lastEvent(Double_t timeStampdouble) {
   m_intree->Reset();
 
   m_sec_last = timeStampdouble;
-  printTime(std::cout,m_timeStamp);
+  //printTime(std::cout,m_timeStamp);
   std::cout << std::endl << std::endl;
 
   // Delete all contents from Tfile 

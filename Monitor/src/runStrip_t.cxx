@@ -285,20 +285,20 @@ int main(int argn, char** argc) {
   int nfastmonobjects=0;
   int ntrackermonobjects=0;
   if(digiinpcol)ndigiobjects= digiinpcol->nObjects();
-  if (ndigiobjects>0)allinpcol.push_back(digiinpcol);
+  if(ndigiobjects>0)allinpcol.push_back(digiinpcol);
   if(reconinpcol)nreconobjects= reconinpcol->nObjects();
   if(nreconobjects>0)allinpcol.push_back(reconinpcol);
-  if(mcinpcol )nmcobjects= mcinpcol->nObjects();
+  if(mcinpcol)nmcobjects= mcinpcol->nObjects();
   if(nmcobjects>0)allinpcol.push_back(mcinpcol);
-  if(meritinpcol )nmeritobjects= meritinpcol->nObjects();
+  if(meritinpcol)nmeritobjects= meritinpcol->nObjects();
   if(nmeritobjects>0)allinpcol.push_back(meritinpcol);
-  if(svacinpcol )nsvacobjects= svacinpcol->nObjects();
+  if(svacinpcol)nsvacobjects= svacinpcol->nObjects();
   if(nsvacobjects>0)allinpcol.push_back(svacinpcol);
-  if(calinpcol )ncalobjects= calinpcol->nObjects();
+  if(calinpcol)ncalobjects= calinpcol->nObjects();
   if(ncalobjects>0)allinpcol.push_back(calinpcol);
-  if(fastmoninpcol )nfastmonobjects= fastmoninpcol->nObjects();
+  if(fastmoninpcol)nfastmonobjects= fastmoninpcol->nObjects();
   if(nfastmonobjects>0)allinpcol.push_back(fastmoninpcol);
-  if(trackermoninpcol )ntrackermonobjects= trackermoninpcol->nObjects();
+  if(trackermoninpcol)ntrackermonobjects= trackermoninpcol->nObjects();
   if(ntrackermonobjects>0)allinpcol.push_back(trackermoninpcol);
   if (ndigiobjects+nreconobjects+nmcobjects+nmeritobjects+nsvacobjects+ncalobjects+nfastmonobjects+ntrackermonobjects==0){
     std::cerr<<"No input objects defined. Exiting..."<<std::cerr;
@@ -635,31 +635,29 @@ int main(int argn, char** argc) {
     
   }
 
-
   //std::cout << std::endl << "Del digi" << std::endl <<std::endl;
-  if (digiinpcol)delete digiinpcol;
+  if (digiinpcol) delete digiinpcol;
   //std::cout << std::endl << "Del recon" << std::endl <<std::endl;
-  if (reconinpcol)delete reconinpcol;
+  if (reconinpcol) delete reconinpcol;
   //std::cout << std::endl << "Del mc" << std::endl <<std::endl;
-  if (mcinpcol)delete mcinpcol;
+  if (mcinpcol) delete mcinpcol;
   //std::cout << std::endl << "Del svac" << std::endl <<std::endl;
-  if (svacinpcol)delete svacinpcol;
+  if (svacinpcol) delete svacinpcol;
   //std::cout << std::endl << "Del merit" << std::endl <<std::endl;
-  if (meritinpcol)delete meritinpcol;
+  if (meritinpcol) delete meritinpcol;
   //std::cout << std::endl << "Del cal" << std::endl <<std::endl;
-  if (calinpcol)delete calinpcol;
+  if (calinpcol) delete calinpcol;
   //std::cout << std::endl << "Del fastmon" << std::endl <<std::endl;
-  if (fastmoninpcol)delete fastmoninpcol;
+  if (fastmoninpcol) delete fastmoninpcol;
   //std::cout << std::endl << "Del trackermon" << std::endl <<std::endl;
-  if (trackermoninpcol)delete trackermoninpcol;
+  if (trackermoninpcol) delete trackermoninpcol;
 
- 
   //  std::cout << std::endl << "Del prim" << std::endl <<std::endl;
-  delete outcolprim;
-
-
+  if (outcolprim) delete outcolprim;
   // std::cout << std::endl << "Del second" << std::endl <<std::endl;
-  delete outcolsec;
+  if (outcolsec) delete outcolsec;
+
+  gSystem->Abort(0);
   return 0;
 }
 
