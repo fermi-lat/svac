@@ -8,7 +8,7 @@
 import os
 import sys
 
-L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc_p8-rh5"
+L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc_p8"
 L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "5.0"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
@@ -177,14 +177,18 @@ groundRoot = os.path.join(glastRoot, 'ground')
 #glastSetup = os.path.join(groundRoot, 'scripts', 'group.sh')
 #glastSetupCsh = os.path.join(groundRoot, 'scripts', 'group.cshrc')
 scons = '/afs/slac.stanford.edu/g/glast/applications/install/@sys/usr/bin/scons'
+
+#this is for rhel5:
+#optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
+#glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
+#releaseDir = os.path.join(groundRoot, 'releases', 'volume04')
+
+#and this is for rhel6:
+optConfig = 'redhat6-x86_64-64bit-gcc44-Optimized'
+glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
+releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
+python = os.path.join(glastExt, "python/2.7.6/bin/python") 
 #
-#optConfig = 'redhat6-x86_64-64bit-gcc44-Optimized'
-optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
-#glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
-glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
-#
-#releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
-releaseDir = os.path.join(groundRoot, 'releases', 'volume04')
 glastVersion = '20-10-00'
 releaseName = 'GlastRelease'
 #
@@ -211,7 +215,7 @@ rootSys = os.path.join(glastExt, 'ROOT/v5.34.03-gr01')
 haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
-stDir = os.path.join(groundRoot, 'releases', 'volume03')
+stDir = os.path.join(groundRoot, 'releases', 'volume12')
 stVersion = '09-35-01'
 stName = 'ScienceTools'
 
@@ -264,13 +268,13 @@ else:
     pass
 aspAlreadyLaunched = 160
 
-elFt1ProcVer = 301
-exFt1ProcVer = 301
-exLs1ProcVer = 301
-ft1ProcVer = 301
-ft2ProcVer = 301
-ft2SecondsProcVer = 301
-ls1ProcVer = 301
+elFt1ProcVer = 302
+exFt1ProcVer = 302
+exLs1ProcVer = 302
+ft1ProcVer = 302
+ft2ProcVer = 302
+ft2SecondsProcVer = 302
+ls1ProcVer = 302
 
 procVer = {
     'electronFT1BadGti': elFt1ProcVer,
@@ -302,7 +306,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-06-00',
+        'version': 'Monitor-03-06-03',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -325,7 +329,7 @@ cvsPackages = {
         },
     'evtClassDefs': {
         'repository': '',
-        'version': 'evtClassDefs-01-00-03',
+        'version': 'evtClassDefs-01-01-01',
         },
     'FastMon': {
         'repository': 'dataMonitoring',
@@ -341,7 +345,7 @@ cvsPackages = {
         },
     'IGRF': {
         'repository': 'dataMonitoring',
-        'version': 'IGRF-02-01-01',
+        'version': 'IGRF-03-01-01',
         },
     }
 
@@ -373,7 +377,6 @@ packages['FastMon']['configDir'] = os.path.join(
 packages['FastMon']['env'] = {
     'XML_CONFIG_DIR': packages['FastMon']['configDir']
     }
-packages['FastMon']['extraSetup'] = isocEnv
 packages['FastMon']['saaDefinition'] = os.path.join(
     packages['FastMon']['configDir'], 'saaDefinition.xml')
 
@@ -569,15 +572,16 @@ tdBin = {
 
 evclData = packages['evtClassDefs']['data']
 evclXml = packages['evtClassDefs']['xml']
-electronCuts = os.path.join(evclData, 'pass8.1_Transient_cuts_L1')
-extendedCuts = os.path.join(evclData, 'pass8.1_Transient_cuts_L1')
+electronCuts = os.path.join(evclData, 'pass8.2_Electron_cuts_L1')
+extendedCuts = os.path.join(evclData, 'pass8.2_Transient_cuts_L1')
 ft1Vars = os.path.join(evclData, 'pass8_FT1variables')
 ls1Vars = os.path.join(evclData, 'pass8_LS1variables')
-electronClass = 'EvtCREventClass'
 photonClass = 'FT1EventClass'
+#electronClass = 'EvtCREventClass'
+electronClass = 'FT1EventClass'
 #transientCuts = os.path.join(evclData, 'pass7.6_Transient_cuts_L1')
 #sourceCuts = os.path.join(evclData, 'pass7.6_Source_cuts_L1')
-xmlClassifier =  os.path.join(evclXml, 'EvtClassDefs_P8R1.xml')
+xmlClassifier =  os.path.join(evclXml, 'EvtClassDefs_P8R2.xml')
 filterClassifyMap = {
     'electronMerit': {
         'cutFile': electronCuts,
@@ -602,20 +606,22 @@ filterClassifyMap = {
         },
     }
 gtSelectClass = {
-    'ft1': 2,
-    'ls1': 0,
+    'ft1': 128,
+    'ls1': 65544,
 }
 
-diffRspMap = {
-    2: {
-        'irf': 'P7REP_SOURCE_V15',
-        'model': os.path.join(glastExt, 'diffuseModels/v4r1/diffmodel_p7rep_source_v05_rev1.xml'),
-        },
-    3: {
-        'irf': 'P7REP_CLEAN_V15',
-        'model': os.path.join(glastExt, 'diffuseModels/v4r1/diffmodel_p7rep_clean_v05_rev1.xml'),
-        },
-    }
+#do nothing: there is no diffuse responseto be computed for Pass8
+
+#diffRspMap = {
+#    2: {
+#        'irf': 'P7REP_SOURCE_V15',
+#        'model': os.path.join(glastExt, 'diffuseModels/v4r1/diffmodel_p7rep_source_v05_rev1.xml'),
+#        },
+#    3: {
+#        'irf': 'P7REP_CLEAN_V15',
+#        'model': os.path.join(glastExt, 'diffuseModels/v4r1/diffmodel_p7rep_clean_v05_rev1.xml'),
+#        },
+#    }
 
 verifyOptions = {
     'InProgress': '',
@@ -706,7 +712,7 @@ excludeIn = None
 # default option for stageFiles.stageSet.finish()
 finishOption = ''
 
-python = sys.executable
+#python = sys.executable
 
 # values for L1RunStatus in run quality table
 runningStatus = 'Running'
