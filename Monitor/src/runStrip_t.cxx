@@ -657,7 +657,6 @@ int main(int argn, char** argc) {
   // std::cout << std::endl << "Del second" << std::endl <<std::endl;
   if (outcolsec) delete outcolsec;
 
-  gSystem->Abort(0);
   return 0;
 }
 

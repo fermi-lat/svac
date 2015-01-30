@@ -54,14 +54,16 @@ void MonInput_ReconNumTracks::setValue(TObject* event) {
   if(tkrRecon) 
     numtracks = tkrRecon->getTrackCol()->GetLast()+1;
 
+  // for now, just fill the first 10 tracks, but don't crash (>10 is allowed in Pass8)
   if(numtracks<=10)
     m_val[numtracks]++;
-  else{
+  
+  /* else{
     std::cout << "Retrieved number of tracks = " << numtracks 
 	      << " .This is not allowed. Something wrong happened."
 	      << std:: endl;
     assert(0);
-  }
+  }*/`
 
 
 }
