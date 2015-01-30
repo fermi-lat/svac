@@ -336,7 +336,7 @@ int main(int argn, char** argc) {
 #ifdef oldROOT
   cmd.ReplaceAll("-W ","-W -Wno-unused-parameter -DoldROOT ");
 #else
-  cmd.ReplaceAll("-W ","-W -Wno-unused-parameter ");
+  cmd.ReplaceAll("-W ","-W -Wno-unused-parameter -Wno-write-strings");
 #endif
   cmd.ReplaceAll("$LinkedLibs",gSystem->GetLibraries("","SDL"));
   gSystem->SetMakeSharedLib(cmd);
