@@ -41,6 +41,8 @@ source %(l1Setup)s
 
     #do nothing. TKR analysis is not working.
     #status |= runner.run(cmd)
+    
+    open(stagedOutFile,"w")
     status = 0
 
     return status

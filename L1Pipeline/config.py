@@ -306,7 +306,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-06-03',
+        'version': 'Monitor-03-06-06',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -325,7 +325,7 @@ cvsPackages = {
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'DigiReconCalMeritCfg-01-26-02',
+        'version': 'DigiReconCalMeritCfg-01-26-03',
         },
     'evtClassDefs': {
         'repository': '',
