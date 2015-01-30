@@ -59,7 +59,7 @@ cd %(workDir)s
 export INST_DIR=%(instDir)s 
 export GLAST_EXT=%(glastExt)s
 source %(l1Setup)s
-/afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/rh9_gcc32opt/python/2.5.1/bin/python2.5 %(app)s %(stagedInFile)s %(stagedMonFile)s %(htmlDir)s %(stagedAlarmFile)s %(logFile)s
+%(python)s %(app)s %(stagedInFile)s %(stagedMonFile)s %(htmlDir)s %(stagedAlarmFile)s %(logFile)s
 """ % locals()
 
 status = runner.run(cmd)

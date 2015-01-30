@@ -39,6 +39,8 @@ source %(l1Setup)s
 %(app)s %(stagedDigiFile)s %(stagedReconFile)s %(stagedOutFile)s
 """ % locals()
 
-    status |= runner.run(cmd)
+    #do nothing. TKR analysis is not working.
+    #status |= runner.run(cmd)
+    status = 0
 
     return status
