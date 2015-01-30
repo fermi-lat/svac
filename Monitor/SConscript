@@ -1,7 +1,7 @@
 # -*- python -*-
 # $Header: 
 # Authors: Authors: E. Charles <echarles@slac.stanford.edu> 
-# Version: Monitor-03-06-07
+# Version: Monitor-03-06-08
 Import('baseEnv')
 Import('listFiles')
 Import('packages')
