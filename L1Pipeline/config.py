@@ -572,7 +572,7 @@ tdBin = {
 
 evclData = packages['evtClassDefs']['data']
 evclXml = packages['evtClassDefs']['xml']
-electronCuts = os.path.join(evclData, 'pass8.2_Electron_cuts_L1')
+electronCuts = os.path.join(evclData, 'pass8.2_Electrons_cuts_L1')
 extendedCuts = os.path.join(evclData, 'pass8.2_Transient_cuts_L1')
 ft1Vars = os.path.join(evclData, 'pass8_FT1variables')
 ls1Vars = os.path.join(evclData, 'pass8_LS1variables')
