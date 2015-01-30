@@ -159,7 +159,7 @@ def merge(files, idArgs, level, outFileTypes, staged, workDir, **args):
         'gcr': 'GcrSelect',
         'merit': 'MeritTuple',
         'recon': 'Recon',
-        'relation': 'Relation',
+        'relation': 'Relations',
         }
 
     print >> sys.stderr, '------------------- start merge ------------------'
