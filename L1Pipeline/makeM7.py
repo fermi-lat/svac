@@ -29,7 +29,7 @@ stagedOutFile = staged.stageOut(realOutFile)
 
 isocBin = config.isocBin
 
-python = config.python
+python = sys.executable
 taskBase = config.hpTaskBase
 scid = config.scid
 
@@ -38,7 +38,7 @@ tStop = glastTime.met2Iso8860(float(os.environ['tStop']) + config.m7Pad)
 
 arch = config.l0Archive
 
-cmd = """eval `%(isocBin)s/isoc env --add-env=flightops`
+cmd = """
 export LD_PRELOAD=$ISOC_INSTALLROOT/lib/libXrdPosixPreload.so
 %(python)s %(taskBase)s/scripts/DiagRet.py --scid %(scid)s -b "%(tStart)s" -e "%(tStop)s" --lsm --arch %(arch)s | grep -E 'ATT|ORB' > %(stagedOutFile)s
 """ % locals()

@@ -42,8 +42,6 @@ def fastMon(files, idArgs, workDir, staged, **args):
 
     dmRoot = config.L1Build
 
-    extra = package['extraSetup']
-
     dataSource = os.environ['DATASOURCE']
     if dataSource in ['LCI']:
         optionTag = 'fastMonLci'
@@ -56,14 +54,13 @@ def fastMon(files, idArgs, workDir, staged, **args):
     configFile = config.monitorOptions[optionTag]
 
     igrfExport = config.igrfExport
-    python = config.python
+    python = sys.executable
 
     cmd = '''
     cd %(workDir)s
     export DATAMONITORING_ROOT=%(dmRoot)s
     export FAST_MON_DIR=%(workDir)s
     %(igrfExport)s
-    %(extra)s
     export PYTHONPATH=${PYTHONPATH}:%(workDir)s
     %(python)s %(app)s -c %(configFile)s %(varArgs)s %(inFile)s
     ''' % locals()
