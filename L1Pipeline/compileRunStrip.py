@@ -37,7 +37,7 @@ else:
         'digiHist', 'digiTrend',
         'fastMonTrend',
         'meritHist', 'meritTrend',
-        #'reconHist', 'reconTrend',
+        'reconHist', 'reconTrend',
         'tkrTrend',
         ]
     pass
