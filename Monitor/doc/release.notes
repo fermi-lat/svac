@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-06-06 29-Jan-2015 monzani TYPOOOOOOOOOOOOOOOOOOOO
  Monitor-03-06-05 29-Jan-2015 monzani removed the hard limit on 10 tracks
  Monitor-03-06-04 22-Jan-2015 monzani stopgap measure for avoiding stack trace at the end of runStrip
  Monitor-03-06-03 15-Jan-2015 monzani solved the static initialization fiasco
