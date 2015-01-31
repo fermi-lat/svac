@@ -1320,7 +1320,8 @@
         <after process="mergeMeritChunks" status="SUCCESS"/>
       </depends>
     </process>
- 
+
+<!-- 
     <process name="filterMerit" autoRetryMaxAttempts="%(retries)s">
       <variables>
         <var name="inFileTypes">merit</var>
@@ -1349,7 +1350,7 @@
         <after process="filterMerit" status="SUCCESS"/>
       </depends>
     </process>
-
+-->
  
     <process name="electronMerit" autoRetryMaxAttempts="%(retries)s">
       <variables>
@@ -2758,7 +2759,7 @@
         <after process="registerCal" status="SUCCESS"/>
         <after process="registerElectronFT1" status="SUCCESS"/>
         <after process="registerFastMonTuple" status="SUCCESS"/>
-        <after process="registerFilteredMerit" status="SUCCESS"/>
+<!--        <after process="registerFilteredMerit" status="SUCCESS"/>    -->
         <after process="registerGcr" status="SUCCESS"/>
         <after process="registerM7Hp" status="SUCCESS"/>
         <after process="registerMeritHist" status="SUCCESS"/>
