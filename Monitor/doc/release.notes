@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-08-01 03-Feb-2015 lbaldini Add acd in merit trend, repalce CTB quantities with corresponding  WP8
  
 - Added new MonInput objects for the WP8 quantities that will replace
   the old CTB variables.
