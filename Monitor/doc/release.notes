@@ -4,6 +4,10 @@
  *
  *                  EOH
 
+- Started putting back the recon variables for the Pass 8 flavor of the
+  L1 Proc. At this point in time most of the TKR and CAL stuff is
+  up and running. Need to work on the ACD.
+
  Monitor-03-06-08 30-Jan-2015 monzani fixing yet another typo
  Monitor-03-06-07 30-Jan-2015 monzani decreasing the verbosity for ACliC
  Monitor-03-06-06 29-Jan-2015 monzani TYPOOOOOOOOOOOOOOOOOOOO
