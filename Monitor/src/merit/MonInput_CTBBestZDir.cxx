@@ -11,7 +11,7 @@
 
 #define NAME CTBBestZDir
 #define OUTBRANCH "CTBBestZDir"
-#define LEAF "CTBBestZDir/F"
+#define LEAF "CTBBestZDir/D"
 #define INBRANCH "CTBBestZDir"
 #define ACCESSOR 
 #define MONSOURCE MeritEvent
