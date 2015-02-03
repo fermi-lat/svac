@@ -243,6 +243,14 @@
 // Last updated with object Acd2CR1ActDistTileEnergy by user lbaldini on Tue Feb  3 14:18:07 2015
 // Last updated with object Acd2TotalTileEnergy by user lbaldini on Tue Feb  3 14:27:00 2015
 // Last updated with object Acd2CRActDistTileEnergy by user lbaldini on Tue Feb  3 14:38:41 2015
+// Last updated with object WP8BestEnergy by user lbaldini on Tue Feb  3 15:14:15 2015
+// Last updated with object WP8CTBestEnergyProb by user lbaldini on Tue Feb  3 15:15:12 2015
+// Last updated with object WP8CTPSFCore by user lbaldini on Tue Feb  3 15:16:11 2015
+// Last updated with object WP8BestZDir by user lbaldini on Tue Feb  3 15:16:41 2015
+#include "merit/MonInput_WP8BestZDir.h"
+#include "merit/MonInput_WP8CTPSFCore.h"
+#include "merit/MonInput_WP8CTBestEnergyProb.h"
+#include "merit/MonInput_WP8BestEnergy.h"
 #include "merit/MonInput_Acd2CRActDistTileEnergy.h"
 #include "merit/MonInput_Acd2TotalTileEnergy.h"
 #include "merit/MonInput_Acd2CR1ActDistTileEnergy.h"
@@ -942,6 +950,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Acd2TotalTileEnergy;
   if (s=="Acd2CRActDistTileEnergy")
     return new MonInput_Acd2CRActDistTileEnergy;
+  if (s=="WP8BestEnergy")
+    return new MonInput_WP8BestEnergy;
+  if (s=="WP8CTBestEnergyProb")
+    return new MonInput_WP8CTBestEnergyProb;
+  if (s=="WP8CTPSFCore")
+    return new MonInput_WP8CTPSFCore;
+  if (s=="WP8BestZDir")
+    return new MonInput_WP8BestZDir;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1182,6 +1198,10 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Acd2CR1ActDistTileEnergy");
   names.push_back("Acd2TotalTileEnergy");
   names.push_back("Acd2CRActDistTileEnergy");
+  names.push_back("WP8BestEnergy");
+  names.push_back("WP8CTBestEnergyProb");
+  names.push_back("WP8CTPSFCore");
+  names.push_back("WP8BestZDir");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
