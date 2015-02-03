@@ -231,6 +231,8 @@
 // Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
 // Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
 // Last updated with object FT1EventClass by user lbaldini on Tue Jan 13 15:31:52 2015
+// Last updated with object FT1EventClassBitMap by user lbaldini by hand
+//#include "merit/MonInput_FT1EventClassBitMap.h"
 #include "merit/MonInput_FT1EventClass.h"
 #include "merit/MonInput_FT1Dec.h"
 #include "merit/MonInput_FT1Ra.h"
@@ -396,7 +398,7 @@
 #include "digi/MonInput_Range4.h"
 #include "digi/MonInput_CalXAdc_TowerCalLayerCalColumnFaceRange.h"
 #include "digi/MonInput_Tick20MHzDeviation.h"
-//#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
+#include "recon/MonInput_ReconEnergy_TowerCalLayerCalColumn.h"
 #include "digi/MonInput_timestampdouble.h"
 #include "digi/MonInput_DeadZoneDelta.h"
 #include "digi/MonInput_DiscardedDelta.h"
@@ -404,8 +406,8 @@
 #include "digi/MonInput_condarrcno.h"
 #include "digi/MonInput_condarrtkr.h"
 //#include "recon/MonInput_ReconEnergy_TowerCalLayer.h"
-//#include "recon/MonInput_ReconVertexPosXYZ.h"
-//#include "recon/MonInput_ReconDirXYZ.h"
+#include "recon/MonInput_ReconVertexPosXYZ.h"
+#include "recon/MonInput_ReconDirXYZ.h"
 #include "recon/MonInput_ReconNumTracks.h"
 #include "digi/MonInput_CalXHit_TowerCalLayer.h"
 #include "digi/MonInput_AcdPha_PmtB_AcdTile.h"
@@ -542,10 +544,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalXHit_TowerCalLayer;
   if (s=="ReconNumTracks")
     return new MonInput_ReconNumTracks;
-//  if (s=="ReconDirXYZ")
-//    return new MonInput_ReconDirXYZ;
-//  if (s=="ReconVertexPosXYZ")
-//    return new MonInput_ReconVertexPosXYZ;
+  if (s=="ReconDirXYZ")
+    return new MonInput_ReconDirXYZ;
+  if (s=="ReconVertexPosXYZ")
+    return new MonInput_ReconVertexPosXYZ;
 //  if (s=="ReconEnergy_TowerCalLayer")
 //    return new MonInput_ReconEnergy_TowerCalLayer;
   if (s=="condarrtkr")
@@ -560,8 +562,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DeadZoneDelta;
   if (s=="timestampdouble")
     return new MonInput_timestampdouble;
-//  if (s=="ReconEnergy_TowerCalLayerCalColumn")
-//    return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
+  if (s=="ReconEnergy_TowerCalLayerCalColumn")
+    return new MonInput_ReconEnergy_TowerCalLayerCalColumn;
   if (s=="Tick20MHzDeviation")
     return new MonInput_Tick20MHzDeviation;
   if (s=="CalXAdc_TowerCalLayerCalColumnFaceRange")
@@ -898,6 +900,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1Dec;
   if (s=="FT1EventClass")
     return new MonInput_FT1EventClass;
+  //if (s=="FT1EventClassBitMap")
+  //  return new MonInput_FT1EventClassBitMap;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1127,6 +1131,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FT1Ra");
   names.push_back("FT1Dec");
   names.push_back("FT1EventClass");
+  //names.push_back("FT1EventClassBitMap");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
