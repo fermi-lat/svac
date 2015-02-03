@@ -74,13 +74,9 @@
 // Last updated with object FilterBits by user dpaneque on Thu Sep 27 18:08:37 2007
 // Last updated with object PrescaledDelta by user dpaneque on Fri Sep 28 18:41:04 2007
 // Last updated with object GltWord by user dpaneque on Sat Sep 29 01:03:08 2007
-// Last updated with object CTBBestZDir by user dpaneque on Sat Sep 29 01:06:01 2007
 // Last updated with object FT1ZenithTheta by user dpaneque on Sat Sep 29 01:08:22 2007
-// Last updated with object CTBClassLevel by user dpaneque on Sat Sep 29 01:10:02 2007
-// Last updated with object CTBBestEnergyProb by user dpaneque on Sat Sep 29 01:10:45 2007
+// Last updated with object CTBBestnergyProb by user dpaneque on Sat Sep 29 01:10:45 2007
 // Last updated with object CTBCORE by user dpaneque on Sat Sep 29 01:11:28 2007
-// Last updated with object CTBBestEnergy by user dpaneque on Sat Sep 29 01:12:23 2007
-// Last updated with object CTBBestEnergyRatio by user dpaneque on Sat Sep 29 01:13:23 2007
 // Last updated with object DeltaEventTime by user dpaneque on Wed Oct  3 00:27:24 2007
 // Last updated with object DeltaWindowOpen by user dpaneque on Wed Oct  3 00:33:15 2007
 // Last updated with object DeltaEventTimeManual by user dpaneque on Mon Oct  8 19:35:18 2007
@@ -193,7 +189,6 @@
 // Last updated with object GemPrescale by user dpaneque on Sat May 24 21:46:05 2008
 // Last updated with object DGNGemPrescale by user dpaneque on Sat May 24 21:47:37 2008
 // Last updated with object FswFilters_GammaBits by user dpaneque on Sun May 25 23:31:55 2008
-// Last updated with object CTBParticleType by user dpaneque on Thu May 29 04:19:18 2008
 // Last updated with object CurrentTimeToneMissing by user dpaneque on Tue Jun 24 01:15:42 2008
 // Last updated with object PtSCzenith by user dpaneque on Tue Jul  1 01:21:11 2008
 // Last updated with object EventSizeInBytes by user dpaneque on Tue Jul  1 02:33:38 2008
@@ -298,7 +293,6 @@
 #include "digi/MonInput_EventSizeInBytes.h"
 #include "merit/MonInput_PtSCzenith.h"
 #include "digi/MonInput_CurrentTimeToneMissing.h"
-#include "merit/MonInput_CTBParticleType.h"
 #include "digi/MonInput_FswFilters_GammaBits.h"
 #include "digi/MonInput_DGNGemPrescale.h"
 #include "digi/MonInput_GemPrescale.h"
@@ -407,13 +401,7 @@
 #include "digi/MonInput_DeltaEventTimeManual.h"
 #include "digi/MonInput_DeltaWindowOpen.h"
 #include "digi/MonInput_DeltaEventTime.h"
-#include "merit/MonInput_CTBBestEnergyRatio.h"
-#include "merit/MonInput_CTBBestEnergy.h"
-#include "merit/MonInput_CTBCORE.h"
-#include "merit/MonInput_CTBBestEnergyProb.h"
-#include "merit/MonInput_CTBClassLevel.h"
 #include "merit/MonInput_FT1ZenithTheta.h"
-#include "merit/MonInput_CTBBestZDir.h"
 #include "merit/MonInput_GltWord.h"
 #include "digi/MonInput_PrescaledDelta.h"
 #include "digi/MonInput_FilterBits.h"
@@ -616,20 +604,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_PrescaledDelta;
   if (s=="GltWord")
     return new MonInput_GltWord;
-  if (s=="CTBBestZDir")
-    return new MonInput_CTBBestZDir;
   if (s=="FT1ZenithTheta")
     return new MonInput_FT1ZenithTheta;
-  if (s=="CTBClassLevel")
-    return new MonInput_CTBClassLevel;
-  if (s=="CTBBestEnergyProb")
-    return new MonInput_CTBBestEnergyProb;
-  if (s=="CTBCORE")
-    return new MonInput_CTBCORE;
-  if (s=="CTBBestEnergy")
-    return new MonInput_CTBBestEnergy;
-  if (s=="CTBBestEnergyRatio")
-    return new MonInput_CTBBestEnergyRatio;
   if (s=="DeltaEventTime")
     return new MonInput_DeltaEventTime;
   if (s=="DeltaWindowOpen")
@@ -850,8 +826,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DGNGemPrescale;
   if (s=="FswFilters_GammaBits")
     return new MonInput_FswFilters_GammaBits;
-  if (s=="CTBParticleType")
-    return new MonInput_CTBParticleType;
   if (s=="CurrentTimeToneMissing")
     return new MonInput_CurrentTimeToneMissing;
   if (s=="PtSCzenith")
@@ -1030,13 +1004,7 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("FilterBits");
   names.push_back("PrescaledDelta");
   names.push_back("GltWord");
-  names.push_back("CTBBestZDir");
   names.push_back("FT1ZenithTheta");
-  names.push_back("CTBClassLevel");
-  names.push_back("CTBBestEnergyProb");
-  names.push_back("CTBCORE");
-  names.push_back("CTBBestEnergy");
-  names.push_back("CTBBestEnergyRatio");
   names.push_back("DeltaEventTime");
   names.push_back("DeltaWindowOpen");
   names.push_back("DeltaEventTimeManual");
@@ -1149,7 +1117,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("DGNGemPrescale");
   names.push_back("FswFilters_GammaBits");
   names.push_back("MeritObfGamStatus");
-  names.push_back("CTBParticleType");
   names.push_back("CurrentTimeToneMissing");
   names.push_back("PtSCzenith");
   names.push_back("EventSizeInBytes");
