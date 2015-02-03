@@ -4,6 +4,9 @@
  *
  *                  EOH
 
+- Added new MonInput objects for the WP8 quantities that will replace
+  the old CTB variables.
+
  Monitor-03-08-00 03-Feb-2015 lbaldini ACD quantities back in the merit eor.
 - All the ACD quantities for the merit hist file back in (in the Acd2 flavor).
 - Minor fix to CTBBestZDir (/F changed to /D), though this will disappear.
