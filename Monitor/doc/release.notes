@@ -4,8 +4,13 @@
  *
  *                  EOH
 
- Monitor-03-08-01 03-Feb-2015 lbaldini Add acd in merit trend, repalce CTB quantities with corresponding  WP8
- 
+- Acd2 quantities back in for the recon hist.
+  (Note that not all of them are actually functional, i.e., most of the code 
+  in MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.* and
+  MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile.* is commented out
+  and probably needs Eric.)
+
+ Monitor-03-08-01 03-Feb-2015 lbaldini Add acd in merit trend, repalce CTB quantities with corresponding  WP8 
 - Added new MonInput objects for the WP8 quantities that will replace
   the old CTB variables.
 
