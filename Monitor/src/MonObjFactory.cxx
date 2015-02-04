@@ -384,7 +384,8 @@
 #include "fastmon/MonInput_FastMon_TkrHits.h"
 #include "digi/MonInput_ZeroSuppress.h"
 #include "digi/MonInput_AcdPha_PmtIdPmtRangeAcdTile.h"
-//#include "recon/MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
+#include "recon/MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile.h"
+#include "recon/MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ.h"
 #include "digi/MonInput_AcdHit_GafeGarc.h"
 #include "digi/MonInput_AcdVeto_GafeGarc.h"
 #include "digi/MonInput_AcdVeto_PmtGarcGafe.h"
@@ -406,8 +407,8 @@
 #include "digi/MonInput_PrescaledDelta.h"
 #include "digi/MonInput_FilterBits.h"
 #include "digi/MonInput_Sequence.h"
-//#include "recon/MonInput_AcdPhaMips_PmtB_AcdTile.h"
-//#include "recon/MonInput_AcdPhaMips_PmtA_AcdTile.h"
+#include "recon/MonInput_Acd2PhaMips_PmtB_AcdTile.h"
+#include "recon/MonInput_Acd2PhaMips_PmtA_AcdTile.h"
 #include "digi/MonInput_OBFStatus.h"
 #include "digi/MonInput_CalReadoutRange.h"
 #include "cal/MonInput_CalXtalFaceSignal.h"
@@ -592,10 +593,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_CalReadoutRange;
   if (s=="OBFStatus")
     return new MonInput_OBFStatus;
-//  if (s=="AcdPhaMips_PmtA_AcdTile")
-//    return new MonInput_AcdPhaMips_PmtA_AcdTile;
-//  if (s=="AcdPhaMips_PmtB_AcdTile")
-//    return new MonInput_AcdPhaMips_PmtB_AcdTile;
+  if (s=="Acd2PhaMips_PmtA_AcdTile")
+    return new MonInput_Acd2PhaMips_PmtA_AcdTile;
+  if (s=="Acd2PhaMips_PmtB_AcdTile")
+    return new MonInput_Acd2PhaMips_PmtB_AcdTile;
   if (s=="Sequence")
     return new MonInput_Sequence;
   if (s=="FilterBits")
@@ -638,14 +639,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_AcdVeto_GafeGarc;
   if (s=="AcdHit_GafeGarc")
     return new MonInput_AcdHit_GafeGarc;
-//  if (s=="AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile")
-//    return new MonInput_AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile;
+  if (s=="Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile")
+    return new MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile;
   if (s=="AcdPha_PmtIdPmtRangeAcdTile")
     return new MonInput_AcdPha_PmtIdPmtRangeAcdTile;
 //  if (s=="AcdGlobalPos_NotMatchedTrack_FacePosXYZ")
 //    return new MonInput_AcdGlobalPos_NotMatchedTrack_FacePosXYZ;
-//  if (s=="AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
-//    return new MonInput_AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
+  if (s=="Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ")
+    return new MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ;
   if (s=="ZeroSuppress")
     return new MonInput_ZeroSuppress;
   if (s=="FastMon_TkrHits")
@@ -998,8 +999,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("CalXtalFaceSignal");
   names.push_back("CalReadoutRange");
   names.push_back("OBFStatus");
-  names.push_back("AcdPhaMips_PmtA_AcdTile");
-  names.push_back("AcdPhaMips_PmtB_AcdTile");
+  names.push_back("Acd2PhaMips_PmtA_AcdTile");
+  names.push_back("Acd2PhaMips_PmtB_AcdTile");
   names.push_back("Sequence");
   names.push_back("FilterBits");
   names.push_back("PrescaledDelta");
@@ -1022,10 +1023,10 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("AcdVeto_PmtGarcGafe");
   names.push_back("AcdVeto_GafeGarc");
   names.push_back("AcdHit_GafeGarc");
-  names.push_back("AcdPhaMipAngleCorrected_PmtExtrapolatedAcdTile");
+  names.push_back("Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile");
   names.push_back("AcdPha_PmtIdPmtRangeAcdTile");
   names.push_back("AcdGlobalPos_NotMatchedTrack_FacePosXYZ");
-  names.push_back("AcdGlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ");
+  names.push_back("Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ");
   names.push_back("ZeroSuppress");
   names.push_back("FastMon_TkrHits");
   names.push_back("fastmontimestampdouble");
