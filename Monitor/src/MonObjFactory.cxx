@@ -225,9 +225,6 @@
 // Last updated with object stripOcc_err by user lbaldini on Fri Jan 15 13:01:16 2010
 // Last updated with object FT1Ra by user dpaneque on Tue Jul  5 12:00:04 2011
 // Last updated with object FT1Dec by user dpaneque on Tue Jul  5 12:01:02 2011
-// Last updated with object FT1EventClass by user lbaldini on Tue Jan 13 15:31:52 2015
-// Last updated with object FT1EventClassBitMap by user lbaldini by hand
-//#include "merit/MonInput_FT1EventClassBitMap.h"
 // Last updated with object Acd2CornerDoca by user lbaldini on Tue Feb  3 13:11:20 2015
 // Last updated with object Acd2TileCount by user lbaldini on Tue Feb  3 13:34:07 2015
 // Last updated with object Acd2RibbonCount by user lbaldini on Tue Feb  3 13:35:09 2015
@@ -242,6 +239,10 @@
 // Last updated with object WP8CTBestEnergyProb by user lbaldini on Tue Feb  3 15:15:12 2015
 // Last updated with object WP8CTPSFCore by user lbaldini on Tue Feb  3 15:16:11 2015
 // Last updated with object WP8BestZDir by user lbaldini on Tue Feb  3 15:16:41 2015
+// Last updated with object DQMEventClass by user bregeon on Thu Feb  5 15:25:16 2015
+// Last updated with object DQMEventType by user bregeon on Thu Feb  5 15:25:59 2015
+#include "merit/MonInput_DQMEventType.h"
+#include "merit/MonInput_DQMEventClass.h"
 #include "merit/MonInput_WP8BestZDir.h"
 #include "merit/MonInput_WP8CTPSFCore.h"
 #include "merit/MonInput_WP8CTBestEnergyProb.h"
@@ -256,7 +257,6 @@
 #include "merit/MonInput_Acd2RibbonCount.h"
 #include "merit/MonInput_Acd2TileCount.h"
 #include "merit/MonInput_Acd2CornerDoca.h"
-#include "merit/MonInput_FT1EventClass.h"
 #include "merit/MonInput_FT1Dec.h"
 #include "merit/MonInput_FT1Ra.h"
 #include "trackermon/MonInput_stripOcc_err.h"
@@ -901,10 +901,6 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_FT1Ra;
   if (s=="FT1Dec")
     return new MonInput_FT1Dec;
-  if (s=="FT1EventClass")
-    return new MonInput_FT1EventClass;
-  //if (s=="FT1EventClassBitMap")
-  //  return new MonInput_FT1EventClassBitMap;
   if (s=="Acd2CornerDoca")
     return new MonInput_Acd2CornerDoca;
   if (s=="Acd2TileCount")
@@ -933,6 +929,10 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_WP8CTPSFCore;
   if (s=="WP8BestZDir")
     return new MonInput_WP8BestZDir;
+  if (s=="DQMEventClass")
+    return new MonInput_DQMEventClass;
+  if (s=="DQMEventType")
+    return new MonInput_DQMEventType;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1154,8 +1154,6 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("stripOcc_err");
   names.push_back("FT1Ra");
   names.push_back("FT1Dec");
-  names.push_back("FT1EventClass");
-  //names.push_back("FT1EventClassBitMap");
   names.push_back("Acd2CornerDoca");
   names.push_back("Acd2TileCount");
   names.push_back("Acd2RibbonCount");
@@ -1170,6 +1168,8 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("WP8CTBestEnergyProb");
   names.push_back("WP8CTPSFCore");
   names.push_back("WP8BestZDir");
+  names.push_back("DQMEventClass");
+  names.push_back("DQMEventType");
   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
