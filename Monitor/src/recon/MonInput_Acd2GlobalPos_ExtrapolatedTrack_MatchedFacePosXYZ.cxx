@@ -18,6 +18,10 @@
 #define INPUTSOURCE "ReconEvent"
 #define DESCRIPTION "Vector [matched][face][posXYZ] containing the position (X,Y,Z) of the intersection of the best track extrapolated to the ACD tile. The index matched indicates whther the track has an associated hit (matched=1) or not (matched=0), the index face indicates TOP (face=0), -X (face=1), -Y (face=2), +X (face=3) -X (face=4), X oriented ribbon (face=5) and Y oriented ribbon (face=6). Vector components which are not used (e.g. index matched=1 for a non-matched extrapolated track) are set to 10000, which is a non-physical position easily to recognize."
 #include "reconRootData/ReconEvent.h"
+#include "reconRootData/AcdReconV2.h"
+#include "reconRootData/AcdAssoc.h"
+#include "reconRootData/AcdTkrHitPocaV2.h"
+
 
 // End user defined part 
 
@@ -50,99 +54,42 @@ void MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue(TObjec
 
   const AcdReconV2* acdRecon = de->getAcdReconV2();
 
-  /*
   if (acdRecon) { 
-    UInt_t nAcdInter = acdRecon->nAcdIntersections();
-    for ( UInt_t iAcdInter(0); iAcdInter < nAcdInter; iAcdInter++ ) {
-      const AcdTkrIntersection* acdInter = acdRecon->getAcdTkrIntersection(iAcdInter);
+    const TClonesArray& assocs = acdRecon->getTkrAssocCol();
+    UInt_t nTkrAssoc = assocs.GetSize();
+    for ( UInt_t iAssoc(0); iAssoc < nTkrAssoc; iAssoc++ ) {
+      const AcdAssoc* anAssoc = dynamic_cast<const AcdAssoc*>(assocs[iAssoc]);
+      if ( anAssoc == 0 ) continue; // maybe warn? 
+      if ( anAssoc->getTrackIndex() != 0 ) continue;  //  only the best track is used
+      if ( ! anAssoc->getUpward() ) continue; // only up-going intersctions
 
-      if ( acdInter->getTrackIndex() != 0 ) continue; // only the best track is used
-
-      const TVector3& missPos = acdInter->getGlobalPosition();
-      UInt_t face = acdInter->getTileId().getFace();
-      if(face>6){
-	std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: ERROR" 
-		  << std::endl
-		  << "face (="<<face<<") is out of bound [0,7)." << std::endl;
-	assert(0);
-	//continue;
-      }
-
-      // tmp
-      /*
-      if(face==0)
-      {
-      std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-      << std::endl
-      << "TOP: X,Y,Z = " 
-      << missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-      }
-
-      if(face==1)
-      {
-      std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-      << std::endl
-      << "Minus X: X,Y,Z = " 
-      << missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-      }
-
-       if(face==3)
-       {
-       std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-       << std::endl
-       << "Plus X: X,Y,Z = " 
-       << missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-       }
-
-
-
-      if(face==5)
-      {
-      std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-      << std::endl
-      TBro b    << "X Oriented Ribbon: X,Y,Z = " 
-      << missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-      }
-
-      if(face==6)
-      {
-      std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-      << std::endl
-      << "Y Oriented Ribbon: X,Y,Z = " 
-      << missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-      }
-      */
-      // endtmp
-
-  /*
-      if (acdInter->tileHit() ) { // There is a tile hit associated with this track
-	m_val[1][face][0] = missPos.X();
-	m_val[1][face][1] = missPos.Y();
-	m_val[1][face][2] = missPos.Z();
-      }
-      else{ // no tile hit associated with this track
-	m_val[0][face][0] = missPos.X();
-	m_val[0][face][1] = missPos.Y();
-	m_val[0][face][2] = missPos.Z();
-
-	// tmp
-	/*
-      if(face==5)
-      {
-        sillycounter++;
-	std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: DEBUG INFO"
-	<< std::endl
-	<< "Not matched X oriented ribbon, event number " << sillycounter+1 << std::endl << "X,Y,Z = "
-	<< missPos.X() << ", " << missPos.Y() << ", " << missPos.Z() << ", " << std::endl;
-	  
+      UInt_t nHitPoca = anAssoc->nAcdHitPoca();
+      for ( UInt_t iHitPoca(0); iHitPoca < nHitPoca; iHitPoca++ ) {
+	const AcdTkrHitPocaV2* aHitPoca = anAssoc->getHitPoca(iHitPoca);
+	if ( aHitPoca == 0 ) continue; // maybe warn? 
+	if ( aHitPoca->getDoca() < 0 ) continue; // missed element
+	UInt_t face = aHitPoca->getId().getFace();
+	const TVector3& missPos = aHitPoca->getGlobalPosition();
+	if(face>6){
+	  std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: ERROR" 
+		    << std::endl
+		    << "face (="<<face<<") is out of bound [0,7)." << std::endl;
+	  assert(0);
+	  //continue;
 	}
-	*/
-	// endtmp
-  /*
+	if ( aHitPoca->hasHit() ) { // There is a tile hit associated with this track
+	  m_val[1][face][0] = missPos.X();
+	  m_val[1][face][1] = missPos.Y();
+	  m_val[1][face][2] = missPos.Z();
+	}
+	else{ // no tile hit associated with this track
+	  m_val[0][face][0] = missPos.X();
+	  m_val[0][face][1] = missPos.Y();
+	  m_val[0][face][2] = missPos.Z();
+	}
       }
     }
   }
-  */
 }
 
 std::string MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::getInputSource(){

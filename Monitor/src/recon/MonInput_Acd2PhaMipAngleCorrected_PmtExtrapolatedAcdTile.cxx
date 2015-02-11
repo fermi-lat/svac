@@ -18,6 +18,10 @@
 #define INPUTSOURCE "ReconEvent"
 #define DESCRIPTION "Vector [pmt][acdtile] containing the PhA in Mips corrected for incoming angle for pmt (A/B) and extrapolated acdtile. Obviously, only AcdHits related to extrapolated tracks are taken into account. If the PMT A/B of acdtile was not used, the vector component is set to -1."
 #include "reconRootData/ReconEvent.h"
+#include "reconRootData/AcdReconV2.h"
+#include "reconRootData/AcdAssoc.h"
+#include "reconRootData/AcdTkrHitPocaV2.h"
+
 
 // End user defined part 
 
@@ -67,76 +71,32 @@ void MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile::setValue(TObject*
   */
   // entmp
 
-  
-  /*
-  if (acdRecon && numtracks) { 
 
-   
-    // map of the acd hits
-    std::map<int,const AcdHit*> acdHitMap;
-    UInt_t nAcdHit = acdRecon->getHitCol().GetEntriesFast();
-    for ( UInt_t iAcdHit(0); iAcdHit < nAcdHit; iAcdHit++ ) {
-      const AcdHit* acdHit = (const AcdHit*)(acdRecon->getHitCol().UncheckedAt(iAcdHit));
-      assert(acdHit);
-      acdHitMap[acdHit->getId().getId()] = acdHit;
-    }
-
-    UInt_t nAcdInter = acdRecon->nAcdIntersections();
-
-
-
-    for ( UInt_t iAcdInter(0); iAcdInter < nAcdInter; iAcdInter++ ) {
-      const AcdTkrIntersection* acdInter = acdRecon->getAcdTkrIntersection(iAcdInter);
-
-      if ( acdInter->getTrackIndex() != 0 ) continue;
-
-      int acdID = acdInter->getTileId().getId() ;
-      UShort_t AcdGemID = AcdId::gemIndexFromTile(acdID);
-
-      if(AcdGemID<128){
-	if ( acdInter->tileHit() ) { // There is a tile hit associated with this track
-	  const AcdHit* acdHit = acdHitMap[ acdInter->getTileId().getId() ];
-	  if ( acdHit != 0 ) {
-	    Double_t tileWidth = int( acdID / 10 ) == 2 ? 12. : 10.;
-	    Double_t pathLength = acdInter->getPathLengthInTile();
-	    Double_t angleToPlane = tileWidth / pathLength; 
-	    //    Double_t angleToPlane = acdInter->getCosTheta();
-	    Double_t mipsA = acdHit->getMips(AcdHit::A) * angleToPlane;
-	    Double_t mipsB = acdHit->getMips(AcdHit::B) * angleToPlane;
-	    m_val[0][AcdGemID]= Float_t(mipsA);
-	    m_val[1][AcdGemID]=Float_t(mipsB);
-
-	    // tmp
-	    //  std::cout << "MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile::setValue: INFO" 
-	    //  << std::endl
-	    //  << "iAcdInter = " << iAcdInter << std::endl
-	    //  << "ID, AcdGemID,angle,mipsA,mipsB,mipANoAngle, mipBNoAngle,  = " 
-	    //  << acdID << ", " 
-	    //  << AcdGemID << std::endl
-	    //  << angleToPlane << ", " << std::endl
-	    //  <<  m_val[0][AcdGemID] << ", " <<  m_val[1][AcdGemID] << std::endl
-	    //  << acdHit->getMips(AcdHit::A)<< ", " << acdHit->getMips(AcdHit::B)
-	    //  << std::endl;
-	    // entmp
-
-
-	  }
-	}
-      }
-      else{
-	if(acdID != 899)// NA values are set to 899
-	  {
-	    std::cout << "MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile::setValue: WARNING" 
-		      << std::endl
-		      << " AcdGemID = " <<  AcdGemID << std::endl
-		      << " acdHit->getId().getId() = " << acdID
-		      << " , which is NOT the conventional NA value (=899)"
-		      << std::endl;
-	  }
+  if (acdRecon && numtracks) {
+    const TClonesArray& assocs = acdRecon->getTkrAssocCol();
+    UInt_t nTkrAssoc = assocs.GetSize();
+    for ( UInt_t iAssoc(0); iAssoc < nTkrAssoc; iAssoc++ ) {
+      const AcdAssoc* anAssoc = dynamic_cast<const AcdAssoc*>(assocs[iAssoc]);
+      if ( anAssoc == 0 ) continue; // maybe warn? 
+      if ( anAssoc->getTrackIndex() != 0 ) continue;  //  only the best track is used
+      if ( ! anAssoc->getUpward() ) continue; // only up-going intersctions
+      
+      UInt_t nHitPoca = anAssoc->nAcdHitPoca();
+      for ( UInt_t iHitPoca(0); iHitPoca < nHitPoca; iHitPoca++ ) {
+	const AcdTkrHitPocaV2* aHitPoca = anAssoc->getHitPoca(iHitPoca);
+	if ( aHitPoca == 0 ) continue; // maybe warn? 
+	if ( !aHitPoca->hasHit() ) continue; // no hit
+	Int_t acdID = aHitPoca->getId().getId() ;
+	UShort_t AcdGemID = AcdId::gemIndexFromTile(acdID);
+	Float_t tilePath = int( acdID / 10 ) == 2 ? 12. : 10.;  // width of the tile
+	tilePath /= aHitPoca->getCosTheta(); // incidence angle secant-correction
+	Float_t mipsA = aHitPoca->mipsPmtA() / tilePath;
+	Float_t mipsB = aHitPoca->mipsPmtB() / tilePath;
+	m_val[0][AcdGemID]=mipsA;
+	m_val[1][AcdGemID]=mipsB;
       }
     }
   }
-*/
 }
  
 
