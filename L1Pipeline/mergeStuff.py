@@ -1,5 +1,3 @@
-#!/afs/slac/g/glast/isoc/flightOps/rhel5_gcc41/ISOC_PROD/bin/shisoc python2.6
-
 """@brief Merge results of chunk or crumb processing.
 
 @author W. Focke <focke@slac.stanford.edu>

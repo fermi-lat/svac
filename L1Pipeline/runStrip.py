@@ -1,5 +1,3 @@
-#!/afs/slac/g/glast/isoc/flightOps/rhel5_gcc41/ISOC_PROD/bin/shisoc python2.6
-
 """@brief Make monitoring histograms.
 
 @author W. Focke <focke@slac.stanford.edu>
