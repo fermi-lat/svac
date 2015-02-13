@@ -42,6 +42,8 @@ def fastMon(files, idArgs, workDir, staged, **args):
 
     dmRoot = config.L1Build
 
+    extra = package['extraSetup']
+
     dataSource = os.environ['DATASOURCE']
     if dataSource in ['LCI']:
         optionTag = 'fastMonLci'
@@ -54,14 +56,25 @@ def fastMon(files, idArgs, workDir, staged, **args):
     configFile = config.monitorOptions[optionTag]
 
     igrfExport = config.igrfExport
+
+    #special settings to deal with the lack of a 64 bits ISOC env 
     python = sys.executable
+    override_rootPath = '/afs/slac/package/lsf/curr/lib:/afs/slac.stanford.edu/g/glast/ground/GLAST_EXT/redhat5-i686-32bit-gcc41/ROOT/v5.26.00a-gl6/gcc41/lib' 
+    L1home = config.L1ProcROOT
+    commonPath = os.path.join(dmRoot,'Common','python')
+    igrfPath = os.path.join(dmRoot,'IGRF','python')
+    #end of the special settings section. This is terribly ugly
 
     cmd = '''
     cd %(workDir)s
     export DATAMONITORING_ROOT=%(dmRoot)s
     export FAST_MON_DIR=%(workDir)s
     %(igrfExport)s
-    export PYTHONPATH=${PYTHONPATH}:%(workDir)s
+    export LD_LIBRARY_PATH=""
+    export PYTHONPATH=""
+    %(extra)s
+    export LD_LIBRARY_PATH=%(override_rootPath)s:${LD_LIBRARY_PATH}
+    export PYTHONPATH=%(L1home)s:%(override_rootPath)s:%(commonPath)s:%(igrfPath)s:${PYTHONPATH}:%(workDir)s
     %(python)s %(app)s -c %(configFile)s %(varArgs)s %(inFile)s
     ''' % locals()
 

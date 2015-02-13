@@ -189,7 +189,7 @@ glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
 releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
 python = os.path.join(glastExt, "python/2.7.6/bin/python") 
 #
-glastVersion = '20-10-00'
+glastVersion = '20-10-01'
 releaseName = 'GlastRelease'
 #
 glastName = '-'.join((releaseName, glastVersion))
@@ -306,7 +306,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-06-08',
+        'version': 'Monitor-03-10-01',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -325,7 +325,7 @@ cvsPackages = {
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'DigiReconCalMeritCfg-01-26-04',
+        'version': 'DigiReconCalMeritCfg-01-30-00',
         },
     'evtClassDefs': {
         'repository': '',
@@ -377,6 +377,7 @@ packages['FastMon']['configDir'] = os.path.join(
 packages['FastMon']['env'] = {
     'XML_CONFIG_DIR': packages['FastMon']['configDir']
     }
+packages['FastMon']['extraSetup'] = isocEnv
 packages['FastMon']['saaDefinition'] = os.path.join(
     packages['FastMon']['configDir'], 'saaDefinition.xml')
 
