@@ -96,7 +96,7 @@ int main(int argn, char** argc) {
   //This setting is ugly but necessary to compile with SCons
   char inclpath[512];
   sprintf(inclpath," -I%s/include ",getenv("INST_DIR"));
-  gSystem->Load("libMonitor");
+  gSystem->Load("libRFun");
   gSystem->AddIncludePath(inclpath);
 
   // configure
