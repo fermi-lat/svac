@@ -405,7 +405,9 @@ void mergebins(std::vector<void*> addout,std::vector<void*> addin1, std::vector<
 	  float xm=(val1*n1+val2*n2)/nadd;
 	  ((Float_t*)addout[i])[j]=xm;
 	  float xs=(sig1*sig1+val1*val1)*n1+(sig2*sig2+val2*val2)*n2;
-	  ((Float_t*)addout[errindex])[j]=sqrt((xs/nadd-xm*xm)/nadd);
+	  if ((xs/nadd-xm*xm)>=0) { 
+	    ((Float_t*)addout[errindex])[j]=sqrt((xs/nadd-xm*xm)/nadd);
+	  } else ((Float_t*)addout[errindex])[j]=0;
 	}else{
 	  ((Float_t*)addout[i])[j]=0;
 	  ((Float_t*)addout[errindex])[j]=0;
