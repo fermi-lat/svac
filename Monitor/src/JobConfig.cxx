@@ -244,7 +244,7 @@ Int_t JobConfig::parse(int argn, char** argc) {
 	assert(0);
       }
     }
-    PrintNormFactorsMap();
+    //PrintNormFactorsMap();
   } 
 
   // tmp dir to store intermediate tree
