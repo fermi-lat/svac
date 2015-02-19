@@ -48,7 +48,8 @@ htmlDir = os.path.join(workDir, htmlBase)
 logBase = '%s_tkrReport.log' % runId
 logFile = os.path.join(workDir, logBase)
 
-python = config.python
+#python = config.python
+python = sys.executable
 app = config.apps['tkrMonitor']
 l1Setup = config.l1Setup
 instDir = config.L1Build

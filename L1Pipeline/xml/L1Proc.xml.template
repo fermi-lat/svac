@@ -2980,7 +2980,7 @@
           <var name="%(tkrReport_versionName)s">%(tkrReport_version)s</var>
           <!-- <var name="%(tkrAlarm_versionName)s">%(tkrAlarm_version)s</var> -->
         </variables>
-        <job executable="${L1ProcROOT}/tools/wrapper ${python} ${L1ProcROOT}/tkrMonitor.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} python2.5 ${L1ProcROOT}/tkrMonitor.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
           <after process="registerTkrAnalysis" status="SUCCESS"/>
         </depends>
@@ -3186,7 +3186,7 @@
           <var name="reportType">fastMonTuple</var>
           <var name="outFileTypes">fastMonTuple/fastMonError</var>
         </variables>
-        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.6 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
       </process>
 
       <process name="fastMonHist" autoRetryMaxAttempts="%(retries)s">
@@ -3196,7 +3196,7 @@
           <var name="outFileTypes">fastMonHist</var>
           <var name="%(fastMonTuple_versionName)s">${pipeline.getCurrentStream.getProcessInstance("fastMonTuple").getVariable("L1_PI_version")}</var>
         </variables>
-        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.6 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
+        <job executable="${L1ProcROOT}/tools/wrapper ${isocRun} --add-env=flightops python2.5 ${L1ProcROOT}/genericScript.py" batchOptions=" -q %(longQ)s -sp ${midPriority} -R &quot;select[${standardSelect}] rusage[${standardRusage}]&quot; "/>
         <depends>
           <after process="fastMonTuple" status="SUCCESS"/>
         </depends>
