@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-11-01 18-Feb-2015 monzani don't need to print the map of normalized factors
  Monitor-03-11-00 18-Feb-2015 monzani moving the normalization factors from RFun to JobConfig, to bypass the static initialization issue
  Monitor-03-10-03 17-Feb-2015 monzani fixing an unprotected sqrt() operation in treemerge
  Monitor-03-10-02 14-Feb-2015 monzani cleaning up SConscript
