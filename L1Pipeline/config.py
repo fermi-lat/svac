@@ -216,7 +216,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume12')
-stVersion = '09-35-02'
+stVersion = '10-00-00'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
@@ -306,7 +306,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-10-01',
+        'version': 'Monitor-03-11-01',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
@@ -325,7 +325,7 @@ cvsPackages = {
         },
     'DigiReconCalMeritCfg': {
         'repository': 'dataMonitoring',
-        'version': 'DigiReconCalMeritCfg-01-30-00',
+        'version': 'DigiReconCalMeritCfg-02-00-00',
         },
     'evtClassDefs': {
         'repository': '',
