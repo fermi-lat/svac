@@ -20,11 +20,9 @@
 // Stuff needed for MySQL for GlastRelease-v15r40
 #include "facilities/commonUtilities.h"
 
-//
 // Job configuration and options parser
 #include "JobConfig.h"
 
-//
 // The thing that actually does the work
 #include "MonEventLooper_t.h"
 

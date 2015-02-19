@@ -5,6 +5,9 @@
 
 #include "Rtypes.h"
 #include <string>
+#include <map>
+#include <vector>
+#include <list>
 
 class TChain;
 
@@ -22,10 +25,6 @@ public :
   
   Int_t parse(int argn, char** argc);
 
-
-  
- 
-  
   inline const std::string& theApp() const { return m_theApp; }
   inline const std::string& path() const { return m_path; }
 
@@ -70,11 +69,20 @@ public :
   Bool_t checkFastMon() const;
   Bool_t checkTrackerMon() const;
 
-
   std::string getDataType(){ return m_datatype;} 
   Bool_t WriteInTreeToDisk() {return m_WriteintreeToDisk;}
   std::string gettmpdir() { return m_tmpdir;}
    
+  // function that reads the norm factors from ascii file and fills the map NormFactors
+  static int LoadNormFactors();
+  // print out the norm factors 
+  static void PrintNormFactorsMap();
+  // public memeber data
+  static std::map<std::string,std::list<std::vector<float> > > m_NormFactors;
+  static std::map<std::string, std::vector<float> > m_EarthLimbCorrFactors;
+  static std::map<std::string, std::vector<float> > m_LongitudeCorr;
+  static std::string m_normfactascii;
+
 protected:
 
   TChain* makeChain(const char* name, const std::string& fileString) const;
@@ -120,7 +128,6 @@ private:
   std::string m_datatype;
   Bool_t m_WriteintreeToDisk;
   std::string m_tmpdir;
-  std::string m_normfactascii;
 };
 
 #endif

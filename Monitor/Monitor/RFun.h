@@ -3,12 +3,10 @@
 
 //#include "configData/db/TrgConfigDB.h"
 #include <vector>
-#include <map>
 #include "TBranchProxy.h"
 #include "TBranchProxyDirector.h"
 #include "TBranchProxyTemplate.h"
 #include "TMath.h"
-
 
 
 class RFun{
@@ -142,18 +140,10 @@ class RFun{
   // END of Acd/Tracker/Cal related functions
   // Trigger related functions
   static Double_t oneTriggerTower(ROOT::TArrayBoolProxy& invector);
-
-  // Normalization of Rates
   
-  static void SetAsciiFileNameWithNormFactors(const char* asciifile){m_normfactascii = asciifile;}
-
-  // function that reads the norm factors from ascii file and fills the map RFun::NormFactors
-  static int LoadNormFactors();
-  
-
-    // function that returns the Normalized the rates or error in the normalized rate 
-// for the rate_type and magnetic info
-  // It uses info from RFun::NormFactors. If this object is empty, it will fill it from ascii file
+  // function that returns the Normalized the rates or error in the normalized rate 
+  // for the rate_type and magnetic info
+  // It uses info from JobConfig::NormFactors. If this object is empty, it will complain
 
   static Float_t NormalizeRate(char* RateType, Float_t MagneticInfo, 
 			       Float_t Rate,  Float_t RateErr, char* RetType);
@@ -171,8 +161,6 @@ class RFun{
                  Float_t Rate,  Float_t RateErr, char* RetType,int dim);
 
  
-  // 
-  static void PrintNormFactorsMap();
 
   // Fast mon functions
 
@@ -190,27 +178,19 @@ class RFun{
   // one of the predefined circles with 45 deg radius centered at following  RA and Dec locations: 
   // RA=[0,45,90,135,180,225,270,315], Dec=[-90,-45,0,45,90]"
   // This will be used to define the quantity LLEvents_BinsRaDec[8][5]
-
   static int IsEventInThisRaDecBin(Float_t Ra, Float_t Dec, int thisrabin, int thisdecbin);
   
-
   // Get Angular separation between two points defined by Ra and Dec
   static Float_t getSeparation(Float_t RefRA,Float_t RefDec,Float_t RA,Float_t Dec);
 
-
   // This works !!
-
   static unsigned loopovertowerANDtkrplanes_int(ROOT::TArrayProxy<ROOT::TArrayType<Int_t, 36> >&);
   static unsigned loopovertkrplanes_int(const Int_t invector[]);
   static Double_t loopovertkrplanes_double(const Double_t invector[]);
   static Double_t loopovertowerANDtkrplanes_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >&);
   static Double_t loopovertowerANDtkrplanes_square_double(ROOT::TArrayProxy<ROOT::TArrayType<Double_t, 36> >&);
-
-    //(ROOT::TArrayProxy<ROOT::TArrayType<UShort_t, 36> >&);
        
   // end of fastmon functions
-
-  
 
   // Test functions
   static std::vector<double> testfun();
@@ -221,24 +201,10 @@ class RFun{
   // end test functions
 
 
-  // Functions to be deleted (obsolete)
-  
-  // end of functions to be deleted
-
-
-  // public memeber data
-  static std::map<std::string,std::list<std::vector<float> > > m_NormFactors;
-  static std::map<std::string, std::vector<float> > m_EarthLimbCorrFactors;
-  static std::map<std::string, std::vector<float> > m_LongitudeCorr;
-  static std::string m_normfactascii;
-
-
  private:
   static int m_boundarytwr[16][8]; // boundary towers for all towers
   static bool m_boundarytwrdefined;
   //static TrgConfigDB* m_tcf;
-
-  
 
   static int m_datagramevtcounter[5];
   static int m_previousdatagramnumber[5];
