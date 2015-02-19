@@ -48,8 +48,7 @@ htmlDir = os.path.join(workDir, htmlBase)
 logBase = '%s_tkrReport.log' % runId
 logFile = os.path.join(workDir, logBase)
 
-#python = config.python
-python = sys.executable
+python = config.python
 app = config.apps['tkrMonitor']
 l1Setup = config.l1Setup
 instDir = config.L1Build
@@ -63,13 +62,22 @@ source %(l1Setup)s
 %(python)s %(app)s %(stagedInFile)s %(stagedMonFile)s %(htmlDir)s %(stagedAlarmFile)s %(logFile)s
 """ % locals()
 
-status = runner.run(cmd)
-if status: finishOption = 'wipe'
+#do nothing. TKR analysis is not working.
+#status = runner.run(cmd)
+#if status: finishOption = 'wipe'
+#
+#if not status:
+#    tkrReport = tarfile.open(stagedReportFile, 'w')
+#    tkrReport.add(htmlDir, htmlBase)
+#    tkrReport.close()
+#    pass
+
+status = 0
 
 if not status:
     tkrReport = tarfile.open(stagedReportFile, 'w')
-    tkrReport.add(htmlDir, htmlBase)
     tkrReport.close()
+    open(stagedMonFile,"w")
     pass
 
 status |= staged.finish(finishOption)
