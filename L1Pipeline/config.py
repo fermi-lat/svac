@@ -8,7 +8,7 @@
 import os
 import sys
 
-L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc_p8"
+L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc_p8_isoc"
 L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "5.0"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
@@ -178,16 +178,10 @@ groundRoot = os.path.join(glastRoot, 'ground')
 #glastSetupCsh = os.path.join(groundRoot, 'scripts', 'group.cshrc')
 scons = '/afs/slac.stanford.edu/g/glast/applications/install/@sys/usr/bin/scons'
 
-#this is for rhel5:
-#optConfig = 'redhat5-i686-32bit-gcc41-Optimized'
-#glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat5-i686-32bit-gcc41')
-#releaseDir = os.path.join(groundRoot, 'releases', 'volume04')
-
-#and this is for rhel6:
+#this is for rhel6:
 optConfig = 'redhat6-x86_64-64bit-gcc44-Optimized'
 glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
 releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
-python = os.path.join(glastExt, "python/2.7.6/bin/python") 
 #
 glastVersion = '20-10-01'
 releaseName = 'GlastRelease'
@@ -216,7 +210,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume12')
-stVersion = '10-00-00'
+stVersion = '10-00-02'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
@@ -230,8 +224,9 @@ l1ExeDir = os.path.join(L1Build, 'exe', optConfig)
 l1Setup = os.path.join(l1BinDir, '_setup.sh')
 
 isoc = '/afs/slac/g/glast/isoc/flightOps'
-isocPlatform = 'rhel5_gcc41'
-isocMode = os.environ.get('isocMode', 'ISOC_PROD')
+isocPlatform = 'rhel6_gcc44'
+#isocMode = os.environ.get('isocMode', 'ISOC_PROD')
+isocMode = os.environ.get('isocMode', 'ISOC_TEST')
 isocBin = os.path.join(isoc, isocPlatform, isocMode, 'bin')
 isocRun = os.path.join(isoc, isocPlatform, '${isocMode}', 'bin', 'isoc run')
 
@@ -329,7 +324,7 @@ cvsPackages = {
         },
     'evtClassDefs': {
         'repository': '',
-        'version': 'evtClassDefs-01-01-02',
+        'version': 'evtClassDefs-01-01-04',
         },
     'FastMon': {
         'repository': 'dataMonitoring',
@@ -345,7 +340,7 @@ cvsPackages = {
         },
     'IGRF': {
         'repository': 'dataMonitoring',
-        'version': 'IGRF-03-01-01',
+        'version': 'IGRF-03-01-04',
         },
     }
 
@@ -713,7 +708,7 @@ excludeIn = None
 # default option for stageFiles.stageSet.finish()
 finishOption = ''
 
-#python = sys.executable
+python = sys.executable
 
 # values for L1RunStatus in run quality table
 runningStatus = 'Running'

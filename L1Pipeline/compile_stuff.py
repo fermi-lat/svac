@@ -1,7 +1,7 @@
-#! /usr/bin/env python2.6
+#! /afs/slac/g/glast/isoc/flightOps/rhel6_gcc44/ISOC_TEST/bin/shisoc python2.6
 
-#for IGRF (on rhel5): /afs/slac/g/glast/isoc/flightOps/rhel5_gcc41/ISOC_PROD/bin/shisoc python2.5
-#everything else (on rhel6): /usr/bin/env python2.6
+#obsolete: /afs/slac/g/glast/isoc/flightOps/rhel5_gcc41/ISOC_PROD/bin/shisoc python2.5
+#everything else (obsolete, on rhel6): /usr/bin/env python2.6
 
 import os
 import sys

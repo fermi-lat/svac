@@ -29,7 +29,7 @@ stagedOutFile = staged.stageOut(realOutFile)
 
 isocBin = config.isocBin
 
-python = sys.executable
+python = config.python
 taskBase = config.hpTaskBase
 scid = config.scid
 
