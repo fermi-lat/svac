@@ -1,4 +1,4 @@
-#!/afs/slac/g/glast/isoc/flightOps/rhel5_gcc41/ISOC_PROD/bin/shisoc python2.6
+#!/afs/slac/g/glast/isoc/flightOps/rhel6_gcc44/ISOC_NIGHTLY_DEVEL/bin/shisoc python2.6
 
 """@brief Configuration.
 
@@ -183,7 +183,7 @@ optConfig = 'redhat6-x86_64-64bit-gcc44-Optimized'
 glastExt = os.path.join(groundRoot, 'GLAST_EXT', 'redhat6-x86_64-64bit-gcc44')
 releaseDir = os.path.join(groundRoot, 'releases', 'volume12')
 #
-glastVersion = '20-10-01'
+glastVersion = '20-10-02'
 releaseName = 'GlastRelease'
 #
 glastName = '-'.join((releaseName, glastVersion))
@@ -210,7 +210,7 @@ haddRootSys = rootSys
 hadd = os.path.join(glastExt, haddRootSys, 'bin', 'hadd')
 
 stDir = os.path.join(groundRoot, 'releases', 'volume12')
-stVersion = '10-00-02'
+stVersion = '10-01-00'
 stName = 'ScienceTools'
 
 ST = os.path.join(stDir, "ScienceTools-%s" % stVersion)
@@ -226,7 +226,7 @@ l1Setup = os.path.join(l1BinDir, '_setup.sh')
 isoc = '/afs/slac/g/glast/isoc/flightOps'
 isocPlatform = 'rhel6_gcc44'
 #isocMode = os.environ.get('isocMode', 'ISOC_PROD')
-isocMode = os.environ.get('isocMode', 'ISOC_TEST')
+isocMode = os.environ.get('isocMode', 'ISOC_NIGHTLY_DEVEL')
 isocBin = os.path.join(isoc, isocPlatform, isocMode, 'bin')
 isocRun = os.path.join(isoc, isocPlatform, '${isocMode}', 'bin', 'isoc run')
 
