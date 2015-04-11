@@ -29,12 +29,13 @@ realOutFile = fileNames.fileName(outFileType, dlId, runId, next=True)
 stagedOutFile = staged.stageOut(realOutFile)
 
 workDir = os.path.dirname(stagedInFile)
+python = config.python
 
 app = config.apps['alarmPostProcessor']
 
 configFile = config.alarmPostProcessorConfigs[fileType]
 
-cmd = '%(app)s -c %(configFile)s -o %(stagedOutFile)s %(stagedInFile)s' % locals()
+cmd = '%(python)s %(app)s -c %(configFile)s -o %(stagedOutFile)s %(stagedInFile)s' % locals()
 
 status = runner.run(cmd)
 

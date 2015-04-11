@@ -19,6 +19,7 @@ runId = os.environ['RUNID']
 
 staged = stageFiles.StageSet(excludeIn=config.excludeIn)
 finishOption = config.finishOption
+python = config.python
 
 #input file
 realDigiTrend = fileNames.fileName('digiTrend', dlId, runId, next=False)
@@ -39,7 +40,7 @@ workDir = os.path.dirname(solarFlareHist)
 
 cmd = '''
 cd %(workDir)s
-%(app)s %(stagedDigiTrend)s %(stagedMeritTrend)s -r %(solarFlareHist)s -x %(solarFlareLog)s -p %(solarFlarePlot)s
+%(python)s %(app)s %(stagedDigiTrend)s %(stagedMeritTrend)s -r %(solarFlareHist)s -x %(solarFlareLog)s -p %(solarFlarePlot)s
 ''' % locals()
 
 status = runner.run(cmd)

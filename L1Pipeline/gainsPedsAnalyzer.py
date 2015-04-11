@@ -30,10 +30,11 @@ realOutFile = fileNames.fileName(outFileType, dlId, runId, next=True)
 stagedOutFile = staged.stageOut(realOutFile)
 
 workDir = os.path.dirname(stagedInFile)
+python = config.python
 
 app = config.apps[reportType]
 
-cmd = '%(app)s -o %(stagedOutFile)s %(stagedInFile)s' % locals()
+cmd = '%(python)s %(app)s -o %(stagedOutFile)s %(stagedInFile)s' % locals()
 
 status = runner.run(cmd)
 

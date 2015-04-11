@@ -267,8 +267,8 @@ elFt1ProcVer = 302
 exFt1ProcVer = 302
 exLs1ProcVer = 302
 ft1ProcVer = 302
-ft2ProcVer = 302
-ft2SecondsProcVer = 302
+ft2ProcVer = 202
+ft2SecondsProcVer = 203
 ls1ProcVer = 302
 
 procVer = {
