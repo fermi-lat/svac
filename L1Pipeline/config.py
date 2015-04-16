@@ -279,10 +279,10 @@ procVer = {
     
 
 sConsPackages = {
-    'calibGenTKR': {
-        'repository': '',
-        'version': 'calibGenTKR-04-08-03',
-        },
+    #'calibGenTKR': {
+    #    'repository': '',
+    #    'version': 'calibGenTKR-04-08-03',
+    #    },
     'calibTkrUtil': {
         'repository': '',
         'version': 'calibTkrUtil-02-10-01',
