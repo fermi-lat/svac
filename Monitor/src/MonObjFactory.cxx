@@ -230,28 +230,29 @@
 // Last updated with object Acd2RibbonCount by user lbaldini on Tue Feb  3 13:35:09 2015
 // Last updated with object Acd2RibbonActDist by user lbaldini on Tue Feb  3 13:36:48 2015
 // Last updated with object Acd2RibbonEnergy by user lbaldini on Tue Feb  3 13:37:40 2015
-// Last updated with object Acd2CRActiveDist3D by user lbaldini on Tue Feb  3 14:17:20 2015
-// Last updated with object Acd2CR1ActiveDist by user lbaldini on Tue Feb  3 14:17:43 2015
-// Last updated with object Acd2CR1ActDistTileEnergy by user lbaldini on Tue Feb  3 14:18:07 2015
+// Last updated with object Acd2Tkr1TileActDist by user maldera on Mon Apr 20 13:15:04 2015
+#include "merit/MonInput_Acd2Tkr1TileActDist.h"
+
 // Last updated with object Acd2TotalTileEnergy by user lbaldini on Tue Feb  3 14:27:00 2015
-// Last updated with object Acd2CRActDistTileEnergy by user lbaldini on Tue Feb  3 14:38:41 2015
 // Last updated with object WP8BestEnergy by user lbaldini on Tue Feb  3 15:14:15 2015
 // Last updated with object WP8CTBestEnergyProb by user lbaldini on Tue Feb  3 15:15:12 2015
 // Last updated with object WP8CTPSFCore by user lbaldini on Tue Feb  3 15:16:11 2015
 // Last updated with object WP8BestZDir by user lbaldini on Tue Feb  3 15:16:41 2015
 // Last updated with object DQMEventClass by user bregeon on Thu Feb  5 15:25:16 2015
 // Last updated with object DQMEventType by user bregeon on Thu Feb  5 15:25:59 2015
+// Last updated with object Acd2TileActDist3D by user maldera on Mon Apr 20 11:49:49 2015
+// Last updated with object Acd2TileActDistEnergy by user maldera on Mon Apr 20 12:13:49 2015
+// Last updated with object Acd2Tkr1TileActDistEnergy by user maldera on Mon Apr 20 12:50:31 2015
+#include "merit/MonInput_Acd2Tkr1TileActDistEnergy.h"
+#include "merit/MonInput_Acd2TileActDistEnergy.h"
+#include "merit/MonInput_Acd2TileActDist3D.h"
 #include "merit/MonInput_DQMEventType.h"
 #include "merit/MonInput_DQMEventClass.h"
 #include "merit/MonInput_WP8BestZDir.h"
 #include "merit/MonInput_WP8CTPSFCore.h"
 #include "merit/MonInput_WP8CTBestEnergyProb.h"
 #include "merit/MonInput_WP8BestEnergy.h"
-#include "merit/MonInput_Acd2CRActDistTileEnergy.h"
 #include "merit/MonInput_Acd2TotalTileEnergy.h"
-#include "merit/MonInput_Acd2CR1ActDistTileEnergy.h"
-#include "merit/MonInput_Acd2CR1ActiveDist.h"
-#include "merit/MonInput_Acd2CRActiveDist3D.h"
 #include "merit/MonInput_Acd2RibbonEnergy.h"
 #include "merit/MonInput_Acd2RibbonActDist.h"
 #include "merit/MonInput_Acd2RibbonCount.h"
@@ -911,16 +912,8 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_Acd2RibbonActDist;
   if (s=="Acd2RibbonEnergy")
     return new MonInput_Acd2RibbonEnergy;
-  if (s=="Acd2CRActiveDist3D")
-    return new MonInput_Acd2CRActiveDist3D;
-  if (s=="Acd2CR1ActiveDist")
-    return new MonInput_Acd2CR1ActiveDist;
-  if (s=="Acd2CR1ActDistTileEnergy")
-    return new MonInput_Acd2CR1ActDistTileEnergy;
-  if (s=="Acd2TotalTileEnergy")
+   if (s=="Acd2TotalTileEnergy")
     return new MonInput_Acd2TotalTileEnergy;
-  if (s=="Acd2CRActDistTileEnergy")
-    return new MonInput_Acd2CRActDistTileEnergy;
   if (s=="WP8BestEnergy")
     return new MonInput_WP8BestEnergy;
   if (s=="WP8CTBestEnergyProb")
@@ -933,6 +926,14 @@ MonInputObject* MonObjFactory::getMonInputObject(string s){
     return new MonInput_DQMEventClass;
   if (s=="DQMEventType")
     return new MonInput_DQMEventType;
+  if (s=="Acd2TileActDist3D")
+    return new MonInput_Acd2TileActDist3D;
+  if (s=="Acd2TileActDistEnergy")
+    return new MonInput_Acd2TileActDistEnergy;
+  if (s=="Acd2Tkr1TileActDistEnergy")
+    return new MonInput_Acd2Tkr1TileActDistEnergy;
+  if (s=="Acd2Tkr1TileActDist")
+    return new MonInput_Acd2Tkr1TileActDist;
   // This line is a tag for makeNewMonObject.pl. Do not move or remove.
   else{
     std::cout<<"Object "<<s<<" does not exist"<<std::endl;
@@ -1159,18 +1160,18 @@ const std::map<std::string, std::map<std::string, std::string> > MonObjFactory::
   names.push_back("Acd2RibbonCount");
   names.push_back("Acd2RibbonActDist");
   names.push_back("Acd2RibbonEnergy");
-  names.push_back("Acd2CRActiveDist3D");
-  names.push_back("Acd2CR1ActiveDist");
-  names.push_back("Acd2CR1ActDistTileEnergy");
   names.push_back("Acd2TotalTileEnergy");
-  names.push_back("Acd2CRActDistTileEnergy");
   names.push_back("WP8BestEnergy");
   names.push_back("WP8CTBestEnergyProb");
   names.push_back("WP8CTPSFCore");
   names.push_back("WP8BestZDir");
   names.push_back("DQMEventClass");
   names.push_back("DQMEventType");
-  // another tag used by makeNewMonObject.pl. Do not move or remove.
+  names.push_back("Acd2TileActDist3D");
+  names.push_back("Acd2TileActDistEnergy");
+  names.push_back("Acd2Tkr1TileActDistEnergy");
+  names.push_back("Acd2Tkr1TileActDist");
+   // another tag used by makeNewMonObject.pl. Do not move or remove.
   for (unsigned int i=0;i<names.size();i++){
     MonInputObject* obj=getMonInputObject(names[i]);
     descriptions[names[i]]["Description"]=obj->getDescription();
