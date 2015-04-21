@@ -4,6 +4,13 @@
  *
  *                  EOH
 
+
+  -Replacing Acd2CRActiveDist3D with Acd2TileActDist3D
+  -Replacing Acd2CR1ActDistTileEnergy with Acd2TileActDistEnergy  
+  -Adding Acd2Tkr1TileActDistEnergy
+  -Replacing Acd2CR1ActiveDist with Acd2Tkr1TileActDist
+  -Removing Acd2CRActDistTileEnergy
+
  Monitor-03-11-01 18-Feb-2015 monzani don't need to print the map of normalized factors
  Monitor-03-11-00 18-Feb-2015 monzani moving the normalization factors from RFun to JobConfig, to bypass the static initialization issue
  Monitor-03-10-03 17-Feb-2015 monzani fixing an unprotected sqrt() operation in treemerge
