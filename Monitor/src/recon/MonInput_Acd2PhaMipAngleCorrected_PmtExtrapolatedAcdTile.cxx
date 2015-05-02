@@ -88,10 +88,8 @@ void MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile::setValue(TObject*
 	if ( !aHitPoca->hasHit() ) continue; // no hit
 	Int_t acdID = aHitPoca->getId().getId() ;
 	UShort_t AcdGemID = AcdId::gemIndexFromTile(acdID);
-	Float_t tilePath = int( acdID / 10 ) == 2 ? 12. : 10.;  // width of the tile
-	tilePath /= aHitPoca->getCosTheta(); // incidence angle secant-correction
-	Float_t mipsA = aHitPoca->mipsPmtA() / tilePath;
-	Float_t mipsB = aHitPoca->mipsPmtB() / tilePath;
+	Float_t mipsA = aHitPoca->mipsPmtA() * aHitPoca->getCosTheta();
+	Float_t mipsB = aHitPoca->mipsPmtB() * aHitPoca->getCosTheta();
 	m_val[0][AcdGemID]=mipsA;
 	m_val[1][AcdGemID]=mipsB;
       }
