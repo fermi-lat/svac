@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-13-01 08-May-2015 monzani Only 1st track used when computing angle correction
  Monitor-03-13-00 01-May-2015 monzani Fixed Angle Correction for MIPs
  Monitor-03-12-00 22-Apr-2015 maldera fixing some Acd2 quantities
 
