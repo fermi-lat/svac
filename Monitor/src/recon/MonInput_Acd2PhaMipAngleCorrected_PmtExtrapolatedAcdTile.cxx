@@ -87,6 +87,7 @@ void MonInput_Acd2PhaMipAngleCorrected_PmtExtrapolatedAcdTile::setValue(TObject*
 	if ( aHitPoca == 0 ) continue; // maybe warn? 
 	if ( !aHitPoca->hasHit() ) continue; // no hit
 	if ( aHitPoca->getTrackIndex() != 0 ) continue; // only use first track in event
+	if ( aHitPoca->getDoca() <= 0 ) continue; //tracks points into tile
 	Int_t acdID = aHitPoca->getId().getId() ;
 	UShort_t AcdGemID = AcdId::gemIndexFromTile(acdID);
 	Float_t mipsA = aHitPoca->mipsPmtA() * aHitPoca->getCosTheta();
