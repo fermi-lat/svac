@@ -1,4 +1,4 @@
-#!/afs/slac/g/glast/isoc/flightOps/rhel6_gcc44/ISOC_NIGHTLY_DEVEL/bin/shisoc python2.6
+#!/afs/slac/g/glast/isoc/flightOps/rhel6_gcc44/ISOC_PROD/bin/shisoc python2.6
 
 """@brief Configuration.
 
@@ -8,7 +8,7 @@
 import os
 import sys
 
-L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc_p8_isoc"
+L1Name = os.environ.get('L1_TASK_NAME') or "L1Proc"
 L1Version = os.environ.get('PIPELINE_TASKVERSION') or os.environ.get('L1_TASK_VERSION') or "5.0"
 fullTaskName = '-'.join([L1Name, L1Version])
 installRoot = os.environ.get('L1_INSTALL_DIR') or "/afs/slac.stanford.edu/g/glast/ground/PipelineConfig/Level1"
@@ -225,8 +225,7 @@ l1Setup = os.path.join(l1BinDir, '_setup.sh')
 
 isoc = '/afs/slac/g/glast/isoc/flightOps'
 isocPlatform = 'rhel6_gcc44'
-#isocMode = os.environ.get('isocMode', 'ISOC_PROD')
-isocMode = os.environ.get('isocMode', 'ISOC_NIGHTLY_DEVEL')
+isocMode = os.environ.get('isocMode', 'ISOC_PROD')
 isocBin = os.path.join(isoc, isocPlatform, isocMode, 'bin')
 isocRun = os.path.join(isoc, isocPlatform, '${isocMode}', 'bin', 'isoc run')
 
@@ -301,7 +300,7 @@ sConsPackages = {
         },
     'Monitor': {
         'repository': 'svac',
-        'version': 'Monitor-03-12-00',
+        'version': 'Monitor-03-13-03',
         },
     'pipelineDatasets': {
         'repository': 'users/richard',
