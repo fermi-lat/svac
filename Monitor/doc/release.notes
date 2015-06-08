@@ -4,6 +4,7 @@
  *
  *                  EOH
 
+ Monitor-03-13-04 08-Jun-2015 monzani 3D vector pointing to the ribbons
  Monitor-03-13-03 07-Jun-2015 monzani replacing GlobalPosition for ribbons
  Monitor-03-13-02 08-May-2015 monzani Track points inside the tile
  Monitor-03-13-01 08-May-2015 monzani Only 1st track used when computing angle correction
