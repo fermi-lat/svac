@@ -69,7 +69,7 @@ void MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue(TObjec
 	if ( aHitPoca == 0 ) continue; // maybe warn? 
 	if ( aHitPoca->getDoca() < 0 ) continue; // missed element
 	UInt_t face = aHitPoca->getId().getFace();
-	const TVector3& missPos = face <= 4 ? aHitPoca->getGlobalPosition() : aHitPoca->getPoca() - aHitPoca->getPocaVector();
+	const TVector3& missPos = face <= 4 ? aHitPoca->getGlobalPosition() : aHitPoca->getPoca();
 	if(face>6){
 	  std::cout << "MonInput_Acd2GlobalPos_ExtrapolatedTrack_MatchedFacePosXYZ::setValue: ERROR" 
 		    << std::endl
