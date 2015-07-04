@@ -49,29 +49,16 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
   }
 
   
-  // Time from Mission elapsed time to Unix time:
-    int deltaTimeUgly = 978307200;
-    double timeStamp = de->getTimeStamp();
-    // Leap second from Dec 31st, 2005
-    if (timeStamp > 157766400) deltaTimeUgly--;
-    // Leap second from Dec 31st, 2008
-    if (timeStamp > 252460800) deltaTimeUgly--;
-    // Leap second from Jun 30th, 2012
-    if (timeStamp > 362793601) deltaTimeUgly--;
-    // Leap second from Jun 30th, 2015
-    if (timeStamp > 457401602) deltaTimeUgly--;
-    
+  m_val= (de->getCcsds()-timeStamp);
 
-  m_val= (de->getCcsds().getUtc()-(timeStamp+deltaTimeUgly));
-
-  // std::cout << de->getCcsds().getUtc() << "\t" << de->getTimeStamp() << "\t diff(off) =" << m_val << std::endl;
+  // std::cout << de->getCcsds() << "\t" << de->getTimeStamp() << "\t diff(off) =" << m_val << std::endl;
   if(m_val <0)
     {
       std::cout << "MonInput_Delta_CCSDSTime_EvtTime::setValue : WARNING" << std::endl
 		<< "Delta_CCSDSTime_EvtTime is negative.  " << std::endl
 		<< "m_val = " << m_val << std::endl
 		<< "digi->getTimeStamp() = " << de->getTimeStamp() 
-		<< ", digi->getCcsds().getUtc() = " << de->getCcsds().getUtc() << std::endl;
+		<< ", digi->getCcsds() = " << de->getCcsds().getUtc() << std::endl;
     }
 
 
@@ -79,11 +66,11 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
   /*
   std::cout << "MonInput_Delta_CCSDSTime_EvtTime::setValue : TMP INFO" << std::endl
 	    << setprecision(20) 
-	    << "CCSDS time = " << de->getCcsds().getUtc() << std::endl
+	    << "CCSDS time = " << de->getCcsds() << std::endl
 	    << "time stamp = " << de->getTimeStamp() << std::endl
 	    << "Other time stamp = " << de->getMetaEvent().time().current().timeSecs()  << std::endl
 	    << "Diff = " << m_val << std::endl 
-	    << "Diff2 = " <<  de->getCcsds().getUtc()-de->getMetaEvent().time().current().timeSecs() << std::endl  
+	    << "Diff2 = " <<  de->getCcsds()-de->getMetaEvent().time().current().timeSecs() << std::endl  
 	    << "Diff ref timestamps = " << de->getMetaEvent().time().current().timeSecs()- de->getTimeStamp()
 	    << std::endl  
 	    << std::endl << std::endl;
