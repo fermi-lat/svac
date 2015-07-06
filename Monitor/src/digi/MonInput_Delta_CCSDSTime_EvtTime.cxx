@@ -48,8 +48,7 @@ void MonInput_Delta_CCSDSTime_EvtTime::setValue(TObject* event) {
     assert(de);
   }
 
-  
-  m_val= (de->getCcsds()-timeStamp);
+  m_val= (de->getCcsds()-de->getTimeStamp());
 
   // std::cout << de->getCcsds() << "\t" << de->getTimeStamp() << "\t diff(off) =" << m_val << std::endl;
   if(m_val <0)
